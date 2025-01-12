@@ -80,117 +80,118 @@ function ScheduleManagement(opts) {
 	};
 
 	ScheduleManagement.prototype.init = function () {
-		$('.scheduleDetails').each(function () {
-			var details = $(this);
-			var id = details.find(':hidden.id').val();
-			var reservable = details.find('.reservableSlots');
-			var blocked = details.find('.blockedSlots');
-			var timezone = details.find('.timezone');
-			var daysVisible = details.find('.daysVisible');
-			var dayOfWeek = details.find('.dayOfWeek');
-			var usesDailyLayouts = details.find('.usesDailyLayouts');
+		var schedulesTable = $('#schedulesTable_wrapper');
 
-			details.find('a.update').click(function () {
-				setActiveScheduleId(id);
-			});
+		schedulesTable.on('click', '.update', function (e) {
+			e.preventDefault();
+			var id = $(this).closest('.scheduleDetails').attr('data-schedule-id');
+			setActiveScheduleId(id);
+		});
 
-			details.find('.renameButton').click(function (e) {
-				e.stopPropagation();
-				details.find('.scheduleName').editable('toggle');
-			});
+		schedulesTable.on('click', '.renameButton', function (e) {
+			e.stopPropagation();
+			$(this).closest('.scheduleDetails').find('.scheduleName').editable('toggle');
+		});
 
-			details.find('.dayName').click(function (e) {
-				e.stopPropagation();
-				$(this).editable('toggle');
-			});
+		schedulesTable.on('click', '.dayName', function (e) {
+			e.stopPropagation();
+			$(this).editable('toggle');
+		});
 
-			details.find('.daysVisible').click(function (e) {
-				e.stopPropagation();
-				$(this).editable('toggle');
-			});
+		schedulesTable.on('click', '.daysVisible', function (e) {
+			e.stopPropagation();
+			$(this).editable('toggle');
+		});
 
-			details.find('.changeScheduleAdmin').click(function (e) {
-				e.stopPropagation();
-				details.find('.scheduleAdmin').editable('toggle');
-			});
+		schedulesTable.on('click', '.changeScheduleAdmin', function (e) {
+			e.stopPropagation();
+			$(this).closest('.scheduleDetails').find('.scheduleAdmin').editable('toggle');
+		});
 
-			details.find('.changeLayoutButton').click(function (e) {
-				if ($(e.target).data('layout-type') == 0) {
-					showChangeLayout(e, reservable, blocked, timezone, (usesDailyLayouts.val() == 'false'));
-				}
-				else {
-					showChangeCustomLayout(id);
-				}
-				return false;
-			});
+		schedulesTable.on('click', '.changeLayoutButton', function (e) {
+			var id = getActiveScheduleId();
+			var reservable = $(this).closest('.scheduleDetails').find('.reservableSlots');
+			var blocked = $(this).closest('.scheduleDetails').find('.blockedSlots');
+			var timezone = $(this).closest('.scheduleDetails').find('.timezone');
+			var usesDailyLayouts = $(this).closest('.scheduleDetails').find('.usesDailyLayouts');
 
-			details.find('.makeDefaultButton').click(function (e) {
-				PerformAsyncAction($(this), getSubmitCallback(options.makeDefaultAction), $('#action-indicator'));
-			});
+			if ($(e.target).data('layout-type') == 0) {
+				showChangeLayout(e, reservable, blocked, timezone, (usesDailyLayouts.val() == 'false'));
+			} else {
+				showChangeCustomLayout(id);
+			}
+			return false;
+		});
 
-			details.find('.enableSubscription').click(function (e) {
-				PerformAsyncAction($(this), getSubmitCallback(options.enableSubscriptionAction), $('#action-indicator'));
-			});
+		schedulesTable.on('click', '.makeDefaultButton, .enableSubscription, .disableSubscription', function (e) {
+			var action;
+			if ($(this).hasClass('makeDefaultButton')) {
+				action = options.makeDefaultAction;
+			} else if ($(this).hasClass('enableSubscription')) {
+				action = options.enableSubscriptionAction;
+			} else if ($(this).hasClass('disableSubscription')) {
+				action = options.disableSubscriptionAction;
+			}
 
-			details.find('.disableSubscription').click(function (e) {
-				PerformAsyncAction($(this), getSubmitCallback(options.disableSubscriptionAction), $('#action-indicator'));
-			});
+			if (action) {
+				PerformAsyncAction($(this), getSubmitCallback(action), $('#action-indicator'));
+			}
+		});
 
-			details.find('.deleteScheduleButton').click(function (e) {
-				showDeleteDialog(e);
-				return false;
-			});
+		schedulesTable.on('click', '.deleteScheduleButton', function (e) {
+			showDeleteDialog(e);
+			return false;
+		});
 
-			details.find('.showAllDailyLayouts').click(function (e) {
-				e.preventDefault();
-				$(this).next('.allDailyLayouts').toggle();
-			});
+		schedulesTable.on('click', '.showAllDailyLayouts', function (e) {
+			e.preventDefault();
+			$(this).next('.allDailyLayouts').toggle();
+		});
 
-			details.find('.changePeakTimes').click(function (e) {
-				e.preventDefault();
-				showPeakTimesDialog(getActiveScheduleId());
-			});
+		schedulesTable.on('click', '.changePeakTimes', function (e) {
+			e.preventDefault();
+			showPeakTimesDialog(getActiveScheduleId());
+		});
 
-			details.find('.changeAvailability').click(function (e) {
-				e.preventDefault();
-				showAvailabilityDialog(getActiveScheduleId());
-			});
+		schedulesTable.on('click', '.changeAvailability', function (e) {
+			e.preventDefault();
+			showAvailabilityDialog(getActiveScheduleId());
+		});
 
-			details.find('.toggleConcurrent').click(function (e) {
-				e.preventDefault();
-				var toggle = $(e.target);
-				var container = toggle.parent('.concurrentContainer');
-				toggleConcurrentReservations(getActiveScheduleId(), toggle, container);
-			});
+		schedulesTable.on('click', '.toggleConcurrent', function (e) {
+			e.preventDefault();
+			var toggle = $(e.target);
+			var container = toggle.parent('.concurrentContainer');
+			toggleConcurrentReservations(getActiveScheduleId(), toggle, container);
+		});
 
-			details.find('.defaultScheduleStyle').click(function (e) {
-				e.stopPropagation();
-				$(this).editable('toggle');
-			});
+		schedulesTable.on('click', '.defaultScheduleStyle', function (e) {
+			e.stopPropagation();
+			$(this).editable('toggle');
+		});
 
-			details.find('.switchLayout').click(function (e) {
-				e.preventDefault();
-				$('#switchLayoutTypeId').val($(e.target).data('switch-to'));
-				elements.switchLayoutDialog.modal('show');
-			});
+		schedulesTable.on('click', '.switchLayout', function (e) {
+			e.preventDefault();
+			$('#switchLayoutTypeId').val($(e.target).data('switch-to'));
+			elements.switchLayoutDialog.modal('show');
+		});
 
-			details.find('.changeScheduleConcurrentMaximum').click(function (e) {
-				e.preventDefault();
-				var concurrent = $(e.target).closest('.maximumConcurrentContainer').data('concurrent');
-				elements.maximumConcurrentUnlimited.attr('checked', concurrent == "0");
-				elements.maximumConcurrent.val(concurrent);
-				elements.maximumConcurrent.attr('disabled', concurrent == "0");
-				elements.concurrentMaximumDialog.modal('show');
-			});
+		schedulesTable.on('click', '.changeScheduleConcurrentMaximum', function (e) {
+			e.preventDefault();
+			var concurrent = $(e.target).closest('.maximumConcurrentContainer').data('concurrent');
+			elements.maximumConcurrentUnlimited.attr('checked', concurrent == "0");
+			elements.maximumConcurrent.val(concurrent);
+			elements.maximumConcurrent.attr('disabled', concurrent == "0");
+			elements.concurrentMaximumDialog.modal('show');
+		});
 
-			details.find('.changeResourcesPerReservation').click(function (e) {
-				e.preventDefault();
-				var maximum = $(e.target).closest('.resourcesPerReservationContainer').data('maximum');
-				elements.resourcesPerReservationUnlimited.attr('checked', maximum == "0");
-				elements.resourcesPerReservationResources.val(maximum);
-				elements.resourcesPerReservationResources.attr('disabled', maximum == "0");
-				elements.resourcesPerReservationDialog.modal('show');
-			});
+		schedulesTable.on('click', '.changeResourcesPerReservation', function (e) {
+			e.preventDefault();
+			var maximum = $(e.target).closest('.resourcesPerReservationContainer').data('maximum');
+			elements.resourcesPerReservationUnlimited.attr('checked', maximum == "0");
+			elements.resourcesPerReservationResources.val(maximum);
+			elements.resourcesPerReservationResources.attr('disabled', maximum == "0");
+			elements.resourcesPerReservationDialog.modal('show');
 		});
 
 		elements.deletePeakTimesButton.click(function (e) {
