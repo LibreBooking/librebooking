@@ -67,9 +67,43 @@ function ReservationManagement(opts, approval) {
 
     ReservationManagement.prototype.init = function () {
 
-        elements.reservationTable.delegate('.changeAttribute', 'click', function (e) {
+        var reservationTable = $('#reservationTable_wrapper');
+
+        reservationTable.on('click', '.update', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var td = $(this);
+            if (this.tagName != 'TD') {
+                td = $(this).closest('td');
+            }
+            setCurrentReservationInformation(td);
+        });
+
+        reservationTable.on('click', '.changeAttribute', function (e) {
             e.stopPropagation();
             $(e.target).closest('.updateCustomAttribute').find('.inlineAttribute').editable('toggle');
+        });
+
+        reservationTable.on('click', 'tr.editable', function (e) {
+            if ($(e.target).hasClass('action') || $(e.target).hasClass('user') || $(e.target).closest('td').hasClass('action')) {
+                e.stopPropagation();
+                return;
+            }
+            $(this).addClass('clicked');
+            viewReservation($(this).attr('data-refnum'));
+        });
+
+        reservationTable.on('click', '.delete', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showDeleteReservation(getActiveReferenceNumber());
+        });
+
+        reservationTable.on('click', '.approve', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            approveReservation(getActiveReferenceNumber());
         });
 
         elements.deleteTerms.click(function (e) {
@@ -97,27 +131,8 @@ function ReservationManagement(opts, approval) {
             elements.referenceNumberList.val(referenceNumber);
         }
 
-        elements.reservationTable.delegate('a.update', 'click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
 
-            var td = $(this);
-            if (this.tagName != 'TD') {
-                td = $(this).closest('td');
-            }
-            setCurrentReservationInformation(td);
-        });
-
-        elements.reservationTable.delegate('tr.editable', 'click', function (e) {
-            if ($(e.target).hasClass('action') || $(e.target).hasClass('user') || $(e.target).closest('td').hasClass('action')) {
-                e.stopPropagation();
-                return;
-            }
-            $(this).addClass('clicked');
-            viewReservation($(this).attr('data-refnum'));
-        });
-
-        elements.reservationTable.delegate('.edit', 'click', function (e) {
+        reservationTable.on('click', '.edit', function (e) {
             //This conditional prevents the edit button from working on mobile devices
             /*if ($(e.target).hasClass('action') || $(e.target).closest('td').hasClass('action')) {
                 e.stopPropagation();
@@ -136,18 +151,6 @@ function ReservationManagement(opts, approval) {
             }, function (e) {
                 $(this).find('td').removeClass('highlight');
             });*/
-        });
-
-        elements.reservationTable.delegate('.delete', 'click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            showDeleteReservation(getActiveReferenceNumber());
-        });
-
-        elements.reservationTable.delegate('.approve', 'click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            approveReservation(getActiveReferenceNumber());
         });
 
         elements.statusOptions.change(function (e) {
