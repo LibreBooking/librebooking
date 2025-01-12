@@ -54,7 +54,7 @@
 					<i class="bi bi-funnel-fill me-1"></i>{translate key="Filter"}
 				</button>
 			</h2>
-			<div id="filter-reservations-content" class="accordion-collapse collapse">
+			<div id="filter-reservations-content" class="accordion-collapse collapse show">
 				<div class="accordion-body">
 					{assign var=groupClass value="col-12 col-sm-4 col-md-3"}
 					<form id="filterForm" role="form" class="row gy-2">

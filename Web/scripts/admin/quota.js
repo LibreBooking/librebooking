@@ -17,7 +17,8 @@ function QuotaManagement(opts) {
 	var activeQuotaId = null;
 
 	QuotaManagement.prototype.init = function () {
-		$('.delete').click(function (e) {
+
+		$('#quotaList-content').on('click', '.delete', function (e) {
 			e.preventDefault();
 			setActiveQuotaId($(this).attr('quotaId'));
 			elements.deleteDialog.modal('show');
