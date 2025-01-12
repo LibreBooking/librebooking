@@ -116,152 +116,144 @@ function ResourceManagement(opts) {
 	}
 
 	ResourceManagement.prototype.init = function () {
-		$('.resourceDetails').each(function () {
-			var indicator = $('.indicator');
-			var details = $(this);
-			var id = details.attr('data-resourceId');
 
-			initializeResourceUI(id, details);
+		var ressourceTable = $('#resourcesTable_wrapper')
 
-			details.find('.update').click(function (e) {
-				e.preventDefault();
-				setActiveResourceId(id);
-			});
-
-			details.find('.imageButton').click(function (e) {
-				showChangeImage(e);
-			});
-
-			var subscriptionCallback = function (data) {
-				details.find('.publicSettingsPlaceHolder').html(data);
-			};
-
-			details.find('.renameButton').click(function (e) {
-				e.stopPropagation();
-				details.find('.resourceName').editable('toggle');
-			});
-
-			details.find('.copyButton').click(function (e) {
-				e.stopPropagation();
-				elements.copyName.val(getActiveResource().name + ' ' + options.copyText);
-				elements.copyDialog.modal('show');
-				elements.copyName.select().focus();
-			});
-
-			details.find('.changeScheduleButton').click(function (e) {
-				e.stopPropagation();
-				details.find('.scheduleName').editable('toggle');
-			});
-
-			details.find('.changeResourceType').click(function (e) {
-				e.stopPropagation();
-				details.find('.resourceTypeName').editable('toggle');
-			});
-
-			details.find('.changeSortOrder').click(function (e) {
-				e.stopPropagation();
-				details.find('.sortOrderValue').editable('toggle');
-			});
-
-			details.find('.changeLocation').click(function (e) {
-				e.stopPropagation();
-				details.find('.locationValue').editable('toggle');
-			});
-
-			details.find('.changeContact').click(function (e) {
-				e.stopPropagation();
-				details.find('.contactValue').editable('toggle');
-			});
-
-			details.find('.changeDescription').click(function (e) {
-				e.stopPropagation();
-				details.find('.descriptionValue').editable('toggle');
-			});
-
-			details.find('.changeNotes').click(function (e) {
-				e.stopPropagation();
-				details.find('.notesValue').editable('toggle');
-			});
-
-			details.find('.changeResourceAdmin').click(function (e) {
-				e.stopPropagation();
-				details.find('.resourceAdminValue').editable('toggle');
-			});
-
-			details.find('.adminButton').click(function (e) {
-				showResourceAdmin(e);
-			});
-
-			details.find('.deleteButton').click(function (e) {
-				showDeletePrompt(e);
-			});
-
-			details.find('.changeAttribute').click(function (e) {
-				e.stopPropagation();
-				$(e.target).closest('.updateCustomAttribute').find('.inlineAttribute').editable('toggle');
-			});
-
-			details.find('.changeStatus').click(function (e) {
-				showStatusPrompt(e);
-			});
-
-			details.find('.changeDuration').click(function (e) {
-				showDurationPrompt(e);
-			});
-
-			details.find('.changeCapacity').click(function (e) {
-				showCapacityPrompt(e);
-			});
-
-			details.find('.changeAccess').click(function (e) {
-				showAccessPrompt(e);
-			});
-
-			details.find('.changeUserPermission').click(function (e) {
-				changeUserPermissions();
-				elements.userDialog.modal('show');
-			});
-
-			details.find('.changeGroupPermissions').click(function (e) {
-				changeGroupPermissions();
-				elements.groupDialog.modal('show');
-			});
-
-			details.find('.changeResourceGroups').click(function (e) {
-				changeResourceGroups();
-				elements.resourceGroupDialog.modal('show');
-			});
-
-			details.find('.resourceColorPicker').on('change', function (e) {
-				setActiveResourceId(id);
-				var color = $(this).val();
-				elements.reservationColor.val(color);
-				elements.colorForm.submit();
-			});
-
-			details.find('.clearColor').click(function (e) {
-				$(this).siblings('.resourceColorPicker').val('#ffffff');
-				elements.reservationColor.val('');
-				elements.colorForm.submit();
-			});
-
-			details.find('.changeCredits').click(function (e) {
-				var resource = getActiveResource();
-				elements.creditsPerSlot.val(resource.credits);
-				elements.peakCreditsPerSlot.val(resource.peakCredits);
-				elements.creditsDialog.modal('show');
-			});
-
-			details.delegate('.enableSubscription', 'click', function (e) {
-				e.preventDefault();
-				PerformAsyncAction($(this), getSubmitCallback(options.actions.enableSubscription), $('#subscriptionIndicator'), subscriptionCallback);
-			});
-
-			details.delegate('.disableSubscription', 'click', function (e) {
-				e.preventDefault();
-				PerformAsyncAction($(this), getSubmitCallback(options.actions.disableSubscription), $('#subscriptionIndicator'), subscriptionCallback);
-			});
+	    ressourceTable.on('click', '.update', function (e) {
+			e.preventDefault();
+			var id = $(this).closest('.resourceDetails').attr('data-resourceId');
+			setActiveResourceId(id);
 		});
+
+		ressourceTable.on('click', '.imageButton', function (e) {
+			showChangeImage(e);
+		});
+
+		ressourceTable.on('click', '.renameButton', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.resourceName').editable('toggle');
+		});
+
+		ressourceTable.on('click', '.copyButton', function (e) {
+			e.stopPropagation();
+			elements.copyName.val(getActiveResource().name + ' ' + options.copyText);
+			elements.copyDialog.modal('show');
+			elements.copyName.select().focus();
+		});
+		
+		ressourceTable.on('click', '.changeScheduleButton', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.scheduleName').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeResourceType', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.resourceTypeName').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeSortOrder', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.sortOrderValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeLocation', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.locationValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeContact', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.contactValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeDescription', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.descriptionValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeNotes', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.notesValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeResourceAdmin', function (e) {
+			e.stopPropagation();
+			$(this).closest('.resourceDetails').find('.resourceAdminValue').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.adminButton', function (e) {
+			showResourceAdmin(e);
+		});
+		
+		ressourceTable.on('click', '.deleteButton', function (e) {
+			showDeletePrompt(e);
+		});
+		
+		ressourceTable.on('click', '.changeAttribute', function (e) {
+			e.stopPropagation();
+			$(e.target).closest('.updateCustomAttribute').find('.inlineAttribute').editable('toggle');
+		});
+		
+		ressourceTable.on('click', '.changeStatus', function (e) {
+			showStatusPrompt(e);
+		});
+		
+		ressourceTable.on('click', '.changeDuration', function (e) {
+			showDurationPrompt(e);
+		});
+		
+		ressourceTable.on('click', '.changeCapacity', function (e) {
+			showCapacityPrompt(e);
+		});
+		
+		ressourceTable.on('click', '.changeAccess', function (e) {
+			showAccessPrompt(e);
+		});
+		
+		ressourceTable.on('click', '.changeUserPermission', function (e) {
+			changeUserPermissions();
+			elements.userDialog.modal('show');
+		});
+		
+		ressourceTable.on('click', '.changeGroupPermissions', function (e) {
+			changeGroupPermissions();
+			elements.groupDialog.modal('show');
+		});
+		
+		ressourceTable.on('click', '.changeResourceGroups', function (e) {
+			changeResourceGroups();
+			elements.resourceGroupDialog.modal('show');
+		});
+		
+		ressourceTable.on('change', '.resourceColorPicker', function (e) {
+			setActiveResourceId($(this).closest('.resourceDetails').attr('data-resourceId'));
+			var color = $(this).val();
+			elements.reservationColor.val(color);
+			elements.colorForm.submit();
+		});
+		
+		ressourceTable.on('click', '.clearColor', function (e) {
+			$(this).siblings('.resourceColorPicker').val('#ffffff');
+			elements.reservationColor.val('');
+			elements.colorForm.submit();
+		});
+		
+		ressourceTable.on('click', '.changeCredits', function (e) {
+			var resource = getActiveResource();
+			elements.creditsPerSlot.val(resource.credits);
+			elements.peakCreditsPerSlot.val(resource.peakCredits);
+			elements.creditsDialog.modal('show');
+		});
+
+		ressourceTable.on('click', '.enableSubscription, .disableSubscription', function (e) {
+			e.preventDefault();
+			const details = $(this).closest('.resourceDetails');
+			const action = $(this).hasClass('enableSubscription') ? options.actions.enableSubscription : options.actions.disableSubscription; // Determine the action
+			const subscriptionCallback = function (data) {
+				details.find('.publicSettingsPlaceHolder').html(data || '<p>No data received</p>');
+			};
+			PerformAsyncAction(details, getSubmitCallback(action), $('#subscriptionIndicator'), subscriptionCallback);
+		});		
 
 		elements.checkAllResources.click(function (e) {
 			e.preventDefault();

@@ -694,6 +694,10 @@ class SmartyPage extends Smarty
                         $(".buttons-collection").addClass("btn-sm");
                     });
                 },
+                "drawCallback": function (settings) {
+                    console.log("redraw")
+                    setUpEditables();
+                },
             });
         </script>
         '
