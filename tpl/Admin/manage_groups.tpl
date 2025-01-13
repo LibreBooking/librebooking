@@ -67,8 +67,6 @@
                             <td><a href="#" class="update permissions link-primary">{translate key='Change'}</a></td>
                             {if $CanChangeRoles}
                                 <td>
-
-
                                     {if $group->IsExtendedAdmin()}
                                         <div class="btn-group btn-group-sm">
                                             <a href="#" class="update roles btn btn-outline-primary">{translate key='Change'}</a>
@@ -103,6 +101,8 @@
                                                 {/if}
                                             </ul>
                                         </div>
+                                    {else}
+                                        <a href="#" class="update roles link-primary">{translate key='Change'}</a>
                                     {/if}
                                 </td>
                             {/if}
