@@ -215,18 +215,18 @@
             {block name="legend"}
                 <div class="schedule-legend mt-3">
                     <div class="d-none d-sm-flex justify-content-center flex-wrap gap-1 text-center">
-                        <div class="legend reservable border border-dark-subtle rounded-2">{translate key=Reservable}</div>
-                        <div class="legend unreservable border border-dark-subtle rounded-2">{translate key=Unreservable}</div>
-                        <div class="legend reserved border border-dark-subtle rounded-2">{translate key=Reserved}</div>
+                        <div class="legend reservable border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Reservable}</div>
+                        <div class="legend unreservable border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Unreservable}</div>
+                        <div class="legend reserved border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Reserved}</div>
                         {if $LoggedIn}
-                            <div class="legend reserved mine border border-dark-subtle rounded-2">{translate key=MyReservation}
+                            <div class="legend reserved mine border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=MyReservation}
                             </div>
-                            <div class="legend reserved participating border border-dark-subtle rounded-2">
+                            <div class="legend reserved participating border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
                                 {translate key=Participant}</div>
                         {/if}
-                        <div class="legend reserved pending border border-dark-subtle rounded-2">{translate key=Pending}</div>
-                        <div class="legend pasttime border border-dark-subtle rounded-2">{translate key=Past}</div>
-                        <div class="legend restricted border border-dark-subtle rounded-2">{translate key=Restricted}</div>
+                        <div class="legend reserved pending border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Pending}</div>
+                        <div class="legend pasttime border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Past}</div>
+                        <div class="legend restricted border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">{translate key=Restricted}</div>
                     </div>
                 </div>
             {/block}
