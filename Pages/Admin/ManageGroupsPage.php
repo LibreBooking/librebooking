@@ -165,7 +165,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->presenter->PageLoad();
         $this->Set('chooseText', Resources::GetInstance()->GetString('Choose') . '...');
         $this->Set('CanChangeRoles', $this->CanChangeRoles);
-        $this->Display('Admin/manage_groups.tpl');
+        $this->Display('Admin/Groups/manage_groups.tpl');
     }
 
     public function BindPageInfo(PageInfo $pageInfo)

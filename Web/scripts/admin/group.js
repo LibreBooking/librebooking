@@ -71,6 +71,20 @@ function GroupManagement(opts) {
 			elements.membersDialog.modal('show');
 		});
 
+		elements.groupList.delegate('.groupAdmin', 'click', function () {
+			changeGroupAdmin();
+		});
+
+		elements.groupList.delegate('.changeAdminGroups', 'click', function () {
+			changeAdminGroups();
+		});
+		elements.groupList.delegate('.changeAdminResources', 'click', function () {
+			changeAdminResources();
+		});
+		elements.groupList.delegate('.changeAdminSchedules', 'click', function () {
+			changeAdminSchedules();
+		});
+
 		elements.groupList.delegate('.delete', 'click', function () {
 			deleteGroup();
 		});
@@ -125,20 +139,6 @@ function GroupManagement(opts) {
 		elements.userSearch.userAutoComplete(options.userAutocompleteUrl, function (ui) {
 			addUserToGroup(ui.item.value);
 			elements.userSearch.val('');
-		});
-
-		elements.groupList.delegate('.groupAdmin', 'click', function () {
-			changeGroupAdmin();
-		});
-
-		elements.groupList.delegate('.changeAdminGroups', 'click', function () {
-			changeAdminGroups();
-		});
-		elements.groupList.delegate('.changeAdminResources', 'click', function () {
-			changeAdminResources();
-		});
-		elements.groupList.delegate('.changeAdminSchedules', 'click', function () {
-			changeAdminSchedules();
 		});
 
 		elements.checkAllResourcesFull.click(function (e) {
@@ -348,9 +348,8 @@ function GroupManagement(opts) {
 
 	var changeGroupAdmin = function () {
 		var groupId = getActiveId();
-
+		
 		elements.groupAdminForm.find('select').val('');
-
 		elements.groupAdminDialog.modal('show');
 	};
 
