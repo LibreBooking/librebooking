@@ -30,7 +30,7 @@ class ManageThemePresenter extends ActionPresenter
 
             $this->RemoveLogo();
 
-            $target = ROOT_DIR . 'Web/img/custom-logo.' . $logoFile->Extension();
+            $target = Paths::Theme() . 'custom-logo.' . $logoFile->Extension();
             $copied = copy($logoFile->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -42,7 +42,7 @@ class ManageThemePresenter extends ActionPresenter
         }
         if ($cssFile != null) {
             Log::Debug('Replacing css file with ' . $cssFile->OriginalName());
-            $target = ROOT_DIR . 'Web/css/custom-style.css';
+            $target = Paths::Theme() . 'custom-style.css';
             $copied = copy($cssFile->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -57,7 +57,7 @@ class ManageThemePresenter extends ActionPresenter
 
             $this->RemoveFavicon();
 
-            $target = ROOT_DIR . 'Web/custom-favicon.' . $favicon->Extension();
+            $target = Paths::Theme() . 'custom-favicon.' . $favicon->Extension();
             $copied = copy($favicon->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -72,7 +72,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveLogo()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/img/custom-logo.*');
+            $targets = array_merge(glob(ROOT_DIR . 'Web/img/custom-logo.*'), glob(PATHS::Theme() . 'custom-logo.*'));
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {
@@ -87,7 +87,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveFavicon()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/custom-favicon.*');
+            $targets = array_merge(glob(ROOT_DIR . 'Web/custom-favicon.*'), glob(PATHS::Theme() . 'custom-favicon.*'));
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {
@@ -102,7 +102,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveCss()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/css/custom-style.css');
+            $targets = array_merge(glob(ROOT_DIR . 'Web/css/custom-style.css'), glob(PATHS::Theme() . 'custom-style.css'));
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {

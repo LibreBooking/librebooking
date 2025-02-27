@@ -127,6 +127,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'format_date', [$this, 'FormatDate']);
         $this->registerPlugin('function', 'html_link', [$this, 'PrintLink']);
         $this->registerPlugin('function', 'html_image', [$this, 'PrintImage']);
+        $this->registerPlugin('function', 'html_favicon', [$this, 'PrintFavicon']);
         $this->registerPlugin('function', 'control', [$this, 'DisplayControl']);
         $this->registerPlugin('function', 'validator', [$this, 'Validator']);
         $this->registerPlugin('function', 'textbox', [$this, 'Textbox']);
@@ -221,7 +222,13 @@ class SmartyPage extends Smarty
 
     public function PrintLink($params, $smarty)
     {
+        $icon = isset($params['icon']) ? $params['icon'] : 'bi-people-fill';
+
         $string = $this->Resources->GetString($params['key']);
+        if (isset($params['text'])){
+            $string = $params['text'];
+        }
+
         if (!isset($params['title'])) {
             $title = $string;
         } else {
@@ -237,7 +244,7 @@ class SmartyPage extends Smarty
         $knownAttributes = ['key', 'title', 'href'];
         $attributes = $this->AppendAttributes($params, $knownAttributes);
 
-        return "<a href=\"$href\" class=\"link-primary\" title=\"$title\" $attributes><i class=\"bi bi-people-fill me-1\"></i>$string</a>";
+        return "<a href=\"$href\" class=\"link-primary\" title=\"$title\" $attributes><i class=\"bi $icon me-1\"></i>$string</a>";
     }
 
     public function SmartyTranslate($params, $smarty)
@@ -280,13 +287,32 @@ class SmartyPage extends Smarty
         return $formatted;
     }
 
+    public function PrintFavicon($params, $smarty){
+
+        $favicon = isset($params['favicon']) ? $params['favicon'] : '';
+        $path = isset($params['path']) ? $params['path'] : '';
+
+        return "<link rel=\"shortcut icon\" href=\"$path$favicon\" />" . PHP_EOL
+        . "<link rel=\"icon\" href=\"$path$favicon\" />";
+    }
+
     public function PrintImage($params, $smarty)
     {
         $alt = isset($params['alt']) ? $params['alt'] : '';
         $altKey = isset($params['altKey']) ? $params['altKey'] : '';
         $width = isset($params['width']) ? $params['width'] : '';
         $height = isset($params['height']) ? $params['height'] : '';
-        $imgPath = sprintf('%simg/%s', $this->RootPath, $params['src']);
+        
+        $file = isset($params['file']) ? $params['file'] : '';
+        $path = isset($params['path']) ? $params['path'] : '';
+        
+        if (isset($file) && isset($path)){
+            $imgPath = $path.'/'.$file;
+            unset($params['file']);
+            unset($params['path']);
+        } else {
+            $imgPath = sprintf('%simg/%s', $this->RootPath, $params['src']);
+        }
 
         $knownAttributes = ['alt', 'width', 'height', 'src', 'title', 'altKey'];
         $attributes = $this->AppendAttributes($params, $knownAttributes);

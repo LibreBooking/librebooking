@@ -26,10 +26,9 @@
 
                     <li class="list-group-item">
                         <h4>{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</h4>
-                        <img src="{$ScriptUrl}/img/{$LogoUrl}" class="d-block mx-auto mw-100" />
+                         {html_image file="$LogoUrl?{$Version}" path="{$ScriptUrl}{$LogoPath}" alt="$Title" class="d-block mx-auto mw-100" }
                         <div class="d-flex align-items-center justify-content-center my-2">
-                            <a href="{$ScriptUrl}/img/{$LogoUrl}" download="{$ScriptUrl}/img/{$LogoUrl}"
-                                class="link-primary"><i class="bi bi-download me-1"></i>{$LogoUrl}</a>
+                            {html_link text="{$LogoUrl}" href="{$ScriptUrl}{$LogoPath}{$LogoUrl}?{$Version}" download="{$ScriptUrl}{$LogoPath}{$LogoUrl}?{$Version}" class="link-primary" icon="bi-download" }
                             <div class="vr mx-1"></div>
                             <a href="#" id="removeLogo" class="link-danger text-decoration-none"><i
                                     class="bi bi-trash3-fill me-1"></i>{translate key=Remove}</a>
@@ -45,10 +44,9 @@
 
                     <li class="list-group-item">
                         <h4>Favicon (*.ico, *.png, *.gif, *.jpg - Recommended size 48px x 48px)</h4>
-                        <img src="{$ScriptUrl}/{$FaviconUrl}" class="d-block mx-auto" />
+                        {html_image file="$FaviconUrl" path="{$ScriptUrl}{$FaviconPath}" alt="$Title" class="d-block mx-auto"}
                         <div class="d-flex align-items-center justify-content-center my-2">
-                            <a href="{$ScriptUrl}/{$FaviconUrl}" download="{$ScriptUrl}/img/{$FaviconUrl}"
-                                class="link-primary"><i class="bi bi-download me-1"></i>{$FaviconUrl}</a>
+                            {html_link text="{$FaviconUrl}" href="{$ScriptUrl}{$FaviconPath}{$FaviconUrl}" download="{$ScriptUrl}{$FaviconPath}{$FaviconUrl}" class="link-primary" icon="bi-download" }
                             <div class="vr mx-1"></div>
                             <a href="#" id="removeFavicon" class="link-danger text-decoration-none"><i
                                     class="bi bi-trash3-fill me-1"></i>{translate key=Remove}</a>
@@ -65,13 +63,14 @@
                     <li class="list-group-item">
                         <div>
                             <h4>{translate key="CssFile"} (*.css)</h4>
+                            {if isset($CssUrl) && $CssUrl neq 'null-style.css'}
                             <div class="d-flex align-items-center justify-content-center my-2">
-                                <a href="{$ScriptUrl}/css/{$CssUrl}" download="{$ScriptUrl}/css/{$CssUrl}"
-                                    class="link-primary"><i class="bi bi-download me-1"></i>{$CssUrl}</a>
+                                {html_link text="{$CssUrl}" href="{$ScriptUrl}{$CssPath}{$CssUrl}" download="{$ScriptUrl}{$CssPath}{$CssUrl}" class="link-primary" icon="bi-download" }
                                 <div class="vr mx-1"></div>
                                 <a href="#" id="removeCss" class="link-danger text-decoration-none"><i
                                         class="bi bi-trash3-fill me-1"></i>{translate key=Remove}</a>
                             </div>
+                            {/if}
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=CSS_FILE} class="form-control" id="cssFile"

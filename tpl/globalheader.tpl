@@ -10,8 +10,7 @@
         <meta http-equiv="REFRESH"
             content="{$SessionTimeoutSeconds};URL={$Path}logout.php?{QueryStringKeys::REDIRECT}={$smarty.server.REQUEST_URI|urlencode}" />
     {/if}
-    <link rel="shortcut icon" href="{$Path}{$FaviconUrl}" />
-    <link rel="icon" href="{$Path}{$FaviconUrl}" />
+    {html_favicon path="$FaviconPath" favicon="$FaviconUrl"}
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {jsfile src="js/jquery-3.3.1.min.js"}
@@ -88,8 +87,9 @@
             {cssfile src=$cssFile}
         {/foreach}
     {/if}
-    {if isset($CssUrl) && $CssUrl neq ''}
-        {cssfile src=$CssUrl}
+    {if isset($CssUrl) && $CssUrl neq '' && $CssUrl neq 'null-style.css' }
+        {assign var='CssFullUrl' value= $CssPath|cat:$CssUrl}
+        {cssfile src=$CssFullUrl}
     {/if}
     {if isset($CssStylingFile) && $CssStylingFile neq ''}
         {cssfile src='styling-plugin.php'}
@@ -119,7 +119,7 @@
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
-                {html_image src="$LogoUrl?{$Version}" alt="$Title" class="logo"}
+                {html_image file="$LogoUrl?{$Version}" path="$LogoPath" alt="$Title" class="logo"}
             </a>
             <div class="border-start ps-2 d-flex flex-column">
                 {if $CompanyName neq ''}
@@ -130,7 +130,7 @@
         </div>
         <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
             <div class="container-fluid">
-                {*<a class="navbar-brand py-0" href="{$HomeUrl}">{html_image src="$LogoUrl?{$Version}" alt="$Title"
+                {*<a class="navbar-brand py-0" href="{$HomeUrl}">{html_image path="$logoPath" file="$LogoUrl"?{$Version}" alt="$Title"
                     class="logo"}</a>*}
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation">

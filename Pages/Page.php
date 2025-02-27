@@ -5,11 +5,14 @@ if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require ROOT_DIR . 'vendor/autoload.php';
 }
 
+
 require_once(ROOT_DIR . 'Pages/IPage.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
+require_once(ROOT_DIR . 'lib/FileSystem/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
+
 require_once(ROOT_DIR . 'lib/external/MobileDetect/Mobile_Detect.php');
 
 abstract class Page implements IPage
@@ -91,19 +94,26 @@ abstract class Page implements IPage
         $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
 
         $this->smarty->assign('LogoUrl', 'librebooking.png');
-        if (file_exists($this->path . 'img/custom-logo.png')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.png');
-        }
-        if (file_exists($this->path . 'img/custom-logo.gif')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.gif');
-        }
-        if (file_exists($this->path . 'img/custom-logo.jpg')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.jpg');
+        $this->smarty->assign('LogoPath', $this->path .  "img");
+
+        // custom logo
+        foreach ( ['.png', '.gif', '.jpg'] as $extension){
+            if (file_exists($this->path . 'img/custom-logo' . $extension)) {
+                $this->smarty->assign('LogoUrl', 'custom-logo' . $extension);
+                break;
+            }
+            if (file_exists(Paths::Theme() . 'custom-logo' . $extension)) {
+                $this->smarty->assign('LogoPath', Paths::Theme());
+                $this->smarty->assign('LogoUrl', 'custom-logo.png');
+
+                break;
+            }
         }
 
         $this->smarty->assign('CssUrl', 'null-style.css');
-        if (file_exists($this->path . 'css/custom-style.css')) {
-            $this->smarty->assign('CssUrl', 'custom-style.css');
+        if (file_exists(Paths::Theme() . 'custom-style.css')) {
+            $this->smarty->assign('CssUrl',  'custom-style.css');
+            $this->smarty->assign('CssPath', Paths::Theme());
         }
 
         $stylingFactory = PluginManager::Instance()->LoadStyling();
@@ -112,17 +122,19 @@ abstract class Page implements IPage
         }
 
         $this->smarty->assign('FaviconUrl', 'favicon.ico');
-        if (file_exists($this->path . 'custom-favicon.png')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.png');
-        }
-        if (file_exists($this->path . 'custom-favicon.gif')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.gif');
-        }
-        if (file_exists($this->path . 'custom-favicon.jpg')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.jpg');
-        }
-        if (file_exists($this->path . 'custom-favicon.ico')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.ico');
+        $this->smarty->assign('FaviconPath', $this->path);
+
+        // custom favicon
+        foreach ( ['.png', '.gif', '.jpg','.ico'] as $extension){
+            if (file_exists($this->path . 'img/custom-favicon' . $extension)) {
+                $this->smarty->assign('FaviconUrl', 'custom-favicon' . $extension);
+                break;
+            }
+            if (file_exists(Paths::Theme() . 'custom-favicon' . $extension)) {
+                $this->smarty->assign('FaviconUrl', 'custom-favicon' . $extension);
+                $this->smarty->assign('FaviconPath', Paths::Theme());
+                break;
+            }
         }
 
         $logoUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);

@@ -47,6 +47,17 @@ class Paths
         return ROOT_DIR . 'Web/uploads/tos/';
     }
 
+     /**
+     * Filesystem directory for storing theme files (logo, favicon, css)
+     *
+     * @static
+     * @return string
+     */
+    public static function Theme()
+    {
+        return ROOT_DIR . 'Web/uploads/theme/';
+    }
+
     /**
      * Filesystem directory for storing terms of email templates for given language. Always contains trailing slash
      *
