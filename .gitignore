@@ -35,6 +35,8 @@ lang/*/*-custom.tpl
 !/Web/uploads/images/index.html
 /Web/uploads/tos/*
 !/Web/uploads/tos/index.html
+/Web/uploads/theme/*
+!/Web/uploads/theme/index.html
 
 /Web/test-embed.html
 

@@ -93,6 +93,7 @@
                 <!-- user files -->
                 <exclude name="**/uploads/images/*" />
                 <exclude name="**/uploads/reservation/*" />
+                <exclude name="**/uploads/theme/*" />
                 <!-- asset resources -->
                 <exclude name="**.psd" />
                 <exclude name="**.bak" />

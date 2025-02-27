@@ -55,6 +55,16 @@ class Paths
      */
     public static function Theme()
     {
+        $themeDir = dirname(__FILE__) . '/' . ROOT_DIR . 'Web/uploads/theme';
+        if (!is_dir($themeDir)) {
+            Log::Debug('Could not find directory %s. Attempting to create it', $themeDir);
+            $created = mkdir($themeDir);
+            if ($created) {
+                Log::Debug('Created %s', $themeDir);
+            } else {
+                Log::Debug('Could not create %s', $themeDir);
+            }
+        }
         return ROOT_DIR . 'Web/uploads/theme/';
     }
 
