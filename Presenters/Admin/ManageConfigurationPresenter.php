@@ -51,7 +51,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         parent::__construct($page);
         $this->page = $page;
         $this->configSettings = $settings;
-        $this->configFilePath = ROOT_DIR . 'config/config.php';
+        $this->configFilePath = Configuration::Instance()->GetConfigFilePath();
         $this->configFilePathDist = ROOT_DIR . 'config/config.dist.php';
 
         $this->AddAction(ConfigActions::Update, 'Update');

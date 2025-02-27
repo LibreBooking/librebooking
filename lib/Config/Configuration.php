@@ -63,6 +63,16 @@ interface IConfigurationFile
     public function GetAdminEmail();
 
     public function EnableSubscription();
+
+    /**
+     * @return string
+     */
+    public function GetConfigFilePath();
+
+    /**
+     * do nothing or die
+     */
+    public function Validate();
 }
 
 class Configuration implements IConfiguration
@@ -83,9 +93,7 @@ class Configuration implements IConfiguration
 
     public const VERSION = '2.8.6.2';
 
-    protected function __construct()
-    {
-    }
+    protected function __construct() {}
 
     /**
      * @return IConfigurationFile
@@ -95,12 +103,32 @@ class Configuration implements IConfiguration
         if (self::$_instance == null) {
             self::$_instance = new Configuration();
             self::$_instance->Register(
-                dirname(__FILE__) . '/../../' . self::DEFAULT_CONFIG_FILE_PATH,
+                self::$_instance->getConfigFilePath(),
                 self::DEFAULT_CONFIG_ID
             );
         }
 
         return self::$_instance;
+    }
+
+    public function GetConfigFilePath()
+    {
+
+        $env = getenv(strtoupper(self::DEFAULT_CONFIG_ID) . '_CONFIG_FILE');
+
+        if (!empty($env)) {
+            return dirname(__FILE__) . '/../../' . $env;
+        }
+
+        return dirname(__FILE__) . '/../../' . self::DEFAULT_CONFIG_FILE_PATH;
+    }
+
+    public function Validate()
+    {
+        if (empty($this->_configs[self::DEFAULT_CONFIG_ID])) {
+
+            die('Missing configuration file. Please refer to the installation instructions.');
+        }
     }
 
     public static function SetInstance($value)
@@ -199,6 +227,14 @@ class ConfigurationFile implements IConfigurationFile
         if (array_key_exists($keyName, $this->_values)) {
             return $this->Convert($this->_values[$keyName], $converter);
         }
+        return null;
+    }
+
+    public function Validate(){
+        //  do nothing
+    }
+
+    public function GetConfigFilePath(){
         return null;
     }
 
