@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: LibreBooking Community Support
+    url: https://github.com/LibreBooking/app/discussions
+    about: Please ask and answer questions here.
+  - name: 💬 Discord Chat
+    url: https://discord.gg/AEvcebqB
+    about: Chat with devs and community. If the link doesn't work please file an issue.
