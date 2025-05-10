@@ -21,7 +21,6 @@ jobs:
           stale-pr-label: "stale"
           exempt-assignees: 'effgarces'
 
-          any-of-labels: 'need info,stale'
           stale-issue-message: >
             This issue was marked stale because it has been open 60 days with no
             activity. Please remove the stale label or comment on this issue. Otherwise,
