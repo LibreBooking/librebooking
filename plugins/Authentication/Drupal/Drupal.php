@@ -209,6 +209,12 @@ class Drupal extends Authentication implements IAuthentication
             $stored_hash = $account->pass;
         }
 
+        $type = substr($stored_hash, 0, 4);
+        // Drupal 10.1.0 uses password_hash(), see https://www.drupal.org/node/3322420
+        if ($type == '$2y$') {
+            return password_verify($password, $stored_hash);
+        }
+
         $type = substr($stored_hash, 0, 3);
         switch ($type) {
             case '$S$':
