@@ -157,6 +157,13 @@ class Registration implements IRegistration
         } else {
             $defaultHomePageId = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_HOMEPAGE, new IntConverter());
             $additionalFields = ['phone' => $user->Phone(), 'organization' => $user->Organization(), 'position' => $user->Title()];
+            $userGroups = $this->GetUserGroups($user);
+            
+            if (str_contains($user->Email(), '@ifnmg.edu.br')) 
+                $userGroups = [new UserGroup(5, 'Servidores')];
+            elseif (str_contains($user->Email(), '@aluno.ifnmg.edu.br')) 
+                $userGroups = [new UserGroup(6, 'Alunos')];
+            
             $this->Register(
                 $user->UserName(),
                 $user->Email(),
@@ -168,7 +175,8 @@ class Registration implements IRegistration
                 empty($defaultHomePageId) ? Pages::DEFAULT_HOMEPAGE_ID : $defaultHomePageId,
                 $additionalFields,
                 [],
-                $this->GetUserGroups($user)
+                //$this->GetUserGroups($user)
+                $userGroups
             );
         }
     }
