@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' InlineEdit=true DataTable=true}
+{include file='globalheader.tpl' Qtip=true InlineEdit=true DataTable=true}
 
 <div id="page-manage-reservations" class="admin-page">
 	<div class="clearfix border-bottom mb-3">
@@ -54,7 +54,7 @@
 					<i class="bi bi-funnel-fill me-1"></i>{translate key="Filter"}
 				</button>
 			</h2>
-			<div id="filter-reservations-content" class="accordion-collapse collapse show">
+			<div id="filter-reservations-content" class="accordion-collapse collapse">
 				<div class="accordion-body">
 					{assign var=groupClass value="col-12 col-sm-4 col-md-3"}
 					<form id="filterForm" role="form" class="row gy-2">
@@ -62,27 +62,26 @@
 							class="form-group filter-dates {$groupClass} d-flex justify-content-between align-items-center">
 							<div>
 								<label for="startDate" class="fw-bold">{translate key='BeginDate'}</label>
-								<input id="startDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$StartDate format='Y-m-d'}" />
+								<input id="startDate" type="text" class="form-control form-control-sm dateinput inline"
+									value="{formatdate date=$StartDate}" />
 								<input id="formattedStartDate" type="hidden"
 									value="{formatdate date=$StartDate key=system}" />
 							</div>
 							<div>
 								<label for="endDate" class="fw-bold">{translate key='EndDate'}</label>
-								<input id="endDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$EndDate format='Y-m-d'}" />
+								<input id="endDate" type="text" class="form-control form-control-sm dateinput inline"
+									value="{formatdate date=$EndDate}" />
 								<input id="formattedEndDate" type="hidden"
 									value="{formatdate date=$EndDate key=system}" />
 							</div>
 						</div>
 						<div class="form-group filter-user {$groupClass}">
 							<label for="userFilter" class="fw-bold">{translate key=User}</label>
-							<div class="position-relative">
-								<input id="userFilter" type="text" class="form-control form-control-sm"
-									value="{$UserNameFilter}" placeholder="{translate key=User}" />
-								<input id="userId" type="hidden" value="{$UserIdFilter}" />
-								<span class="searchclear bi bi-x-circle-fill" ref="userFilter,userId"></span>
-							</div>
+							<input id="userFilter" type="search" class="form-control form-control-sm"
+								value="{$UserNameFilter}" placeholder="{translate key=User}" />
+							<input id="userId" type="hidden" value="{$UserIdFilter}" />
+							{*<span class="searchclear input-group-text bi bi-x-circle text-danger"
+							ref="userFilter,userId"></span>*}
 						</div>
 						<div class="form-group filter-schedule {$groupClass}">
 							<label for="scheduleId" class="fw-bold">{translate key=Schedule}</label>
@@ -109,28 +108,25 @@
 						</div>
 						<div class="form-group filter-referenceNumber {$groupClass}">
 							<label for="referenceNumber" class="fw-bold">{translate key=ReferenceNumber}</label>
-							<div class="position-relative">
-								<input id="referenceNumber" type="text" class="form-control form-control-sm"
-									value="{$ReferenceNumber}" placeholder="{translate key=ReferenceNumber}" />
-								<span class="searchclear bi bi-x-circle-fill" ref="referenceNumber"></span>
-							</div>
+							<input id="referenceNumber" type="search" class="form-control form-control-sm"
+								value="{$ReferenceNumber}" placeholder="{translate key=ReferenceNumber}" />
+							{*<span class="searchclear input-group-text bi bi-x-circle text-danger"
+							ref="referenceNumber"></span>*}
 						</div>
 						<div class="form-group filter-title {$groupClass}">
 							<label for="reservationTitle" class="fw-bold">{translate key=Title}</label>
-							<div class="position-relative">
-								<input id="reservationTitle" type="text" class="form-control form-control-sm"
-									value="{$ReservationTitle}" placeholder="{translate key=Title}" />
-								<span class="searchclear bi bi-x-circle-fill" ref="reservationTitle"></span>
-							</div>
+							<input id="reservationTitle" type="search" class="form-control form-control-sm"
+								value="{$ReservationTitle}" placeholder="{translate key=Title}" />
+							{*<span class="searchclear input-group-text bi bi-x-circle text-danger"
+							ref="reservationTitle"></span>*}
 						</div>
 						<div class="form-group filter-title {$groupClass}">
 							<label for="reservationDescription"
 								class="fw-bold">{translate key=ReservationDescription}</label>
-							<div class="position-relative">
-								<input id="reservationDescription" type="text" class="form-control form-control-sm"
-									value="{$ReservationDescription}" placeholder="{translate key=Description}" />
-								<span class="searchclear bi bi-x-circle-fill" ref="reservationDescription"></span>
-							</div>
+							<input id="reservationDescription" type="search" class="form-control form-control-sm"
+								value="{$ReservationDescription}" placeholder="{translate key=Description}" />
+							{*<span class="searchclear input-group-text bi bi-x-circle text-danger"
+						ref="reservationDescription"></span>*}
 						</div>
 						<div class="form-group filter-resourceStatus {$groupClass}">
 							<label for="resourceStatusIdFilter" class="fw-bold">{translate key=ResourceStatus}</label>
@@ -180,7 +176,7 @@
 		<div class="card-body">
 			<div class="table-responsive">
 				{assign var=tableId value=reservationTable}
-				<table class="table table-striped table-hover border-top w-100 admin-panel" id="{$tableId}">
+				<table class="table table-striped table-hover border-top w-100 admin-panel" id="reservationTable">
 					{assign var=colCount value=11}
 					<thead>
 						<tr>
@@ -227,8 +223,7 @@
 							{/if}
 							{assign var=reservationId value=$reservation->ReservationId}
 							<tr class="{$rowCss} {if $IsDesktop}editable{/if}" data-seriesId="{$reservation->SeriesId}"
-								data-refnum="{$reservation->ReferenceNumber}" data-bs-custom-class="respopup-tooltip"
-								data-bs-html="true">
+								data-refnum="{$reservation->ReferenceNumber}">
 								<td class="id d-none">{$reservationId}</td>
 								<td class="user">
 									{fullname first=$reservation->FirstName last=$reservation->LastName ignorePrivacy=true}
@@ -301,6 +296,10 @@
 										<div>
 											<label class="fw-bold">{translate key='LastModified'}</label>
 											{formatdate date=$reservation->ModifiedDate timezone=$Timezone key=short_datetime}
+										</div>
+										<div>
+											<label class="fw-bold">{translate key='LastActionBy'}</label>
+											{$reservation->LastActionByUserName}
 										</div>
 										<div>
 											<label class="fw-bold">{translate key='CheckInTime'}</label>
@@ -596,7 +595,7 @@
 		</div>
 	</div>
 
-	{include file="javascript-includes.tpl" InlineEdit=true DataTable=true}
+	{include file="javascript-includes.tpl" Qtip=true InlineEdit=true Clear=true DataTable=true}
 	{datatable tableId=$tableId}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/reservations.js"}
@@ -607,7 +606,7 @@
 	{jsfile src="dropzone.js"}
 
 	<script type="text/javascript">
-		/*function hidePopoversWhenClickAway() {
+		function hidePopoversWhenClickAway() {
 			$('body').on('click', function(e) {
 				$('[rel="popover"]').each(function() {
 					if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e
@@ -616,12 +615,27 @@
 					}
 				});
 			});
-		}*/
+		}
 
 		function setUpPopovers() {
-			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-			var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl);
+			$('[rel="popover"]').popover({
+				container: 'body',
+				html: true,
+				placement: 'top',
+				content: function() {
+					var popoverId = $(this).data('popover-content');
+					return $(popoverId).html();
+				}
+			}).click(function(e) {
+				e.preventDefault();
+			}).on('show.bs.popover', function() {
+
+			}).on('shown.bs.popover', function() {
+				var trigger = $(this);
+				var popover = trigger.data('bs.popover').tip();
+				popover.find('.editable-cancel').click(function() {
+					trigger.popover('hide');
+				});
 			});
 		}
 
@@ -642,9 +656,8 @@
 		}
 
 		$(document).ready(function() {
-
 			setUpPopovers();
-			//hidePopoversWhenClickAway();
+			hidePopoversWhenClickAway();
 			setUpEditables();
 			dropzone($("#termsOfServiceUpload"));
 
@@ -696,6 +709,8 @@
 
 			reservationManagement.initializeStatusFilter('{$ResourceStatusFilterId}', '{$ResourceStatusReasonFilterId}');
 		});
+
+		/*$('#filter-reservations-panel').showHidePanel();*/
 	</script>
 
 	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}
@@ -703,11 +718,13 @@
 
 	{csrf_token}
 
-	<div class="modal fade" id="approveDiv" tabindex="-1" role="dialog" aria-labelledby="approveDivLabel"
-		data-bs-backdrop="static" aria-hidden="true">
-		{include file="wait-box.tpl" translateKey='Approving'}
+	<div id="colorbox">
+		<div id="approveDiv" class="wait-box">
+			<h3>{translate key=Approving}</h3>
+			{include file='wait-box.tpl'}
+		</div>
 	</div>
 
 </div>
-{jsfile src="search-clear.js"}
+
 {include file='globalfooter.tpl'}

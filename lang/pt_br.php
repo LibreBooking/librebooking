@@ -175,6 +175,7 @@ class pt_br extends en_gb
         $strings['FindUser'] = 'Encontrar Usuário';
         $strings['Created'] = 'Criado';
         $strings['LastModified'] = 'Última Modificação';
+        $strings['LastActionBy'] = 'Última Ação por';
         $strings['GroupName'] = 'Nome do Grupo';
         $strings['GroupMembers'] = 'Membros do Grupo';
         $strings['GroupRoles'] = 'Regras do Grupo';

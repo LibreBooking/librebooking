@@ -206,6 +206,16 @@ class ReservationItemView implements IReservedItemView
     public $ModifiedDate;
 
     /**
+     * @var int
+     */
+    public $LastActionBy;
+
+    /**
+     * @var null|string
+     */
+    public $LastActionByUserName;
+
+    /**
      * @var null|bool
      */
     public $IsRecurring;
@@ -575,6 +585,11 @@ class ReservationItemView implements IReservedItemView
             $view->ModifiedDate = Date::FromDatabase($row[ColumnNames::RESERVATION_MODIFIED]);
         }
 
+        if (isset($row[ColumnNames::LAST_ACTION_BY])) {
+            $view->LastActionBy = $row[ColumnNames::LAST_ACTION_BY];
+            $view->LastActionByUserName = $row[ColumnNames::LAST_ACTION_BY_USERNAME];
+        }
+
         if (isset($row[ColumnNames::REPEAT_TYPE])) {
             $repeatConfig = RepeatConfiguration::Create(
                 $row[ColumnNames::REPEAT_TYPE],
@@ -708,6 +723,8 @@ class ReservationItemView implements IReservedItemView
         $item->CreatedDate = $r->DateCreated;
         $item->DateCreated = $r->DateCreated;
         $item->ModifiedDate = $r->DateModified;
+        $item->LastActionBy = $r->LastActionBy;
+        $item->LastActionByUserName = $r->LastActionByUserName;
         $item->OwnerEmailAddress = $r->OwnerEmailAddress;
         $item->OwnerPhone = $r->OwnerPhone;
 

@@ -208,6 +208,7 @@ class en_us extends Language
         $strings['FindUser'] = 'Find User';
         $strings['Created'] = 'Created';
         $strings['LastModified'] = 'Last Modified';
+        $strings['LastActionBy'] = 'Last Action By';
         $strings['GroupName'] = 'Group Name';
         $strings['GroupMembers'] = 'Group Members';
         $strings['GroupRoles'] = 'Group Roles';
@@ -794,7 +795,6 @@ class en_us extends Language
         $strings['GroupMembership'] = 'Group Membership';
         $strings['AvailableGroups'] = 'Available Groups';
         $strings['CheckingAvailabilityError'] = 'Cannot get resource availability - too many resources';
-        $strings['ScanToSchedule'] = 'Scan to schedule';
         // End Strings
 
         // Install
@@ -1063,7 +1063,7 @@ class en_us extends Language
         $strings['NoResourcesToView'] = 'No available resources';
         //End View Resource
 
-        //Datatables
+         //Datatables
         $strings['Info'] = "Showing page _PAGE_ of _PAGES_ of _MAX_";
         $strings['LengthMenu'] = "Display _MENU_ records per page";
         //End Datatables

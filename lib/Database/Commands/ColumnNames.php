@@ -81,6 +81,8 @@ class ColumnNames
     public const RESERVATION_GROUP = 'group_id';
     public const RESERVATION_CREATED = 'date_created';
     public const RESERVATION_MODIFIED = 'last_modified';
+    public const LAST_ACTION_BY = 'last_action_by';
+    public const LAST_ACTION_BY_USERNAME = 'last_action_by_username';
     public const RESERVATION_TYPE = 'type_id';
     public const RESERVATION_TITLE = 'title';
     public const RESERVATION_DESCRIPTION = 'description';
