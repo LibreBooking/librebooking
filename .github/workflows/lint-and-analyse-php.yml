@@ -1,4 +1,4 @@
-name: Lint and analyse php files
+name: Linters
 
 # If a pull-request is pushed then cancel all previously running jobs related
 # to that pull-request
@@ -17,6 +17,20 @@ permissions:
   contents: read
 
 jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: markdownlint-cli2-action
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          config: 'doc/.markdownlint.yml'
+          globs: |
+            *.md
+            doc/*.md
+
   phpunit:
     runs-on: ubuntu-latest
     strategy:
