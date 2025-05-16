@@ -1,0 +1,7 @@
+---
+# .markdownlint.yml
+default: true
+MD013: false # Disable: maximum line length, for now.
+MD024:
+  siblings_only: true # Multiple headings with the same context
+MD036: false #  Disable: Emphasis used instead of a heading
