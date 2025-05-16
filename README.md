@@ -8,25 +8,27 @@ Second, if you found a bug submit an issue.
 Third, if you managed to fix or trace the problem update the issue, even you can't code, others might be able to quickly provide a fix and maybe even submit a pr.
 Finally if you can code, please contribute to the project even if it's something simple, like fixing grammatical errors all the help is appreciated.
 
-# Community discussion channel on Discord
+## Community discussion channel on Discord
 
 There is a community discussion channel on Discord at
-https://discord.gg/AEvcebqB  (If this link doesn't work please file an Issue.
+<https://discord.gg/AEvcebqB>  (If this link doesn't work please file an Issue.
 We set the link to never expire but for some reason it still keeps becoming
 invalid)
 
 ## TODO list
-Because LibreBooking is an opensource project, there are some things we have to do to make it better. Here is a list of things you can do if you're interested in helping out
-- 
 
-# Welcome to LibreBooking
+Because LibreBooking is an opensource project, there are some things we have to do to make it better. Here is a list of things you can do if you're interested in helping out
+
+## Welcome to LibreBooking
 
 This is a community effort to keep the OpenSource [GPLv3](./LICENSE.md) LibreBooking alive, see [History](./doc/HISTORY.md)
 
-# Note:
-## The update project is currently in the beta phase; testing and participation from all users and administrators are required.
+### Note
+
+The update project is currently in the beta phase; testing and participation from all users and administrators are required.
 
 ## What's new?
+
 - Update to Bootstrap 5 and migration of icons to Bootstrap Icons.
 
 ![Update to Bootstrap 5 and migration of icons to Bootstrap Icons](./Web/img/readme/01.png)
@@ -47,7 +49,7 @@ This is a community effort to keep the OpenSource [GPLv3](./LICENSE.md) LibreBoo
 
 - Rename Web/booked.css to Web/librebooking.css (this is no longer Booked Schedule ;-) ).
 
-- Ability to change the color scheme in config.php $conf['settings']['css.theme'] = 'default'  and/or customize an existing one in Web/css/librebooking.css
+- Ability to change the color scheme in `config.php $conf['settings']['css.theme'] = 'default'`  and/or customize an existing one in `Web/css/librebooking.css`
 
 ![color scheme](./Web/img/readme/10.png)
 ![color scheme](./Web/img/readme/11.png)
@@ -76,9 +78,11 @@ This is a community effort to keep the OpenSource [GPLv3](./LICENSE.md) LibreBoo
 [developer documentation](./doc/README.md)
 
 ## Help
+
 Please consult the wiki for more help <https://github.com/LibreBooking/app/wiki>
 
 ## REPO
+
 <https://github.com/LibreBooking/app>
 
 ## ReCaptcha
