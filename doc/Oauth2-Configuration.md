@@ -1,11 +1,14 @@
 # Oauth2 Configuration
+
 You can use any IdP (Identity Provider) which supports Oauth2 like [authentik](https://goauthentik.io) or [Keycloak](https://www.keycloak.org/) for authentification with LibreBooking
 
 ## IdP Configuration
+
 First you need to create a Client in your IdP in Confidential mode (Client ID and Client Secret).
 The Client need to allow redirects to `<LibreBooking URL>/Web/oauth2-auth.php` ex. `https://librebooking.com/Web/oauth2-auth.php` and need the scoopes `openid`, `email` and `profile`.
 
 The mapping of Oauth2 attributes to LibreBooking attributes is:
+
 - `email` -> `email`
 - `given_name` -> `firstName`
 - `family_name` -> `lastName`
@@ -15,7 +18,9 @@ The mapping of Oauth2 attributes to LibreBooking attributes is:
 - `title` -> `title`
 
 ## LibreBooking Config
+
 To connect LibreBooking with your Oauth2 IdP you need to add the following vars to your `config.php`, in this example with authentik as IdP with the url `authentik.io`.
+
 ```php
 $conf['settings']['authentication']['allow.oauth2.login'] = 'true';  // Enable Oauth2
 $conf['settings']['authentication']['oauth2.name'] = 'authentik'; // Display name of Oauth2 IdP
@@ -27,6 +32,7 @@ $conf['settings']['authentication']['oauth2.client.secret'] = '13246zgtfd4t456zh
 ```
 
 To hide the internal LibreBooking Login you can additional add the following variable.
+
 ```php
 $conf['settings']['authentication']['hide.booked.login.prompt'] = 'true';
 ```
