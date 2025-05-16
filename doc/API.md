@@ -2,48 +2,48 @@
 
 A dynamically generated API documentation Page can be found by opening `<librebooking-url>/Web/Services/index.php` (API has to be enabled in config)
 
-- [Getting Started With The API](#Getting-Started-With-The-API)
-- [Accessories](#Accessories)
-- [Accounts](#Accounts)
-- [Attributes](#Attributes)
-- [Authentication](#Authentication)
-- [Groups](#Groups)
-- [Reservations](#Reservations)
-- [Resources](#Resources)
-- [Schedules](#Schedules)
-- [Users](#Users)
-
+- [Getting Started With The API](#getting-started-with-the-api)
+- [Accessories](#accessories)
+- [Accounts](#accounts)
+- [Attributes](#attributes)
+- [Authentication](#authentication)
+- [Groups](#groups)
+- [Reservations](#reservations)
+- [Resources](#resources)
+- [Schedules](#schedules)
+- [Users](#users)
 
 ## Getting Started With the API
 
 ### Authenticating to LibreBooking
 
 For all of the secure service calls it is required to be
-[Authenticated](#Authenticate). The basic steps are:
+[Authenticated](#authenticate). The basic steps are:
 
-1. Make a request to the [Authenticate](#Authenticate) POST API endpoint. The
+1. Make a request to the [Authenticate](#authenticate) POST API endpoint. The
    POST data must be sent as JSON
-1. The result from the [Authenticate](#Authenticate) POST API call, if
+1. The result from the [Authenticate](#authenticate) POST API call, if
    successful, will contain the two values: `sessionToken` and `userId`
 1. When making secure service calls the following headers must be set:
-    1.  `X-Booked-SessionToken` set to the value of `sessionToken`
-        returned by the [Authenticate](#Authenticate) API call.
-    1.  `X-Booked-UserId` set to the value of `userId` returned by the
-        [Authenticate](#Authenticate) API call.
+    1. `X-Booked-SessionToken` set to the value of `sessionToken`
+        returned by the [Authenticate](#authenticate) API call.
+    1. `X-Booked-UserId` set to the value of `userId` returned by the
+        [Authenticate](#authenticate) API call.
 
 ### POST Requests
 
 When making POST API requests it is required to send the POST data as JSON
 
-
 ## Accessories
 
 ### POST Services
+
 na.
 
 ### GET Services
 
 #### GetAllAccessories
+
 __Description:__  
 Loads all accessories.  
 CreditApplicability of 1 is per slot, 2 is per reservation
@@ -74,8 +74,8 @@ __Response:__
 }
 ```
 
-
 #### GetAccessory
+
 __Description:__  
 Loads a specific accessory by id. CreditApplicability of 1 is per slot, 2 is per reservation
 
@@ -146,6 +146,7 @@ __Request:__
 ```
 
 #### UpdateAccount
+
 __Description:__  
 Updates an existing user account
 
@@ -308,7 +309,6 @@ __Request:__
     ]
 }
 ```
-
 
 #### UpdateCustomAttribute
 
@@ -508,7 +508,6 @@ __Request:__
 }
 ```
 
-
 #### Authenticate
 
 __Description:__  
@@ -541,6 +540,7 @@ __Request:__
 ```
 
 ### GET Services
+
 na.
 
 ## Groups
@@ -583,7 +583,6 @@ __Request:__
 ```json
 {"name":"group name","isDefault":true}
 ```
-
 
 #### UpdateGroup
 
@@ -629,7 +628,6 @@ __Request:__
 }
 ```
 
-
 ### ChangeGroupRoles
 
 __Description:__  
@@ -670,7 +668,6 @@ __Request:__
 
 No request
 
-
 ### ChangeGroupPermissions
 
 __Description:__  
@@ -708,7 +705,6 @@ __Response:__
 __Request:__  
 
 No request
-
 
 ### ChangeGroupUsers
 
@@ -779,7 +775,6 @@ __Response:__
 }
 ```
 
-
 #### GetGroup
 
 __Description:__  
@@ -815,7 +810,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### DeleteGroup
 
@@ -944,7 +938,6 @@ __Request:__
 }
 ```
 
-
 #### UpdateReservation
 
 __Description:__  
@@ -1048,7 +1041,6 @@ __Request:__
 }
 ```
 
-
 #### ApproveReservation
 
 __Description:__  
@@ -1078,11 +1070,10 @@ __Response:__
     "message": null
 }
 ```
+
 __Request:__  
 
 No request
-
-
 
 #### CheckinReservation
 
@@ -1113,11 +1104,10 @@ __Response:__
     "message": null
 }
 ```
+
 __Request:__  
 
 No request
-
-
 
 #### CheckoutReservation
 
@@ -1152,7 +1142,6 @@ __Response:__
 __Request:__  
 
 No request
-
 
 ### GET Services
 
@@ -1221,7 +1210,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### GetReservation
 
@@ -1343,7 +1331,6 @@ __Response:__
 }
 ```
 
-
 #### DeleteReservation
 
 __Description:__  
@@ -1363,7 +1350,6 @@ __Response:__
     "message": "The item was deleted"
 }
 ```
-
 
 ## Resources
 
@@ -1438,7 +1424,6 @@ __Request:__
 }
 ```
 
-
 #### UpdateResource
 
 __Description:__  
@@ -1507,7 +1492,6 @@ __Request:__
     "maxConcurrentReservations": 1
 }
 ```
-
 
 ### GET Services
 
@@ -1606,7 +1590,6 @@ __Response:__
 }
 ```
 
-
 #### GetStatusReasons
 
 __Description:__  
@@ -1688,7 +1671,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### GetGroups
 
@@ -1779,7 +1761,6 @@ __Response:__
 }
 ```
 
-
 #### GetResource
 
 __Description:__  
@@ -1837,7 +1818,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 GetAvailability
 
@@ -1919,6 +1899,7 @@ __Response:__
 ## Schedules
 
 ### POST Services
+
 na.
 
 ### GET Services
@@ -1957,7 +1938,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### GetSchedule
 
@@ -2060,7 +2040,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### GetSlots
 
@@ -2215,7 +2194,6 @@ __Request:__
 }
 ```
 
-
 #### UpdateUser
 
 __Description:__  
@@ -2272,7 +2250,6 @@ __Request:__
     ]
 }
 ```
-
 
 #### UpdatePassword
 
@@ -2366,7 +2343,6 @@ __Response:__
     "message": null
 }
 ```
-
 
 #### GetUser
 
