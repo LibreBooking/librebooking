@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3"]
+        php-version: ["8.2", "8.3", "8.4"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.1"]
+        php-version: ["8.1", "8.2"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,17 +78,19 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      # TODO: Enable this after resolving issues
-      # - name: Validate composer.json and composer.lock
-      #   run: composer validate --strict
-
       - name: Install Composer dependencies
-        # Allow the previous check to fail but not abort
-        if: always()
         uses: ramsey/composer-install@v2
         with:
           # Ignore zip for php-webdriver/webdriver
           composer-options: "--ignore-platform-reqs"
+
+      - name: Update the composer.lock file
+        if: matrix.php-version > '8.1'
+        run: composer update
+
+      - name: Validate composer.json and composer.lock
+        if: matrix.php-version > '8.1'
+        run: composer validate --strict
 
       # TODO: Enable this after resolving issues
       # - name: Cache coding-standard
@@ -100,8 +102,6 @@ jobs:
       #     key: phpcs-cache
 
       - name: Lint PHP files
-        # Allow the previous check to fail but not abort
-        if: always()
         run: ./ci/ci-phplint
 
       # TODO: Enable this after resolving issues
