@@ -4,15 +4,12 @@ require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
 
 class RequestRequiredValueValidator extends RequiredValidator
 {
-    private $attributeName;
-
     /**
      * @param $value mixed
      * @param $attributeName string
      */
-    public function __construct($value, $attributeName)
+    public function __construct($value, private $attributeName)
     {
-        $this->attributeName = $attributeName;
         parent::__construct($value);
     }
 

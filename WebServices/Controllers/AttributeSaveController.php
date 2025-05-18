@@ -29,13 +29,8 @@ interface IAttributeSaveController
 
 class AttributeControllerResult
 {
-    private $attributeId;
-    private $errors = [];
-
-    public function __construct($attributeId, $errors = [])
+    public function __construct(private $attributeId, private $errors = [])
     {
-        $this->attributeId = $attributeId;
-        $this->errors = $errors;
     }
 
     /**

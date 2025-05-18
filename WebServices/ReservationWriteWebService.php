@@ -14,15 +14,9 @@ class ReservationWriteWebService
      */
     private $server;
 
-    /**
-     * @var IReservationSaveController
-     */
-    private $controller;
-
-    public function __construct(IRestServer $server, IReservationSaveController $controller)
+    public function __construct(IRestServer $server, private readonly IReservationSaveController $controller)
     {
         $this->server = $server;
-        $this->controller = $controller;
     }
 
     /**

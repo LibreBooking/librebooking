@@ -2,15 +2,12 @@
 
 class CustomAttributeCreatedResponse extends RestResponse
 {
-    public $attributeId;
-
-    public function __construct(IRestServer $server, $attributeId)
+    public function __construct(IRestServer $server, public $attributeId)
     {
         $this->message = 'The attribute was created';
-        $this->attributeId = $attributeId;
-        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
-        $this->AddService($server, WebServices::UpdateCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
-        $this->AddService($server, WebServices::DeleteCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
+        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $this->attributeId]);
+        $this->AddService($server, WebServices::UpdateCustomAttribute, [WebServiceParams::AttributeId => $this->attributeId]);
+        $this->AddService($server, WebServices::DeleteCustomAttribute, [WebServiceParams::AttributeId => $this->attributeId]);
     }
 
     public static function Example()
@@ -21,14 +18,11 @@ class CustomAttributeCreatedResponse extends RestResponse
 
 class CustomAttributeUpdatedResponse extends RestResponse
 {
-    public $attributeId;
-
-    public function __construct(IRestServer $server, $attributeId)
+    public function __construct(IRestServer $server, public $attributeId)
     {
         $this->message = 'The attribute was updated';
-        $this->attributeId = $attributeId;
-        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
-        $this->AddService($server, WebServices::UpdateCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
+        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $this->attributeId]);
+        $this->AddService($server, WebServices::UpdateCustomAttribute, [WebServiceParams::AttributeId => $this->attributeId]);
     }
 
     public static function Example()

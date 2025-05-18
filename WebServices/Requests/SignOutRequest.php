@@ -3,21 +3,10 @@
 class SignOutRequest
 {
     /**
-     * @var string
-     */
-    public $userId;
-    /**
-     * @var string
-     */
-    public $sessionToken;
-
-    /**
      * @param string $userId
      * @param string $sessionToken
      */
-    public function __construct($userId = null, $sessionToken = null)
+    public function __construct(public $userId = null, public $sessionToken = null)
     {
-        $this->userId = $userId;
-        $this->sessionToken = $sessionToken;
     }
 }

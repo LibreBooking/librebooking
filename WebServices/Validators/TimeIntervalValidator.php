@@ -4,13 +4,8 @@ require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
 
 class TimeIntervalValidator extends ValidatorBase
 {
-    private $value;
-    private $attributeName;
-
-    public function __construct($value, $attributeName)
+    public function __construct(private $value, private $attributeName)
     {
-        $this->value = $value;
-        $this->attributeName = $attributeName;
         $this->isValid = true;
     }
 
@@ -21,7 +16,7 @@ class TimeIntervalValidator extends ValidatorBase
     {
         try {
             TimeInterval::Parse($this->value);
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $this->isValid = false;
             $this->AddMessage("Invalid time specified for {$this->attributeName}");
         }

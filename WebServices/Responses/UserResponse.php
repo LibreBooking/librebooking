@@ -80,16 +80,6 @@ class UserResponse extends RestResponse
 class UserGroupItemResponse extends RestResponse
 {
     /**
-     * @var int
-     */
-    public $id;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
      * @var bool
      */
     public $isDefault;
@@ -99,11 +89,13 @@ class UserGroupItemResponse extends RestResponse
      */
     public $roleIds;
 
-    public function __construct(IRestServer $server, $id, $name)
+    /**
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct(IRestServer $server, public $id, public $name)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $id]);
+        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $this->id]);
     }
 
     public static function Example()

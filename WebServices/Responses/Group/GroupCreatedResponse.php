@@ -2,15 +2,12 @@
 
 class GroupCreatedResponse extends RestResponse
 {
-    public $groupId;
-
-    public function __construct(IRestServer $server, $groupId)
+    public function __construct(IRestServer $server, public $groupId)
     {
         $this->message = 'The group was created';
-        $this->groupId = $groupId;
-        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $groupId]);
-        $this->AddService($server, WebServices::UpdateGroup, [WebServiceParams::GroupId => $groupId]);
-        $this->AddService($server, WebServices::DeleteGroup, [WebServiceParams::GroupId => $groupId]);
+        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $this->groupId]);
+        $this->AddService($server, WebServices::UpdateGroup, [WebServiceParams::GroupId => $this->groupId]);
+        $this->AddService($server, WebServices::DeleteGroup, [WebServiceParams::GroupId => $this->groupId]);
     }
 
     public static function Example()
@@ -21,15 +18,12 @@ class GroupCreatedResponse extends RestResponse
 
 class GroupUpdatedResponse extends RestResponse
 {
-    public $groupId;
-
-    public function __construct(IRestServer $server, $groupId)
+    public function __construct(IRestServer $server, public $groupId)
     {
         $this->message = 'The group was updated';
-        $this->groupId = $groupId;
-        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $groupId]);
-        $this->AddService($server, WebServices::UpdateGroup, [WebServiceParams::GroupId => $groupId]);
-        $this->AddService($server, WebServices::DeleteGroup, [WebServiceParams::GroupId => $groupId]);
+        $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $this->groupId]);
+        $this->AddService($server, WebServices::UpdateGroup, [WebServiceParams::GroupId => $this->groupId]);
+        $this->AddService($server, WebServices::DeleteGroup, [WebServiceParams::GroupId => $this->groupId]);
     }
 
     public static function Example()

@@ -4,19 +4,8 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class RecurrenceRequestResponse
 {
-    public $type;
-    public $interval;
-    public $monthlyType;
-    public $weekdays;
-    public $repeatTerminationDate;
-
-    public function __construct($type, $interval, $monthlyType, $weekdays, $repeatTerminationDate)
+    public function __construct(public $type, public $interval, public $monthlyType, public $weekdays, public $repeatTerminationDate)
     {
-        $this->type = $type;
-        $this->interval = $interval;
-        $this->monthlyType = $monthlyType;
-        $this->weekdays = $weekdays;
-        $this->repeatTerminationDate = $repeatTerminationDate;
     }
 
     public static function Example()

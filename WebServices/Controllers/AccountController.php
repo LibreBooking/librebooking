@@ -49,10 +49,6 @@ class AccountController implements IAccountController
      */
     private $registration;
     /**
-     * @var IAccountRequestValidator
-     */
-    private $requestValidator;
-    /**
      * @var IUserRepository
      */
     private $userRepository;
@@ -68,12 +64,11 @@ class AccountController implements IAccountController
     public function __construct(
         IRegistration $registration,
         IUserRepository $userRepository,
-        IAccountRequestValidator $requestValidator,
+        private readonly IAccountRequestValidator $requestValidator,
         PasswordEncryption $passwordEncryption,
         IAttributeService $attributeService
     ) {
         $this->registration = $registration;
-        $this->requestValidator = $requestValidator;
         $this->userRepository = $userRepository;
         $this->passwordEncryption = $passwordEncryption;
         $this->attributeService = $attributeService;
@@ -168,29 +163,12 @@ class AccountController implements IAccountController
 class AccountControllerResult
 {
     /**
-     * @var int
-     */
-    private $userId;
-
-    /**
-     * @var array|string[]
-     */
-    private $errors = [];
-    /**
-     * @var array|string[]
-     */
-    private $messages;
-
-    /**
      * @param int $userId
      * @param array|string[] $errors
      * @param array|string[] $messages
      */
-    public function __construct($userId, $errors = [], $messages = [])
+    public function __construct(private $userId, private $errors = [], private $messages = [])
     {
-        $this->userId = $userId;
-        $this->errors = $errors;
-        $this->messages = $messages;
     }
 
     /**

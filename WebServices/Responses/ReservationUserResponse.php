@@ -4,18 +4,9 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class ReservationUserResponse extends RestResponse
 {
-    public $userId;
-    public $firstName;
-    public $lastName;
-    public $emailAddress;
-
-    public function __construct(IRestServer $server, $userId, $firstName, $lastName, $emailAddress)
+    public function __construct(IRestServer $server, public $userId, public $firstName, public $lastName, public $emailAddress)
     {
-        $this->userId = $userId;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->emailAddress = $emailAddress;
-        $this->AddService($server, WebServices::GetUser, [WebServiceParams::UserId => $userId]);
+        $this->AddService($server, WebServices::GetUser, [WebServiceParams::UserId => $this->userId]);
     }
 
     public static function Masked()

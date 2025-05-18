@@ -45,15 +45,9 @@ class UserSaveController implements IUserSaveController
      */
     private $serviceFactory;
 
-    /**
-     * @var IUserRequestValidator
-     */
-    private $requestValidator;
-
-    public function __construct(IManageUsersServiceFactory $serviceFactory, IUserRequestValidator $requestValidator)
+    public function __construct(IManageUsersServiceFactory $serviceFactory, private readonly IUserRequestValidator $requestValidator)
     {
         $this->serviceFactory = $serviceFactory;
-        $this->requestValidator = $requestValidator;
     }
 
     public function Create($request, $session)
@@ -150,23 +144,11 @@ class UserSaveController implements IUserSaveController
 class UserControllerResult
 {
     /**
-     * @var int
-     */
-    private $userId;
-
-    /**
-     * @var array|string[]
-     */
-    private $errors = [];
-
-    /**
      * @param int $userId
      * @param array $errors
      */
-    public function __construct($userId, $errors = [])
+    public function __construct(private $userId, private $errors = [])
     {
-        $this->userId = $userId;
-        $this->errors = $errors;
     }
 
     /**

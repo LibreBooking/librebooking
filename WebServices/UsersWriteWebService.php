@@ -15,15 +15,9 @@ class UsersWriteWebService
      */
     private $server;
 
-    /**
-     * @var IUserSaveController
-     */
-    private $controller;
-
-    public function __construct(IRestServer $server, IUserSaveController $controller)
+    public function __construct(IRestServer $server, private readonly IUserSaveController $controller)
     {
         $this->server = $server;
-        $this->controller = $controller;
     }
 
     /**

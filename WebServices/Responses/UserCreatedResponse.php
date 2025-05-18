@@ -4,13 +4,10 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class UserCreatedResponse extends RestResponse
 {
-    public $userId;
-
-    public function __construct(IRestServer $server, $userId)
+    public function __construct(IRestServer $server, public $userId)
     {
-        $this->userId = $userId;
-        $this->AddService($server, WebServices::GetUser, [WebServiceParams::UserId => $userId]);
-        $this->AddService($server, WebServices::UpdateUser, [WebServiceParams::UserId => $userId]);
+        $this->AddService($server, WebServices::GetUser, [WebServiceParams::UserId => $this->userId]);
+        $this->AddService($server, WebServices::UpdateUser, [WebServiceParams::UserId => $this->userId]);
     }
 
     public static function Example()

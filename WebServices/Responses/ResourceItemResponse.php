@@ -4,22 +4,17 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class ResourceItemResponse extends RestResponse
 {
-    public $id;
-    public $name;
     public $type;
     public $groups;
 
-    public function __construct(IRestServer $server, $id, $name)
+    public function __construct(IRestServer $server, public $id, public $name)
     {
-        $this->id = $id;
-        $this->name = $name;
-
         /*
          * Unfortunately we have to get the full resource here to be able to get the
          * resource_type_id
          */
         $resourceRepository = new ResourceRepository();
-        $resource = $resourceRepository->LoadById($id);
+        $resource = $resourceRepository->LoadById($this->id);
 
         if ($resource->HasResourceType()) {
             $this->type = $resourceRepository->LoadResourceType($resource->GetResourceTypeId())->Name();
@@ -37,7 +32,7 @@ class ResourceItemResponse extends RestResponse
             $this->groups[$resourceGroupId] = $this->BuildParentList($resourceGroupId);
         }
 
-        $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $id]);
+        $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $this->id]);
     }
 
     private function BuildParentList($resourceGroupId, &$parents=[])

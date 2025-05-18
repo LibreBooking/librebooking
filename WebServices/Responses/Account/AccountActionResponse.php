@@ -4,13 +4,10 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class AccountActionResponse extends RestResponse
 {
-    public $userId;
-
-    public function __construct(IRestServer $server, $userId)
+    public function __construct(IRestServer $server, public $userId)
     {
-        $this->userId = $userId;
-        $this->AddService($server, WebServices::GetAccount, [WebServiceParams::UserId => $userId]);
-        $this->AddService($server, WebServices::UpdateAccount, [WebServiceParams::UserId => $userId]);
+        $this->AddService($server, WebServices::GetAccount, [WebServiceParams::UserId => $this->userId]);
+        $this->AddService($server, WebServices::UpdateAccount, [WebServiceParams::UserId => $this->userId]);
     }
 
     public static function Example()

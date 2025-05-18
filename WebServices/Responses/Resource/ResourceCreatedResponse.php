@@ -4,13 +4,10 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class ResourceCreatedResponse extends RestResponse
 {
-    public $resourceId;
-
-    public function __construct(IRestServer $server, $resourceId)
+    public function __construct(IRestServer $server, public $resourceId)
     {
-        $this->resourceId = $resourceId;
-        $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $resourceId]);
-        $this->AddService($server, WebServices::UpdateResource, [WebServiceParams::ResourceId => $resourceId]);
+        $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $this->resourceId]);
+        $this->AddService($server, WebServices::UpdateResource, [WebServiceParams::ResourceId => $this->resourceId]);
     }
 
     public static function Example()
