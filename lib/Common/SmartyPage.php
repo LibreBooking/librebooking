@@ -62,6 +62,7 @@ class SmartyPage extends Smarty
         $this->AddTemplateDirectory($base . 'lang/' . $this->Resources->CurrentLanguage);
 
         $this->RegisterFunctions();
+        $this->RegisterClasses();
     }
 
     public function AddTemplateDirectory($templateDirectory)
@@ -87,7 +88,7 @@ class SmartyPage extends Smarty
         $localizedPath = $langPath . $languageCode;
         $customTemplateName = str_replace('.tpl', '-custom.tpl', $templateName);
         $hasCustomTemplate = file_exists($localizedPath . '/' . $customTemplateName);
-        
+
         if ($enforceCustomTemplate && !$hasCustomTemplate) {
             $defaultLanguageCode = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
             $defaultLocalizedPath = $langPath . $defaultLanguageCode;
@@ -112,6 +113,73 @@ class SmartyPage extends Smarty
         }
 
         return $this->fetch($templateName);
+    }
+
+    protected function RegisterClasses()
+    {
+        // Classes that should be registered
+        $classesToRegister = [
+            'Actions',
+            'AutoCompleteType',
+            'CalendarActions',
+            'CalendarTypes',
+            'CannedReport',
+            'ColumnNames',
+            'ConfigActions',
+            'ConfigKeys',
+            'ConfigSettingType',
+            'CookieKeys',
+            'CustomAttributeCategory',
+            'CustomAttributeTypes',
+            'Date',
+            'DayOfWeek',
+            'EmailTemplatesActions',
+            'FormKeys',
+            'InvitationAction',
+            'ManageAccessoriesActions',
+            'ManageAnnouncementsActions',
+            'ManageAttributesActions',
+            'ManageBlackoutsActions',
+            'ManageGroupsActions',
+            'ManageQuotasActions',
+            'ManageReservationsActions',
+            'ManageResourcesActions',
+            'ManageSchedules',
+            'ManageUsersActions',
+            'Pages',
+            'ProfileActions',
+            'QueryStringKeys',
+            'QuotaDuration',
+            'QuotaScope',
+            'QuotaUnit',
+            'RepeatMonthlyType',
+            'ReportActions',
+            'Report_GroupBy',
+            'Report_Range',
+            'Report_ResultSelection',
+            'Report_Usage',
+            'ReservationAction',
+            'ReservationConflictResolution',
+            'ReservationEvent',
+            'ReservationStatus',
+            'ResourceStatus',
+            'Schedule',
+            'ScheduleLayout',
+            'ScheduleStyle',
+            'SeriesUpdateScope',
+            'TermsOfService',
+
+        ];
+
+        foreach ($classesToRegister as $className) {
+            try {
+                if (class_exists($className)) {
+                    $this->registerClass($className, $className);
+                }
+            } catch (Exception $ex) {
+                error_log("Error registering $className : " . $ex->getMessage());
+            }
+        }
     }
 
     protected function RegisterFunctions()
@@ -659,14 +727,14 @@ class SmartyPage extends Smarty
                     lengthMenu: "' . $lengthMenuText . '",
                     zeroRecords: "' . $NoResultsFoundText . '",
                 },
-                "buttons": [ 
+                "buttons": [
                     {
                         extend: "copyHtml5",
-                        text: "<i class=\"bi bi-copy me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $copyText . '</div>", 
+                        text: "<i class=\"bi bi-copy me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $copyText . '</div>",
                     },
                     {
                         extend: "excelHtml5",
-                        text: "<i class=\"bi bi-file-earmark-spreadsheet me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' Excel</div>", 
+                        text: "<i class=\"bi bi-file-earmark-spreadsheet me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' Excel</div>",
                     },
                     {
                         extend: "pdfHtml5",
@@ -678,7 +746,7 @@ class SmartyPage extends Smarty
                     },
                     {
                         extend: "colvis",
-                        text: "<i class=\"bi bi-list-check me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $showHideText . '</div>", 
+                        text: "<i class=\"bi bi-list-check me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $showHideText . '</div>",
                     }
                 ],
                 "initComplete": function(settings, json) {
