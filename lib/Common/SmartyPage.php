@@ -23,11 +23,6 @@ class SmartyPage extends Smarty
     protected $Resources = null;
 
     /**
-     * @var null|string
-     */
-    protected $RootPath = null;
-
-    /**
      * @var bool
      */
     private $IsValid = true;
@@ -35,13 +30,13 @@ class SmartyPage extends Smarty
     /**
      *
      * @param Resources $resources
-     * @param string $rootPath
+     * @param string $RootPath
      */
-    public function __construct(Resources &$resources = null, $rootPath = null)
+    public function __construct(Resources &$resources = null, protected $RootPath = null)
     {
         parent::__construct();
 
-        $base = dirname(__FILE__) . '/../../';
+        $base = __DIR__ . '/../../';
 
         $this->debugging = isset($_GET['debug']);
         $this->AddTemplateDirectory($base . 'tpl');
@@ -63,7 +58,6 @@ class SmartyPage extends Smarty
         }
 
         $this->Resources = &$resources;
-        $this->RootPath = $rootPath;
 
         $this->AddTemplateDirectory($base . 'lang/' . $this->Resources->CurrentLanguage);
 
@@ -122,53 +116,53 @@ class SmartyPage extends Smarty
 
     protected function RegisterFunctions()
     {
-        $this->registerPlugin('function', 'translate', [$this, 'SmartyTranslate']);
-        $this->registerPlugin('function', 'formatdate', [$this, 'FormatDate']);
-        $this->registerPlugin('function', 'format_date', [$this, 'FormatDate']);
-        $this->registerPlugin('function', 'html_link', [$this, 'PrintLink']);
-        $this->registerPlugin('function', 'html_image', [$this, 'PrintImage']);
-        $this->registerPlugin('function', 'control', [$this, 'DisplayControl']);
-        $this->registerPlugin('function', 'validator', [$this, 'Validator']);
-        $this->registerPlugin('function', 'textbox', [$this, 'Textbox']);
-        $this->registerPlugin('function', 'object_html_options', [$this, 'ObjectHtmlOptions']);
-        $this->registerPlugin('block', 'validation_group', [$this, 'ValidationGroup']);
-        $this->registerPlugin('function', 'setfocus', [$this, 'SetFocus']);
-        $this->registerPlugin('function', 'formname', [$this, 'GetFormName']);
-        $this->registerPlugin('modifier', 'url2link', [$this, 'CreateUrl']);
-        $this->registerPlugin('function', 'pagelink', [$this, 'CreatePageLink']);
-        $this->registerPlugin('function', 'pagination', [$this, 'CreatePagination']);
-        $this->registerPlugin('function', 'js_array', [$this, 'CreateJavascriptArray']);
-        $this->registerPlugin('function', 'async_validator', [$this, 'AsyncValidator']);
-        $this->registerPlugin('function', 'fullname', [$this, 'DisplayFullName']);
-        $this->registerPlugin('function', 'add_querystring', [$this, 'AddQueryString']);
-        $this->registerPlugin('function', 'resource_image', [$this, 'GetResourceImage']);
-        $this->registerPlugin('modifier', 'escapequotes', [$this, 'EscapeQuotes']);
-        $this->registerPlugin('function', 'flush', [$this, 'Flush']);
-        $this->registerPlugin('function', 'jsfile', [$this, 'IncludeJavascriptFile']);
-        $this->registerPlugin('function', 'cssfile', [$this, 'IncludeCssFile']);
-        $this->registerPlugin('function', 'indicator', [$this, 'DisplayIndicator']);
-        $this->registerPlugin('function', 'read_only_attribute', [$this, 'ReadOnlyAttribute']);
-        $this->registerPlugin('function', 'csrf_token', [$this, 'CSRFToken']);
-        $this->registerPlugin('function', 'cancel_button', [$this, 'CancelButton']);
-        $this->registerPlugin('function', 'update_button', [$this, 'UpdateButton']);
-        $this->registerPlugin('function', 'add_button', [$this, 'AddButton']);
-        $this->registerPlugin('function', 'delete_button', [$this, 'DeleteButton']);
-        $this->registerPlugin('function', 'reset_button', [$this, 'ResetButton']);
-        $this->registerPlugin('function', 'filter_button', [$this, 'FilterButton']);
-        $this->registerPlugin('function', 'ok_button', [$this, 'OkButton']);
-        $this->registerPlugin('function', 'showhide_icon', [$this, 'ShowHideIcon']);
-        $this->registerPlugin('function', 'sort_column', [$this, 'SortColumn']);
-        $this->registerPlugin('function', 'formatcurrency', [$this, 'FormatCurrency']);
-        $this->registerPlugin('function', 'linebreak', [$this, 'LineBreak']);
-        $this->registerPlugin('modifier', 'urlencode', [$this, 'UrlEncode']);
-        $this->registerPlugin('modifier', 'explode', [$this, 'Explode']);
-        $this->registerPlugin('modifier', 'html_entity_decode', [$this, 'HtmlEntityDecode']);
-        $this->registerPlugin('modifier', 'implode', [$this, 'Implode']);
-        $this->registerPlugin('modifier', 'join', [$this, 'Join']);
-        $this->registerPlugin('modifier', 'intval', [$this, 'Intval']);
-        $this->registerPlugin('modifier', 'strtolower', [$this, 'Strtolower']);
-        $this->registerPlugin('function', 'datatable', [$this, 'CreateDataTable']);
-        $this->registerPlugin('function', 'datatablefilter', [$this, 'CreateDataTableFilter']);
+        $this->registerPlugin('function', 'translate', $this->SmartyTranslate(...));
+        $this->registerPlugin('function', 'formatdate', $this->FormatDate(...));
+        $this->registerPlugin('function', 'format_date', $this->FormatDate(...));
+        $this->registerPlugin('function', 'html_link', $this->PrintLink(...));
+        $this->registerPlugin('function', 'html_image', $this->PrintImage(...));
+        $this->registerPlugin('function', 'control', $this->DisplayControl(...));
+        $this->registerPlugin('function', 'validator', $this->Validator(...));
+        $this->registerPlugin('function', 'textbox', $this->Textbox(...));
+        $this->registerPlugin('function', 'object_html_options', $this->ObjectHtmlOptions(...));
+        $this->registerPlugin('block', 'validation_group', $this->ValidationGroup(...));
+        $this->registerPlugin('function', 'setfocus', $this->SetFocus(...));
+        $this->registerPlugin('function', 'formname', $this->GetFormName(...));
+        $this->registerPlugin('modifier', 'url2link', $this->CreateUrl(...));
+        $this->registerPlugin('function', 'pagelink', $this->CreatePageLink(...));
+        $this->registerPlugin('function', 'pagination', $this->CreatePagination(...));
+        $this->registerPlugin('function', 'js_array', $this->CreateJavascriptArray(...));
+        $this->registerPlugin('function', 'async_validator', $this->AsyncValidator(...));
+        $this->registerPlugin('function', 'fullname', $this->DisplayFullName(...));
+        $this->registerPlugin('function', 'add_querystring', $this->AddQueryString(...));
+        $this->registerPlugin('function', 'resource_image', $this->GetResourceImage(...));
+        $this->registerPlugin('modifier', 'escapequotes', $this->EscapeQuotes(...));
+        $this->registerPlugin('function', 'flush', $this->Flush(...));
+        $this->registerPlugin('function', 'jsfile', $this->IncludeJavascriptFile(...));
+        $this->registerPlugin('function', 'cssfile', $this->IncludeCssFile(...));
+        $this->registerPlugin('function', 'indicator', $this->DisplayIndicator(...));
+        $this->registerPlugin('function', 'read_only_attribute', $this->ReadOnlyAttribute(...));
+        $this->registerPlugin('function', 'csrf_token', $this->CSRFToken(...));
+        $this->registerPlugin('function', 'cancel_button', $this->CancelButton(...));
+        $this->registerPlugin('function', 'update_button', $this->UpdateButton(...));
+        $this->registerPlugin('function', 'add_button', $this->AddButton(...));
+        $this->registerPlugin('function', 'delete_button', $this->DeleteButton(...));
+        $this->registerPlugin('function', 'reset_button', $this->ResetButton(...));
+        $this->registerPlugin('function', 'filter_button', $this->FilterButton(...));
+        $this->registerPlugin('function', 'ok_button', $this->OkButton(...));
+        $this->registerPlugin('function', 'showhide_icon', $this->ShowHideIcon(...));
+        $this->registerPlugin('function', 'sort_column', $this->SortColumn(...));
+        $this->registerPlugin('function', 'formatcurrency', $this->FormatCurrency(...));
+        $this->registerPlugin('function', 'linebreak', $this->LineBreak(...));
+        $this->registerPlugin('modifier', 'urlencode', $this->UrlEncode(...));
+        $this->registerPlugin('modifier', 'explode', $this->Explode(...));
+        $this->registerPlugin('modifier', 'html_entity_decode', $this->HtmlEntityDecode(...));
+        $this->registerPlugin('modifier', 'implode', $this->Implode(...));
+        $this->registerPlugin('modifier', 'join', $this->Join(...));
+        $this->registerPlugin('modifier', 'intval', $this->Intval(...));
+        $this->registerPlugin('modifier', 'strtolower', $this->Strtolower(...));
+        $this->registerPlugin('function', 'datatable', $this->CreateDataTable(...));
+        $this->registerPlugin('function', 'datatablefilter', $this->CreateDataTableFilter(...));
 
         /**
          * PageValidators
@@ -271,7 +265,7 @@ class SmartyPage extends Smarty
 
         $formatted = $date->Format($format);
 
-        if (strpos($format, 'l') !== false) {
+        if (str_contains((string) $format, 'l')) {
             // correct english day name to translated day name
             $english_days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             $days = $this->Resources->GetDays('full');
@@ -282,10 +276,10 @@ class SmartyPage extends Smarty
 
     public function PrintImage($params, $smarty)
     {
-        $alt = isset($params['alt']) ? $params['alt'] : '';
-        $altKey = isset($params['altKey']) ? $params['altKey'] : '';
-        $width = isset($params['width']) ? $params['width'] : '';
-        $height = isset($params['height']) ? $params['height'] : '';
+        $alt = $params['alt'] ?? '';
+        $altKey = $params['altKey'] ?? '';
+        $width = $params['width'] ?? '';
+        $height = $params['height'] ?? '';
         $imgPath = sprintf('%simg/%s', $this->RootPath, $params['src']);
 
         $knownAttributes = ['alt', 'width', 'height', 'src', 'title', 'altKey'];
@@ -324,7 +318,7 @@ class SmartyPage extends Smarty
         }
 
         if (!$repeat) {
-            $actualContent = trim($content);
+            $actualContent = trim((string) $content);
 
             return empty($actualContent) ? '' :
                 '<div class="' . $class . ' d-flex align-items-center">
@@ -431,9 +425,9 @@ class SmartyPage extends Smarty
         $key = $params['key'];
         $label = $params['label'];
         $options = $params['options'];
-        $type = isset($params['type']) ? $params['type'] : 'array';
-        $usemethod = isset($params['usemethod']) ? $params['usemethod'] : true;
-        $selected = isset($params['selected']) ? $params['selected'] : '';
+        $type = $params['type'] ?? 'array';
+        $usemethod = $params['usemethod'] ?? true;
+        $selected = $params['selected'] ?? '';
 
         $builder = new StringBuilder();
         foreach ($options as $option) {
@@ -479,9 +473,9 @@ class SmartyPage extends Smarty
                 return $matches[0];
             }
             // removed trailing [.,;:] from URL
-            if (in_array(substr($url, -1), ['.', ',', ';', ':']) === true) {
-                $ret = substr($url, -1);
-                $url = substr($url, 0, strlen($url) - 1);
+            if (in_array(substr((string) $url, -1), ['.', ',', ';', ':']) === true) {
+                $ret = substr((string) $url, -1);
+                $url = substr((string) $url, 0, strlen((string) $url) - 1);
             }
 
             $text = $url;
@@ -528,15 +522,15 @@ class SmartyPage extends Smarty
         $url = preg_replace_callback(
             '#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is',
             $make_web_ftp_clickable_cb,
-            $url
+            (string) $url
         );
         $url = preg_replace_callback(
             '#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i',
             $make_email_clickable_cb,
-            $url
+            (string) $url
         );
-        $url = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $url);
-        $url = trim($url);
+        $url = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", (string) $url);
+        $url = trim((string) $url);
         return $url;
     }
 
@@ -618,7 +612,7 @@ class SmartyPage extends Smarty
         $page = $params['page'];
         $pageSize = $params['size'];
         $iscurrent = $params['iscurrent'];
-        $text = isset($params['text']) ? $params['text'] : $page;
+        $text = $params['text'] ?? $page;
 
         $newUrl = $this->ReplaceQueryString($url, QueryStringKeys::PAGE, $page);
         $newUrl = $this->ReplaceQueryString($newUrl, QueryStringKeys::PAGE_SIZE, $pageSize);
@@ -742,8 +736,8 @@ class SmartyPage extends Smarty
     {
         $newUrl = $url;
 
-        if (strpos($url, $key) === false) { // does not have variable
-            if (strpos($url, '?') === false) { // and does not have any query string
+        if (!str_contains((string) $url, (string) $key)) { // does not have variable
+            if (!str_contains((string) $url, '?')) { // and does not have any query string
                 $newUrl = sprintf('%s?%s=%s', $url, $key, $value);
             } else {
                 $newUrl = sprintf('%s&amp;%s=%s', $url, $key, $value); // and has existing query string
@@ -752,7 +746,7 @@ class SmartyPage extends Smarty
             $pattern = '/(\?|&)(' . $key . '=.*)/';
             $replace = '${1}' . $key . '=' . $value;
 
-            $newUrl = preg_replace($pattern, $replace, $url);
+            $newUrl = preg_replace($pattern, $replace, (string) $url);
         }
 
         return $newUrl;
@@ -803,7 +797,7 @@ class SmartyPage extends Smarty
     {
         $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
 
-        if (strpos($imageUrl, 'http://') === false) {
+        if (!str_contains((string) $imageUrl, 'http://')) {
             $imageUrl = Configuration::Instance()->GetScriptUrl() . "/$imageUrl";
         }
 
@@ -841,10 +835,10 @@ class SmartyPage extends Smarty
 
     public function DisplayIndicator($params, $smarty)
     {
-        $id = isset($params['id']) ? $params['id'] : '';
+        $id = $params['id'] ?? '';
         $size = isset($params['size']) ? "spinner-border-{$params['size']}" : 'spinner-border-sm';
         $show = isset($params['show']) ? '' : 'd-none';
-        $class = isset($params['class']) ? $params['class'] : 'indicator';
+        $class = $params['class'] ?? 'indicator';
 
         echo "<span id=\"$id\" class=\"spinner-border $size $class $show\"></span>";
     }
@@ -878,15 +872,15 @@ class SmartyPage extends Smarty
 
     public function CancelButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Cancel';
-        $class = isset($params['class']) ? $params['class'] : '';
+        $key = $params['key'] ?? 'Cancel';
+        $class = $params['class'] ?? '';
         echo '<button type="button" class="btn btn-outline-secondary cancel ' . $class . '" data-bs-dismiss="modal" ' . $this->GetButtonAttributes($params) . '>' .
             Resources::GetInstance()->GetString($key) . '</button>';
     }
 
     public function UpdateButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Update';
+        $key = $params['key'] ?? 'Update';
         $class = isset($params['class']) ? ' ' . $params['class'] . ' ' : '';
         $type = isset($params['submit']) ? 'submit' : 'button';
         $save = $type == 'submit' ? '' : ' save ';
@@ -897,9 +891,9 @@ class SmartyPage extends Smarty
 
     public function AddButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Add';
-        $class = isset($params['class']) ? $params['class'] : '';
-        $submit = isset($params['submit']) ? $params['submit'] : false;
+        $key = $params['key'] ?? 'Add';
+        $class = $params['class'] ?? '';
+        $submit = $params['submit'] ?? false;
         $type = 'button';
         if ($submit) {
             $type = 'submit';
@@ -911,9 +905,9 @@ class SmartyPage extends Smarty
 
     public function DeleteButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Delete';
-        $class = isset($params['class']) ? $params['class'] : '';
-        $submit = isset($params['submit']) ? $params['submit'] : false;
+        $key = $params['key'] ?? 'Delete';
+        $class = $params['class'] ?? '';
+        $submit = $params['submit'] ?? false;
         $type = 'button';
         if ($submit) {
             $type = 'submit';
@@ -924,31 +918,31 @@ class SmartyPage extends Smarty
 
     public function ResetButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Reset';
-        $class = isset($params['class']) ? $params['class'] : '';
+        $key = $params['key'] ?? 'Reset';
+        $class = $params['class'] ?? '';
         echo '<button type="reset" class="btn btn-outline-secondary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-arrow-counterclockwise me-1"></i>' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
     public function FilterButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'Filter';
-        $class = isset($params['class']) ? $params['class'] : '';
+        $key = $params['key'] ?? 'Filter';
+        $class = $params['class'] ?? '';
         echo '<button type="search" class="btn btn-primary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-search"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
     public function OkButton($params, $smarty)
     {
-        $key = isset($params['key']) ? $params['key'] : 'OK';
-        $class = isset($params['class']) ? $params['class'] : '';
+        $key = $params['key'] ?? 'OK';
+        $class = $params['class'] ?? '';
         echo '<button type="button" class="btn btn-primary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
     public function ShowHideIcon($params, $smarty)
     {
-        $class = isset($params['class']) ? $params['class'] : '';
+        $class = $params['class'] ?? '';
         echo '<a class="link-primary" href="#"><i class="show-hide bi ' . $class . '"></i><span class="visually-hidden">Show/Hide</span></a>';
     }
 
@@ -976,7 +970,7 @@ class SmartyPage extends Smarty
         }
 
         if (BookedStringHelper::Contains($url, $sd)) {
-            $url = preg_replace("/$sd=(asc|desc)&?/", "$sd=$sortDirection&", $url);
+            $url = preg_replace("/$sd=(asc|desc)&?/", "$sd=$sortDirection&", (string) $url);
         } else {
             $url = $url . ($hasQueryString ? "&" : "?") . "$sd=$sortDirection";
         }
@@ -1014,12 +1008,12 @@ class SmartyPage extends Smarty
 
     public function UrlEncode($url)
     {
-        return urlencode($url);
+        return urlencode((string) $url);
     }
 
     public function Explode($separator, $string)
     {
-        return explode($separator, $string);
+        return explode($separator, (string) $string);
     }
 
     public function Implode($separator, $array)
@@ -1029,7 +1023,7 @@ class SmartyPage extends Smarty
 
     public function HtmlEntityDecode($string)
     {
-        return html_entity_decode($string);
+        return html_entity_decode((string) $string);
     }
 
     public function Join($sep, $array)
@@ -1044,6 +1038,6 @@ class SmartyPage extends Smarty
 
     public function Strtolower($string)
     {
-        return strtolower($string);
+        return strtolower((string) $string);
     }
 }
