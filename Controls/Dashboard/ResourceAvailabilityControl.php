@@ -37,18 +37,12 @@ class AvailableDashboardItem
     private $resource;
 
     /**
-     * @var ReservationItemView|null $nextItem
-     */
-    private $next;
-
-    /**
      * @param ResourceDto $resource
-     * @param ReservationItemView|null $nextItem
+     * @param ReservationItemView|null $next
      */
-    public function __construct(ResourceDto $resource, $nextItem = null)
+    public function __construct(ResourceDto $resource, private $next = null)
     {
         $this->resource = $resource;
-        $this->next = $nextItem;
     }
 
     /**
