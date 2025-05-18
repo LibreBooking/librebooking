@@ -231,6 +231,9 @@ class SmartyPage extends Smarty
         $this->registerPlugin('modifier', 'strtolower', $this->Strtolower(...));
         $this->registerPlugin('function', 'datatable', $this->CreateDataTable(...));
         $this->registerPlugin('function', 'datatablefilter', $this->CreateDataTableFilter(...));
+        $this->registerPlugin('modifier', 'microtime', $this->Microtime(...));
+        $this->registerPlugin('modifier', 'array_key_exists', $this->ArrayKeyExists(...));
+        $this->registerPlugin('modifier', 'count', $this->Count(...));
 
         /**
          * PageValidators
@@ -1077,6 +1080,18 @@ class SmartyPage extends Smarty
     public function UrlEncode($url)
     {
         return urlencode((string) $url);
+    }
+
+    public function Microtime(bool $as_float = false): string|float {
+        return microtime($as_float);
+    }
+
+    public function ArrayKeyExists(string|int|float|bool|null $key, array $array): bool {
+        return array_key_exists($key, $array);
+    }
+
+    public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int {
+        return count($value, $mode);
     }
 
     public function Explode($separator, $string)
