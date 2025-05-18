@@ -60,7 +60,7 @@ class UpgradeDbTask // extends Task
         usort($upgrades, [$this, 'SortDirectories']);
 
         foreach ($upgrades as $upgrade) {
-            if ($upgrade === '.' || $upgrade === '..' || strpos($upgrade, '.') === 0) {
+            if ($upgrade === '.' || $upgrade === '..' || str_starts_with($upgrade, '.')) {
                 continue;
             }
 
@@ -97,9 +97,9 @@ class UpgradeDbTask // extends Task
         $path = "$fullUpgradeDir/$fileName";
         print("Executing $path\n");
 
-        $sqlArray = explode(';', $this->GetFullSql($path));
+        $sqlArray = explode(';', (string) $this->GetFullSql($path));
         foreach ($sqlArray as $stmt) {
-            if (strlen($stmt) > 3 && substr(ltrim($stmt), 0, 2) != '/*') {
+            if (strlen($stmt) > 3 && !str_starts_with(ltrim($stmt), '/*')) {
                 $queryResult = mysqli_query($dblink, $stmt);
                 if (!$queryResult) {
                     $sqlErrorCode = mysqli_errno($dblink);
@@ -127,11 +127,7 @@ class UpgradeDbTask // extends Task
     {
         $d1 = floatval($dir1);
         $d2 = floatval($dir2);
-
-        if ($d1 == $d2) {
-            return 0;
-        }
-        return ($d1 < $d2) ? -1 : 1;
+        return $d1 <=> $d2;
     }
 }
 

@@ -47,7 +47,7 @@ class CombineDbFilesTask
         usort($upgrades, [$this, 'SortDirectories']);
 
         foreach ($upgrades as $upgrade) {
-            if ($upgrade === '.' || $upgrade === '..' || strpos($upgrade, '.') === 0) {
+            if ($upgrade === '.' || $upgrade === '..' || str_starts_with($upgrade, '.')) {
                 continue;
             }
 
@@ -124,11 +124,7 @@ class CombineDbFilesTask
     {
         $d1 = floatval($dir1);
         $d2 = floatval($dir2);
-
-        if ($d1 == $d2) {
-            return 0;
-        }
-        return ($d1 < $d2) ? -1 : 1;
+        return $d1 <=> $d2;
     }
 }
 
