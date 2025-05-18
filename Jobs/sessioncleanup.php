@@ -5,7 +5,7 @@
 *  0 0 * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sessioncleanup.php
 */
 
-define('ROOT_DIR', dirname(__FILE__) . '/../');
+define('ROOT_DIR', __DIR__ . '/../');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Jobs/JobCop.php');
 

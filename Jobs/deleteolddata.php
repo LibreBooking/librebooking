@@ -9,7 +9,7 @@
 *  /usr/bin/env php -f                                  -> the path to php (run "which php" to know what it is)
 *  ${WWW_DIR}/librebooking/Jobs/sendmissedcheckin.php   -> the path to this script
 */
-define('ROOT_DIR', dirname(__FILE__) . '/../');
+define('ROOT_DIR', __DIR__ . '/../');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Jobs/JobCop.php');
 
