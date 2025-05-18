@@ -1,7 +1,7 @@
 <?php
 
 mysqli_report(MYSQLI_REPORT_OFF);
-error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+error_reporting(E_ALL & ~E_NOTICE);
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 
@@ -211,5 +211,5 @@ $conf['settings']['registration']['require.organization'] = 'false';
  * Error logging
  */
 $conf['settings']['logging']['folder'] = '/var/log/librebooking/log'; //Absolute path to folder were the log will be written, writing permissions to the folder are required
-$conf['settings']['logging']['level'] = 'debug'; //Set to none disable logs, error to only log errors or debug to log all messages to the app.log file 
+$conf['settings']['logging']['level'] = 'debug'; //Set to none disable logs, error to only log errors or debug to log all messages to the app.log file
 $conf['settings']['logging']['sql'] = 'false'; //Set to true no enable the creation of and sql.log file

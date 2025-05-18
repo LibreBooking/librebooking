@@ -120,7 +120,7 @@ class Configurator implements IConfigurationSettings
             return;
         }
         $contents = file_get_contents($file);
-        $new = str_replace("<?php", "<?php\r\nmysqli_report(MYSQLI_REPORT_OFF);\r\nerror_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);\r\n", $contents);
+        $new = str_replace("<?php", "<?php\r\nmysqli_report(MYSQLI_REPORT_OFF);\r\nerror_reporting(E_ALL & ~E_NOTICE);\r\n", $contents);
 
         file_put_contents($file, $new);
     }

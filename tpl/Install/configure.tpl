@@ -39,7 +39,7 @@
 
                 <div class="alert alert-secondary" style="font-family: courier;">
                     &lt;?php<br />
-                    error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);<br />
+                    error_reporting(E_ALL & ~E_NOTICE);<br />
                     {$ManualConfig|nl2br}
                     ?&gt;
                 </div>
