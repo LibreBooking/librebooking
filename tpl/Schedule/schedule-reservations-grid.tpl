@@ -1,3 +1,4 @@
+<!-- schedule-reservations-grid.tpl -->
 {function name=displaySlot}
     {call name=$DisplaySlotFactory->GetFunction($Slot, $AccessAllowed) Slot=$Slot Href=$Href SlotRef=$SlotRef ResourceId=$ResourceId}
 {/function}

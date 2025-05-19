@@ -1,3 +1,4 @@
+<!-- schedule-days-horizontal.tpl -->
 {extends file="Schedule/schedule.tpl"}
 
 {function name=displaySlot}

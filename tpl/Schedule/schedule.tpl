@@ -1,3 +1,4 @@
+<!-- tpl/Schedule/schedule.tpl -->
 {* All of the slot display formatting *}
 
 {function name=displayPastTime}

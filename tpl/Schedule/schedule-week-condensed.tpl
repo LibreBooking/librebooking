@@ -1,3 +1,4 @@
+<!-- schedule-week-condensed.tpl -->
 {extends file="Schedule/schedule.tpl"}
 
 {block name="legend"}{/block}

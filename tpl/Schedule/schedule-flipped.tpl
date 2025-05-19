@@ -1,3 +1,4 @@
+<!--- schedule-flipped.tpl --->
 {function name=displaySlotTall}
     {call name=$DisplaySlotFactory->GetFunction($Slot, $AccessAllowed) Slot=$Slot Href=$Href SlotRef=$SlotRef ResourceId=$ResourceId}
 {/function}
