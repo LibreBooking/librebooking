@@ -65,4 +65,4 @@ lang/*/*-custom.tpl
 php8-report.log
 
 # phpunit cache
-.phpunit.cache/test-results
+.phpunit.cache/
