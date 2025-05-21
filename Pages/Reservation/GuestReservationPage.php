@@ -87,9 +87,9 @@ class GuestReservationPage extends NewReservationPage implements IGuestReservati
         URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/dashboard.php');
 
         if (preg_match('/(?:\?|&)(redirect)=([^&]+)/', $_SERVER['REQUEST_URI'])) {
-            ParamsValidator::validate(RouteParamsKeys::GUEST_RESERVATION_FROM_CALENDAR, $_SERVER['REQUEST_URI'], '/view-calendar.php', false);
+            ParamsValidator::validateOrRedirect(RouteParamsKeys::GUEST_RESERVATION_FROM_CALENDAR, $_SERVER['REQUEST_URI'], '/view-calendar.php', false);
         } else {
-            ParamsValidator::validate(RouteParamsKeys::GUEST_RESERVATION_FROM_SCHEDULE, $_SERVER['REQUEST_URI'], '/view-schedule.php', false);
+            ParamsValidator::validateOrRedirect(RouteParamsKeys::GUEST_RESERVATION_FROM_SCHEDULE, $_SERVER['REQUEST_URI'], '/view-schedule.php', false);
         }
     }
 }

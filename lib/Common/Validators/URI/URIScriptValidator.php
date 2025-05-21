@@ -34,7 +34,13 @@ class URIScriptValidator implements IURIScriptValidator
         $isPathSafe = self::isSafePath($path);
         $isQuerySafe = self::isSafeQuery($query);
 
-        Log::Debug(message: "Validating URI. Path: '$path', Query: '$query', PathSafe: " . ($isPathSafe ? "yes" : "no") . ", QuerySafe: " . ($isQuerySafe ? "yes" : "no"));
+        Log::Debug(
+            "Validating URI. Path: %s, Query: %s, PathSafe: %s, QuerySafe: %s",
+            $path,
+            $query,
+            $isPathSafe ? "yes" : "no",
+            $isQuerySafe ? "yes" : "no"
+        );
 
         return $isPathSafe && $isQuerySafe;
     }
