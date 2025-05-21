@@ -61,6 +61,9 @@ jobs:
       - name: Create config.php for unit tests
         run: cp config/config.dist.php config/config.php
 
+      - name: Change timezone to 'America/Chicago' in config.php
+        run: sed -i 's+Etc/UTC+America/Chicago+g' config/config.php
+
       - name: Unit Tests
         run: composer phpunit
 
