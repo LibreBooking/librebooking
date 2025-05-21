@@ -13,7 +13,7 @@ class ParamsValidator
     public static function validate(array $params, string $requestURI, bool $optional): bool
     {
         // Parse query string from the URI into an array
-        $query = parse_url($requestURI, PHP_URL_QUERY);
+        $query = parse_url($requestURI, PHP_URL_QUERY) ?? '';
         parse_str($query, $queryParams);
 
         // If there are no query parameters
