@@ -9,10 +9,10 @@ class ViewSchedulePage extends SchedulePage
     private $userRepository;
 
     private $_styles = [
-                ScheduleStyle::Wide => 'Schedule/schedule-days-horizontal.tpl',
-                ScheduleStyle::Tall => 'Schedule/schedule-flipped.tpl',
-                ScheduleStyle::CondensedWeek => 'Schedule/schedule-week-condensed.tpl',
-        ];
+        ScheduleStyle::Wide => 'Schedule/schedule-days-horizontal.tpl',
+        ScheduleStyle::Tall => 'Schedule/schedule-flipped.tpl',
+        ScheduleStyle::CondensedWeek => 'Schedule/schedule-week-condensed.tpl',
+    ];
 
     public function __construct()
     {
@@ -41,9 +41,10 @@ class ViewSchedulePage extends SchedulePage
 
     public function ProcessPageLoad()
     {
-        URIScriptValidator::validate($_SERVER['REQUEST_URI'], '/view-schedule.php');
-        ParamsValidator::validate(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/view-schedule.php', true);
-        
+
+        URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/view-schedule.php');
+        ParamsValidator::validateOrRedirect(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/view-schedule.php', true);
+
         $user = new NullUserSession();
         $this->_presenter->PageLoad($user);
 

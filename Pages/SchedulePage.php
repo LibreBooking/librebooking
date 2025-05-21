@@ -281,6 +281,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
     {
         $start = microtime(true);
 
+        URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/schedule.php');
+        ParamsValidator::validateOrRedirect(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/schedule.php', true);
+
         $user = ServiceLocator::GetServer()->GetUserSession();
 
         // ensure Smarty $ResourceIds is an empty array to prevent an error if no
@@ -598,7 +601,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function BindViewableResourceReservations($resourceIds)
     {
-        $this->Set('CanViewResourceReservations',$resourceIds);
+        $this->Set('CanViewResourceReservations', $resourceIds);
     }
 
     public function GetReservationRequest()

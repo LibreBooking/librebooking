@@ -1,27 +1,79 @@
 <?php
 
 class URIScriptValidator implements IURIScriptValidator
+
 {
-    public static function validate($requestURI, $redirectURL): void
+
+    /**
+     * Redirects if the URI is not safe.
+     *
+     * @param string $requestURI
+     * @param string $redirectURL
+     */
+    public static function validateOrRedirect(string $requestURI, string $redirectURL): void
     {
-        $segments = explode('/', $requestURI);
-
-        $possibleScripts = self::ValidatePossibleScripts(($requestURI));
-
-        if (isset($segments[2]) || $possibleScripts) {
-            header("Location: " . $redirectURL);
+        if (!self::validate($requestURI)) {
+            Log::Debug(message: "Invalid URI detected. Redirecting to: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
             exit;
         }
     }
 
-    private static function validatePossibleScripts(string $requestURI): bool
+    /**
+     * Validates the request URI for safe path and query parameters.
+     *
+     * @param string $requestURI Full URI of the request (e.g., $_SERVER['REQUEST_URI']).
+     * @return bool True if safe, false if potentially malicious.
+     */
+    public static function validate($requestURI): bool
     {
-        $decodedURI = urldecode($requestURI);
 
-        return preg_match('/%22|"/', $requestURI) ||
-            preg_match('/%27|\'/', $requestURI) ||
-            preg_match('/%3Cscript%3E|<script>/', $decodedURI) ||
-            preg_match('/%3C.*%3E|<.*>/', $decodedURI) ||
-            preg_match('/on[a-z]+=[^&]*/i', $decodedURI);
+        $path = parse_url($requestURI, PHP_URL_PATH);
+        $query = parse_url($requestURI, PHP_URL_QUERY) ?? '';
+
+        $isPathSafe = self::isSafePath($path);
+        $isQuerySafe = self::isSafeQuery($query);
+
+        Log::Debug(message: "Validating URI. Path: '$path', Query: '$query', PathSafe: " . ($isPathSafe ? "yes" : "no") . ", QuerySafe: " . ($isQuerySafe ? "yes" : "no"));
+
+        return $isPathSafe && $isQuerySafe;
+    }
+
+
+
+    private static function isSafePath(string $path): bool
+    {
+        // Enforce the path must include /Web/ and end with a PHP file
+        if (!preg_match('#/Web/[^/]+\.php$#', $path)) {
+            return false;
+        }
+
+        // Basic XSS prevention on path (e.g., no <script> or encoded variants)
+        return !preg_match('/<script|%3Cscript/i', $path);
+    }
+
+    private static function isSafeQuery(string $query): bool
+    {
+        if (empty($query)) return true;
+
+        // Decode and check for script-related payloads
+        $decoded = urldecode($query);
+
+        // Common XSS vectors to look for
+        $xssPatterns = [
+            '/<script.*?>.*?<\/script>/is',
+            '/on\w+=".*?"/i',
+            '/javascript:/i',
+            '/data:text\/html/i',
+            '/<.*?>/i',
+        ];
+
+        foreach ($xssPatterns as $pattern) {
+            if (preg_match($pattern, $decoded)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
