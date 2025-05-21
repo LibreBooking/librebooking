@@ -11,7 +11,7 @@ Finally if you can code, please contribute to the project even if it's something
 ## Community discussion channel on Discord
 
 There is a community discussion channel on Discord at
-<https://discord.gg/AEvcebqB>  (If this link doesn't work please file an Issue.
+<https://discord.gg/4TGThPtmX8>  (If this link doesn't work please file an Issue.
 We set the link to never expire but for some reason it still keeps becoming
 invalid)
 
