@@ -161,6 +161,7 @@ class SmartyPage extends Smarty
             'ReservationAction',
             'ReservationConflictResolution',
             'ReservationEvent',
+            'ReservationReminderInterval',
             'ReservationStatus',
             'ResourceStatus',
             'Schedule',
