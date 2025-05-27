@@ -40,8 +40,10 @@ class iCalendarReservationView
         $canViewDetails = $privacyFilter->CanViewDetails($currentUser, $res, $res->OwnerId);
 
         $privateNotice = 'Private';
-
-        $this->DateCreated = $res->DateCreated;
+        if ($res->DateCreated){
+                $this->DateCreated = $res->DateCreated;
+        }
+        else $this->DateCreated = Date::Now();
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
         $this->Description =  $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
@@ -62,7 +64,7 @@ class iCalendarReservationView
 
         $this->StartReminder = $res->StartReminder;
         $this->EndReminder = $res->EndReminder;
-        $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $res->DateCreated : $res->ModifiedDate;
+        $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $this->DateCreated : $res->ModifiedDate;
         $this->IsPending = $res->RequiresApproval;
 
         if ($res->OwnerId == $currentUser->UserId) {
