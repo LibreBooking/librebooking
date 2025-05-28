@@ -2,7 +2,6 @@ function Dashboard(opts) {
     var options = opts;
 
     var ShowReservationAjaxResponse = function () {
-        //$('.blockUI').css('cursor', 'default');
         $('#creatingNotification').hide();
         $('#result').show();
     };
@@ -11,39 +10,6 @@ function Dashboard(opts) {
         $('#wait-box').modal('hide');
     };
     Dashboard.prototype.init = function () {
-        /*function setIcon(dash, targetIcon) {
-            var iconSpan = dash.find('.dashboardHeader').find('a>.bi');
-            iconSpan.removeClass('bi-chevron-up');
-            iconSpan.removeClass('bi-chevron-down');
-            iconSpan.addClass(targetIcon);
-        }
-
-        $(".dashboard").each(function (i, v) {
-            var dash = $(v);
-            var id = dash.attr('id');
-            var visibility = readCookie(id);
-            if (visibility == '0') {
-                dash.find('.dashboardContents').hide();
-                setIcon(dash, 'bi-chevron-down');
-            } else {
-                setIcon(dash, 'bi-chevron-up');
-            }
-
-            dash.find('.dashboardHeader a').click(function (e) {
-                e.preventDefault();
-                var dashboard = dash.find('.dashboardContents');
-                var id = dashboard.parent().attr('id');
-                if (dashboard.css('display') == 'none') {
-                    createCookie(id, '1', 30, opts.scriptUrl);
-                    dashboard.show();
-                    setIcon(dash, 'bi-chevron-up');
-                } else {
-                    createCookie(id, '0', 30, opts.scriptUrl);
-                    dashboard.hide();
-                    setIcon(dash, 'bi-chevron-down');
-                }
-            });
-        });*/
 
         $('.resourceNameSelector').each(function () {
             $(this).bindResourceDetails($(this).attr('resource-id'));
@@ -120,7 +86,6 @@ function Dashboard(opts) {
             var refNum = $(this).attr('data-referencenumber');
             $('#referenceNumber').val(refNum);
             $('#wait-box').modal('show');
-            //$.blockUI({ message: $('#wait-box') });
             ajaxPost(form, $(this).data('url'), null, function (data) {
                 $('button[data-referencenumber="' + refNum + '"]').addClass('d-none');
                 $('#result').html(data);
@@ -141,7 +106,6 @@ function Dashboard(opts) {
             var form = $('#form-checkout');
             var refNum = $(this).attr('data-referencenumber');
             $('#referenceNumber').val(refNum);
-            //$.blockUI({ message: $('#wait-box') });
             ajaxPost(form, null, null, function (data) {
                 $('button[data-referencenumber="' + refNum + '"]').addClass('d-none');
                 $('#result').html(data);

@@ -45,7 +45,7 @@ function BlackoutManagement(opts) {
 			$(this).closest('.modal').modal("hide");
 		});
 
-		$('#result').on( 'click', '.reload', function (e) {
+		$('#result').on('click', '.reload', function (e) {
 			location.reload();
 		});
 
@@ -77,11 +77,6 @@ function BlackoutManagement(opts) {
 				$(".save").click(function () {
 					$(this).closest('form').submit();
 				});
-
-				/*$('#cancelUpdate').click(function (e) {
-					$('#update-box').addClass('d-none');
-					$.unblockUI();
-				});*/
 
 				$('.blackoutResources').click(function (e) {
 					if ($(".blackoutResources input:checked").length == 0) {

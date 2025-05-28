@@ -525,7 +525,7 @@
 
 {block name=extras}{/block}
 
-{include file="javascript-includes.tpl" Qtip=false Owl=false}
+{include file="javascript-includes.tpl" Qtip=false}
 
 {control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
 {control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}

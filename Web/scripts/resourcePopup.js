@@ -1,7 +1,6 @@
 $.fn.bindResourceDetails = function (resourceId, options) {
     var opts = $.extend({ preventClick: false, position: 'left bottom' }, options);
 
-    /*var owl;*/
 
     var showEvent = $(this).data('show-event');
     if (!showEvent) {
@@ -88,12 +87,6 @@ $.fn.bindResourceDetails = function (resourceId, options) {
                         hideDiv();
                     });
                     tag.position({ my: 'left top', at: opts.position, of: resourceNameElement });
-                    /*if (typeof '' !== "owlCarousel") {
-                        owl = $(".owl-carousel");
-                        owl.owlCarousel({
-                            items: 1
-                        });
-                    }*/
                 }
             }, 500);
         }).mouseleave(function () {

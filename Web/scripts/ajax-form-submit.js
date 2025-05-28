@@ -21,17 +21,13 @@ jQuery.fn.bindAjaxSubmit = function (updateButton, successElement, modalDiv) {
 	function onBeforeAddSubmit(formData, jqForm, opts) {
 		successElement.addClass('d-none');
 
-		//$.blockUI({ message: $('#' + modalDiv.attr('id')) });
 		$('#waitModal').modal('show');
-		//modalDiv.show();
 
 		return true;
 	}
 
 	function hideModal() {
-		//modalDiv.hide();
 		$('#waitModal').modal('hide');
-		//$.unblockUI();
 
 		var top = self.scrollTop();
 		$('html, body').animate({ scrollTop: top }, 'slow');

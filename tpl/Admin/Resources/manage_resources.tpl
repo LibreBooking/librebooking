@@ -302,17 +302,14 @@
 																<label
 																	class="inline fw-bold">{translate key='Status'}</label>
 																{if $resource->IsAvailable()}
-																	{*{html_image src="status.png"}*}
 																	<a class="update changeStatus link-primary" href="#"
 																		data-popover-content="#statusDialog">{translate key='Available'}</a>
 																	<i class="bi bi-check-circle-fill text-success"></i>
 																{elseif $resource->IsUnavailable()}
-																	{*{html_image src="status-away.png"}*}
 																	<a class="update changeStatus link-primary" href="#"
 																		data-popover-content="#statusDialog">{translate key='Unavailable'}</a>
 																	<i class="bi bi-exclamation-circle-fill text-warning"></i>
 																{else}
-																	{*{html_image src="status-busy.png"}*}
 																	<a class="update changeStatus link-primary" href="#"
 																		data-popover-content="#statusDialog">{translate key='Hidden'}</a>
 																	<i class="bi bi-x-circle-fill text-danger"></i>

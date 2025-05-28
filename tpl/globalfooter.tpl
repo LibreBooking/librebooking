@@ -10,8 +10,6 @@
 
 	<script type="text/javascript">
 		init();
-		//$.blockUI.defaults.css.border = 'none';
-		//$.blockUI.defaults.css.top = '25%';
 	</script>
 
 	{if !empty($GoogleAnalyticsTrackingId)}

@@ -152,8 +152,8 @@
 						</div>
 						<div class="accordion-footer border-top pt-3">
 							{filter_button class="btn-sm" id="filter"}
-							<button id="showAll"
-								class="btn btn-outline-secondary btn-sm"><i class="bi bi-list-task me-1"></i>{translate key=ViewAll}</button>
+							<button id="showAll" class="btn btn-outline-secondary btn-sm"><i
+									class="bi bi-list-task me-1"></i>{translate key=ViewAll}</button>
 						</div>
 					</div>
 				</div>
@@ -369,12 +369,7 @@
 			var blackoutManagement = new BlackoutManagement(blackoutOpts);
 			blackoutManagement.init();
 
-			//$('#add-blackout-panel').showHidePanel();
 		});
-
-		//$.blockUI.defaults.css.width = '80%';
-		//$.blockUI.defaults.css.left = '10%';
-		//$.blockUI.defaults.css.marginTop = '-5%';
 	</script>
 
 	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}

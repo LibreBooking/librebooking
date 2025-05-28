@@ -435,9 +435,6 @@
         // jsPDF
         {include file="Reservation/pdf.tpl"}
         //
-
-        //$.blockUI.defaults.css.width = '60%';
-        //$.blockUI.defaults.css.left = '20%';
     });
 </script>
 {include file='globalfooter.tpl'}
