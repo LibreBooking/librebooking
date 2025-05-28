@@ -47,12 +47,12 @@
                 <div class="no-data text-center fst-italic fs-5">{translate key=None}</div>
             {/if}
 
-            <div class="header fw-bold fs-5">{translate key=Unavailable}</div>
+            <div class="header fw-bold fs-5 mt-3">{translate key=Unavailable}</div>
 
             {foreach from=$Schedules item=s}
                 {assign var=availability value=$Unavailable[$s->GetId()]}
                 {if is_array($availability) && $availability|default:array()|count > 0}
-                    <h5>{$s->GetName()}</h5>
+                    <div class="text-body-secondary fs-4 mt-3 text-center fw-bold">{$s->GetName()}</div>
                     {foreach from=$availability item=i}
                         <div class="availabilityItem row py-2 border-bottom align-items-center">
                             <div class="col-12 col-sm-5">
@@ -86,11 +86,11 @@
                 <div class="no-data text-center fst-italic fs-5">{translate key=None}</div>
             {/if}
 
-            <div class="header fw-bold fs-5">{translate key=UnavailableAllDay}</div>
+            <div class="header fw-bold fs-5 mt-3">{translate key=UnavailableAllDay}</div>
             {foreach from=$Schedules item=s}
                 {assign var=availability value=$UnavailableAllDay[$s->GetId()]}
                 {if is_array($availability) && $availability|default:array()|count > 0}
-                    <h5>{$s->GetName()}</h5>
+                    <div class="text-body-secondary fs-4 mt-3 text-center fw-bold">{$s->GetName()}</div>
                     {foreach from=$availability item=i}
                         <div class="availabilityItem row py-2 border-bottom align-items-center">
                             <div class="col-12 col-sm-5">

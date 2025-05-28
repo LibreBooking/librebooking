@@ -1,7 +1,7 @@
 {include file='globalheader.tpl' }
 
 <div id="page-change-theme" class="admin-page">
-    <div class="card default-box col-12 col-sm-8 mx-auto">
+    <div class="card shadow col-12 col-sm-8 mx-auto">
         <div class="card-body">
             <h1 class="border-bottom mb-3">{translate key=LookAndFeel}</h1>
 

@@ -587,7 +587,7 @@ class es extends en_gb
         $strings['ApplyToCurrentUsers'] = 'Aplicar a los usuarios actuales';
         $strings['ReasonText'] = 'Razón';
         $strings['NoAvailableMatchingTimes'] = 'No hay horas disponibles que coincidan con tu búsqueda';
-        $strings['Schedules'] = 'Horarios';
+        $strings['Schedules'] = 'Planificaciones';
         $strings['NotifyUser'] = 'Notificar al usuario';
         $strings['UpdateUsersOnImport'] = 'Actualizar el usuario existente si la dirección del correo electrónico ya existe.';
         $strings['UpdateResourcesOnImport'] = 'Actualizar los recursos existentes si el nombre ya existe';
@@ -758,6 +758,7 @@ class es extends en_gb
         $strings['AvailableGroups'] = 'Grupos disponibles';
         $strings['CheckingAvailabilityError'] = 'No es posible obtener la disponibilidad de recursos - demasiados recursos';
         $strings['ScanToSchedule'] = 'Escanee para reservar';
+        $strings['MaintenanceNotice'] = 'Actualmente estamos en mantenimiento. Volveremos pronto.';
         // End Strings
 
         // Install
@@ -917,6 +918,8 @@ class es extends en_gb
         $strings['ViewCalendar'] = 'Ver Calendario';
         $strings['DataCleanup'] = 'Limpiar Datos';
         $strings['ManageEmailTemplates'] = 'Administrar Plantillas de Correo Electrónico';
+        $strings['CheckResources'] = 'Consultar Recursos';
+        $strings['CheckSchedules'] = 'Consultar Planificaciones';
         // End Page Titles
 
         // Day representations
@@ -1019,7 +1022,7 @@ class es extends en_gb
         //END NEEDS CHECKING
 
         //View Resource
-        $strings['Check'] = 'Comprobar';
+        $strings['Check'] = 'Consultar';
         $strings['PermissionType'] = 'Tipo de permiso';
         $strings['NoResourcesToView'] = 'No hay recursos disponibles';
         //End View Resource

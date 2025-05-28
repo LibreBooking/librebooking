@@ -795,6 +795,7 @@ class en_us extends Language
         $strings['AvailableGroups'] = 'Available Groups';
         $strings['CheckingAvailabilityError'] = 'Cannot get resource availability - too many resources';
         $strings['ScanToSchedule'] = 'Scan to schedule';
+        $strings['MaintenanceNotice'] = 'Currently performing maintenance. We will be back soon.';
         // End Strings
 
         // Install

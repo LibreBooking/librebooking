@@ -11,7 +11,7 @@
             {/if}
 
             {if $InstallPasswordMissing}
-                <div class="error alert alert-danger">
+                <div class="error alert alert-info">
                     <p>{translate key=SetInstallPassword}</p>
                     <p>{translate key=InstallPasswordInstructions args="$ConfigPath,$ConfigSetting,$SuggestedInstallPassword"}
                     </p>
@@ -23,8 +23,8 @@
                     <li>{translate key=ProvideInstallPassword}</li>
                     <li>{translate key=InstallPasswordLocation args="$ConfigPath,$ConfigSetting"}</li>
                     <li>{textbox type="password" name="INSTALL_PASSWORD" class="textbox" size="20"}
-                        <button type="submit" name="" class="button" value="submit">{translate key=Next}<i
-                                class="bi bi-arrow-right-circle-fill ms-1"></i></button>
+                        <button type="submit" name="" class="btn btn-outline-secondary mt-2"
+                            value="submit">{translate key=Next}<i class="bi bi-arrow-right-circle-fill ms-1"></i></button>
                     </li>
                 </ul>
             {/if}
