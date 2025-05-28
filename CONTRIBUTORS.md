@@ -56,9 +56,9 @@ Thank you to the following projects and libraries
 - jqplot
 - FeedWriter
 - Slim
-- Bootstrap
+- [Bootstrap](https://getbootstrap.com/)
 - Select2
-- Owl
-- Font Awesome
+- [Trumbowyg](https://alex-d.github.io/Trumbowyg/)
+- [Bootstrap Icons](https://icons.getbootstrap.com/)
 - Gregwar/captcha
 - Monolog
