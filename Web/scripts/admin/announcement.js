@@ -20,20 +20,20 @@ function AnnouncementManagement(opts) {
 		editPriority: $('#editPriority'),
 		editUserGroups: $('#editUserGroups'),
 		editResourceGroups: $('#editResourceGroups'),
-        editUserGroupsDiv: $('#editUserGroupsDiv'),
-        editResourceGroupsDiv: $('#editResourceGroupsDiv'),
+		editUserGroupsDiv: $('#editUserGroupsDiv'),
+		editResourceGroupsDiv: $('#editResourceGroupsDiv'),
 
 		emailCount: $('#emailCount'),
 
-        displayPage: $('#addPage'),
-        moreOptions: $('#moreOptions')
+		displayPage: $('#addPage'),
+		moreOptions: $('#moreOptions')
 	};
 
 	var announcements = new Object();
 
 	AnnouncementManagement.prototype.init = function () {
 
-		elements.announcementList.on( 'click', 'a.update', function (e) {
+		elements.announcementList.on('click', 'a.update', function (e) {
 			setActiveId($(this));
 			e.preventDefault();
 		});
@@ -48,15 +48,14 @@ function AnnouncementManagement(opts) {
 			deleteAnnouncement();
 		});
 
-		elements.displayPage.change(function(e){
-		    if ($(this).val() == '5')
-            {
-                elements.moreOptions.hide();
-            }
-            else {
-                elements.moreOptions.show();
-            }
-        });
+		elements.displayPage.change(function (e) {
+			if ($(this).val() == '5') {
+				elements.moreOptions.hide();
+			}
+			else {
+				elements.moreOptions.show();
+			}
+		});
 
 		$(".save").click(function () {
 			$(this).closest('form').submit();
@@ -68,9 +67,19 @@ function AnnouncementManagement(opts) {
 
 		ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.add));
 		ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.actions.deleteAnnouncement));
-		ConfigureAsyncForm(elements.form, getSubmitCallback(options.actions.edit));
-		ConfigureAsyncForm(elements.emailForm, getSubmitCallback(options.actions.email), function() {
-			elements.emailDialog.modal('hide');}
+		ConfigureAsyncForm(elements.form, function () {
+			// Sanitize the content of the Trumbowyg before sending it
+			const rawContent = $('#editText').trumbowyg('html');
+			const sanitizedHtml = DOMPurify.sanitize(rawContent);
+
+			// Update the textarea with clean content before submitting
+			$('#editText').val(sanitizedHtml);
+
+			return options.submitUrl + "?aid=" + getActiveId() + "&action=" + options.actions.edit;
+		});
+		ConfigureAsyncForm(elements.emailForm, getSubmitCallback(options.actions.email), function () {
+			elements.emailDialog.modal('hide');
+		}
 		);
 	};
 
@@ -91,41 +100,43 @@ function AnnouncementManagement(opts) {
 
 	var editAnnouncement = function () {
 		var announcement = getActiveAnnouncement();
+		// date formatting, temporary?
+		var startDateFormatted = moment(announcement.start, 'DD/MM/YYYY').format('YYYY-MM-DD');
+		var endDateFormatted = moment(announcement.end, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
 		elements.editText.val(HtmlDecode(announcement.text));
-		elements.editBegin.val(announcement.start);
+		elements.editBegin.val(startDateFormatted);
 		elements.editBegin.trigger('change');
-		elements.editEnd.val(announcement.end);
+		elements.editEnd.val(endDateFormatted);
 		elements.editEnd.trigger('change');
 		elements.editPriority.val(announcement.priority);
 
-		if (announcement.displayPage == 5)
-        {
-            elements.editUserGroupsDiv.hide();
-            elements.editResourceGroupsDiv.hide();
-        }
-        else
-        {
-            elements.editUserGroupsDiv.show();
-            elements.editResourceGroupsDiv.show();
+		if (announcement.displayPage == 5) {
+			elements.editUserGroupsDiv.hide();
+			elements.editResourceGroupsDiv.hide();
+		}
+		else {
+			elements.editUserGroupsDiv.show();
+			elements.editResourceGroupsDiv.show();
 
-            elements.editUserGroups.val($.map(announcement.groupIds, function(i){
-                return i + "";
-            }));
-            elements.editUserGroups.trigger('change');
+			elements.editUserGroups.val($.map(announcement.groupIds, function (i) {
+				return i + "";
+			}));
+			elements.editUserGroups.trigger('change');
 
-            elements.editResourceGroups.val($.map(announcement.resourceIds, function(i){
-                return i + "";
-            }));
-            elements.editResourceGroups.trigger('change');
-        }
+			elements.editResourceGroups.val($.map(announcement.resourceIds, function (i) {
+				return i + "";
+			}));
+			elements.editResourceGroups.trigger('change');
+		}
 
 		elements.editDialog.modal('show');
 	};
 
-	var emailAnnouncement = function() {
+	var emailAnnouncement = function () {
 		var announcement = getActiveAnnouncement();
 
-		ajaxGet(options.getEmailCountUrl + '&aid=' +announcement.id, function(){}, function(data) {
+		ajaxGet(options.getEmailCountUrl + '&aid=' + announcement.id, function () { }, function (data) {
 			elements.emailCount.text(data.users);
 			elements.emailDialog.modal('show');
 		});
@@ -140,6 +151,6 @@ function AnnouncementManagement(opts) {
 	};
 
 	AnnouncementManagement.prototype.addAnnouncement = function (id, text, start, end, priority, groupIds, resourceIds, displayPage) {
-		announcements[id] = {id: id, text: text, start: start, end: end, priority: priority, groupIds: groupIds, resourceIds: resourceIds, displayPage: displayPage};
+		announcements[id] = { id: id, text: text, start: start, end: end, priority: priority, groupIds: groupIds, resourceIds: resourceIds, displayPage: displayPage };
 	};
 }

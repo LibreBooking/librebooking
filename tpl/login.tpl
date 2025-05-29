@@ -9,17 +9,20 @@
     {/if}
 
     {if $Announcements|default:array()|count > 0}
-        <div id="announcements" class="col-sm-8 col-12 mx-auto shadow mb-2 mt-5">
-            <div class="list-group">
-                {foreach from=$Announcements item=each}
-                    <div class="announcement list-group-item">{$each->Text()|html_entity_decode|url2link|nl2br}</div>
-                {/foreach}
+        <div id="announcements" class="col-sm-8 col-12 card mx-auto shadow mt-5">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {foreach from=$Announcements item=each}
+                        <li class="announcement list-group-item">{$each->Text()|html_entity_decode}</li>
+                    {/foreach}
+                </ul>
             </div>
         </div>
     {/if}
 
     <div class="col-md-6 col-12 mx-auto mt-5">
-        <form role="form" name="login" id="login" class="form-horizontal" method="post" action="{$smarty.server.SCRIPT_NAME}">
+        <form role="form" name="login" id="login" class="form-horizontal" method="post"
+            action="{$smarty.server.SCRIPT_NAME}">
             <div class="card shadow mb-2">
                 <div class="card-body mx-3">
                     <div id="login-box" class="default-box">
@@ -36,14 +39,16 @@
                         {if $ShowUsernamePrompt}
                             <div class="input-group mb-2">
                                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                                <input type="text" required="" class="form-control" id="email" {formname key=EMAIL} placeholder="{translate key=UsernameOrEmail}" />
+                                <input type="text" required="" class="form-control" id="email" {formname key=EMAIL}
+                                    placeholder="{translate key=UsernameOrEmail}" />
                             </div>
                         {/if}
 
                         {if $ShowPasswordPrompt}
                             <div class="input-group mb-2">
                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                <input type="password" required="" id="password" {formname key=PASSWORD} class="form-control" value="" placeholder="{translate key=Password}" />
+                                <input type="password" required="" id="password" {formname key=PASSWORD}
+                                    class="form-control" value="" placeholder="{translate key=Password}" />
                             </div>
                         {/if}
 
@@ -57,7 +62,8 @@
 
                         {if $ShowUsernamePrompt &&  $ShowPasswordPrompt}
                             <div class="d-grid mb-2 mt-3">
-                                <button type="submit" class="btn btn-primary btn-block" name="{Actions::LOGIN}" value="submit">{translate key='LogIn'}</button>
+                                <button type="submit" class="btn btn-primary btn-block" name="{Actions::LOGIN}"
+                                    value="submit">{translate key='LogIn'}</button>
                                 <input type="hidden" {formname key=RESUME} value="{$ResumeUrl}" />
                             </div>
                         {/if}
@@ -66,7 +72,8 @@
                             {if $ShowUsernamePrompt &&  $ShowPasswordPrompt}
                                 <div class="float-start">
                                     <div class="form-check">
-                                        <input class="form-check-input" id="rememberMe" type="checkbox" {formname key=PERSIST_LOGIN}>
+                                        <input class="form-check-input" id="rememberMe" type="checkbox"
+                                            {formname key=PERSIST_LOGIN}>
                                         <label class="form-check-label" for="rememberMe">{translate key=RememberMe}</label>
                                     </div>
                                 </div>
@@ -75,7 +82,9 @@
                             {if $ShowRegisterLink}
                                 <div class="float-end register">
                                     <span class="fw-bold">{translate key="FirstTimeUser?"}
-                                        <a class="link-primary" href="{$RegisterUrl}" {if isset($RegisterUrlNew)}{$RegisterUrlNew}{/if} title="{translate key=Register}">{translate key=Register}</a>
+                                        <a class="link-primary" href="{$RegisterUrl}"
+                                            {if isset($RegisterUrlNew)}{$RegisterUrlNew}{/if}
+                                            title="{translate key=Register}">{translate key=Register}</a>
                                     </span>
                                 </div>
                             {/if}
@@ -83,22 +92,28 @@
 
                         <section class="d-flex justify-content-center flex-wrap gap-2 my-3 social-login">
                             {if $AllowGoogleLogin}
-                                <a type="button" href="{$GoogleUrl}" class="btn btn-outline-primary"><i class="bi bi-google me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
+                                <a type="button" href="{$GoogleUrl}" class="btn btn-outline-primary"><i
+                                        class="bi bi-google me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
                                         Google</span></a>
                             {/if}
                             {if $AllowMicrosoftLogin}
-                                <a type="button" href="{$MicrosoftUrl}" class="btn btn-outline-primary"><i class="bi bi-microsoft me-1"></i>{translate key='SignInWith'}<span class="fw-medium"> Microsoft</span></a>
+                                <a type="button" href="{$MicrosoftUrl}" class="btn btn-outline-primary"><i
+                                        class="bi bi-microsoft me-1"></i>{translate key='SignInWith'}<span
+                                        class="fw-medium"> Microsoft</span></a>
                             {/if}
                             {if $AllowFacebookLogin}
-                                <a type="button" href="{$FacebookUrl}" class="btn btn-outline-primary"><i class="bi bi-facebook me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
+                                <a type="button" href="{$FacebookUrl}" class="btn btn-outline-primary"><i
+                                        class="bi bi-facebook me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
                                         Facebook</span></a>
                             {/if}
                             {if $AllowKeycloakLogin}
-                                <a type="button" href="{$KeycloakUrl}" class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
+                                <a type="button" href="{$KeycloakUrl}"
+                                    class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
                                         Keycloak</span></a>
                             {/if}
                             {if $AllowOauth2Login}
-                                <a type="button" href="{$Oauth2Url}" class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
+                                <a type="button" href="{$Oauth2Url}"
+                                    class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
                                         {$Oauth2Name}</span></a>
                             {/if}
                         </section>
@@ -111,12 +126,14 @@
                 <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between">
                     {if $ShowForgotPasswordPrompt}
                         <div id="forgot-password">
-                            <a href="{$ForgotPasswordUrl}" {if isset($ForgotPasswordUrlNew)}{$ForgotPasswordUrlNew}{/if} class="link-primary"><span><i class="bi bi-question-circle-fill"></i></span>
+                            <a href="{$ForgotPasswordUrl}" {if isset($ForgotPasswordUrlNew)}{$ForgotPasswordUrlNew}{/if}
+                                class="link-primary"><span><i class="bi bi-question-circle-fill"></i></span>
                                 {translate key='ForgotMyPassword'}</a>
                         </div>
                     {/if}
                     <div id="change-language" class="text-end">
-                        <a type="button" class="link-primary" data-bs-toggle="collapse" data-bs-target="#change-language-options"><span><i class="bi bi-globe-americas"></i></span>
+                        <a type="button" class="link-primary" data-bs-toggle="collapse"
+                            data-bs-target="#change-language-options"><span><i class="bi bi-globe-americas"></i></span>
                             {translate key=ChangeLanguage}
                         </a>
                         <div id="change-language-options" class="collapse">

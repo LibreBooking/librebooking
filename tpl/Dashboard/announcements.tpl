@@ -8,13 +8,13 @@
 	</div>
 	<div id="announcementsContents" class="accordion-collapse collapse">
 		<div class="accordion-body">
-			<ul class="list-unstyled">
+			<div class="announcementContent">
 				{foreach from=$Announcements item=each}
-					<li class="border-bottom">{$each->Text()|html_entity_decode|url2link|nl2br}</li>
+					<div class="border-bottom py-2">{$each->Text()|html_entity_decode|url2link|nl2br}</div>
 				{foreachelse}
 					<p class="noresults text-center fst-italic fs-5">{translate key="NoAnnouncements"}</p>
 				{/foreach}
-			</ul>
+				</ul>
+			</div>
 		</div>
-	</div>
 </div>

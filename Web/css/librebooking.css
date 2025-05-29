@@ -86,11 +86,6 @@ img.logo {
     color: var(--primary-hover) !important;
 }
 
-/*
-.dropdown-toggle.show {
-    color: var(--primary-hover) !important;
-}
-*/
 .dropdown-menu {
     --bs-dropdown-link-active-bg: var(--primary);
     font-size: 12px;
@@ -298,7 +293,6 @@ li.ui-timepicker-selected,
     background: var(--primary);
 }
 
-.horizontal-list li,
 .updateCustomAttribute,
 .reservation-list-dates div {
     min-width: 240px;
@@ -609,6 +603,22 @@ input.mid-number {
 .notesValue p,
 .descriptionValue p {
     margin: 0;
+}
+
+.trumbowyg-modal-submit {
+    background-color: var(--primary) !important;
+    color: var(--text-color-btn) !important;
+}
+
+.descriptionValue a,
+.descriptionContent a,
+.notesValue a,
+.noteContent a,
+.announcement a,
+.announcementText a,
+.announcementContent a,
+.trumbowyg-editor a {
+    color: var(--primary);
 }
 
 .editable-container.editable-popup {

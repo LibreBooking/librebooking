@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Select2=true DataTable=true}
+{include file='globalheader.tpl' Select2=true DataTable=true Trumbowyg=true}
 
 <div id="page-manage-announcements" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=ManageAnnouncements}</h1>
@@ -114,8 +114,7 @@
 					</thead>
 					<tbody>
 						{foreach from=$announcements item=announcement}
-							{*{cycle values='row0,row1' assign=rowCss}*}
-							<tr class="{$rowCss}" data-announcement-id="{$announcement->Id()}">
+							<tr data-announcement-id="{$announcement->Id()}">
 								<td class="announcementText">{$announcement->Text()|unescape:'html'}</td>
 								<td class="announcementPriority">{$announcement->Priority()}</td>
 								<td class="announcementStart">
@@ -179,7 +178,7 @@
 	</div>
 
 	<div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
-		aria-hidden="true">
+		aria-hidden="true" data-bs-focus="false" data-bs-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<form id="editForm" method="post">
 				<div class="modal-content">
@@ -187,20 +186,20 @@
 						<h5 class="modal-title" id="editDialogLabel">{translate key=Edit}</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
 					</div>
-					<div class="modal-body">
+					<div class="modal-body row gy-2">
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="editText">{translate key=Announcement}<i
 									class="bi bi-asterisk text-danger align-top form-control-feedback"
 									style="font-size: 0.5rem;"></i></label>
-							<textarea id="editText" class="form-control  has-feedback required" rows="5"
-								{formname key=ANNOUNCEMENT_TEXT}></textarea>
+							<textarea id="editText" class="form-control has-feedback required" rows="5"
+								{formname key='ANNOUNCEMENT_TEXT'}></textarea>
 						</div>
-						<div class="form-group mb-2">
+						<div class="form-group col-md-6 mb-2">
 							<label class="fw-bold" for="editBegin">{translate key='BeginDate'}</label>
 							<input type="date" id="editBegin" class="form-control" />
 							<input type="hidden" id="formattedEditBegin" {formname key=ANNOUNCEMENT_START} />
 						</div>
-						<div class="form-group mb-2">
+						<div class="form-group col-md-6 mb-2">
 							<label class="fw-bold" for="editEnd">{translate key='EndDate'}</label>
 							<input type="date" id="editEnd" class="form-control" />
 							<input type="hidden" id="formattedEditEnd" {formname key=ANNOUNCEMENT_END} />
@@ -263,7 +262,7 @@
 		</div>
 	</div>
 
-	{include file="javascript-includes.tpl" Select2=true DataTable=true}
+	{include file="javascript-includes.tpl" Select2=true DataTable=true Trumbowyg=true Resizimg=true}
 	{datatable tableId={$tableId}}
 	{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate"}
 	{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate"}
@@ -278,6 +277,39 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			const defaultTrumbowygOptions = {
+				btns: [
+					['viewHTML'],
+					['undo', 'redo'],
+					['formatting'],
+					['strong', 'em', 'del'],
+					['link'],
+					['insertImage'],
+					['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+					['unorderedList', 'orderedList']
+				],
+				tagsToRemove: ['script', 'link'],
+				removeformatPasted: true,
+				urlProtocol: true
+			};
+
+			$('#addAnnouncement').trumbowyg(defaultTrumbowygOptions);
+
+			$(document).on('shown.bs.modal', '#editDialog', function() {
+				// Obtaining and sanitizing content
+				const rawContent = $('#editText').val();
+				const sanitizedHtml = DOMPurify.sanitize(rawContent);
+
+				// Initialize editor
+				$('#editText').trumbowyg(defaultTrumbowygOptions)
+					.trumbowyg('html', sanitizedHtml);
+			});
+
+			$(document).on('hidden.bs.modal', '#editDialog', function() {
+				if ($('#editText').data('trumbowyg')) {
+					$('#editText').trumbowyg('destroy');
+				}
+			});
 
 			var actions = {
 				add: '{ManageAnnouncementsActions::Add}',
@@ -299,7 +331,7 @@
 			{foreach from=$announcements item=announcement}
 				announcementManagement.addAnnouncement(
 					'{$announcement->Id()}',
-					'{$announcement->Text()|escape:"quotes"|regex_replace:"/[\n]/":"\\n"}',
+					DOMPurify.sanitize('{$announcement->Text()|escape:"quotes"|regex_replace:"/[\n]/":"\\n"}'),
 					'{formatdate date=$announcement->Start()->ToTimezone($timezone)}',
 					'{formatdate date=$announcement->End()->ToTimezone($timezone)}',
 					'{$announcement->Priority()}',
@@ -309,7 +341,6 @@
 				);
 			{/foreach}
 
-			//$('#add-announcement-panel').showHidePanel();
 
 			$('#announcementGroups').select2({
 				placeholder: '{translate key=UsersInGroups}'
