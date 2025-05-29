@@ -202,6 +202,10 @@
                                                             <div class="title resourceNameField fs-5 fw-bold">
                                                                 {$resource->GetName()}</div>
                                                             <div>
+                                                                <label class="inline fw-bold">ResourceId:</label>
+                                                                <span>{$id}</span>
+                                                            </div>
+                                                            <div>
                                                                 <label class="inline fw-bold">{translate key='Status'}</label>
                                                                 {if $resource->IsAvailable()}
                                                                     <span>{translate key='Available'}<i

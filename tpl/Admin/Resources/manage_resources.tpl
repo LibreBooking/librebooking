@@ -175,7 +175,6 @@
 			</div>
 		</div>
 	</div>
-	{*{pagination pageInfo=$PageInfo showCount=true}*}
 
 	<div id="globalError" class="error d-none"></div>
 
@@ -297,6 +296,10 @@
 																		<i class="bi bi-trash3-fill icon delete"></i>
 																	</a>
 																</div>
+															</div>
+															<div>
+																<label class="inline fw-bold">ResourceId:</label>
+																<span>{$id}</span>
 															</div>
 															<div>
 																<label
@@ -2124,31 +2127,31 @@
 			container: 'body',
 			html: true,
 			placement: 'top',
-            trigger: 'manual',
+			trigger: 'manual',
 			content: function() {
 				var popoverId = $(this).data('popover-content');
 				return $(popoverId).html();
 			}
 		});
 
-        $('[rel="popover"]').on('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+		$('[rel="popover"]').on('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
 
-            // Hide other popovers if needed
-            $('[rel="popover"]').not(this).popover('hide');
+			// Hide other popovers if needed
+			$('[rel="popover"]').not(this).popover('hide');
 
-            // Toggle the clicked one
-            $(this).popover('toggle');
-        });
+			// Toggle the clicked one
+			$(this).popover('toggle');
+		});
 
-        $('.descriptionValue').on('shown', function(e, editable) {
-            $(document).off('click.editable');
-        });
+		$('.descriptionValue').on('shown', function(e, editable) {
+			$(document).off('click.editable');
+		});
 
-        $('.notesValue').on('shown', function(e, editable) {
-            $(document).off('click.editable');
-        });
+		$('.notesValue').on('shown', function(e, editable) {
+			$(document).off('click.editable');
+		});
 	}
 
 	function setupCustomAttributesIcon() {
@@ -2223,7 +2226,7 @@
 	});
 
 	$('.descriptionValue').editable({
-url: updateUrl + '{ManageResourcesActions::ActionChangeDescription}',
+		url: updateUrl + '{ManageResourcesActions::ActionChangeDescription}',
 		emptytext: "{translate key='NoDescriptionLabel'|escape:'javascript'}"
 	});
 
