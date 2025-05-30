@@ -42,6 +42,7 @@
                         </div>
 
                         <input type="hidden" id="templatePath" {formname key=EMAIL_TEMPLATE_NAME} />
+                        <input type="hidden" id="selectedLanguage" {formname key=EMAIL_TEMPLATE_LANGUAGE} />
                         {csrf_token}
                     </form>
                 </div>

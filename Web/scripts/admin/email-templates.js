@@ -8,6 +8,7 @@ function EmailTemplateManagement(opts) {
         updateEmailForm: $('#updateEmailForm'),
         reloadEmailContents: $('#reloadEmailContents'),
         templatePath: $('#templatePath'),
+        selectedLanguage: $('#selectedLanguage'),
         updateSuccess: $('#updateSuccess'),
         updateFailed: $('#updateFailed'),
 
@@ -16,14 +17,6 @@ function EmailTemplateManagement(opts) {
     };
 
     EmailTemplateManagement.prototype.init = function () {
-
-        $(".save").click(function () {
-            $(this).closest('form').submit();
-        });
-
-        $(".cancel").click(function () {
-            $(this).closest('.dialog').dialog("close");
-        });
 
         elements.languageOpts.on('change', function (e) {
             document.location = options.scriptUrl + '?lang=' + elements.languageOpts.val();
@@ -36,6 +29,7 @@ function EmailTemplateManagement(opts) {
             }
             else {
                 elements.templatePath.val(templateName);
+                elements.selectedLanguage.val(elements.languageOpts.val());
                 ajaxGet(options.scriptUrl + '?dr=template&lang=' + elements.languageOpts.val() + '&tn=' + templateName, null, loadTemplate);
             }
         });
