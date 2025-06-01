@@ -1,8 +1,9 @@
 <?php
 
 require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/external/icalreader/icalreader.php');
 require_once(ROOT_DIR . 'Pages/Admin/Import/ICalImportPage.php');
+
+use Sabre\VObject\Reader;
 
 class ICalImportPresenter extends ActionPresenter
 {
@@ -80,57 +81,43 @@ class ICalImportPresenter extends ActionPresenter
             die($error);
         }
 
-        $icalReader = new ICal();
-
         $contents = $file->Contents();
 
         if (empty($contents)) {
             die('Invalid import file');
         }
 
-        /** @var ICal $ical */
-        $ical = $icalReader->initLines(explode("\n", trim($file->Contents())));
-
-        if ($ical === false) {
-            die('Invalid import file');
+        try {
+            $vcalendar = Reader::read($contents);
+        } catch (\Exception $e) {
+            die('Invalid import file: ' . $e->getMessage());
         }
 
-        $events = $icalReader->events();
-
+        $events = $vcalendar->VEVENT;
         Log::Debug('Found %s events in ics file', count($events));
 
         foreach ($events as $event) {
             try {
-                if (!array_key_exists('LOCATION', $event)) {
-                    $numberSkipped++;
-                    Log::Debug('Skipping ics import - missing resource');
-                    continue;
-                }
-                $location = $event['LOCATION'];
-
-                if (empty($location)) {
+                if (empty($event->LOCATION)) {
                     $numberSkipped++;
                     Log::Debug('Skipping ics import - missing resource');
                     continue;
                 }
 
-                $organizer = '';
-                if (array_key_exists('ORGANIZER', $event)) {
-                    $organizer = $event['ORGANIZER'];
-                }
+                $location = (string)$event->LOCATION;
+                $organizer = isset($event->ORGANIZER) ? (string)$event->ORGANIZER : '';
 
                 $user = $this->GetOrCreateUser($organizer);
                 $resource = $this->GetOrCreateResource($location);
 
-                $startts = date('Y-m-d H:i:s', $icalReader->iCalDateToUnixTimestamp($event['DTSTART']));
-                $start = Date::Parse($startts, $this->GetTimezone($event, 'DTSTART_array'));
+                $start = $event->DTSTART->getDateTime(); // \DateTime object
+                $end = $event->DTEND->getDateTime();     // \DateTime object
 
-                $endts = date('Y-m-d H:i:s', $icalReader->iCalDateToUnixTimestamp($event['DTEND']));
-                $end = Date::Parse($endts, $this->GetTimezone($event, 'DTEND_array'));
+                $start = Date::Parse($start->format('Y-m-d H:i:s'));
+                $end = Date::Parse($end->format('Y-m-d H:i:s'));
 
-                $title = array_key_exists('SUMMARY', $event) ? htmlspecialchars($event['SUMMARY']) : '';
-                $description = array_key_exists('DESCRIPTION', $event) ? htmlspecialchars($event['DESCRIPTION']) : '';
-                ;
+                $title = isset($event->SUMMARY) ? htmlspecialchars((string)$event->SUMMARY) : '';
+                $description = isset($event->DESCRIPTION) ? htmlspecialchars((string)$event->DESCRIPTION) : '';
 
                 $reservation = ReservationSeries::Create(
                     $user->Id(),
@@ -141,14 +128,14 @@ class ICalImportPresenter extends ActionPresenter
                     new RepeatNone(),
                     ServiceLocator::GetServer()->GetUserSession()
                 );
+
                 $participantIds = [];
 
-                if (array_key_exists('ATTENDEE_array', $event)) {
-                    foreach ($event['ATTENDEE_array'] as $attendee) {
-                        if (is_string($attendee)) {
-                            $participant = $this->GetOrCreateUser($attendee);
-                            $participantIds[] = $participant->Id();
-                        }
+                if (isset($event->ATTENDEE)) {
+                    foreach ($event->select('ATTENDEE') as $attendee) {
+                        $email = (string)$attendee;
+                        $participant = $this->GetOrCreateUser($email);
+                        $participantIds[] = $participant->Id();
                     }
                 }
 
@@ -157,7 +144,6 @@ class ICalImportPresenter extends ActionPresenter
                 }
 
                 Log::Debug('Importing reservation on %s - %s for %s', $start, $end, $location);
-
                 $this->reservationRepository->Add($reservation);
                 $numberImported++;
             } catch (Exception $ex) {
@@ -166,7 +152,6 @@ class ICalImportPresenter extends ActionPresenter
         }
 
         Log::Debug('Done running ics import. Imported %s Skipped %s', $numberImported, $numberSkipped);
-
         $this->page->SetNumberImported($numberImported, $numberSkipped);
     }
 
