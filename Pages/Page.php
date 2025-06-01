@@ -10,7 +10,8 @@ require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/external/MobileDetect/Mobile_Detect.php');
+
+use Detection\MobileDetect;
 
 abstract class Page implements IPage
 {
@@ -131,7 +132,7 @@ abstract class Page implements IPage
         }
         $this->smarty->assign('HomeUrl', $logoUrl);
 
-        $detect = new Mobile_Detect();
+        $detect = new MobileDetect();
         $this->IsMobile = $detect->isMobile();
         $this->IsTablet = $detect->isTablet();
         $this->IsDesktop = !$this->IsMobile && !$this->IsTablet;
@@ -403,7 +404,7 @@ abstract class Page implements IPage
      */
     protected function DisplayLocalized($templateName)
     {
-        $languageCode = $this->GetVar('CurrentLanguage');        
+        $languageCode = $this->GetVar('CurrentLanguage');
         $localizedPath = ROOT_DIR . 'lang/' . $languageCode;
         $defaultPath = ROOT_DIR . 'lang/en_us/';
 
