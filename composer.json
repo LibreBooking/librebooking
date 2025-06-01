@@ -20,7 +20,8 @@
         "microsoft/microsoft-graph": "^2.0",
         "nickdnk/graph-sdk": "^7.0",
         "mobiledetect/mobiledetectlib": "^4.8",
-        "bacon/bacon-qr-code": "^3.0"
+        "bacon/bacon-qr-code": "^3.0",
+        "mibe/feedwriter": "^1.1"
     },
     "repositories": [
         {
