@@ -5,8 +5,8 @@ require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
-require_once(ROOT_DIR . 'lib/external/FeedWriter/FeedWriter.php');
-require_once(ROOT_DIR . 'lib/external/FeedWriter/FeedItem.php');
+
+use \FeedWriter\ATOM;
 
 class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 {
@@ -52,17 +52,16 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 
         $config = Configuration::Instance();
 
-        $feed = new FeedWriter(ATOM);
+        $feed = new ATOM();
         $title = $config->GetKey(ConfigKeys::APP_TITLE);
         $feed->setTitle(Resources::GetInstance()->GetString('AtomFeedTitle', [$title]));
         $url = $config->GetScriptUrl();
         $feed->setLink($url);
 
         $lastUpdated = Date::Min();
-        $feed->setChannelElement('author', ['name'=>$title]);
+        $feed->setChannelElement('author', ['name' => $title]);
 
         foreach ($this->reservations as $reservation) {
-            /** @var FeedItem $item */
             $item = $feed->createNewItem();
             $item->setTitle($reservation->Summary);
             $item->setLink($reservation->ReservationUrl);
@@ -80,7 +79,7 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
         }
 
         $feed->setChannelElement('updated', $lastUpdated->Format(DATE_ATOM));
-        $feed->genarateFeed();
+        $feed->printFeed();
     }
 
     public function SetReservations($reservations)
