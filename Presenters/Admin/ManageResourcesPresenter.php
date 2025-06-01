@@ -9,6 +9,9 @@ require_once(ROOT_DIR . 'lib/Application/Admin/ResourceImportCsv.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/ResourceStatusChangeEmail.php');
 
+use BaconQrCode\Renderer\GDLibRenderer;
+use BaconQrCode\Writer;
+
 class ManageResourcesActions
 {
     public const ActionAdd = 'add';
@@ -887,7 +890,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function PrintQRCode()
     {
-        $qrGenerator = new QRGenerator();
+        $qrGenerator = new GDLibRenderer(400);
 
         $resourceId = $this->page->GetResourceId();
 
@@ -897,9 +900,10 @@ class ManageResourcesPresenter extends ActionPresenter
         $savePath = $imageUploadDir->GetDirectory() . $imageName;
 
         $qrPath = sprintf('%s/%s?%s=%s', Configuration::Instance()->GetScriptUrl(), Pages::RESOURCE_QR_ROUTER, QueryStringKeys::RESOURCE_ID, $resourceId);
-        $qrGenerator->SavePng($qrPath, $savePath);
-        $resource = $this->resourceRepository->LoadById($resourceId);
 
+        $writer = new Writer($qrGenerator);
+        $writer->writeFile($qrPath, $savePath);
+        $resource = $this->resourceRepository->LoadById($resourceId);
         $this->page->ShowQRCode($url, $resource->GetName());
     }
 
@@ -1117,90 +1121,83 @@ class ManageResourcesPresenter extends ActionPresenter
     public function ProcessDataRequest($dataRequest)
     {
         switch ($dataRequest) {
-            case 'all':
-            {
-                $this->page->SetResourcesJson(array_map(['AdminResourceJson', 'FromBookable'], $this->resourceRepository->GetResourceList()));
-                break;
-            }
-            case 'users':
-            {
-                $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
-                $this->page->BindUserPermissions($users->Results());
-                break;
-            }
-            case 'usersAll':
-            {
-                $userRepository = new UserRepository();
-                $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
-                $users = $users->Results();
-                $allUsers = $userRepository->GetList(null, 1000);
-                $allUsers = $allUsers->Results();
-
-                $idsWithPermissions = [];
-                foreach ($users as $permission) {
-                    $idsWithPermissions[$permission->Id] = true;
+            case 'all': {
+                    $this->page->SetResourcesJson(array_map(['AdminResourceJson', 'FromBookable'], $this->resourceRepository->GetResourceList()));
+                    break;
                 }
-                /** @var UserItemView $user */
-                foreach ($allUsers as $user) {
-                    $found = array_key_exists($user->Id, $idsWithPermissions);
+            case 'users': {
+                    $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
+                    $this->page->BindUserPermissions($users->Results());
+                    break;
+                }
+            case 'usersAll': {
+                    $userRepository = new UserRepository();
+                    $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
+                    $users = $users->Results();
+                    $allUsers = $userRepository->GetList(null, 1000);
+                    $allUsers = $allUsers->Results();
 
-                    if (!$found) {
-                        $u = new UserPermissionItemView();
-                        $u->Id = $user->Id;
-                        $u->First = $user->First;
-                        $u->Last = $user->Last;
-                        $users[] = $u;
+                    $idsWithPermissions = [];
+                    foreach ($users as $permission) {
+                        $idsWithPermissions[$permission->Id] = true;
                     }
-                }
-                $this->page->BindUserPermissions($users);
-                break;
-            }
-            case 'groups':
-            {
-                $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
-                $this->page->BindGroupPermissions($groups->Results());
-                break;
-            }
-            case 'groupsAll':
-            {
-                $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
-                /** @var GroupPermissionItemView[] $groups */
-                $groups = $groups->Results();
-                $allGroups = $this->groupRepository->GetList(null, 1000);
-                $allGroups = $allGroups->Results();
+                    /** @var UserItemView $user */
+                    foreach ($allUsers as $user) {
+                        $found = array_key_exists($user->Id, $idsWithPermissions);
 
-                $idsWithPermissions = [];
-                foreach ($groups as $permission) {
-                    $idsWithPermissions[$permission->Id] = true;
-                }
-
-                /** @var GroupItemView $group */
-                foreach ($allGroups as $user) {
-                    $found = array_key_exists($user->Id(), $idsWithPermissions);
-
-                    if (!$found) {
-                        $groups[] = new GroupPermissionItemView($user->Id(), $user->Name());
+                        if (!$found) {
+                            $u = new UserPermissionItemView();
+                            $u->Id = $user->Id;
+                            $u->First = $user->First;
+                            $u->Last = $user->Last;
+                            $users[] = $u;
+                        }
                     }
+                    $this->page->BindUserPermissions($users);
+                    break;
                 }
-                $this->page->BindGroupPermissions($groups);
-                break;
-            }
-            case 'template':
-            {
-                $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
-                $importAttributes = [];
-                foreach ($attributes as $attribute) {
-                    if (!$attribute->UniquePerEntity()) {
-                        $importAttributes[] = $attribute;
+            case 'groups': {
+                    $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
+                    $this->page->BindGroupPermissions($groups->Results());
+                    break;
+                }
+            case 'groupsAll': {
+                    $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
+                    /** @var GroupPermissionItemView[] $groups */
+                    $groups = $groups->Results();
+                    $allGroups = $this->groupRepository->GetList(null, 1000);
+                    $allGroups = $allGroups->Results();
+
+                    $idsWithPermissions = [];
+                    foreach ($groups as $permission) {
+                        $idsWithPermissions[$permission->Id] = true;
                     }
+
+                    /** @var GroupItemView $group */
+                    foreach ($allGroups as $user) {
+                        $found = array_key_exists($user->Id(), $idsWithPermissions);
+
+                        if (!$found) {
+                            $groups[] = new GroupPermissionItemView($user->Id(), $user->Name());
+                        }
+                    }
+                    $this->page->BindGroupPermissions($groups);
+                    break;
                 }
-                $this->page->ShowTemplateCSV($importAttributes);
-                break;
-            }
-            case 'export':
-            {
-                $this->ExportResources();
-            }
+            case 'template': {
+                    $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
+                    $importAttributes = [];
+                    foreach ($attributes as $attribute) {
+                        if (!$attribute->UniquePerEntity()) {
+                            $importAttributes[] = $attribute;
+                        }
+                    }
+                    $this->page->ShowTemplateCSV($importAttributes);
+                    break;
+                }
+            case 'export': {
+                    $this->ExportResources();
+                }
         }
     }
 
@@ -1231,8 +1228,7 @@ class ManageResourcesPresenter extends ActionPresenter
                 $path = ROOT_DIR . $imageUploadDirectory;
             }
         }
-        return $path = "$path/$fileName";
-        ;
+        return $path = "$path/$fileName";;
     }
 }
 
