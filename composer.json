@@ -19,7 +19,8 @@
         "google/apiclient": "^2.0",
         "microsoft/microsoft-graph": "^2.0",
         "nickdnk/graph-sdk": "^7.0",
-        "mobiledetect/mobiledetectlib": "^4.8"
+        "mobiledetect/mobiledetectlib": "^4.8",
+        "bacon/bacon-qr-code": "^3.0"
     },
     "repositories": [
         {
