@@ -18,7 +18,8 @@
         "gregwar/captcha": "1.*",
         "google/apiclient": "^2.0",
         "microsoft/microsoft-graph": "^2.0",
-        "nickdnk/graph-sdk": "^7.0"
+        "nickdnk/graph-sdk": "^7.0",
+        "mobiledetect/mobiledetectlib": "^4.8"
     },
     "repositories": [
         {
