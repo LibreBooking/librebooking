@@ -1,9 +1,9 @@
 <?php
 
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'lib/external/phpmailer/class.phpmailer.php');
-require_once(ROOT_DIR . 'lib/external/phpmailer/class.pop3.php');
-require_once(ROOT_DIR . 'lib/external/phpmailer/class.smtp.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class EmailService implements IEmailService
 {
@@ -14,21 +14,30 @@ class EmailService implements IEmailService
 
     public function __construct($phpMailer = null)
     {
-        $this->phpMailer = $phpMailer;
-
         if (is_null($phpMailer)) {
-            $this->phpMailer = new PHPMailer();
-            $this->phpMailer->isHTML(true);
-            $this->phpMailer->Mailer = $this->Config('mailer');
-            $this->phpMailer->Host = $this->Config('smtp.host');
-            $this->phpMailer->Port = $this->Config('smtp.port', new IntConverter());
-            $this->phpMailer->SMTPSecure = $this->Config('smtp.secure');
-            $this->phpMailer->SMTPAuth = $this->Config('smtp.auth', new BooleanConverter());
-            $this->phpMailer->Username = $this->Config('smtp.username');
-            $this->phpMailer->Password = $this->Config('smtp.password');
-            $this->phpMailer->Sendmail = $this->Config('sendmail.path');
-            $this->phpMailer->SMTPDebug = $this->Config('smtp.debug', new BooleanConverter());
+            $phpMailer = new PHPMailer(true); // true para usar excepciones
+
+            $phpMailer->isHTML(true);
+            $phpMailer->CharSet = 'UTF-8';
+
+            $mailer = $this->Config('mailer');
+            if ($mailer === 'smtp') {
+                $phpMailer->isSMTP();
+            } elseif ($mailer === 'sendmail') {
+                $phpMailer->isSendmail();
+                $phpMailer->Sendmail = $this->Config('sendmail.path');
+            }
+
+            $phpMailer->Host = $this->Config('smtp.host');
+            $phpMailer->Port = $this->Config('smtp.port', new IntConverter());
+            $phpMailer->SMTPSecure = $this->Config('smtp.secure');
+            $phpMailer->SMTPAuth = $this->Config('smtp.auth', new BooleanConverter());
+            $phpMailer->Username = $this->Config('smtp.username');
+            $phpMailer->Password = $this->Config('smtp.password');
+            $phpMailer->SMTPDebug = $this->Config('smtp.debug', new BooleanConverter());
         }
+
+        $this->phpMailer = $phpMailer;
     }
 
     public function Send(IEmailMessage $emailMessage)
