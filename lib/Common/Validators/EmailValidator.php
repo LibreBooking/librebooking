@@ -1,6 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/is_email/is_email.php');
+use Egulias\EmailValidator\EmailValidator as EguliasValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 
 class EmailValidator extends ValidatorBase implements IValidator
 {
@@ -13,7 +14,8 @@ class EmailValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        $this->isValid = psi_is_email($this->email);
+        $validator = new EguliasValidator();
+        $this->isValid = $validator->isValid($this->email, new RFCValidation());
 
         if (!$this->isValid) {
             $this->AddMessageKey('ValidEmailRequired');
