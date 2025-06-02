@@ -1,7 +1,5 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/random/random.php');
-
 class BookedStringHelper
 {
     /**
@@ -50,7 +48,7 @@ class BookedStringHelper
     public static function Random($length = 50)
     {
         try {
-            $string = random_bytes(intval($length/2));
+            $string = random_bytes(intval($length / 2));
             $string = bin2hex($string);
         } catch (Exception $e) {
             $string = uniqid(rand(), true);
