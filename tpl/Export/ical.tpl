@@ -4,7 +4,7 @@ METHOD:REQUEST
 PRODID:-//LibreBooking//NONSGML {$bookedVersion}//EN
 {foreach from=$Reservations item=reservation}
 BEGIN:VEVENT
-CLASS:PUBLIC
+CLASS:{$reservation->Classification}
 CREATED:{formatdate date=$reservation->DateCreated key=ical}
 DESCRIPTION:{$reservation->Description|regex_replace:"/\r\n|\n|\r/m":"\n "}
 DTSTAMP:{formatdate date=$reservation->DateCreated key=ical}
@@ -23,6 +23,8 @@ UID:{$reservation->ReferenceNumber}&{$UID}
 SEQUENCE:0
 URL:{$reservation->ReservationUrl}
 X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+{if $reservation->ExtraIcalLines != null}
+{$reservation->ExtraIcalLines}{/if}
 {if $reservation->StartReminder != null}
 BEGIN:VALARM
 TRIGGER;RELATED=START:-PT{$reservation->StartReminder->MinutesPrior()}M

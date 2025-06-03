@@ -45,6 +45,7 @@ class ConfigKeys
 
     public const PLUGIN_AUTHENTICATION = 'Authentication';
     public const PLUGIN_AUTHORIZATION = 'Authorization';
+    public const PLUGIN_EXPORT = 'Export';
     public const PLUGIN_PERMISSION = 'Permission';
     public const PLUGIN_POSTREGISTRATION = 'PostRegistration';
     public const PLUGIN_PRERESERVATION = 'PreReservation';

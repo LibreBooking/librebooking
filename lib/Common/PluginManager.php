@@ -169,9 +169,9 @@ class PluginManager
 
     /**
      * Loads the configured Styling plugin, if one exists
-     * If no plugin exists, the default PreReservationFactory class is returned
+     * If no plugin exists, the default StylingFactory class is returned
      *
-     * @return IPreReservationFactory
+     * @return IStylingFactory
      */
     public function LoadStyling()
     {
@@ -180,6 +180,27 @@ class PluginManager
         $factory = new StylingFactory();
 
         $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_STYLING, 'Styling', $factory);
+
+        if (!is_null($plugin)) {
+            return $plugin;
+        }
+
+        return $factory;
+    }
+
+    /**
+     * Loads the configured Export plugin, if one exists
+     * If no plugin exists, the default ExportFactory class is returned
+     *
+     * @return IExportFactory
+     */
+    public function LoadExport()
+    {
+        require_once(ROOT_DIR . 'lib/Application/Export/namespace.php');
+
+        $factory = new ExportFactory();
+
+        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_EXPORT, 'Export', $factory);
 
         if (!is_null($plugin)) {
             return $plugin;

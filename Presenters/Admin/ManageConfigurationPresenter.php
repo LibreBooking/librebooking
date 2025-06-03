@@ -158,6 +158,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         $this->page->SetPreReservationPluginValues($plugins['PreReservation']);
         $this->page->SetPostReservationPluginValues($plugins['PostReservation']);
         $this->page->SetStylingPluginValues($plugins['Styling']);
+        $this->page->SetExportPluginValues($plugins['Export']);
     }
 
     public function Update()

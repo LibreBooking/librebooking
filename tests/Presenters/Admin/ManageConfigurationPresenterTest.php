@@ -323,6 +323,14 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
     }
 
     /**
+     * @param string[] $values
+     */
+    public function SetExportPluginValues($values)
+    {
+        // TODO: Implement SetExportPluginValues() method.
+    }
+
+    /**
      * @return int
      */
     public function GetHomePageId()

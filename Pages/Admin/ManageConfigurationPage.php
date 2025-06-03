@@ -95,6 +95,11 @@ interface IManageConfigurationPage extends IActionPage
     public function SetStylingPluginValues($values);
 
     /**
+     * @param string[] $values
+     */
+    public function SetExportPluginValues($values);
+
+    /**
      * @return int
      */
     public function GetHomePageId();
@@ -261,6 +266,10 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
     public function SetStylingPluginValues($values)
     {
         $this->Set('StylingPluginValues', $values);
+    }
+    public function SetExportPluginValues($values)
+    {
+        $this->Set('ExportPluginValues', $values);
     }
 
     public function GetHomePageId()
