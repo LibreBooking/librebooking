@@ -1,9 +1,9 @@
 <?php
 
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-  require_once ROOT_DIR . 'vendor/autoload.php';
+    require_once ROOT_DIR . 'vendor/autoload.php';
 }
-require ROOT_DIR . 'lib/external/Unirest/Unirest.php';
+
 
 class PaymentGateways
 {
@@ -254,9 +254,9 @@ class PayPalGateway implements IPaymentGateway
     public function Settings()
     {
         return [
-                new PaymentGatewaySetting(self::CLIENT_ID, $this->ClientId()),
-                new PaymentGatewaySetting(self::SECRET, $this->Secret()),
-                new PaymentGatewaySetting(self::ENVIRONMENT, $this->Environment()),
+            new PaymentGatewaySetting(self::CLIENT_ID, $this->ClientId()),
+            new PaymentGatewaySetting(self::SECRET, $this->Secret()),
+            new PaymentGatewaySetting(self::ENVIRONMENT, $this->Environment()),
         ];
     }
 
@@ -302,7 +302,7 @@ class PayPalGateway implements IPaymentGateway
         $baseUrl = "https://api.paypal.com";
         $paypalEnvironment = $this->Environment();
         if (strtolower($paypalEnvironment) == "sandbox") {
-            $baseUrl = "https://api.sandbox.paypal.com";
+            $baseUrl = "https://api-m.sandbox.paypal.com";
         }
         return $baseUrl;
     }
@@ -325,9 +325,10 @@ class PayPalGateway implements IPaymentGateway
             $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
             $purchaseRequest = ['description' => $resources->GetString('CreditPurchase'), 'amount' => ['value' => "{$cart->Total()}", 'currency_code' => $cart->Currency]];
             $data = [
-                    'intent' => 'CAPTURE',
-                    'application_context' => ['return_url' => $returnUrl, 'cancel_url' => $cancelUrl],
-                    'purchase_units' => [$purchaseRequest]];
+                'intent' => 'CAPTURE',
+                'application_context' => ['return_url' => $returnUrl, 'cancel_url' => $cancelUrl],
+                'purchase_units' => [$purchaseRequest]
+            ];
             $body = Unirest\Request\Body::json($data);
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($checkoutUrl, $headers, $body);
@@ -530,8 +531,8 @@ class StripeGateway implements IPaymentGateway
     public function Settings()
     {
         return [
-                new PaymentGatewaySetting(self::PUBLISHABLE_KEY, $this->PublishableKey()),
-                new PaymentGatewaySetting(self::SECRET_KEY, $this->SecretKey()),
+            new PaymentGatewaySetting(self::PUBLISHABLE_KEY, $this->PublishableKey()),
+            new PaymentGatewaySetting(self::SECRET_KEY, $this->SecretKey()),
         ];
     }
 
@@ -564,19 +565,19 @@ class StripeGateway implements IPaymentGateway
             \Stripe\Stripe::setApiKey($this->SecretKey());
 
             $customer = \Stripe\Customer::create([
-                                                         'email' => $email,
-                                                         'source' => $token
-                                                 ]);
+                'email' => $email,
+                'source' => $token
+            ]);
 
             $currency = new \Booked\Currency($cart->Currency);
 
             $charge = \Stripe\Charge::create([
-                                                     'customer' => $customer->id,
-                                                     'amount' => $currency->ToStripe($cart->Total()),
-                                                     'currency' => strtolower($cart->Currency),
-                                                     'description' => Resources::GetInstance()->GetString('Credits'),
-                                                     'expand' => ['balance_transaction']
-                                             ]);
+                'customer' => $customer->id,
+                'amount' => $currency->ToStripe($cart->Total()),
+                'currency' => strtolower($cart->Currency),
+                'description' => Resources::GetInstance()->GetString('Credits'),
+                'expand' => ['balance_transaction']
+            ]);
 
             if (Log::DebugEnabled()) {
                 Log::Debug('Stripe charge response %s', json_encode($charge));
@@ -598,7 +599,7 @@ class StripeGateway implements IPaymentGateway
                 json_encode($charge)
             );
             return $charge->status == 'succeeded';
-        } catch (\Stripe\Error\Card $ex) {
+        } catch (\Stripe\Exception\CardException $ex) {
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
@@ -610,15 +611,15 @@ class StripeGateway implements IPaymentGateway
                 $err['param'],
                 $err['message']
             );
-        } catch (\Stripe\Error\RateLimit $ex) {
+        } catch (\Stripe\Exception\RateLimitException $ex) {
             Log::Error('Stripe - too many requests. %s', $ex);
-        } catch (\Stripe\Error\InvalidRequest $ex) {
+        } catch (\Stripe\Exception\InvalidRequestException $ex) {
             Log::Error('Stripe - invalid request. %s', $ex);
-        } catch (\Stripe\Error\Authentication $ex) {
+        } catch (\Stripe\Exception\AuthenticationException $ex) {
             Log::Error('Stripe - authentication error. %s', $ex);
-        } catch (\Stripe\Error\ApiConnection $ex) {
+        } catch (\Stripe\Exception\ApiConnectionException $ex) {
             Log::Error('Stripe - connection failure. %s', $ex);
-        } catch (\Stripe\Error\Base $ex) {
+        } catch (\Stripe\Exception\ApiErrorException $ex) {
             Log::Error('Stripe - error. %s', $ex);
         } catch (Exception $ex) {
             Log::Error('Stripe - internal error. %s', $ex);
@@ -640,10 +641,10 @@ class StripeGateway implements IPaymentGateway
 
             \Stripe\Stripe::setApiKey($this->SecretKey());
             $refund = \Stripe\Refund::create([
-                                                     'charge' => $log->TransactionId,
-                                                     'amount' => $currency->ToStripe($amount),
-                                                     'expand' => ['balance_transaction']
-                                             ]);
+                'charge' => $log->TransactionId,
+                'amount' => $currency->ToStripe($amount),
+                'expand' => ['balance_transaction']
+            ]);
 
             if (Log::DebugEnabled()) {
                 Log::Debug('Stripe refund response %s', json_encode($refund));
@@ -663,7 +664,7 @@ class StripeGateway implements IPaymentGateway
             );
 
             return $refund->status == 'succeeded';
-        } catch (\Stripe\Error\Card $ex) {
+        } catch (\Stripe\Exception\CardException $ex) {
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
@@ -675,15 +676,15 @@ class StripeGateway implements IPaymentGateway
                 $err['param'],
                 $err['message']
             );
-        } catch (\Stripe\Error\RateLimit $ex) {
+        } catch (\Stripe\Exception\RateLimitException $ex) {
             Log::Error('Stripe refund - too many requests. %s', $ex);
-        } catch (\Stripe\Error\InvalidRequest $ex) {
+        } catch (\Stripe\Exception\InvalidRequestException $ex) {
             Log::Error('Stripe refund - invalid request. %s', $ex);
-        } catch (\Stripe\Error\Authentication $ex) {
+        } catch (\Stripe\Exception\AuthenticationException $ex) {
             Log::Error('Stripe refund - authentication error. %s', $ex);
-        } catch (\Stripe\Error\ApiConnection $ex) {
+        } catch (\Stripe\Exception\ApiConnectionException $ex) {
             Log::Error('Stripe refund - connection failure. %s', $ex);
-        } catch (\Stripe\Error\Base $ex) {
+        } catch (\Stripe\Exception\ApiErrorException $ex) {
             Log::Error('Stripe - error. %s', $ex);
         } catch (Exception $ex) {
             Log::Error('Stripe refund - internal error. %s', $ex);
