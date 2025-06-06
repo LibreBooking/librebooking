@@ -25,7 +25,8 @@
         "sabre/vobject": "^4.5",
         "egulias/email-validator": "^4.0",
         "phpmailer/phpmailer": "^6.10",
-        "claviska/simpleimage": "^4.2"
+        "claviska/simpleimage": "^4.2",
+        "mashape/unirest-php": "^3.0"
     },
     "repositories": [
         {
