@@ -132,15 +132,22 @@ abstract class Page implements IPage
         }
         $this->smarty->assign('HomeUrl', $logoUrl);
 
-        $detect = new MobileDetect();
-        $this->IsMobile = $detect->isMobile();
-        $this->IsTablet = $detect->isTablet();
+        $loadMobileViews = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_LOAD_MOBILE_VIEWS, new BooleanConverter()) ?? true;
+
+        if ($loadMobileViews) {
+            $detect = new MobileDetect();
+            $this->IsMobile = $detect->isMobile();
+            $this->IsTablet = $detect->isTablet();
+        }
+
         $this->IsDesktop = !$this->IsMobile && !$this->IsTablet;
-        $this->Set('IsMobile', $this->IsMobile);
-        $this->Set('IsTablet', $this->IsTablet);
-        $this->Set('IsDesktop', $this->IsDesktop);
+        $this->Set('IsMobile', (bool)$this->IsMobile);
+        $this->Set('IsTablet', (bool)$this->IsTablet);
+        $this->Set('IsDesktop', (bool)$this->IsDesktop);
         $this->Set('GoogleAnalyticsTrackingId', Configuration::Instance()->GetSectionKey(ConfigSection::GOOGLE_ANALYTICS, ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
+
+        $this->Set('AutoScrollToday', Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_AUTO_SCROLL_TODAY, new BooleanConverter()) ?? true);
     }
 
     protected function SetTitle($title)
