@@ -440,6 +440,7 @@
         autocompleteUrl: "{$Path}ajax/autocomplete.php?type={AutoCompleteType::User}",
         fastReservationLoad: "{$FastReservationLoad}",
         resourceMaxConcurrentReservations,
+        autoScrollToday: {$AutoScrollToday|@json_encode},
     };
 
     const resourceOrder = [];

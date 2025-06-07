@@ -11,10 +11,6 @@ function Schedule(opts, resourceGroups) {
     const ScheduleWide = "1";
     const ScheduleTall = "2";
     const ScheduleCondensed = "3";
-    //Replaced by a global button
-    /* const elements = {
-         topButton: $('#reservationsToTop')
-     };*/
 
     this.init = function () {
         this.initUserDefaultSchedule();
@@ -25,11 +21,13 @@ function Schedule(opts, resourceGroups) {
         this.initNavigation();
         addNumericalIdsToRows();
 
-        var today = $(".today");
-        if (today && today.length > 0) {
-            $('html, body').animate({
-                scrollTop: today.offset().top - 50
-            }, 500);
+        if (scheduleOpts.autoScrollToday) {
+            var today = $(".today");
+            if (today && today.length > 0) {
+                $('html, body').animate({
+                    scrollTop: today.offset().top - 50
+                }, 500);
+            }
         }
 
         $(window).on('resize', _.debounce(function () {
@@ -38,20 +36,6 @@ function Schedule(opts, resourceGroups) {
                 renderEvents(true);
             }
         }, 1000));
-        //Replaced by a global button
-        /*$(window).on('scroll', function () {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                elements.topButton[0].style.display = "block";
-            } else {
-                elements.topButton[0].style.display = "none";
-            }
-        });
-
-        elements.topButton.on('click', function () {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        });*/
 
         setInterval(function () {
             renderEvents(true);
@@ -862,12 +846,10 @@ function Schedule(opts, resourceGroups) {
             var isInteger = /^[0-9]+$/.test(scheduleDisplay);
 
             if (isInteger) {
-                
                 // If is valid cerate a normal cookie
                 createCookie(opts.cookieName, parseInt(scheduleDisplay, 10), 30, opts.scriptUrl);
                 window.location.reload();
             } else {
-                
                 // Otherwise create a cookie with value 0
                 createCookie(opts.cookieName, 0, 30, opts.scriptUrl);
                 window.location.reload();
@@ -1035,12 +1017,12 @@ function Schedule(opts, resourceGroups) {
             var ref = $(this).attr('ref');
             reservations.find('td[ref="' + ref + '"]').addClass('hilite');
         });
-
+     
          reservations.delegate('.clickres:not(.reserved)', 'mouseleave', function () {
             if (selectingTds) {
                 return;
             }
-
+     
             $(this).siblings('.resourcename').removeClass('hilite');
             var ref = $(this).attr('ref');
             reservations.find('td[ref="' + ref + '"]').removeClass('hilite');
