@@ -24,7 +24,8 @@
         "mibe/feedwriter": "^1.1",
         "sabre/vobject": "^4.5",
         "egulias/email-validator": "^4.0",
-        "phpmailer/phpmailer": "^6.10"
+        "phpmailer/phpmailer": "^6.10",
+        "claviska/simpleimage": "^4.2"
     },
     "repositories": [
         {
