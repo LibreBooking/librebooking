@@ -42,6 +42,8 @@ $conf['settings']['schedule']['hide.blocked.periods'] = 'false';        // if bl
 $conf['settings']['schedule']['update.highlight.minutes'] = '0';    // if set, will show reservations as 'updated' for a certain amount of time
 $conf['settings']['schedule']['show.week.numbers'] = 'false';
 $conf['settings']['schedule']['fast.reservation.load'] = 'false';  // Experimental: Use new algorithm to load reservations faster in the schedule. Currently does not support concurrent reservations. With larger number of resources this can be 10x or 100x faster. Only runs with the StandardSchedule otherwise will fall back to legacy mode.
+$conf['settings']['schedule']['load.mobile.views'] = 'true';                    // if the mobile views should be loaded on mobile devices. If false, the desktop views will be loaded instead
+$conf['settings']['schedule']['auto.scroll.today'] = 'true';               // if the schedule should automatically scroll to today when the page is loaded
 /**
  * ical integration configuration
  */

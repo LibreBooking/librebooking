@@ -36,6 +36,8 @@ class ConfigKeys
     public const SCHEDULE_UPDATE_HIGHLIGHT_MINUTES = 'update.highlight.minutes';
     public const SCHEDULE_SHOW_WEEK_NUMBERS = 'show.week.numbers';
     public const SCHEDULE_FAST_RESERVATION_LOAD = 'fast.reservation.load';
+    public const SCHEDULE_LOAD_MOBILE_VIEWS = 'load.mobile.views';
+    public const SCHEDULE_AUTO_SCROLL_TODAY = 'auto.scroll.today';
 
     public const DATABASE_TYPE = 'type';
     public const DATABASE_USER = 'user';
