@@ -646,8 +646,8 @@
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="permissions">{translate key='ResourcePermissions'}</label>
 							<select class="form-select" {formname key=AUTO_ASSIGN} id="permissions">
-								<option value="1">{translate key="ResourcePermissionAutoGranted"}</option>
 								<option value="0">{translate key="ResourcePermissionNotAutoGranted"}</option>
+								<option value="1">{translate key="ResourcePermissionAutoGranted"}</option>
 							</select>
 						</div>
 						<div class="form-group mb-2">
