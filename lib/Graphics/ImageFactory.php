@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/SimpleImage/SimpleImage.php');
+use claviska\SimpleImage;
 
 interface IImageFactory
 {
@@ -18,9 +18,13 @@ class ImageFactory implements IImageFactory
             die('gd extension is required for image upload');
         }
 
-        $image = new SimpleImage();
-        $image->load($pathToImage);
+        try {
+            $image = new SimpleImage();
+            $image->fromFile($pathToImage); // correct method in the new version
 
-        return new Image($image);
+            return new Image($image);
+        } catch (Exception $err) {
+            die('Error loading image: ' . $err->getMessage());
+        }
     }
 }

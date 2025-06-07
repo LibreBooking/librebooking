@@ -1,5 +1,7 @@
 <?php
 
+use claviska\SimpleImage;
+
 interface IImage
 {
     public function ResizeToWidth($pixels);
@@ -9,6 +11,8 @@ interface IImage
 
 class Image implements IImage
 {
+    private $image;
+
     public function __construct(SimpleImage $image)
     {
         $this->image = $image;
@@ -16,11 +20,11 @@ class Image implements IImage
 
     public function ResizeToWidth($pixels)
     {
-        $this->image->resizeToWidth($pixels);
+        $this->image->bestFit($pixels, 9999);
     }
 
     public function Save($path)
     {
-        $this->image->save($path);
+        $this->image->toFile($path);
     }
 }
