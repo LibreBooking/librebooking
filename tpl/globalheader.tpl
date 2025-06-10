@@ -58,9 +58,8 @@
                 type="text/css" />
         {/if}
         {if isset($Trumbowyg) && $Trumbowyg}
-            <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
-            type="text/css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
+                type="text/css" />
         {/if}
 
     {/if}
@@ -413,4 +412,4 @@
         </nav>
     {/if}
 
-<div id="main" class="container-fluid mt-3">
+<div id="main" class="container-fluid my-3">

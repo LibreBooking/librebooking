@@ -56,9 +56,9 @@
     --text-color-btn: #ffffff;
 }
 
-html {
-    min-height: 100%;
-    position: relative;
+html,
+body {
+    height: 99%;
 }
 
 body {
@@ -66,16 +66,12 @@ body {
     font-weight: 400;
     font-style: normal;
     font-size: 14px;
-    margin: 0;
-    margin-bottom: 100px;
-    background-color: #fbfbfb;
+    display: flex;
+    flex-direction: column;
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
+    margin-top: auto;
 }
 
 img.logo {
