@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+:root {
+    --color-principal: #8C1919;
+    --color-secundario: #9a0a18;
+    --color-dark: #373435;
+    --color-azul: #192129;
+
+
+    --color-terciario: #b1beb5;
+    --color-amarillo: #FDB400;
+
+    --color-menu: #c0c0c0;
+    --color-lineas: #a6a6a6;
+
+    --reserved: hsl(210, 62%, 50%);
+    --reserved-past: hsl(210, 62%, 70%);
+    --reserved-hilite: hsl(210, 62%, 75%);
+}
+
+[data-bs-theme="dimgray"] {
+    --primary: #373435;
+    --primary-hover: #272526;
+    --primary-disabled: #4f4a4c;
+    --text-color-btn: #ffffff;
+}
+
+.past {
+    opacity: 1 !important;
+    background-color: var(--reserved-past) !important;
+}
+
+.reserved.hilite {
+    background-color: var(--reserved-hilite) !important;
+}
+
+body {
+    font-family: 'Hind', sans-serif;
+    background-color: #f5f5f5;
+    color: #262626;
+}
+
+#encabezado {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+    background-color: var(--color-azul);
+    color: #fff;
+    padding: 12px 0px 12px 0px;
+}
+
+#encabezado a {
+    color: #fff;
+    text-decoration: none;
+}
+
+img.logo {
+    max-height: 80px;
+}
+
+.contenedor-body a {
+    font-family: 'Hind', sans-serif;
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+}
+
+#menu2 {
+    position: relative;
+    background-image: url(https://www.udistrital.edu.co/themes/custom/versh/images/tema/bgnavnegra.png);
+    background-position: left !important;
+    background-repeat: no-repeat;
+}
+
+#menu2>a {
+    font-family: 'Hind', sans-serif;
+    color: #fff;
+    text-decoration: none;
+    padding-left: 0.75em;
+}
+
+.bg-rojo {
+    background-color: var(--color-principal);
+}
+
+.navbar-nav {
+    font-size: 16px;
+}
+
+.link-light:hover {
+    color: #ffffff !important;
+}
+
+.slash {
+    color: var(--color-amarillo);
+}
+
+/* TIMER 
+-------------------------------------------------*/
+.maintenance-card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.countdown-number {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.countdown-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.countdown-separator {
+    font-size: 1.8rem;
+    color: #495057;
+    padding-bottom: 1rem;
+}
+
+@media (max-width: 576px) {
+    .countdown-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .countdown-separator {
+        font-size: 1.4rem;
+        padding-bottom: 0.8rem;
+    }
+}
+
+footer {
+    font-family: 'Lora', sans-serif;
+    color: #fff;
+}
+
+#footer-fondo {
+    background-image: url(https://www.udistrital.edu.co/themes/custom/versh/images/tema/footerbg.png);
+}
+
+hr.piedepagina {
+    background-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+    border: 0 none;
+    opacity: 0.75;
+    height: 1px;
+    margin: 22px 0;
+}
+
+hr.piedepaginarojocorto {
+    background-color: var(--color-amarillo);
+    border: 0 none;
+    height: 1px;
+    margin: 0px 0;
+    min-height: 1px;
+    max-width: 30px;
+    opacity: 1;
+}
+
+hr.piedepaginarojolargo {
+    background-color: var(--color-amarillo);
+    border: 0 none;
+    height: 1px;
+    margin: 3px 0;
+    min-height: 1px;
+    max-width: 90px;
+    opacity: 1;
+}
+
+#footer-fondo a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#footer-fondo a:hover {
+    color: #fff;
+}
+
+#footer-fondo-oscuro a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#footer-fondo-oscuro a:hover {
+    color: #fff;
+}
+
+#footer-fondo-oscuro {
+    background-color: #222222;
+    font-size: 12px;
+}
+
+#navlist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+#link_inferior:hover {
+    color: #fff !important;
+}
+
+/* Slider */
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-250px * 7));
+    }
+}
+
+.my-slider {
+    width: 146px;
+    margin: 0 auto;
+}
+
+.slider-wrapper {
+    background: rgba(0, 0, 0, 0.5);
+    position: relative;
+    align-items: center;
+}
+
+.my-slider {
+    flex: 1;
+    margin: 0 40px;
+}
+
+.custom-prev,
+.custom-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.custom-prev {
+    left: 10px;
+}
+
+.custom-next {
+    right: 10px;
+}
+
+[data-action] {
+    min-width: 2em;
+    min-height: 2em;
+    background: #ffffff;
+    border-radius: 1em;
+}

@@ -270,8 +270,8 @@ td.dropped {
 }
 
 .reserved.hilite {
-  /*background-color: #59A8EF;*/
-  opacity: 0.75;
+  background-color: #59A8EF;
+  /*opacity: 0.75;*/
 }
 
 .reserved.mine {

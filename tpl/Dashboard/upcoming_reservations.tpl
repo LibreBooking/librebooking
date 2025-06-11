@@ -1,4 +1,4 @@
-<div class="upcomingReservationsDashboard accordion-item shadow mb-2" id="upcomingReservationsDashboard">
+<div class="upcomingReservationsDashboard accordion-item shadow mb-2 d-none" id="upcomingReservationsDashboard">
 	<div class="accordion-header dashboardHeader">
 		<button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
 			data-bs-target="#UpcomingReservationsContents" aria-expanded="false"

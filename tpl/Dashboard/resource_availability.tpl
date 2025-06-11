@@ -1,4 +1,4 @@
-<div class="dashboard accordion-item shadow mb-2 availabilityDashboard" id="availabilityDashboard">
+<div class="dashboard accordion-item shadow mb-2 availabilityDashboard d-none" id="availabilityDashboard">
     <div class="accordion-header dashboardHeader">
         <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
             data-bs-target="#ResourceAvailabilityContents" aria-expanded="false"

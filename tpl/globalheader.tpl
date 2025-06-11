@@ -28,7 +28,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
     {/if}
-
+    <script src="https://kit.fontawesome.com/ff9ce5127a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
     <!-- End JavaScript -->
 
     <!-- CSS -->
@@ -116,6 +117,19 @@
 <body data-bs-theme='{$cssTheme}'>
 
     {if !isset($HideNavBar) || $HideNavBar == false}
+        <div id="encabezado">
+            <div class="container-fluid text-end text-white">
+                <span class="fas fa-phone fa-rotate-270" aria-hidden="true"></span> <span>018000-914410 </span>
+                <span class="mx-3 text-white"><a id="textoSup" href="https://www.udistrital.edu.co/directorio"><i
+                            class="fas fa-book" aria-hidden="true"></i> Directorio</a> </span>
+                <span class="mx-3"><a id="textoSup" href="https://www.udistrital.edu.co/servicios"><i
+                            class="far fa-list-alt" aria-hidden="true"></i> Servicios</a> </span>
+                <span class="mx-3"><a id="textoSup" href="https://transparencia.udistrital.edu.co/"><i
+                            class="fa fa-check-double" aria-hidden="true"></i> Índices de transparencia</a> </span>
+                <span class="mx-3"><a id="textoSup" href="https://reclamos.udistrital.edu.co/participa"><i
+                            class="fa fa-check-double" aria-hidden="true"></i> Participa</a> </span>
+            </div>
+        </div>
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
                 {html_image src="$LogoUrl?{$Version}" alt="$Title" class="logo"}
@@ -127,22 +141,40 @@
                 <h5 class="mb-0"><a class="link-primary" href="{$HomeUrl}">{$AppTitle}</a></h5>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
+        <div class="clearfix">
+            <div id="menu2" class="float-end d-none d-lg-inline ps-4 pe-2 py-2">
+                <a href="http://autoevaluacionyacreditacion.udistrital.edu.co/">Aseguramiento de la calidad</a>
+                <a href="http://idexud.udistrital.edu.co/">Instituto de Extensión</a>
+                <a href="https://urelinter.udistrital.edu.co/" class="mx-2">Internacionalización</a>
+                <a href="https://moodleilud.udistrital.edu.co/">Instituto de idiomas</a>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg bg-rojo shadow-sm py-2 sticky-top">
             <div class="container-fluid">
-                {*<a class="navbar-brand py-0" href="{$HomeUrl}">{html_image src="$LogoUrl?{$Version}" alt="$Title"
-                    class="logo"}</a>*}
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="librebooking-navigation">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav mx-auto text-uppercase mb-2 mb-lg-0">
+                        <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
+                                href="https://rita.udistrital.edu.co:23604/adminlab/"><i
+                                    class="slash fas fa-slash fa-rotate-90"></i>Inicio</a></li>
+                        <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
+                                href="{$baseUrl}adminlab/recursos"><i
+                                    class="slash fas fa-slash fa-rotate-90"></i>Recursos</a></li>
+                        <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
+                                href="{$baseUrl}adminlab/pazysalvos"><i class="slash fas fa-slash fa-rotate-90"></i>Paz y
+                                Salvos</a>
+                        </li>
                         {if isset($LoggedIn) && $LoggedIn}
-                            <li class="nav-item" id="navDashboard"><a class="nav-link link-primary"
-                                    href="{$Path}{Pages::DASHBOARD}">{translate key="Dashboard"}</a></li>
-                            <li class="nav-item dropdown" id="navMyAccountDropdown">
-                                <a href="#" class="nav-link  link-primary dropdown-toggle" role="button"
-                                    data-bs-toggle="dropdown">{translate key="MyAccount"}</a>
+                            <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
+                                    href="{$Path}{Pages::DASHBOARD}"><i
+                                        class="slash fas fa-slash fa-rotate-90"></i>{translate key="Dashboard"}</a></li>
+                            {*<li class="nav-item dropdown" id="navMyAccountDropdown">
+                                <a href="#" class="nav-link  link-light dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown"><i
+                                        class="slash fas fa-slash fa-rotate-90"></i>{translate key="MyAccount"}</a>
                                 <ul class="dropdown-menu">
                                     <li id="navProfile"><a class="dropdown-item"
                                             href="{$Path}{Pages::PROFILE}">{translate key="Profile"}</a></li>
@@ -164,8 +196,12 @@
                                         </li>
                                     {/if}
                                 </ul>
+                            </li>*}
+                            <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
+                                    href="{$Path}{Pages::SCHEDULE}"><i
+                                        class="slash fas fa-slash fa-rotate-90"></i>{translate key="Bookings"}</a>
                             </li>
-                            <li class="nav-item dropdown" id="navScheduleDropdown">
+                            {*<li class="nav-item dropdown" id="navScheduleDropdown">
                                 <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                     data-bs-toggle="dropdown">{translate key="Schedule"}</a>
                                 <ul class="dropdown-menu">
@@ -202,11 +238,12 @@
                                             href="{$Path}view_schedules.php">{translate key=Schedules}</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>*}
                             {if isset($CanViewAdmin) && $CanViewAdmin}
                                 <li class="nav-item dropdown" id="navApplicationManagementDropdown">
-                                    <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
-                                        data-bs-toggle="dropdown">{translate key="ApplicationManagement"}</a>
+                                    <a href="#" class="nav-link link-light dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown"><i
+                                            class="slash fas fa-slash fa-rotate-90"></i>{translate key="ApplicationManagement"}</a>
                                     <ul class="dropdown-menu">
                                         <li id="navManageReservations"><a class="dropdown-item"
                                                 href="{$Path}admin/manage_reservations.php">{translate key="ManageReservations"}</a>
@@ -303,7 +340,7 @@
                                 </li>
                             {/if}
                             {if isset($CanViewReports) && $CanViewReports}
-                                <li class="nav-item dropdown" id="navReportsDropdown">
+                                {*<li class="nav-item dropdown" id="navReportsDropdown">
                                     <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                         data-bs-toggle="dropdown">{translate key="Reports"}</a>
                                     <ul class="dropdown-menu">
@@ -320,14 +357,12 @@
                                                 href="{$Path}reports/{Pages::REPORTS_COMMON}">{translate key=CommonReports}</a>
                                         </li>
                                     </ul>
-                                </li>
+                                </li>*}
                             {/if}
                         {/if}
 
-                    </ul>
-                    <ul class="navbar-nav navbar-right">
                         {if isset($ShowScheduleLink) && $ShowScheduleLink}
-                            <li class="nav-item dropdown" id="navScheduleDropdown">
+                            {*<li class="nav-item dropdown" id="navScheduleDropdown">
                                 <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                     data-bs-toggle="dropdown">{translate key="Schedule"}</a>
                                 <ul class="dropdown-menu">
@@ -338,12 +373,11 @@
                                             href="view-calendar.php">{translate key='ViewCalendar'}</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>*}
                         {/if}
                         {if isset($CanViewAdmin) && $CanViewAdmin}
                             <li class="nav-item dropdown" id="navHelpDropdown">
-                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
-                                    data-bs-toggle="dropdown">
+                                <a href="#" class="nav-link link-light dropdown-toggle" role="button" data-bs-toggle="dropdown">
                                     <span class="visually-hidden">Configuration</span>
                                     <i class="bi bi-gear-fill"></i>
                                     {if isset($ShowNewVersion) && $ShowNewVersion}<span
@@ -383,7 +417,7 @@
                                 </ul>
                             </li>
                         {/if}
-                        <li class="nav-item dropdown" id="navHelpDropdown">
+                        {*<li class="nav-item dropdown" id="navHelpDropdown">
                             <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown">{translate key="Help"}</a>
                             <ul class="dropdown-menu  dropdown-menu-end">
@@ -398,13 +432,13 @@
                                 <li id="navAbout"><a class="dropdown-item"
                                         href="{$Path}help.php?ht=about">{translate key=About}</a></li>
                             </ul>
-                        </li>
+                        </li>*}
                         {if isset($LoggedIn) && $LoggedIn}
-                            <li class="nav-item" id="navSignOut"><a class="nav-link link-primary"
-                                    href="{$Path}logout.php">{translate key="SignOut"}</a></li>
+                            <li class="nav-item" id="navSignOut"><a class="nav-link link-light" href="{$Path}logout.php"><i
+                                        class="slash fas fa-slash fa-rotate-90"></i>{translate key="SignOut"}</a></li>
                         {else}
-                            <li class="nav-item" id="navLogIn"><a class="nav-link  link-primary"
-                                    href="{$Path}index.php">{translate key="LogIn"}</a></li>
+                            <li class="nav-item" id="navLogIn"><a class="nav-link link-light" href="{$Path}index.php"><i
+                                        class="slash fas fa-slash fa-rotate-90"></i>{translate key="LogIn"}</a></li>
                         {/if}
                     </ul>
                 </div>
