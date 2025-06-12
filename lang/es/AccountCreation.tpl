@@ -4,7 +4,7 @@
 Correo electrónico: {$EmailAddress}<br/>
 Nombre: {$FullName}<br/>
 Teléfono: {$Phone}<br/>
-Organización: {$Organization}<br/>
+Proyecto Curricular: {$Organization}<br/>
 Cargo: {$Position}</p>
 {if !empty($CreatedBy)}
 	Creado por: {$CreatedBy}
