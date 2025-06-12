@@ -1,8 +1,9 @@
 <?php
 
 // see http://pear.php.net/manual/en/package.networking.net-ldap2.connecting.php
+//     https://www.php.net/manual/en/function.ldap-connect.php
 
-$conf['settings']['host'] = 'localhost'; // comma separated list of ldap servers such as mydomain1,localhost
+$conf['settings']['host'] = 'ldap://localhost'; // comma separated list of ldap servers such as ldap://mydomain1,ldap://localhost
 $conf['settings']['port'] = '389';      // default ldap port 389 or 636 for ssl.
 $conf['settings']['version'] = '3';		// LDAP protocol version
 $conf['settings']['starttls'] = 'false';	// TLS is started after connecting
