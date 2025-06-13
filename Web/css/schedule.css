@@ -105,7 +105,7 @@ table.reservations td.resourcename a:hover {
 }
 
 table.reservations td.resdate {
-  width: 150px;
+  width: 400px;
   padding: 0 3px;
   background-color: #36648B;
   color: #F0F0F0;
