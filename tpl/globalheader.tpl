@@ -151,7 +151,7 @@
         </div>
         <nav class="navbar navbar-expand-lg bg-rojo shadow-sm py-2 sticky-top">
             <div class="container-fluid">
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                <button type="button" class="navbar-toggler ms-auto" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
