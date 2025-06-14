@@ -99,7 +99,7 @@
                             {if $AllowMicrosoftLogin}
                                 <a type="button" href="{$MicrosoftUrl}" class="btn btn-primary"><i
                                         class="bi bi-microsoft me-1"></i>{translate key='SignInWith'}<span
-                                        class="fw-medium"> Microsoft</span></a>
+                                        class="fw-medium"> Cuenta Institucional</span></a>
                             {/if}
                             {if $AllowFacebookLogin}
                                 <a type="button" href="{$FacebookUrl}" class="btn btn-outline-primary"><i
