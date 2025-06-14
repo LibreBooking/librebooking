@@ -98,9 +98,8 @@
                     </thead>
                     <tbody>
                         {foreach from=$users item=user}
-                            {cycle values='row0,row1' assign=rowCss}
                             {assign var=id value=$user->Id}
-                            <tr class="{$rowCss}" data-userId="{$id}">
+                            <tr data-userId="{$id}">
                                 <td>{fullname first=$user->First last=$user->Last ignorePrivacy="true"}</td>
                                 <td>{$user->Username}</td>
                                 <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>
@@ -182,7 +181,7 @@
                                 </td>
 
                                 {if $attributes|default:array()|count > 0}
-                                    <td class="{$rowCss} customAttributes" userId="{$id}">
+                                    <td class="customAttributes" userId="{$id}">
                                         {assign var=changeAttributeAction value=ManageUsersActions::ChangeAttribute}
                                         {assign var=attributeUrl value="`$smarty.server.SCRIPT_NAME`?action=`$changeAttributeAction`"}
                                         {foreach from=$AttributeList item=attribute}
@@ -418,7 +417,7 @@
                                 <tr>
                                     <td>
                                         {assign var=rid value=$resource->GetResourceId()}
-                                        <div class="{$rowCss} permissionRow form-group clearfix">
+                                        <div class="permissionRow form-group clearfix">
                                             <label for="permission_{$rid}"
                                                 class="float-start">{$resource->GetName()}</label>
                                             <select class="float-end form-select form-select-sm resourceId inline-block"

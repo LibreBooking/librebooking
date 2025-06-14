@@ -19,7 +19,6 @@
 				</thead>
 				<tbody>
 					{foreach from=$Reservations item=reservation}
-						{*{cycle values='row0,row1' assign=rowCss}*}
 						{if $reservation->RequiresApproval}
 							{assign var=rowCss value='pending table-warning'}
 						{/if}

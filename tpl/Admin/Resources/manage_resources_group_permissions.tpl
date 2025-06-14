@@ -7,10 +7,9 @@
 <table class="table table-striped">
     <tbody>
         {foreach from=$Groups item=g}
-            {*{cycle values='row0,row1' assign=rowCss}*}
             <tr>
                 <td>
-                    <div class="{$rowCss} form-group clearfix">
+                    <div class="form-group clearfix">
                         <label for="permission{$g->Id}" class="float-start">{$g->Name}</label>
                         <select class="change-permission-type float-end form-select form-select-sm inline-block"
                             style="width:auto;" id="permission{$g->Id}" data-group-id="{$g->Id}">

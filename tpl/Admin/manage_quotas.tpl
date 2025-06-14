@@ -246,9 +246,8 @@
 									{translate key=NotCountingCompletedReservations}
 								{/if}
 							{/capture}
-							{*{cycle values='row0,row1' assign=rowCss}*}
 							<tr>
-								<td class="quotaItem {$rowCss} clearfix">
+								<td class="quotaItem clearfix">
 									<div class="float-start">
 										{translate key=QuotaConfiguration args="$scheduleName,$resourceName,$groupName,$amount,$unit,$duration"}
 										<span class="fw-bold">{$scope}</span>.

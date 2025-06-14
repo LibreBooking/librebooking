@@ -4,10 +4,12 @@
     <div class="border-bottom mb-3 clearfix">
         <div class="dropdown admin-header-more float-end">
             <div class="btn-group btn-group-sm">
-                <a role="menuitem" href="#" class="add-group btn btn-primary" id="add-group"><i class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="AddGroup"}
+                <a role="menuitem" href="#" class="add-group btn btn-primary" id="add-group"><i
+                        class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="AddGroup"}
 
                 </a>
-                <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions" data-bs-toggle="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
+                    data-bs-toggle="dropdown">
                     <span class="visually-hidden">{translate key='More'}</span>
                     <i class="bi bi-three-dots"></i>
                 </button>
@@ -18,7 +20,10 @@
                         </a>
                     </li>
                     <li role="presentation">
-                        <a role="menuitem" href="{$smarty.server.SCRIPT_NAME}?dr=export" download="{$smarty.server.SCRIPT_NAME}?dr=export" class="export-groups dropdown-item" id="export-groups" target="_blank"> <i class="bi bi-upload me-1"></i>{translate key="Export"}
+                        <a role="menuitem" href="{$smarty.server.SCRIPT_NAME}?dr=export"
+                            download="{$smarty.server.SCRIPT_NAME}?dr=export" class="export-groups dropdown-item"
+                            id="export-groups" target="_blank"> <i
+                                class="bi bi-upload me-1"></i>{translate key="Export"}
                         </a>
                     </li>
                 </ul>
@@ -55,8 +60,7 @@
                 </thead>
                 <tbody>
                     {foreach from=$groups item=group}
-                        {*{cycle values='row0,row1' assign=rowCss}*}
-                        <tr class="{$rowCss}" data-group-id="{$group->Id}" data-group-default="{$group->IsDefault}">
+                        <tr data-group-id="{$group->Id}" data-group-default="{$group->IsDefault}">
                             <td class="dataGroupName">{$group->Name}</td>
                             <td><a href="#" class="update members link-primary">{translate key='Manage'}</a></td>
                             <td><a href="#" class="update permissions link-primary">{translate key='Change'}</a></td>
@@ -65,7 +69,8 @@
                                     {if $group->IsExtendedAdmin()}
                                         <div class="btn-group btn-group-sm">
                                             <a href="#" class="update roles btn btn-outline-primary">{translate key='Change'}</a>
-                                            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown">
                                                 <span class="visually-hidden">{translate key=More}</span>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -77,17 +82,20 @@
                                                 </li>
                                                 {if $group->IsGroupAdmin()}
                                                     <li role="presentation">
-                                                        <a role="menuitem" href="#" class="update changeAdminGroups dropdown-item">{translate key="Groups"}</a>
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminGroups dropdown-item">{translate key="Groups"}</a>
                                                     </li>
                                                 {/if}
                                                 {if $group->IsResourceAdmin()}
                                                     <li role="presentation">
-                                                        <a role="menuitem" href="#" class="update changeAdminResources dropdown-item">{translate key="Resources"}</a>
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminResources dropdown-item">{translate key="Resources"}</a>
                                                     </li>
                                                 {/if}
                                                 {if $group->IsScheduleAdmin()}
                                                     <li role="presentation">
-                                                        <a role="menuitem" href="#" class="update changeAdminSchedules dropdown-item">{translate key="Schedules"}</a>
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminSchedules dropdown-item">{translate key="Schedules"}</a>
                                                     </li>
                                                 {/if}
                                             </ul>
@@ -97,7 +105,8 @@
                                     {/if}
                                 </td>
                             {/if}
-                            <td><a href="#" class="update groupAdmin link-primary">{$group->AdminGroupName|default:$chooseText}</a>
+                            <td><a href="#"
+                                    class="update groupAdmin link-primary">{$group->AdminGroupName|default:$chooseText}</a>
                             </td>
                             <td>{if $group->IsDefault}
                                     <i class="bi bi-check-circle text-success"></i>
@@ -107,19 +116,20 @@
                             </td>
                             <td class="action">
                                 <a href="#" class="update rename link-primary"><span class="bi bi-pencil-square icon"></a> |
-                                <a href="#" class="update delete"><span class="bi bi-trash3-fill text-danger icon remove"></span></a>
+                                <a href="#" class="update delete"><span
+                                        class="bi bi-trash3-fill text-danger icon remove"></span></a>
                             </td>
                         </tr>
                     {/foreach}
                 </tbody>
             </table>
-            {*{pagination pageInfo=$PageInfo}*}
         </div>
     </div>
 
     <input type="hidden" id="activeId" />
 
-    <div class="modal fade" id="membersDialog" tabindex="-1" role="dialog" aria-labelledby="membersDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="membersDialog" tabindex="-1" role="dialog" aria-labelledby="membersDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -137,13 +147,15 @@
                     <div id="groupUserList"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary cancel" data-bs-dismiss="modal">{translate key='Done'}</button>
+                    <button type="button" class="btn btn-primary cancel"
+                        data-bs-dismiss="modal">{translate key='Done'}</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel" aria-hidden="true">
+    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -157,7 +169,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="permissionsDialog" tabindex="-1" role="dialog" aria-labelledby="permissionsDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="permissionsDialog" tabindex="-1" role="dialog" aria-labelledby="permissionsDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
 
             <div class="modal-content">
@@ -183,13 +196,14 @@
                                 </tr>
                             </thead>
                             {foreach from=$resources item=resource}
-                                {*{cycle values='row0,row1' assign=rowCss}*}
                                 {assign var=rid value=$resource->GetResourceId()}
                                 <tr>
                                     <td>
-                                        <div class="{$rowCss} permissionRow form-group clearfix">
-                                            <label for="permission_{$rid}" class="float-start">{$resource->GetName()}</label>
-                                            <select class="form-select form-select-sm w-auto resourceId float-end" {formname key=RESOURCE_ID multi=true}id="permission_{$rid}">
+                                        <div class="permissionRow form-group clearfix">
+                                            <label for="permission_{$rid}"
+                                                class="float-start">{$resource->GetName()}</label>
+                                            <select class="form-select form-select-sm w-auto resourceId float-end"
+                                                {formname key=RESOURCE_ID multi=true}id="permission_{$rid}">
                                                 <option value="{$rid}_none" class="none">{translate key=None}</option>
                                                 <option value="{$rid}_0" class="full">{translate key=FullAccess}</option>
                                                 <option value="{$rid}_1" class="view">{translate key=ViewOnly}</option>
@@ -218,7 +232,8 @@
         <input type="hidden" id="addUserId" {formname key=USER_ID} />
     </form>
 
-    <div class="modal fade" id="addGroupDialog" tabindex="-1" role="dialog" aria-labelledby="addDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="addGroupDialog" tabindex="-1" role="dialog" aria-labelledby="addDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form id="addGroupForm" method="post">
                 <div class="modal-content">
@@ -229,13 +244,17 @@
                     <div class="modal-body">
                         <div id="addGroupResults" class="error" style="display:none;"></div>
                         <div class="form-group">
-                            <label class="fw-bold" for="addGroupName">{translate key=Name}<i class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
-                            <input {formname key=GROUP_NAME} type="text" id="addGroupName" required class="form-control required has-feedback" />
+                            <label class="fw-bold" for="addGroupName">{translate key=Name}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
+                            <input {formname key=GROUP_NAME} type="text" id="addGroupName" required
+                                class="form-control required has-feedback" />
                         </div>
                         <div class="form-group mt-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="addGroupIsDefault" {formname key=IS_DEFAULT} />
-                                <label class="form-check-label" for="addGroupIsDefault">{translate key=AutomaticallyAddToGroup}</label>
+                                <input class="form-check-input" type="checkbox" id="addGroupIsDefault"
+                                    {formname key=IS_DEFAULT} />
+                                <label class="form-check-label"
+                                    for="addGroupIsDefault">{translate key=AutomaticallyAddToGroup}</label>
                             </div>
                         </div>
                     </div>
@@ -249,7 +268,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form id="deleteGroupForm" method="post">
                 <div class="modal-content">
@@ -273,7 +293,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form id="editGroupForm" method="post">
                 <div class="modal-content">
@@ -283,13 +304,18 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="fw-bold" for="editGroupName">{translate key=Name}<i class="bi bi-asterisk text-danger align-top form-control-feedback" style="font-size: 0.5rem;"></i></label>
-                            <input type="text" id="editGroupName" class="form-control required has-feedback" required {formname key=GROUP_NAME} />
+                            <label class="fw-bold" for="editGroupName">{translate key=Name}<i
+                                    class="bi bi-asterisk text-danger align-top form-control-feedback"
+                                    style="font-size: 0.5rem;"></i></label>
+                            <input type="text" id="editGroupName" class="form-control required has-feedback" required
+                                {formname key=GROUP_NAME} />
                         </div>
                         <div class="form-group mt-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="editGroupIsDefault" {formname key=IS_DEFAULT} />
-                                <label class="form-check-label" for="editGroupIsDefault">{translate key=AutomaticallyAddToGroup}</label>
+                                <input class="form-check-input" type="checkbox" id="editGroupIsDefault"
+                                    {formname key=IS_DEFAULT} />
+                                <label class="form-check-label"
+                                    for="editGroupIsDefault">{translate key=AutomaticallyAddToGroup}</label>
                             </div>
                         </div>
                     </div>
@@ -304,7 +330,8 @@
     </div>
 
     {if $CanChangeRoles}
-        <div class="modal fade" id="rolesDialog" tabindex="-1" role="dialog" aria-labelledby="rolesDialogLabel" aria-hidden="true">
+        <div class="modal fade" id="rolesDialog" tabindex="-1" role="dialog" aria-labelledby="rolesDialogLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <form id="rolesForm" method="post">
                     <div class="modal-content">
@@ -315,7 +342,8 @@
                         <div class="modal-body">
                             {foreach from=$Roles item=role}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="role{$role->Id}" {formname key=ROLE_ID multi=true} value="{$role->Id}" />
+                                    <input class="form-check-input" type="checkbox" id="role{$role->Id}"
+                                        {formname key=ROLE_ID multi=true} value="{$role->Id}" />
                                     <label class="form-check-label" for="role{$role->Id}">{$role->Name}</label>
                                 </div>
                             {/foreach}
@@ -329,7 +357,8 @@
                 </form>
             </div>
         </div>
-        <div class="modal fade adminDialog" id="resourceAdminDialog" tabindex="-1" role="dialog" aria-labelledby="resourceAdminDialogLabel" aria-hidden="true">
+        <div class="modal fade adminDialog" id="resourceAdminDialog" tabindex="-1" role="dialog"
+            aria-labelledby="resourceAdminDialogLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -343,8 +372,10 @@
 
                             {foreach from=$resources item=resource}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="resource{$resource->GetId()}" {formname key=RESOURCE_ID multi=true} value="{$resource->GetId()}" />
-                                    <label class="form-check-label" for="resource{$resource->GetId()}">{$resource->GetName()}</label>
+                                    <input class="form-check-input" type="checkbox" id="resource{$resource->GetId()}"
+                                        {formname key=RESOURCE_ID multi=true} value="{$resource->GetId()}" />
+                                    <label class="form-check-label"
+                                        for="resource{$resource->GetId()}">{$resource->GetName()}</label>
                                 </div>
                             {/foreach}
                         </form>
@@ -357,7 +388,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade adminDialog" id="groupAdminAllDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminAllDialogLabel" aria-hidden="true">
+        <div class="modal fade adminDialog" id="groupAdminAllDialog" tabindex="-1" role="dialog"
+            aria-labelledby="groupAdminAllDialogLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="groupAdminGroupsForm" method="post">
 
@@ -372,7 +404,8 @@
 
                             {foreach from=$groups item=group}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="group{$group->Id}" {formname key=GROUP_ID multi=true}" value="{$group->Id}" />
+                                    <input class="form-check-input" type="checkbox" id="group{$group->Id}"
+                                        {formname key=GROUP_ID multi=true}" value="{$group->Id}" />
                             <label class="form-check-label" for="group{$group->Id}">{$group->Name}</label>
                         </div>
                         {/foreach}
@@ -386,7 +419,8 @@
             </form>
         </div>
     </div>
-    <div class="modal fade adminDialog" id="scheduleAdminDialog" tabindex="-1" role="dialog" aria-labelledby="scheduleAdminDialogLabel" aria-hidden="true">
+    <div class="modal fade adminDialog" id="scheduleAdminDialog" tabindex="-1" role="dialog"
+        aria-labelledby="scheduleAdminDialogLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -400,8 +434,10 @@
 
                         {foreach from=$Schedules item=schedule}
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="schedule{$schedule->GetId()}" {formname key=SCHEDULE_ID multi=true} value="{$schedule->GetId()}" />
-                            <label class="form-check-label" for="schedule{$schedule->GetId()}">{$schedule->GetName()}</label>
+                            <input class="form-check-input" type="checkbox" id="schedule{$schedule->GetId()}"
+                                {formname key=SCHEDULE_ID multi=true} value="{$schedule->GetId()}" />
+                            <label class="form-check-label"
+                                for="schedule{$schedule->GetId()}">{$schedule->GetName()}</label>
                         </div>
                         {/foreach}
                     </form>
@@ -416,7 +452,8 @@
     </div>
     {/if}
 
-    <div class="modal fade" id="groupAdminDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminDialogLabel" aria-hidden="true">
+    <div class="modal fade" id="groupAdminDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminDialogLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form id="groupAdminForm" method="post">
                 <div class="modal-content">
@@ -426,7 +463,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group has-feedback">
-                            <label for="groupAdmin" class="off-screen fw-bold">{translate key=WhoCanManageThisGroup}</label>
+                            <label for="groupAdmin"
+                                class="off-screen fw-bold">{translate key=WhoCanManageThisGroup}</label>
                             <select {formname key=GROUP_ADMIN} class="form-select" id="groupAdmin">
                                 <option value="">-- {translate key=None} --</option>
                                 {foreach from=$AdminGroups item=adminGroup}
@@ -445,8 +483,10 @@
         </div>
     </div>
 
-    <div id="importGroupsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importGroupsModalLabel" aria-hidden="true">
-        <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data" ajaxAction="{ManageGroupsActions::Import}">
+    <div id="importGroupsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importGroupsModalLabel"
+        aria-hidden="true">
+        <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data"
+            ajaxAction="{ManageGroupsActions::Import}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -456,7 +496,9 @@
                     <div class="modal-body">
                         <div id="importInstructions" class="alert alert-info">
                             <div class="note fst-italic">{translate key=GroupsImportInstructions}</div>
-                            <a href="{$smarty.server.SCRIPT_NAME}?dr=template" class="alert-link" download="{$smarty.server.SCRIPT_NAME}?dr=template" target="_blank">{translate key=GetTemplate} <span class="bi bi-download"></span></a>
+                            <a href="{$smarty.server.SCRIPT_NAME}?dr=template" class="alert-link"
+                                download="{$smarty.server.SCRIPT_NAME}?dr=template"
+                                target="_blank">{translate key=GetTemplate} <span class="bi bi-download"></span></a>
                         </div>
                         <div id="importGroupsResults" class="validationSummary alert alert-danger d-none">
                             <ul>
@@ -474,11 +516,14 @@
                             <a class="alert-link" href="{$smarty.server.SCRIPT_NAME}">{translate key=Done}</a>
                         </div>
                         <div class="">
-                            <input type="file" class="form-control" {formname key=GROUP_IMPORT_FILE} id="groupsImportFile" />
+                            <input type="file" class="form-control" {formname key=GROUP_IMPORT_FILE}
+                                id="groupsImportFile" />
                             <label for="groupsImportFile" class="visually-hidden">Group Import File</label>
                             <div class="form-check mt-1">
-                                <input class="form-check-input" type="checkbox" id="updateOnImport" {formname key=UPDATE_ON_IMPORT} />
-                                <label class="form-check-label" for="updateOnImport">{translate key=UpdateGroupsOnImport}</label>
+                                <input class="form-check-input" type="checkbox" id="updateOnImport"
+                                    {formname key=UPDATE_ON_IMPORT} />
+                                <label class="form-check-label"
+                                    for="updateOnImport">{translate key=UpdateGroupsOnImport}</label>
                             </div>
                         </div>
                     </div>

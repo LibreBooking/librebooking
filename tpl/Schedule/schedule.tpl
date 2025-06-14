@@ -65,7 +65,7 @@
                     <span id="warning-resources"></span> resources for <span id="warning-days"></span> days.
                     <button type="button" class="close close-forever btn btn-link alert-link"
                         aria-label="Do not show again">
-                        <span aria-hidden="true">Do not show again</span> {*Cadena para traducir*}
+                        <span aria-hidden="true">Do not show again</span>
                     </button>
                 </p>
             </div>

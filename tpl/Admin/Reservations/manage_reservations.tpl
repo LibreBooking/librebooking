@@ -221,7 +221,6 @@
 					</thead>
 					<tbody>
 						{foreach from=$reservations item=reservation}
-							{cycle values='row0,row1' assign=rowCss}
 							{if $reservation->RequiresApproval}
 								{assign var=rowCss value='table-warning pending'}
 							{/if}
@@ -236,13 +235,10 @@
 								<td class="resource">{$reservation->ResourceName}
 									{if $reservation->ResourceStatusId == ResourceStatus::AVAILABLE}
 										<i class="bi bi-check-circle-fill text-success"></i>
-										{*{translate key='Available'}*}
 									{elseif $reservation->ResourceStatusId == ResourceStatus::UNAVAILABLE}
 										<i class="bi bi-exclamation-circle-fill text-warning"></i>
-										{*{translate key='Unavailable'}*}
 									{else}
 										<i class="bi bi-x-circle-fill text-danger"></i>
-										{*{translate key='Hidden'}*}
 									{/if}
 									{*{if array_key_exists($reservation->ResourceStatusReasonId,$StatusReasons)}*}
 										{*<span class="reservationResourceStatusReason">{$StatusReasons[$reservation->ResourceStatusReasonId]->Description()}</span>*}
@@ -288,10 +284,6 @@
 										<label class="" for="delete{$reservationId}"></label>
 									</div>
 								</td>
-								{*</tr>
-						<tr class="{$rowCss}" data-seriesId="{$reservation->SeriesId}"
-							data-refnum="{$reservation->ReferenceNumber}">
-<td colspan="{$colCount}">*}
 								<td>
 									<div class="reservation-list-dates d-flex">
 										<div>
@@ -327,20 +319,8 @@
 							</tr>
 						{/foreach}
 					</tbody>
-					{*<tfoot>
-					<tr>
-						<td colspan="{$colCount-1}"></td>
-						<td class="action-delete">
-							<a href="#" id="delete-selected" class="d-none" title="{translate key=Delete}">
-								<span class="bi bi-trash3-fill text-danger icon remove"></span>
-								<span class="visually-hidden">{translate key=Delete}</span>
-							</a>
-						</td>
-					</tr>
-				</tfoot>*}
 				</table>
 
-				{*{pagination pageInfo=$PageInfo}*}
 			</div>
 		</div>
 	</div>

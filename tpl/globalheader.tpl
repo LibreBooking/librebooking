@@ -129,8 +129,6 @@
         </div>
         <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
             <div class="container-fluid">
-                {*<a class="navbar-brand py-0" href="{$HomeUrl}">{html_image src="$LogoUrl?{$Version}" alt="$Title"
-                    class="logo"}</a>*}
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -248,7 +246,6 @@
                                                     href="{$Path}admin/manage_payments.php">{translate key="ManagePayments"}</a>
                                             </li>
                                         {/if}
-                                        {*<li class="dropdown-header">{translate key=Customization}</li>*}
                                         <li id="navManageAttributes"><a class="dropdown-item"
                                                 href="{$Path}admin/manage_attributes.php">{translate key="CustomAttributes"}</a>
                                         </li>

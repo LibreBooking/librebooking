@@ -78,8 +78,6 @@
 
 	</div>
 
-	{html_image src="admin-ajax-indicator.gif" id="indicator" style="display:none;"}
-
 	{include file="javascript-includes.tpl"}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="participation.js"}

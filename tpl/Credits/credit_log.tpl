@@ -10,8 +10,7 @@
         </thead>
         <tbody>
             {foreach from=$CreditLog item=log}
-                {cycle values='row0,row1' assign=rowCss}
-                <tr class="{$rowCss}">
+                <tr>
                     <td>{formatdate date=$log->Date timezone=$Timezone key='general_datetime'}</td>
                     <td>{$log->Note}</td>
                     <td>{$log->OriginalCreditCount}</td>

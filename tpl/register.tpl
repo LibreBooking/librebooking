@@ -6,9 +6,7 @@
         <div class="card shadow mb-3">
             <div class="card-body mx-3">
                 <form method="post" ajaxAction="{RegisterActions::Register}" id="form-register"
-                    action="{$smarty.server.SCRIPT_NAME}" role="form" {*data-bv-feedbackicons-valid="bi bi-check-lg"
-                    data-bv-feedbackicons-invalid="bi bi-x-lg" data-bv-feedbackicons-validating="bi bi-arrow-clockwise"
-                    data-bv-feedbackicons-required="bi bi-asterisk"*} data-bv-submitbuttons='button[type="submit"]'
+                    action="{$smarty.server.SCRIPT_NAME}" role="form" data-bv-submitbuttons='button[type="submit"]'
                     data-bv-onerror="enableButton" data-bv-onsuccess="enableButton" data-bv-live="enabled">
 
                     <h1 class="text-center border-bottom">{translate key=RegisterANewAccount}</h1>
@@ -134,45 +132,45 @@
                         </div>
 
                         {if $RequirePhone || !$HidePhone}
-                        <div class="col-12 col-sm-6" id="phone">
-                            <div class="form-group">
-                                <label class="reg fw-bold" for="phone">{translate key="Phone"}{if $RequirePhone}<i
-                                            class="bi bi-asterisk text-danger align-top"
-                                        style="font-size: 0.5rem;"></i>{/if}</label>
-                                <input type="text" id="phone" {formname key="PHONE"} class="form-control" size="20"
-                                    {if $RequirePhone}required="required" data-bv-notempty="true"
-                                    data-bv-notempty-message="{translate key=PhoneRequired}" {/if} />
+                            <div class="col-12 col-sm-6" id="phone">
+                                <div class="form-group">
+                                    <label class="reg fw-bold" for="phone">{translate key="Phone"}{if $RequirePhone}<i
+                                                class="bi bi-asterisk text-danger align-top"
+                                            style="font-size: 0.5rem;"></i>{/if}</label>
+                                    <input type="text" id="phone" {formname key="PHONE"} class="form-control" size="20"
+                                        {if $RequirePhone}required="required" data-bv-notempty="true"
+                                        data-bv-notempty-message="{translate key=PhoneRequired}" {/if} />
+                                </div>
                             </div>
-                        </div>
                         {/if}
 
                         {if $RequireOrganization || !$HideOrganization}
-                        <div class="col-12 col-sm-6" id="organization">
-                            <div class="form-group">
-                                <label class="reg fw-bold"
-                                    for="txtOrganization">{translate key="Organization"}{if $RequireOrganization}<i
-                                            class="bi bi-asterisk text-danger align-top"
-                                        style="font-size: 0.5rem;"></i>{/if}</label>
-                                <input type="text" id="txtOrganization" {formname key="ORGANIZATION"}
-                                    class="form-control" size="20" {if $RequireOrganization}required="required"
-                                        data-bv-notempty="true"
-                                    data-bv-notempty-message="{translate key=OrganizationRequired}" {/if} />
+                            <div class="col-12 col-sm-6" id="organization">
+                                <div class="form-group">
+                                    <label class="reg fw-bold"
+                                        for="txtOrganization">{translate key="Organization"}{if $RequireOrganization}<i
+                                                class="bi bi-asterisk text-danger align-top"
+                                            style="font-size: 0.5rem;"></i>{/if}</label>
+                                    <input type="text" id="txtOrganization" {formname key="ORGANIZATION"}
+                                        class="form-control" size="20" {if $RequireOrganization}required="required"
+                                            data-bv-notempty="true"
+                                        data-bv-notempty-message="{translate key=OrganizationRequired}" {/if} />
+                                </div>
                             </div>
-                        </div>
                         {/if}
 
                         {if $RequirePosition || !$HidePosition}
-                        <div class="col-12 col-sm-6 " id="position">
-                            <div class="form-group">
-                                <label class="reg fw-bold"
-                                    for="txtPosition">{translate key="Position"}{if $RequirePosition}<i
-                                            class="bi bi-asterisk text-danger align-top"
-                                        style="font-size: 0.5rem;"></i>{/if}</label>
-                                <input type="text" id="txtPosition" {formname key="POSITION"} class="form-control"
-                                    size="20" {if $RequirePosition}required="required" data-bv-notempty="true"
-                                    data-bv-notempty-message="{translate key=PositionRequired}" {/if} />
+                            <div class="col-12 col-sm-6 " id="position">
+                                <div class="form-group">
+                                    <label class="reg fw-bold"
+                                        for="txtPosition">{translate key="Position"}{if $RequirePosition}<i
+                                                class="bi bi-asterisk text-danger align-top"
+                                            style="font-size: 0.5rem;"></i>{/if}</label>
+                                    <input type="text" id="txtPosition" {formname key="POSITION"} class="form-control"
+                                        size="20" {if $RequirePosition}required="required" data-bv-notempty="true"
+                                        data-bv-notempty-message="{translate key=PositionRequired}" {/if} />
+                                </div>
                             </div>
-                        </div>
                         {/if}
 
                         <div class="col-12 col-sm-6">
@@ -184,17 +182,9 @@
                     </div>
 
                     {if $Attributes|default:array()|count > 1}
-                        {*{for $i=1 to $Attributes|default:array()|count-1}*}
-                            {*{if $i%2==1}*}
-                                {*<div class="row">*}
-                            {*{/if}*}
-                            <div class="col-12 col-sm-6">
-                                {control type="AttributeControl" attribute=$Attributes[$i]}
-                            </div>
-                            {*{if $i%2==0 || $i==$Attributes|default:array()|count-1}*}
-                                {*</div>*}
-                            {*{/if}*}
-                        {*{/for}*}
+                        <div class="col-12 col-sm-6">
+                            {control type="AttributeControl" attribute=$Attributes[$i]}
+                        </div>
                     {/if}
 
                     {if $EnableCaptcha}

@@ -136,8 +136,6 @@
 							<input type="text" class="form-control required" required id="edit-reason-description"
 								{formname key=RESOURCE_STATUS_REASON} />
 							<input type="hidden" id="add-reason-status" {formname key=RESOURCE_STATUS_ID} />
-							{*<i class="bi bi-asterisk form-control-feedback"
-								data-bv-icon-for="edit-reason-description"></i>*}
 						</div>
 					</div>
 					<div class="modal-footer">

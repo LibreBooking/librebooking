@@ -11,7 +11,6 @@
 					{/if}
 				</div>
 			</div>
-			{*<div id="customize-columns"></div>*}
 			<div class="table-responsive mt-3">
 				{assign var=tableId value="report-results"}
 				<table id="{$tableId}" chart-type="{$Definition->GetChartType()}"
@@ -33,8 +32,7 @@
 					</thead>
 					<tbody>
 						{foreach from=$Report->GetData()->Rows() item=row}
-							{cycle values=',alt' assign=rowCss}
-							<tr class="{$rowCss}">
+							<tr>
 								{foreach from=$Definition->GetRow($row) item=cell}
 									<td chart-value="{$cell->ChartValue()}" chart-column-type="{$cell->GetChartColumnType()}"
 										chart-group="{$cell->GetChartGroup()}">{$cell->Value()}</td>

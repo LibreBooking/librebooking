@@ -64,8 +64,7 @@
 				</thead>
 				<tbody>
 					{foreach from=$accessories item=accessory}
-						{*{cycle values='row0,row1' assign=rowCss}*}
-						<tr class="{*{$rowCss}*}" data-accessory-id="{$accessory->Id}">
+						<tr data-accessory-id="{$accessory->Id}">
 							<td>{$accessory->Name}</td>
 							<td>{$accessory->QuantityAvailable|default:'&infin;'}</td>
 							<td>
