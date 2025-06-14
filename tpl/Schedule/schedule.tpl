@@ -252,7 +252,7 @@
                     <i id="restore-sidebar" class="bi bi-chevron-double-right"></i></a>
             </div>
             <div class="row g-2">
-                <div id="reservations-left" class="d-none col-md-2 col-sm-12">
+                <div id="reservations-left" class="d-none no-show col-md-2 col-sm-12">
                     <div class="card h-100">
                         <div
                             class="reservations-left-header card-header d-flex justify-content-between align-items-center px-3 py-2">
