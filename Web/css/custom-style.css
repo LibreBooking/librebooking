@@ -82,6 +82,10 @@ img.logo {
     background-color: var(--color-principal);
 }
 
+.navbar-toggler {
+    background-color: #ffffff;
+}
+
 .navbar-nav {
     font-size: 16px;
 }
