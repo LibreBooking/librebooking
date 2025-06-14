@@ -125,7 +125,7 @@
                         {/if}
                     </div>
                 </div>
-                <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between">
+                <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between d-none">
                     {if $ShowForgotPasswordPrompt}
                         <div id="forgot-password">
                             <a href="{$ForgotPasswordUrl}" {if isset($ForgotPasswordUrlNew)}{$ForgotPasswordUrlNew}{/if}
