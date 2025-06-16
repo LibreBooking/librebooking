@@ -45,17 +45,17 @@ Ensure this setting is disabled.
 
 You can configure LibreBooking to fit your environments and needs or use the minimal default settings which should be enough for the application to work.
 We recommend you to change according to your specifics. Additional information on all configuration settings can be found in the application help page.
-To configure the application, you can open `/config/config.php` and alter any settings accordingly.  
-The admin email address can be set in the `librebooking/config/config.php` file of `$conf['settings']['admin.email']`  
-When later register an account with admin email address the user will be given admin privilege.  
+To configure the application, you can open `/config/config.php` and alter any settings accordingly.<br>
+The admin email address can be set in the `librebooking/config/config.php` file of `$conf['settings']['admin.email']`<br>
+When later register an account with admin email address the user will be given admin privilege.<br>
 
-In addition, to allow resource image uploads, the web server must also have read/write access to your configurable uploads directory of `$conf['settings']['image.upload.directory']` in the `config.php`.  
-By default, LibreBooking uses standard username/password for user authentication.  
-Alternatively, you can use LDAP authentication.  
-See the plugins section of the application help page for more details.  
+In addition, to allow resource image uploads, the web server must also have read/write access to your configurable uploads directory of `$conf['settings']['image.upload.directory']` in the `config.php`.<br>
+By default, LibreBooking uses standard username/password for user authentication.<br>
+Alternatively, you can use LDAP authentication.<br>
+See the plugins section of the application help page for more details.<br>
 Note: If you try to load the application at this time (eg. <http://localhost/librebooking/Web/>), you will probably get a white page.
 
-This is because there is no backend database configured yet.  
+This is because there is no backend database configured yet.<br>
 So continue on ...
 
 #### Database Setup
@@ -66,48 +66,48 @@ You have 2 ways to set up your database for the application to work.
 
 You must have the application configured correctly before running the automated install.
 
-The automated database setup only supports MySQL at this time.  
-To run the automated database setup, navigate to the `/Web/install` directory in a web browser and follow the on-screen instructions.  
-Note: Some may see directory permission issues displayed on the page.  
-The web server must have write access to `/librebooking/tpl_c` and `/librebooking/tpl`.  
+The automated database setup only supports MySQL at this time.<br>
+To run the automated database setup, navigate to the `/Web/install` directory in a web browser and follow the on-screen instructions.<br>
+Note: Some may see directory permission issues displayed on the page.<br>
+The web server must have write access to `/librebooking/tpl_c` and `/librebooking/tpl`.<br>
 If you cannot provide the required permission. Contact your web server administrator or hosting service to resolve or run the manual install
 
 ##### Manual Database Setup
 
-The packaged database scripts make assumptions about your desired database configuration and set default values.  
-Please edit them to suit your environment before running. The files are located in `librebooking/database_schema/`  
+The packaged database scripts make assumptions about your desired database configuration and set default values.<br>
+Please edit them to suit your environment before running. The files are located in `librebooking/database_schema/`<br>
 Import the following sql files in the listed order (we recommend [phpMyAdmin]("https://www.phpmyadmin.net/"):
 
-On a remote host with no database creation privileges  
-If you are installing LibreBooking on a remote host, please follow these steps.  
-These steps assume you are using cPanel and have the ability to create databases via the cPanel tool and phpMyAdmin.  
+On a remote host with no database creation privileges<br>
+If you are installing LibreBooking on a remote host, please follow these steps.<br>
+These steps assume you are using cPanel and have the ability to create databases via the cPanel tool and phpMyAdmin.<br>
 
 Adding the database and user
 
 Select the MySQL Databases tool
 
 Add a new user with username and password of your choice.
-This will be the database user and database password set in your LibreBooking config file.  
+This will be the database user and database password set in your LibreBooking config file.<br>
 
-**Please be aware that some hosts will prefix your database user name.**  
+**Please be aware that some hosts will prefix your database user name.**<br>
 
-Create a new database with whatever name you choose.  
-This will be the name of the database in your LibreBooking config file. 'librebooking' is the recommended database name.  
+Create a new database with whatever name you choose.<br>
+This will be the name of the database in your LibreBooking config file. 'librebooking' is the recommended database name.<br>
 
-**Please be aware that some hosts will prefix your database name.**  
+**Please be aware that some hosts will prefix your database name.**<br>
 
-Associate the new user with the new database, giving the user permission to SELECT, CREATE, UPDATE, INSERT and DELETE.  
-Click the 'Add User to Db' button. 'Creating tables'  
-Open phpMyAdmin.  
-Click on the database name that you just created in the left panel.  
-Click the SQL tab at the top of the page.  
-Import `/database_schema/create-schema.sql` to librebooking (or whatever database name was used in the creation process)  
-Import `/database_schema/create-data.sql` to librebooking (or whatever database name was used in the creation process)  
+Associate the new user with the new database, giving the user permission to SELECT, CREATE, UPDATE, INSERT and DELETE.<br>
+Click the 'Add User to Db' button. 'Creating tables'<br>
+Open phpMyAdmin.<br>
+Click on the database name that you just created in the left panel.<br>
+Click the SQL tab at the top of the page.<br>
+Import `/database_schema/create-schema.sql` to librebooking (or whatever database name was used in the creation process)<br>
+Import `/database_schema/create-data.sql` to librebooking (or whatever database name was used in the creation process)<br>
 
-If you have database creation privileges in MySQL  
-Open `/database_schema/full-install.sql` and edit the database name and username/password to match your `config.php` database values  
-Run or import `/database_schema/full-install.sql` Optionally - run/import `/database_schema/testdata-utf8.sql` to librebooking (sample application data will be created with 2 users: admin/password and user/password).  
-These users are available for testing your installation.  
+If you have database creation privileges in MySQL<br>
+Open `/database_schema/full-install.sql` and edit the database name and username/password to match your `config.php` database values<br>
+Run or import `/database_schema/full-install.sql` Optionally - run/import `/database_schema/testdata-utf8.sql` to librebooking (sample application data will be created with 2 users: admin/password and user/password).<br>
+These users are available for testing your installation.<br>
 
 You are done. Try to load the application at (eg. [http://yourhostname/librebooking/Web/](http://yourhostname/librebooking/Web/)).
 
@@ -123,15 +123,15 @@ The steps for upgrading from a previous version of LibreBooking are very similar
 
 #### Recommended
 
-The recommended approach is to backup your current LibreBooking files, then upload the new files to the that same location.  
+The recommended approach is to backup your current LibreBooking files, then upload the new files to the that same location.<br>
 This prevents any old files from interfering with new ones.
-After the new files are uploaded, copy your old `config/config.php` file to the config directory in the new version.  
-Then run `/Web/install/configure.php` to bring your config file up to date.  
+After the new files are uploaded, copy your old `config/config.php` file to the config directory in the new version.<br>
+Then run `/Web/install/configure.php` to bring your config file up to date.<br>
 If you have any uploaded resource images you will need to copy them from their old location to the new one.
 
 #### Alternative
 
-An alternative upgrade approach is to overwrite the current LibreBooking files with the new ones.  
+An alternative upgrade approach is to overwrite the current LibreBooking files with the new ones.<br>
 If doing this, you must delete the contents of `/tpl_c`.
 This approach will not allow you to roll back and will not clear out any obsolete files.
 
@@ -141,7 +141,7 @@ After the application files have been upgraded you will need to upgrade the data
 
 ##### Automatical Database Upgrade
 
-The automatic database upgrade is exactly the same as the automatic database install.  
+The automatic database upgrade is exactly the same as the automatic database install.<br>
 Please follow the instructions in the Automatic Database Setup section above.
 
 ##### Manual Database Upgrade
@@ -149,13 +149,13 @@ Please follow the instructions in the Automatic Database Setup section above.
 The packaged database scripts make assumptions about your desired database configuration and set default values.
 Please edit them to suit your environment before running.
 The files are located in `librebooking/database_schema/upgrades.`
-Depending on your current version, import the `upgrade.sql` file within each subdirectory to get to the current version (we recommend [adminer](https://www.adminer.org/) for this)  
+Depending on your current version, import the `upgrade.sql` file within each subdirectory to get to the current version (we recommend [adminer](https://www.adminer.org/) for this)<br>
 For example, if you are running version 2.0 and the current version is 2.2 then you should run `librebooking/database_schema/upgrade/2.1/upgrade.sql` then `librebooking/database_schema/upgrade/2.2/upgrade.sql`
 
 ### Migrating from version 1.2
 
-A migration from 1.2 to 2.0 is supported for MySQL only.  
-This can be run after the 2.0 installation.  
+A migration from 1.2 to 2.0 is supported for MySQL only.<br>
+This can be run after the 2.0 installation.<br>
 To run the migration open `/Web/install/migrate.php` directory in a web browser and follow the on-screen instructions.
 
 ## Getting Started
@@ -202,7 +202,7 @@ LibreBooking has the option to expose a RESTful JSON API. This API can be levera
 
 #### API Documentation
 
-Auto-generated documentation for API usage can be found by browsing http://your_librebooking_url/Web/Services.  
+Auto-generated documentation for API usage can be found by browsing http://your_librebooking_url/Web/Services.<br>
 This documentation describes each available service, indicates whether or not the service is available to unauthenticated users/administrators, and provides example requests/responses.
 
 #### Consuming the API
