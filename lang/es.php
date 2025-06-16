@@ -214,7 +214,7 @@ class es extends en_gb
         $strings['RememberMe'] = 'Recuérdame';
         $strings['FirstTimeUser?'] = '¿Eres un usuario nuevo?';
         $strings['CreateAnAccount'] = 'Crear cuenta';
-        $strings['ViewSchedule'] = 'Ver planificación';
+        $strings['ViewSchedule'] = 'Ver Horarios';
         $strings['ForgotMyPassword'] = 'He olvidado mi contraseña';
         $strings['YouWillBeEmailedANewPassword'] = 'Se te enviará una contraseña generada aleatoriamente.';
         $strings['Close'] = 'Cerrar';
