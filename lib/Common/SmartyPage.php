@@ -152,6 +152,7 @@ class SmartyPage extends Smarty
             'QuotaDuration',
             'QuotaScope',
             'QuotaUnit',
+            'RegisterActions',
             'RepeatMonthlyType',
             'ReportActions',
             'Report_GroupBy',
@@ -163,12 +164,14 @@ class SmartyPage extends Smarty
             'ReservationEvent',
             'ReservationReminderInterval',
             'ReservationStatus',
+            'Resources',
             'ResourceStatus',
             'Schedule',
             'ScheduleLayout',
             'ScheduleStyle',
             'SeriesUpdateScope',
             'TermsOfService',
+            'UserAttribute',
 
         ];
 
@@ -322,7 +325,7 @@ class SmartyPage extends Smarty
 
         $date = is_string($params['date']) ? Date::Parse($params['date']) : $params['date'];
 
-        /** @var $date Date */
+        /** @var Date $date */
         $date = isset($params['timezone']) ? $date->ToTimezone($params['timezone']) : $date;
 
         if (isset($params['format'])) {
@@ -369,7 +372,7 @@ class SmartyPage extends Smarty
         $type = $params['type'];
         require_once(ROOT_DIR . "Controls/$type.php");
 
-        /** @var $control Control */
+        /** @var Control $control */
         $control = new $type($this);
 
         foreach ($params as $key => $val) {
@@ -1083,15 +1086,18 @@ class SmartyPage extends Smarty
         return urlencode((string) $url);
     }
 
-    public function Microtime(bool $as_float = false): string|float {
+    public function Microtime(bool $as_float = false): string|float
+    {
         return microtime($as_float);
     }
 
-    public function ArrayKeyExists(string|int|float|bool|null $key, array $array): bool {
+    public function ArrayKeyExists(string|int|float|bool|null $key, array $array): bool
+    {
         return array_key_exists($key, $array);
     }
 
-    public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int {
+    public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int
+    {
         return count($value, $mode);
     }
 
