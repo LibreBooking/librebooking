@@ -67,6 +67,11 @@
 
 ### Manual Installation
 
+To run LibreBooking from a prebuilt release, your server needs:
+
+- PHP >= 8.2 with the  extensions: pdo, mbstring, openssl, tokenizer, json, curl, xml, ctype, bcmath, fileinfo
+- A web server like Apache or Nginx
+- MySQL >= 5.5
 For full setup instructions, see [INSTALLATION.md](./doc/INSTALLATION.md)
 
 ### Docker Deployment
@@ -100,7 +105,7 @@ docker-compose up -d
 
 ## 🔒 ReCaptcha
 
-As of 09/03/2023, ReCaptcha integration updated to v3. Generate new keys for your domain if using ReCaptcha.
+As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for your domain if using ReCaptcha.
 
 ## 💬 Community & Support
 
@@ -114,7 +119,7 @@ As of 09/03/2023, ReCaptcha integration updated to v3. Generate new keys for you
 - Fork, file issues, suggest improvements.
 - Even non-coders can help by reporting bugs, testing, updating issues.
 - PRs welcome (docs, features, refactoring, fixes).
-- See CONTRIBUTING.md if present.
+- See CONTRIBUTING.md
 
 ## 💡 Roadmap
 
