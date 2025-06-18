@@ -294,8 +294,9 @@
                             {/if}
                             {if isset($CanViewResponsibilities) && $CanViewResponsibilities}
                                 <li class="nav-item dropdown" id="navResponsibilitiesDropdown">
-                                    <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
-                                        data-bs-toggle="dropdown">{translate key="Responsibilities"}</a>
+                                    <a href="#" class="nav-link link-light dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown"><i
+                                            class="slash fas fa-slash fa-rotate-90"></i>{translate key="Responsibilities"}</a>
                                     <ul class="dropdown-menu">
                                         {if isset($CanViewGroupAdmin) && $CanViewGroupAdmin}
                                             <li id="navResponsibilitiesGAUsers"><a class="dropdown-item"

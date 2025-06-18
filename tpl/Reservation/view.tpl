@@ -29,10 +29,10 @@
                 <div id="reservationDetails" class="{$detailsCol}">
                     <div class="col-12">
                         <label class="fw-bold">{translate key='User'}</label>
-                        {if $ShowUserDetails && $ShowReservationDetails && $isResourcePermitted}
+                        {if isset($CanViewResponsibilities) && $CanViewResponsibilities}
                             {translate key=Private}
-                            {*<a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName}</a>
-                            <input id="userId" type="hidden" value="{$UserId}" />*}
+                            <a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName}</a>
+                            <input id="userId" type="hidden" value="{$UserId}" />
                         {else}
                             {translate key=Private}
                         {/if}
