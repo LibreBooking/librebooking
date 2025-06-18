@@ -1,95 +1,137 @@
-# Current status
 
-As some are aware, due to a chronic lack of time and health issues, I' haven't been the fastest to answer, implement new features or fix bugs., so I just want to inform everyone on the current status of the project.
-At the moment my health is not the strongest, this combined with a heavy workload means that I'm simply not able to keep a very close eye on librebooking, this does NOT mean that this project is dead, in fact the usage on my workplace has steadily increased and will continue to do so in a nearby future, what this means is that in the coming months I won't be able to do much, besides fixing breaking bugs or merge pull requests.
-I'm hoping this phase will pass quickly and that soon I will be able to a more active role, especially implementing new features.
-So what can you do to help, first thing, fork the project, even if you are not a coder, fork the project, the more that have the code the better.
-Second, if you found a bug submit an issue.
-Third, if you managed to fix or trace the problem update the issue, even you can't code, others might be able to quickly provide a fix and maybe even submit a pr.
-Finally if you can code, please contribute to the project even if it's something simple, like fixing grammatical errors all the help is appreciated.
+# Librebooking
 
-## Community discussion channel on Discord
+[![GitHub issues](https://img.shields.io/github/issues/LibreBooking/app)](https://github.com/LibreBooking/app/issues)
+[![Last commit](https://img.shields.io/github/last-commit/LibreBooking/app)](https://github.com/LibreBooking/app/commits)
+[![GitHub release](https://img.shields.io/github/v/release/LibreBooking/app?include_prereleases)](https://github.com/LibreBooking/app/releases)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE.md)
 
-There is a community discussion channel on Discord at
-<https://discord.gg/4TGThPtmX8>  (If this link doesn't work please file an Issue.
-We set the link to never expire but for some reason it still keeps becoming
-invalid)
+[![GitHub stars](https://img.shields.io/github/stars/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/network)
 
-## TODO list
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-brightgreen.svg?logo=php)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-5.5%2B-blue.svg?logo=mysql)](https://www.mysql.com/)
+![Platform](https://img.shields.io/badge/Platform-Web-lightgrey)
+![Status](https://img.shields.io/badge/Status-Active-green)
 
-Because LibreBooking is an opensource project, there are some things we have to do to make it better. Here is a list of things you can do if you're interested in helping out
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue?logo=docker)](https://github.com/LibreBooking/docker)
+[![Docker pulls](https://img.shields.io/docker/pulls/librebooking/librebooking)](https://github.com/LibreBooking/docker)
 
-## Welcome to LibreBooking
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/4TGThPtmX8)
+[![Wiki](https://img.shields.io/badge/Wiki-Available-lightgrey?logo=read-the-docs)](https://github.com/LibreBooking/app/wiki)
 
-This is a community effort to keep the OpenSource [GPLv3](./LICENSE.md) LibreBooking alive, see [History](./doc/HISTORY.md)
+⭐ Star us on GitHub — it motivates us a lot!
 
-### Note
+🔥 Join the community: [Discord discussion channel](https://discord.gg/4TGThPtmX8) .
 
-The update project is currently in the beta phase; testing and participation from all users and administrators are required.
+## Table of Contents
 
-## What's new?
+- [About](#-about)
+- [Features](#-features)
+- [Screenshots](#-screenshots)
+- [Installation & Deployment](#-installation--deployment)
+- [Developer Documentation](#-developer-documentation)
+- [Configuration & Theming](#-configuration--theming)
+- [ReCaptcha](#-recaptcha)
+- [Community & Support](#-community--support)
+- [Contributing](#-contributing)
+- [Roadmap](#-roadmap)
+- [License](#-license)
 
-- Update to Bootstrap 5 and migration of icons to Bootstrap Icons.
+## 🚀 About
 
-![Update to Bootstrap 5 and migration of icons to Bootstrap Icons](./Web/img/readme/01.png)
+**LibreBooking** is an open-source scheduling solution, forked from Booked Scheduler. It offers a flexible, mobile-friendly, and extensible interface for organizations to manage resource reservations. The repository for the last open source version of Booked Scheduler is maintained here; the `develop` branch contains the latest working code (beta), while `master` is the stable release.
 
-- Design changes.
+## ✨ Features
 
-![Design changes](./Web/img/readme/02.png)
-![Design changes](./Web/img/readme/03.png)
-![Design changes](./Web/img/readme/04.png)
-![Design changes](./Web/img/readme/05.png)
-![Design changes](./Web/img/readme/06.png)
-![Design changes](./Web/img/readme/07.png)
-![Design changes](./Web/img/readme/08.png)
+- [x] Multi-resource booking & waitlists
+- [x] DataTables for advanced listings
+- [x] Role-based access control
+- [x] Quotas and credits for reservations
+- [x] Granular usage reporting
+- [x] Responsive Bootstrap 5 interface
+- [x] Custom themes and color schemes
+- [x] Plugin-ready architecture
+- [x] Outlook/Thunderbird integration through ics
 
-- "Back to top" button on all pages.
+## 📸 Screenshots
 
-!["Back to top" button on all pages](./Web/img/readme/09.png)
+![Login](./Web/img/readme/02.png)
+![Schedules](./Web/img/readme/06.png)
+![Dashboard](./Web/img/readme/03.png)
+![User profile](./Web/img/readme/04.png)
+![Search](./Web/img/readme/07.png)
+![DataTables example](./Web/img/readme/15.png)
 
-- Rename Web/booked.css to Web/librebooking.css (this is no longer Booked Schedule ;-) ).
+## 🔧 Installation & Deployment
 
-- Ability to change the color scheme in `config.php $conf['settings']['css.theme'] = 'default'`  and/or customize an existing one in `Web/css/librebooking.css`
+### Manual Installation
 
-![color scheme](./Web/img/readme/10.png)
-![color scheme](./Web/img/readme/11.png)
-![color scheme](./Web/img/readme/12.png)
-![color scheme](./Web/img/readme/13.png)
-![color scheme](./Web/img/readme/14.png)
+To run LibreBooking from a prebuilt release, your server needs:
 
-- Use of DataTables.
+- PHP >= 8.2 with the  extensions: pdo, mbstring, openssl, tokenizer, json, curl, xml, ctype, bcmath, fileinfo
+- A web server like Apache or Nginx
+- MySQL >= 5.5
+For full setup instructions, see [INSTALLATION.md](./doc/INSTALLATION.md)
 
-![Use of DataTables](./Web/img/readme/15.png)
+### Docker Deployment
 
-- Removal of obsolete libraries (e.g. Owl, FloatThead).
+LibreBooking is available as a Docker container. See [LibreBooking Docker README](https://github.com/LibreBooking/docker) for complete setup.
 
-## Prerequisites
+```bash
+git clone https://github.com/LibreBooking/docker.git
+cd docker
+docker-compose up -d
+```
 
-- PHP 8.1 or greater
-- MySQL 5.5 or greater
-- Web server (Apache, IIS)
+## 💻 Developer Documentation
 
-## Installation instructions
+- See [doc/README.md](./doc/README.md) for developer notes.
+- See [doc/API.md](./doc/API.md) for API notes.
+- See [doc/Oauth2-Configuration.md](./doc/Oauth2-Configuration.md) for Oauth2 configuration.
+- See [doc/SAML-Configuration.md](./doc/SAML-Configuration.md) for SAML configuration.
+- Codebase follows PSR-12 standards and GitHub Flow.
 
-[Full install instructions](./doc/INSTALLATION.md)
+## 🎨 Configuration & Theming
 
-## Developer Documentation
+- Change theme via `config.php`:
 
-[developer documentation](./doc/README.md)
+  ```php
+  $conf['settings']['css.theme'] = 'default';
+  ```
 
-## Help
+- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'pastel_blue'
+- Customize `Web/css/librebooking.css`.
 
-Please consult the wiki for more help <https://github.com/LibreBooking/app/wiki>
+## 🔒 ReCaptcha
 
-## REPO
+As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for your domain if using ReCaptcha.
 
-<https://github.com/LibreBooking/app>
+## 💬 Community & Support
 
-## ReCaptcha
+- [Discord](https://discord.gg/4TGThPtmX8)
+- [Wiki](https://github.com/LibreBooking/app/wiki)
+- [Issues](https://github.com/LibreBooking/app/issues)
+- [Discussions](https://github.com/LibreBooking/app/discussions)
 
-09/03/2023 - The ReCaptcha integration has been updated to v3, you will need to generate new keys for your website if you are using it on your website.
+## 🤝 Contributing
 
-## Docker usage
+- Fork, file issues, suggest improvements.
+- Even non-coders can help by reporting bugs, testing, updating issues.
+- PRs welcome (docs, features, refactoring, fixes).
+- See CONTRIBUTING.md
 
-For information on how to use LibreBooking in a Docker container see:
-<https://github.com/LibreBooking/docker>
+## 💡 Roadmap
+
+_Work in progress – roadmap to be defined._  
+Want to suggest a feature? [Open an issue](https://github.com/LibreBooking/app/issues) or join the [Discord discussion channel](https://discord.gg/4TGThPtmX8).
+
+## 📜 License
+
+This project is licensed under **GPL-3.0**.
+
+## 🙏 Acknowledgments
+
+Forked from Booked Scheduler. Thanks to all contributors and the community.
+
+[Back to top](#librebooking)
