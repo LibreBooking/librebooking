@@ -30,7 +30,6 @@
                     <div class="col-12">
                         <label class="fw-bold">{translate key='User'}</label>
                         {if isset($CanViewResponsibilities) && $CanViewResponsibilities}
-                            {translate key=Private}
                             <a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName}</a>
                             <input id="userId" type="hidden" value="{$UserId}" />
                         {else}
