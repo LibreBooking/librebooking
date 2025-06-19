@@ -38,26 +38,30 @@
                 {if $AllowPurchasingCredits && $IsCreditCostSet}
                     <div class="tab-pane" id="purchase" role="tabpanel">
 
-                        <div class="col-4">
+                        <div class="col-12 col-md-4">
                             <form role="form" name="purchaseCreditsForm" id="purchaseCreditsForm" method="post"
                                 action="checkout.php">
-                                <div class="d-flex align-items-center gap-1 mb-1">{translate key=CreditsEachCost1}
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="count" class="form-label mb-0">{translate key=CreditsEachCost1}</label>
                                     <select id="count" {formname key=CREDIT_COUNT}
                                         class="form-select form-select-sm w-auto">
                                         {foreach from=$CreditCosts item=credit}
                                             <option value="{$credit->Count()}">{$credit->Count()}</option>
                                         {/foreach}
                                     </select>
-                                    {translate key=CreditsEachCost2} <span id="cost"
-                                        class="cost fw-bold">{$CreditCost}</span>
+                                    <span class="ms-1">{translate key=CreditsEachCost2}</span>
+                                    <span id="cost" class="cost fw-bold ms-2">{$CreditCost}</span>
                                 </div>
-                                <div class="d-flex align-items-center gap-1">{translate key=Quantity}
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="quantity" class="form-label mb-0">{translate key=Quantity}</label>
                                     <input id="quantity" {formname key=CREDIT_QUANTITY} type="number"
-                                        class="form-control form-control-sm inline-block" min="1" style="width:100px"
-                                        value="1" />
+                                        class="form-control form-control-sm w-auto" min="1" style="width:100px" value="1">
                                 </div>
-                                <div>
-                                    {translate key=Total} <span id="totalCost" class="cost fw-bold">{$CreditCost}</span>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="form-label mb-0">{translate key=Total}</label>
+                                    <span id="totalCost" class="cost fw-bold">{$CreditCost}</span>
                                 </div>
                                 <button type="submit"
                                     class="btn btn-outline-secondary col-12">{translate key=Checkout}</button>

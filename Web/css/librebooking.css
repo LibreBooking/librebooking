@@ -511,7 +511,8 @@ table.reservations td {
     z-index: 99999;
 }
 
-#reservation-box label {
+#reservation-box label,
+#purchase label {
     min-width: 50px;
 }
 
