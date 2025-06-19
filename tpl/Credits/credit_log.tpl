@@ -1,5 +1,6 @@
 <div style="overflow-x:auto;">
-    <table class="table" id="credit-log-list">
+    {assign var=tableId value='credit-log-list'}
+    <table class="table table-striped table-hover border-top w-100" id="{$tableId}">
         <thead>
             <tr>
                 <th>{translate key=Date}</th>
@@ -10,8 +11,7 @@
         </thead>
         <tbody>
             {foreach from=$CreditLog item=log}
-                {cycle values='row0,row1' assign=rowCss}
-                <tr class="{$rowCss}">
+                <tr>
                     <td>{formatdate date=$log->Date timezone=$Timezone key='general_datetime'}</td>
                     <td>{$log->Note}</td>
                     <td>{$log->OriginalCreditCount}</td>
@@ -21,4 +21,4 @@
         </tbody>
     </table>
 </div>
-{pagination pageInfo=$PageInfo}
+{datatable tableId={$tableId}}

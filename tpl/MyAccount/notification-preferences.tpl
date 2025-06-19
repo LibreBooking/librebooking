@@ -26,15 +26,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::Created}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $Created}active{/if}">
-									<input id="createdYes" type="radio" name="{ReservationEvent::Created}" value="1"
-										{if $Created}checked="checked" {/if} /> {translate key=PreferenceSendEmail}{$Created}
-								</label>
-								<label class="btn btn-default btn-xs {if !$Created}active{/if}">
-									<input id="createdNo" type="radio" name="{ReservationEvent::Created}" value="0"
-										{if !$Created}checked="checked" {/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 						</div>
 
 						<div class="notification-row col-12 col-sm-6">
@@ -46,15 +37,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::Updated}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $Updated}active{/if}">
-									<input id="updatedYes" type="radio" name="{ReservationEvent::Updated}" value="1"
-										{if $Updated}checked="checked" {/if} /> {translate key=PreferenceSendEmail}
-								</label>
-								<label class="btn btn-default btn-xs {if !$Updated}active{/if}">
-									<input id="updatedNo" type="radio" name="{ReservationEvent::Updated}" value="0"
-										{if !$Updated}checked="checked" {/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 						</div>
 
 						<div class="notification-row col-12 col-sm-6">
@@ -68,15 +50,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::Deleted}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $Deleted}active{/if}">
-									<input id="deletedYes" type="radio" name="{ReservationEvent::Deleted}" value="1"
-										{if $Deleted}checked="checked" {/if} /> {translate key=PreferenceSendEmail}
-								</label>
-								<label class="btn btn-default btn-xs {if !$Deleted}active{/if}">
-									<input id="deletedNo" type="radio" name="{ReservationEvent::Deleted}" value="0"
-										{if !$Deleted}checked="checked" {/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 
 						</div>
 
@@ -91,15 +64,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::Approved}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $Approved}active{/if}">
-									<input id="approvedYes" type="radio" name="{ReservationEvent::Approved}" value="1"
-										{if $Approved}checked="checked" {/if} /> {translate key=PreferenceSendEmail}
-								</label>
-								<label class="btn btn-default btn-xs {if !$Approved}active{/if}">
-									<input id="approvedNo" type="radio" name="{ReservationEvent::Approved}" value="0"
-										{if !$Approved}checked="checked" {/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 						</div>
 
 						<div class="notification-row col-12 col-sm-6">
@@ -114,17 +78,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::ParticipationChanged}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $ParticipantChanged}active{/if}">
-									<input id="endingYes" type="radio" name="{ReservationEvent::ParticipationChanged}" value="1"
-										{if $ParticipantChanged}checked="checked" {/if} />
-									{translate key=PreferenceSendEmail}
-								</label>
-								<label class="btn btn-default btn-xs {if !$ParticipantChanged}active{/if}">
-									<input id="endingNo" type="radio" name="{ReservationEvent::ParticipationChanged}" value="0"
-										{if !$ParticipantChanged}checked="checked"
-										{/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 						</div>
 
 						<div class="notification-row-alt col-12 col-sm-6">
@@ -138,15 +91,6 @@
 								<label class="form-check-label"
 									for="{ReservationEvent::SeriesEnding}">{translate key=PreferenceSendEmail}</label>
 							</div>
-							{*<div class="btn-group form-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs {if $SeriesEnding}active{/if}">
-									<input id="endingYes" type="radio" name="{ReservationEvent::SeriesEnding}" value="1"
-										{if $SeriesEnding}checked="checked" {/if} /> {translate key=PreferenceSendEmail}
-								</label>
-								<label class="btn btn-default btn-xs {if !$SeriesEnding}active{/if}">
-									<input id="endingNo" type="radio" name="{ReservationEvent::SeriesEnding}" value="0"
-										{if !$SeriesEnding}checked="checked" {/if} />{translate key=PreferenceNoEmail}</label>
-							</div>*}
 						</div>
 
 					</div>

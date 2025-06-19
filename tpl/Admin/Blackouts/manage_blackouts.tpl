@@ -189,9 +189,8 @@
 					</thead>
 					<tbody>
 						{foreach from=$blackouts item=blackout}
-							{*{cycle values='row0,row1' assign=rowCss}*}
 							{assign var=id value=$blackout->InstanceId}
-							<tr class="{$rowCss} editable" data-blackout-id="{$id}">
+							<tr class="editable" data-blackout-id="{$id}">
 								<td>{$blackout->ResourceName}</td>
 								<td class="date">{formatdate date=$blackout->StartDate timezone=$Timezone key=res_popup}
 								</td>
@@ -223,14 +222,6 @@
 							</tr>
 						{/foreach}
 					</tbody>
-					{*<tfoot>
-						<tr>
-							<td colspan="7"></td>
-							<td class="action-delete"><a href="#" id="delete-selected" class="d-none"
-									title="{translate key=Delete}">{translate key=Delete}<span
-										class="bi bi-trash3-fill text-danger icon remove"></span></a></td>
-						</tr>
-					</tfoot>*}
 				</table>
 			</div>
 		</div>

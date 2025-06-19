@@ -126,10 +126,13 @@
 							</div>
 							<div class="form-group {$groupClass}">
 								<label for="filterCapacity" class="fw-bold">{translate key=MinimumCapacity}</label>
-								<input type="number" min="0" id="filterCapacity" class="form-control"
-									{formname key=MAX_PARTICIPANTS} value="{$CapacityFilter}"
-									placeholder="{translate key=MinimumCapacity}" />
-								{*<span class="searchclear bi bi-x-circle input-group-text" ref="filterCapacity"></span>*}
+								<div class="position-relative">
+									<input type="number" min="0" id="filterCapacity" class="form-control"
+										{formname key=MAX_PARTICIPANTS} value="{$CapacityFilter}"
+										placeholder="{translate key=MinimumCapacity}" />
+									<span class="searchclear searchclear-label bi bi-x-circle-fill me-4"
+										ref="filterCapacity"></span>
+								</div>
 							</div>
 							<div class="form-group {$groupClass}">
 								<label for="filterRequiresApproval"
@@ -257,7 +260,8 @@
 													</div>
 													<div class="text-center">
 														<div>{translate key=ResourceColor}</div>
-														<input class="resourceColorPicker w-50 border" type="color"
+														<input type="color"
+															class="resourceColorPicker w-50 mx-auto border form-control form-control-color"
 															value='{if $resource->HasColor()}{$resource->GetColor()}{else}#ffffff{/if}'
 															alt="{translate key=ResourceColor}"
 															title="{translate key=ResourceColor}" />
@@ -611,8 +615,6 @@
 		</div>
 	</div>
 
-	{*{pagination pageInfo=$PageInfo}*}
-
 	<div id="add-resource-dialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="addResourceModalLabel"
 		aria-hidden="true">
 		<form id="addResourceForm" class="form" role="form" method="post"
@@ -632,7 +634,6 @@
 							</label>
 							<input type="text" class="form-control required has-feedback " maxlength="85"
 								id="resourceName" {formname key=RESOURCE_NAME} />
-							{*<i class="bi bi-asterisk form-control-feedback" data-bv-icon-for="resourceName"></i>*}
 
 						</div>
 						<div class="form-group mb-2">
@@ -1800,7 +1801,7 @@
 								</div>
 							</div>
 
-						</div> {*accordion*}
+						</div>
 						{csrf_token}
 					</form>
 				</div>

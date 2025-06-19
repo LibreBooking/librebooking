@@ -202,8 +202,6 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'setfocus', $this->SetFocus(...));
         $this->registerPlugin('function', 'formname', $this->GetFormName(...));
         $this->registerPlugin('modifier', 'url2link', $this->CreateUrl(...));
-        $this->registerPlugin('function', 'pagelink', $this->CreatePageLink(...));
-        $this->registerPlugin('function', 'pagination', $this->CreatePagination(...));
         $this->registerPlugin('function', 'js_array', $this->CreateJavascriptArray(...));
         $this->registerPlugin('function', 'async_validator', $this->AsyncValidator(...));
         $this->registerPlugin('function', 'fullname', $this->DisplayFullName(...));
@@ -610,94 +608,6 @@ class SmartyPage extends Smarty
         return $url;
     }
 
-    public function CreatePagination($params, $smarty)
-    {
-        /** @var PageInfo $pageInfo */
-        $pageInfo = $params['pageInfo'];
-        $hideCount = isset($params['showCount']) && $params['showCount'] == false;
-
-        if (empty($pageInfo->Total)) {
-            return '';
-        }
-
-        $sb = new StringBuilder();
-
-        $viewAllText = $this->Resources->GetString('ViewAll');
-        if (!$hideCount) {
-            $sb->Append('<div class="pagination-rows">');
-            $sb->Append($this->Resources->GetString('Rows'));
-            $sb->Append(": {$pageInfo->ResultsStart} - {$pageInfo->ResultsEnd} ({$pageInfo->Total})");
-            $sb->Append('<span>&nbsp;</span>');
-            if ($pageInfo->TotalPages != 1) {
-                $sb->Append($this->CreatePageLink(['page' => 1, 'size' => '-1', 'text' => $viewAllText], $smarty));
-            }
-            $sb->Append('</div>');
-        }
-        $size = $pageInfo->PageSize;
-        $currentPage = $pageInfo->CurrentPage;
-
-        $sb->Append('<nav aria-label="Reservations Pagination">'); /* Nav for Bootstrap 5 */
-        $sb->Append('<ul class="pagination">');
-        $sb->Append('<li class="page-item">');
-        $sb->Append($this->CreatePageLink(
-            [
-                'page' => max(
-                    1,
-                    $currentPage - 1
-                ),
-                'size' => $size,
-                'text' => '&laquo;'
-            ],
-            $smarty
-        ));
-        $sb->Append('</li>');
-
-        for ($i = 1; $i <= $pageInfo->TotalPages; $i++) {
-            $isCurrent = ($i == $currentPage);
-
-            if ($isCurrent) {
-                $sb->Append('<li class="page-item active">');
-            } else {
-                $sb->Append('<li class="page-item">');
-            }
-            $sb->Append($this->CreatePageLink(['page' => $i, 'size' => $size], $smarty));
-            $sb->Append('</li>');
-        }
-        $sb->Append('<li class="page-item">');
-        $sb->Append($this->CreatePageLink(
-            [
-                'page' => min(
-                    $pageInfo->TotalPages,
-                    $currentPage + 1
-                ),
-                'size' => $size,
-                'text' => '&raquo;'
-            ],
-            $smarty
-        ));
-        $sb->Append('</li>');
-        $sb->Append('</ul>');
-        $sb->Append('</nav>');/* End nav pagination Bootstrap 5 */
-
-        return $sb->ToString();
-    }
-
-    public function CreatePageLink($params, $smarty)
-    {
-        $url = ServiceLocator::GetServer()->GetUrl();
-        $page = $params['page'];
-        $pageSize = $params['size'];
-        $iscurrent = $params['iscurrent'];
-        $text = $params['text'] ?? $page;
-
-        $newUrl = $this->ReplaceQueryString($url, QueryStringKeys::PAGE, $page);
-        $newUrl = $this->ReplaceQueryString($newUrl, QueryStringKeys::PAGE_SIZE, $pageSize);
-
-        $class = $iscurrent ? "page-link active" : "page-link";
-
-        return sprintf('<a class="%s" href="%s" data-page="%s" data-page-size="%s">%s</a>', $class, $newUrl, $page, $pageSize, $text);
-    }
-
     public function CreateDataTable($params)
     {
         $tableId = $params['tableId'];
@@ -1062,12 +972,12 @@ class SmartyPage extends Smarty
 
     public function FormatCurrency($params, $smarty)
     {
-        $amount = $params['amount'];
-        $currency = $params['currency'];
+        $amount = isset($params['amount']) && is_numeric($params['amount']) ? floatval($params['amount']) : 0.0;
+        $currency = $params['currency'] ?? 'USD';
 
         if (!class_exists('NumberFormatter')) {
             if ($currency == 'USD') {
-                echo '$' . floatval($amount) . 'USD';
+                echo '$' . number_format($amount, 2) . ' USD';
             } else {
                 echo 'We cannot format this currency. <a href="http://php.net/manual/en/book.intl.php">You must enable internationalization</a>.';
             }

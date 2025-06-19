@@ -26,8 +26,7 @@
 			</thead>
 			<tbody>
 				{foreach from=$Attributes item=attribute}
-					{*{cycle values='row0,row1' assign=rowCss}*}
-					<tr class="{$rowCss}" attributeId="{$attribute->Id()}">
+					<tr attributeId="{$attribute->Id()}">
 						<td class="d-none">{$attribute->Id()}</td>
 						<td>{$attribute->SortOrder()}</td>
 						<td>{$attribute->Label()}</td>

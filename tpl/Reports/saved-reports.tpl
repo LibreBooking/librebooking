@@ -31,8 +31,7 @@
 								</thead>
 								<tbody>
 									{foreach from=$ReportList item=report}
-										{*{cycle values=',alt' assign=rowCss}*}
-										<tr reportId="{$report->Id()}" class="{$rowCss}">
+										<tr reportId="{$report->Id()}">
 											<td><span class="fw-bold">{$report->ReportName()|default:$untitled}</span></td>
 											<td class="right"><span
 													class="report-created-date fst-italic">{format_date date=$report->DateCreated()}</span>

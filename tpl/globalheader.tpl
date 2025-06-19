@@ -151,6 +151,7 @@
         </div>
         <nav class="navbar navbar-expand-lg bg-rojo shadow-sm py-2 sticky-top">
             <div class="container-fluid">
+
                 <button type="button" class="navbar-toggler ms-auto" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -285,7 +286,6 @@
                                                     href="{$Path}admin/manage_payments.php">{translate key="ManagePayments"}</a>
                                             </li>
                                         {/if}
-                                        {*<li class="dropdown-header">{translate key=Customization}</li>*}
                                         <li id="navManageAttributes"><a class="dropdown-item"
                                                 href="{$Path}admin/manage_attributes.php">{translate key="CustomAttributes"}</a>
                                         </li>

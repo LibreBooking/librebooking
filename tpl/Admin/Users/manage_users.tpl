@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' InlineEdit=true cssFiles='scripts/css/colorpicker.css' DataTable=true}
+{include file='globalheader.tpl' InlineEdit=true DataTable=true}
 
 <div id="page-manage-users" class="admin-page">
 
@@ -74,18 +74,15 @@
                             <th class="action">{translate key='Status'}</th>
                             {if $CreditsEnabled}
                                 <th class="action">{translate key='Credits'}</th>
-                                {*{assign var=colCount value=$colCount+1}*}
                             {/if}
                             {if $PerUserColors}
                                 <th class="action">{translate key='Color'}</th>
-                                {*{assign var=colCount value=$colCount+1}*}
                             {/if}
                             <th>{translate key='Actions'}</th>
                             <th class="action-delete">
                                 <div class="form-check checkbox-single">
                                     <input class="form-check-input" type="checkbox" id="delete-all"
                                         aria-label="{translate key=All}" title="{translate key=All}" />
-                                    {*<label class="form-check-label" for="delete-all"></label>*}
                                 </div>
                                 <a href="#" id="delete-selected" class="d-none" title="{translate key=Delete}">
                                     <span class="visually-hidden">{translate key=Delete}</span>
@@ -101,9 +98,8 @@
                     </thead>
                     <tbody>
                         {foreach from=$users item=user}
-                            {cycle values='row0,row1' assign=rowCss}
                             {assign var=id value=$user->Id}
-                            <tr class="{$rowCss}" data-userId="{$id}">
+                            <tr data-userId="{$id}">
                                 <td>{fullname first=$user->First last=$user->Last ignorePrivacy="true"}</td>
                                 <td>{$user->Username}</td>
                                 <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>
@@ -132,8 +128,8 @@
                                     <td class="action">
                                         <a href="#" class="update changeColor link-primary">{translate key='Edit'}</a>
                                         {if !empty($user->ReservationColor)}
-                                            <div class="user-color update changeColor"
-                                                style="background-color:#{$user->ReservationColor}">
+                                            <div class="user-color update changeColor rounded"
+                                                style="background-color:{$user->ReservationColor}">
                                                 &nbsp;
                                             </div>
                                         {/if}
@@ -181,39 +177,23 @@
                                         <input {formname key=USER_ID multi=true} class="delete-multiple form-check-input"
                                             type="checkbox" id="delete{$id}" value="{$id}"
                                             aria-label="{translate key=Delete}" title="{translate key=Delete}" />
-                                        {*<label for="delete{$id}" class=""></label>*}
                                     </div>
                                 </td>
-                                {*</tr>*}
 
                                 {if $attributes|default:array()|count > 0}
-                                    {*<tr data-userId="{$id}">*}
-                                    <td class="{$rowCss} customAttributes" userId="{$id}">
+                                    <td class="customAttributes" userId="{$id}">
                                         {assign var=changeAttributeAction value=ManageUsersActions::ChangeAttribute}
                                         {assign var=attributeUrl value="`$smarty.server.SCRIPT_NAME`?action=`$changeAttributeAction`"}
                                         {foreach from=$AttributeList item=attribute}
                                             {include file='Admin/InlineAttributeEdit.tpl' url=$attributeUrl id=$id attribute=$attribute value=$user->GetAttributeValue($attribute->Id())}
                                         {/foreach}
                                     </td>
-                                    {*</tr>*}
                                 {/if}
                             {/foreach}
                         </tr>
                     </tbody>
-                    {*<tfoot>
-                        <tr>
-                            <td colspan="{$colCount-1}"></td>
-                            <td class="action-delete">
-                                <a href="#" id="delete-selected" class="no-show" title="{translate key=Delete}">
-                                    <span class="visually-hidden">{translate key=Delete}</span>
-                                    <span class="bi bi-trash3-fill text-danger icon remove"></span>
-                                </a>
-                            </td>
-                        </tr>
-                    </tfoot>*}
                 </table>
             </div>
-            {*{pagination pageInfo=$PageInfo}*}
         </div>
     </div>
 
@@ -244,8 +224,6 @@
                                         style="font-size: 0.5rem;"></i></label>
                                 <input type="text" {formname key="USERNAME"} class="required form-control has-feedback"
                                     required id="addUsername" />
-                                {*<i class="glyphicon glyphicon-asterisk form-control-feedback"
-                                    data-bv-icon-for="addUsername"></i>*}
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -255,8 +233,6 @@
                                         style="font-size: 0.5rem;"></i></label>
                                 <input type="text" {formname key="EMAIL"} class="required form-control has-feedback"
                                     required id="addEmail" />
-                                {*<i class="glyphicon glyphicon-asterisk form-control-feedback"
-                                    data-bv-icon-for="addEmail"></i>*}
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -338,15 +314,9 @@
 
                         {if $AttributeList|default:array()|count > 1}
                             {for $i=1 to $AttributeList|default:array()|count-1}
-                                {*{if $i%2==1}*}
-                                    {*<div class="row">*}
-                                {*{/if}*}
                                 <div class="col-12 col-sm-6">
                                     {control type="AttributeControl" attribute=$AttributeList[$i]}
                                 </div>
-                                {*{if $i%2==0 || $i==$AttributeList|default:array()|count-1}*}
-                                    {*</div>*}
-                                {*{/if}*}
                             {/for}
                         {/if}
                         <div class="clearfix"></div>
@@ -444,11 +414,10 @@
                                 </tr>
                             </thead>
                             {foreach from=$resources item=resource}
-                                {*{cycle values='row0,row1' assign=rowCss}*}
                                 <tr>
                                     <td>
                                         {assign var=rid value=$resource->GetResourceId()}
-                                        <div class="{$rowCss} permissionRow form-group clearfix">
+                                        <div class="permissionRow form-group clearfix">
                                             <label for="permission_{$rid}"
                                                 class="float-start">{$resource->GetName()}</label>
                                             <select class="float-end form-select form-select-sm resourceId inline-block"
@@ -656,10 +625,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="input-group">
-                            <span class="input-group-text">#</span>
+                            <span class="input-group-text"><i class="bi bi-paint-bucket"></i></span>
                             <label for="reservationColor" class="visually-hidden">Reservation Color</label>
-                            <input type="text" {formname key=RESERVATION_COLOR} id="reservationColor" maxlength="6"
-                                class="form-control" placeholder="FFFFFF">
+                            <input type="color" {formname key=RESERVATION_COLOR} id="reservationColor"
+                                class="form-control form-control-color">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -680,7 +649,6 @@
     {jsfile src="autocomplete.js"}
     {jsfile src="admin/user.js"}
     {jsfile src="js/jquery.form-3.09.min.js"}
-    {jsfile src="js/colorpicker.js"}
 
     <script type="text/javascript">
         function setUpEditables() {
@@ -740,16 +708,6 @@
                 };
                 userManagement.addUser(user);
             {/foreach}
-
-            $('#reservationColor').ColorPicker({
-                onSubmit: function(hsb, hex, rgb, el) {
-                    $(el).val(hex);
-                    $(el).ColorPickerHide();
-                },
-                onBeforeShow: function() {
-                    $(this).ColorPickerSetColor(this.value);
-                }
-            });
 
 
             setUpEditables();

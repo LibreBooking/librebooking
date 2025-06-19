@@ -32,8 +32,7 @@
 			</thead>
 			<tbody>
 				{foreach from=$Reservations item=reservation}
-					{*{cycle values='row0,row1' assign=rowCss}*}
-					<tr class="{$rowCss} editable" data-reservation-id="{$reservation->ReferenceNumber}">
+					<tr class="editable" data-reservation-id="{$reservation->ReferenceNumber}">
 						<td>{$reservation->FirstName} {$reservation->LastName}</td>
 						<td>{$reservation->ResourceName}</td>
 						<td>{formatdate date=$reservation->StartDate timezone=$Timezone key=res_popup}</td>

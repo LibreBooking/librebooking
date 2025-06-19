@@ -381,13 +381,17 @@ class PayPalGateway implements IPaymentGateway
                 }
             }
 
+            $paypalFee = isset($sale->seller_receivable_breakdown->paypal_fee->value)
+                ? $sale->seller_receivable_breakdown->paypal_fee->value
+                : 0;
+
             $logger->LogPayment(
                 $cart->UserId,
                 $response->body->status,
                 $sale->id,
                 $response->body->id,
                 $sale->amount->value,
-                $sale->seller_receivable_breakdown->paypal_fee->value,
+                $paypalFee,
                 $sale->amount->currency_code,
                 $self,
                 $refund,

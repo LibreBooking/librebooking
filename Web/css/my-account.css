@@ -1,9 +1,0 @@
-.notification-type {
-  font-size: 1.5em;
-  margin-top: 15px;
-}
-@media (max-width: 768px) {
-  .notification-type {
-    font-size: 1em;
-  }
-}

@@ -5,9 +5,7 @@
     <div id="profile-box" class="default-box card shadow col-12 col-sm-8 mx-auto">
 
         <form method="post" ajaxAction="{ProfileActions::Update}" id="form-profile" class="was-validated"
-            action="{$smarty.server.SCRIPT_NAME}" role="form" {*data-bv-feedbackicons-valid="bi bi-check-lg"
-            data-bv-feedbackicons-invalid="bi bi-x-lg" data-bv-feedbackicons-validating="bi bi-arrow-repeat"
-            data-bv-feedbackicons-required="bi bi-asterisk"*} data-bv-submitbuttons='button[type="submit"]'
+            action="{$smarty.server.SCRIPT_NAME}" role="form" data-bv-submitbuttons='button[type="submit"]'
             data-bv-onerror="enableButton" data-bv-onsuccess="enableButton" data-bv-live="enabled">
 
             <div class="card-body">

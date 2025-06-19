@@ -93,11 +93,11 @@ class CheckoutPresenter extends ActionPresenter
     {
         $gateway = $this->paymentRepository->GetPayPalGateway();
 
-        /** @var $cart CreditCartSession */
+        /** @var CreditCartSession $cart  */
         $cart = ServiceLocator::GetServer()->GetSession(SessionKeys::CREDIT_CART);
         $payment = $gateway->ExecutePayment($cart, $this->page->GetPaymentId(), $this->page->GetPayerId(), $this->paymentLogger);
 
-        if ($payment->state == "approved") {
+        if (isset($payment->status) && $payment->status == "COMPLETED") {
             $user = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
             $user->AddCredits($cart->Quantity, Resources::GetInstance()->GetString('NoteCreditsPurchased'));
             $this->userRepository->Update($user);
@@ -114,7 +114,7 @@ class CheckoutPresenter extends ActionPresenter
 
         $gateway = $this->paymentRepository->GetStripeGateway();
 
-        /** @var $cart CreditCartSession */
+        /** @var CreditCartSession $cart  */
         $cart = ServiceLocator::GetServer()->GetSession(SessionKeys::CREDIT_CART);
         $result = $gateway->Charge($cart, $userSession->Email, $token, $this->paymentLogger);
 

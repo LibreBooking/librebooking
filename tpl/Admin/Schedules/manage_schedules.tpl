@@ -70,8 +70,7 @@
 																data-value="{$schedule->GetAdminGroupId()}"
 																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">{($GroupLookup[$schedule->GetAdminGroupId()]) ? $GroupLookup[$schedule->GetAdminGroupId()]->Name : 'None'}</span>
 															{if $AdminGroups|default:array()|count > 0}
-																<a class="link-primary update changeScheduleAdmin"
-																	{*href="#" If used, clicking scrolls up the page *}><span
+																<a class="link-primary update changeScheduleAdmin"><span
 																		class="visually-hidden">{translate key='ScheduleAdministrator'}</span><span
 																		class="bi bi-pencil-square"></span>
 																</a>
@@ -287,7 +286,6 @@
 			</div>
 		</div>
 	</div>
-	{*{pagination pageInfo=$PageInfo}*}
 
 	<div id="addDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addScheduleDialogLabel"
 		aria-hidden="true">

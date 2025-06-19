@@ -62,9 +62,8 @@
 				</thead>
 				<tbody>
 					{foreach from=$ResourceTypes item=type}
-						{*{cycle values='row0,row1' assign=rowCss}*}
 						{assign var=id value=$type->Id()}
-						<tr class="{$rowCss}">
+						<tr>
 							<td>{$type->Name()}</td>
 							<td>{$type->Description()|nl2br}</td>
 							<td class="action">
@@ -104,7 +103,6 @@
 									class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 							<input type="text" id="editName" class="form-control required" required="required"
 								maxlength="85" {formname key=RESOURCE_TYPE_NAME} />
-							{*<i class="bi bi-asterisk form-control-feedback" data-bv-icon-for="editName"></i>*}
 						</div>
 						<div class="form-group">
 							<label for="editDescription" class="fw-bold">{translate key='Description'}</label>

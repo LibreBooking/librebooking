@@ -15,7 +15,6 @@
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="USERNAME"} class="required form-control has-feedback" required
 					id="username" value="{$User->Username()|escape:html}" />
-				{*<i class="glyphicon glyphicon-asterisk form-control-feedback" data-bv-icon-for="username"></i>*}
 			</div>
 		</div>
 
@@ -25,7 +24,6 @@
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="EMAIL"} class="required form-control has-feedback" required id="email"
 					value="{$User->EmailAddress()|escape:html}" />
-				{*<i class="glyphicon glyphicon-asterisk form-control-feedback" data-bv-icon-for="email"></i>*}
 			</div>
 		</div>
 
@@ -35,7 +33,6 @@
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="FIRST_NAME"} class="required form-control has-feedback" required
 					id="fname" value="{$User->FirstName()|escape:html}" />
-				{*<i class="glyphicon glyphicon-asterisk form-control-feedback" data-bv-icon-for="fname"></i>*}
 			</div>
 		</div>
 
@@ -45,7 +42,6 @@
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="LAST_NAME"} class="required form-control has-feedback" required
 					id="lname" value="{$User->LastName()|escape:html}" />
-				{*<i class="glyphicon glyphicon-asterisk form-control-feedback" data-bv-icon-for="lname"></i>*}
 			</div>
 		</div>
 

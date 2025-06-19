@@ -6,8 +6,6 @@
 		<h1 class="float-start">{translate key=ManageSchedules}</h1>
 	</div>
 
-	{*pagination pageInfo=$PageInfo*}
-
 	<div class="card shadow" id="list-schedules-panel">
 		<div class="card-body" id="scheduleList">
 			<div class="accordion" id="scheduleAccordion">
@@ -187,7 +185,6 @@
 		</div>
 	</div>
 
-	{*pagination pageInfo=$PageInfo*}
 
 	{include file="javascript-includes.tpl" DataTable=true}
 	{datatablefilter tableId=$tableIdFilter}
