@@ -8,10 +8,12 @@
                 <h1 class="text-center border-bottom mb-2">{translate key="SearchReservations"}</h1>
                 <div class="form-group col-sm-4">
                     <label for="userFilter" class="fw-bold">{translate key=User}</label>
-                    <input id="userFilter" type="search" class="form-control form-control-sm" value="{$UserNameFilter}"
-                        placeholder="{translate key=User}" />
-                    {*<span class="searchclear bi bi-circle" ref="userFilter,userId"></span>*}
-                    <input id="userId" type="hidden" {formname key=USER_ID} value="{$UserIdFilter}" />
+                    <div class="position-relative">
+                        <input id="userFilter" type="text" class="form-control form-control-sm"
+                            value="{$UserNameFilter}" placeholder="{translate key=User}" />
+                        <span class="searchclear bi bi-x-circle-fill" ref="userFilter,userId"></span>
+                        <input id="userId" type="hidden" {formname key=USER_ID} value="{$UserIdFilter}" />
+                    </div>
                 </div>
 
                 <div class="form-group col-sm-4">
@@ -121,6 +123,7 @@
     {jsfile src="autocomplete.js"}
     {jsfile src="reservationPopup.js"}
     {jsfile src="reservation-search.js"}
+    {jsfile src="search-clear.js"}
 
     {control type="DatePickerSetupControl" ControlId="beginDate" AltId="formattedBeginDate" DefaultDate=$BeginDate}
     {control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate" DefaultDate=$EndDate}
