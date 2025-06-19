@@ -624,3 +624,26 @@ input.mid-number {
 .editable-input {
     max-width: 90%;
 }
+
+#entityChoices,
+#editEntityChoices {
+    display: none;
+    min-width: 150px;
+    border: solid 1px #e2e2e2;
+    padding: 10px;
+    max-height: 400px;
+    overflow-x: auto;
+    overflow-y: visible;
+    position: absolute;
+    z-index: 10000;
+    background-color: #f5f5f5;
+    -moz-box-shadow: 0px 0px 3px 0px #ccc;
+    -webkit-box-shadow: 0px 0px 3px 0px #ccc;
+    box-shadow: 0px 0px 3px 0px #ccc;
+}
+
+#entityChoices li,
+#editEntityChoices li {
+    list-style: none;
+    font-size: 10pt;
+}

@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles='css/admin.css' DataTable=true}
+{include file='globalheader.tpl' DataTable=true}
 
 <div id="page-manage-attributes" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=CustomAttributes}</h1>
@@ -52,7 +52,6 @@
 										class="bi bi-asterisk text-danger align-top form-control-feedback"
 										style="font-size: 0.5rem;"></i></label>
 								{textbox name=ATTRIBUTE_LABEL class="required has-feedback"}
-								{*<i class="bi bi-asterisk form-control-feedback" data-bv-icon-for="ATTRIBUTE_LABEL"></i>*}
 							</div>
 
 							<div class="attributeValidationExpression form-group mb-2">
@@ -65,8 +64,6 @@
 								<label for="ATTRIBUTE_POSSIBLE_VALUES">{translate key=PossibleValues} <span
 										class="note fw-bold">({translate key=CommaSeparated})</span></label>
 								{textbox name=ATTRIBUTE_POSSIBLE_VALUES class="required has-feedback"}
-								{*<i class="glyphicon glyphicon-asterisk form-control-feedback"
-									data-bv-icon-for="ATTRIBUTE_POSSIBLE_VALUES"></i>*}
 							</div>
 
 							<div class="attributeSortOrder form-group mb-2">
@@ -175,8 +172,6 @@
 										class="bi bi-asterisk text-danger align-top form-control-feedback"
 										style="font-size: 0.5rem;"></i></label>
 								{textbox name=ATTRIBUTE_LABEL class="required has-feedback" id='editAttributeLabel'}
-								{*<i class="glyphicon glyphicon-asterisk form-control-feedback"
-									data-bv-icon-for="editAttributeLabel"></i>*}
 							</div>
 
 							<div class="form-group attributeValidationExpression">
@@ -190,8 +185,6 @@
 										class="note">({translate key=CommaSeparated}
 										)</span></label>
 								{textbox name=ATTRIBUTE_POSSIBLE_VALUES class="required" id="editAttributePossibleValues"}
-								{*<i class="glyphicon glyphicon-asterisk form-control-feedback"
-									data-bv-icon-for="editAttributePossibleValues"></i>*}
 							</div>
 
 							<div class="form-group attributeSortOrder mb-2">
