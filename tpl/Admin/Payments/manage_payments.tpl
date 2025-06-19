@@ -77,8 +77,7 @@
                         </thead>
                         <tbody>
                             {foreach from=$CreditCosts item=credit}
-                                {*{cycle values='row0,row1' assign=rowCss}*}
-                                <tr class="{$rowCss}" data-credit-id="{$credit->Count()}">
+                                <tr data-credit-id="{$credit->Count()}">
                                     <td>{$credit->Count()}</td>
                                     <td>{$credit->Cost()}</td>
                                     <td>{$credit->Currency()}</td>

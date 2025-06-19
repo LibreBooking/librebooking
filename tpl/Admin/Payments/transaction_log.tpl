@@ -17,8 +17,7 @@
         </thead>
         <tbody>
             {foreach from=$TransactionLog item=log}
-                {*{cycle values='row0,row1' assign=rowCss}*}
-                <tr class="{$rowCss}">
+                <tr>
                     <td>{formatdate date=$log->TransactionDate timezone=$Timezone key='general_datetime'}</td>
                     <td>{$log->UserFullName}</td>
                     <td>{$log->Status}</td>
@@ -40,4 +39,3 @@
     </table>
 </div>
 {datatable tableId={$tableId}}
-{*{pagination pageInfo=$PageInfo}*}

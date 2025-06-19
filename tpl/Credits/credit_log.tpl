@@ -1,5 +1,6 @@
 <div style="overflow-x:auto;">
-    <table class="table" id="credit-log-list">
+    {assign var=tableId value='credit-log-list'}
+    <table class="table table-striped table-hover border-top w-100" id="{$tableId}">
         <thead>
             <tr>
                 <th>{translate key=Date}</th>
@@ -20,4 +21,4 @@
         </tbody>
     </table>
 </div>
-{pagination pageInfo=$PageInfo}
+{datatable tableId={$tableId}}

@@ -11,12 +11,12 @@
 			</script>
 			<script src="https://checkout.stripe.com/checkout.js"></script>
 
-			<div id="checkoutPage">
+			<div id="checkoutPage" class="row">
 
 				{if !$IsCartEmpty}
-					<div class="cart" id="cart">
+					<div class="cart col-12 col-sm-4" id="cart">
 
-						<div class="col-12 col-sm-4">
+						<div class="">
 							<h4>{translate key=PurchaseSummary}</h4>
 							<div class="d-flex justify-content-between">
 								<div class="">

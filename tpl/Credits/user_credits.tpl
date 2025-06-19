@@ -1,4 +1,4 @@
-{include file='globalheader.tpl'}
+{include file='globalheader.tpl' DataTable=true}
 
 <div id="page-user-credits">
 
@@ -80,12 +80,11 @@
             </div>
         </div>
     </div>
-
-    {include file="javascript-includes.tpl"}
-    {jsfile src="user-credits.js"}
-    {jsfile src="ajax-helpers.js"}
-
 </div>
+
+{include file="javascript-includes.tpl" DataTable=true}
+{jsfile src="user-credits.js"}
+{jsfile src="ajax-helpers.js"}
 
 <script type="text/javascript">
     $(function() {
