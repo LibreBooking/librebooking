@@ -15,7 +15,8 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="moreResourceActions">
                     <li role="presentation">
-                        <a role="menuitem" href="#" class="import-groups dropdown-item" id="import-groups">
+                        <a role="menuitem" href="#" class="import-groups dropdown-item" id="import-groups"
+                            data-bs-toggle="modal" data-bs-target="#importGroupsDialog">
                             <i class="bi bi-download me-1"></i>{translate key="Import"}
                         </a>
                     </li>

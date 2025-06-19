@@ -127,11 +127,6 @@ function GroupManagement(opt) {
             modal.find('.count').text(modal.find(':checked').length);
         });
 
-        //import group form
-        importGroupsDialog.click((e) => {
-            e.preventDefault();
-            elements.importGroupsDialog.modal('show');
-        });
     }
 
     var configureAutocomplete = function () {
