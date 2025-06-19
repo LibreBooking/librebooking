@@ -56,25 +56,27 @@
 {else}
     {assign var=TodaysDate value=Date::Now()}
     {foreach from=$BoundDates item=date}
-        <div class="monitor-display-date">{formatdate date=$date}</div>
-        {foreach from=$Resources item=resource name=resource_loop}
-            {if $resource->HasColor()}{assign var=style value="color:{$resource->GetTextColor()}
-!important;background-color:{$resource->GetColor()} !important;"}{/if}
-            <div class="monitor-display-resource-name">{$resource->Name}</div>
-            {assign var=slots value=$DailyLayout->GetLayout($date, $resource->Id)}
-            {foreach from=$slots item=slot}
-                {if $slot->IsReserved()}
-                    <div class="reserved" style="{$style}">
-                        {formatdate date=$slot->BeginDate() key=period_time} -
-                        {assign var=slotformat value=period_time}
-                        {if !$slot->BeginDate()->DateEquals($slot->EndDate())}
-                            {assign var=slotformat value=short_reservation_date}
-                        {/if}
-                        {formatdate date=$slot->EndDate() key=$slotformat}
-                        {$slot->Label($SlotLabelFactory)|escapequotes}
-                    </div>
-                {/if}
+        <div class="alert alert-light">
+            <div class="monitor-display-date fw-bold fs-5">{formatdate date=$date}</div>
+            {foreach from=$Resources item=resource name=resource_loop}
+                {if $resource->HasColor()}{assign var=style value="color:{$resource->GetTextColor()}!important;background-color:{$resource->GetColor()}
+    !important;"}{/if}
+                <div class="monitor-display-resource-name fw-bold fs-6">{$resource->Name}</div>
+                {assign var=slots value=$DailyLayout->GetLayout($date, $resource->Id)}
+                {foreach from=$slots item=slot}
+                    {if $slot->IsReserved()}
+                        <div class="reserved rounded-1 p-1 mb-1" style="{$style}">
+                            {formatdate date=$slot->BeginDate() key=period_time} -
+                            {assign var=slotformat value=period_time}
+                            {if !$slot->BeginDate()->DateEquals($slot->EndDate())}
+                                {assign var=slotformat value=short_reservation_date}
+                            {/if}
+                            {formatdate date=$slot->EndDate() key=$slotformat}
+                            {$slot->Label($SlotLabelFactory)|escapequotes}
+                        </div>
+                    {/if}
+                {/foreach}
             {/foreach}
-        {/foreach}
+        </div>
     {/foreach}
 {/if}
