@@ -5,10 +5,14 @@ RewriteEngine On
 #RewriteCond %{HTTPS} off
 #RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteCond %{REQUEST_URI} !^/Web/
-RewriteRule ^(.*)$ /Web/$1 [R]
+RewriteRule ^Web - [L,NC]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ Web/$1 [QSA,L]
 
 #Header Set Access-Control-Allow-Origin "*"
 #Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
 #Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
 #php_value max_input_vars 10000
+DefaultLanguage es
+AddDefaultCharset utf-8

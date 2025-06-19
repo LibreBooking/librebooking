@@ -92,10 +92,11 @@ abstract class ReservationEmailMessage extends EmailMessage
     protected function PopulateTemplate()
     {
         $currentInstance = $this->reservationSeries->CurrentInstance();
+        $this->Set('Localizacion', $this->reservationSeries->Resource()->GetLocation());
+        $this->Set('Note', $this->reservationSeries->Resource()->GetNotes());
         $this->Set('UserName', $this->reservationOwner->FullName());
         $this->Set('StartDate', $currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $currentInstance->EndDate()->ToTimezone($this->timezone));
-        $this->Set('ScheduleId', $this->reservationSeries->ScheduleId());
         $this->Set('ResourceName', $this->reservationSeries->Resource()->GetName());
         $img = $this->reservationSeries->Resource()->GetImage();
         if (!empty($img)) {
