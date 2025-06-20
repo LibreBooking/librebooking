@@ -360,7 +360,7 @@
                                             href="{$Path}admin/manage_theme.php">{translate key="LookAndFeel"}</a>
                                     </li>
                                     <li id="navImport"><a class="dropdown-item"
-                                            href="{$Path}admin/import.php">{translate key="Import"}</a>
+                                            href="{$Path}admin/ics_import.php">{translate key="Import"}</a>
                                     </li>
                                     <li id="navServerSettings"><a class="dropdown-item"
                                             href="{$Path}admin/server_settings.php">{translate key="ServerSettings"}</a>
