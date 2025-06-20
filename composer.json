@@ -10,7 +10,7 @@
         "phpunit/phpunit": "^11.3"
     },
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "smarty/smarty": "^4.5",
         "stripe/stripe-php": "^10.2",
         "monolog/monolog": "^2.9",
