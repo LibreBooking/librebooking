@@ -2,7 +2,7 @@
 
 <div id="page-import-ics" class="admin-page">
 
-    <div class="card col-12 col-sm-8 mx-auto">
+    <div class="card shadow col-12 col-sm-8 mx-auto">
         <div class="card-body">
             <h1 class="border-bottom mb-3">{translate key=ImportICS}</h1>
 
