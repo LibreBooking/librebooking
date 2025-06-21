@@ -82,7 +82,7 @@
     {cssfile src="scripts/css/jquery-ui-timepicker-addon.css"}
     {cssfile src="librebooking.css"}
     {if isset($cssFiles) && $cssFiles neq ''}
-        {assign var='CssFileList' value=','|explode:$cssFiles}
+        {assign var='CssFileList' value=$cssFiles|split:','}
         {foreach from=$CssFileList item=cssFile}
             {cssfile src=$cssFile}
         {/foreach}
@@ -98,7 +98,7 @@
     {/if}
 
     {if isset($printCssFiles) && $printCssFiles neq ''}
-        {assign var='PrintCssFileList' value=','|explode:$printCssFiles}
+        {assign var='PrintCssFileList' value=$printCssFiles|split:','}
         {foreach from=$PrintCssFileList item=cssFile}
             <link rel='stylesheet' type='text/css' href='{$Path}{$cssFile}' media='print' />
         {/foreach}
@@ -118,7 +118,7 @@
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
-                {html_image src="$LogoUrl?{$Version}" alt="$Title" class="logo"}
+                <img src="{$Path}img/{$LogoUrl}?{$Version}" alt="{$Title}" class="logo">
             </a>
             <div class="border-start ps-2 d-flex flex-column">
                 {if $CompanyName neq ''}
