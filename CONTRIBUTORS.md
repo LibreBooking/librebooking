@@ -1,11 +1,29 @@
 # Contributors of LibreBooking
 
-- [Nick Korbel, Twinkle Toes Software, LLC](https://www.twinkletoessoftware.com/services/) Original Developer of Booked Scheduler
+## Current Maintainers
+
+- [effgarces](https://github.com/effgarces) Project Owner
+- [John Villalovos](https://github.com/JohnVillalovos/)
+
+## Recent Contributors
+
+- [LabMecanicaTec](https://github.com/labmecanicatec)
+- [lucs7](https://github.com/lucs7)
+- [Robin Alexander](https://github.com/colisee)
+- [supaeasy](https://github.com/supaeasy)
+- [Lars Lehmann](https://github.com/larsl-net)
+- [John Livingston](https://github.com/JohnXLivingston)
+
+## Previous Contributors
+
 - Alois Schloegl
 - Paul Menchini
 - [Bart Verheyde](mailto:bart.verheyde@ugent.be)
-- [effgarces](https://github.com/effgarces) fork maintainer
 - [attero](https://github.com/apfelchips)
+
+## Original Developer of Booked Scheduler, no longer active
+
+- [Nick Korbel, Twinkle Toes Software, LLC](https://www.twinkletoessoftware.com/services/)
 
 ## Translators
 
@@ -37,7 +55,8 @@
 - Veliša Bujić (Serbian)
 - Róbert Bere (Hungarian)
 
-If you want your information to be updated or mentioned here, please make a pull request, or contact us via chat.
+If you want your information to be updated or mentioned here, please make a
+pull request, or contact us via chat.
 
 ## Libraries
 
