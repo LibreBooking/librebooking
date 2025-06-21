@@ -10,6 +10,8 @@ require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
+use Smarty\Smarty;
+
 class SmartyPage extends Smarty
 {
     /**
@@ -32,8 +34,13 @@ class SmartyPage extends Smarty
      * @param Resources $resources
      * @param string $RootPath
      */
-    public function __construct(Resources &$resources = null, protected $RootPath = null)
-    {
+
+    public $plugins_dir;
+
+    public function __construct(
+        protected ?Resources $resources = null,
+        protected $RootPath = null
+    ) {
         parent::__construct();
 
         $base = __DIR__ . '/../../';
@@ -79,7 +86,7 @@ class SmartyPage extends Smarty
      * if custom template of the target language is not available.
      * @return string
      */
-    public function FetchLocalized($templateName, bool $enforceCustomTemplate, string $languageCode = null)
+    public function FetchLocalized($templateName, bool $enforceCustomTemplate, ?string $languageCode = null)
     {
         if ($languageCode == null) {
             $languageCode = $this->getTemplateVars('CurrentLanguage');
@@ -193,7 +200,6 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'formatdate', $this->FormatDate(...));
         $this->registerPlugin('function', 'format_date', $this->FormatDate(...));
         $this->registerPlugin('function', 'html_link', $this->PrintLink(...));
-        $this->registerPlugin('function', 'html_image', $this->PrintImage(...));
         $this->registerPlugin('function', 'control', $this->DisplayControl(...));
         $this->registerPlugin('function', 'validator', $this->Validator(...));
         $this->registerPlugin('function', 'textbox', $this->Textbox(...));
@@ -226,10 +232,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'formatcurrency', $this->FormatCurrency(...));
         $this->registerPlugin('function', 'linebreak', $this->LineBreak(...));
         $this->registerPlugin('modifier', 'urlencode', $this->UrlEncode(...));
-        $this->registerPlugin('modifier', 'explode', $this->Explode(...));
         $this->registerPlugin('modifier', 'html_entity_decode', $this->HtmlEntityDecode(...));
-        $this->registerPlugin('modifier', 'implode', $this->Implode(...));
-        $this->registerPlugin('modifier', 'join', $this->Join(...));
         $this->registerPlugin('modifier', 'intval', $this->Intval(...));
         $this->registerPlugin('modifier', 'strtolower', $this->Strtolower(...));
         $this->registerPlugin('function', 'datatable', $this->CreateDataTable(...));
@@ -346,24 +349,6 @@ class SmartyPage extends Smarty
             $formatted = str_replace($english_days[$date->Weekday()], $days[$date->Weekday()], $formatted);
         }
         return $formatted;
-    }
-
-    public function PrintImage($params, $smarty)
-    {
-        $alt = $params['alt'] ?? '';
-        $altKey = $params['altKey'] ?? '';
-        $width = $params['width'] ?? '';
-        $height = $params['height'] ?? '';
-        $imgPath = sprintf('%simg/%s', $this->RootPath, $params['src']);
-
-        $knownAttributes = ['alt', 'width', 'height', 'src', 'title', 'altKey'];
-        $attributes = $this->AppendAttributes($params, $knownAttributes);
-
-        if (!empty($altKey)) {
-            $alt = $this->Resources->GetString($altKey);
-        }
-
-        return "<img src=\"$imgPath\" title=\"$alt\" alt=\"$alt\"  $attributes />";
     }
 
     public function DisplayControl($params, $smarty)
@@ -1012,24 +997,9 @@ class SmartyPage extends Smarty
         return count($value, $mode);
     }
 
-    public function Explode($separator, $string)
-    {
-        return explode($separator, (string) $string);
-    }
-
-    public function Implode($separator, $array)
-    {
-        return implode($separator, $array);
-    }
-
     public function HtmlEntityDecode($string)
     {
         return html_entity_decode((string) $string);
-    }
-
-    public function Join($sep, $array)
-    {
-        return join($sep, $array);
     }
 
     public function Intval($string)
