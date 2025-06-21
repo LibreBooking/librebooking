@@ -11,7 +11,7 @@
     },
     "require": {
         "php": ">=8.2",
-        "smarty/smarty": "^4.5",
+        "smarty/smarty": "^5.5",
         "stripe/stripe-php": "^10.2",
         "monolog/monolog": "^2.9",
         "google/recaptcha": "1.2.*",
