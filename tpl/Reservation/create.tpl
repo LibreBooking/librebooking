@@ -460,7 +460,7 @@
                                 <input type="hidden" class="name" value="{$accessory->GetName()}" />
                                 <input type="hidden" class="id" value="{$accessory->GetId()}" />
                                 <input type="hidden" class="resource-ids"
-                                    value="{','|implode:$accessory->ResourceIds()}" />
+                                    value="{$accessory->ResourceIds()|join:','}" />
                                 <label for="accessory{$accessory->GetId()}"
                                     class="visually-hidden">{$accessory->GetName()}</label>
                                 {if $accessory->GetQuantityAvailable() == 1}
