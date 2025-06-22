@@ -22,7 +22,7 @@ server as LibreBooking.
 Our first step is to download the latest version
 of [SimpleSAMLphp](http://web.archive.org/web/20210303172340/https://simplesamlphp.org/) and install it on your web
 server. I recommend installing it outside your publicly visible directories and set up a subdomain pointing to the
-www directory. For example, if you install it to `/home/username/simplesamlphp` and you have LibreBookingrunning out of
+www directory. For example, if you install it to `/home/username/simplesamlphp` and you have LibreBooking running out of
 `/home/username/public\_html/librebooking`, then you’d create a subdomain such as `saml.librebooking.xpto` pointing to
 `/home/username/simplesamlphp/www`. The reason we do this is because the only files which need to be publicly visible in
 SimpleSAMLphp are located in the www directory. Exposing more than that opens unnecessary security holes.
