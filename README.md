@@ -28,6 +28,7 @@
 
 - [About](#-about)
 - [Features](#-features)
+- [Demo](#-demo)
 - [Screenshots](#-screenshots)
 - [Installation & Deployment](#-installation--deployment)
 - [Developer Documentation](#-developer-documentation)
@@ -53,6 +54,19 @@
 - [x] Custom themes and color schemes
 - [x] Plugin-ready architecture
 - [x] Outlook/Thunderbird integration through ics
+
+## 🧪 Demo
+
+A live demo instance of LibreBooking is available for testing:
+
+[Try the demo](https://librebooking-demo.fly.dev/)
+
+| Role  | Username | Password    |
+| ----- | -------- | ----------- |
+| Admin | `admin`  | `demoadmin` |
+| User  | `user`   | `demouser`  |
+
+Note: This instance is public and **resets every 20 minutes** to ensure a clean environment. Startup might take a few seconds, so please be patient.
 
 ## 📸 Screenshots
 
