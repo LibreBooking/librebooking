@@ -1,12 +1,10 @@
-# LibreBooking
-
-## LibreBooking Installation
+# LibreBooking Installation
 
 Note: for users without web hosting service or existing environment, packages like [XAMMP](http://www.apachefriends.org/en/index.html) or [WampServer](http://www.wampserver.com/en/) can help you get set up quickly.
 
-### Fresh Installation
+## Fresh Installation
 
-#### Server Configuration
+### Server Configuration
 
 In an **Apache** or similar server environment, some required modules for LibreBooking may not be enabled by default. The following modules (or their equivalents) are often not enabled as part of a standard installation but should be enabled for the proper operation of the LibreBooking application:
 
@@ -27,7 +25,7 @@ sudo a2enmod rewrite
 sudo service apache2 restart
 ```
 
-#### Application Deployment to Server
+### Application Deployment to Server
 
 Move the contents of the directory to your webserver's document root (or subsite).
 If you don't have direct access to your document root or use a hosting service, then transfer the directory to your web server's document root using FTP or [WinSCP](https://winscp.net/).
@@ -41,7 +39,7 @@ If using an (S)FTP client, check read/write/execute for Owner and Group on `/tpl
 LibreBooking will not work if PHP [session.autostart](http://www.php.net/manual/en/session.configuration.php#ini.session.auto-start) is enabled.
 Ensure this setting is disabled.
 
-#### Application Configuration
+### Application Configuration
 
 You can configure LibreBooking to fit your environments and needs or use the minimal default settings which should be enough for the application to work.
 We recommend you to change according to your specifics. Additional information on all configuration settings can be found in the application help page.
@@ -58,11 +56,11 @@ Note: If you try to load the application at this time (eg. <http://localhost/lib
 This is because there is no backend database configured yet.  
 So continue on ...
 
-#### Database Setup
+### Database Setup
 
 You have 2 ways to set up your database for the application to work.
 
-##### Automatic Database Setup
+#### Automatic Database Setup
 
 You must have the application configured correctly before running the automated install.
 
@@ -72,11 +70,11 @@ Note: Some may see directory permission issues displayed on the page.
 The web server must have write access to `/librebooking/tpl_c` and `/librebooking/tpl`.  
 If you cannot provide the required permission. Contact your web server administrator or hosting service to resolve or run the manual install
 
-##### Manual Database Setup
+#### Manual Database Setup
 
 The packaged database scripts make assumptions about your desired database configuration and set default values.  
 Please edit them to suit your environment before running. The files are located in `librebooking/database_schema/`  
-Import the following sql files in the listed order (we recommend [phpMyAdmin]("https://www.phpmyadmin.net/"):
+Import the following sql files in the listed order (we recommend [phpMyAdmin](https://www.phpmyadmin.net/):
 
 On a remote host with no database creation privileges  
 If you are installing LibreBooking on a remote host, please follow these steps.  
@@ -111,7 +109,7 @@ These users are available for testing your installation.
 
 You are done. Try to load the application at (eg. [http://yourhostname/librebooking/Web/](http://yourhostname/librebooking/Web/)).
 
-#### Registering the Administrator Account
+### Registering the Administrator Account
 
 After the database has been set up you will need to register the account for your application administrator. Navigate to register.php register an account with email address set in `$conf['settings']['admin.email']`.
 
