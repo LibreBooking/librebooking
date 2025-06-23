@@ -63,7 +63,7 @@ The documentation will be generated in `/.phpdoc/build`.
 
 ### [PHP-CS-Fixer](https://github.com/FriendsOfPhp/PHP-CS-Fixer#usage)
 
-`compser lint` and `composer fix`  
+`composer lint` and `composer fix`  
 lints (just warnings) and fixes (changes files) code formating to [PSR-12]
 
 ## Application Structure

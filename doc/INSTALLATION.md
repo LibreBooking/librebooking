@@ -32,7 +32,7 @@ If you don't have direct access to your document root or use a hosting service, 
 
 Copy `/config/config.dist.php` to `/config/config.php` and adjust the settings for your environment.
 
-Important! The web server must have write access (0755) to `/librebooking/tpl_c` and `/librebooking/tpl` [want to know why?](http://www.smarty.net/docs/en/variable.compile.dir.tpl")
+Important! The web server must have write access (0755) to `/librebooking/tpl_c` and `/librebooking/tpl` [want to know why?](http://www.smarty.net/docs/en/variable.compile.dir.tpl)
 
 If using an (S)FTP client, check read/write/execute for Owner and Group on `/tpl`, `/tpl_c`, and `/uploads`
 
