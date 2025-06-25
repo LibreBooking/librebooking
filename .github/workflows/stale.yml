@@ -20,10 +20,11 @@ jobs:
         with:
           stale-issue-label: "stale"
           stale-pr-label: "stale"
-          exempt-assignees: 'effgarces'
+          # If an issue/PR has an assignee it won't be marked as stale
+          exempt-all-assignees: true
           operations-per-run: 500  # API calls per run, allowed 5000 per hour.
 
-          stale-issue-message: >
+          stale-issue-message: |
             This issue was marked stale because it has been open 60 days with no
             activity. Please remove the stale label or comment on this issue. Otherwise,
             it will be closed in 15 days.
@@ -44,9 +45,13 @@ jobs:
             We value your input. If you can help provide a fix, we'd be happy
             to keep this issue open and support your efforts.
 
+            This is documented in CONTRIBUTING.md
+
+            https://github.com/LibreBooking/app/blob/develop/CONTRIBUTING.md
+
           days-before-issue-stale: 60
           days-before-issue-close: 15
-          close-issue-message: >
+          close-issue-message: |
             This issue was closed because it has been marked stale for 15 days
             with no activity.
 
@@ -72,6 +77,8 @@ jobs:
 
             This is documented in CONTRIBUTING.md
 
+            https://github.com/LibreBooking/app/blob/develop/CONTRIBUTING.md
+
           stale-pr-message: >
             This Pull Request (PR) was marked stale because it has been open 90 days
             with no activity.  Please remove the stale label or comment on this PR.
@@ -81,4 +88,3 @@ jobs:
           close-pr-message: >
             This PR was closed because it has been marked stale for 15 days with no
             activity. If this PR is still valid, please re-open.
-
