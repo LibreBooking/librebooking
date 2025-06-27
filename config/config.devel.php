@@ -1,5 +1,11 @@
 <?php
 
+/** !!!!!!!!!!!! DEPRECATED !!!!!!!!!!!!!!!!!!
+ * This file is deprecated and will be removed in a future release.
+ * Please use config.example.php instead.
+ * !!!!!!!!!!!! DEPRECATED !!!!!!!!!!!!!!!!!!
+*/
+
 mysqli_report(MYSQLI_REPORT_OFF);
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set('display_errors', 1);
