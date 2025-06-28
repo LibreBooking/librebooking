@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 3.0.1 - 2025-06-25
+
+Update the version number in the code base. This wa missed in the v3.0.0
+release.
+
+**Full Changelog**: <https://github.com/LibreBooking/app/compare/v3.0.0...v3.0.1>
+
+## 3.0.0 - 2025-06-24
+
+### Highlights
+
+* Bootstrap 5 Framework and Bootstrap icons now used.
+* Modernization of the user interface.
+* Integration of libraries such as Datatables and Trumbowyg.
+* Migrate external libraries to be pulled in via composer instead of storing the code for those projects in the repository. Also upgraded versions of external libraries used.
+* Improvements to the CI system.
+* Thanks to @labmecanicatec and @lucs7 for all their work this release.
+
+**Full Changelog**: <https://github.com/LibreBooking/app/compare/2.8.6.2...v3.0.0>
+
 ## 2.8.6.2 - 2024-08-18
 
 See all the changes at <https://github.com/LibreBooking/app/commits/develop>
