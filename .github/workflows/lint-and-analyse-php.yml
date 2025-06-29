@@ -72,7 +72,7 @@ jobs:
           composer-options: "--ignore-platform-req=ext-zip"
 
       - name: Create config.php for unit tests
-        run: cp config/config.dist.php config/config.php
+        run: cp config/config.example.php config/config.php
 
       - name: Unit Tests
         run: composer phpunit

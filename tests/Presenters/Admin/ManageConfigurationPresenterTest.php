@@ -127,7 +127,7 @@ class ManageConfigurationPresenterTest extends TestBase
     private function getDefaultConfigValues()
     {
         $config = new Config();
-        $current = $config->parseConfig(ROOT_DIR . 'config/config.dist.php', 'PHPArray');
+        $current = $config->parseConfig(ROOT_DIR . 'config/config.example.php', 'PHPArray');
         $currentValues = $current->getItem("section", Configuration::SETTINGS)->toArray();
         return $currentValues[Configuration::SETTINGS];
     }

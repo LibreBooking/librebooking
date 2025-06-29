@@ -30,7 +30,7 @@ sudo service apache2 restart
 Move the contents of the directory to your webserver's document root (or subsite).
 If you don't have direct access to your document root or use a hosting service, then transfer the directory to your web server's document root using FTP or [WinSCP](https://winscp.net/).
 
-Copy `/config/config.dist.php` to `/config/config.php` and adjust the settings for your environment.
+Copy `/config/config.example.php` to `/config/config.php` and adjust the settings for your environment.
 
 Important! The web server must have write access (0755) to `/librebooking/tpl_c` and `/librebooking/tpl` [want to know why?](http://www.smarty.net/docs/en/variable.compile.dir.tpl)
 
