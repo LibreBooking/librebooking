@@ -52,7 +52,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         $this->page = $page;
         $this->configSettings = $settings;
         $this->configFilePath = ROOT_DIR . 'config/config.php';
-        $this->configFilePathDist = ROOT_DIR . 'config/config.dist.php';
+        $this->configFilePathDist = ROOT_DIR . 'config/config.example.php';
 
         $this->AddAction(ConfigActions::Update, 'Update');
         $this->AddAction(ConfigActions::SetHomepage, 'SetHomepage');
@@ -283,7 +283,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
                     $rootDir = ROOT_DIR . 'plugins/' . $requestedConfigFile;
 
-                    $distFile = glob("$rootDir/*config.dist.php");
+                    $distFile = glob("$rootDir/*config.example.php");
                     $configFile = glob("$rootDir/*config.php");
                     if (count($distFile) == 1 && count($configFile) == 0) {
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));

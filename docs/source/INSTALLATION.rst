@@ -45,7 +45,7 @@ subsite). If you don’t have direct access to your document root or use a
 hosting service, then transfer the directory to your web server’s
 document root using FTP or `WinSCP <https://winscp.net/>`__.
 
-Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
+Copy ``/config/config.example.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
 
 Important! The web server must have write access (0755) to
