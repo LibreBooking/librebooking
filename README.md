@@ -132,7 +132,7 @@ docker-compose up -d
   $conf['settings']['css.theme'] = 'default';
   ```
 
-- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'pastel_blue'
+- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
 - Customize `Web/css/librebooking.css`.
 
 ## 🔒 ReCaptcha
