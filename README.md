@@ -41,7 +41,17 @@
 
 ## 🚀 About
 
-**LibreBooking** is an open-source scheduling solution, forked from Booked Scheduler. It offers a flexible, mobile-friendly, and extensible interface for organizations to manage resource reservations. The repository for the last open source version of Booked Scheduler is maintained here; the `develop` branch contains the latest working code (beta), while `master` is the stable release.
+**LibreBooking** is an open-source resource scheduling solution. It provides a
+flexible, mobile-friendly, and extensible interface for organizations to manage
+resource reservations.
+
+The repository for LibreBooking is hosted on GitHub at
+<https://github.com/LibreBooking/app>; the `develop` branch contains the latest
+code.
+
+LibreBooking is a fork of Booked Scheduler, based on Booked Scheduler's last
+open-source version released in 2020. Since then, LibreBooking has evolved
+significantly and diverged from the original project.
 
 ## ✨ Features
 
@@ -122,7 +132,7 @@ docker-compose up -d
   $conf['settings']['css.theme'] = 'default';
   ```
 
-- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'pastel_blue'
+- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
 - Customize `Web/css/librebooking.css`.
 
 ## 🔒 ReCaptcha
