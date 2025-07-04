@@ -16,10 +16,11 @@
             $controlId.attr('max', maxDate);
         {/if}
 
-        {if $DefaultDate}
-            var defaultDate = {dateFormat date=$DefaultDate};
-            $controlId.val(defaultDate);
-
+        {if $smarty.server.SCRIPT_NAME|basename != 'reservation.php'}
+            {if $DefaultDate}
+                var defaultDate = {dateFormat date=$DefaultDate};
+                $controlId.val(defaultDate);
+            {/if}
         {/if}
 
         {if $AltId neq ''}
