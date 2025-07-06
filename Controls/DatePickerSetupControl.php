@@ -43,7 +43,11 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 
-        $this->Display('Controls/DateSetup.tpl');
+        if ($controlId == 'datepicker') {
+            $this->Display('Controls/DatePickerSetup.tpl');
+        } else {
+            $this->Display('Controls/DateSetup.tpl');
+        }
     }
 
     private function SetDefault($key, $value)
