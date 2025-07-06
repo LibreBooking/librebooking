@@ -369,7 +369,6 @@
 {include file="javascript-includes.tpl"}
 {jsfile src="participation.js"}
 {jsfile src="approval.js"}
-{jsfile src="js/jquery.autogrow.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="userPopup.js"}
 {jsfile src="date-helper.js"}

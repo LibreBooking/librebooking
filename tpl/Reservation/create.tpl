@@ -532,7 +532,6 @@
 {control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
 {control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone)}
 
-{jsfile src="js/jquery.autogrow.js"}
 {jsfile src="js/moment.min.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="userPopup.js"}
@@ -643,7 +642,6 @@
             return false;
         });
 
-        $('#description').autogrow();
         $('#userName').bindUserDetails();
 
         // jsPDF
