@@ -1,0 +1,41 @@
+name: Docs
+
+# If a pull-request is pushed then cancel all previously running jobs related
+# to that pull-request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+  pull_request:
+    branches:
+      - develop
+      - master
+
+env:
+  PY_COLORS: 1
+
+jobs:
+  sphinx:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Set up Python
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install tox
+      - name: Build docs
+        env:
+          TOXENV: docs
+        run: tox
+      - name: Archive generated docs
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: html-docs
+          path: docs/build/html/

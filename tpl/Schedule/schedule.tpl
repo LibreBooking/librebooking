@@ -90,13 +90,20 @@
                                 <a href="#" id="make_default" class="link-primary me-2" style="display:none;"><i
                                         class="bi bi-star-fill"></i></a>
                                 <a href="#" class="schedule-style me-1" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard}">{html_image src="table.png" altKey="StandardScheduleDisplay"}</a>
-                                <a href="#" class="schedule-style me-1" id="schedule_tall"
-                                    schedule-display="{ScheduleStyle::Tall}">{html_image src="table-tall.png" altKey="TallScheduleDisplay"}</a>
+                                    schedule-display="{ScheduleStyle::Standard}">
+                                    <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
+                                </a>
+                                <a href="#" class="schedule-style me-1" id="schedule_tall" schedule-display="{ScheduleStyle::Tall}">
+                                    <img src="img/table-tall.png" alt="{translate key='TallScheduleDisplay'}" />
+                                </a>
                                 <a href="#" class="schedule-style d-none d-md-block me-1" id="schedule_wide"
-                                    schedule-display="{ScheduleStyle::Wide}">{html_image src="table-wide.png" altKey="WideScheduleDisplay"}</a>
+                                    schedule-display="{ScheduleStyle::Wide}">
+                                    <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
+                                </a>
                                 <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek}">{html_image src="table-week.png" altKey="CondensedWeekScheduleDisplay"}</a>
+                                    schedule-display="{ScheduleStyle::CondensedWeek}">
+                                    <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
+                                </a>
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
                                 <div class="d-flex align-items-center"><i class="bi bi-rss-fill link-primary me-1"></i>
@@ -425,7 +432,7 @@
         cookieName: "{$CookieName}",
         scheduleId: "{$ScheduleId|escape:'javascript'}",
         scriptUrl: '{$ScriptUrl}',
-        selectedResources: [{','|implode:$ResourceIds}],
+        selectedResources: [{$ResourceIds|join:','}],
         specificDates: [{foreach from=$SpecificDates item=d}'{$d->Format('Y-m-d')}',{/foreach}],
         updateReservationUrl: "{$Path}ajax/reservation_move.php",
         lockTableHead: "{if isset($LockTableHead)}{$LockTableHead}{/if}",

@@ -1,10 +1,12 @@
 <?php
 
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-  require_once ROOT_DIR . 'vendor/autoload.php';
+    require_once ROOT_DIR . 'vendor/autoload.php';
 }
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
+
+use Smarty\Smarty;
 
 class SmartyEmail extends Smarty
 {
@@ -29,8 +31,8 @@ class SmartyEmail extends Smarty
         $this->cache_dir = ROOT_DIR . 'cache';
 
         $cacheTemplates = Configuration::Instance()->GetKey(ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
-        $this->compile_check = !$cacheTemplates;	// should be set to false in production
-        $this->force_compile = !$cacheTemplates;	// should be set to false in production
+        $this->compile_check = !$cacheTemplates;    // should be set to false in production
+        $this->force_compile = !$cacheTemplates;    // should be set to false in production
 
         $this->RegisterFunctions();
     }

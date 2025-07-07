@@ -12,7 +12,7 @@
     <div class="col-sm-3 col-6">{formatdate date=$reservation->StartDate->ToTimezone($Timezone) key=dashboard} -
         {formatdate date=$reservation->EndDate->ToTimezone($Timezone) key=dashboard}</div>
     {*<div class="col-sm-2 col-6">{formatdate date=$reservation->EndDate->ToTimezone($Timezone) key=dashboard}</div>*}
-    <div class="col-sm-{if $checkin || $checkout}2{else}3{/if} col-12">{', '|join:$reservation->ResourceNames}</div>
+    <div class="col-sm-{if $checkin || $checkout}2{else}3{/if} col-12">{$reservation->ResourceNames|join:', '}</div>
     {if $allowCheckin}
         {if $checkin}
             <div class="col-sm-1 col-12">

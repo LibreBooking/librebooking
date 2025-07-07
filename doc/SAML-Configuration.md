@@ -22,7 +22,7 @@ server as LibreBooking.
 Our first step is to download the latest version
 of [SimpleSAMLphp](http://web.archive.org/web/20210303172340/https://simplesamlphp.org/) and install it on your web
 server. I recommend installing it outside your publicly visible directories and set up a subdomain pointing to the
-www directory. For example, if you install it to `/home/username/simplesamlphp` and you have LibreBookingrunning out of
+www directory. For example, if you install it to `/home/username/simplesamlphp` and you have LibreBooking running out of
 `/home/username/public\_html/librebooking`, then you’d create a subdomain such as `saml.librebooking.xpto` pointing to
 `/home/username/simplesamlphp/www`. The reason we do this is because the only files which need to be publicly visible in
 SimpleSAMLphp are located in the www directory. Exposing more than that opens unnecessary security holes.
@@ -50,7 +50,7 @@ subdomain, this should be something like `https://saml.yourdomain.com`
 for SimpleSAML.
 
 `trusted.url.domains` - This should be set to an array of domains that will participate in the SSO
-handshake. I use `array(‘saml.librebooking.com’, ‘librebooking.com’)`
+handshake. I use `array('saml.librebooking.com', 'librebooking.com')`
 
 `session.cookie.domain` - This should be set to the wildcard subdomain of your primary domain. For example, I
 use `.librebooking.com`
@@ -121,7 +121,7 @@ LibreBooking.
 
 There are only 2 absolutely required fields to map – username/userid and email. For example, if the
 username is being sent across in the SAML payload as `urn:oid:0.1.2.3` you’d set `simplesamlphp.username` to this value
-like `$conf[‘settings][‘simplesamlphp.username’] = ‘urn:oid:0.1.2.3’;`
+like `$conf['settings']['simplesamlphp.username'] = 'urn:oid:0.1.2.3';`
 
 This is the same for all the other
 attributes. If you don’t know the attributes coming across then you can add the following line to

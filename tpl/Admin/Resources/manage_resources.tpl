@@ -2389,7 +2389,7 @@
 				resource.images.push('{resource_image image=$image}');
 			{/foreach}
 
-			resource.resourceGroupIds = [{','|join:$resource->GetResourceGroupIds()}];
+			resource.resourceGroupIds = [{$resource->GetResourceGroupIds()|join:','}];
 
 			resourceManagement.add(resource);
 		{/foreach}

@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/LibreBooking/app)](https://github.com/LibreBooking/app/issues)
 [![Last commit](https://img.shields.io/github/last-commit/LibreBooking/app)](https://github.com/LibreBooking/app/commits)
 [![GitHub release](https://img.shields.io/github/v/release/LibreBooking/app?include_prereleases)](https://github.com/LibreBooking/app/releases)
-[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE.md)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/LibreBooking/app/blob/develop/LICENSE.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/network)
@@ -28,6 +28,7 @@
 
 - [About](#-about)
 - [Features](#-features)
+- [Demo](#-demo)
 - [Screenshots](#-screenshots)
 - [Installation & Deployment](#-installation--deployment)
 - [Developer Documentation](#-developer-documentation)
@@ -40,7 +41,17 @@
 
 ## 🚀 About
 
-**LibreBooking** is an open-source scheduling solution, forked from Booked Scheduler. It offers a flexible, mobile-friendly, and extensible interface for organizations to manage resource reservations. The repository for the last open source version of Booked Scheduler is maintained here; the `develop` branch contains the latest working code (beta), while `master` is the stable release.
+**LibreBooking** is an open-source resource scheduling solution. It provides a
+flexible, mobile-friendly, and extensible interface for organizations to manage
+resource reservations.
+
+The repository for LibreBooking is hosted on GitHub at
+<https://github.com/LibreBooking/app>; the `develop` branch contains the latest
+code.
+
+LibreBooking is a fork of Booked Scheduler, based on Booked Scheduler's last
+open-source version released in 2020. Since then, LibreBooking has evolved
+significantly and diverged from the original project.
 
 ## ✨ Features
 
@@ -53,6 +64,19 @@
 - [x] Custom themes and color schemes
 - [x] Plugin-ready architecture
 - [x] Outlook/Thunderbird integration through ics
+
+## 🧪 Demo
+
+A live demo instance of LibreBooking is available for testing:
+
+[Try the demo](https://librebooking-demo.fly.dev/)
+
+| Role  | Username | Password    |
+| ----- | -------- | ----------- |
+| Admin | `admin`  | `demoadmin` |
+| User  | `user`   | `demouser`  |
+
+Note: This instance is public and **resets every 20 minutes** to ensure a clean environment. Startup might take a few seconds, so please be patient.
 
 ## 📸 Screenshots
 
@@ -72,7 +96,8 @@ To run LibreBooking from a prebuilt release, your server needs:
 - PHP >= 8.2 with the  extensions: pdo, mbstring, openssl, tokenizer, json, curl, xml, ctype, bcmath, fileinfo
 - A web server like Apache or Nginx
 - MySQL >= 5.5
-For full setup instructions, see [INSTALLATION.md](./doc/INSTALLATION.md)
+For full setup instructions, see
+[INSTALLATION.md](https://github.com/LibreBooking/app/blob/develop/doc/INSTALLATION.md)
 
 ### Docker Deployment
 
@@ -86,10 +111,17 @@ docker-compose up -d
 
 ## 💻 Developer Documentation
 
-- See [doc/README.md](./doc/README.md) for developer notes.
-- See [doc/API.md](./doc/API.md) for API notes.
-- See [doc/Oauth2-Configuration.md](./doc/Oauth2-Configuration.md) for Oauth2 configuration.
-- See [doc/SAML-Configuration.md](./doc/SAML-Configuration.md) for SAML configuration.
+- See
+  [doc/README.md](https://github.com/LibreBooking/app/blob/develop/doc/README.md)
+  for developer notes.
+- See [doc/API.md](https://github.com/LibreBooking/app/blob/develop/doc/API.md)
+  for API notes.
+- See
+  [doc/Oauth2-Configuration.md](https://github.com/LibreBooking/app/blob/develop/doc/Oauth2-Configuration.md)
+  for Oauth2 configuration.
+- See
+  [doc/SAML-Configuration.md](https://github.com/LibreBooking/app/blob/develop/doc/SAML-Configuration.md)
+  for SAML configuration.
 - Codebase follows PSR-12 standards and GitHub Flow.
 
 ## 🎨 Configuration & Theming
@@ -100,7 +132,7 @@ docker-compose up -d
   $conf['settings']['css.theme'] = 'default';
   ```
 
-- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'pastel_blue'
+- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
 - Customize `Web/css/librebooking.css`.
 
 ## 🔒 ReCaptcha
