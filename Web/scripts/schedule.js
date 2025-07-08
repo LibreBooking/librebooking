@@ -1017,12 +1017,12 @@ function Schedule(opts, resourceGroups) {
             var ref = $(this).attr('ref');
             reservations.find('td[ref="' + ref + '"]').addClass('hilite');
         });
-     
+
          reservations.delegate('.clickres:not(.reserved)', 'mouseleave', function () {
             if (selectingTds) {
                 return;
             }
-     
+
             $(this).siblings('.resourcename').removeClass('hilite');
             var ref = $(this).attr('ref');
             reservations.find('td[ref="' + ref + '"]').removeClass('hilite');
@@ -1199,7 +1199,7 @@ function ChangeGroup(node) {
 }
 
 function AddSpecificDate(dateText, inst) {
-    var formattedDate = inst.selectedYear + '-' + (inst.selectedMonth + 1) + '-' + inst.selectedDay;
+    var formattedDate = inst.selectedYear + '-' + (inst.selectedMonth + 1).padStart(2, '0') + '-' + inst.selectedDay.padStart(2, '0');
     if (scheduleSpecificDates.indexOf(formattedDate) != -1) {
         return;
     }
@@ -1214,12 +1214,11 @@ function dpDateChanged(dateText, inst) {
     if ($('#multidateselect').is(':checked')) {
         AddSpecificDate(dateText, inst);
     } else {
-
         if (inst) {
-            ChangeDate(inst.selectedYear, inst.selectedMonth + 1, inst.selectedDay);
+            ChangeDate(inst.selectedYear, (inst.selectedMonth + 1).toString().padStart(2, '0') , inst.selectedDay.toString().padStart(2, '0'));
         } else {
             var date = new Date();
-            ChangeDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+            ChangeDate(date.getFullYear(), (date.getMonth() + 1).padStart(2, '0'), date.getDate().padStart(2, '0'));
         }
     }
 }
@@ -1244,8 +1243,6 @@ function RedirectToSelf(queryStringParam, regexMatch, substitution, preProcess) 
     } else {
         newUrl = newUrl + "?" + substitution;
     }
-
     newUrl = newUrl.replace("#", "");
-
     window.location = newUrl;
 }
