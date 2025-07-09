@@ -39,10 +39,9 @@ jobs:
       - name: markdownlint-cli2-action
         uses: DavidAnson/markdownlint-cli2-action@v20
         with:
-          config: 'doc/.markdownlint.yml'
+          config: 'docs/.markdownlint.yml'
           globs: |
             *.md
-            doc/*.md
 
   phpunit:
     runs-on: ubuntu-latest
