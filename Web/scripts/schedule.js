@@ -1199,7 +1199,7 @@ function ChangeGroup(node) {
 }
 
 function AddSpecificDate(dateText, inst) {
-    var formattedDate = inst.selectedYear + '-' + (inst.selectedMonth + 1).padStart(2, '0') + '-' + inst.selectedDay.padStart(2, '0');
+    var formattedDate = inst.selectedYear + '-' + (inst.selectedMonth + 1).toString().padStart(2, '0') + '-' + inst.selectedDay.toString().padStart(2, '0');
     if (scheduleSpecificDates.indexOf(formattedDate) != -1) {
         return;
     }
@@ -1218,7 +1218,7 @@ function dpDateChanged(dateText, inst) {
             ChangeDate(inst.selectedYear, (inst.selectedMonth + 1).toString().padStart(2, '0') , inst.selectedDay.toString().padStart(2, '0'));
         } else {
             var date = new Date();
-            ChangeDate(date.getFullYear(), (date.getMonth() + 1).padStart(2, '0'), date.getDate().padStart(2, '0'));
+            ChangeDate(date.getFullYear(), (date.getMonth() + 1).toString().padStart(2, '0'), date.getDate().toString().padStart(2, '0'));
         }
     }
 }
