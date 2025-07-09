@@ -123,7 +123,7 @@ Application Structure
                /Authentication         Authentication (login)
                /Authorization          Authorization (access)
                /Reporting              Logic for generating and running reports
-               /Reservation        
+               /Reservation
                    /Notification           Post-reservation logic
                    /Persistence            Creating, updating, deleting reservation information
                    /Validation             Pre-reservation logic

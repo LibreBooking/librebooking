@@ -71,19 +71,19 @@ GetAllAccessories
    {
        "accessories": [
            {
-               "id": 1, 
-               "name": "accessoryName", 
-               "quantityAvailable": 3, 
-               "associatedResourceCount": 10, 
-               "creditCount": 1, 
-               "peakCreditCount": 2, 
-               "creditApplicability": 1, 
-               "creditsChargedAllSlots": null, 
-               "links": [], 
+               "id": 1,
+               "name": "accessoryName",
+               "quantityAvailable": 3,
+               "associatedResourceCount": 10,
+               "creditCount": 1,
+               "peakCreditCount": 2,
+               "creditApplicability": 1,
+               "creditsChargedAllSlots": null,
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -102,22 +102,22 @@ service is secure and requires authentication*
 .. code:: json
 
    {
-       "id": 1, 
-       "name": "accessoryName", 
-       "quantityAvailable": 10, 
+       "id": 1,
+       "name": "accessoryName",
+       "quantityAvailable": 10,
        "associatedResources": [
            {
-               "resourceId": 1, 
-               "minQuantity": 4, 
-               "maxQuantity": 10, 
-               "links": [], 
+               "resourceId": 1,
+               "minQuantity": 4,
+               "maxQuantity": 10,
+               "links": [],
                "message": null
            }
-       ], 
-       "creditCount": 1, 
-       "peakCreditCount": 2, 
-       "creditApplicability": 1, 
-       "links": [], 
+       ],
+       "creditCount": 1,
+       "peakCreditCount": 2,
+       "creditApplicability": 1,
+       "links": [],
        "message": null
    }
 
@@ -146,20 +146,20 @@ Unstructured response of type *AccountCreatedResponse*
 .. code:: json
 
    {
-       "password": "plaintextpassword", 
-       "acceptTermsOfService": true, 
-       "firstName": "FirstName", 
-       "lastName": "LastName", 
-       "emailAddress": "email@address.com", 
-       "userName": "username", 
-       "language": "en_us", 
-       "timezone": "America/Chicago", 
-       "phone": "phone", 
-       "organization": "organization", 
-       "position": "position", 
+       "password": "plaintextpassword",
+       "acceptTermsOfService": true,
+       "firstName": "FirstName",
+       "lastName": "LastName",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "language": "en_us",
+       "timezone": "America/Chicago",
+       "phone": "phone",
+       "organization": "organization",
+       "position": "position",
        "customAttributes": [
            {
-               "attributeId": 1, 
+               "attributeId": 1,
                "attributeValue": "attribute value"
            }
        ]
@@ -183,18 +183,18 @@ UpdateAccount
 .. code:: json
 
    {
-       "firstName": "FirstName", 
-       "lastName": "LastName", 
-       "emailAddress": "email@address.com", 
-       "userName": "username", 
-       "language": "en_us", 
-       "timezone": "America/Chicago", 
-       "phone": "phone", 
-       "organization": "organization", 
-       "position": "position", 
+       "firstName": "FirstName",
+       "lastName": "LastName",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "language": "en_us",
+       "timezone": "America/Chicago",
+       "phone": "phone",
+       "organization": "organization",
+       "position": "position",
        "customAttributes": [
            {
-               "attributeId": 1, 
+               "attributeId": 1,
                "attributeValue": "attribute value"
            }
        ]
@@ -245,27 +245,27 @@ Gets the currently authenticated users’s account information
 .. code:: json
 
    {
-       "userId": 1, 
-       "firstName": "first", 
-       "lastName": "last", 
-       "emailAddress": "email@address.com", 
-       "userName": "username", 
-       "language": "en_us", 
-       "timezone": "America/Chicago", 
-       "phone": "phone", 
-       "organization": "organization", 
-       "position": "position", 
+       "userId": 1,
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "language": "en_us",
+       "timezone": "America/Chicago",
+       "phone": "phone",
+       "organization": "organization",
+       "position": "position",
        "customAttributes": [
            {
-               "id": 123, 
-               "label": "label", 
-               "value": "value", 
-               "links": [], 
+               "id": 123,
+               "label": "label",
+               "value": "value",
+               "links": [],
                "message": null
            }
-       ], 
-       "icsUrl": "webcal://path-to-calendar", 
-       "links": [], 
+       ],
+       "icsUrl": "webcal://path-to-calendar",
+       "links": [],
        "message": null
    }
 
@@ -322,25 +322,25 @@ CreateCustomAttribute
 .. code:: json
 
    {
-       "label": "attribute name", 
-       "type": 1, 
-       "categoryId": 1, 
-       "regex": "validation regex", 
-       "required": true, 
+       "label": "attribute name",
+       "type": 1,
+       "categoryId": 1,
+       "regex": "validation regex",
+       "required": true,
        "possibleValues": [
-           "possible", 
-           "values", 
+           "possible",
+           "values",
            "only valid for select list"
-       ], 
-       "sortOrder": 100, 
+       ],
+       "sortOrder": 100,
        "appliesToIds": [
            10
-       ], 
-       "adminOnly": true, 
-       "isPrivate": true, 
-       "secondaryCategoryId": 1, 
+       ],
+       "adminOnly": true,
+       "isPrivate": true,
+       "secondaryCategoryId": 1,
        "secondaryEntityIds": [
-           1, 
+           1,
            2
        ]
    }
@@ -371,17 +371,17 @@ UpdateCustomAttribute
 .. code:: json
 
    {
-       "attributeId": 1, 
+       "attributeId": 1,
        "links": [
            {
-               "href": "http://url/to/attribute", 
+               "href": "http://url/to/attribute",
                "title": "get_custom_attribute"
-           }, 
+           },
            {
-               "href": "http://url/to/update/attribute", 
+               "href": "http://url/to/update/attribute",
                "title": "update_custom_attribute"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -390,25 +390,25 @@ UpdateCustomAttribute
 .. code:: json
 
    {
-       "label": "attribute name", 
-       "type": 1, 
-       "categoryId": 1, 
-       "regex": "validation regex", 
-       "required": true, 
+       "label": "attribute name",
+       "type": 1,
+       "categoryId": 1,
+       "regex": "validation regex",
+       "required": true,
        "possibleValues": [
-           "possible", 
-           "values", 
+           "possible",
+           "values",
            "only valid for select list"
-       ], 
-       "sortOrder": 100, 
+       ],
+       "sortOrder": 100,
        "appliesToIds": [
            10
-       ], 
-       "adminOnly": true, 
-       "isPrivate": true, 
-       "secondaryCategoryId": 1, 
+       ],
+       "adminOnly": true,
+       "isPrivate": true,
+       "secondaryCategoryId": 1,
        "secondaryEntityIds": [
-           1, 
+           1,
            2
        ]
    }
@@ -437,32 +437,32 @@ GetCategoryAttributes
    {
        "attributes": [
            {
-               "id": 1, 
-               "label": "display label", 
-               "type": "Allowed values for type: 4 (checkbox), 2 (multi line), 3 (select list), 1 (single line)", 
-               "categoryId": "Allowed values for category: 1 (reservation), 4 (resource), 5 (resource type), 2 (user)", 
-               "regex": "validation regex", 
-               "required": true, 
+               "id": 1,
+               "label": "display label",
+               "type": "Allowed values for type: 4 (checkbox), 2 (multi line), 3 (select list), 1 (single line)",
+               "categoryId": "Allowed values for category: 1 (reservation), 4 (resource), 5 (resource type), 2 (user)",
+               "regex": "validation regex",
+               "required": true,
                "possibleValues": [
-                   "possible", 
+                   "possible",
                    "values"
-               ], 
-               "sortOrder": 100, 
+               ],
+               "sortOrder": 100,
                "appliesToIds": [
                    10
-               ], 
-               "adminOnly": true, 
-               "isPrivate": true, 
-               "secondaryCategoryId": 1, 
+               ],
+               "adminOnly": true,
+               "isPrivate": true,
+               "secondaryCategoryId": 1,
                "secondaryEntityIds": [
-                   1, 
+                   1,
                    2
-               ], 
-               "links": [], 
+               ],
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -482,28 +482,28 @@ Gets all custom attribute definitions for the requested attribute
 .. code:: json
 
    {
-       "id": 1, 
-       "label": "display label", 
-       "type": "Allowed values for type: 4 (checkbox), 2 (multi line), 3 (select list), 1 (single line)", 
-       "categoryId": "Allowed values for category: 1 (reservation), 4 (resource), 5 (resource type), 2 (user)", 
-       "regex": "validation regex", 
-       "required": true, 
+       "id": 1,
+       "label": "display label",
+       "type": "Allowed values for type: 4 (checkbox), 2 (multi line), 3 (select list), 1 (single line)",
+       "categoryId": "Allowed values for category: 1 (reservation), 4 (resource), 5 (resource type), 2 (user)",
+       "regex": "validation regex",
+       "required": true,
        "possibleValues": [
-           "possible", 
+           "possible",
            "values"
-       ], 
-       "sortOrder": 100, 
+       ],
+       "sortOrder": 100,
        "appliesToIds": [
            10
-       ], 
-       "adminOnly": true, 
-       "isPrivate": true, 
-       "secondaryCategoryId": 1, 
+       ],
+       "adminOnly": true,
+       "isPrivate": true,
+       "secondaryCategoryId": 1,
        "secondaryEntityIds": [
-           1, 
+           1,
            2
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -525,7 +525,7 @@ Deletes an existing custom attribute
 .. code:: json
 
    {
-       "links": [], 
+       "links": [],
        "message": "The item was deleted"
    }
 
@@ -555,7 +555,7 @@ No response
 .. code:: json
 
    {
-       "userId": null, 
+       "userId": null,
        "sessionToken": null
    }
 
@@ -573,12 +573,12 @@ Authenticates an existing LibreBooking user
 .. code:: json
 
    {
-       "sessionToken": "sessiontoken", 
-       "sessionExpires": "2021-03-08T09:56:04+0000", 
-       "userId": 123, 
-       "isAuthenticated": true, 
-       "version": "1.0", 
-       "links": [], 
+       "sessionToken": "sessiontoken",
+       "sessionExpires": "2021-03-08T09:56:04+0000",
+       "userId": 123,
+       "isAuthenticated": true,
+       "version": "1.0",
+       "links": [],
        "message": null
    }
 
@@ -624,17 +624,17 @@ Creates a new group
 .. code:: json
 
    {
-       "attributeId": 1, 
+       "attributeId": 1,
        "links": [
            {
-               "href": "http://url/to/attribute", 
+               "href": "http://url/to/attribute",
                "title": "get_custom_attribute"
-           }, 
+           },
            {
-               "href": "http://url/to/update/attribute", 
+               "href": "http://url/to/update/attribute",
                "title": "update_custom_attribute"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -662,21 +662,21 @@ Updates and existing group
 .. code:: json
 
    {
-       "groupId": 1, 
+       "groupId": 1,
        "links": [
            {
-               "href": "http://url/to/group", 
+               "href": "http://url/to/group",
                "title": "get_group"
-           }, 
+           },
            {
-               "href": "http://url/to/update/group", 
+               "href": "http://url/to/update/group",
                "title": "update_group"
-           }, 
+           },
            {
-               "href": "http://url/to/delete/group", 
+               "href": "http://url/to/delete/group",
                "title": "delete_group"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -685,7 +685,7 @@ Updates and existing group
 .. code:: json
 
    {
-       "name": "group name", 
+       "name": "group name",
        "isDefault": true
    }
 
@@ -709,21 +709,21 @@ ChangeGroupRoles
 .. code:: json
 
    {
-       "groupId": 1, 
+       "groupId": 1,
        "links": [
            {
-               "href": "http://url/to/group", 
+               "href": "http://url/to/group",
                "title": "get_group"
-           }, 
+           },
            {
-               "href": "http://url/to/update/group", 
+               "href": "http://url/to/update/group",
                "title": "update_group"
-           }, 
+           },
            {
-               "href": "http://url/to/delete/group", 
+               "href": "http://url/to/delete/group",
                "title": "delete_group"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -748,21 +748,21 @@ service is secure and requires authentication*
 .. code:: json
 
    {
-       "groupId": 1, 
+       "groupId": 1,
        "links": [
            {
-               "href": "http://url/to/group", 
+               "href": "http://url/to/group",
                "title": "get_group"
-           }, 
+           },
            {
-               "href": "http://url/to/update/group", 
+               "href": "http://url/to/update/group",
                "title": "update_group"
-           }, 
+           },
            {
-               "href": "http://url/to/delete/group", 
+               "href": "http://url/to/delete/group",
                "title": "delete_group"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -788,21 +788,21 @@ Updates the permissions for an existing group
 .. code:: json
 
    {
-       "groupId": 1, 
+       "groupId": 1,
        "links": [
            {
-               "href": "http://url/to/group", 
+               "href": "http://url/to/group",
                "title": "get_group"
-           }, 
+           },
            {
-               "href": "http://url/to/update/group", 
+               "href": "http://url/to/update/group",
                "title": "update_group"
-           }, 
+           },
            {
-               "href": "http://url/to/delete/group", 
+               "href": "http://url/to/delete/group",
                "title": "delete_group"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -833,14 +833,14 @@ Loads all groups
    {
        "groups": [
            {
-               "id": 1, 
-               "name": "group name", 
-               "isDefault": true, 
-               "links": [], 
+               "id": 1,
+               "name": "group name",
+               "isDefault": true,
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -860,24 +860,24 @@ Loads a specific group by id
 .. code:: json
 
    {
-       "id": 123, 
-       "name": "group name", 
-       "adminGroup": "http://url/to/group", 
+       "id": 123,
+       "name": "group name",
+       "adminGroup": "http://url/to/group",
        "permissions": [
            "http://url/to/resource"
-       ], 
+       ],
        "viewPermissions": [
            "http://url/to/resource"
-       ], 
+       ],
        "users": [
            "http://url/to/user"
-       ], 
+       ],
        "roles": [
-           1, 
+           1,
            2
-       ], 
-       "isDefault": true, 
-       "links": [], 
+       ],
+       "isDefault": true,
+       "links": [],
        "message": null
    }
 
@@ -899,7 +899,7 @@ Deletes an existing group
 .. code:: json
 
    {
-       "links": [], 
+       "links": [],
        "message": "The item was deleted"
    }
 
@@ -927,18 +927,18 @@ Creates a new reservation
 .. code:: json
 
    {
-       "referenceNumber": "referenceNumber", 
-       "isPendingApproval": true, 
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
        "links": [
            {
-               "href": "http://url/to/reservation", 
+               "href": "http://url/to/reservation",
                "title": "get_reservation"
-           }, 
+           },
            {
-               "href": "http://url/to/update/reservation", 
+               "href": "http://url/to/update/reservation",
                "title": "update_reservation"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -949,68 +949,68 @@ Creates a new reservation
    {
        "accessories": [
            {
-               "accessoryId": 1, 
+               "accessoryId": 1,
                "quantityRequested": 2
            }
-       ], 
+       ],
        "customAttributes": [
            {
-               "attributeId": 2, 
+               "attributeId": 2,
                "attributeValue": "some value"
            }
-       ], 
-       "description": "reservation description", 
-       "endDateTime": "2021-03-08T09:56:04+0000", 
+       ],
+       "description": "reservation description",
+       "endDateTime": "2021-03-08T09:56:04+0000",
        "invitees": [
-           1, 
-           2, 
+           1,
+           2,
            3
-       ], 
+       ],
        "participants": [
-           1, 
+           1,
            2
-       ], 
+       ],
        "participatingGuests": [
            "participating.guest@email.com"
-       ], 
+       ],
        "invitedGuests": [
            "invited.guest@email.com"
-       ], 
+       ],
        "recurrenceRule": {
-           "type": "daily|monthly|none|weekly|yearly", 
-           "interval": 3, 
-           "monthlyType": "dayOfMonth|dayOfWeek|null", 
+           "type": "daily|monthly|none|weekly|yearly",
+           "interval": 3,
+           "monthlyType": "dayOfMonth|dayOfWeek|null",
            "weekdays": [
-               0, 
-               1, 
-               2, 
-               3, 
-               4, 
-               5, 
+               0,
+               1,
+               2,
+               3,
+               4,
+               5,
                6
-           ], 
+           ],
            "repeatTerminationDate": "2021-03-08T09:56:04+0000"
-       }, 
-       "resourceId": 1, 
+       },
+       "resourceId": 1,
        "resources": [
-           2, 
+           2,
            3
-       ], 
-       "startDateTime": "2021-03-08T09:56:04+0000", 
-       "title": "reservation title", 
-       "userId": 1, 
+       ],
+       "startDateTime": "2021-03-08T09:56:04+0000",
+       "title": "reservation title",
+       "userId": 1,
        "startReminder": {
-           "value": 15, 
+           "value": 15,
            "interval": "hours or minutes or days"
-       }, 
-       "endReminder": null, 
-       "allowParticipation": true, 
+       },
+       "endReminder": null,
+       "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name", 
+               "name": "name",
                "value": "value"
            }
-       ], 
+       ],
        "termsAccepted": true
    }
 
@@ -1032,20 +1032,20 @@ UpdateReservation
 .. code:: json
 
    {
-       "referenceNumber": "referenceNumber", 
-       "isPendingApproval": true, 
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
        "links": [
            {
-               "href": "http://url/to/reservation", 
+               "href": "http://url/to/reservation",
                "title": "get_reservation"
-           }, 
+           },
            {
-               "href": "http://url/to/update/reservation", 
+               "href": "http://url/to/update/reservation",
                "title": "update_reservation"
            }
-       ], 
+       ],
        "message": null
-   } 
+   }
 
 **Request:**
 
@@ -1054,68 +1054,68 @@ UpdateReservation
    {
        "accessories": [
            {
-               "accessoryId": 1, 
+               "accessoryId": 1,
                "quantityRequested": 2
            }
-       ], 
+       ],
        "customAttributes": [
            {
-               "attributeId": 2, 
+               "attributeId": 2,
                "attributeValue": "some value"
            }
-       ], 
-       "description": "reservation description", 
-       "endDateTime": "2021-03-08T09:56:04+0000", 
+       ],
+       "description": "reservation description",
+       "endDateTime": "2021-03-08T09:56:04+0000",
        "invitees": [
-           1, 
-           2, 
+           1,
+           2,
            3
-       ], 
+       ],
        "participants": [
-           1, 
+           1,
            2
-       ], 
+       ],
        "participatingGuests": [
            "participating.guest@email.com"
-       ], 
+       ],
        "invitedGuests": [
            "invited.guest@email.com"
-       ], 
+       ],
        "recurrenceRule": {
-           "type": "daily|monthly|none|weekly|yearly", 
-           "interval": 3, 
-           "monthlyType": "dayOfMonth|dayOfWeek|null", 
+           "type": "daily|monthly|none|weekly|yearly",
+           "interval": 3,
+           "monthlyType": "dayOfMonth|dayOfWeek|null",
            "weekdays": [
-               0, 
-               1, 
-               2, 
-               3, 
-               4, 
-               5, 
+               0,
+               1,
+               2,
+               3,
+               4,
+               5,
                6
-           ], 
+           ],
            "repeatTerminationDate": "2021-03-08T09:56:04+0000"
-       }, 
-       "resourceId": 1, 
+       },
+       "resourceId": 1,
        "resources": [
-           2, 
+           2,
            3
-       ], 
-       "startDateTime": "2021-03-08T09:56:04+0000", 
-       "title": "reservation title", 
-       "userId": 1, 
+       ],
+       "startDateTime": "2021-03-08T09:56:04+0000",
+       "title": "reservation title",
+       "userId": 1,
        "startReminder": {
-           "value": 15, 
+           "value": 15,
            "interval": "hours or minutes or days"
-       }, 
-       "endReminder": null, 
-       "allowParticipation": true, 
+       },
+       "endReminder": null,
+       "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name", 
+               "name": "name",
                "value": "value"
            }
-       ], 
+       ],
        "termsAccepted": true
    }
 
@@ -1136,18 +1136,18 @@ Approves a pending reservation.
 .. code:: json
 
    {
-       "referenceNumber": "referenceNumber", 
-       "isPendingApproval": true, 
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
        "links": [
            {
-               "href": "http://url/to/reservation", 
+               "href": "http://url/to/reservation",
                "title": "get_reservation"
-           }, 
+           },
            {
-               "href": "http://url/to/update/reservation", 
+               "href": "http://url/to/update/reservation",
                "title": "update_reservation"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -1172,18 +1172,18 @@ Checks in to a reservation.
 .. code:: json
 
    {
-       "referenceNumber": "referenceNumber", 
-       "isPendingApproval": true, 
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
        "links": [
            {
-               "href": "http://url/to/reservation", 
+               "href": "http://url/to/reservation",
                "title": "get_reservation"
-           }, 
+           },
            {
-               "href": "http://url/to/update/reservation", 
+               "href": "http://url/to/update/reservation",
                "title": "update_reservation"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -1208,18 +1208,18 @@ Checks out of a reservation.
 .. code:: json
 
    {
-       "referenceNumber": "referenceNumber", 
-       "isPendingApproval": true, 
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
        "links": [
            {
-               "href": "http://url/to/reservation", 
+               "href": "http://url/to/reservation",
                "title": "get_reservation"
-           }, 
+           },
            {
-               "href": "http://url/to/update/reservation", 
+               "href": "http://url/to/update/reservation",
                "title": "update_reservation"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -1256,49 +1256,49 @@ GetReservations
    {
        "reservations": [
            {
-               "referenceNumber": "refnum", 
-               "startDate": "2021-03-08T09:56:04+0000", 
-               "endDate": "2021-03-08T09:56:04+0000", 
-               "firstName": "first", 
-               "lastName": "last", 
-               "resourceName": "resourcename", 
-               "title": "reservation title", 
-               "description": "reservation description", 
-               "requiresApproval": true, 
-               "isRecurring": true, 
-               "scheduleId": 22, 
-               "userId": 11, 
-               "resourceId": 123, 
-               "duration": "1 hours 45 minutes", 
-               "bufferTime": "1 minutes", 
-               "bufferedStartDate": "2021-03-08T09:56:04+0000", 
-               "bufferedEndDate": "2021-03-08T09:56:04+0000", 
+               "referenceNumber": "refnum",
+               "startDate": "2021-03-08T09:56:04+0000",
+               "endDate": "2021-03-08T09:56:04+0000",
+               "firstName": "first",
+               "lastName": "last",
+               "resourceName": "resourcename",
+               "title": "reservation title",
+               "description": "reservation description",
+               "requiresApproval": true,
+               "isRecurring": true,
+               "scheduleId": 22,
+               "userId": 11,
+               "resourceId": 123,
+               "duration": "1 hours 45 minutes",
+               "bufferTime": "1 minutes",
+               "bufferedStartDate": "2021-03-08T09:56:04+0000",
+               "bufferedEndDate": "2021-03-08T09:56:04+0000",
                "participants": [
                    "participant name"
-               ], 
+               ],
                "invitees": [
                    "invitee name"
-               ], 
-               "participatingGuests": [], 
-               "invitedGuests": [], 
-               "startReminder": 10, 
-               "endReminder": 10, 
-               "color": "#FFFFFF", 
-               "textColor": "#000000", 
-               "checkInDate": "2021-03-08T09:56:04+0000", 
-               "checkOutDate": "2021-03-08T09:56:04+0000", 
-               "originalEndDate": "2021-03-08T09:56:04+0000", 
-               "isCheckInEnabled": true, 
-               "autoReleaseMinutes": 1, 
-               "resourceStatusId": null, 
-               "creditsConsumed": 15, 
-               "links": [], 
+               ],
+               "participatingGuests": [],
+               "invitedGuests": [],
+               "startReminder": 10,
+               "endReminder": 10,
+               "color": "#FFFFFF",
+               "textColor": "#000000",
+               "checkInDate": "2021-03-08T09:56:04+0000",
+               "checkOutDate": "2021-03-08T09:56:04+0000",
+               "originalEndDate": "2021-03-08T09:56:04+0000",
+               "isCheckInEnabled": true,
+               "autoReleaseMinutes": 1,
+               "resourceStatusId": null,
+               "creditsConsumed": 15,
+               "links": [],
                "message": null
            }
-       ], 
-       "startDateTime": null, 
-       "endDateTime": null, 
-       "links": [], 
+       ],
+       "startDateTime": null,
+       "endDateTime": null,
+       "links": [],
        "message": null
    }
 
@@ -1318,108 +1318,108 @@ Loads a specific reservation by reference number
 .. code:: json
 
    {
-       "referenceNumber": "refnum", 
-       "startDate": "2021-03-08T09:56:04+0000", 
-       "endDate": "2021-03-08T09:56:04+0000", 
-       "title": "reservation title", 
-       "description": "reservation description", 
-       "requiresApproval": true, 
-       "isRecurring": true, 
-       "scheduleId": 123, 
-       "resourceId": 123, 
+       "referenceNumber": "refnum",
+       "startDate": "2021-03-08T09:56:04+0000",
+       "endDate": "2021-03-08T09:56:04+0000",
+       "title": "reservation title",
+       "description": "reservation description",
+       "requiresApproval": true,
+       "isRecurring": true,
+       "scheduleId": 123,
+       "resourceId": 123,
        "owner": {
-           "userId": 123, 
-           "firstName": "first", 
-           "lastName": "last", 
-           "emailAddress": "email@address.com", 
-           "links": [], 
+           "userId": 123,
+           "firstName": "first",
+           "lastName": "last",
+           "emailAddress": "email@address.com",
+           "links": [],
            "message": null
-       }, 
+       },
        "participants": [
            {
-               "userId": 123, 
-               "firstName": "first", 
-               "lastName": "last", 
-               "emailAddress": "email@address.com", 
-               "links": [], 
+               "userId": 123,
+               "firstName": "first",
+               "lastName": "last",
+               "emailAddress": "email@address.com",
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "invitees": [
            {
-               "userId": 123, 
-               "firstName": "first", 
-               "lastName": "last", 
-               "emailAddress": "email@address.com", 
-               "links": [], 
+               "userId": 123,
+               "firstName": "first",
+               "lastName": "last",
+               "emailAddress": "email@address.com",
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "customAttributes": [
            {
-               "id": 123, 
-               "label": "label", 
-               "value": "value", 
-               "links": [], 
+               "id": 123,
+               "label": "label",
+               "value": "value",
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "recurrenceRule": {
-           "type": "daily|monthly|none|weekly|yearly", 
-           "interval": 3, 
-           "monthlyType": "dayOfMonth|dayOfWeek|null", 
+           "type": "daily|monthly|none|weekly|yearly",
+           "interval": 3,
+           "monthlyType": "dayOfMonth|dayOfWeek|null",
            "weekdays": [
-               0, 
-               1, 
-               2, 
-               3, 
-               4, 
-               5, 
+               0,
+               1,
+               2,
+               3,
+               4,
+               5,
                6
-           ], 
+           ],
            "repeatTerminationDate": "2021-03-08T09:56:04+0000"
-       }, 
+       },
        "attachments": [
            {
                "url": "http://example/attachments/url"
            }
-       ], 
+       ],
        "resources": [
            {
-               "id": 123, 
-               "name": "resource name", 
-               "type": null, 
-               "groups": null, 
-               "links": [], 
+               "id": 123,
+               "name": "resource name",
+               "type": null,
+               "groups": null,
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "accessories": [
            {
-               "id": 1, 
-               "name": "Example", 
-               "quantityAvailable": 12, 
-               "quantityReserved": 3, 
-               "links": [], 
+               "id": 1,
+               "name": "Example",
+               "quantityAvailable": 12,
+               "quantityReserved": 3,
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "startReminder": {
-           "value": 15, 
+           "value": 15,
            "interval": "hours or minutes or days"
-       }, 
+       },
        "endReminder": {
-           "value": 15, 
+           "value": 15,
            "interval": "hours or minutes or days"
-       }, 
-       "allowParticipation": null, 
-       "checkInDate": null, 
-       "checkOutDate": null, 
-       "originalEndDate": null, 
-       "isCheckInAvailable": null, 
-       "isCheckoutAvailable": null, 
-       "autoReleaseMinutes": null, 
-       "links": [], 
+       },
+       "allowParticipation": null,
+       "checkInDate": null,
+       "checkOutDate": null,
+       "originalEndDate": null,
+       "isCheckInAvailable": null,
+       "isCheckoutAvailable": null,
+       "autoReleaseMinutes": null,
+       "links": [],
        "message": null
    }
 
@@ -1441,7 +1441,7 @@ DeleteReservation
 .. code:: json
 
    {
-       "links": [], 
+       "links": [],
        "message": "The item was deleted"
    }
 
@@ -1471,17 +1471,17 @@ Creates a new resource
 .. code:: json
 
    {
-       "resourceId": 1, 
+       "resourceId": 1,
        "links": [
            {
-               "href": "http://url/to/resource", 
+               "href": "http://url/to/resource",
                "title": "get_resource"
-           }, 
+           },
            {
-               "href": "http://url/to/update/resource", 
+               "href": "http://url/to/update/resource",
                "title": "update_resource"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -1490,36 +1490,36 @@ Creates a new resource
 .. code:: json
 
    {
-       "name": "resource name", 
-       "location": "location", 
-       "contact": "contact information", 
-       "notes": "notes", 
-       "minLength": "1d0h0m", 
-       "maxLength": "3600", 
-       "requiresApproval": true, 
-       "allowMultiday": true, 
-       "maxParticipants": 100, 
-       "minNotice": "86400", 
-       "maxNotice": "0d12h30m", 
-       "description": "description", 
-       "scheduleId": 10, 
-       "autoAssignPermissions": true, 
+       "name": "resource name",
+       "location": "location",
+       "contact": "contact information",
+       "notes": "notes",
+       "minLength": "1d0h0m",
+       "maxLength": "3600",
+       "requiresApproval": true,
+       "allowMultiday": true,
+       "maxParticipants": 100,
+       "minNotice": "86400",
+       "maxNotice": "0d12h30m",
+       "description": "description",
+       "scheduleId": 10,
+       "autoAssignPermissions": true,
        "customAttributes": [
            {
-               "attributeId": 1, 
+               "attributeId": 1,
                "attributeValue": "attribute value"
            }
-       ], 
-       "sortOrder": 1, 
-       "statusId": 1, 
-       "statusReasonId": 2, 
-       "autoReleaseMinutes": 15, 
-       "requiresCheckIn": true, 
-       "color": "#ffffff", 
-       "credits": 3, 
-       "peakCredits": 6, 
-       "creditApplicability": 1, 
-       "creditsChargedAllSlots": 1, 
+       ],
+       "sortOrder": 1,
+       "statusId": 1,
+       "statusReasonId": 2,
+       "autoReleaseMinutes": 15,
+       "requiresCheckIn": true,
+       "color": "#ffffff",
+       "credits": 3,
+       "peakCredits": 6,
+       "creditApplicability": 1,
+       "creditsChargedAllSlots": 1,
        "maxConcurrentReservations": 1
    }
 
@@ -1541,17 +1541,17 @@ Updates an existing resource
 .. code:: json
 
    {
-       "resourceId": 1, 
+       "resourceId": 1,
        "links": [
            {
-               "href": "http://url/to/resource", 
+               "href": "http://url/to/resource",
                "title": "get_resource"
-           }, 
+           },
            {
-               "href": "http://url/to/update/resource", 
+               "href": "http://url/to/update/resource",
                "title": "update_resource"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -1560,36 +1560,36 @@ Updates an existing resource
 .. code:: json
 
    {
-       "name": "resource name", 
-       "location": "location", 
-       "contact": "contact information", 
-       "notes": "notes", 
-       "minLength": "1d0h0m", 
-       "maxLength": "3600", 
-       "requiresApproval": true, 
-       "allowMultiday": true, 
-       "maxParticipants": 100, 
-       "minNotice": "86400", 
-       "maxNotice": "0d12h30m", 
-       "description": "description", 
-       "scheduleId": 10, 
-       "autoAssignPermissions": true, 
+       "name": "resource name",
+       "location": "location",
+       "contact": "contact information",
+       "notes": "notes",
+       "minLength": "1d0h0m",
+       "maxLength": "3600",
+       "requiresApproval": true,
+       "allowMultiday": true,
+       "maxParticipants": 100,
+       "minNotice": "86400",
+       "maxNotice": "0d12h30m",
+       "description": "description",
+       "scheduleId": 10,
+       "autoAssignPermissions": true,
        "customAttributes": [
            {
-               "attributeId": 1, 
+               "attributeId": 1,
                "attributeValue": "attribute value"
            }
-       ], 
-       "sortOrder": 1, 
-       "statusId": 1, 
-       "statusReasonId": 2, 
-       "autoReleaseMinutes": 15, 
-       "requiresCheckIn": true, 
-       "color": "#ffffff", 
-       "credits": 3, 
-       "peakCredits": 6, 
-       "creditApplicability": 1, 
-       "creditsChargedAllSlots": 1, 
+       ],
+       "sortOrder": 1,
+       "statusId": 1,
+       "statusReasonId": 2,
+       "autoReleaseMinutes": 15,
+       "requiresCheckIn": true,
+       "color": "#ffffff",
+       "credits": 3,
+       "peakCredits": 6,
+       "creditApplicability": 1,
+       "creditsChargedAllSlots": 1,
        "maxConcurrentReservations": 1
    }
 
@@ -1614,19 +1614,19 @@ Returns all available resource statuses
    {
        "statuses": [
            {
-               "id": 0, 
+               "id": 0,
                "name": "Hidden"
-           }, 
+           },
            {
-               "id": 1, 
+               "id": 1,
                "name": "Available"
-           }, 
+           },
            {
-               "id": 2, 
+               "id": 2,
                "name": "Unavailable"
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -1648,50 +1648,50 @@ Loads all resources
    {
        "resources": [
            {
-               "resourceId": 123, 
-               "name": "resource name", 
-               "location": "location", 
-               "contact": "contact", 
-               "notes": "notes", 
-               "minLength": "2 minutes", 
-               "maxLength": "2 minutes", 
-               "requiresApproval": true, 
-               "allowMultiday": true, 
-               "maxParticipants": 10, 
-               "minNoticeAdd": "2 minutes", 
-               "minNoticeUpdate": "2 minutes", 
-               "minNoticeDelete": "2 minutes", 
-               "maxNotice": "2 minutes", 
-               "description": "resource description", 
-               "scheduleId": 123, 
-               "icsUrl": null, 
-               "statusId": 1, 
-               "statusReasonId": 3, 
+               "resourceId": 123,
+               "name": "resource name",
+               "location": "location",
+               "contact": "contact",
+               "notes": "notes",
+               "minLength": "2 minutes",
+               "maxLength": "2 minutes",
+               "requiresApproval": true,
+               "allowMultiday": true,
+               "maxParticipants": 10,
+               "minNoticeAdd": "2 minutes",
+               "minNoticeUpdate": "2 minutes",
+               "minNoticeDelete": "2 minutes",
+               "maxNotice": "2 minutes",
+               "description": "resource description",
+               "scheduleId": 123,
+               "icsUrl": null,
+               "statusId": 1,
+               "statusReasonId": 3,
                "customAttributes": [
                    {
-                       "id": 123, 
-                       "label": "label", 
-                       "value": "value", 
-                       "links": [], 
+                       "id": 123,
+                       "label": "label",
+                       "value": "value",
+                       "links": [],
                        "message": null
                    }
-               ], 
-               "typeId": 2, 
-               "groupIds": null, 
-               "bufferTime": "1 hours 30 minutes", 
-               "autoReleaseMinutes": 15, 
-               "requiresCheckIn": true, 
-               "color": "#ffffff", 
-               "credits": 3, 
-               "peakCredits": 6, 
-               "creditApplicability": 1, 
-               "creditsChargedAllSlots": true, 
-               "maxConcurrentReservations": 1, 
-               "links": [], 
+               ],
+               "typeId": 2,
+               "groupIds": null,
+               "bufferTime": "1 hours 30 minutes",
+               "autoReleaseMinutes": 15,
+               "requiresCheckIn": true,
+               "color": "#ffffff",
+               "credits": 3,
+               "peakCredits": 6,
+               "creditApplicability": 1,
+               "creditsChargedAllSlots": true,
+               "maxConcurrentReservations": 1,
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -1713,12 +1713,12 @@ Returns all available resource status reasons
    {
        "reasons": [
            {
-               "id": 1, 
-               "description": "reason description", 
+               "id": 1,
+               "description": "reason description",
                "statusId": 2
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -1744,41 +1744,41 @@ GetAvailability
    {
        "resources": [
            {
-               "available": true, 
+               "available": true,
                "resource": {
-                   "resourceId": 1, 
-                   "name": "resource name", 
-                   "scheduleId": 2, 
-                   "statusId": 1, 
-                   "statusReasonId": 123, 
+                   "resourceId": 1,
+                   "name": "resource name",
+                   "scheduleId": 2,
+                   "statusId": 1,
+                   "statusReasonId": 123,
                    "links": [
                        {
-                           "href": "http://get-resource-url", 
+                           "href": "http://get-resource-url",
                            "title": "get_resource"
-                       }, 
+                       },
                        {
-                           "href": "http://get-schedule-url", 
+                           "href": "http://get-schedule-url",
                            "title": "get_schedule"
                        }
-                   ], 
+                   ],
                    "message": null
-               }, 
-               "availableAt": "2021-03-08T09:56:04+0000", 
-               "availableUntil": "2021-03-08T09:56:04+0000", 
+               },
+               "availableAt": "2021-03-08T09:56:04+0000",
+               "availableUntil": "2021-03-08T09:56:04+0000",
                "links": [
                    {
-                       "href": "http://get-user-url", 
+                       "href": "http://get-user-url",
                        "title": "get_user"
-                   }, 
+                   },
                    {
-                       "href": "http://get-reservation-url", 
+                       "href": "http://get-reservation-url",
                        "title": "get_reservation"
                    }
-               ], 
+               ],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -1800,75 +1800,75 @@ Returns the full resource group tree
    {
        "groups": [
            {
-               "id": 0, 
-               "name": "Resource Group 1", 
-               "label": "Resource Group 1", 
-               "parent": null, 
-               "parent_id": null, 
+               "id": 0,
+               "name": "Resource Group 1",
+               "label": "Resource Group 1",
+               "parent": null,
+               "parent_id": null,
                "children": [
                    {
-                       "type": "resource", 
-                       "group_id": 0, 
-                       "resource_name": "Resource 1", 
-                       "id": "resource-0-1", 
-                       "label": "Resource 1", 
-                       "resource_id": 1, 
-                       "resourceAdminGroupId": null, 
-                       "scheduleId": 2, 
-                       "statusId": 1, 
-                       "scheduleAdminGroupId": null, 
-                       "requiresApproval": false, 
-                       "isCheckInEnabled": true, 
-                       "isAutoReleased": true, 
-                       "autoReleaseMinutes": 30, 
-                       "minLength": 10, 
-                       "resourceTypeId": 1, 
-                       "color": "#ffffff", 
-                       "textColor": "#000000", 
-                       "maxConcurrentReservations": 2, 
+                       "type": "resource",
+                       "group_id": 0,
+                       "resource_name": "Resource 1",
+                       "id": "resource-0-1",
+                       "label": "Resource 1",
+                       "resource_id": 1,
+                       "resourceAdminGroupId": null,
+                       "scheduleId": 2,
+                       "statusId": 1,
+                       "scheduleAdminGroupId": null,
+                       "requiresApproval": false,
+                       "isCheckInEnabled": true,
+                       "isAutoReleased": true,
+                       "autoReleaseMinutes": 30,
+                       "minLength": 10,
+                       "resourceTypeId": 1,
+                       "color": "#ffffff",
+                       "textColor": "#000000",
+                       "maxConcurrentReservations": 2,
                        "requiredResourceIds": [
                            2
                        ]
-                   }, 
+                   },
                    {
-                       "id": 1, 
-                       "name": "Resource Group 2", 
-                       "label": "Resource Group 2", 
-                       "parent": null, 
-                       "parent_id": 0, 
+                       "id": 1,
+                       "name": "Resource Group 2",
+                       "label": "Resource Group 2",
+                       "parent": null,
+                       "parent_id": 0,
                        "children": [
                            {
-                               "type": "resource", 
-                               "group_id": 1, 
-                               "resource_name": "Resource 2", 
-                               "id": "resource-1-1", 
-                               "label": "Resource 2", 
-                               "resource_id": 1, 
-                               "resourceAdminGroupId": null, 
-                               "scheduleId": 2, 
-                               "statusId": 1, 
-                               "scheduleAdminGroupId": null, 
-                               "requiresApproval": true, 
-                               "isCheckInEnabled": false, 
-                               "isAutoReleased": false, 
-                               "autoReleaseMinutes": null, 
-                               "minLength": null, 
-                               "resourceTypeId": 2, 
-                               "color": "#000000", 
-                               "textColor": "#FFFFFF", 
-                               "maxConcurrentReservations": 1, 
+                               "type": "resource",
+                               "group_id": 1,
+                               "resource_name": "Resource 2",
+                               "id": "resource-1-1",
+                               "label": "Resource 2",
+                               "resource_id": 1,
+                               "resourceAdminGroupId": null,
+                               "scheduleId": 2,
+                               "statusId": 1,
+                               "scheduleAdminGroupId": null,
+                               "requiresApproval": true,
+                               "isCheckInEnabled": false,
+                               "isAutoReleased": false,
+                               "autoReleaseMinutes": null,
+                               "minLength": null,
+                               "resourceTypeId": 2,
+                               "color": "#000000",
+                               "textColor": "#FFFFFF",
+                               "maxConcurrentReservations": 1,
                                "requiredResourceIds": [
                                    1
                                ]
                            }
-                       ], 
+                       ],
                        "type": "group"
                    }
-               ], 
+               ],
                "type": "group"
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -1914,46 +1914,46 @@ Loads a specific resource by id
 .. code:: json
 
    {
-       "resourceId": 123, 
-       "name": "resource name", 
-       "location": "location", 
-       "contact": "contact", 
-       "notes": "notes", 
-       "minLength": "2 minutes", 
-       "maxLength": "2 minutes", 
-       "requiresApproval": true, 
-       "allowMultiday": true, 
-       "maxParticipants": 10, 
-       "minNoticeAdd": "2 minutes", 
-       "minNoticeUpdate": "2 minutes", 
-       "minNoticeDelete": "2 minutes", 
-       "maxNotice": "2 minutes", 
-       "description": "resource description", 
-       "scheduleId": 123, 
-       "icsUrl": null, 
-       "statusId": 1, 
-       "statusReasonId": 3, 
+       "resourceId": 123,
+       "name": "resource name",
+       "location": "location",
+       "contact": "contact",
+       "notes": "notes",
+       "minLength": "2 minutes",
+       "maxLength": "2 minutes",
+       "requiresApproval": true,
+       "allowMultiday": true,
+       "maxParticipants": 10,
+       "minNoticeAdd": "2 minutes",
+       "minNoticeUpdate": "2 minutes",
+       "minNoticeDelete": "2 minutes",
+       "maxNotice": "2 minutes",
+       "description": "resource description",
+       "scheduleId": 123,
+       "icsUrl": null,
+       "statusId": 1,
+       "statusReasonId": 3,
        "customAttributes": [
            {
-               "id": 123, 
-               "label": "label", 
-               "value": "value", 
-               "links": [], 
+               "id": 123,
+               "label": "label",
+               "value": "value",
+               "links": [],
                "message": null
            }
-       ], 
-       "typeId": 2, 
-       "groupIds": null, 
-       "bufferTime": "1 hours 30 minutes", 
-       "autoReleaseMinutes": 15, 
-       "requiresCheckIn": true, 
-       "color": "#ffffff", 
-       "credits": 3, 
-       "peakCredits": 6, 
-       "creditApplicability": 1, 
-       "creditsChargedAllSlots": true, 
-       "maxConcurrentReservations": 1, 
-       "links": [], 
+       ],
+       "typeId": 2,
+       "groupIds": null,
+       "bufferTime": "1 hours 30 minutes",
+       "autoReleaseMinutes": 15,
+       "requiresCheckIn": true,
+       "color": "#ffffff",
+       "credits": 3,
+       "peakCredits": 6,
+       "creditApplicability": 1,
+       "creditsChargedAllSlots": true,
+       "maxConcurrentReservations": 1,
+       "links": [],
        "message": null
    }
 
@@ -1979,41 +1979,41 @@ GetAvailability
    {
        "resources": [
            {
-               "available": true, 
+               "available": true,
                "resource": {
-                   "resourceId": 1, 
-                   "name": "resource name", 
-                   "scheduleId": 2, 
-                   "statusId": 1, 
-                   "statusReasonId": 123, 
+                   "resourceId": 1,
+                   "name": "resource name",
+                   "scheduleId": 2,
+                   "statusId": 1,
+                   "statusReasonId": 123,
                    "links": [
                        {
-                           "href": "http://get-resource-url", 
+                           "href": "http://get-resource-url",
                            "title": "get_resource"
-                       }, 
+                       },
                        {
-                           "href": "http://get-schedule-url", 
+                           "href": "http://get-schedule-url",
                            "title": "get_schedule"
                        }
-                   ], 
+                   ],
                    "message": null
-               }, 
-               "availableAt": "2021-03-08T09:56:04+0000", 
-               "availableUntil": "2021-03-08T09:56:04+0000", 
+               },
+               "availableAt": "2021-03-08T09:56:04+0000",
+               "availableUntil": "2021-03-08T09:56:04+0000",
                "links": [
                    {
-                       "href": "http://get-user-url", 
+                       "href": "http://get-user-url",
                        "title": "get_user"
-                   }, 
+                   },
                    {
-                       "href": "http://get-reservation-url", 
+                       "href": "http://get-reservation-url",
                        "title": "get_reservation"
                    }
-               ], 
+               ],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -2035,7 +2035,7 @@ Deletes an existing resource
 .. code:: json
 
    {
-       "links": [], 
+       "links": [],
        "message": "The item was deleted"
    }
 
@@ -2106,90 +2106,90 @@ Loads a specific schedule by id
 .. code:: json
 
    {
-       "daysVisible": 5, 
-       "id": 123, 
-       "isDefault": true, 
-       "name": "schedule name", 
-       "timezone": "timezone_name", 
-       "weekdayStart": 0, 
-       "icsUrl": "webcal://url/to/calendar", 
-       "availabilityStart": "2021-03-08T09:56:04+0000", 
-       "availabilityEnd": "2021-03-08T09:56:04+0000", 
-       "maxResourcesPerReservation": 10, 
-       "totalConcurrentReservationsAllowed": 0, 
+       "daysVisible": 5,
+       "id": 123,
+       "isDefault": true,
+       "name": "schedule name",
+       "timezone": "timezone_name",
+       "weekdayStart": 0,
+       "icsUrl": "webcal://url/to/calendar",
+       "availabilityStart": "2021-03-08T09:56:04+0000",
+       "availabilityEnd": "2021-03-08T09:56:04+0000",
+       "maxResourcesPerReservation": 10,
+       "totalConcurrentReservationsAllowed": 0,
        "periods": [
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
-           ], 
+           ],
            [
                {
-                   "start": "2021-03-08T09:56:04+0000", 
-                   "end": "2021-03-08T09:56:04+0000", 
-                   "label": "label", 
-                   "startTime": "09:56:04", 
-                   "endTime": "09:56:04", 
+                   "start": "2021-03-08T09:56:04+0000",
+                   "end": "2021-03-08T09:56:04+0000",
+                   "label": "label",
+                   "startTime": "09:56:04",
+                   "endTime": "09:56:04",
                    "isReservable": true
                }
            ]
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -2216,73 +2216,73 @@ GetSlots
    {
        "dates": [
            {
-               "date": "2021-03-08T09:56:04+0000", 
+               "date": "2021-03-08T09:56:04+0000",
                "resources": [
                    {
                        "slots": [
                            {
-                               "slotSpan": 4, 
-                               "isReserved": true, 
-                               "label": "username", 
-                               "isReservable": false, 
-                               "color": "#ffffff", 
-                               "startDateTime": "2021-03-08T09:56:04+0000", 
-                               "endDateTime": "2021-03-08T09:56:04+0000", 
+                               "slotSpan": 4,
+                               "isReserved": true,
+                               "label": "username",
+                               "isReservable": false,
+                               "color": "#ffffff",
+                               "startDateTime": "2021-03-08T09:56:04+0000",
+                               "endDateTime": "2021-03-08T09:56:04+0000",
                                "reservation": {
-                                   "referenceNumber": "refnum", 
-                                   "startDate": "2021-03-08T09:56:04+0000", 
-                                   "endDate": "2021-03-08T09:56:04+0000", 
-                                   "firstName": "first", 
-                                   "lastName": "last", 
-                                   "resourceName": "resourcename", 
-                                   "title": "reservation title", 
-                                   "description": "reservation description", 
-                                   "requiresApproval": true, 
-                                   "isRecurring": true, 
-                                   "scheduleId": 22, 
-                                   "userId": 11, 
-                                   "resourceId": 123, 
-                                   "duration": "1 hours 45 minutes", 
-                                   "bufferTime": "1 minutes", 
-                                   "bufferedStartDate": "2021-03-08T09:56:04+0000", 
-                                   "bufferedEndDate": "2021-03-08T09:56:04+0000", 
+                                   "referenceNumber": "refnum",
+                                   "startDate": "2021-03-08T09:56:04+0000",
+                                   "endDate": "2021-03-08T09:56:04+0000",
+                                   "firstName": "first",
+                                   "lastName": "last",
+                                   "resourceName": "resourcename",
+                                   "title": "reservation title",
+                                   "description": "reservation description",
+                                   "requiresApproval": true,
+                                   "isRecurring": true,
+                                   "scheduleId": 22,
+                                   "userId": 11,
+                                   "resourceId": 123,
+                                   "duration": "1 hours 45 minutes",
+                                   "bufferTime": "1 minutes",
+                                   "bufferedStartDate": "2021-03-08T09:56:04+0000",
+                                   "bufferedEndDate": "2021-03-08T09:56:04+0000",
                                    "participants": [
                                        "participant name"
-                                   ], 
+                                   ],
                                    "invitees": [
                                        "invitee name"
-                                   ], 
-                                   "participatingGuests": [], 
-                                   "invitedGuests": [], 
-                                   "startReminder": 10, 
-                                   "endReminder": 10, 
-                                   "color": "#FFFFFF", 
-                                   "textColor": "#000000", 
-                                   "checkInDate": "2021-03-08T09:56:04+0000", 
-                                   "checkOutDate": "2021-03-08T09:56:04+0000", 
-                                   "originalEndDate": "2021-03-08T09:56:04+0000", 
-                                   "isCheckInEnabled": true, 
-                                   "autoReleaseMinutes": 1, 
-                                   "resourceStatusId": null, 
-                                   "creditsConsumed": 15, 
-                                   "links": [], 
+                                   ],
+                                   "participatingGuests": [],
+                                   "invitedGuests": [],
+                                   "startReminder": 10,
+                                   "endReminder": 10,
+                                   "color": "#FFFFFF",
+                                   "textColor": "#000000",
+                                   "checkInDate": "2021-03-08T09:56:04+0000",
+                                   "checkOutDate": "2021-03-08T09:56:04+0000",
+                                   "originalEndDate": "2021-03-08T09:56:04+0000",
+                                   "isCheckInEnabled": true,
+                                   "autoReleaseMinutes": 1,
+                                   "resourceStatusId": null,
+                                   "creditsConsumed": 15,
+                                   "links": [],
                                    "message": null
-                               }, 
-                               "links": [], 
+                               },
+                               "links": [],
                                "message": null
                            }
-                       ], 
-                       "resourceId": 1, 
-                       "resourceName": "resourcename", 
-                       "links": [], 
+                       ],
+                       "resourceId": 1,
+                       "resourceName": "resourcename",
+                       "links": [],
                        "message": null
                    }
-               ], 
-               "links": [], 
+               ],
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -2312,17 +2312,17 @@ Creates a new user
 .. code:: json
 
    {
-       "userId": null, 
+       "userId": null,
        "links": [
            {
-               "href": "http://url/to/user", 
+               "href": "http://url/to/user",
                "title": "get_user"
-           }, 
+           },
            {
-               "href": "http://url/to/update/user", 
+               "href": "http://url/to/update/user",
                "title": "update_user"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -2331,25 +2331,25 @@ Creates a new user
 .. code:: json
 
    {
-       "password": "unencrypted password", 
-       "language": "en_us", 
-       "firstName": "first", 
-       "lastName": "last", 
-       "emailAddress": "email@address.com", 
-       "userName": "username", 
-       "timezone": "America/Chicago", 
-       "phone": "123-456-7989", 
-       "organization": "organization", 
-       "position": "position", 
+       "password": "unencrypted password",
+       "language": "en_us",
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "timezone": "America/Chicago",
+       "phone": "123-456-7989",
+       "organization": "organization",
+       "position": "position",
        "customAttributes": [
            {
-               "attributeId": 99, 
+               "attributeId": 99,
                "attributeValue": "attribute value"
            }
-       ], 
+       ],
        "groups": [
-           1, 
-           2, 
+           1,
+           2,
            4
        ]
    }
@@ -2372,17 +2372,17 @@ Updates an existing user
 .. code:: json
 
    {
-       "userId": null, 
+       "userId": null,
        "links": [
            {
-               "href": "http://url/to/user", 
+               "href": "http://url/to/user",
                "title": "get_user"
-           }, 
+           },
            {
-               "href": "http://url/to/update/user", 
+               "href": "http://url/to/update/user",
                "title": "update_user"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -2391,23 +2391,23 @@ Updates an existing user
 .. code:: json
 
    {
-       "firstName": "first", 
-       "lastName": "last", 
-       "emailAddress": "email@address.com", 
-       "userName": "username", 
-       "timezone": "America/Chicago", 
-       "phone": "123-456-7989", 
-       "organization": "organization", 
-       "position": "position", 
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "timezone": "America/Chicago",
+       "phone": "123-456-7989",
+       "organization": "organization",
+       "position": "position",
        "customAttributes": [
            {
-               "attributeId": 99, 
+               "attributeId": 99,
                "attributeValue": "attribute value"
            }
-       ], 
+       ],
        "groups": [
-           1, 
-           2, 
+           1,
+           2,
            4
        ]
    }
@@ -2432,17 +2432,17 @@ Updates the password for an existing user
 .. code:: json
 
    {
-       "userId": null, 
+       "userId": null,
        "links": [
            {
-               "href": "http://url/to/user", 
+               "href": "http://url/to/user",
                "title": "get_user"
-           }, 
+           },
            {
-               "href": "http://url/to/update/user", 
+               "href": "http://url/to/update/user",
                "title": "update_user"
            }
-       ], 
+       ],
        "message": null
    }
 
@@ -2482,35 +2482,35 @@ GetAllUsers
    {
        "users": [
            {
-               "id": 1, 
-               "userName": "username", 
-               "firstName": "first", 
-               "lastName": "last", 
-               "emailAddress": "email@address.com", 
-               "phoneNumber": "phone", 
-               "dateCreated": "2021-03-08T09:56:04+0000", 
-               "lastLogin": "2021-03-08T09:56:04+0000", 
-               "statusId": "statusId", 
-               "timezone": "timezone", 
-               "organization": "organization", 
-               "position": "position", 
-               "language": "language_code", 
+               "id": 1,
+               "userName": "username",
+               "firstName": "first",
+               "lastName": "last",
+               "emailAddress": "email@address.com",
+               "phoneNumber": "phone",
+               "dateCreated": "2021-03-08T09:56:04+0000",
+               "lastLogin": "2021-03-08T09:56:04+0000",
+               "statusId": "statusId",
+               "timezone": "timezone",
+               "organization": "organization",
+               "position": "position",
+               "language": "language_code",
                "customAttributes": [
                    {
-                       "id": 123, 
-                       "label": "label", 
-                       "value": "value", 
-                       "links": [], 
+                       "id": 123,
+                       "label": "label",
+                       "value": "value",
+                       "links": [],
                        "message": null
                    }
-               ], 
-               "currentCredits": "2.50", 
-               "reservationColor": "#000000", 
-               "links": [], 
+               ],
+               "currentCredits": "2.50",
+               "reservationColor": "#000000",
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -2530,52 +2530,52 @@ Loads the requested user by Id
 .. code:: json
 
    {
-       "id": 1, 
-       "userName": "username", 
-       "firstName": "first", 
-       "lastName": "last", 
-       "emailAddress": "email@address.com", 
-       "phoneNumber": "phone", 
-       "lastLogin": "2021-03-08T09:56:04+0000", 
-       "statusId": "statusId", 
-       "timezone": "timezone", 
-       "organization": "organization", 
-       "position": "position", 
-       "language": "language_code", 
-       "icsUrl": "webcal://url/to/calendar", 
-       "defaultScheduleId": 1, 
-       "currentCredits": "2.50", 
-       "reservationColor": "#000000", 
+       "id": 1,
+       "userName": "username",
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "phoneNumber": "phone",
+       "lastLogin": "2021-03-08T09:56:04+0000",
+       "statusId": "statusId",
+       "timezone": "timezone",
+       "organization": "organization",
+       "position": "position",
+       "language": "language_code",
+       "icsUrl": "webcal://url/to/calendar",
+       "defaultScheduleId": 1,
+       "currentCredits": "2.50",
+       "reservationColor": "#000000",
        "customAttributes": [
            {
-               "id": 123, 
-               "label": "label", 
-               "value": "value", 
-               "links": [], 
+               "id": 123,
+               "label": "label",
+               "value": "value",
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "permissions": [
            {
-               "id": 123, 
-               "name": "resource name", 
-               "type": null, 
-               "groups": null, 
-               "links": [], 
+               "id": 123,
+               "name": "resource name",
+               "type": null,
+               "groups": null,
+               "links": [],
                "message": null
            }
-       ], 
+       ],
        "groups": [
            {
-               "id": 1, 
-               "name": "group name", 
-               "isDefault": null, 
-               "roleIds": null, 
-               "links": [], 
+               "id": 1,
+               "name": "group name",
+               "isDefault": null,
+               "roleIds": null,
+               "links": [],
                "message": null
            }
-       ], 
-       "links": [], 
+       ],
+       "links": [],
        "message": null
    }
 
@@ -2597,6 +2597,6 @@ Deletes an existing user
 .. code:: json
 
    {
-       "links": [], 
+       "links": [],
        "message": "The item was deleted"
    }
