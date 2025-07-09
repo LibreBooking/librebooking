@@ -1872,6 +1872,32 @@ Returns the full resource group tree
        "message": null
    }
 
+GetResourceTypes
+^^^^^^^^^^^^^^^^
+
+**Description:**
+
+Returns all available resource types
+
+**Route:** ``/Web/Services/index.php/Resources/Types``
+
+*This service is secure and requires authentication*
+
+**Response:**
+
+.. code:: json
+
+    {
+        "links": [],
+        "message": null,
+        "types": [
+            {
+                "id": 1,
+                "description": "description"
+            }
+        ]
+    }
+
 GetResource
 ^^^^^^^^^^^
 
