@@ -331,7 +331,7 @@ client applications.
 Prerequisites
 ^^^^^^^^^^^^^
 
--  PHP 7.0 or greater
+-  PHP 8.2 or greater
 -  To use ‘friendly’ URLs, mod_rewrite or URL rewriting must be enabled
 -  Your web server must accept all verbs: GET, POST, PUT, DELETE
 
@@ -348,11 +348,14 @@ Configuration
 API Documentation
 ^^^^^^^^^^^^^^^^^
 
-| Auto-generated documentation for API usage can be found by browsing
-  http://your_librebooking_url/Web/Services.
-| This documentation describes each available service, indicates whether
-  or not the service is available to unauthenticated
-  users/administrators, and provides example requests/responses.
+Auto-generated documentation for API usage can be found by browsing
+http://your_librebooking_url/Web/Services.
+
+API documentation is also available at :doc:`API`
+
+This documentation describes each available service, indicates whether or not
+the service is available to unauthenticated users/administrators, and provides
+example requests/responses.
 
 Consuming the API
 ^^^^^^^^^^^^^^^^^
