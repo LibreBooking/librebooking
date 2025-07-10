@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 3.0.2 - 2025-07-07
+
+### Highlights
+
+* Now have a documentation/home page website at <https://librebooking.readthedocs.io/>
+
+### What's Changed
+
+* docs: add a `.readthedocs.yml` file by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/647>
+* docs: remove 'beta' designation of the `develop` branch by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/649>
+* docs: fix theme options list by @ClemCordier in <https://github.com/LibreBooking/app/pull/650>
+* Fix date and autogrow issues by @lucs7 in <https://github.com/LibreBooking/app/pull/657>
+* fix: correct datepicker issue introduced in e0cfcbc by @lucs7 in <https://github.com/LibreBooking/app/pull/658>
+* fix: don't attempt to reserve view-only resource by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/656>
+
+**Full Changelog**: <https://github.com/LibreBooking/app/compare/v3.0.1...v3.0.2>
+
 ## 3.0.1 - 2025-06-25
 
 Update the version number in the code base. This wa missed in the v3.0.0
