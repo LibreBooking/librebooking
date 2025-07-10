@@ -49,7 +49,7 @@ Accessories
 POST Services
 ~~~~~~~~~~~~~
 
-na.
+Not applicable.
 
 GET Services
 ~~~~~~~~~~~~
@@ -136,6 +136,11 @@ CreateAccount
 | Creates a user account. This does not authenticate
 
 **Route:** ``/Web/Services/index.php/Accounts/``
+
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
 
 **Response:**
 
@@ -297,6 +302,11 @@ CreateCustomAttribute
 *This service is secure and requires authentication*
 
 *This service is only available to application administrators*
+
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
 
 **Response:**
 
@@ -619,6 +629,11 @@ Creates a new group
 
 *This service is only available to application administrators*
 
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
+
 **Response:**
 
 .. code:: json
@@ -921,6 +936,11 @@ Creates a new reservation
 **Route:** ``/Web/Services/index.php/Reservations/``
 
 *This service is secure and requires authentication*
+
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
 
 **Response:**
 
@@ -1465,6 +1485,11 @@ Creates a new resource
 *This service is secure and requires authentication*
 
 *This service is only available to application administrators*
+
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
 
 **Response:**
 
@@ -2047,7 +2072,7 @@ Schedules
 POST Services
 ~~~~~~~~~~~~~
 
-na.
+Not applicable.
 
 .. _get-services-7:
 
@@ -2306,6 +2331,11 @@ Creates a new user
 *This service is secure and requires authentication*
 
 *This service is only available to application administrators*
+
+.. note::
+
+   It is required for the route to end with the ``/`` character, or it will
+   fail.
 
 **Response:**
 
