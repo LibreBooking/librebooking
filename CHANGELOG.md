@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 3.0.3 - 2025-07-09
+
+### Highlights
+
+* Improvements to the Installation guide at
+  <https://librebooking.readthedocs.io/en/latest/INSTALLATION.html>
+
+### What's Changed
+
+* fix(API): add endpoint to get resource types by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/663>
+* remove old docs by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/665>
+* fix(schedule): datepicker conflicts with url validation by @lucs7 in <https://github.com/LibreBooking/app/pull/661>
+* Fix for #671 / Adjusting css to enable datepicker styling by @lucs7 in <https://github.com/LibreBooking/app/pull/673>
+* doc: remove trailing whitespace from *.rst files by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/674>
+* fix(CustomAttribute): handle invalid data by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/662>
+* fix: allow guests to book reservations by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/668>
+* update(docs): update installation documentation: cloning, composer setup, and database config by @labmecanicatec in <https://github.com/LibreBooking/app/pull/675>
+* docs: add link to API docs, use notes, update PHP version by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/676>
+
+**Full Changelog**: <https://github.com/LibreBooking/app/compare/v3.0.2...v3.0.3>
+
 ## 3.0.2 - 2025-07-07
 
 ### Highlights

@@ -9,7 +9,7 @@
 project = "LibreBooking"
 copyright = "2025, The LibreBooking development team"
 author = "The LibreBooking development team"
-release = "3.0.1"
+release = "3.0.3"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
