@@ -578,7 +578,7 @@
 																			<i id="customAttributesIcon{$id}"
 																				class="bi bi-chevron-down"></i>
 																		</a>
-																		<div id="customAttributes{$id}" class="collapse">
+																		<div id="customAttributes{$id}" class="collapse show">
 																			<div class="row">
 																			{/if}
 																			{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
