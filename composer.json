@@ -15,7 +15,7 @@
         "stripe/stripe-php": "^10.2",
         "monolog/monolog": "^2.9",
         "google/recaptcha": "1.2.*",
-        "gregwar/captcha": "1.*",
+        "gregwar/captcha": "^1.3",
         "google/apiclient": "^2.0",
         "microsoft/microsoft-graph": "^2.0",
         "nickdnk/graph-sdk": "^7.0",
@@ -28,19 +28,6 @@
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0"
     },
-    "repositories": [
-        {
-            "type":"package",
-            "package": {
-              "name": "gregwar/captcha",
-              "version":"1.2.1",
-              "dist": {
-                  "url": "https://github.com/effgarces/Captcha/archive/refs/heads/master.zip",
-                  "type": "zip"
-                }
-            }
-        }
-    ],
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
