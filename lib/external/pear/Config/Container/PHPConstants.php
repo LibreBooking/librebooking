@@ -66,22 +66,22 @@ class Config_Container_PHPConstants extends Config_Container
                 null, PEAR_ERROR_RETURN
             );
         }
-        
+
         $fileContent = file_get_contents($datasrc, true);
-        
+
         if (!$fileContent) {
             return PEAR::raiseError(
                 "File '$datasrc' could not be read.",
                 null, PEAR_ERROR_RETURN
             );
         }
-        
+
         $rows = explode("\n", $fileContent);
         for ($i=0, $max=count($rows); $i<$max; $i++) {
             $line = $rows[$i];
-    
+
             //blanks?
-                
+
             // sections
             if (preg_match("/^\/\/\s*$/", $line)) {
                 preg_match("/^\/\/\s*(.+)$/", $rows[$i+1], $matches);
@@ -89,7 +89,7 @@ class Config_Container_PHPConstants extends Config_Container
                 $i += 2;
                 continue;
             }
-          
+
             // comments
             if (preg_match("/^\/\/\s*(.+)$/", $line, $matches)
                 || preg_match("/^#\s*(.+)$/", $line, $matches)
@@ -97,7 +97,7 @@ class Config_Container_PHPConstants extends Config_Container
                 $obj->container->createComment(trim($matches[1]));
                 continue;
             }
-          
+
             // directives
             $regex = "/^\s*define\s*\('([A-Z1-9_]+)',\s*'*(.[^\']*)'*\)/";
             preg_match($regex, $line, $matches);
@@ -111,34 +111,34 @@ class Config_Container_PHPConstants extends Config_Container
                 );
             }
         }
-    
+
         return $return;
-        
+
     } // end func parseDatasrc
 
     /**
      * Returns a formatted string of the object
      *
-     * @param object &$obj Container object to be output as string
+     * @param object $obj Container object to be output as string
      *
      * @return string
      *
      * @access public
      */
-    function toString(&$obj)
+    function toString($obj, $options = array())
     {
         $string = '';
-        
-        switch ($obj->type) 
+
+        switch ($obj->type)
         {
         case 'blank':
             $string = "\n";
             break;
-            
+
         case 'comment':
             $string = '// '.$obj->content."\n";
             break;
-            
+
         case 'directive':
             $content = $obj->content;
             // don't quote numeric values, true/false and constants
@@ -155,7 +155,7 @@ class Config_Container_PHPConstants extends Config_Container
                 . ', ' . $content . ');'
                 . chr(10);
             break;
-            
+
         case 'section':
             if (!$obj->isRoot()) {
                 $string  = chr(10);
@@ -179,13 +179,13 @@ class Config_Container_PHPConstants extends Config_Container
      * Writes the configuration to a file
      *
      * @param mixed  $datasrc Info on datasource such as path to the file
-     * @param string &$obj    Configuration object to write
+     * @param string $obj    Configuration object to write
      *
      * @return mixed PEAR_Error on failure or boolean true if all went well
      *
      * @access public
      */
-    function writeDatasrc($datasrc, &$obj)
+    function writeDatasrc($datasrc, $obj, $options = array())
     {
         $fp = @fopen($datasrc, 'w');
         if (!$fp) {
@@ -204,19 +204,19 @@ class Config_Container_PHPConstants extends Config_Container
         $string .= '**/' . chr(10);
         $string .= $this->toString($obj);
         $string .= "\n?>"; // <? : Fix my syntax coloring
-        
+
         $len = strlen($string);
         @flock($fp, LOCK_EX);
         @fwrite($fp, $string, $len);
         @flock($fp, LOCK_UN);
         @fclose($fp);
-        
+
         // need an error check here
-        
+
         return true;
     } // end func writeDatasrc
 
-     
+
 } // end class Config_Container_PHPConstants
 
 ?>
