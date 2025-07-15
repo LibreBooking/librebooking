@@ -60,6 +60,7 @@ $conf['settings']['privacy']['view.reservations'] = 'false';                // i
 $conf['settings']['privacy']['hide.user.details'] = 'false';                // if personal user details should be displayed to non-administrators
 $conf['settings']['privacy']['hide.reservation.details'] = 'false';         // if reservation details should be displayed to non-administrators. options are true, false, current, future, past
 $conf['settings']['privacy']['allow.guest.reservations'] = 'false';         // if reservations can be made by users without a LibreBooking account, if true this overrides schedule and resource visibility
+$conf['settings']['privacy']['public.future.days'] = '1';                     // How many days in the future unauthenticated users can see/make reservations
 /**
  * Reservation specific configuration
  */
