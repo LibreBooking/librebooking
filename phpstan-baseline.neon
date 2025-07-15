@@ -1,0 +1,613 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Instantiated class AddReminderCommand not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Access/ReminderRepository.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$startDate \(Date\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 2
+			path: Domain/Access/ReservationViewRepository.php
+
+		-
+			message: '#^Method ExistingReservationSeries\:\:AddNewInstance\(\) should return Reservation but return statement is missing\.$#'
+			identifier: return.missing
+			count: 2
+			path: Domain/ExistingReservationSeries.php
+
+		-
+			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$fileId\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Domain/ReservationAttachmentView.php
+
+		-
+			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$fileName\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Domain/ReservationAttachmentView.php
+
+		-
+			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$seriesId\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Domain/ReservationAttachmentView.php
+
+		-
+			message: '#^Access to an undefined property ReservationItemView\:\:\$BufferTime\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Domain/ReservationItemView.php
+
+		-
+			message: '#^Access to an undefined property ActivationPage\:\:\$_presenter\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Pages/ActivationPage.php
+
+		-
+			message: '#^Method ManageBlackoutsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageBlackoutsPage.php
+
+		-
+			message: '#^Method ManageGroupsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageGroupsPage.php
+
+		-
+			message: '#^Method ManageReservationsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageReservationsPage.php
+
+		-
+			message: '#^Method ManageResourcesPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageResourcesPage.php
+
+		-
+			message: '#^Method ManageSchedulesPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageSchedulesPage.php
+
+		-
+			message: '#^Method ManageUsersPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Admin/ManageUsersPage.php
+
+		-
+			message: '#^Method ReservationApprovalPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Ajax/ReservationApprovalPage.php
+
+		-
+			message: '#^Method ReservationDeleteJsonPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Ajax/ReservationDeletePage.php
+
+		-
+			message: '#^Method ReservationDeletePage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Ajax/ReservationDeletePage.php
+
+		-
+			message: '#^Parameter \$item of method DashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Pages/DashboardPage.php
+
+		-
+			message: '#^Parameter \$item of method IDashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Pages/DashboardPage.php
+
+		-
+			message: '#^Method AtomSubscriptionPage\:\:GetAccessoryIds\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: Pages/Export/AtomSubscriptionPage.php
+
+		-
+			message: '#^Parameter \$control of method AnnouncementPresenter\:\:__construct\(\) has invalid type IAnnouncementsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/AnnouncementPresenter.php
+
+		-
+			message: '#^Parameter \$control of method GroupUpcomingReservationsPresenter\:\:__construct\(\) has invalid type IUpcomingReservationsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/GroupUpcomingReservationsPresenter.php
+
+		-
+			message: '#^Parameter \$control of method MissingCheckInOutReservationsPresenter\:\:__construct\(\) has invalid type IRemainingPastReservationsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/MissingCheckInOutReservationsPresenter.php
+
+		-
+			message: '#^Parameter \$control of method PastReservationsPresenter\:\:__construct\(\) has invalid type IPastReservationsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/PastReservationsPresenter.php
+
+		-
+			message: '#^Parameter \$control of method PendingApprovalReservationsPresenter\:\:__construct\(\) has invalid type IAditionalUpcomingReservationsFieldsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/PendingApprovalReservationsPresenter.php
+
+		-
+			message: '#^Instantiated class AvailableDashboardItem not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Presenters/Dashboard/ResourceAvailabilityControlPresenter.php
+
+		-
+			message: '#^Instantiated class UnavailableDashboardItem not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Presenters/Dashboard/ResourceAvailabilityControlPresenter.php
+
+		-
+			message: '#^Parameter \$control of method ResourceAvailabilityControlPresenter\:\:__construct\(\) has invalid type IResourceAvailabilityControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/ResourceAvailabilityControlPresenter.php
+
+		-
+			message: '#^Parameter \$control of method UpcomingReservationsPresenter\:\:__construct\(\) has invalid type IUpcomingReservationsControl\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/Dashboard/UpcomingReservationsPresenter.php
+
+		-
+			message: '#^Instantiated class AllUpcomingReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class AnnouncementsControl not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class GroupUpcomingReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class MissingCheckInOutReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class PastReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class PendingApprovalReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class ResourceAvailabilityControl not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Instantiated class UpcomingReservations not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Presenters/DashboardPresenter.php
+
+		-
+			message: '#^Undefined variable\: \$additionalResourceIds$#'
+			identifier: variable.undefined
+			count: 1
+			path: Presenters/Reservation/ReservationCreditsPresenter.php
+
+		-
+			message: '#^Function IsUserInGroup not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: WebServices/AuthenticationWebService.php
+
+		-
+			message: '#^Method CreateGroupFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method CreateGroupFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method CreateGroupFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:AutomaticallyAddToGroup\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetAdminGroupId\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetAllowedResourceIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetGroupId\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetGroupName\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetImportFile\(\) should return UploadedFile but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetPageNumber\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetRoleIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetUpdateOnImport\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetUserId\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method GroupControllerPageFacade\:\:GetUserIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupPermissionsFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupPermissionsFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupPermissionsFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupRolesFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupRolesFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupRolesFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupUsersFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupUsersFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method UpdateGroupUsersFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/GroupSaveController.php
+
+		-
+			message: '#^Method ReservationApprovalRequestResponseFacade\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/ReservationSaveController.php
+
+		-
+			message: '#^Method ReservationDeleteRequestResponseFacade\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Controllers/ReservationSaveController.php
+
+		-
+			message: '#^Access to an undefined property AttachmentResponse\:\:\$fileName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: WebServices/Responses/AttachmentResponse.php
+
+		-
+			message: '#^Class AuthenticationResponse does not have a constructor and must be instantiated without any parameters\.$#'
+			identifier: new.noConstructor
+			count: 1
+			path: WebServices/Responses/AuthenticationResponse.php
+
+		-
+			message: '#^Method ScheduleWebServicePageBuilder\:\:GetGroupId\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^Method ScheduleWebServiceView\:\:GetLayoutDate\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^Method ResourceRequestValidator\:\:ValidateDeleteRequest\(\) should return array\<string\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: WebServices/Validators/ResourceRequestValidator.php
+
+		-
+			message: '#^Method ManageReservationsUpdateAttributeResultCollector\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: lib/Application/Admin/ManageReservationsService.php
+
+		-
+			message: '#^Method ScheduleAdminScheduleRepository\:\:Add\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
+
+		-
+			message: '#^Access to an undefined property WebAuthenticationPage\:\:\$page\.$#'
+			identifier: property.notFound
+			count: 4
+			path: lib/Application/Authentication/WebAuthentication.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$chartColumnDefinition \(ChartColumnDefinition\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: lib/Application/Reporting/ReportColumn.php
+
+		-
+			message: '#^Class InviteeRemovedEmail constructor invoked with 4 parameters, 5 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: lib/Application/Reservation/Notification/InviteeUpdatedEmailNotification.php
+
+		-
+			message: '#^Access to an undefined property ReservationCanBeCheckedInRule\:\:\$userSession\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
+
+		-
+			message: '#^Access to an undefined property ReservationCanBeCheckedOutRule\:\:\$userSession\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
+
+		-
+			message: '#^Access to an undefined property ScheduleAvailabilityRule\:\:\$timezone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Application/Reservation/Validation/ScheduleAvailabilityRule.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$session \(UserSession\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 2
+			path: lib/Application/Schedule/ScheduleService.php
+
+		-
+			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Common/Resources.php
+
+		-
+			message: '#^Access to an undefined property RegexValidator\:\:\$_regex\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/Common/Validators/RegexValidator.php
+
+		-
+			message: '#^Access to an undefined property RegexValidator\:\:\$_value\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/Common/Validators/RegexValidator.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$startDate \(Date\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: lib/Database/Commands/Commands.php
+
+		-
+			message: '#^Undefined variable\: \$appTitle$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Email/EmailMessage.php
+
+		-
+			message: '#^Call to static method Contains\(\) on an unknown class AvailableLanguages\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/FileSystem/Paths.php
+
+		-
+			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#\(\[0\-9\]\+\);~e$#'
+			identifier: regexp.pattern
+			count: 1
+			path: lib/GoogleVoice/GoogleVoice.php
+
+		-
+			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#x\(\[0\-9a\-f\]\+\);~ei$#'
+			identifier: regexp.pattern
+			count: 1
+			path: lib/GoogleVoice/GoogleVoice.php
+
+		-
+			message: '#^Function IsUserInGroup not found\.$#'
+			identifier: function.notFound
+			count: 3
+			path: lib/WebService/Slim/SlimWebServiceRegistry.php
+
+		-
+			message: '#^Function IsUserInGroup not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/WebService/Slim/SlimWebServiceRegistryCategory.php
+
+		-
+			message: '#^Function mcrypt_enc_get_iv_size not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mcrypt_enc_get_key_size not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mcrypt_generic not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mcrypt_generic_deinit not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mcrypt_generic_init not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mcrypt_module_open not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Function mdecrypt_generic not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: lib/external/Slim/Http/Util.php
+
+		-
+			message: '#^Method Slim\\Middleware\\ContentTypes\:\:parseJson\(\) should return array\|string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 2
+			path: lib/external/Slim/Middleware/ContentTypes.php
+
+		-
+			message: '#^Path in require_once\(\) "Config/Container\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: lib/external/pear/Config/Container/PHPConstants.php
+
+		-
+			message: '#^Call to an undefined method Event_Dispatcher\:\:_notificationClass\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/external/pear/Event/Dispatcher.php
+
+		-
+			message: '#^Class Event_Dispatcher does not have a constructor and must be instantiated without any parameters\.$#'
+			identifier: new.noConstructor
+			count: 1
+			path: lib/external/pear/Event/Dispatcher.php
+
+		-
+			message: '#^Path in require_once\(\) "Event/Notification\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: lib/external/pear/Event/Dispatcher.php
+
+		-
+			message: '#^Call to static method getopt2\(\) on an unknown class Console_Getopt\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/external/pear/System.php

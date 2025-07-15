@@ -122,28 +122,27 @@ jobs:
       #   if: always()
       #   run: composer phpcs
 
-# TODO: Enable this after resolving issues
-#  analyse-php:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        php-version: ["8.2"]
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Set up PHP ${{ matrix.php-version }}
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ matrix.php-version }}
+  analyse-php:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.4"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
 #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
-#
-#      - name: Install Composer dependencies
-#        uses: ramsey/composer-install@v2
-#
-#      - name: Analyse files with PHPStan
-#        run: composer phpstan -- --memory-limit 2G
-#
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Analyse files with PHPStan
+        run: composer phpstan -- --memory-limit 2G
+
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
 #        if: always()
