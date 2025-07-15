@@ -30,8 +30,7 @@ $GLOBALS['CONFIG_TYPES'] =
             'inifile'       => array(PEAR_ROOT . 'Config/Container/IniFile.php', 'Config_Container_IniFile'),
             'inicommented'  => array(PEAR_ROOT . 'Config/Container/IniCommented.php', 'Config_Container_IniCommented'),
             'phparray'      => array(PEAR_ROOT . 'Config/Container/PHPArray.php', 'Config_Container_PHPArray'),
-			'phpconstants'	=> array(PEAR_ROOT . 'Config/Container/PHPConstants.php', 'Config_Container_PHPConstants'),
-            'xml'           => array(PEAR_ROOT . 'Config/Container/XML.php', 'Config_Container_XML')
+			'phpconstants'	=> array(PEAR_ROOT . 'Config/Container/PHPConstants.php', 'Config_Container_PHPConstants')
             );
 
 /**
