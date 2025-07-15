@@ -18,6 +18,7 @@ $conf['settings']['company.url'] = '';                          // URL of compan
 $conf['settings']['default.page.size'] = '50';                  // number of records per page
 $conf['settings']['enable.email'] = 'true';                     // global configuration to enable if any emails will be sent
 $conf['settings']['default.language'] = 'en_us';                // find your language in the lang directory
+$conf['settings']['enforce.custom.mail.template'] = 'false';    // Fallback to default.language for missing custom templates, but only when custom template is available for default.language
 $conf['settings']['script.url'] = '';                           // public URL to the Web directory of this instance. this is the URL that appears when you are logging in. leave http: or https: off to auto-detect
 $conf['settings']['image.upload.directory'] = 'Web/uploads/images'; // full or relative path to where images will be stored
 $conf['settings']['image.upload.url'] = 'uploads/images';       // full or relative path to show uploaded images from
@@ -30,6 +31,7 @@ $conf['settings']['registration.notify.admin'] = 'false';       // whether the r
 $conf['settings']['inactivity.timeout'] = '30';                 // minutes before the user is automatically logged out
 $conf['settings']['name.format'] = '{first} {last}';            // display format when showing user names
 $conf['settings']['css.extension.file'] = '';                   // full or relative url to an additional css file to include. this can be used to override the default style
+$conf['settings']['css.theme'] = 'default';                          //default, dimgray, dark_red, dark_green, french_blue, orange,
 $conf['settings']['disable.password.reset'] = 'false';          // if the password reset functionality should be disabled
 $conf['settings']['home.url'] = '';                             // the url to open when the logo is clicked
 $conf['settings']['logout.url'] = '';                           // the url to be directed to after logging out
@@ -187,6 +189,8 @@ $conf['settings']['google.analytics']['tracking.id'] = ''; // if set, Google Ana
 
 $conf['settings']['authentication']['allow.facebook.login'] = 'false';
 $conf['settings']['authentication']['allow.google.login'] = 'false';
+$conf['settings']['authentication']['allow.microsoft.login'] = 'false';
+$conf['settings']['authentication']['allow.oauth2.login'] = 'false';
 $conf['settings']['authentication']['required.email.domains'] = '';
 $conf['settings']['authentication']['hide.booked.login.prompt'] = 'false';
 $conf['settings']['authentication']['captcha.on.login'] = 'false';
@@ -210,6 +214,9 @@ $conf['settings']['tablet.view']['auto.suggest.emails'] = 'false';
 $conf['settings']['registration']['require.phone'] = 'false';
 $conf['settings']['registration']['require.position'] = 'false';
 $conf['settings']['registration']['require.organization'] = 'false';
+$conf['settings']['registration']['hide.phone'] = 'false';                  //Hide phone field when 'true', but show it when the phone is required
+$conf['settings']['registration']['hide.position'] = 'false';               //Hide position field when 'true', but show it when the phone is required
+$conf['settings']['registration']['hide.organization'] = 'false';           //Hide organization field when 'true', but show it when the phone is required
 /**
  * Error logging
  */
@@ -217,6 +224,54 @@ $conf['settings']['logging']['folder'] = '/var/log/librebooking/log'; //Absolute
 $conf['settings']['logging']['level'] = 'debug'; //Set to none disable logs, error to only log errors or debug to log all messages to the app.log file
 $conf['settings']['logging']['sql'] = 'false'; //Set to true no enable the creation of and sql.log file
 
+// IN THE REDIRECT URIs (OF THE AUTHENTICATION YOU ARE USING) YOU NEED TO ADD THE PATH FROM THE WEBSITE DOMAIN TO THE
+// WEB/GOOGLE-AUTH.PHP or WEB/FACEBOOK-AUTH.PHP or WEB/MICROSOFT-AUTH.PHP (depending on the services you are using)
+// EG: http://localhost/Web/facebook-auth.php
+/**
+ * Google login configuration
+ */
+$conf['settings']['authentication']['google.client.id'] = '';
+$conf['settings']['authentication']['google.client.secret'] = '';
+$conf['settings']['authentication']['google.redirect.uri'] = '/Web/google-auth.php';
+/**
+ * Microsoft login configuration
+ */
+$conf['settings']['authentication']['microsoft.client.id'] = '';
+$conf['settings']['authentication']['microsoft.tenant.id'] = 'common'; //Replace with your tenant id if the app is single tenant
+$conf['settings']['authentication']['microsoft.client.secret'] = '';
+$conf['settings']['authentication']['microsoft.redirect.uri'] = '/Web/microsoft-auth.php';
+/**
+ * Facebook login configuration
+ */
+$conf['settings']['authentication']['facebook.client.id'] = '';
+$conf['settings']['authentication']['facebook.client.secret'] = '';
+$conf['settings']['authentication']['facebook.redirect.uri'] = '/Web/facebook-auth.php';
+/**
+ * Keycloak login configuration
+ */
+$conf['settings']['authentication']['keycloak.url'] = '';
+$conf['settings']['authentication']['keycloak.realm'] = '';
+$conf['settings']['authentication']['keycloak.client.id'] = '';
+$conf['settings']['authentication']['keycloak.client.secret'] = '';
+$conf['settings']['authentication']['keycloak.client.uri'] = '/Web/keycloak-auth.php';
+/**
+ * OAuth2 login configuration
+ */
+$conf['settings']['authentication']['oauth2.name'] = 'OAuth2';
+$conf['settings']['authentication']['oauth2.url.authorize'] = '';
+$conf['settings']['authentication']['oauth2.url.token'] = '';
+$conf['settings']['authentication']['oauth2.url.userinfo'] = '';
+$conf['settings']['authentication']['oauth2.client.id'] = '';
+$conf['settings']['authentication']['oauth2.client.secret'] = '';
+$conf['settings']['authentication']['oauth2.client.uri'] = '/Web/oauth2-auth.php';
+/**
+ * Delete old data job configuration
+ * Activate the deleteolddata.php as a background job to use this feature
+ */
+$conf['settings']['delete.old.data']['years.old.data'] = '3';               //Choose how long a blackout, announcement and reservation stay in the database (in years) counting from the end date
+$conf['settings']['delete.old.data']['delete.old.announcements'] = 'false'; //Choose if this feature deletes old announcements from database
+$conf['settings']['delete.old.data']['delete.old.blackouts'] = 'false';     //Choose if this feature deletes old blackouts from database
+$conf['settings']['delete.old.data']['delete.old.reservations'] = 'false';  //Choose if this feature deletes old reservations from database
 
 /**
  * API Granularity Settings
