@@ -49,42 +49,6 @@ parameters:
 			path: Pages/ActivationPage.php
 
 		-
-			message: '#^Method ManageBlackoutsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageBlackoutsPage.php
-
-		-
-			message: '#^Method ManageGroupsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageGroupsPage.php
-
-		-
-			message: '#^Method ManageReservationsPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageReservationsPage.php
-
-		-
-			message: '#^Method ManageResourcesPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^Method ManageSchedulesPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageSchedulesPage.php
-
-		-
-			message: '#^Method ManageUsersPage\:\:GetPageSize\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Admin/ManageUsersPage.php
-
-		-
 			message: '#^Method ReservationApprovalPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1

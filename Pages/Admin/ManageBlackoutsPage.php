@@ -257,6 +257,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @var PageablePage
+     * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     private $pageablePage;
 
@@ -274,6 +275,9 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
             new ResourceAdminResourceRepository($userRepo, $userSession)
         );
 
+        /**
+         * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+         */
         $this->pageablePage = new PageablePage($this);
     }
 
@@ -430,11 +434,13 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @return int
+     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
     {
         /* replaced by dataTable */
         /*return $this->pageablePage->GetPageSize();*/
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**

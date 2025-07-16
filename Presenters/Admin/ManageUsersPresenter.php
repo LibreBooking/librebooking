@@ -182,7 +182,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         } else {
             $userList = $this->userRepository->GetList(
                 $this->page->GetPageNumber(),
-                $this->page->GetPageSize(),
+                null,
                 $this->page->GetSortField(),
                 $this->page->GetSortDirection(),
                 null,

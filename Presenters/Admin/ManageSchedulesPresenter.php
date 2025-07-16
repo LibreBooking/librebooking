@@ -446,7 +446,7 @@ class ManageSchedulesPresenter extends ActionPresenter
 
     public function PageLoad()
     {
-        $results = $this->manageSchedulesService->GetList($this->page->GetPageNumber(), $this->page->GetPageSize());
+        $results = $this->manageSchedulesService->GetList($this->page->GetPageNumber(), null);
         $schedules = $results->Results();
 
         $sourceSchedules = $this->manageSchedulesService->GetSourceSchedules();
