@@ -545,33 +545,3 @@ parameters:
 			identifier: return.missing
 			count: 2
 			path: lib/external/Slim/Middleware/ContentTypes.php
-
-		-
-			message: '#^Path in require_once\(\) "Config/Container\.php" is not a file or it does not exist\.$#'
-			identifier: requireOnce.fileNotFound
-			count: 1
-			path: lib/external/pear/Config/Container/PHPConstants.php
-
-		-
-			message: '#^Call to an undefined method Event_Dispatcher\:\:_notificationClass\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: lib/external/pear/Event/Dispatcher.php
-
-		-
-			message: '#^Class Event_Dispatcher does not have a constructor and must be instantiated without any parameters\.$#'
-			identifier: new.noConstructor
-			count: 1
-			path: lib/external/pear/Event/Dispatcher.php
-
-		-
-			message: '#^Path in require_once\(\) "Event/Notification\.php" is not a file or it does not exist\.$#'
-			identifier: requireOnce.fileNotFound
-			count: 1
-			path: lib/external/pear/Event/Dispatcher.php
-
-		-
-			message: '#^Call to static method getopt2\(\) on an unknown class Console_Getopt\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/external/pear/System.php

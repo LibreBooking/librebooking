@@ -25,12 +25,7 @@ require_once(PEAR_ROOT . 'Config/Container.php');
 
 $GLOBALS['CONFIG_TYPES'] =
         array(
-            'apache'        => array(PEAR_ROOT . 'Config/Container/Apache.php', 'Config_Container_Apache'),
-            'genericconf'   => array(PEAR_ROOT . 'Config/Container/GenericConf.php', 'Config_Container_GenericConf'),
-            'inifile'       => array(PEAR_ROOT . 'Config/Container/IniFile.php', 'Config_Container_IniFile'),
-            'inicommented'  => array(PEAR_ROOT . 'Config/Container/IniCommented.php', 'Config_Container_IniCommented'),
             'phparray'      => array(PEAR_ROOT . 'Config/Container/PHPArray.php', 'Config_Container_PHPArray'),
-			'phpconstants'	=> array(PEAR_ROOT . 'Config/Container/PHPConstants.php', 'Config_Container_PHPConstants')
             );
 
 /**
@@ -177,7 +172,7 @@ class Config {
     /**
     * Parses the datasource contents
     *
-    * This method will parse the datasource given and fill the root 
+    * This method will parse the datasource given and fill the root
     * Config_Container object with other Config_Container objects.
     *
     * @param mixed   $datasrc     Datasource to parse
