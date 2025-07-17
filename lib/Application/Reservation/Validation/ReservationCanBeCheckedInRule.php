@@ -3,6 +3,11 @@
 class ReservationCanBeCheckedInRule implements IReservationValidationRule
 {
     /**
+     * @var UserSession
+     */
+    private $userSession;
+
+    /**
      * @param ExistingReservationSeries $reservationSeries
      * @param null|ReservationRetryParameter[] $retryParameters
      * @return ReservationRuleResult

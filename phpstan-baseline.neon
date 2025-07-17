@@ -19,34 +19,10 @@ parameters:
 			path: Domain/ExistingReservationSeries.php
 
 		-
-			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$fileId\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Domain/ReservationAttachmentView.php
-
-		-
-			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$fileName\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Domain/ReservationAttachmentView.php
-
-		-
-			message: '#^Access to an undefined property ReservationAttachmentView\:\:\$seriesId\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Domain/ReservationAttachmentView.php
-
-		-
 			message: '#^Access to an undefined property ReservationItemView\:\:\$BufferTime\.$#'
 			identifier: property.notFound
 			count: 2
 			path: Domain/ReservationItemView.php
-
-		-
-			message: '#^Access to an undefined property ActivationPage\:\:\$_presenter\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Pages/ActivationPage.php
 
 		-
 			message: '#^Method ReservationApprovalPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
@@ -355,12 +331,6 @@ parameters:
 			path: WebServices/Controllers/ReservationSaveController.php
 
 		-
-			message: '#^Access to an undefined property AttachmentResponse\:\:\$fileName\.$#'
-			identifier: property.notFound
-			count: 1
-			path: WebServices/Responses/AttachmentResponse.php
-
-		-
 			message: '#^Class AuthenticationResponse does not have a constructor and must be instantiated without any parameters\.$#'
 			identifier: new.noConstructor
 			count: 1
@@ -397,12 +367,6 @@ parameters:
 			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
 
 		-
-			message: '#^Access to an undefined property WebAuthenticationPage\:\:\$page\.$#'
-			identifier: property.notFound
-			count: 4
-			path: lib/Application/Authentication/WebAuthentication.php
-
-		-
 			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$chartColumnDefinition \(ChartColumnDefinition\) is implicitly nullable via default value null\.$#'
 			identifier: parameter.implicitlyNullable
 			count: 1
@@ -413,18 +377,6 @@ parameters:
 			identifier: arguments.count
 			count: 1
 			path: lib/Application/Reservation/Notification/InviteeUpdatedEmailNotification.php
-
-		-
-			message: '#^Access to an undefined property ReservationCanBeCheckedInRule\:\:\$userSession\.$#'
-			identifier: property.notFound
-			count: 2
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
-
-		-
-			message: '#^Access to an undefined property ReservationCanBeCheckedOutRule\:\:\$userSession\.$#'
-			identifier: property.notFound
-			count: 2
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
 
 		-
 			message: '#^Access to an undefined property ScheduleAvailabilityRule\:\:\$timezone\.$#'
@@ -443,18 +395,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: lib/Common/Resources.php
-
-		-
-			message: '#^Access to an undefined property RegexValidator\:\:\$_regex\.$#'
-			identifier: property.notFound
-			count: 2
-			path: lib/Common/Validators/RegexValidator.php
-
-		-
-			message: '#^Access to an undefined property RegexValidator\:\:\$_value\.$#'
-			identifier: property.notFound
-			count: 2
-			path: lib/Common/Validators/RegexValidator.php
 
 		-
 			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$startDate \(Date\) is implicitly nullable via default value null\.$#'

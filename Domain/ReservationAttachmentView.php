@@ -2,6 +2,10 @@
 
 class ReservationAttachmentView
 {
+    private int $fileId;
+    private int $seriesId;
+    private string $fileName;
+
     /**
      * @param int $fileId
      * @param int $seriesId
