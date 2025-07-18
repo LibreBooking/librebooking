@@ -241,28 +241,10 @@ parameters:
 			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
 
 		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$chartColumnDefinition \(ChartColumnDefinition\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 1
-			path: lib/Application/Reporting/ReportColumn.php
-
-		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$session \(UserSession\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 2
-			path: lib/Application/Schedule/ScheduleService.php
-
-		-
 			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
 			path: lib/Common/Resources.php
-
-		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$startDate \(Date\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 1
-			path: lib/Database/Commands/Commands.php
 
 		-
 			message: '#^Call to static method Contains\(\) on an unknown class AvailableLanguages\.$#'

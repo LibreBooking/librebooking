@@ -4,10 +4,10 @@ interface IScheduleService
 {
     /**
      * @param bool $includeInaccessible
-     * @param UserSession $session
+     * @param UserSession|null $session
      * @return Schedule[]
      */
-    public function GetAll($includeInaccessible = true, UserSession $session = null);
+    public function GetAll($includeInaccessible = true, ?UserSession $session = null);
 
     /**
      * @param int $scheduleId
@@ -49,7 +49,7 @@ class ScheduleService implements IScheduleService
         $this->dailyLayoutFactory = $dailyLayoutFactory;
     }
 
-    public function GetAll($includeInaccessible = true, UserSession $session = null)
+    public function GetAll($includeInaccessible = true, ?UserSession $session = null)
     {
         $schedules = $this->scheduleRepository->GetAll();
 
