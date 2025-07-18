@@ -13,12 +13,6 @@ parameters:
 			path: Domain/Access/ReservationViewRepository.php
 
 		-
-			message: '#^Access to an undefined property ReservationItemView\:\:\$BufferTime\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Domain/ReservationItemView.php
-
-		-
 			message: '#^Parameter \$item of method DashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
 			identifier: class.notFound
 			count: 1

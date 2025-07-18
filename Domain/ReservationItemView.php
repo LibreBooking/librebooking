@@ -877,8 +877,8 @@ class ReservationItemView implements IReservedItemView
     {
         if ($this->HasBufferTime()) {
             $range = new DateRange(
-                $this->StartDate->SubtractInterval($this->BufferTime),
-                $this->EndDate->AddInterval($this->BufferTime)
+                $this->StartDate->SubtractInterval($this->GetBufferTime()),
+                $this->EndDate->AddInterval($this->GetBufferTime())
             );
         } else {
             $range = new DateRange($this->StartDate, $this->EndDate);
