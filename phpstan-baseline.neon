@@ -271,12 +271,6 @@ parameters:
 			path: lib/Application/Reservation/Notification/InviteeUpdatedEmailNotification.php
 
 		-
-			message: '#^Access to an undefined property ScheduleAvailabilityRule\:\:\$timezone\.$#'
-			identifier: property.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ScheduleAvailabilityRule.php
-
-		-
 			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$session \(UserSession\) is implicitly nullable via default value null\.$#'
 			identifier: parameter.implicitlyNullable
 			count: 2
