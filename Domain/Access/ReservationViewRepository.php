@@ -66,7 +66,7 @@ interface IReservationViewRepository
     );
 
     /**
-     * @param Date $startDate
+     * @param Date|null $startDate
      * @param Date $endDate
      * @param int|null|int[] $userIds
      * @param int|ReservationUserLevel|null $userLevel
@@ -77,7 +77,7 @@ interface IReservationViewRepository
      * @return ReservationItemView[]
      */
     public function GetReservationsMissingCheckInCheckOut(
-        Date $startDate = null,
+        ?Date $startDate,
         Date $endDate,
         $userIds = ReservationViewRepository::ALL_USERS,
         $userLevel = ReservationUserLevel::OWNER,
@@ -368,7 +368,7 @@ class ReservationViewRepository implements IReservationViewRepository
     }
 
     public function GetReservationsMissingCheckInCheckOut(
-        Date $startDate = null,
+        ?Date $startDate,
         Date $endDate,
         $userIds = self::ALL_USERS,
         $userLevel = ReservationUserLevel::OWNER,
