@@ -134,6 +134,32 @@
 
 		</div>
 	</div>
+	<div id="footer-fondo-oscuro">
+		<div class="row justify-content-center container-fluid">
+			<div class="col-sm-12 col-md-6">
+				<div>© Copyright 2025
+					| Sitio creado y administrado por los <a
+						href="https://ftecnologica.udistrital.edu.co/laboratorios/mecanica/index.php/">Laboratorios y
+						Talleres de Mecánica</a>
+					| <a href="https://ftecnologica.udistrital.edu.co/">Facultad Tecnológica</a>
+					| v{$Version}</div>
+			</div>
+			<div class="col-sm-12 col-md-6">
+				<ul id="navlist">
+					<li><a id="link_inferior" href="https://www.udistrital.edu.co/user/login/google">Ingreso
+							publicadores</a></li>
+					<li><a id="link_inferior" href="http://www.bogota.gov.co/sdqs">SDQS</a></li>
+					<li><a id="link_inferior" href="https://www.udistrital.edu.co/politicas-de-privacidad">Política
+							de
+							Privacidad</a>
+					</li>
+					<li><a id="link_inferior" href="https://www.udistrital.edu.co/contacto">Contáctenos</a></li>
+					<li><a id="link_inferior" href="https://www.udistrital.edu.co/sitemap.xml">Mapa de sitio</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </footer>
 
 <script type="text/javascript">
