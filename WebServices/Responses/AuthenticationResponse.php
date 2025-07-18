@@ -18,7 +18,7 @@ class AuthenticationResponse extends RestResponse
      */
     public static function Success(IRestServer $server, $userSession, $version)
     {
-        $response = new AuthenticationResponse($server);
+        $response = new AuthenticationResponse();
         $response->sessionToken = $userSession->SessionToken;
         $response->sessionExpires = $userSession->SessionExpiration;
         $response->isAuthenticated = true;

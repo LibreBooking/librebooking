@@ -223,12 +223,6 @@ parameters:
 			path: WebServices/Controllers/ReservationSaveController.php
 
 		-
-			message: '#^Class AuthenticationResponse does not have a constructor and must be instantiated without any parameters\.$#'
-			identifier: new.noConstructor
-			count: 1
-			path: WebServices/Responses/AuthenticationResponse.php
-
-		-
 			message: '#^Method ScheduleWebServicePageBuilder\:\:GetGroupId\(\) should return int but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
