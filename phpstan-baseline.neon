@@ -265,12 +265,6 @@ parameters:
 			path: lib/Application/Reporting/ReportColumn.php
 
 		-
-			message: '#^Class InviteeRemovedEmail constructor invoked with 4 parameters, 5 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: lib/Application/Reservation/Notification/InviteeUpdatedEmailNotification.php
-
-		-
 			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$session \(UserSession\) is implicitly nullable via default value null\.$#'
 			identifier: parameter.implicitlyNullable
 			count: 2

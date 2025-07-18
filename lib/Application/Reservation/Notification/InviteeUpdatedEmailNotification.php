@@ -46,7 +46,7 @@ class InviteeUpdatedEmailNotification extends InviteeAddedEmailNotification
 
             $invitee = $this->userRepository->LoadById($userId);
 
-            $message = new InviteeRemovedEmail($owner, $invitee, $reservationSeries, $this->attributeRepository);
+            $message = new InviteeRemovedEmail($owner, $invitee, $reservationSeries, $this->attributeRepository, $this->userRepository);
             ServiceLocator::GetEmailService()->Send($message);
         }
     }
