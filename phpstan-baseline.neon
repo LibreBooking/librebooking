@@ -295,12 +295,6 @@ parameters:
 			path: lib/Database/Commands/Commands.php
 
 		-
-			message: '#^Undefined variable\: \$appTitle$#'
-			identifier: variable.undefined
-			count: 1
-			path: lib/Email/EmailMessage.php
-
-		-
 			message: '#^Call to static method Contains\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
