@@ -96,6 +96,7 @@ class ReservationApprovalPage extends SecurePage implements IReservationApproval
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 
     /**

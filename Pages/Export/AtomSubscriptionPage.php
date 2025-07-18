@@ -100,6 +100,7 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
     public function GetAccessoryIds()
     {
         // no op
+        return 0;
     }
 
     public function GetResourceGroupId()

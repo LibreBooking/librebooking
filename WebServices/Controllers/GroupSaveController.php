@@ -420,6 +420,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -428,6 +429,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -436,6 +438,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
@@ -475,6 +478,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -483,6 +487,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -491,6 +496,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
@@ -544,6 +550,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -552,6 +559,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -560,6 +568,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
@@ -599,6 +608,7 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -607,6 +617,7 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -615,5 +626,6 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }

@@ -13,34 +13,10 @@ parameters:
 			path: Domain/Access/ReservationViewRepository.php
 
 		-
-			message: '#^Method ExistingReservationSeries\:\:AddNewInstance\(\) should return Reservation but return statement is missing\.$#'
-			identifier: return.missing
-			count: 2
-			path: Domain/ExistingReservationSeries.php
-
-		-
 			message: '#^Access to an undefined property ReservationItemView\:\:\$BufferTime\.$#'
 			identifier: property.notFound
 			count: 2
 			path: Domain/ReservationItemView.php
-
-		-
-			message: '#^Method ReservationApprovalPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Ajax/ReservationApprovalPage.php
-
-		-
-			message: '#^Method ReservationDeleteJsonPage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Ajax/ReservationDeletePage.php
-
-		-
-			message: '#^Method ReservationDeletePage\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Ajax/ReservationDeletePage.php
 
 		-
 			message: '#^Parameter \$item of method DashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
@@ -53,12 +29,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: Pages/DashboardPage.php
-
-		-
-			message: '#^Method AtomSubscriptionPage\:\:GetAccessoryIds\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: Pages/Export/AtomSubscriptionPage.php
 
 		-
 			message: '#^Parameter \$control of method AnnouncementPresenter\:\:__construct\(\) has invalid type IAnnouncementsControl\.$#'
@@ -175,24 +145,6 @@ parameters:
 			path: WebServices/AuthenticationWebService.php
 
 		-
-			message: '#^Method CreateGroupFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method CreateGroupFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method CreateGroupFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
 			message: '#^Method GroupControllerPageFacade\:\:AutomaticallyAddToGroup\(\) should return bool but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
@@ -260,60 +212,6 @@ parameters:
 
 		-
 			message: '#^Method GroupControllerPageFacade\:\:GetUserIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupPermissionsFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupPermissionsFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupPermissionsFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupRolesFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupRolesFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupRolesFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupUsersFacade\:\:GetGroupAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupUsersFacade\:\:GetResourceAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/GroupSaveController.php
-
-		-
-			message: '#^Method UpdateGroupUsersFacade\:\:GetScheduleAdminIds\(\) should return array\<int\> but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
 			path: WebServices/Controllers/GroupSaveController.php

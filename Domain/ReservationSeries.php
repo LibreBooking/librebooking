@@ -403,9 +403,9 @@ class ReservationSeries
 
     /**
      * @param DateRange $reservationDate
-     * @return Reservation newly created instance
+     * @return Reservation|null newly created instance
      */
-    protected function AddNewInstance(DateRange $reservationDate)
+    protected function AddNewInstance(DateRange $reservationDate): Reservation|null
     {
         $newInstance = new Reservation($this, $reservationDate);
         $this->AddInstance($newInstance);
