@@ -133,12 +133,6 @@ parameters:
 			path: Presenters/DashboardPresenter.php
 
 		-
-			message: '#^Undefined variable\: \$additionalResourceIds$#'
-			identifier: variable.undefined
-			count: 1
-			path: Presenters/Reservation/ReservationCreditsPresenter.php
-
-		-
 			message: '#^Function IsUserInGroup not found\.$#'
 			identifier: function.notFound
 			count: 1
