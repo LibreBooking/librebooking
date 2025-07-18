@@ -103,6 +103,7 @@ class ReservationDeletePage extends SecurePage implements IReservationDeletePage
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 
     public function SetCanJoinWaitList($canJoinWaitlist)
@@ -181,5 +182,6 @@ class ReservationDeleteJsonPage extends ReservationDeletePage implements IReserv
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 }

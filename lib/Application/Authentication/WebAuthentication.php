@@ -243,6 +243,11 @@ class WebAuthentication implements IWebAuthentication
 
 class WebAuthenticationPage implements IAuthenticationPage
 {
+    /**
+     * @var ILoginPage
+     */
+    private $page;
+
     public function __construct(ILoginPage $page)
     {
         $this->page = $page;

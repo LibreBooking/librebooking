@@ -15,15 +15,10 @@ class AccountWebService
      * @var IRestServer
      */
     private $server;
-    /**
-     * @var IAccountController
-     */
-    private $controller;
 
-    public function __construct(IRestServer $server, IAccountController $controller)
+    public function __construct(IRestServer $server, private readonly IAccountController $controller)
     {
         $this->server = $server;
-        $this->controller = $controller;
     }
 
     /**

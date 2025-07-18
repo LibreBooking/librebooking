@@ -96,8 +96,11 @@ To run LibreBooking from a prebuilt release, your server needs:
 - PHP >= 8.2 with the  extensions: pdo, mbstring, openssl, tokenizer, json, curl, xml, ctype, bcmath, fileinfo
 - A web server like Apache or Nginx
 - MySQL >= 5.5
+- Composer (for managing PHP dependencies)
+- Git (optional, useful for cloning the repository or managing updates)
+
 For full setup instructions, see
-[INSTALLATION.md](https://github.com/LibreBooking/app/blob/develop/doc/INSTALLATION.md)
+[INSTALLATION](https://github.com/LibreBooking/app/blob/develop/docs/source/INSTALLATION.rst)
 
 ### Docker Deployment
 
@@ -112,15 +115,16 @@ docker-compose up -d
 ## 💻 Developer Documentation
 
 - See
-  [doc/README.md](https://github.com/LibreBooking/app/blob/develop/doc/README.md)
+  [docs/source/README.md](https://github.com/LibreBooking/app/blob/develop/docs/source/DEVELOPER-README.rst
+)
   for developer notes.
-- See [doc/API.md](https://github.com/LibreBooking/app/blob/develop/doc/API.md)
+- See [docs/source/API.md](https://github.com/LibreBooking/app/blob/develop/docs/source/API.rst)
   for API notes.
 - See
-  [doc/Oauth2-Configuration.md](https://github.com/LibreBooking/app/blob/develop/doc/Oauth2-Configuration.md)
+  [docs/source/Oauth2-Configuration.md](https://github.com/LibreBooking/app/blob/develop/docs/source/Oauth2-Configuration.rst)
   for Oauth2 configuration.
 - See
-  [doc/SAML-Configuration.md](https://github.com/LibreBooking/app/blob/develop/doc/SAML-Configuration.md)
+  [docs/source/SAML-Configuration.md](https://github.com/LibreBooking/app/blob/develop/docs/source/SAML-Configuration.rst)
   for SAML configuration.
 - Codebase follows PSR-12 standards and GitHub Flow.
 

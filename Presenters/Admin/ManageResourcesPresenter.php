@@ -151,7 +151,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         $results = $this->resourceRepository->GetList(
             $this->page->GetPageNumber(),
-            $this->page->GetPageSize(),
+            null,
             null,
             null,
             $filterValues->AsFilter($resourceAttributes)

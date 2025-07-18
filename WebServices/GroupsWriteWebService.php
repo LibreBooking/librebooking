@@ -8,19 +8,13 @@ require_once(ROOT_DIR . 'WebServices/Requests/Group/GroupRequest.php');
 class GroupsWriteWebService
 {
     /**
-     * @var IGroupSaveController
-     */
-    private $controller;
-
-    /**
      * @var IRestServer
      */
     private $server;
 
-    public function __construct(IRestServer $server, IGroupSaveController $controller)
+    public function __construct(IRestServer $server, private readonly IGroupSaveController $controller)
     {
         $this->server = $server;
-        $this->controller = $controller;
     }
 
     /**

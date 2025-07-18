@@ -7,6 +7,7 @@ require_once(ROOT_DIR . 'lib/Server/QueryStringKeys.php');
 class AttachmentResponse
 {
     public $url;
+    public $fileName;
 
     public function __construct(IRestServer $server, $fileId, $fileName, $referenceNumber)
     {

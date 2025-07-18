@@ -18,6 +18,11 @@ interface IActivationPage extends IPage
 
 class ActivationPage extends ActionPage implements IActivationPage
 {
+    /**
+     * @var ActivationPresenter
+     */
+    private $_presenter;
+
     public function __construct()
     {
         parent::__construct('AccountActivation');

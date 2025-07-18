@@ -251,10 +251,14 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         return $this->pageable->GetPageNumber();
     }
 
+    /**
+     * @todo Delete this method for LibreBooking v4.0.0
+     */
     public function GetPageSize()
     {
         /* replaced by dataTable */
         /*return $this->pageable->GetPageSize();*/
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindUsers($users)

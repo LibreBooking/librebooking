@@ -2,13 +2,8 @@
 
 class AttributeValueRequest
 {
-    public $attributeId;
-    public $attributeValue;
-
-    public function __construct($attributeId, $attributeValue)
+    public function __construct(public $attributeId, public $attributeValue)
     {
-        $this->attributeId = $attributeId;
-        $this->attributeValue = $attributeValue;
     }
 
     public static function Example()

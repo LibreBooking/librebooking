@@ -46,9 +46,12 @@ SimpleSAMLphp has a lot of configuration options. If you’re like me and
 far from an expert in SAML, it’s overwhelming. Luckily, since
 LibreBooking is a Service Provider it doesn’t need anything special.
 I’ll go through each of the settings that need to be updated
-individually. Please note that at the time of writing this post, the
-latest version of SimpleSAMLphp was 1.18.5. It’s possible that the names
-of the options will change in future versions.
+individually.
+
+.. note::
+   At the time of writing this post, the latest version of SimpleSAMLphp was
+   1.18.5. It’s possible that the names of the options will change in future
+   versions.
 
 Copy ``/home/username/simplesamlphp/config/config.php.dist`` to
 ``/home/username/simplesamlphp/config/config.php``
@@ -188,15 +191,18 @@ Some Restrictions
 
 A couple important notes with SAML enabled:
 
-The first is that you will no longer be able to log into LibreBooking
-with any other credentials. There is no “back door” – so every
-authentication request will be routed through SAML.
+.. warning::
 
-The other restriction is that you will not be able to use any
-authenticated method from the API. SAML performs a series of browser
-redirects in order to complete the authentication process. When using
-the API you are not within the context of a browser, so authentication
-will fail.
+    You will no longer be able to log into LibreBooking with any other
+    credentials. There is no “back door” – so every authentication request will
+    be routed through SAML.
+
+.. warning::
+
+    You will not be able to use any authenticated method from the API. SAML
+    performs a series of browser redirects in order to complete the
+    authentication process. When using the API you are not within the context
+    of a browser, so authentication will fail.
 
 Logging In
 ----------

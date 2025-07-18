@@ -19,8 +19,12 @@ class CustomAttributes
         $pairs = explode('!sep!', $attributes);
 
         foreach ($pairs as $pair) {
-            $nv = explode('=', $pair);
-            $ca->Add($nv[0], $nv[1]);
+            $nv = explode('=', $pair, 2);
+            if (count($nv) !== 2) {
+                Log::Debug('nv not exploded to two values: %s', print_r($nv, true));
+            } else {
+                $ca->Add($nv[0], $nv[1]);
+            }
         }
 
         return $ca;

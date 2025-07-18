@@ -13,15 +13,9 @@ class ResourcesWriteWebService
      */
     private $server;
 
-    /**
-     * @var IResourceSaveController
-     */
-    private $controller;
-
-    public function __construct(IRestServer $server, IResourceSaveController $controller)
+    public function __construct(IRestServer $server, private readonly IResourceSaveController $controller)
     {
         $this->server = $server;
-        $this->controller = $controller;
     }
 
     /**

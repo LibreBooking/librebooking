@@ -2,16 +2,11 @@
 
 class ReservationCreatedResponse extends RestResponse
 {
-    public $referenceNumber;
-    public $isPendingApproval;
-
-    public function __construct(IRestServer $server, $referenceNumber, $isPendingApproval)
+    public function __construct(IRestServer $server, public $referenceNumber, public $isPendingApproval)
     {
         $this->message = 'The reservation was created';
-        $this->referenceNumber = $referenceNumber;
-        $this->isPendingApproval = $isPendingApproval;
-        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
-        $this->AddService($server, WebServices::UpdateReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
+        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
+        $this->AddService($server, WebServices::UpdateReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
     }
 
     public static function Example()
@@ -22,15 +17,10 @@ class ReservationCreatedResponse extends RestResponse
 
 class ReservationUpdatedResponse extends RestResponse
 {
-    public $referenceNumber;
-    public $isPendingApproval;
-
-    public function __construct(IRestServer $server, $referenceNumber, $isPendingApproval)
+    public function __construct(IRestServer $server, public $referenceNumber, public $isPendingApproval)
     {
         $this->message = 'The reservation was updated';
-        $this->referenceNumber = $referenceNumber;
-        $this->isPendingApproval = $isPendingApproval;
-        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
+        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
     }
 
     public static function Example()
@@ -41,13 +31,10 @@ class ReservationUpdatedResponse extends RestResponse
 
 class ReservationApprovedResponse extends RestResponse
 {
-    public $referenceNumber;
-
-    public function __construct(IRestServer $server, $referenceNumber)
+    public function __construct(IRestServer $server, public $referenceNumber)
     {
         $this->message = 'The reservation was approved';
-        $this->referenceNumber = $referenceNumber;
-        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
+        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
     }
 
     public static function Example()
@@ -58,13 +45,10 @@ class ReservationApprovedResponse extends RestResponse
 
 class ReservationCheckedInResponse extends RestResponse
 {
-    public $referenceNumber;
-
-    public function __construct(IRestServer $server, $referenceNumber)
+    public function __construct(IRestServer $server, public $referenceNumber)
     {
         $this->message = 'The reservation was checked in';
-        $this->referenceNumber = $referenceNumber;
-        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
+        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
     }
 
     public static function Example()
@@ -75,13 +59,10 @@ class ReservationCheckedInResponse extends RestResponse
 
 class ReservationCheckedOutResponse extends RestResponse
 {
-    public $referenceNumber;
-
-    public function __construct(IRestServer $server, $referenceNumber)
+    public function __construct(IRestServer $server, public $referenceNumber)
     {
         $this->message = 'The reservation was checked out';
-        $this->referenceNumber = $referenceNumber;
-        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $referenceNumber]);
+        $this->AddService($server, WebServices::GetReservation, [WebServiceParams::ReferenceNumber => $this->referenceNumber]);
     }
 
     public static function Example()

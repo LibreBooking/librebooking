@@ -81,7 +81,7 @@ class Configuration implements IConfiguration
     public const DEFAULT_CONFIG_ID = 'librebooking';
     public const DEFAULT_CONFIG_FILE_PATH = 'config/config.php';
 
-    public const VERSION = '3.0.1';
+    public const VERSION = '3.0.3';
 
     protected function __construct()
     {

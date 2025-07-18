@@ -334,6 +334,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
 
     /**
      * @var PageablePage
+     * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     protected $pageablePage;
 
@@ -351,6 +352,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
             new TermsOfServiceRepository()
         );
 
+        /**
+         *  @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+         */
         $this->pageablePage = new PageablePage($this);
 
         $this->Set('CreditsEnabled', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
@@ -487,10 +491,14 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         return $this->pageablePage->GetPageNumber();
     }
 
+    /**
+     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
+     */
     public function GetPageSize()
     {
         /* replaced by dataTable */
         //return $this->pageablePage->GetPageSize();
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindPageInfo(PageInfo $pageInfo)

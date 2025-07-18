@@ -254,12 +254,18 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
      * @var ManageSchedulesPresenter
      */
     protected $_presenter;
+    /**
+     * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+     */
     protected $pageablePage;
 
     public function __construct()
     {
         parent::__construct('ManageSchedules', 1);
 
+        /**
+         * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+         */
         $this->pageablePage = new PageablePage($this);
         $this->_presenter = new ManageSchedulesPresenter(
             $this,
@@ -427,6 +433,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
 
     /**
      * @return int
+     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
     {
@@ -437,6 +444,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
             return 10;
         }
         return $pageSize;*/
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**

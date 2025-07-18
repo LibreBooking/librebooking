@@ -396,14 +396,16 @@ class ExistingReservationSeries extends ReservationSeries
         $this->AddEvent(new InstanceUpdatedEvent($this->CurrentInstance(), $this));
     }
 
-    protected function AddNewInstance(DateRange $reservationDate)
+    protected function AddNewInstance(DateRange $reservationDate): Reservation|null
     {
         if (!$this->InstanceStartsOnDate($reservationDate)) {
             Log::Debug('Adding instance for series %s on %s', $this->SeriesId(), $reservationDate);
 
             $newInstance = parent::AddNewInstance($reservationDate);
             $this->AddEvent(new InstanceAddedEvent($newInstance, $this));
+            return $newInstance;
         }
+        return null;
     }
 
     /**

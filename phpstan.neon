@@ -1,0 +1,23 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 0
+    errorFormat: prettyJson
+    paths:
+        - Jobs
+        - lib
+        - Domain
+        - Pages
+        - Presenters
+        - WebServices
+    excludePaths:
+        analyse:
+            - vendor/
+            - tpl_c/ (?)
+            - build/ (?)
+            - Web/scripts/
+            - Web/css/
+            - plugins/
+    bootstrapFiles:
+        - vendor/autoload.php

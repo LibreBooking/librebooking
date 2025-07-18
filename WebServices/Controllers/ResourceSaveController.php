@@ -36,15 +36,9 @@ class ResourceSaveController implements IResourceSaveController
      */
     private $repository;
 
-    /**
-     * @var IResourceRequestValidator
-     */
-    private $validator;
-
-    public function __construct(IResourceRepository $repository, IResourceRequestValidator $validator)
+    public function __construct(IResourceRepository $repository, private readonly IResourceRequestValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator = $validator;
     }
 
     public function Create($request, $session)
@@ -154,13 +148,8 @@ class ResourceSaveController implements IResourceSaveController
 
 class ResourceControllerResult
 {
-    private $resourceId;
-    private $errors = [];
-
-    public function __construct($resourceId, $errors = [])
+    public function __construct(private $resourceId, private $errors = [])
     {
-        $this->resourceId = $resourceId;
-        $this->errors = $errors;
     }
 
     /**

@@ -53,13 +53,8 @@ interface IGroupSaveController
 
 class GroupControllerResult
 {
-    private $groupId;
-    private $errors = [];
-
-    public function __construct($groupId, $errors = [])
+    public function __construct(private $groupId, private $errors = [])
     {
-        $this->groupId = $groupId;
-        $this->errors = $errors;
     }
 
     /**
@@ -389,19 +384,11 @@ abstract class GroupControllerPageFacade implements IManageGroupsPage
 class CreateGroupFacade extends GroupControllerPageFacade
 {
     /**
-     * @var GroupRequest
-     */
-    private $request;
-    private $id;
-
-    /**
      * @param GroupRequest $request
      * @param int|null $id
      */
-    public function __construct($request, $id = null)
+    public function __construct(private $request, private $id = null)
     {
-        $this->request = $request;
-        $this->id = $id;
     }
 
     public function GetGroupId()
@@ -433,6 +420,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -441,6 +429,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -449,25 +438,18 @@ class CreateGroupFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
 class UpdateGroupRolesFacade extends GroupControllerPageFacade
 {
     /**
-     * @var GroupRolesRequest
-     */
-    private $request;
-    private $id;
-
-    /**
      * @param GroupRolesRequest $request
      * @param int|null $id
      */
-    public function __construct($request, $id = null)
+    public function __construct(private $request, private $id = null)
     {
-        $this->request = $request;
-        $this->id = $id;
     }
 
     public function GetGroupId()
@@ -496,6 +478,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -504,6 +487,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -512,25 +496,18 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
 class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
 {
     /**
-     * @var GroupPermissionsRequest
-     */
-    private $request;
-    private $id;
-
-    /**
      * @param GroupPermissionsRequest $request
      * @param int|null $id
      */
-    public function __construct($request, $id = null)
+    public function __construct(private $request, private $id = null)
     {
-        $this->request = $request;
-        $this->id = $id;
     }
 
     public function GetGroupId()
@@ -573,6 +550,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -581,6 +559,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -589,25 +568,18 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }
 
 class UpdateGroupUsersFacade extends GroupControllerPageFacade
 {
     /**
-     * @var GroupUsersRequest
-     */
-    private $request;
-    private $id;
-
-    /**
      * @param GroupUsersRequest $request
      * @param int|null $id
      */
-    public function __construct($request, $id = null)
+    public function __construct(private $request, private $id = null)
     {
-        $this->request = $request;
-        $this->id = $id;
     }
 
     public function GetGroupId()
@@ -636,6 +608,7 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetGroupAdminIds()
     {
         // TODO: Implement GetGroupAdminIds() method.
+        return [];
     }
 
     /**
@@ -644,6 +617,7 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetResourceAdminIds()
     {
         // TODO: Implement GetResourceAdminIds() method.
+        return [];
     }
 
     /**
@@ -652,5 +626,6 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
     public function GetScheduleAdminIds()
     {
         // TODO: Implement GetScheduleAdminIds() method.
+        return [];
     }
 }

@@ -32,6 +32,7 @@ class WebServices
     public const GetResource = 'get_resource';
     public const GetResourceAvailability = 'get_resource_availability';
     public const GetResourceGroups = 'get_resource_groups';
+    public const GetResourceTypes = 'get_resource_types';
     public const GetSchedule = 'get_schedule';
     public const GetScheduleSlots = 'get_schedule_reservations';
     public const GetUser = 'get_user';

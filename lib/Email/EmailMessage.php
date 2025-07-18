@@ -20,8 +20,8 @@ abstract class EmailMessage implements IEmailMessage
     protected function __construct($languageCode = null)
     {
         $this->enforceCustomTemplate = Configuration::Instance()->GetKey(ConfigKeys::ENFORCE_CUSTOM_MAIL_TEMPLATE, new BooleanConverter());
-        $this->email = new SmartyPage($resources);
         $resources = Resources::GetInstance();
+        $this->email = new SmartyPage($resources);
         if (!empty($languageCode)) {
             $resources->SetLanguage($languageCode);
             $this->Set('CurrentLanguage', $languageCode);

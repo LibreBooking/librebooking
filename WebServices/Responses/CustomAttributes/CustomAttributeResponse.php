@@ -4,16 +4,9 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class CustomAttributeResponse extends RestResponse
 {
-    public $id;
-    public $label;
-    public $value;
-
-    public function __construct(IRestServer $server, $attributeId, $attributeLabel, $attributeValue)
+    public function __construct(IRestServer $server, public $id, public $label, public $value)
     {
-        $this->id = $attributeId;
-        $this->label = $attributeLabel;
-        $this->value = $attributeValue;
-        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $attributeId]);
+        $this->AddService($server, WebServices::GetCustomAttribute, [WebServiceParams::AttributeId => $this->id]);
     }
 
     public static function Example()

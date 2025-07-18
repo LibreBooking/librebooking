@@ -9,19 +9,13 @@ require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/CustomAttributeRe
 class AttributesWriteWebService
 {
     /**
-     * @var IAttributeSaveController
-     */
-    private $attributeController;
-
-    /**
      * @var IRestServer
      */
     private $server;
 
-    public function __construct(IRestServer $server, IAttributeSaveController $attributeController)
+    public function __construct(IRestServer $server, private readonly IAttributeSaveController $attributeController)
     {
         $this->server = $server;
-        $this->attributeController = $attributeController;
     }
 
     /**

@@ -169,11 +169,6 @@ class ScheduleWebServicePageBuilder extends SchedulePageBuilder
 class ScheduleWebServiceView implements ISchedulePage
 {
     /**
-     * @var int
-     */
-    private $scheduleId;
-
-    /**
      * @var IDailyLayout
      */
     private $dailyLayout;
@@ -192,11 +187,6 @@ class ScheduleWebServiceView implements ISchedulePage
      * @var ResourceDto[]
      */
     private $resources;
-
-    /**
-     * @var int
-     */
-    private $resourceId;
 
     /**
      * @var Date
@@ -218,11 +208,13 @@ class ScheduleWebServiceView implements ISchedulePage
      */
     private $allowConcurrentReservations;
 
-    public function __construct($scheduleId, $startDate, $resourceId)
+    /**
+     * @param int $scheduleId
+     * @param int $resourceId
+     */
+    public function __construct(private $scheduleId, $startDate, private $resourceId)
     {
-        $this->scheduleId = $scheduleId;
         $this->startDate = $startDate;
-        $this->resourceId = $resourceId;
     }
 
     public function SetSchedules($schedules)

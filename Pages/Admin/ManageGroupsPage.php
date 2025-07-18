@@ -143,6 +143,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
 
     /**
      * @var PageablePage
+     * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     private $pageable;
 
@@ -157,6 +158,9 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
             new UserRepository()
         );
 
+        /**
+         * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+         */
         $this->pageable = new PageablePage($this);
     }
 
@@ -178,10 +182,14 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         return $this->pageable->GetPageNumber();
     }
 
+    /**
+     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
+     */
     public function GetPageSize()
     {
         /* replaced by dataTable */
         //return $this->pageable->GetPageSize();
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindGroups($groups)

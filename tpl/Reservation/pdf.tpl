@@ -254,10 +254,12 @@ $('.btnPDF').click(function (e) {
 		body: [
 		[{ content: '{translate key="SendReminder"}', styles: { fontStyle: 'bold'}},
 		{if $ReminderTimeStart neq ''}
-		{ content: '{$ReminderTimeStart} {translate key=$ReminderIntervalStart} {translate key=ReminderBeforeStart}'},
+		{assign var="ReminderBeforeStart" value="{translate key=ReminderBeforeStart}"}
+		{ content: '{$ReminderTimeStart} {translate key=$ReminderIntervalStart} {$ReminderBeforeStart|escape:'javascript'}'},
 		{/if}
 		{if $ReminderTimeEnd neq ''}
-		{ content: '{$ReminderTimeEnd} {translate key=$ReminderIntervalEnd} {translate key=ReminderBeforeEnd}'},
+		{assign var="ReminderBeforeEnd" value="{translate key=ReminderBeforeEnd}"}
+		{ content: '{$ReminderTimeEnd} {translate key=$ReminderIntervalEnd} {$ReminderBeforeEnd|escape:'javascript'}'},
 		{/if}
 		],
 		]

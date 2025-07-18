@@ -6,7 +6,7 @@ Only the most current stable version will receive patches for security vulnerabi
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 3.0.1   | :white_check_mark: |
+| 3.0.3   | :white_check_mark: |
 
 Please report (suspected) security vulnerabilities to
 **[librebooking@outlook.com](mailto:librebooking@outlook.com)**. I will try to

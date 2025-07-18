@@ -280,24 +280,19 @@ class ReservationSaveController implements IReservationSaveController
 class ReservationControllerResult
 {
     /**
-     * @var string
+     * @param string $referenceNumber
+     * @param mixed[]|string[] $errors
+     * @param bool $requiresApproval
      */
-    private $createdReferenceNumber;
-
-    /**
-     * @var array|string[]
-     */
-    private $errors = [];
-    /**
-     * @var bool
-     */
-    private $requiresApproval;
-
-    public function __construct($referenceNumber = null, $errors = [], $requiresApproval = false)
+    public function __construct(
+        private $createdReferenceNumber = null,
+        /**
+         * @var array|string[]
+         */
+        private $errors = [],
+        private $requiresApproval = false
+    )
     {
-        $this->createdReferenceNumber = $referenceNumber;
-        $this->errors = $errors;
-        $this->requiresApproval = $requiresApproval;
     }
 
     /**
@@ -364,11 +359,6 @@ class ReservationRequestResponseFacade implements IReservationSavePage
     private $_createdErrors = [];
 
     /**
-     * @var ReservationRequest
-     */
-    private $request;
-
-    /**
      * @var WebServiceUserSession
      */
     private $session;
@@ -402,11 +392,10 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      * @param ReservationRequest $request
      * @param WebServiceUserSession $session
      */
-    public function __construct($request, WebServiceUserSession $session)
+    public function __construct(private $request, WebServiceUserSession $session)
     {
-        $this->request = $request;
         $this->session = $session;
-        $this->recurrenceRule = empty($request->recurrenceRule) ? RecurrenceRequestResponse::Null() : $request->recurrenceRule;
+        $this->recurrenceRule = empty($this->request->recurrenceRule) ? RecurrenceRequestResponse::Null() : $this->request->recurrenceRule;
     }
 
     public function ReferenceNumber()
@@ -752,26 +741,14 @@ class ReservationRequestResponseFacade implements IReservationSavePage
 class ReservationUpdateRequestResponseFacade extends ReservationRequestResponseFacade implements IReservationUpdatePage
 {
     /**
-     * @var string
-     */
-    private $referenceNumber;
-
-    /**
-     * @var SeriesUpdateScope|string
-     */
-    private $updateScope;
-
-    /**
      * @param ReservationRequest $request
      * @param WebServiceUserSession $session
      * @param string $referenceNumber
      * @param SeriesUpdateScope|string $updateScope
      */
-    public function __construct($request, WebServiceUserSession $session, $referenceNumber, $updateScope)
+    public function __construct($request, WebServiceUserSession $session, private $referenceNumber, private $updateScope)
     {
         parent::__construct($request, $session);
-        $this->referenceNumber = $referenceNumber;
-        $this->updateScope = $updateScope;
     }
 
     /**
@@ -801,14 +778,10 @@ class ReservationUpdateRequestResponseFacade extends ReservationRequestResponseF
 
 class ReservationDeleteRequestResponseFacade implements IReservationDeletePage
 {
-    private $referenceNumber;
-    private $updateScope;
     private $errors = [];
 
-    public function __construct($referenceNumber, $updateScope)
+    public function __construct(private $referenceNumber, private $updateScope)
     {
-        $this->referenceNumber = $referenceNumber;
-        $this->updateScope = $updateScope;
     }
 
     /**
@@ -921,12 +894,10 @@ class ReservationDeleteRequestResponseFacade implements IReservationDeletePage
 
 class ReservationApprovalRequestResponseFacade implements IReservationApprovalPage
 {
-    private $referenceNumber;
     private $errors = [];
 
-    public function __construct($referenceNumber)
+    public function __construct(private $referenceNumber)
     {
-        $this->referenceNumber = $referenceNumber;
     }
 
     /**
@@ -1009,14 +980,10 @@ class ReservationApprovalRequestResponseFacade implements IReservationApprovalPa
 
 class ReservationCheckinRequestResponseFacade implements IReservationCheckinPage
 {
-    private $referenceNumber;
-    private $action;
     private $errors = [];
 
-    public function __construct($referenceNumber, $action)
+    public function __construct(private $referenceNumber, private $action)
     {
-        $this->referenceNumber = $referenceNumber;
-        $this->action = $action;
     }
 
     /**

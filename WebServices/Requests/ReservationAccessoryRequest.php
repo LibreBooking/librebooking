@@ -2,12 +2,7 @@
 
 class ReservationAccessoryRequest
 {
-    public $accessoryId;
-    public $quantityRequested;
-
-    public function __construct($accessoryId, $quantityRequested)
+    public function __construct(public $accessoryId, public $quantityRequested)
     {
-        $this->accessoryId = $accessoryId;
-        $this->quantityRequested = $quantityRequested;
     }
 }

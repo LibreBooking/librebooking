@@ -104,12 +104,12 @@ class ResourceRequest extends JsonRequest
     public $maxConcurrentReservations;
 
     public string $bufferTime;
-    public array|null $groupIds;
-    public string|null $icsUrl;
+    public array|null $groupIds = null;
+    public string|null $icsUrl = null;
     public string $minNoticeAdd;
     public string $minNoticeDelete;
     public string $minNoticeUpdate;
-    public int|null $typeId;
+    public int|null $typeId = null;
 
 
     /**

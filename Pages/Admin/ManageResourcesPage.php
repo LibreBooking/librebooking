@@ -485,6 +485,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             new ReservationViewRepository()
         );
 
+        /**
+         * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
+         */
         $this->pageablePage = new PageablePage($this);
         $this->Set(
             'YesNoOptions',
@@ -526,6 +529,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     /**
      * @return int
+     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
     {
@@ -536,6 +540,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             return 10;
         }
         return $pageSize;*/
+        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**

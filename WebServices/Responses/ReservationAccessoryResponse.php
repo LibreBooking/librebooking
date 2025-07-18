@@ -4,19 +4,9 @@ require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class ReservationAccessoryResponse extends RestResponse
 {
-    public $id;
-    public $name;
-    public $quantityAvailable;
-    public $quantityReserved;
-
-    public function __construct(IRestServer $server, $id, $name, $quantityReserved, $quantityAvailable)
+    public function __construct(IRestServer $server, public $id, public $name, public $quantityReserved, public $quantityAvailable)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->quantityReserved = $quantityReserved;
-        $this->quantityAvailable = $quantityAvailable;
-
-        $this->AddService($server, WebServices::GetAccessory, [WebServiceParams::AccessoryId => $id]);
+        $this->AddService($server, WebServices::GetAccessory, [WebServiceParams::AccessoryId => $this->id]);
     }
 
     public static function Example()
