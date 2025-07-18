@@ -41,12 +41,13 @@
 
             <div class="row gx-2">
                 {include file='../Custom/avisos.tpl' resource=$Resource}
-                <div class="reservationTitle col-12 border-bottom py-2 d-none">
+                <div class="reservationTitle col-12 border-bottom py-2">
                     <div class="form-group">
                         <label class="fw-bold mb-0" for="reservationTitle">{translate key="ReservationTitle"}
                             {if $TitleRequired}
                             <i class="bi bi-asterisk text-danger align-top text-small"></i>
                             {/if}
+                            (Describa brevemente las actividades a realizar durante la reserva).
                         </label>
                         {textbox name="RESERVATION_TITLE" class="form-control has-feedback" value="ReservationTitle" id="reservationTitle" maxlength="300" required=$TitleRequired}
                     </div>
@@ -304,7 +305,7 @@
                 {/if}
 
                 <div class="reservationDescription border-bottom py-2">
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label class="fw-bold mb-0" for="description">
                             {translate key="ReservationDescription"}{if $DescriptionRequired}<i
                                 class="bi bi-asterisk text-danger align-top text-small"></i>

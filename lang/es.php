@@ -199,7 +199,7 @@ class es extends en_gb
         $strings['Rows'] = 'Filas';
         $strings['Unlimited'] = 'Ilimitado';
         $strings['Email'] = 'Correo';
-        $strings['EmailAddress'] = 'Direción de Correo';
+        $strings['EmailAddress'] = 'Dirección de Correo';
         $strings['Phone'] = 'Teléfono';
         $strings['Organization'] = 'Organización';
         $strings['Position'] = 'Posición';
@@ -407,6 +407,7 @@ class es extends en_gb
         $strings['NoReminders'] = 'No tienes recordatorios próximos.';
         $strings['Reminders'] = 'Recordatorios';
         $strings['SendReminder'] = 'Enviar recordatorio';
+        $strings['seconds'] = 'segundos';
         $strings['minutes'] = 'minutos';
         $strings['hours'] = 'horas';
         $strings['days'] = 'días';
@@ -587,7 +588,7 @@ class es extends en_gb
         $strings['ApplyToCurrentUsers'] = 'Aplicar a los usuarios actuales';
         $strings['ReasonText'] = 'Razón';
         $strings['NoAvailableMatchingTimes'] = 'No hay horas disponibles que coincidan con tu búsqueda';
-        $strings['Schedules'] = 'Planificaciones';
+        $strings['Schedules'] = 'Horarios';
         $strings['NotifyUser'] = 'Notificar al usuario';
         $strings['UpdateUsersOnImport'] = 'Actualizar el usuario existente si la dirección del correo electrónico ya existe.';
         $strings['UpdateResourcesOnImport'] = 'Actualizar los recursos existentes si el nombre ya existe';
@@ -665,8 +666,8 @@ class es extends en_gb
         $strings['UponReservation'] = 'Tras la Reserva';
         $strings['UponRegistration'] = 'Tras el Registro';
         $strings['ViewTerms'] = 'Ver los Términos del Servicio';
-        $strings['IAccept'] = 'Acepto';
-        $strings['TheTermsOfService'] = 'los Términos del Servicio';
+        $strings['IAccept'] = 'Acepto haber leído y me compromento a cumplir';
+        $strings['TheTermsOfService'] = 'el reglamento de los Laboratorios y Talleres de Mecánica';
         $strings['DisplayPage'] = 'Mostrar Página';
         $strings['AvailableAllYear'] = 'Todo el Año';
         $strings['Availability'] = 'Disponibilidad';
@@ -743,7 +744,7 @@ class es extends en_gb
         $strings['ResourceConcurrentReservationsNone'] = 'No permitir reservas simultáneas';
         $strings['AllowConcurrentReservations'] = 'Permitir reservas simultáneas';
         $strings['ResourceDisplayInstructions'] = 'No se ha seleccionado ningún recurso. Puede encontrar la URL para mostrar un recurso en la Gestión de la Aplicación, Recursos. El recurso debe ser de acceso público';
-        $strings['Owner'] = 'Propietario';
+        $strings['Owner'] = 'Usuario';
         $strings['MaximumConcurrentReservations'] = 'Máximo de Reservas Simultáneas';
         $strings['NotifyUsers'] = 'Notificar a los Usuarios';
         $strings['Message'] = 'Mensaje';
@@ -865,14 +866,14 @@ class es extends en_gb
         $strings['ManageReservations'] = 'Gestionar reservas';
         $strings['AwaitingActivation'] = 'Esperando activación';
         $strings['PendingApproval'] = 'Pendiente de aprobación';
-        $strings['ManageSchedules'] = 'Planificaciones';
+        $strings['ManageSchedules'] = 'Laboratorios';
         $strings['ManageResources'] = 'Recursos';
         $strings['ManageAccessories'] = 'Accesorios';
         $strings['ManageUsers'] = 'Usuarios';
         $strings['ManageGroups'] = 'Grupos';
         $strings['ManageQuotas'] = 'Cuotas';
         $strings['ManageBlackouts'] = 'Agenda de no disponibilidad';
-        $strings['MyDashboard'] = 'Mi agenda';
+        $strings['MyDashboard'] = 'Agenda';
         $strings['ServerSettings'] = 'Ajustes de servidor';
         $strings['Dashboard'] = 'Agenda';
         $strings['Help'] = 'Ayuda';

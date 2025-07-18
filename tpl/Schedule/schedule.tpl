@@ -137,7 +137,7 @@
                     </div>
                 </div>
             </div>
-
+            {include file='Custom/avisos.tpl' resource=$Resource}
             <div id="individualDates" class="collapse">
                 <div class="d-flex justify-content-center align-items-center mt-2">
                     <div class="form-check">
@@ -153,7 +153,6 @@
             </div>
             <div type="text" id="datepicker" class="collapse"></div>
 
-            {include file='Custom/avisos.tpl' resource=$Resource}
 
             {capture name="date_navigation"}
                 {if !isset($HideSchedule) || !$HideSchedule}
