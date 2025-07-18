@@ -78,8 +78,8 @@ class ReservationCreditsPresenter
 
             $reservationSeries = ReservationSeries::Create($userId, $resource, null, null, $duration, $repeatOptions, $userSession);
 
-            $resourceIds = $this->GetAdditionalResourceIds();
-            foreach ($resourceIds as $resourceId) {
+            $additionalResourceIds = $this->GetAdditionalResourceIds();
+            foreach ($additionalResourceIds as $resourceId) {
                 if ($primaryResourceId != $resourceId) {
                     $reservationSeries->AddResource($this->resourceRepository->LoadById($resourceId));
                 }
@@ -91,7 +91,7 @@ class ReservationCreditsPresenter
             $existingSeries = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
 
             $resourceId = $this->page->GetResourceId();
-            $resourceIds = $this->GetAdditionalResourceIds();
+            $additionalResourceIds = $this->GetAdditionalResourceIds();
 
             if (empty($resourceId)) {
                 // the first additional resource will become the primary if the primary is removed
@@ -113,7 +113,7 @@ class ReservationCreditsPresenter
             $existingSeries->Repeats($roFactory->CreateFromComposite($this->page, $userSession->Timezone));
 
             $additionalResources = [];
-            foreach ($resourceIds as $additionalResourceId) {
+            foreach ($additionalResourceIds as $additionalResourceId) {
                 if ($additionalResourceId != $resourceId) {
                     $additionalResources[] = $this->resourceRepository->LoadById($additionalResourceId);
                 }

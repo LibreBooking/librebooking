@@ -9,9 +9,15 @@ class ScheduleAvailabilityRule implements IReservationValidationRule
      */
     protected $scheduleRepository;
 
-    public function __construct(IScheduleRepository $scheduleRepository)
+    /**
+     * @var string
+     */
+    protected $timezone;
+
+    public function __construct(IScheduleRepository $scheduleRepository, string $timezone)
     {
         $this->scheduleRepository = $scheduleRepository;
+        $this->timezone = $timezone;
     }
 
     public function Validate($reservationSeries, $retryParameters)

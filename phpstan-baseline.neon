@@ -13,12 +13,6 @@ parameters:
 			path: Domain/Access/ReservationViewRepository.php
 
 		-
-			message: '#^Access to an undefined property ReservationItemView\:\:\$BufferTime\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Domain/ReservationItemView.php
-
-		-
 			message: '#^Parameter \$item of method DashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
 			identifier: class.notFound
 			count: 1
@@ -133,12 +127,6 @@ parameters:
 			path: Presenters/DashboardPresenter.php
 
 		-
-			message: '#^Undefined variable\: \$additionalResourceIds$#'
-			identifier: variable.undefined
-			count: 1
-			path: Presenters/Reservation/ReservationCreditsPresenter.php
-
-		-
 			message: '#^Function IsUserInGroup not found\.$#'
 			identifier: function.notFound
 			count: 1
@@ -229,12 +217,6 @@ parameters:
 			path: WebServices/Controllers/ReservationSaveController.php
 
 		-
-			message: '#^Class AuthenticationResponse does not have a constructor and must be instantiated without any parameters\.$#'
-			identifier: new.noConstructor
-			count: 1
-			path: WebServices/Responses/AuthenticationResponse.php
-
-		-
 			message: '#^Method ScheduleWebServicePageBuilder\:\:GetGroupId\(\) should return int but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
@@ -271,18 +253,6 @@ parameters:
 			path: lib/Application/Reporting/ReportColumn.php
 
 		-
-			message: '#^Class InviteeRemovedEmail constructor invoked with 4 parameters, 5 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: lib/Application/Reservation/Notification/InviteeUpdatedEmailNotification.php
-
-		-
-			message: '#^Access to an undefined property ScheduleAvailabilityRule\:\:\$timezone\.$#'
-			identifier: property.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ScheduleAvailabilityRule.php
-
-		-
 			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$session \(UserSession\) is implicitly nullable via default value null\.$#'
 			identifier: parameter.implicitlyNullable
 			count: 2
@@ -301,28 +271,10 @@ parameters:
 			path: lib/Database/Commands/Commands.php
 
 		-
-			message: '#^Undefined variable\: \$appTitle$#'
-			identifier: variable.undefined
-			count: 1
-			path: lib/Email/EmailMessage.php
-
-		-
 			message: '#^Call to static method Contains\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
 			path: lib/FileSystem/Paths.php
-
-		-
-			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#\(\[0\-9\]\+\);~e$#'
-			identifier: regexp.pattern
-			count: 1
-			path: lib/GoogleVoice/GoogleVoice.php
-
-		-
-			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#x\(\[0\-9a\-f\]\+\);~ei$#'
-			identifier: regexp.pattern
-			count: 1
-			path: lib/GoogleVoice/GoogleVoice.php
 
 		-
 			message: '#^Function IsUserInGroup not found\.$#'
