@@ -301,18 +301,6 @@ parameters:
 			path: lib/FileSystem/Paths.php
 
 		-
-			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#\(\[0\-9\]\+\);~e$#'
-			identifier: regexp.pattern
-			count: 1
-			path: lib/GoogleVoice/GoogleVoice.php
-
-		-
-			message: '#^Regex pattern is invalid\: Unknown modifier ''e'' in pattern\: ~&\#x\(\[0\-9a\-f\]\+\);~ei$#'
-			identifier: regexp.pattern
-			count: 1
-			path: lib/GoogleVoice/GoogleVoice.php
-
-		-
 			message: '#^Function IsUserInGroup not found\.$#'
 			identifier: function.notFound
 			count: 3

@@ -278,8 +278,12 @@ class GoogleVoice
     private function _unhtmlentities($string)
     {
         // replace numeric entities
-        $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
-        $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
+        $string = preg_replace_callback('~&#x([0-9a-f]+);~i', function($matches) {
+            return chr(hexdec($matches[1]));
+        }, $string);
+        $string = preg_replace_callback('~&#([0-9]+);~', function($matches) {
+            return chr((int)$matches[1]);
+        }, $string);
         // replace literal entities
         $string = html_entity_decode($string);
         return $string;
