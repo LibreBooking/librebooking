@@ -162,7 +162,7 @@
                                 href="https://rita.udistrital.edu.co:23604/adminlab/"><i
                                     class="slash fas fa-slash fa-rotate-90"></i>Inicio</a></li>
                         <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
-                                href="{$baseUrl}adminlab/recursos"><i
+                                href="https://rita.udistrital.edu.co:23604/adminlab/recursos"><i
                                     class="slash fas fa-slash fa-rotate-90"></i>Recursos</a></li>
                         <li class="nav-item" id="navDashboard"><a class="nav-link link-light"
                                 href="{$baseUrl}adminlab/pazysalvos"><i class="slash fas fa-slash fa-rotate-90"></i>Paz y
