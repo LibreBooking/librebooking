@@ -149,7 +149,7 @@ class FakeReader implements IReader
     }
 }
 
-class FakeDBConnection implements IDBConnection
+class FakeDBConnection implements IDbConnection
 {
     public $_LastQueryCommand = null;
     public $_LastExecuteCommand = null;
