@@ -453,7 +453,7 @@ class ReservationViewRepositoryTest extends TestBase
 
         $accessories = $this->repository->GetAccessoriesWithin($dateRange);
 
-        $a = new AccessoryReservation($refNum, $start->ToUtc(), $end->ToUtc(), $accessoryId, $quantity, $accessoryName);
+        $a = new AccessoryReservation($refNum, $start->ToUtc(), $end->ToUtc(), $accessoryId, $quantity);
 
         $this->assertEquals($getAccessoriesCommand, $this->db->_LastCommand);
         $this->assertEquals(2, count($accessories));

@@ -136,7 +136,7 @@ class ManageConfigurationPresenterTest extends TestBase
     {
         $expectedValue = $configValues[$key];
         $this->assertTrue(
-            in_array(new ConfigSetting($key, null, $expectedValue, $type), $this->page->_Settings),
+            in_array(new ConfigSetting($key, null, $expectedValue), $this->page->_Settings),
             "Missing $key"
         );
     }

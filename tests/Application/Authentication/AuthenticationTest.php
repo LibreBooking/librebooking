@@ -124,7 +124,7 @@ class AuthenticationTest extends TestBase
 
         $this->auth->Validate($this->username, $this->password);
 
-        $command = new AuthorizationCommand(strtolower($this->username), $this->password);
+        $command = new AuthorizationCommand(strtolower($this->username));
 
         $this->assertEquals($command, $this->db->_LastCommand);
     }

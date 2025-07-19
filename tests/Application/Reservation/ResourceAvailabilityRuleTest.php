@@ -472,7 +472,7 @@ class ResourceAvailabilityRuleTest extends TestBase
                  ->method('GetItemsBetween')
                  ->willReturn($reservations);
 
-        $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy, $this->scheduleRepository), 'UTC');
+        $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
         $result = $rule->Validate($reservation, [new ReservationRetryParameter(ReservationRetryParameter::$SKIP_CONFLICTS, true)]);
 
         $this->assertTrue($result->IsValid(), 'should have skipped conflicts');

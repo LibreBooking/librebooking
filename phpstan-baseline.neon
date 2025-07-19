@@ -145,12 +145,6 @@ parameters:
 			path: lib/external/pear/PEAR.php
 
 		-
-			message: '#^Class AuthorizationCommand constructor invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/Application/Authentication/AuthenticationTest.php
-
-		-
 			message: '#^Method PHPUnit\\Framework\\TestCase\:\:once\(\) invoked with 1 parameter, 0 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -169,18 +163,6 @@ parameters:
 			path: tests/Application/Reservation/QuotaRuleTest.php
 
 		-
-			message: '#^Class ReservationConflictIdentifier constructor invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/Application/Reservation/ResourceAvailabilityRuleTest.php
-
-		-
-			message: '#^Class SchedulePeriod constructor invoked with 4 parameters, 2\-3 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/Application/Schedule/DailyLayoutTest.php
-
-		-
 			message: '#^Class TestReservationItemView constructor invoked with 6 parameters, 3\-5 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -193,28 +175,10 @@ parameters:
 			path: tests/Domain/Reservation/QuotaTest.php
 
 		-
-			message: '#^Class AccessoryReservation constructor invoked with 6 parameters, 5 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/Domain/Reservation/ReservationViewRepositoryTest.php
-
-		-
-			message: '#^Class ResourceGroupAssignment constructor invoked with 16 parameters, 15 required\.$#'
-			identifier: arguments.count
-			count: 4
-			path: tests/Domain/Resource/ResourceGroupTest.php
-
-		-
 			message: '#^Static method Date\:\:ParseExact\(\) invoked with 2 parameters, 1 required\.$#'
 			identifier: arguments.count
 			count: 1
 			path: tests/Infrastructure/Common/DateTest.php
-
-		-
-			message: '#^Class ConfigSetting constructor invoked with 4 parameters, 3 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
 
 		-
 			message: '#^Method ManageConfigurationPresenterTest\:\:assertSectionSettingExists\(\) invoked with 4 parameters, 3 required\.$#'
