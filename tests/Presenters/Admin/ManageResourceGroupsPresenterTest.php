@@ -27,7 +27,7 @@ class ManageResourceGroupsPresenterTest extends TestBase
         $this->page = $this->createMock('IManageResourceGroupsPage');
         $this->resourceRepository = $this->createMock('IResourceRepository');
 
-        $this->presenter = new ManageResourceGroupsPresenter($this->page, $this->fakeUser, $this->resourceRepository);
+        $this->presenter = new ManageResourceGroupsPresenter($this->page, $this->resourceRepository);
     }
 
     public function testBindsResourcesAndGroupsOnLoad()

@@ -29,7 +29,6 @@ class ManageResourceGroupsPresenter extends ActionPresenter
 
     public function __construct(
         IManageResourceGroupsPage $page,
-        UserSession $user,
         IResourceRepository $resourceRepository
     ) {
         parent::__construct($page);

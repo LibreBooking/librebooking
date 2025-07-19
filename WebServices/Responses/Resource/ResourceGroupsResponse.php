@@ -6,7 +6,7 @@ class ResourceGroupsResponse extends RestResponse
 {
     public $groups;
 
-    public function __construct(IRestServer $server, ResourceGroupTree $groupTree)
+    public function __construct(ResourceGroupTree $groupTree)
     {
         $this->groups = $groupTree->GetGroups();
     }

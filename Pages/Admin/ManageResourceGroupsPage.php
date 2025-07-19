@@ -71,8 +71,7 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
     public function __construct()
     {
         parent::__construct('ManageResourceGroups', 1);
-        $this->_presenter = new ManageResourceGroupsPresenter($this, ServiceLocator::GetServer()
-                                                                     ->GetUserSession(), new ResourceRepository());
+        $this->_presenter = new ManageResourceGroupsPresenter($this, new ResourceRepository());
     }
 
     public function ProcessPageLoad()

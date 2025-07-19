@@ -120,7 +120,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Delete($referenceNumber);
 
-        $expectedResponse = new DeletedResponse($this->server, $referenceNumber);
+        $expectedResponse = new DeletedResponse();
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::OK_CODE, $this->server->_LastResponseCode);
     }

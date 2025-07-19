@@ -26,7 +26,6 @@ class ManageResourceStatusPresenter extends ActionPresenter
 
     public function __construct(
         IManageResourceStatusPage $page,
-        UserSession $user,
         IResourceRepository $resourceRepository
     ) {
         parent::__construct($page);

@@ -1,0 +1,379 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Variable \$entityIds in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Domain/Access/AttributeRepository.php
+
+		-
+			message: '#^Variable \$deletedBy in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Domain/Access/ReservationRepository.php
+
+		-
+			message: '#^Variable \$preferences in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Domain/Access/UserRepository.php
+
+		-
+			message: '#^Variable \$body might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: Domain/PaymentGateway.php
+
+		-
+			message: '#^Variable \$instance in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: Domain/ReservationSeries.php
+
+		-
+			message: '#^Variable \$pairs in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Domain/Values/UserPreferences.php
+
+		-
+			message: '#^Variable \$inlineErrors in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/ActionPage.php
+
+		-
+			message: '#^Variable \$inlineErrors in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/Admin/AdminPage.php
+
+		-
+			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/Admin/ManageBlackoutsPage.php
+
+		-
+			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/Ajax/ReservationCreditsPage.php
+
+		-
+			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/Ajax/ReservationSavePage.php
+
+		-
+			message: '#^Variable \$pageTile in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/Page.php
+
+		-
+			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Pages/SearchAvailabilityPage.php
+
+		-
+			message: '#^Static method ParamsValidator\:\:validate\(\) invoked with 4 parameters, 3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: Pages/ViewCalendarPage.php
+
+		-
+			message: '#^Static method URIScriptValidator\:\:validate\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: Pages/ViewCalendarPage.php
+
+		-
+			message: '#^Variable \$resource might not be defined\.$#'
+			identifier: variable.undefined
+			count: 24
+			path: Presenters/Admin/ManageResourcesPresenter.php
+
+		-
+			message: '#^Variable \$user might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: Presenters/Admin/ManageUsersPresenter.php
+
+		-
+			message: '#^Constructor of class CommonCalendarPresenter has an unused parameter \$calendarFactory\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: Presenters/Calendar/CalendarCommon.php
+
+		-
+			message: '#^Variable \$string on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: Presenters/Calendar/CalendarCommon.php
+
+		-
+			message: '#^Variable \$selectedResourceId in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: Presenters/Calendar/CalendarPresenter.php
+
+		-
+			message: '#^Variable \$resourceIds might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^Method MigrationPresenter\:\:Migrate\(\) invoked with 3 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: Web/install/migrate.php
+
+		-
+			message: '#^Variable \$newScheduleId might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: Web/install/migrate.php
+
+		-
+			message: '#^Class ResourceViewerViewResourcesPage constructor invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: Web/view_resources.php
+
+		-
+			message: '#^Class ScheduleViewerViewSchedulesPage constructor invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: Web/view_schedules.php
+
+		-
+			message: '#^Variable \$accessory in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: WebServices/AccessoriesWebService.php
+
+		-
+			message: '#^Class ReservationApprovalRequestResponseFacade constructor invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: WebServices/Controllers/ReservationSaveController.php
+
+		-
+			message: '#^Class ExampleAccessoryResponse constructor invoked with 2 parameters, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: WebServices/Responses/AccessoryResponse.php
+
+		-
+			message: '#^Variable \$request in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 2
+			path: WebServices/Validators/AccountRequestValidator.php
+
+		-
+			message: '#^Variable \$request in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: WebServices/Validators/ResourceRequestValidator.php
+
+		-
+			message: '#^Variable \$createRequest in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: WebServices/Validators/UserRequestValidator.php
+
+		-
+			message: '#^Variable \$updateRequest in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: WebServices/Validators/UserRequestValidator.php
+
+		-
+			message: '#^Variable \$entityId in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: lib/Application/Attributes/AttributeList.php
+
+		-
+			message: '#^Variable \$layoutItem in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: lib/Application/Schedule/ScheduleReservationList.php
+
+		-
+			message: '#^Variable \$log_folder might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Common/Logging/Log.php
+
+		-
+			message: '#^Variable \$log_sql might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/Common/Logging/Log.php
+
+		-
+			message: '#^Variable \$dest in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: lib/Common/SmartyPage.php
+
+		-
+			message: '#^Constructor of class UpdateFutureReservationsCommand has an unused parameter \$newSeriesId\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/Database/Commands/Commands.php
+
+		-
+			message: '#^Variable \$value on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: lib/Server/Url.php
+
+		-
+			message: '#^Constructor of class FailedResponse has an unused parameter \$server\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/WebService/FailedResponse.php
+
+		-
+			message: '#^Class Slim\\Router constructor invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: lib/external/Slim/Slim.php
+
+		-
+			message: '#^Call to an undefined static method PEAR\:\:raiseError\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 5
+			path: lib/external/pear/Config.php
+
+		-
+			message: '#^Call to an undefined static method PEAR\:\:raiseError\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 9
+			path: lib/external/pear/Config/Container.php
+
+		-
+			message: '#^Variable \$name in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/external/pear/Config/Container.php
+
+		-
+			message: '#^Variable \$obj might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/external/pear/Config/Container.php
+
+		-
+			message: '#^Variable \$testFields might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/external/pear/Config/Container.php
+
+		-
+			message: '#^Call to an undefined static method PEAR\:\:raiseError\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: lib/external/pear/Config/Container/PHPArray.php
+
+		-
+			message: '#^Variable \$string in isset\(\) is never defined\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/external/pear/Config/Container/PHPArray.php
+
+		-
+			message: '#^Call to an undefined static method PEAR\:\:raiseError\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: lib/external/pear/PEAR.php
+
+		-
+			message: '#^Call to an undefined static method PEAR\:\:setErrorHandling\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: lib/external/pear/PEAR.php
+
+		-
+			message: '#^Class AuthorizationCommand constructor invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Application/Authentication/AuthenticationTest.php
+
+		-
+			message: '#^Method PHPUnit\\Framework\\TestCase\:\:once\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
+
+		-
+			message: '#^Method PHPUnit\\Framework\\Assert\:\:isInstanceOf\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 10
+			path: tests/Application/Reservation/AdminEmailNotificationTest.php
+
+		-
+			message: '#^Method QuotaRuleTest\:\:mockQuota\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 5
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Class ReservationConflictIdentifier constructor invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Application/Reservation/ResourceAvailabilityRuleTest.php
+
+		-
+			message: '#^Class SchedulePeriod constructor invoked with 4 parameters, 2\-3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Application/Schedule/DailyLayoutTest.php
+
+		-
+			message: '#^Class TestReservationItemView constructor invoked with 6 parameters, 3\-5 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Application/Schedule/ScheduleReservationListTest.php
+
+		-
+			message: '#^Static method Date\:\:_SetNow\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: tests/Domain/Reservation/QuotaTest.php
+
+		-
+			message: '#^Class AccessoryReservation constructor invoked with 6 parameters, 5 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Domain/Reservation/ReservationViewRepositoryTest.php
+
+		-
+			message: '#^Class ResourceGroupAssignment constructor invoked with 16 parameters, 15 required\.$#'
+			identifier: arguments.count
+			count: 4
+			path: tests/Domain/Resource/ResourceGroupTest.php
+
+		-
+			message: '#^Static method Date\:\:ParseExact\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Infrastructure/Common/DateTest.php
+
+		-
+			message: '#^Class ConfigSetting constructor invoked with 4 parameters, 3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
+
+		-
+			message: '#^Method ManageConfigurationPresenterTest\:\:assertSectionSettingExists\(\) invoked with 4 parameters, 3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php

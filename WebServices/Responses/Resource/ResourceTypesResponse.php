@@ -7,10 +7,9 @@ class ResourceTypesResponse extends RestResponse
     public $types = [];
 
     /**
-     * @param IRestServer $server
      * @param ResourceType[] $types
      */
-    public function __construct(IRestServer $server, $types)
+    public function __construct($types)
     {
         foreach ($types as $type) {
             $this->AddType($type->Id(), $type->Description());

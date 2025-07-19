@@ -26,7 +26,6 @@ class ManageResourceStatusPage extends ActionPage implements IManageResourceStat
         parent::__construct('ManageResourceStatus', 1);
         $this->presenter = new ManageResourceStatusPresenter(
             $this,
-            ServiceLocator::GetServer()->GetUserSession(),
             new ResourceRepository()
         );
     }

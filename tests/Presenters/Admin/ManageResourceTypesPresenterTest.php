@@ -32,7 +32,7 @@ class ManageResourceTypesPresenterTest extends TestBase
         $this->resourceRepository = $this->createMock('IResourceRepository');
         $this->attributeService = $this->createMock('IAttributeService');
 
-        $this->presenter = new ManageResourceTypesPresenter($this->page, $this->fakeUser, $this->resourceRepository, $this->attributeService);
+        $this->presenter = new ManageResourceTypesPresenter($this->page, $this->resourceRepository, $this->attributeService);
     }
 
     public function testBindsResourceTypes()

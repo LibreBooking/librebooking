@@ -12,7 +12,7 @@ class ScheduleSlotResponse extends RestResponse
      */
     public $resources;
 
-    public function __construct(IRestServer $server, Date $date)
+    public function __construct(Date $date)
     {
         $this->date = $date->ToIso();
     }
@@ -143,7 +143,7 @@ class ScheduleSlotsResponse extends RestResponse
         $this->AddService($server, WebServices::GetSchedule, [WebServiceParams::ScheduleId => $this->scheduleId]);
 
         foreach ($dates->Dates() as $date) {
-            $scheduleDate = new ScheduleSlotResponse($server, $date);
+            $scheduleDate = new ScheduleSlotResponse($date);
 
             foreach ($resources as $resource) {
                 $scheduleResource = new ScheduleSlotResourceResponse($server, $resource, $privacyFilter);

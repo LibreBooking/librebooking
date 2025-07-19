@@ -131,7 +131,7 @@ class ResourcesWebServiceTest extends TestBase
 
         $this->service->GetStatusReasons();
 
-        $this->assertEquals(new ResourceStatusReasonsResponse($this->server, $reasons), $this->server->_LastResponse);
+        $this->assertEquals(new ResourceStatusReasonsResponse($reasons), $this->server->_LastResponse);
     }
 
     public function testGetsAllResourceAvailability()
@@ -169,7 +169,7 @@ class ResourcesWebServiceTest extends TestBase
             new ResourceAvailabilityResponse($this->server, $resources[2], $upcoming5, null, $upcoming5->EndDate, $endDate),
         ];
 
-        $this->assertEquals(new ResourcesAvailabilityResponse($this->server, $resources), $this->server->_LastResponse);
+        $this->assertEquals(new ResourcesAvailabilityResponse($resources), $this->server->_LastResponse);
     }
 
     public function testGetsAllResourceAvailabilityForARequestTime()
