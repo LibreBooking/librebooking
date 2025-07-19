@@ -160,6 +160,26 @@ class ReservationResourceRow
 {
     private $seriesId;
     private $rows = [];
+    public $allowMultiDay;
+    public $autoAssign;
+    public $color;
+    public $contact;
+    public $creditCount;
+    public $description;
+    public $location;
+    public $maxLength;
+    public $maxNotice;
+    public $maxParticipants;
+    public $minLength;
+    public $minNoticeAdd;
+    public $minNoticeDelete;
+    public $minNoticeUpdate;
+    public $notes;
+    public $peakCreditCount;
+    public $requiresApproval;
+    public $resourceName;
+    public $scheduleId;
+    public $statusId;
 
     public function Rows()
     {

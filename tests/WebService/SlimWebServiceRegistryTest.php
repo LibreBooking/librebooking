@@ -46,6 +46,10 @@ class TestSlim extends Slim\Slim
      * @var array|TestSlimCall[]
      */
     public $deletes = [];
+    /**
+     * @var TestSlimResponse
+     */
+    public $getResponse;
 
     public function __construct()
     {

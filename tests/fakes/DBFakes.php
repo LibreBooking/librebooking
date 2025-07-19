@@ -153,6 +153,7 @@ class FakeDBConnection implements IDbConnection
 {
     public $_LastQueryCommand = null;
     public $_LastExecuteCommand = null;
+    public $_LastSqlCommand = null;
     public $_ConnectWasCalled = false;
     public $_DisconnectWasCalled = false;
     public $_GetLastInsertIdCalled = false;
