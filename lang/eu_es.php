@@ -757,6 +757,7 @@ class eu_es extends en_gb
 
 
         $this->Strings = $strings;
+        return $this->Strings;
     }
 
     protected function _LoadDays()
@@ -778,6 +779,7 @@ class eu_es extends en_gb
         $days['letter'] = ['I', 'A', 'A', 'A', 'O', 'O', 'L'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     protected function _LoadMonths()
@@ -795,11 +797,13 @@ class eu_es extends en_gb
         $months['abbr'] = ['Urt', 'Ots', 'Mar', 'Api', 'Mai', 'Eka', 'Uzt', 'Abu', 'Ira', 'Urr', 'Aza', 'Abe'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()

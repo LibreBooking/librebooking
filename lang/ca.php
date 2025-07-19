@@ -431,6 +431,7 @@ class ca extends en_gb
 
 
         $this->Strings = $strings;
+        return $this->Strings;
     }
 
     protected function _LoadDays()
@@ -452,6 +453,7 @@ class ca extends en_gb
         $days['letter'] = ['G', 'L', 'T', 'C', 'J', 'V', 'S'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     protected function _LoadMonths()
@@ -469,11 +471,13 @@ class ca extends en_gb
         $months['abbr'] = ['Gen', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Agt', 'Set', 'Oct', 'Nov', 'Des'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '&Ntilde;', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()

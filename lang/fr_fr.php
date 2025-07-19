@@ -1020,6 +1020,7 @@ class fr_fr extends en_gb
 
 
         $this->Strings = $strings;
+        return $this->Strings;
     }
 
     /**
@@ -1044,6 +1045,7 @@ class fr_fr extends en_gb
         $days['letter'] = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     protected function _LoadMonths()
@@ -1061,11 +1063,13 @@ class fr_fr extends en_gb
         $months['abbr'] = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()

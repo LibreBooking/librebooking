@@ -429,6 +429,7 @@ class du_be extends en_gb
         //END NEEDS CHECKING
 
         $this->Strings = $strings;
+        return $this->Strings;
     }
 
     protected function _LoadDays()
@@ -450,6 +451,7 @@ class du_be extends en_gb
         $days['letter'] = ['Z', 'M', 'D', 'W', 'D', 'V', 'Z'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     protected function _LoadMonths()
@@ -467,11 +469,13 @@ class du_be extends en_gb
         $months['abbr'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()

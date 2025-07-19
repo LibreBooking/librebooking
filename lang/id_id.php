@@ -614,6 +614,7 @@ class id_id extends en_gb
 
 
         $this->Strings = $strings;
+        return $this->Strings;
     }
 
     protected function _LoadDays()
@@ -635,6 +636,7 @@ class id_id extends en_gb
         $days['letter'] = ['M', 'S', 'S', 'R', 'K', 'J', 'S'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     protected function _LoadMonths()
@@ -652,11 +654,13 @@ class id_id extends en_gb
         $months['abbr'] = ['Jan', 'Peb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nop', 'Des'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()
