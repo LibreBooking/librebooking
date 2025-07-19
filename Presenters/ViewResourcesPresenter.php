@@ -68,6 +68,7 @@ class ViewResourcesPresenter
 
         $filterValues = $this->page->GetFilterValues();
 
+        $resourceIds = [];
         foreach ($resources as $resource) {
             $resourceIds[] = $resource->GetId();
         }

@@ -72,9 +72,9 @@ class QuotaRuleTest extends TestBase
         );
         $series->AddResource(new FakeBookableResource(22));
 
-        $quota1 = $this->mockQuota('IQuota');
-        $quota2 = $this->mockQuota('IQuota');
-        $quota3 = $this->mockQuota('IQuota');
+        $quota1 = $this->mockQuota();
+        $quota2 = $this->mockQuota();
+        $quota3 = $this->mockQuota();
 
         $quotas = [$quota1, $quota2, $quota3];
 
@@ -134,8 +134,8 @@ class QuotaRuleTest extends TestBase
         );
         $series->AddResource(new FakeBookableResource(22));
 
-        $quota1 = $this->mockQuota('IQuota');
-        $quota2 = $this->mockQuota('IQuota');
+        $quota1 = $this->mockQuota();
+        $quota2 = $this->mockQuota();
 
         $quotas = [$quota1, $quota2];
 

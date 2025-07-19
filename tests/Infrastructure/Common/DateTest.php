@@ -511,7 +511,7 @@ class DateTest extends TestBase
         $d = Date::Parse('2012-04-06 12:02:03', 'America/New_York');
         $iso = $d->ToIso();
 
-        $d2 = Date::ParseExact($iso, 'America/New_York');
+        $d2 = Date::ParseExact($iso);
 
         $this->assertTrue($d->Equals($d2), $d->ToUtc()->ToString() . ' ' . $d2->ToString());
     }

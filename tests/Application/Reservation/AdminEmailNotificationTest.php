@@ -75,8 +75,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertEquals(6, count($this->fakeEmailService->_Messages));
 
-        $this->isInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
-        $this->isInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
+        $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
     }
 
     public function testSendsReservationUpdatedEmailIfAdminWantsIt()
@@ -135,8 +135,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
 
-        $this->isInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
-        $this->isInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $this->assertInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
+        $this->assertInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
     }
 
     public function testSendsReservationCreatedRequiresApprovalEmailIfAdminWantsIt()
@@ -196,8 +196,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertEquals(6, count($this->fakeEmailService->_Messages));
 
-        $this->isInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[0]);
-        $this->isInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[0]);
+        $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[1]);
     }
 
     public function testDoesNotSendReservationCreatedRequiresApprovalEmailIfAdminWantsItButNotRequiresApproval()
@@ -282,8 +282,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
 
-        $this->isInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[0]);
-        $this->isInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[0]);
+        $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[1]);
     }
 
     public function testSendsReservationDeletedEmailIfAdminWantsIt()
@@ -341,8 +341,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
 
-        $this->isInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[0]);
-        $this->isInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $this->assertInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[0]);
+        $this->assertInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[1]);
     }
 
     public function testNothingSentIfConfiguredOff()

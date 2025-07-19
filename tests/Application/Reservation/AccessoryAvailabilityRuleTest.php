@@ -127,7 +127,7 @@ class AccessoryAvailabilityRuleTest extends TestBase
             ->with($accessory1->AccessoryId)
             ->willReturn(new Accessory($accessory1->AccessoryId, 'name1', $quantityAvailable));
 
-        $this->reservationRepository->expects($this->once(0))
+        $this->reservationRepository->expects($this->once())
             ->method('GetAccessoriesWithin')
             ->with($this->anything())
             ->willReturn([]);

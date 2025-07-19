@@ -76,10 +76,9 @@ class ManageConfigurationPresenterTest extends TestBase
 
         $this->assertSettingExists($configValues, ConfigKeys::ADMIN_EMAIL, ConfigSettingType::String);
         $this->assertSectionSettingExists(
-            $configValues,
-            ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
-            ConfigSection::PRIVACY,
-            ConfigSettingType::Boolean
+            configValues: $configValues,
+            key: ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
+            section: ConfigSection::PRIVACY
         );
 
         $this->assertSettingMissing(ConfigKeys::INSTALLATION_PASSWORD);

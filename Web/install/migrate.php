@@ -446,6 +446,7 @@ class MigrationPresenter
 
             $newScheduleReader = $currentDatabase->Query(new AdHocCommand("select schedule_id from schedules where legacyId = \"{$row['scheduleid']}\""));
 
+            $newScheduleId = null;
             if ($srow = $newScheduleReader->GetRow()) {
                 $newScheduleId = $srow['schedule_id'];
             }
