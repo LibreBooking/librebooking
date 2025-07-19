@@ -7,18 +7,6 @@ parameters:
 			path: Domain/PaymentGateway.php
 
 		-
-			message: '#^Variable \$inlineErrors in empty\(\) always exists and is always falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/ActionPage.php
-
-		-
-			message: '#^Variable \$inlineErrors in empty\(\) always exists and is always falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/Admin/AdminPage.php
-
-		-
 			message: '#^Static method ParamsValidator\:\:validate\(\) invoked with 4 parameters, 3 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -95,12 +83,6 @@ parameters:
 			identifier: variable.undefined
 			count: 1
 			path: lib/Common/Logging/Log.php
-
-		-
-			message: '#^Variable \$dest in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: lib/Common/SmartyPage.php
 
 		-
 			message: '#^Class Slim\\Router constructor invoked with 1 parameter, 0 required\.$#'

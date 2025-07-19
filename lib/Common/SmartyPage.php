@@ -550,9 +550,6 @@ class SmartyPage extends Smarty
             $dest = $matches[2];
             $dest = 'http://' . $dest;
 
-            if (empty($dest)) {
-                return $matches[0];
-            }
             // removed trailing [,;:] from URL
             if (in_array(substr($dest, -1), ['.', ',', ';', ':']) === true) {
                 $ret = substr($dest, -1);

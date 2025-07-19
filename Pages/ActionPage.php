@@ -90,7 +90,7 @@ abstract class ActionPage extends Page implements IActionPage
 
             if ($validator->ReturnsErrorResponse()) {
                 http_response_code(400);
-                array_merge($validator->Messages(), $inlineErrors);
+                $inlineErrors = array_merge($validator->Messages(), $inlineErrors);
             }
         }
 
