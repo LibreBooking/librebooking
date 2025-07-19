@@ -210,6 +210,7 @@ class ManageReservationsUpdateAttributeResultCollector implements IReservationSa
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 
     /**

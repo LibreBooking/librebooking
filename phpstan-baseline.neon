@@ -199,48 +199,6 @@ parameters:
 			path: WebServices/Controllers/GroupSaveController.php
 
 		-
-			message: '#^Method ReservationApprovalRequestResponseFacade\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/ReservationSaveController.php
-
-		-
-			message: '#^Method ReservationDeleteRequestResponseFacade\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Controllers/ReservationSaveController.php
-
-		-
-			message: '#^Method ScheduleWebServicePageBuilder\:\:GetGroupId\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
-			message: '#^Method ScheduleWebServiceView\:\:GetLayoutDate\(\) should return string but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
-			message: '#^Method ResourceRequestValidator\:\:ValidateDeleteRequest\(\) should return array\<string\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: WebServices/Validators/ResourceRequestValidator.php
-
-		-
-			message: '#^Method ManageReservationsUpdateAttributeResultCollector\:\:GetRetryParameters\(\) should return array\<ReservationRetryParameter\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: lib/Application/Admin/ManageReservationsService.php
-
-		-
-			message: '#^Method ScheduleAdminScheduleRepository\:\:Add\(\) should return int but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
-
-		-
 			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
@@ -305,9 +263,3 @@ parameters:
 			identifier: function.notFound
 			count: 1
 			path: lib/external/Slim/Http/Util.php
-
-		-
-			message: '#^Method Slim\\Middleware\\ContentTypes\:\:parseJson\(\) should return array\|string but return statement is missing\.$#'
-			identifier: return.missing
-			count: 2
-			path: lib/external/Slim/Middleware/ContentTypes.php

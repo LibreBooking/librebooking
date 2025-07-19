@@ -53,7 +53,7 @@ class ScheduleAdminScheduleRepository extends ScheduleRepository
             }
         }
 
-        parent::Add($schedule, $copyLayoutFromScheduleId);
+        return parent::Add($schedule, $copyLayoutFromScheduleId);
     }
 
     /**

@@ -145,6 +145,7 @@ class ScheduleWebServicePageBuilder extends SchedulePageBuilder
     public function GetGroupId($scheduleId, ISchedulePage $page)
     {
         // no op
+        return 0;
     }
 
     public function GetResourceIds($scheduleId, ISchedulePage $page)
@@ -303,6 +304,7 @@ class ScheduleWebServiceView implements ISchedulePage
     public function GetLayoutDate()
     {
         // TODO: Implement GetLayoutDate() method.
+        return '';
     }
 
     public function GetScheduleStyle($scheduleId)
