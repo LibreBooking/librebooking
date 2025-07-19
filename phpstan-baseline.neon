@@ -1,40 +1,10 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Variable \$entityIds in empty\(\) always exists and is always falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Domain/Access/AttributeRepository.php
-
-		-
-			message: '#^Variable \$deletedBy in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Domain/Access/ReservationRepository.php
-
-		-
-			message: '#^Variable \$preferences in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Domain/Access/UserRepository.php
-
-		-
 			message: '#^Variable \$body might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1
 			path: Domain/PaymentGateway.php
-
-		-
-			message: '#^Variable \$instance in isset\(\) always exists and is not nullable\.$#'
-			identifier: isset.variable
-			count: 1
-			path: Domain/ReservationSeries.php
-
-		-
-			message: '#^Variable \$pairs in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Domain/Values/UserPreferences.php
 
 		-
 			message: '#^Variable \$inlineErrors in empty\(\) always exists and is always falsy\.$#'
@@ -47,36 +17,6 @@ parameters:
 			identifier: empty.variable
 			count: 1
 			path: Pages/Admin/AdminPage.php
-
-		-
-			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/Admin/ManageBlackoutsPage.php
-
-		-
-			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/Ajax/ReservationCreditsPage.php
-
-		-
-			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/Ajax/ReservationSavePage.php
-
-		-
-			message: '#^Variable \$pageTile in empty\(\) always exists and is always falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/Page.php
-
-		-
-			message: '#^Variable \$dates in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Pages/SearchAvailabilityPage.php
 
 		-
 			message: '#^Static method ParamsValidator\:\:validate\(\) invoked with 4 parameters, 3 required\.$#'
@@ -101,18 +41,6 @@ parameters:
 			identifier: variable.undefined
 			count: 5
 			path: Presenters/Admin/ManageUsersPresenter.php
-
-		-
-			message: '#^Variable \$string on left side of \?\? always exists and is not nullable\.$#'
-			identifier: nullCoalesce.variable
-			count: 1
-			path: Presenters/Calendar/CalendarCommon.php
-
-		-
-			message: '#^Variable \$selectedResourceId in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: Presenters/Calendar/CalendarPresenter.php
 
 		-
 			message: '#^Variable \$resourceIds might not be defined\.$#'
@@ -145,12 +73,6 @@ parameters:
 			path: Web/view_schedules.php
 
 		-
-			message: '#^Variable \$accessory in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: WebServices/AccessoriesWebService.php
-
-		-
 			message: '#^Class ReservationApprovalRequestResponseFacade constructor invoked with 2 parameters, 1 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -161,42 +83,6 @@ parameters:
 			identifier: arguments.count
 			count: 1
 			path: WebServices/Responses/AccessoryResponse.php
-
-		-
-			message: '#^Variable \$request in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 2
-			path: WebServices/Validators/AccountRequestValidator.php
-
-		-
-			message: '#^Variable \$request in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: WebServices/Validators/ResourceRequestValidator.php
-
-		-
-			message: '#^Variable \$createRequest in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: WebServices/Validators/UserRequestValidator.php
-
-		-
-			message: '#^Variable \$updateRequest in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: WebServices/Validators/UserRequestValidator.php
-
-		-
-			message: '#^Variable \$entityId in empty\(\) always exists and is always falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: lib/Application/Attributes/AttributeList.php
-
-		-
-			message: '#^Variable \$layoutItem in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: lib/Application/Schedule/ScheduleReservationList.php
 
 		-
 			message: '#^Variable \$log_folder might not be defined\.$#'
@@ -217,12 +103,6 @@ parameters:
 			path: lib/Common/SmartyPage.php
 
 		-
-			message: '#^Variable \$value on left side of \?\? always exists and is not nullable\.$#'
-			identifier: nullCoalesce.variable
-			count: 1
-			path: lib/Server/Url.php
-
-		-
 			message: '#^Class Slim\\Router constructor invoked with 1 parameter, 0 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -241,8 +121,8 @@ parameters:
 			path: lib/external/pear/Config/Container.php
 
 		-
-			message: '#^Variable \$name in isset\(\) always exists and is not nullable\.$#'
-			identifier: isset.variable
+			message: '#^Method Config_Container\:\:countChildren\(\) should return int but return statement is missing\.$#'
+			identifier: return.missing
 			count: 1
 			path: lib/external/pear/Config/Container.php
 
