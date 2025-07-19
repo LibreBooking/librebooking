@@ -5,6 +5,7 @@ parameters:
     level: 0
     errorFormat: prettyJson
     paths:
+        - Controls
         - Domain
         - Jobs
         - Pages
