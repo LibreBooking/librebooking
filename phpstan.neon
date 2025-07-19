@@ -11,6 +11,7 @@ parameters:
         - Pages
         - Presenters
         - WebServices
+        - Web
     excludePaths:
         analyse:
             - vendor/

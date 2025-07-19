@@ -121,6 +121,18 @@ parameters:
 			path: Presenters/DashboardPresenter.php
 
 		-
+			message: '#^Instantiated class ReportPage not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Web/reports.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./Pages/ReportPage\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: Web/reports.php
+
+		-
 			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
