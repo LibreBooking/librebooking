@@ -44,6 +44,7 @@ class FakeResourceService implements IResourceService
     public function GetAccessories()
     {
         // TODO: Implement GetAccessories() method.
+        return null;
     }
 
     /**
@@ -54,6 +55,7 @@ class FakeResourceService implements IResourceService
     public function GetResourceGroups($scheduleId, UserSession $user)
     {
         // TODO: Implement GetResourceGroups() method.
+        return null;
     }
 
     /**
@@ -62,6 +64,7 @@ class FakeResourceService implements IResourceService
     public function GetResourceTypes()
     {
         // TODO: Implement GetResourceTypes() method.
+        return null;
     }
 
     /**
@@ -70,6 +73,7 @@ class FakeResourceService implements IResourceService
     public function GetResourceAttributes()
     {
         // TODO: Implement GetResourceAttributes() method.
+        return null;
     }
 
     /**
@@ -78,6 +82,7 @@ class FakeResourceService implements IResourceService
     public function GetResourceTypeAttributes()
     {
         // TODO: Implement GetResourceTypeAttributes() method.
+        return null;
     }
 
     /**
@@ -87,5 +92,6 @@ class FakeResourceService implements IResourceService
     public function GetResource($resourceId)
     {
         // TODO: Implement GetResource() method.
+        return null;
     }
 }

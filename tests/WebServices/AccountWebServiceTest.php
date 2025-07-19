@@ -160,10 +160,12 @@ class FakeAccountController implements IAccountController
     public function LoadUser(WebServiceUserSession $session)
     {
         // TODO: Implement GetUserAttributes() method.
+        return null;
     }
 
     public function GetUserAttributes(WebServiceUserSession $session)
     {
         // TODO: Implement GetUserAttributes() method.
+        return null;
     }
 }

@@ -56,6 +56,7 @@ class FakeAttributeService implements IAttributeService
     public function GetById($attributeId)
     {
         // TODO: Implement GetById() method.
+        return null;
     }
 
     /**

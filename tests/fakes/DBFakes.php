@@ -199,6 +199,7 @@ class FakeDBConnection implements IDbConnection
     public function LimitQuery(ISqlCommand $command, $limit, $offset = null)
     {
         $this->_LimitQueryCalled = true;
+        return null;
     }
 }
 

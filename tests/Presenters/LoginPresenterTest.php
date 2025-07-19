@@ -353,6 +353,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public function GetCaptcha()
     {
         // TODO: Implement GetCaptcha() method.
+        return null;
     }
 
     public function SetAnnouncements($announcements)

@@ -17,6 +17,7 @@ class FakeAccessoryRepository implements IAccessoryRepository
     public function LoadById($accessoryId)
     {
         // TODO: Implement LoadById() method.
+        return null;
     }
 
     /**
@@ -34,6 +35,7 @@ class FakeAccessoryRepository implements IAccessoryRepository
     public function Add(Accessory $accessory)
     {
         // TODO: Implement Add() method.
+        return null;
     }
 
     /**

@@ -88,6 +88,7 @@ class TestReservationListing implements IMutableReservationListing
     public function Count()
     {
         // TODO: Implement Count() method.
+        return null;
     }
 
     /**
@@ -96,6 +97,7 @@ class TestReservationListing implements IMutableReservationListing
     public function Reservations()
     {
         // TODO: Implement Reservations() method.
+        return null;
     }
 
     /**
@@ -105,6 +107,7 @@ class TestReservationListing implements IMutableReservationListing
     public function OnDate($date)
     {
         // TODO: Implement OnDate() method.
+        return null;
     }
 
     /**
@@ -132,6 +135,7 @@ class TestReservationListing implements IMutableReservationListing
     public function ForResource($resourceId)
     {
         // TODO: Implement ForResource() method.
+        return null;
     }
 
     /**
@@ -142,5 +146,6 @@ class TestReservationListing implements IMutableReservationListing
     public function OnDateForResource(Date $date, $resourceId)
     {
         // TODO: Implement OnDateForResource() method.
+        return null;
     }
 }

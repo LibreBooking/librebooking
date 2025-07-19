@@ -432,6 +432,7 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public function GetResourceId()
     {
         // TODO: Implement GetResourceId() method.
+        return null;
     }
 
     public function DisplayLogin()
@@ -573,6 +574,7 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public function GetTermsOfServiceAcknowledgement()
     {
         // TODO: Implement GetTermsOfServiceAcknowledgement() method.
+        return null;
     }
 
     public function DisplayInstructions()

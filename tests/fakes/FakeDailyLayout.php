@@ -22,6 +22,7 @@ class FakeDailyLayout implements IDailyLayout
     public function IsDateReservable(Date $date)
     {
         // TODO: Implement IsDateReservable() method.
+        return null;
     }
 
     /**
@@ -31,6 +32,7 @@ class FakeDailyLayout implements IDailyLayout
     public function GetLabels(Date $displayDate)
     {
         // TODO: Implement GetLabels() method.
+        return null;
     }
 
     /**
@@ -50,6 +52,7 @@ class FakeDailyLayout implements IDailyLayout
     public function GetSummary(Date $date, $resourceId)
     {
         // TODO: Implement GetSummary() method.
+        return null;
     }
 
     /**

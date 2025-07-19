@@ -32,11 +32,15 @@ class FakeResourceRepository implements IResourceRepository
          throw new Exception('Not implemented');
     }
 
-    public function GetUserResourceList() { }
+    public function GetUserResourceList() {
+        return null;
+    }
 
     public function GetUserResourceIdList() { }
 
-    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null) { }
+    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null) {
+        return null;
+    }
 
     public function GetUserResourcePermissions($userId, $resourceIds = []) { }
 
@@ -72,6 +76,7 @@ class FakeResourceRepository implements IResourceRepository
     public function Add(BookableResource $resource)
     {
         // TODO: Implement Add() method.
+        return null;
     }
 
     public function Update(BookableResource $resource)
@@ -92,16 +97,19 @@ class FakeResourceRepository implements IResourceRepository
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
         // TODO: Implement GetList() method.
+        return null;
     }
 
     public function GetAccessoryList($sortField = null, $sortDirection = null)
     {
         // TODO: Implement GetAccessoryList() method.
+        return null;
     }
 
     public function GetResourceGroups($scheduleId = null, $resourceFilter = null)
     {
         // TODO: Implement GetResourceGroups() method.
+        return null;
     }
 
     public function AddResourceToGroup($resourceId, $groupId)
@@ -117,16 +125,19 @@ class FakeResourceRepository implements IResourceRepository
     public function AddResourceGroup(ResourceGroup $group)
     {
         // TODO: Implement AddResourceGroup() method.
+        return null;
     }
 
     public function LoadResourceGroup($groupId)
     {
         // TODO: Implement LoadResourceGroup() method.
+        return null;
     }
 
     public function LoadResourceGroupByPublicId($publicResourceGroupId)
     {
         // TODO: Implement LoadResourceGroupByPublicId() method.
+        return null;
     }
 
     public function UpdateResourceGroup(ResourceGroup $group)
@@ -142,16 +153,19 @@ class FakeResourceRepository implements IResourceRepository
     public function GetResourceTypes()
     {
         // TODO: Implement GetResourceTypes() method.
+        return null;
     }
 
     public function LoadResourceType($resourceTypeId)
     {
         // TODO: Implement LoadResourceType() method.
+        return null;
     }
 
     public function AddResourceType(ResourceType $type)
     {
         // TODO: Implement AddResourceType() method.
+        return null;
     }
 
     public function UpdateResourceType(ResourceType $type)
@@ -167,11 +181,13 @@ class FakeResourceRepository implements IResourceRepository
     public function GetStatusReasons()
     {
         // TODO: Implement GetStatusReasons() method.
+        return null;
     }
 
     public function AddStatusReason($statusId, $reasonDescription)
     {
         // TODO: Implement AddStatusReason() method.
+        return null;
     }
 
     public function UpdateStatusReason($reasonId, $reasonDescription)
@@ -192,16 +208,19 @@ class FakeResourceRepository implements IResourceRepository
         $accountStatus = AccountStatus::ACTIVE
     ) {
         // TODO: Implement GetUsersWithPermission() method.
+        return null;
     }
 
     public function GetGroupsWithPermission($resourceId, $pageNumber = null, $pageSize = null, $filter = null)
     {
         // TODO: Implement GetGroupsWithPermission() method.
+        return null;
     }
 
     public function GetUsersWithPermissionsIncludingGroups($resourceId, $pageNumber = null, $pageSize = null, $filter = null, $accountStatus = AccountStatus::ACTIVE)
     {
         // TODO: Implement GetUsersWithPermissionsIncludingGroups() method.
+        return null;
     }
 
     public function ChangeResourceGroupPermission($resourceId, $groupId, $type)

@@ -35,6 +35,7 @@ class FakeBlackoutRepository implements IBlackoutRepository
     public function Add(BlackoutSeries $blackoutSeries)
     {
         $this->_Added = $blackoutSeries;
+        return null;
     }
 
     /**

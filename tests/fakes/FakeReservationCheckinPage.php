@@ -61,6 +61,7 @@ class FakeReservationCheckinPage implements IReservationCheckinPage
     public function GetRetryParameters()
     {
         // TODO: Implement GetRetryParameters() method.
+        return null;
     }
 
     /**

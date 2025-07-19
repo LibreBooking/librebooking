@@ -19,6 +19,7 @@ class FakeAttributeList implements IEntityAttributeList
     public function GetLabels()
     {
         // TODO: Implement GetLabels() method.
+        return null;
     }
 
     /**
@@ -28,6 +29,7 @@ class FakeAttributeList implements IEntityAttributeList
     public function GetDefinitions($entityId = null)
     {
         // TODO: Implement GetDefinitions() method.
+        return null;
     }
 
     /**
