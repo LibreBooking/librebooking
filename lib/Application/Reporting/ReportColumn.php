@@ -94,9 +94,9 @@ abstract class ReportColumn
 
     /**
      * @param $titleKey string
-     * @param $chartColumnDefinition ChartColumnDefinition
+     * @param $chartColumnDefinition ChartColumnDefinition|null
      */
-    public function __construct($titleKey, ChartColumnDefinition $chartColumnDefinition = null)
+    public function __construct($titleKey, ?ChartColumnDefinition $chartColumnDefinition = null)
     {
         $this->titleKey = $titleKey;
         $this->chartColumnDefinition = $chartColumnDefinition;
@@ -164,7 +164,7 @@ abstract class ReportColumn
 
 class ReportStringColumn extends ReportColumn
 {
-    public function __construct($titleKey, ChartColumnDefinition $chartColumnDefinition)
+    public function __construct($titleKey, ?ChartColumnDefinition $chartColumnDefinition = null)
     {
         parent::__construct(null, $chartColumnDefinition);
         $this->titleKey = $titleKey;
@@ -173,7 +173,7 @@ class ReportStringColumn extends ReportColumn
 
 class ReportAttributeColumn extends ReportColumn
 {
-    public function __construct($title, ChartColumnDefinition $chartColumnDefinition)
+    public function __construct($title, ?ChartColumnDefinition $chartColumnDefinition = null)
     {
         parent::__construct(null, $chartColumnDefinition);
         $this->title = $title;
@@ -203,7 +203,7 @@ class ReportDateColumn extends ReportColumn
     private $timezone;
     private $format;
 
-    public function __construct($titleKey, $timezone, $format, ChartColumnDefinition $chartColumnDefinition)
+    public function __construct($titleKey, $timezone, $format, ?ChartColumnDefinition $chartColumnDefinition = null)
     {
         parent::__construct($titleKey, $chartColumnDefinition);
         $this->timezone = $timezone;
@@ -236,7 +236,7 @@ class ReportTimeColumn extends ReportColumn
 {
     private $includeTotalHours;
 
-    public function __construct($titleKey, ChartColumnDefinition $chartColumnDefinition, $includeTotalHours = true)
+    public function __construct($titleKey, ?ChartColumnDefinition $chartColumnDefinition = null, $includeTotalHours = true)
     {
         parent::__construct($titleKey, $chartColumnDefinition);
         $this->includeTotalHours = $includeTotalHours;
@@ -251,7 +251,7 @@ class ReportTimeColumn extends ReportColumn
 
 class ReportUtilizationColumn extends ReportColumn
 {
-    public function __construct($titleKey, ChartColumnDefinition $chartColumnDefinition)
+    public function __construct($titleKey, ?ChartColumnDefinition $chartColumnDefinition = null)
     {
         parent::__construct($titleKey, $chartColumnDefinition);
     }

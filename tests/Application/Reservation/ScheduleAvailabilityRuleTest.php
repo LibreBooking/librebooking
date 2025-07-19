@@ -21,7 +21,7 @@ class ScheduleAvailabilityRuleTest extends TestBase
 
         $this->scheduleRepository = new FakeScheduleRepository();
 
-        $this->rule = new ScheduleAvailabilityRule($this->scheduleRepository);
+        $this->rule = new ScheduleAvailabilityRule($this->scheduleRepository, 'UTC');
     }
 
     public function testRuleIsValidIfScheduleDoesNotHaveAvailability()

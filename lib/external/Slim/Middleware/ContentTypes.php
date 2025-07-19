@@ -109,16 +109,15 @@ class ContentTypes extends \Slim\Middleware
      * into an associative array.
      *
      * @param  string       $input
-     * @return array|string
+     * @return array|string|null
      */
     protected function parseJson($input)
     {
-        if (function_exists('json_decode')) {
-            $result = json_decode($input, true);
-            if ($result) {
-                return $result;
-            }
+        $result = json_decode($input, true);
+        if ($result) {
+            return $result;
         }
+        return null;
     }
 
     /**

@@ -4,6 +4,19 @@ require_once(ROOT_DIR . '/lib/Reminder.class.php');
 
 class FakeReminder extends Reminder
 {
+    public $email;
+    public $end_date;
+    public $end_time;
+    public $id;
+    public $location;
+    public $machid;
+    public $memberid;
+    public $resid;
+    public $resource_name;
+    public $start_date;
+    public $start_time;
+    public $timezone;
+
     public function __construct()
     {
         $day = date('d');

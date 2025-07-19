@@ -114,11 +114,13 @@ class FakeSearchReservationsPage extends SearchReservationsPage
 
     public function GetRequestedStartDate()
     {
+        return null;
     }
 
 
     public function GetRequestedEndDate()
     {
+        return null;
     }
 
     public function GetResources()

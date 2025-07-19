@@ -1,7 +1,9 @@
 <?php
 
 @define('BASE_DIR', dirname(__FILE__) . '/../..');
-require_once(BASE_DIR . '/lib/PHPMailer.class.php');
+require_once(ROOT_DIR . 'lib/Email/namespace.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
 
 class FakeMailer extends PHPMailer
 {
@@ -25,7 +27,7 @@ class FakeMailer extends PHPMailer
         $this->sendWasCalled = true;
     }
 
-    public function IsHTML($bool)
+    public function IsHTML($bool = true)
     {
         $this->isHtml = $bool;
     }

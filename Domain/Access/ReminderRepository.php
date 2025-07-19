@@ -20,19 +20,6 @@ class ReminderRepository implements IReminderRepository
         return $reminders;
     }
 
-    /**
-     * @param Reminder $reminder
-     */
-    public function Add(Reminder $reminder)
-    {
-        ServiceLocator::GetDatabase()->ExecuteInsert(new AddReminderCommand(
-            $reminder->UserID(),
-            $reminder->Address(),
-            $reminder->Message(),
-            $reminder->SendTime(),
-            $reminder->RefNumber()
-        ));
-    }
 
     /**
      * @param string $user_id
@@ -119,11 +106,6 @@ interface IReminderRepository
      */
     public function GetAll();
 
-    /**
-     * @abstract
-     * @param Reminder $reminder
-     */
-    public function Add(Reminder $reminder);
 
     /**
      * @abstract

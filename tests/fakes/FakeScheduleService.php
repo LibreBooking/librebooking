@@ -22,7 +22,7 @@ class FakeScheduleService implements IScheduleService
      * @param UserSession $session
      * @return Schedule[]
      */
-    public function GetAll($includeInaccessible = true, UserSession $session = null)
+    public function GetAll($includeInaccessible = true, ?UserSession $session = null)
     {
         return $this->_AllSchedules;
     }

@@ -97,5 +97,7 @@ class ResourceRequestValidator implements IResourceRequestValidator
         if (empty($resourceId)) {
             return ['resourceId is required'];
         }
+
+        return [];
     }
 }

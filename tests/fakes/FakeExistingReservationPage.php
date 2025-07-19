@@ -245,6 +245,7 @@ class FakeExistingReservationPage extends FakePageBase implements IExistingReser
     public function IsUnavailable()
     {
         // TODO: Implement IsUnavailable() method.
+        return null;
     }
 
     public function SetTerms($termsOfService)

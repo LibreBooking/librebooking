@@ -975,6 +975,7 @@ class fi_fi extends en_gb
         $days['letter'] = ['S', 'M', 'T', 'K', 'T', 'P', 'L'];
 
         $this->Days = $days;
+        return $this->Days;
     }
 
     /**
@@ -995,6 +996,7 @@ class fi_fi extends en_gb
         $months['abbr'] = ['Tam', 'Hel', 'Maa', 'Huh', 'Tou', 'Kes', 'Hei', 'Elo', 'Syy', 'Lok', 'Mar', 'Jou'];
 
         $this->Months = $months;
+        return $this->Months;
     }
 
     /**
@@ -1003,6 +1005,7 @@ class fi_fi extends en_gb
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $this->Letters;
     }
 
     protected function _GetHtmlLangCode()

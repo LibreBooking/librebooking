@@ -1,6 +1,5 @@
 <?php
 
-use function PHPSTORM_META\map;
 use function PHPUnit\Framework\matches;
 
 require_once(ROOT_DIR . 'WebServices/SchedulesWebService.php');

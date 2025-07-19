@@ -1,23 +1,30 @@
-includes:
-    - phpstan-baseline.neon
-
 parameters:
     level: 0
     errorFormat: prettyJson
     paths:
-        - Jobs
-        - lib
+        - Controls
         - Domain
+        - Jobs
         - Pages
         - Presenters
+        - Web
         - WebServices
+        - config
+        - lang/AvailableLanguage.php
+        - lang/AvailableLanguages.php
+        - lang/Language.php
+        - lib
+        - phing-tasks
+        - plugins
+        - tests
     excludePaths:
         analyse:
-            - vendor/
-            - tpl_c/ (?)
-            - build/ (?)
-            - Web/scripts/
             - Web/css/
+            - Web/scripts/
+            - build/ (?)
+            - lib/external/Slim/Http/Util.php
             - plugins/
+            - tpl_c/ (?)
+            - vendor/
     bootstrapFiles:
         - vendor/autoload.php

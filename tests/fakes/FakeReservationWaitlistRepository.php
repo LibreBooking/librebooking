@@ -41,6 +41,7 @@ class FakeReservationWaitlistRepository implements IReservationWaitlistRepositor
     public function LoadById($waitlistId)
     {
         // TODO: Implement LoadById() method.
+        return null;
     }
 
     /**

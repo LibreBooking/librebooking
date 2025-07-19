@@ -259,5 +259,6 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     public function GetRequestedResourceIds()
     {
         // TODO: Implement GetRequestedResourceIds() method.
+        return null;
     }
 }

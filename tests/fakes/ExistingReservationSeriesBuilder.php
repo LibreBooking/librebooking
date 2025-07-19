@@ -30,6 +30,11 @@ class ExistingReservationSeriesBuilder
 
     private $requiresNewSeries = false;
 
+    /**
+     * @var BookableResource[]
+     */
+    private $resources;
+
     public function __construct()
     {
         $series = new ExistingReservationSeries();

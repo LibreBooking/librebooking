@@ -69,6 +69,7 @@ class FakeRestServer implements IRestServer
     public function GetFullServiceUrl($serviceName, $params = [])
     {
         // TODO: Implement GetFullServiceUrl() method.
+        return null;
     }
 
     public function GetHeader($headerName)

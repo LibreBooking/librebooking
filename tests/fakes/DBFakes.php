@@ -149,10 +149,11 @@ class FakeReader implements IReader
     }
 }
 
-class FakeDBConnection implements IDBConnection
+class FakeDBConnection implements IDbConnection
 {
     public $_LastQueryCommand = null;
     public $_LastExecuteCommand = null;
+    public $_LastSqlCommand = null;
     public $_ConnectWasCalled = false;
     public $_DisconnectWasCalled = false;
     public $_GetLastInsertIdCalled = false;
@@ -199,6 +200,7 @@ class FakeDBConnection implements IDBConnection
     public function LimitQuery(ISqlCommand $command, $limit, $offset = null)
     {
         $this->_LimitQueryCalled = true;
+        return null;
     }
 }
 

@@ -56,7 +56,7 @@ class AuthenticationWebService
             $session = $this->authentication->Login($username);
 
             if (!$session->IsAdmin && is_numeric($this->api_access_group_id)) {
-                if (!IsUserInGroup(groupId: $this->api_access_group_id, userId: $session->UserId)) {
+                if (!UserGroupHelper::isUserInGroup(groupId: $this->api_access_group_id, userId: $session->UserId)) {
                     Log::Debug('WebService Authenticate, user %s was denied API access', $username);
                     $this->server->WriteResponse(AuthenticationResponse::NotAuthorized(), statusCode: RestResponse::FORBIDDEN);
                     return;

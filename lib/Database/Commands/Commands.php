@@ -1833,7 +1833,7 @@ class GetReservationsPendingApprovalCommand extends SqlCommand
 
 class GetReservationsMissingCheckInCheckOutCommand extends SqlCommand
 {
-    public function __construct(Date $startDate = null, Date $endDate, $userIds, $userLevelId, $scheduleIds, $resourceIds, $participantIds)
+    public function __construct(?Date $startDate, Date $endDate, $userIds, $userLevelId, $scheduleIds, $resourceIds, $participantIds)
     {
         parent::__construct(QueryBuilder::GET_RESERVATION_MISSING_CHECK_IN_OUT_LIST());
         if ($startDate !== null){

@@ -674,16 +674,19 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
     public function GetReservationColor()
     {
         // TODO: Implement GetReservationColor() method.
+        return null;
     }
 
     public function GetValue()
     {
         // TODO: Implement GetValue() method.
+        return null;
     }
 
     public function GetName()
     {
         // TODO: Implement GetName() method.
+        return null;
     }
 
     public function ShowTemplateCSV($attributes)
@@ -694,6 +697,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
     public function GetImportFile()
     {
         // TODO: Implement GetImportFile() method.
+        return null;
     }
 
     public function SetImportResult($importResult)
@@ -704,6 +708,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
     public function GetInvitedEmails()
     {
         // TODO: Implement GetInvitedEmails() method.
+        return null;
     }
 
     public function ShowExportCsv()
@@ -724,11 +729,13 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
     public function SendEmailNotification()
     {
         // TODO: Implement SendEmailNotification() method.
+        return null;
     }
 
     public function GetUpdateOnImport()
     {
         // TODO: Implement GetUpdateOnImport() method.
+        return null;
     }
 
     public function ShowUserUpdate(User $user, $attributes)

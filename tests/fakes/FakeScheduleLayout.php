@@ -104,6 +104,7 @@ class FakeScheduleLayout implements IScheduleLayout
     public function FitsToHours()
     {
         // TODO: Implement FitsToHours() method.
+        return null;
     }
 
     /**
@@ -112,5 +113,6 @@ class FakeScheduleLayout implements IScheduleLayout
     public function UsesCustomLayout()
     {
         // TODO: Implement UsesCustomLayout() method.
+        return null;
     }
 }

@@ -865,6 +865,7 @@ class ReservationDeleteRequestResponseFacade implements IReservationDeletePage
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 
     /**
@@ -959,6 +960,7 @@ class ReservationApprovalRequestResponseFacade implements IReservationApprovalPa
     public function GetRetryParameters()
     {
         // no-op
+        return [];
     }
 
     /**
