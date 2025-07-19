@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Instantiated class AddReminderCommand not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Access/ReminderRepository.php
-
-		-
 			message: '#^Parameter \$item of method DashboardPage\:\:AddItem\(\) has invalid type DashboardItem\.$#'
 			identifier: class.notFound
 			count: 1
