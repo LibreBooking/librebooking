@@ -36,6 +36,7 @@
         "lint": "./tools/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
         "phpstan": "./vendor/bin/phpstan analyse",
+        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
         "test": [
             "@phpunit",
             "@lint"
