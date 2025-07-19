@@ -276,14 +276,3 @@ function GetConfigGroup(string $config_group): string|null {
     die("Unable to find group: '$group_name' for API group '$config_group'. Please contact the administrator to resolve this issue in the `config.php` file.");
     return null;
 }
-
-function IsUserInGroup(string|int $groupId, string|int $userId): bool {
-    $groupRepository = new GroupRepository();
-    $group = $groupRepository->LoadById($groupId);
-    foreach ($group->UserIds() as $groupUserId) {
-        if ($groupUserId == $userId) {
-            return true;
-        }
-    }
-    return false;
-}

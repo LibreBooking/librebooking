@@ -121,12 +121,6 @@ parameters:
 			path: Presenters/DashboardPresenter.php
 
 		-
-			message: '#^Function IsUserInGroup not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: WebServices/AuthenticationWebService.php
-
-		-
 			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
 			identifier: class.notFound
 			count: 1
@@ -137,18 +131,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: lib/FileSystem/Paths.php
-
-		-
-			message: '#^Function IsUserInGroup not found\.$#'
-			identifier: function.notFound
-			count: 3
-			path: lib/WebService/Slim/SlimWebServiceRegistry.php
-
-		-
-			message: '#^Function IsUserInGroup not found\.$#'
-			identifier: function.notFound
-			count: 2
-			path: lib/WebService/Slim/SlimWebServiceRegistryCategory.php
 
 		-
 			message: '#^Function mcrypt_enc_get_iv_size not found\.$#'

@@ -52,14 +52,14 @@ class SlimWebServiceRegistryCategory
         if (is_null($this->roGroupId)) {
             return true;
         }
-        return IsUserInGroup(groupId: $this->roGroupId, userId: $userId);
+        return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
     }
 
     public function UserAllowedRwAccess(int|string $userId): bool {
         if (is_null($this->rwGroupId)) {
             return true;
         }
-        return IsUserInGroup(groupId: $this->rwGroupId, userId: $userId);
+        return UserGroupHelper::isUserInGroup(groupId: $this->rwGroupId, userId: $userId);
     }
 
     public function AddGet($route, $callback, $routeName)
