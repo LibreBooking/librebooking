@@ -121,18 +121,6 @@ parameters:
 			path: Presenters/DashboardPresenter.php
 
 		-
-			message: '#^Call to static method GetAvailableLanguages\(\) on an unknown class AvailableLanguages\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/Common/Resources.php
-
-		-
-			message: '#^Call to static method Contains\(\) on an unknown class AvailableLanguages\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/FileSystem/Paths.php
-
-		-
 			message: '#^Function mcrypt_enc_get_iv_size not found\.$#'
 			identifier: function.notFound
 			count: 2

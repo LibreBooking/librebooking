@@ -5,13 +5,16 @@ parameters:
     level: 0
     errorFormat: prettyJson
     paths:
-        - Jobs
-        - lib
         - Domain
+        - Jobs
         - Pages
         - Presenters
-        - WebServices
         - Web
+        - WebServices
+        - lang/AvailableLanguage.php
+        - lang/AvailableLanguages.php
+        - lang/Language.php
+        - lib
     excludePaths:
         analyse:
             - vendor/
