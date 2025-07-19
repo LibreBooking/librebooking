@@ -50,7 +50,7 @@ class UsersWriteWebService
             Log::Debug('UsersWriteWebService.Create() - User Create Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -87,7 +87,7 @@ class UsersWriteWebService
             Log::Debug('UsersWriteWebService.Create() - User Update Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -117,7 +117,7 @@ class UsersWriteWebService
             Log::Debug('UsersWriteWebService.Delete() - User Delete Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -151,7 +151,7 @@ class UsersWriteWebService
             Log::Debug('UsersWriteWebService.UpdatePassword() - User Password Update Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }

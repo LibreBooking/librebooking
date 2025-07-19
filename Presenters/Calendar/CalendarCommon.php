@@ -317,7 +317,6 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
     public function __construct(
         ICommonCalendarPage $page,
-        ICalendarFactory $calendarFactory,
         IReservationViewRepository $reservationRepository,
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository,

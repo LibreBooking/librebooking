@@ -45,7 +45,7 @@ class AttributesWriteWebService
         } else {
             Log::Debug('AttributesWriteWebService.Create() - Create Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -77,7 +77,7 @@ class AttributesWriteWebService
         } else {
             Log::Debug('AttributesWriteWebService.Update() - Update Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -101,7 +101,7 @@ class AttributesWriteWebService
         } else {
             Log::Debug('AttributesWriteWebService.Delete() - Attribute Delete Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 }

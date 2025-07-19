@@ -63,7 +63,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
         $this->service->Create();
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 
@@ -110,7 +110,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
         $this->service->Update($resourceId);
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 
@@ -144,7 +144,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
         $this->service->Delete($resourceId);
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 }

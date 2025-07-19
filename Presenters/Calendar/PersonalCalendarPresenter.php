@@ -11,7 +11,6 @@ class PersonalCalendarPresenter extends CommonCalendarPresenter
     public function __construct(
         ICommonCalendarPage $page,
         IReservationViewRepository $repository,
-        ICalendarFactory $calendarFactory,
         ICalendarSubscriptionService $subscriptionService,
         IUserRepository $userRepository,
         IResourceService $resourceService,
@@ -19,7 +18,6 @@ class PersonalCalendarPresenter extends CommonCalendarPresenter
     ) {
         parent::__construct(
             $page,
-            $calendarFactory,
             $repository,
             $scheduleRepository,
             $userRepository,

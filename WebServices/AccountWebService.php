@@ -52,7 +52,7 @@ class AccountWebService
     {
         if (!Configuration::Instance()->GetSectionKey(ConfigSection::API, ConfigKeys::ALLOW_REGISTRATION, new BooleanConverter())) {
             $this->server->WriteResponse(
-                new FailedResponse($this->server, ['allow.self.registration is not enabled for the API']),
+                new FailedResponse(['allow.self.registration is not enabled for the API']),
                 RestResponse::UNAUTHORIZED_CODE
             );
             return;
@@ -76,7 +76,7 @@ class AccountWebService
             Log::Debug('AccountWebService.Create() - User Create Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -109,7 +109,7 @@ class AccountWebService
             Log::Debug('AccountWebService.Update() - User Update Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -142,7 +142,7 @@ class AccountWebService
             Log::Debug('AccountWebService.Update() - User Update Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }

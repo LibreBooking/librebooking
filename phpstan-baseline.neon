@@ -103,12 +103,6 @@ parameters:
 			path: Presenters/Admin/ManageUsersPresenter.php
 
 		-
-			message: '#^Constructor of class CommonCalendarPresenter has an unused parameter \$calendarFactory\.$#'
-			identifier: constructor.unusedParameter
-			count: 1
-			path: Presenters/Calendar/CalendarCommon.php
-
-		-
 			message: '#^Variable \$string on left side of \?\? always exists and is not nullable\.$#'
 			identifier: nullCoalesce.variable
 			count: 1
@@ -223,22 +217,10 @@ parameters:
 			path: lib/Common/SmartyPage.php
 
 		-
-			message: '#^Constructor of class UpdateFutureReservationsCommand has an unused parameter \$newSeriesId\.$#'
-			identifier: constructor.unusedParameter
-			count: 1
-			path: lib/Database/Commands/Commands.php
-
-		-
 			message: '#^Variable \$value on left side of \?\? always exists and is not nullable\.$#'
 			identifier: nullCoalesce.variable
 			count: 1
 			path: lib/Server/Url.php
-
-		-
-			message: '#^Constructor of class FailedResponse has an unused parameter \$server\.$#'
-			identifier: constructor.unusedParameter
-			count: 1
-			path: lib/WebService/FailedResponse.php
 
 		-
 			message: '#^Class Slim\\Router constructor invoked with 1 parameter, 0 required\.$#'

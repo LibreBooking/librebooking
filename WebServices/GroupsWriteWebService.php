@@ -40,7 +40,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Create() - Create Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -68,7 +68,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Update() - Update Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -92,7 +92,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Delete() - Group Delete Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -120,7 +120,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Roles() - Update Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -147,7 +147,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Permissions() - Update Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 
@@ -174,7 +174,7 @@ class GroupsWriteWebService
         } else {
             Log::Debug('GroupsWriteWebService.Users() - Update Failed.');
 
-            $this->server->WriteResponse(new FailedResponse($this->server, $result->Errors()), RestResponse::BAD_REQUEST_CODE);
+            $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
     }
 }

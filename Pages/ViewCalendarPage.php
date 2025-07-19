@@ -29,7 +29,6 @@ class ViewCalendarPage extends CalendarPage
 
         $this->presenter = new CalendarPresenter(
             $this,
-            new CalendarFactory(),
             new ReservationViewRepository(),
             $scheduleRepository,
             new UserRepository(),

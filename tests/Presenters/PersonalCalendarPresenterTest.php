@@ -60,7 +60,6 @@ class PersonalCalendarPresenterTest extends TestBase
         $this->presenter = new PersonalCalendarPresenter(
             $this->page,
             $this->repository,
-            $this->calendarFactory,
             $this->subscriptionService,
             $this->userRepository,
             $this->resourceService,
