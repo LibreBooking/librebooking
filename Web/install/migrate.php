@@ -246,7 +246,7 @@ class MigrationPresenter
             $currentDatabase = ServiceLocator::GetDatabase();
             $runTarget = $this->page->GetRunTarget();
             if (!empty($runTarget)) {
-                $this->Migrate($runTarget, $legacyDatabase, $currentDatabase);
+                $this->Migrate($runTarget);
             } elseif ($this->page->IsLoggingIn()) {
                 if ($this->TestInstallPassword() && $this->TestLegacyConnection()) {
                     $this->page->StartMigration();

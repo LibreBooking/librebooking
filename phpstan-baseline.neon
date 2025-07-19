@@ -7,18 +7,6 @@ parameters:
 			path: Domain/PaymentGateway.php
 
 		-
-			message: '#^Static method ParamsValidator\:\:validate\(\) invoked with 4 parameters, 3 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: Pages/ViewCalendarPage.php
-
-		-
-			message: '#^Static method URIScriptValidator\:\:validate\(\) invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: Pages/ViewCalendarPage.php
-
-		-
 			message: '#^Variable \$resource might not be defined\.$#'
 			identifier: variable.undefined
 			count: 24
@@ -37,40 +25,10 @@ parameters:
 			path: Presenters/ViewResourcesPresenter.php
 
 		-
-			message: '#^Method MigrationPresenter\:\:Migrate\(\) invoked with 3 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: Web/install/migrate.php
-
-		-
 			message: '#^Variable \$newScheduleId might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1
 			path: Web/install/migrate.php
-
-		-
-			message: '#^Class ResourceViewerViewResourcesPage constructor invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: Web/view_resources.php
-
-		-
-			message: '#^Class ScheduleViewerViewSchedulesPage constructor invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: Web/view_schedules.php
-
-		-
-			message: '#^Class ReservationApprovalRequestResponseFacade constructor invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: WebServices/Controllers/ReservationSaveController.php
-
-		-
-			message: '#^Class ExampleAccessoryResponse constructor invoked with 2 parameters, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: WebServices/Responses/AccessoryResponse.php
 
 		-
 			message: '#^Variable \$log_folder might not be defined\.$#'

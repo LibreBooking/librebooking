@@ -17,7 +17,7 @@ class AccessoryResponse extends RestResponse
 
     public static function Example()
     {
-        return new ExampleAccessoryResponse(null, new Accessory(1, 'accessoryName', 10));
+        return new ExampleAccessoryResponse();
     }
 
     /**

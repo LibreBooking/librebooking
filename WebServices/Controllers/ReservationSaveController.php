@@ -119,7 +119,7 @@ class ReservationSaveController implements IReservationSaveController
      */
     public function Approve($session, $referenceNumber)
     {
-        $facade = new ReservationApprovalRequestResponseFacade($referenceNumber, $session);
+        $facade = new ReservationApprovalRequestResponseFacade($referenceNumber);
         $presenter = $this->factory->Approve($facade, $session);
         $presenter->PageLoad();
         return new ReservationControllerResult($referenceNumber, $facade->Errors());
