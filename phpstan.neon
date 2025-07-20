@@ -1,5 +1,5 @@
-includes:
-    - phpstan-baseline.neon
+# includes:
+#     - phpstan-baseline.neon
 parameters:
     level: 1
     errorFormat: prettyJson
@@ -25,7 +25,7 @@ parameters:
             - Web/css/
             - Web/scripts/
             - build/ (?)
-            - lib/external/Slim/Http/Util.php
+            - lib/external/
             - plugins/
             - tpl_c/ (?)
             - vendor/
