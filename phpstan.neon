@@ -1,7 +1,7 @@
-# includes:
-#     - phpstan-baseline.neon
+includes:
+    - phpstan-baseline.neon
 parameters:
-    level: 1
+    level: 2
     errorFormat: prettyJson
     treatPhpDocTypesAsCertain: false
     paths:

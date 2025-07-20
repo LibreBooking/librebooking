@@ -1,0 +1,3529 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\|CustomAttribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Controls/AttributeControl.php
+
+		-
+			message: '#^Parameter \$smarty of method AttributeControl\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/AttributeControl.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: Controls/CaptchaControl.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Controls/CheckboxControl.php
+
+		-
+			message: '#^Call to method assign\(\) on an unknown class Smarty_Data\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Call to method createTemplate\(\) on an unknown class Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Call to method getTemplateVars\(\) on an unknown class Smarty_Data\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$smarty with type Smarty\|SmartyPage is not subtype of native type SmartyPage\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Parameter \$smarty of method Control\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Property Control\:\:\$data has unknown class Smarty_Data as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Property Control\:\:\$smarty has unknown class Smarty as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Control.php
+
+		-
+			message: '#^Parameter \$smarty of method AnnouncementsControl\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/AnnouncementsControl.php
+
+		-
+			message: '#^Parameter \$smarty of method DashboardItem\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/DashboardItem.php
+
+		-
+			message: '#^Parameter \$smarty of method MissingCheckInOutReservations\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/PastReservations.php
+
+		-
+			message: '#^Parameter \$smarty of method PastReservations\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/PastReservations.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: Controls/Dashboard/PastReservations.php
+
+		-
+			message: '#^Parameter \$smarty of method ResourceAvailabilityControl\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/ResourceAvailabilityControl.php
+
+		-
+			message: '#^Parameter \$smarty of method GroupUpcomingReservations\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/UpcomingReservations.php
+
+		-
+			message: '#^Parameter \$smarty of method PendingApprovalReservations\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/UpcomingReservations.php
+
+		-
+			message: '#^Parameter \$smarty of method UpcomingReservations\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/Dashboard/UpcomingReservations.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 4
+			path: Controls/Dashboard/UpcomingReservations.php
+
+		-
+			message: '#^Parameter \$smarty of method DatePickerSetupControl\:\:__construct\(\) has invalid type Smarty\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Controls/DatePickerSetupControl.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Domain/Access/AttributeFilter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Type\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: Domain/Access/AttributeFilter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: Domain/Access/AttributeFilter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/AttributeFilter.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(array\|\$resourceIds\[\] array of all resource IDs\)\: Unexpected token "\$resourceIds", expected type at offset 25 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/IResourceRepository.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(array\|\$resourceIds\[\] array of user accessible resources IDs\)\: Unexpected token "\$resourceIds", expected type at offset 25 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/IResourceRepository.php
+
+		-
+			message: '#^Parameter \$listBuilder of method PageableDataStore\:\:GetList\(\) has invalid type callback\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Access/PageableDataStore.php
+
+		-
+			message: '#^Parameter \$limit of method QuotaItemView\:\:__construct\(\) has invalid type decimal\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Access/QuotaRepository.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/ReservationRepository.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: Domain/Access/ReservationRepository.php
+
+		-
+			message: '#^Comparison operation "\!\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 13
+			path: Domain/Access/ReservationViewRepository.php
+
+		-
+			message: '#^Comparison operation "\=\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 13
+			path: Domain/Access/ReservationViewRepository.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$endDate$#'
+			identifier: parameter.notFound
+			count: 1
+			path: Domain/Access/ReservationViewRepository.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$referenceNumber string\)\: Unexpected token "\$referenceNumber", expected type at offset 47 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/ReservationViewRepository.php
+
+		-
+			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: Domain/Access/ResourceRepository.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Domain/Access/ResourceRepository.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:AppendBlockedPeriod\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Domain/Access/ScheduleRepository.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:AppendPeriod\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Domain/Access/ScheduleRepository.php
+
+		-
+			message: '#^PHPDoc tag @var with type ScheduleLayout is not subtype of native type null\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: Domain/Access/ScheduleRepository.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$groups array\|UserGroup\[\]\)\: Unexpected token "\$groups", expected type at offset 20 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Access/UserRepository.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\\n     ", expected type at offset 15 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Blackout.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$accessory AttributeValue\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/BookableResource.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/BookableResource.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 3
+			path: Domain/CustomAttribute.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$accessory ReservationAccessory\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 3
+			path: Domain/ExistingReservationSeries.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/ExistingReservationSeries.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$resource BookableResource\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/ExistingReservationSeries.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: Domain/PaymentGateway.php
+
+		-
+			message: '#^Method IQuotaLimit\:\:Amount\(\) has invalid return type decimal\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^Method QuotaLimitCount\:\:Amount\(\) has invalid return type decimal\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(string null \$enforcedEndTime\)\: Unexpected token "null", expected variable at offset 251 on line 9$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$end Date\)\: Unexpected token "\$end", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instances Reservation\[\]\)\: Unexpected token "\$instances", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservation ReservationItemView\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/Quota.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$start Date\)\: Unexpected token "\$start", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/Quota.php
+
+		-
+			message: '#^Call to an undefined method GoogleVoice\:\:sms\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Domain/Reminder.php
+
+		-
+			message: '#^Access to an undefined property IRepeatOptions\:\:\$_daysOfWeek\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Domain/RepeatOptions.php
+
+		-
+			message: '#^Access to an undefined property IRepeatOptions\:\:\$_interval\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Domain/RepeatOptions.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|ReservationUserLevel and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/ReservationItemView.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|ReservationStatus and 3 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/ReservationSeries.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/ReservationSeries.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$references ResourceGroup\[\]\)\: Unexpected token "\$references", expected type at offset 16 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/ResourceGroup.php
+
+		-
+			message: '#^Parameter \$id of method ResourceGroup\:\:WithId\(\) has invalid type long\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/ResourceGroup.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$accessory AttributeValue\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/ResourceType.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Domain/ResourceType.php
+
+		-
+			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 2
+			path: Domain/ScheduleLayout.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$period LayoutPeriod\)\: Unexpected token "\$period", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/ScheduleLayout.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 3 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 4 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 3 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 4 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Domain/User.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/User.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$group UserGroup\)\: Unexpected token "\$group", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: Domain/User.php
+
+		-
+			message: '#^Property SeriesUpdateScopeBase\:\:\$series has unknown class ISeriesDistinction as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Domain/Values/SeriesUpdateScope.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/Admin/ManageGroupsPage.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$cost$#'
+			identifier: parameter.notFound
+			count: 1
+			path: Pages/Admin/ManagePaymentsPage.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$currency$#'
+			identifier: parameter.notFound
+			count: 1
+			path: Pages/Admin/ManagePaymentsPage.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Pages/Admin/ManageResourcesPage.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Pages/Admin/ManageResourcesPage.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Pages/Admin/ManageResourcesPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 5
+			path: Pages/Admin/ManageResourcesPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 5
+			path: Pages/Admin/ManageSchedulesPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 4
+			path: Pages/Admin/ManageUsersPage.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$path SplFileInfo\)\: Unexpected token "\$path", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Pages/Admin/ServerSettingsPage.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$plugin SplFileInfo\)\: Unexpected token "\$plugin", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Pages/Admin/ServerSettingsPage.php
+
+		-
+			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Pages/Ajax/AutoCompletePage.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$result UserItemView\)\: Unexpected token "\$result", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 4
+			path: Pages/Ajax/AutoCompletePage.php
+
+		-
+			message: '#^Call to an undefined method ReservationSavePresenter\:\:GetRepeatOptions\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Pages/Ajax/ReservationSavePage.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$cost$#'
+			identifier: parameter.notFound
+			count: 1
+			path: Pages/Credits/UserCreditsPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/Export/AtomSubscriptionPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/Page.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/Reports/SavedReportsPage.php
+
+		-
+			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Pages/Reservation/ExistingReservationPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/Reservation/ExistingReservationPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Pages/ResourceDisplayPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: Pages/ResourceViewerViewResourcesPage.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(string\|ScheduleStyle Direction\)\: Unexpected token "Direction", expected variable at offset 39 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Pages/SchedulePage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 5
+			path: Pages/ScheduleViewerViewSchedulesPage.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$action string\)\: Unexpected token "\$action", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ActionPresenter.php
+
+		-
+			message: '#^Access to an undefined property Sabre\\VObject\\Document\:\:\$VEVENT\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Presenters/Admin/Import/ICalImportPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$file ConfigFileOption\)\: Unexpected token "\$file", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Admin/ManageConfigurationPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$path SplFileInfo\)\: Unexpected token "\$path", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Admin/ManageConfigurationPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$plugin SplFileInfo\)\: Unexpected token "\$plugin", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Admin/ManageConfigurationPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/Admin/ManageConfigurationPresenter.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 0 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Presenters/Admin/ManageGroupsPresenter.php
+
+		-
+			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: Presenters/Admin/ManageGroupsPresenter.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$groupRepository with type IGroupRepository is not subtype of native type GroupRepository\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: Presenters/Admin/ManageGroupsPresenter.php
+
+		-
+			message: '#^Call to an undefined method IQuotaViewRepository\:\:Add\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Admin/ManageQuotasPresenter.php
+
+		-
+			message: '#^Call to an undefined method IQuotaViewRepository\:\:DeleteById\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Admin/ManageQuotasPresenter.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$quotaRepository with type IQuotaRepository\|IQuotaViewRepository is not subtype of native type IQuotaViewRepository\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: Presenters/Admin/ManageQuotasPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservation ReservationItemView\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Admin/ManageReservationsPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservationItemView ReservationItemView\)\: Unexpected token "\$reservationItemView", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Admin/ManageReservationsPresenter.php
+
+		-
+			message: '#^Variable \$group in PHPDoc tag @var does not match any variable in the foreach loop\: \$allGroups, \$user$#'
+			identifier: varTag.differentVariable
+			count: 1
+			path: Presenters/Admin/ManageResourcesPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 4
+			path: Presenters/Admin/ManageUsersPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/Authentication/ExternalAuthLoginPresenter.php
+
+		-
+			message: '#^Class ResourceDto referenced with incorrect case\: ResourceDTO\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: Presenters/Calendar/CalendarCommon.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Calendar/CalendarCommon.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/Calendar/CalendarFilters.php
+
+		-
+			message: '#^Call to an undefined method ICalendarExportPage\:\:GetAccessoryIds\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/CalendarSubscriptionPresenter.php
+
+		-
+			message: '#^Call to an undefined method ICalendarExportPage\:\:GetFutureNumberOfDays\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/CalendarSubscriptionPresenter.php
+
+		-
+			message: '#^Call to an undefined method ICalendarExportPage\:\:GetPastNumberOfDays\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/CalendarSubscriptionPresenter.php
+
+		-
+			message: '#^Call to an undefined method ICalendarExportPage\:\:GetResourceGroupId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/CalendarSubscriptionPresenter.php
+
+		-
+			message: '#^Call to an undefined method ICalendarExportPage\:\:GetUserId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/CalendarSubscriptionPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: Presenters/Credits/CheckoutPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/GuestParticipationPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/GuestParticipationPresenter.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(null\)\: Unexpected token "\\n     \* ", expected variable at offset 72 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Install/MySqlScript.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: Presenters/Integrate/SlackPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ParticipationPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var with type IReservationValidationRule is not subtype of native type ReservationStartTimeRule\|ResourceMaximumNoticeCurrentInstanceRule\|ResourceMaximumNoticeRule\|ResourceMinimumNoticeCurrentInstanceRuleUpdate\|ResourceMinimumNoticeRuleAdd\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: Presenters/ParticipationPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: Presenters/ParticipationPresenter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:AdminOnly\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/ProfilePresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/ProfilePresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/RegistrationPresenter.php
+
+		-
+			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Reports/GenerateReportPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: Presenters/Reports/ReportCsvColumnView.php
+
+		-
+			message: '#^Call to an undefined method IReservationViewRepository\:\:LoadByReferenceNumber\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Reservation/ReservationCreditsPresenter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Required\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/ResourceDisplayPresenter.php
+
+		-
+			message: '#^Call to an undefined method IResourceDisplayPage\:\:GetStartDate\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/ResourceDisplayPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var with type ReservationListItem is not subtype of native type null\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: Presenters/ResourceDisplayPresenter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: Presenters/ResourceDisplayPresenter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:SetValue\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^Call to an undefined method ISchedulePage\:\:GetGroupId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(array \[int\]ISchedule \$schedules\)\: Unexpected token "\[", expected variable at offset 58 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(array \[int\]ResourceDto \$resources\)\: Unexpected token "\[", expected variable at offset 58 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/Schedule/SchedulePageBuilder.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(IGroupRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 32 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(IResourceRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(IScheduleRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(ResourceViewerViewResourcesPage;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 47 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(int;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 19 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewResourcesPresenter.php
+
+		-
+			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: Presenters/ViewSchedulesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(IResourceRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewSchedulesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(ResourceViewerViewResourcesPage;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 47 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Presenters/ViewSchedulesPresenter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request CreateAccountRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AccountWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateAccountPasswordRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AccountWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateAccountRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AccountWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request CustomAttributeRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: WebServices/AttributesWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request AuthenticationRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AuthenticationWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request SignOutRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AuthenticationWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(bool;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 20 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/AuthenticationWebService.php
+
+		-
+			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: WebServices/Controllers/AccountController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 2 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 4 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 5 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 3 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 2
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 4 results in an error\.$#'
+			identifier: notEqual.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 3 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: WebServices/Controllers/AttributeSaveController.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$referenceNumber$#'
+			identifier: parameter.notFound
+			count: 1
+			path: WebServices/Controllers/ReservationSaveController.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request GroupPermissionsRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/GroupsWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request GroupRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: WebServices/GroupsWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request GroupRolesRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/GroupsWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request GroupUsersRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/GroupsWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request ReservationRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: WebServices/ReservationWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request ResourceRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: WebServices/ResourcesWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$accessory AccessoryDto\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/Responses/AccessoriesResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/Account/AccountResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/Account/AccountResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/Account/AccountResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/ResourceResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/ResourceResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/ResourceResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/UserResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/UserResponse.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: WebServices/Responses/UserResponse.php
+
+		-
+			message: '#^Call to method GetAll\(\) on an unknown class IScheduleRepositorRCOI\.$#'
+			identifier: class.notFound
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^Call to method GetLayout\(\) on an unknown class IScheduleRepositorRCOI\.$#'
+			identifier: class.notFound
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^Call to method LoadById\(\) on an unknown class IScheduleRepositorRCOI\.$#'
+			identifier: class.notFound
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^Property SchedulesWebService\:\:\$scheduleRepository has unknown class IScheduleRepositorRCOI as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: WebServices/SchedulesWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request CreateUserRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/UsersWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateUserPasswordRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/UsersWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateUserRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/UsersWriteWebService.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$validator IValidator\)\: Unexpected token "\$validator", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: WebServices/Validators/AccountRequestValidator.php
+
+		-
+			message: '#^PHPDoc tag @var with type IValidator is not subtype of native type AttributeValidator\|RequestRequiredValueValidator\|TimeIntervalValidator\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: WebServices/Validators/ResourceRequestValidator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$validator IValidator\)\: Unexpected token "\$validator", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: WebServices/Validators/UserRequestValidator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$resource BookableResource\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Admin/ResourceAdminResourceRepository.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Attributes/AttributeService.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 4 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Attributes/AttributeService.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 5 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Attributes/AttributeService.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Attributes/AttributeService.php
+
+		-
+			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Authentication/Authentication.php
+
+		-
+			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Authentication/PostRegistration.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(array\[\]int\)\: Unexpected token "int", expected TOKEN_HORIZONTAL_WS at offset 52 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 3
+			path: lib/Application/Authorization/ResourcePermissionStore.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: lib/Application/Reporting/ReportColumn.php
+
+		-
+			message: '#^Call to method Bind\(\) on an unknown class IExistingReservationComponentBinder\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Application/Reservation/ExistingReservationInitializer.php
+
+		-
+			message: '#^Property ExistingReservationInitializer\:\:\$reservationBinder has unknown class IExistingReservationComponentBinder as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Application/Reservation/ExistingReservationInitializer.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$admin UserDto\)\: Unexpected token "\$admin", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/Notification/AdminEmailNotification.php
+
+		-
+			message: '#^Access to an undefined property IBookableResource\:\:\$Id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Application/Reservation/ReservationComponentBinder.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$resource ResourceDto\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/ReservationComponentBinder.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$user ReservationUserView\)\: Unexpected token "\$user", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: lib/Application/Reservation/ReservationComponentBinder.php
+
+		-
+			message: '#^Call to an undefined method IResource\:\:GetResourceTypeId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Application/Reservation/ResourceTypeFilter.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$resource$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Application/Reservation/ResourceTypeFilter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$resourcetypename\)\: Unexpected token "\$resourcetypename", expected type at offset 16 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/ResourceTypeFilter.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/AccessoryAvailabilityRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 4
+			path: lib/Application/Reservation/Validation/AccessoryResourceRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/BlackoutDateTimeValidationResult.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/CreditsRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/CurrentUserIsReservationUserRule.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 4 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
+
+		-
+			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 5 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
+			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/DescriptionRequiredRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/PermissionValidationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 16
+			path: lib/Application/Reservation/Validation/QuotaRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/ReminderValidationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationAttachmentRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationBasicInfoRule.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$reservationSeries$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$retryParameters$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$reservationSeries$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$retryParameters$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationDateTimeRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/ReservationOverlappingRule.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$currentPeriod SchedulePeriod\)\: Unexpected token "\$currentPeriod", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationStartTimeRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationStartTimeRule.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$rule IReservationValidationRule\)\: Unexpected token "\$rule", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/Validation/ReservationValidationRuleProcessor.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/ResourceAvailabilityRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceCountRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceCrossDayRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceMaximumDurationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceMaximumNoticeRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceMinimumDurationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceMinimumNoticeRuleAdd.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ResourceParticipationRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/ScheduleAvailabilityRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Application/Reservation/Validation/SchedulePeriodRule.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(string;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 111 on line 4$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Reservation/Validation/ScheduleTotalConcurrentReservationsRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/ScheduleTotalConcurrentReservationsRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/TermsOfServiceRule.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Reservation/Validation/TitleRequiredRule.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarDay.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarMonth.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$week CalendarWeek\)\: Unexpected token "\$week", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarMonth.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$resource ResourceDto\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarReservation.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$day CalendarDay\)\: Unexpected token "\$day", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarWeek.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/CalendarWeek.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$periodsToReturn SpanablePeriod\[\]\)\: Unexpected token "\$periodsToReturn", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/DailyLayout.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$_isReservable\)\: Unexpected token "\$_isReservable", expected type at offset 16 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/EmptyReservationSlot.php
+
+		-
+			message: '#^Access to an undefined property IReservedItemView\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Application/Schedule/ReservationListItem.php
+
+		-
+			message: '#^Call to an undefined method IReservedItemView\:\:IsUserParticipating\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Application/Schedule/ReservationListItem.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Application/Schedule/ScheduleResourceFilter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Type\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: lib/Application/Schedule/ScheduleResourceFilter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: lib/Application/Schedule/ScheduleResourceFilter.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$scheduleAdminGroupId\)\: Unexpected token "\$scheduleAdminGroupId", expected type at offset 16 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Application/Schedule/SlotLabelFactory.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Application/Schedule/SlotLabelFactory.php
+
+		-
+			message: '#^Binary operation "\*" between float\|int and string\|null results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: lib/Common/ContrastingColor.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 3
+			path: lib/Common/Date.php
+
+		-
+			message: '#^Property WebExceptionHandler\:\:\$callback has unknown class callback as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/Common/Logging/ExceptionHandler.php
+
+		-
+			message: '#^PHPDoc tag @return with type Server is not subtype of native type IRestServer\|null\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: lib/Common/ServiceLocator.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 30
+			path: lib/Common/SmartyPage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Common/Validators/FileExtensionValidator.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Common/Validators/FileTypeValidator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$firstDate Date\)\: Unexpected token "\$firstDate", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Common/Validators/LayoutValidator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$lastDate Date\)\: Unexpected token "\$lastDate", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Common/Validators/LayoutValidator.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Common/Validators/PasswordComplexityValidator.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Common/Validators/PasswordValidator.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$param$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Common/Validators/URI/IParamsValidatorMethods.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$redirectURL$#'
+			identifier: parameter.notFound
+			count: 1
+			path: lib/Common/Validators/URI/ParamsValidator.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: lib/Common/Validators/ValidatorBase.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$current Config_Container\)\: Unexpected token "\$current", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Config/Configurator.php
+
+		-
+			message: '#^Access to an undefined property ISqlCommand\:\:\$Parameters\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/Database/MySQL/MySqlConnection.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$criteria Criteria\)\: Unexpected token "\$criteria", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/Database/SqlCommand.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$filter ISqlFilter\)\: Unexpected token "\$filter", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 4
+			path: lib/Database/SqlFilter.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Email/Messages/ReservationEmailMessage.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/Email/Messages/ReservationEmailMessage.php
+
+		-
+			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 2
+			path: lib/Email/SmartyEmail.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$a SlimWebServiceRegistryCategory\)\: Unexpected token "\$a", expected type at offset 24 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/WebService/Slim/SlimWebServiceRegistry.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$b SlimWebServiceRegistryCategory\)\: Unexpected token "\$b", expected type at offset 78 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: lib/WebService/Slim/SlimWebServiceRegistry.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 5
+			path: tests/Application/Admin/ManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ManageReservationsServiceTest\:\:\$persistenceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ManageReservationsServiceTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ManageReservationsServiceTest\:\:\$reservationHandler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ManageReservationsServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ScheduleAdminManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Property ScheduleAdminManageReservationsServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Application/Admin/ScheduleAdminScheduleRepositoryTest.php
+
+		-
+			message: '#^Property ScheduleAdminScheduleRepositoryTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Admin/ScheduleAdminScheduleRepositoryTest.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/Application/Attributes/AttributeServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/Application/Authentication/AccountActivationTest.php
+
+		-
+			message: '#^Property AccountActivationTest\:\:\$activationRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authentication/AccountActivationTest.php
+
+		-
+			message: '#^Property AccountActivationTest\:\:\$userRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authentication/AccountActivationTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/Application/Authentication/AuthenticationTest.php
+
+		-
+			message: '#^Property AuthenticationTest\:\:\$authorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authentication/AuthenticationTest.php
+
+		-
+			message: '#^Property AuthenticationTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authentication/AuthenticationTest.php
+
+		-
+			message: '#^Property AuthenticationTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authentication/AuthenticationTest.php
+
+		-
+			message: '#^Access to an undefined property IPassword\:\:\$Encryption\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Application/Authentication/PasswordMigrationTest.php
+
+		-
+			message: '#^Call to an undefined method IUserRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: tests/Application/Authentication/RegistrationTest.php
+
+		-
+			message: '#^Call to an undefined method IUserSessionRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: tests/Application/Authentication/WebServiceAuthenticationTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 5
+			path: tests/Application/Authorization/AuthorizationServiceTest.php
+
+		-
+			message: '#^Property AuthorizationServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authorization/AuthorizationServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/Application/Authorization/PrivacyFilterTest.php
+
+		-
+			message: '#^Property PrivacyFilterTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Authorization/PrivacyFilterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 11
+			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
+
+		-
+			message: '#^Property AccessoryAvailabilityRuleTest\:\:\$accessoryRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
+
+		-
+			message: '#^Property AccessoryAvailabilityRuleTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/Application/Reservation/AdminExcludedRuleTest.php
+
+		-
+			message: '#^Property AdminExcludedRuleTest\:\:\$baseRule has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/AdminExcludedRuleTest.php
+
+		-
+			message: '#^Property AdminExcludedRuleTest\:\:\$user has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/AdminExcludedRuleTest.php
+
+		-
+			message: '#^Property AdminExcludedRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/AdminExcludedRuleTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$allDates DateRange\[\]\)\: Unexpected token "\$allDates", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Application/Reservation/BlackoutsServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
+
+		-
+			message: '#^Property CustomAttributeValidationRuleTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
+
+		-
+			message: '#^Property CustomAttributeValidationRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Property QuotaRuleTest\:\:\$quotaRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Property QuotaRuleTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Property QuotaRuleTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Property QuotaRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/QuotaRuleTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
+
+		-
+			message: '#^Property RequiresApprovalRuleTest\:\:\$authorizationService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
+
+		-
+			message: '#^Property RequiresApprovalRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 92
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$initializer has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$privacyFilter has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Property ReservationComponentTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationComponentTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
+
+		-
+			message: '#^Property ReservationNotificationFactoryTest\:\:\$plugin has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
+
+		-
+			message: '#^Property ReservationNotificationFactoryTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Application/Reservation/ReservationStartTimeRuleTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Application/Reservation/ReservationStartTimeRuleTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Application/Reservation/ResourceCrossDayRuleTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Application/Reservation/SchedulePeriodRuleTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Application/Reservation/SchedulePeriodRuleTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$actualDays array\|CalendarDay\[\]\)\: Unexpected token "\$actualDays", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Application/Schedule/CalendarMonthTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$actualWeek1 CalendarWeek\)\: Unexpected token "\$actualWeek1", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Application/Schedule/CalendarMonthTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionServiceTest\:\:\$resourceRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionServiceTest\:\:\$scheduleRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionServiceTest\:\:\$userRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$actualDays array\|CalendarDay\[\]\)\: Unexpected token "\$actualDays", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Application/Schedule/CalendarWeekTest.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IAccessoryRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 17
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Property ResourceServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Property ResourceServiceTest\:\:\$permissionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Property ResourceServiceTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Property ResourceServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ResourceServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:AppendBlockedPeriod\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: tests/Application/Schedule/ScheduleLayoutTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:AppendPeriod\(\)\.$#'
+			identifier: method.notFound
+			count: 72
+			path: tests/Application/Schedule/ScheduleLayoutTest.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and IReservationSlot results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Application/Schedule/ScheduleReservationListTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
+
+		-
+			message: '#^Property ScheduleResourceFilterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
+
+		-
+			message: '#^Property ScheduleResourceFilterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
+
+		-
+			message: '#^Cannot call method __toString\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/Application/Schedule/SlotLabelFactoryTest.php
+
+		-
+			message: '#^Call to an undefined method IGroupRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Application/User/ManageUsersServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IRegistration\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Application/User/ManageUsersServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IUserViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Application/User/ManageUsersServiceTest.php
+
+		-
+			message: '#^PHPDoc tag @var with type InstanceAddedEvent is not subtype of native type InstanceUpdatedEvent\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: tests/Domain/Reservation/ExistingReservationTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$quotas Quota\[\]\)\: Unexpected token "\$quotas", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Domain/Reservation/QuotaRepositoryTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: tests/Domain/Reservation/QuotaTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Domain/Reservation/QuotaWhenModifyingTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$dates DateRange\[\]\)\: Unexpected token "\$dates", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 3
+			path: tests/Domain/Reservation/RepeatOptionsTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$accessories AccessoryDto\[\]\)\: Unexpected token "\$accessories", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Domain/Resource/ResourceRepositoryTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleLayout\:\:GetPeakTimes\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Domain/Schedule/ScheduleRepositoryTest.php
+
+		-
+			message: '#^Call to an undefined method IConfigurationFile\:\:File\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Infrastructure/Config/ConfigTest.php
+
+		-
+			message: '#^Call to an undefined method IConfigurationFile\:\:Register\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Infrastructure/Config/ConfigTest.php
+
+		-
+			message: '#^Access to an undefined property TestAdLdapEntry\:\:\$fooName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Plugins/Authentication/ActiveDirectory/ActiveDirectoryTest_BROKEN.php
+
+		-
+			message: '#^Method TestLdapEntry\:\:__construct\(\) has invalid return type none\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Plugins/Authentication/Ldap/LdapTest_BROKEN.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/Presenters/ActivationPresenterTest.php
+
+		-
+			message: '#^Property ActivationPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/ActivationPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 14
+			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
+
+		-
+			message: '#^Property ManageAccessoriesPresenterTest\:\:\$accessoryRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
+
+		-
+			message: '#^Property ManageAccessoriesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
+
+		-
+			message: '#^Property ManageAccessoriesPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 5
+			path: tests/Presenters/Admin/ManageAttributesPresenterTest.php
+
+		-
+			message: '#^Property ManageAttributesPresenterTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageAttributesPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 50
+			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
+
+		-
+			message: '#^Property ManageBlackoutsPresenterTest\:\:\$blackoutsService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
+
+		-
+			message: '#^Property ManageBlackoutsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
+
+		-
+			message: '#^Property ManageBlackoutsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
+
+		-
+			message: '#^Property ManageBlackoutsPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 5
+			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
+
+		-
+			message: '#^Property ManageConfigurationPresenterTest\:\:\$configSettings has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 20
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Property ManageQuotasPresenterTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Property ManageQuotasPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Property ManageQuotasPresenterTest\:\:\$quotaRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Property ManageQuotasPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Property ManageQuotasPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 58
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^PHPDoc tag @var with type array\<Attribute\> is not subtype of native type array\{LBAttribute\}\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$reservationsService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$termsOfServiceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Property ManageReservationsPresenterTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 16
+			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
+
+		-
+			message: '#^Property ManageResourceGroupsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
+
+		-
+			message: '#^Property ManageResourceGroupsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 14
+			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
+
+		-
+			message: '#^Property ManageResourceTypesPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
+
+		-
+			message: '#^Property ManageResourceTypesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
+
+		-
+			message: '#^Property ManageResourceTypesPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 23
+			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
+
+		-
+			message: '#^Property ManageSchedulesPresenterTest\:\:\$groupRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
+
+		-
+			message: '#^Property ManageSchedulesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
+
+		-
+			message: '#^Property ManageSchedulesPresenterTest\:\:\$resourceRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
+
+		-
+			message: '#^Property ManageSchedulesPresenterTest\:\:\$scheduleRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method PasswordEncryption\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 7
+			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
+
+		-
+			message: '#^Property ManageUsersPresenterTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
+
+		-
+			message: '#^Property ManageUsersPresenterTest\:\:\$groupViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
+
+		-
+			message: '#^Property ManageUsersPresenterTest\:\:\$manageUsersService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 8
+			path: tests/Presenters/CalendarExportPresenterTest.php
+
+		-
+			message: '#^Property CalendarExportPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarExportPresenterTest.php
+
+		-
+			message: '#^Property CalendarExportPresenterTest\:\:\$repo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarExportPresenterTest.php
+
+		-
+			message: '#^Property CalendarExportPresenterTest\:\:\$validator has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarExportPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 17
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Method CommonCalendarPresenter\:\:PageLoad\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$calendarFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Property CalendarPresenterTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 8
+			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$repo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$validator has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 8
+			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionValidatorTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
+
+		-
+			message: '#^Property CalendarSubscriptionValidatorTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Presenters/Dashboard/UpcomingReservationsPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IUpcomingReservationsControl\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 9
+			path: tests/Presenters/Dashboard/UpcomingReservationsPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 33
+			path: tests/Presenters/ParticipationPresenterTest.php
+
+		-
+			message: '#^Property ParticipationPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/ParticipationPresenterTest.php
+
+		-
+			message: '#^Property ParticipationPresenterTest\:\:\$reservationRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/ParticipationPresenterTest.php
+
+		-
+			message: '#^Property ParticipationPresenterTest\:\:\$reservationViewRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/ParticipationPresenterTest.php
+
+		-
+			message: '#^Property ParticipationPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/ParticipationPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 11
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Method CommonCalendarPresenter\:\:PageLoad\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$calendarFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Property PersonalCalendarPresenterTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/PersonalCalendarPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/RegisterPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method ICaptchaService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/RegisterPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Presenters/Reports/GenerateReportPresenterTest.php
+
+		-
+			message: '#^Property GenerateReportPresenterTest\:\:\$reportingService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reports/GenerateReportPresenterTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$row ReportCell\[\]\)\: Unexpected token "\$row", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 5
+			path: tests/Presenters/Reports/ReportDefinitionTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\\n     ", expected type at offset 15 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 2
+			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
+
+		-
+			message: '#^Property SavedReportsPresenterTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IExistingReservationPage\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/EditReservationPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationInitializer\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/EditReservationPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationInitializerFactory\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/EditReservationPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationPreconditionService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/EditReservationPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/EditReservationPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationInitializer\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/GuestReservationPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
+
+		-
+			message: '#^Property ReservationApprovalPresenterTest\:\:\$auth has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
+
+		-
+			message: '#^Property ReservationApprovalPresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
+
+		-
+			message: '#^Property ReservationApprovalPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
+
+		-
+			message: '#^Property ReservationApprovalPresenterTest\:\:\$persistence has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 24
+			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
+
+		-
+			message: '#^Property ReservationAttachmentPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
+
+		-
+			message: '#^Property ReservationAttachmentPresenterTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
+
+		-
+			message: '#^Access to an undefined property FakeReservationAuthorization\:\:\$_CanReserveFor\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 5
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Property ReservationAttributesPresenterTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Property ReservationAttributesPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
+
+		-
+			message: '#^Property ReservationCheckinPresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
+
+		-
+			message: '#^Property ReservationCheckinPresenterTest\:\:\$persistence has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IDeleteReservationPersistenceService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationDeletePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationDeletePage\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Presenters/Reservation/ReservationDeletePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationHandler\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationDeletePresenterTest.php
+
+		-
+			message: '#^Call to method Initialize\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 9
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Property ReservationInitializationTest\:\:\$dateBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Property ReservationInitializationTest\:\:\$initializer has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Property ReservationInitializationTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Property ReservationInitializationTest\:\:\$resourceBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Property ReservationInitializationTest\:\:\$userBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationInitializationTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationHandler\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IUpdateReservationPersistenceService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
+
+		-
+			message: '#^Property ReservationMovePresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
+
+		-
+			message: '#^Access to an undefined property IReservationSavePage\:\:\$attachment\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Access to an undefined property IReservationSavePage\:\:\$invitedGuests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Access to an undefined property IReservationSavePage\:\:\$participatingGuests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Access to an undefined property IReservationSavePage\:\:\$referenceNumber\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Access to an undefined property IReservationSavePage\:\:\$requiresApproval\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Property ReservationSavePresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Property ReservationSavePresenterTest\:\:\$persistenceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Property ReservationSavePresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationHandler\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Presenters/Reservation/ReservationUpdatePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IResourceRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Presenters/Reservation/ReservationUpdatePresenterTest.php
+
+		-
+			message: '#^Call to an undefined method IUpdateReservationPersistenceService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Presenters/Reservation/ReservationUpdatePresenterTest.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(string\|ScheduleStyle Direction\)\: Unexpected token "Direction", expected variable at offset 39 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/Presenters/SchedulePresenterTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 17
+			path: tests/WebService/WebServiceSecurityTest.php
+
+		-
+			message: '#^Property WebServiceSecurityTest\:\:\$server has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebService/WebServiceSecurityTest.php
+
+		-
+			message: '#^Property WebServiceSecurityTest\:\:\$userSessionRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebService/WebServiceSecurityTest.php
+
+		-
+			message: '#^Call to an undefined method IAccessoryRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/WebServices/AccessoriesWebServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IResourceRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/WebServices/AccessoriesWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/WebServices/AttributesWebServiceTest.php
+
+		-
+			message: '#^Property AttributesWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/AttributesWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/WebServices/AuthenticationWebServiceTest.php
+
+		-
+			message: '#^Method AuthenticationWebService\:\:Authenticate\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: tests/WebServices/AuthenticationWebServiceTest.php
+
+		-
+			message: '#^Method AuthenticationWebService\:\:SignOut\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/WebServices/AuthenticationWebServiceTest.php
+
+		-
+			message: '#^Property AuthenticationWebServiceTest\:\:\$authentication has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/AuthenticationWebServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IReservationPresenterFactory\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/WebServices/Controllers/ReservationSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IResourceRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: tests/WebServices/Controllers/ResourceSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IResourceRequestValidator\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: tests/WebServices/Controllers/ResourceSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IManageUsersService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/WebServices/Controllers/UserSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IManageUsersServiceFactory\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/WebServices/Controllers/UserSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IUserRequestValidator\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: tests/WebServices/Controllers/UserSaveControllerTest.php
+
+		-
+			message: '#^Call to an undefined method IGroupViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/WebServices/GroupsWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/WebServices/GroupsWebServiceTest.php
+
+		-
+			message: '#^Property GroupsWebServiceTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/GroupsWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 8
+			path: tests/WebServices/ReservationWriteWebServiceTest.php
+
+		-
+			message: '#^Property ReservationWriteWebServiceTest\:\:\$controller has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ReservationWriteWebServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/WebServices/ReservationsWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/WebServices/ReservationsWebServiceTest.php
+
+		-
+			message: '#^Property ReservationsWebServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ReservationsWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 18
+			path: tests/WebServices/ResourcesWebServiceTest.php
+
+		-
+			message: '#^Method ResourcesWebService\:\:GetAvailability\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: tests/WebServices/ResourcesWebServiceTest.php
+
+		-
+			message: '#^Property ResourcesWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ResourcesWebServiceTest.php
+
+		-
+			message: '#^Property ResourcesWebServiceTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ResourcesWebServiceTest.php
+
+		-
+			message: '#^Property ResourcesWebServiceTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ResourcesWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 6
+			path: tests/WebServices/ResourcesWriteWebServiceTest.php
+
+		-
+			message: '#^Property ResourcesWriteWebServiceTest\:\:\$controller has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/ResourcesWriteWebServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IScheduleRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/WebServices/SchedulesWebServiceTest.php
+
+		-
+			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
+			identifier: class.notFound
+			count: 17
+			path: tests/WebServices/UsersWebServiceTest.php
+
+		-
+			message: '#^Property UsersWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/UsersWebServiceTest.php
+
+		-
+			message: '#^Property UsersWebServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/UsersWebServiceTest.php
+
+		-
+			message: '#^Property UsersWebServiceTest\:\:\$userRepositoryFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/WebServices/UsersWebServiceTest.php
+
+		-
+			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/WebServices/Validators/ResourceRequestValidatorTest.php
+
+		-
+			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/WebServices/Validators/UserRequestValidatorTest.php
+
+		-
+			message: '#^Call to an undefined method IUserViewRepository\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/WebServices/Validators/UserRequestValidatorTest.php
+
+		-
+			message: '#^Call to an undefined method Configuration\:\:SetKey\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/fakes/FakeConfig.php
+
+		-
+			message: '#^Call to an undefined method Configuration\:\:SetSectionKey\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/fakes/FakeConfig.php
+
+		-
+			message: '#^Method FakeRestServer\:\:GetHeader\(\) should return string\|null but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: tests/fakes/FakeRestServer.php
+
+		-
+			message: '#^Method FakeScheduleLayout\:\:GetPeriod\(\) should return SchedulePeriod\|null but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: tests/fakes/FakeScheduleLayout.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(array\[int\]UserDto\)\: Unexpected token "UserDto", expected TOKEN_HORIZONTAL_WS at offset 29 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: tests/fakes/FakeUserRepository.php
