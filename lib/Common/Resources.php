@@ -8,9 +8,9 @@ interface IResourceLocalization
      * @abstract
      * @param $key
      * @param array|string $args
-     * @return void
+     * @return string
      */
-    public function GetString($key, $args = []);
+    public function GetString($key, $args = []): string;
 
     public function GetDateFormat($key);
 
@@ -135,7 +135,7 @@ class Resources implements IResourceLocalization
                 file_exists($this->LanguageDirectory . $this->AvailableLanguages[$languageCode]->LanguageFile));
     }
 
-    public function GetString($key, $args = [])
+    public function GetString($key, $args = []): string
     {
         if (!is_array($args)) {
             $args = [$args];
@@ -149,18 +149,17 @@ class Resources implements IResourceLocalization
 
         if (empty($args)) {
             return $strings[$key];
-        } else {
-            $sprintf_args = '';
-
-            for ($i = 0; $i < count($args); $i++) {
-                $sprintf_args .= "'" . addslashes($args[$i]) . "',";
-            }
-
-            $sprintf_args = substr($sprintf_args, 0, strlen($sprintf_args) - 1);
-            $string = addslashes($strings[$key]);
-            $return = eval("return sprintf('$string', $sprintf_args);");
-            return $return;
         }
+        $sprintf_args = '';
+
+        for ($i = 0; $i < count($args); $i++) {
+            $sprintf_args .= "'" . addslashes($args[$i]) . "',";
+        }
+
+        $sprintf_args = substr($sprintf_args, 0, strlen($sprintf_args) - 1);
+        $string = addslashes($strings[$key]);
+        $return = eval("return sprintf('$string', $sprintf_args);");
+        return $return;
     }
 
     public function GetDateFormat($key)

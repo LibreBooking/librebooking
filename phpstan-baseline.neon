@@ -13,18 +13,6 @@ parameters:
 			path: Controls/AttributeControl.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: Controls/CaptchaControl.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Controls/CheckboxControl.php
-
-		-
 			message: '#^Call to method assign\(\) on an unknown class Smarty_Data\.$#'
 			identifier: class.notFound
 			count: 1
@@ -91,12 +79,6 @@ parameters:
 			path: Controls/Dashboard/PastReservations.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: Controls/Dashboard/PastReservations.php
-
-		-
 			message: '#^Parameter \$smarty of method ResourceAvailabilityControl\:\:__construct\(\) has invalid type Smarty\.$#'
 			identifier: class.notFound
 			count: 1
@@ -118,12 +100,6 @@ parameters:
 			message: '#^Parameter \$smarty of method UpcomingReservations\:\:__construct\(\) has invalid type Smarty\.$#'
 			identifier: class.notFound
 			count: 1
-			path: Controls/Dashboard/UpcomingReservations.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 4
 			path: Controls/Dashboard/UpcomingReservations.php
 
 		-
@@ -187,12 +163,6 @@ parameters:
 			path: Domain/Access/ReservationRepository.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: Domain/Access/ReservationRepository.php
-
-		-
 			message: '#^Comparison operation "\!\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
 			identifier: notEqual.invalid
 			count: 13
@@ -219,12 +189,6 @@ parameters:
 		-
 			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
 			identifier: notEqual.invalid
-			count: 1
-			path: Domain/Access/ResourceRepository.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
 			count: 1
 			path: Domain/Access/ResourceRepository.php
 
@@ -293,12 +257,6 @@ parameters:
 			identifier: phpDoc.parseError
 			count: 2
 			path: Domain/ExistingReservationSeries.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: Domain/PaymentGateway.php
 
 		-
 			message: '#^Method IQuotaLimit\:\:Amount\(\) has invalid return type decimal\.$#'
@@ -487,12 +445,6 @@ parameters:
 			path: Domain/Values/SeriesUpdateScope.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/Admin/ManageGroupsPage.php
-
-		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$cost$#'
 			identifier: parameter.notFound
 			count: 1
@@ -521,24 +473,6 @@ parameters:
 			identifier: phpDoc.parseError
 			count: 1
 			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 5
-			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 5
-			path: Pages/Admin/ManageSchedulesPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 4
-			path: Pages/Admin/ManageUsersPage.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$path SplFileInfo\)\: Unexpected token "\$path", expected type at offset 9 on line 1$#'
@@ -577,58 +511,16 @@ parameters:
 			path: Pages/Credits/UserCreditsPage.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/Export/AtomSubscriptionPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/Page.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/Reports/SavedReportsPage.php
-
-		-
 			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
 			path: Pages/Reservation/ExistingReservationPage.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/Reservation/ExistingReservationPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Pages/ResourceDisplayPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: Pages/ResourceViewerViewResourcesPage.php
-
-		-
 			message: '#^PHPDoc tag @param has invalid value \(string\|ScheduleStyle Direction\)\: Unexpected token "Direction", expected variable at offset 39 on line 2$#'
 			identifier: phpDoc.parseError
 			count: 1
 			path: Pages/SchedulePage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 5
-			path: Pages/ScheduleViewerViewSchedulesPage.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$action string\)\: Unexpected token "\$action", expected type at offset 9 on line 1$#'
@@ -657,12 +549,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$plugin SplFileInfo\)\: Unexpected token "\$plugin", expected type at offset 9 on line 1$#'
 			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageConfigurationPresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
 			count: 1
 			path: Presenters/Admin/ManageConfigurationPresenter.php
 
@@ -721,18 +607,6 @@ parameters:
 			path: Presenters/Admin/ManageResourcesPresenter.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 4
-			path: Presenters/Admin/ManageUsersPresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Presenters/Authentication/ExternalAuthLoginPresenter.php
-
-		-
 			message: '#^Class ResourceDto referenced with incorrect case\: ResourceDTO\.$#'
 			identifier: class.nameCase
 			count: 1
@@ -743,12 +617,6 @@ parameters:
 			identifier: phpDoc.parseError
 			count: 1
 			path: Presenters/Calendar/CalendarCommon.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Presenters/Calendar/CalendarFilters.php
 
 		-
 			message: '#^Call to an undefined method ICalendarExportPage\:\:GetAccessoryIds\(\)\.$#'
@@ -781,20 +649,8 @@ parameters:
 			path: Presenters/CalendarSubscriptionPresenter.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: Presenters/Credits/CheckoutPresenter.php
-
-		-
 			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
 			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/GuestParticipationPresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
 			count: 1
 			path: Presenters/GuestParticipationPresenter.php
 
@@ -803,12 +659,6 @@ parameters:
 			identifier: phpDoc.parseError
 			count: 1
 			path: Presenters/Install/MySqlScript.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: Presenters/Integrate/SlackPresenter.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
@@ -823,40 +673,16 @@ parameters:
 			path: Presenters/ParticipationPresenter.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: Presenters/ParticipationPresenter.php
-
-		-
 			message: '#^Call to an undefined method Attribute\:\:AdminOnly\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: Presenters/ProfilePresenter.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Presenters/ProfilePresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Presenters/RegistrationPresenter.php
-
-		-
 			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: Presenters/Reports/GenerateReportPresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: Presenters/Reports/ReportCsvColumnView.php
 
 		-
 			message: '#^Call to an undefined method IReservationViewRepository\:\:LoadByReferenceNumber\(\)\.$#'
@@ -880,12 +706,6 @@ parameters:
 			message: '#^PHPDoc tag @var with type ReservationListItem is not subtype of native type null\.$#'
 			identifier: varTag.nativeType
 			count: 1
-			path: Presenters/ResourceDisplayPresenter.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
 			path: Presenters/ResourceDisplayPresenter.php
 
 		-
@@ -1273,12 +1093,6 @@ parameters:
 			path: lib/Application/Attributes/AttributeService.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Attributes/AttributeService.php
-
-		-
 			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -1295,12 +1109,6 @@ parameters:
 			identifier: phpDoc.parseError
 			count: 3
 			path: lib/Application/Authorization/ResourcePermissionStore.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: lib/Application/Reporting/ReportColumn.php
 
 		-
 			message: '#^Call to method Bind\(\) on an unknown class IExistingReservationComponentBinder\.$#'
@@ -1357,36 +1165,6 @@ parameters:
 			path: lib/Application/Reservation/ResourceTypeFilter.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/AccessoryAvailabilityRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 4
-			path: lib/Application/Reservation/Validation/AccessoryResourceRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/BlackoutDateTimeValidationResult.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/CreditsRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/CurrentUserIsReservationUserRule.php
-
-		-
 			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 2 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -1405,48 +1183,6 @@ parameters:
 			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/DescriptionRequiredRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/PermissionValidationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 16
-			path: lib/Application/Reservation/Validation/QuotaRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/ReminderValidationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationAttachmentRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationBasicInfoRule.php
-
-		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$reservationSeries$#'
 			identifier: parameter.notFound
 			count: 1
@@ -1455,12 +1191,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$retryParameters$#'
 			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
 			count: 1
 			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
 
@@ -1475,34 +1205,10 @@ parameters:
 			identifier: parameter.notFound
 			count: 1
 			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationDateTimeRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/ReservationOverlappingRule.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$currentPeriod SchedulePeriod\)\: Unexpected token "\$currentPeriod", expected type at offset 9 on line 1$#'
 			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationStartTimeRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
 			count: 1
 			path: lib/Application/Reservation/Validation/ReservationStartTimeRule.php
 
@@ -1513,88 +1219,10 @@ parameters:
 			path: lib/Application/Reservation/Validation/ReservationValidationRuleProcessor.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/ResourceAvailabilityRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceCountRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceCrossDayRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceMaximumDurationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceMaximumNoticeRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceMinimumDurationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceMinimumNoticeRuleAdd.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ResourceParticipationRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/ScheduleAvailabilityRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Application/Reservation/Validation/SchedulePeriodRule.php
-
-		-
 			message: '#^PHPDoc tag @return has invalid value \(string;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 111 on line 4$#'
 			identifier: phpDoc.parseError
 			count: 1
 			path: lib/Application/Reservation/Validation/ScheduleTotalConcurrentReservationsRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/ScheduleTotalConcurrentReservationsRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/TermsOfServiceRule.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Reservation/Validation/TitleRequiredRule.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
@@ -1681,22 +1309,10 @@ parameters:
 			path: lib/Application/Schedule/SlotLabelFactory.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Application/Schedule/SlotLabelFactory.php
-
-		-
 			message: '#^Binary operation "\*" between float\|int and string\|null results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
 			path: lib/Common/ContrastingColor.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 3
-			path: lib/Common/Date.php
 
 		-
 			message: '#^Property WebExceptionHandler\:\:\$callback has unknown class callback as its type\.$#'
@@ -1711,24 +1327,6 @@ parameters:
 			path: lib/Common/ServiceLocator.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 30
-			path: lib/Common/SmartyPage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Common/Validators/FileExtensionValidator.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Common/Validators/FileTypeValidator.php
-
-		-
 			message: '#^PHPDoc tag @var has invalid value \(\$firstDate Date\)\: Unexpected token "\$firstDate", expected type at offset 9 on line 1$#'
 			identifier: phpDoc.parseError
 			count: 1
@@ -1741,18 +1339,6 @@ parameters:
 			path: lib/Common/Validators/LayoutValidator.php
 
 		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Common/Validators/PasswordComplexityValidator.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Common/Validators/PasswordValidator.php
-
-		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$param$#'
 			identifier: parameter.notFound
 			count: 1
@@ -1763,12 +1349,6 @@ parameters:
 			identifier: parameter.notFound
 			count: 1
 			path: lib/Common/Validators/URI/ParamsValidator.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: lib/Common/Validators/ValidatorBase.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$current Config_Container\)\: Unexpected token "\$current", expected type at offset 9 on line 1$#'
@@ -1805,12 +1385,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: lib/Email/Messages/ReservationEmailMessage.php
-
-		-
-			message: '#^Result of method Resources\:\:GetString\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 2
-			path: lib/Email/SmartyEmail.php
 
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$a SlimWebServiceRegistryCategory\)\: Unexpected token "\$a", expected type at offset 24 on line 2$#'
