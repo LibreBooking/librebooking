@@ -36,7 +36,9 @@ class FakeResourceRepository implements IResourceRepository
         return null;
     }
 
-    public function GetUserResourceIdList() { }
+    public function GetUserResourceIdList(): array {
+        return [];
+    }
 
     public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null) {
         return null;

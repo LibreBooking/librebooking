@@ -2435,21 +2435,3 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: tests/fakes/FakeConfig.php
-
-		-
-			message: '#^Method FakeResourceRepository\:\:GetUserResourceIdList\(\) should return array\<int\> but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: tests/fakes/FakeResourceRepository.php
-
-		-
-			message: '#^Method FakeRestServer\:\:GetHeader\(\) should return string\|null but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: tests/fakes/FakeRestServer.php
-
-		-
-			message: '#^Method FakeScheduleLayout\:\:GetPeriod\(\) should return SchedulePeriod\|null but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: tests/fakes/FakeScheduleLayout.php

@@ -72,9 +72,10 @@ class FakeScheduleLayout implements IScheduleLayout
      * @param Date $date
      * @return SchedulePeriod|null period which occurs at this datetime. Includes start time, excludes end time. null if no match is found
      */
-    public function GetPeriod(Date $date)
+    public function GetPeriod(Date $date): ?SchedulePeriod
     {
         // TODO: Implement GetPeriod() method.
+        return null;
     }
 
     /**
