@@ -307,12 +307,6 @@ parameters:
 			path: Presenters/Admin/ManageResourcesPresenter.php
 
 		-
-			message: '#^Class ResourceDto referenced with incorrect case\: ResourceDTO\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: Presenters/Calendar/CalendarCommon.php
-
-		-
 			message: '#^Call to an undefined method ICalendarExportPage\:\:GetAccessoryIds\(\)\.$#'
 			identifier: method.notFound
 			count: 1

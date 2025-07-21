@@ -371,7 +371,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
             $selectedGroup = $resourceGroups->GetGroup($selectedGroupId);
             $this->page->BindSelectedGroup($selectedGroup);
 
-            /** @var ResourceDTO $resource */
+            /** @var ResourceDto $resource */
             foreach ($resources as $resource) {
                 if (in_array($resource->GetId(), $resourceIds)) {
                     $tempResources[] = $resource;
