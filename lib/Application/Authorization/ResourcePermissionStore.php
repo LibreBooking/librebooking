@@ -6,19 +6,19 @@ interface IResourcePermissionStore
 {
     /**
      * @param $userId int
-     * @return array[]int
+     * @return int[]
      */
     public function GetAllResources($userId);
 
     /**
      * @param $userId int
-     * @return array[]int
+     * @return int[]
      */
     public function GetBookableResources($userId);
 
     /**
      * @param $userId int
-     * @return array[]int
+     * @return int[]
      */
     public function GetViewOnlyResources($userId);
 }

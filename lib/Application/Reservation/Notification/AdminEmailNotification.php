@@ -65,7 +65,7 @@ abstract class AdminEmailNotification implements IReservationNotification
         $resource = $reservationSeries->Resource();
 
         $adminIds = [];
-        /** @var $admin UserDto */
+        /** @var UserDto $admin */
         foreach ($admins as $admin) {
             $id = $admin->Id();
             if (array_key_exists($id, $adminIds) || $id == $owner->Id()) {

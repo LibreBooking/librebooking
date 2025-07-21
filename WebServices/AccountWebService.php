@@ -58,7 +58,7 @@ class AccountWebService
             return;
         }
 
-        /** @var $request CreateAccountRequest */
+        /** @var CreateAccountRequest $request */
         $request = new CreateAccountRequest($this->server->GetRequest());
 
         Log::Debug('AccountWebService.Create()');
@@ -91,7 +91,7 @@ class AccountWebService
      */
     public function Update($userId)
     {
-        /** @var $request UpdateAccountRequest */
+        /** @var UpdateAccountRequest $request */
         $request = new UpdateAccountRequest($this->server->GetRequest());
 
         Log::Debug('AccountWebService.Update()');
@@ -124,7 +124,7 @@ class AccountWebService
      */
     public function UpdatePassword($userId)
     {
-        /** @var $request UpdateAccountPasswordRequest */
+        /** @var UpdateAccountPasswordRequest $request */
         $request = new UpdateAccountPasswordRequest($this->server->GetRequest());
 
         Log::Debug('AccountWebService.UpdatePassword()');

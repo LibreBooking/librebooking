@@ -26,7 +26,7 @@ class GroupsWriteWebService
      */
     public function Create()
     {
-        /** @var $request GroupRequest */
+        /** @var GroupRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug('GroupsWriteWebService.Create() User=%s, Request=%s', $this->server->GetSession()->UserId, json_encode($request));
@@ -54,7 +54,7 @@ class GroupsWriteWebService
      */
     public function Update($groupId)
     {
-        /** @var $request GroupRequest */
+        /** @var GroupRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug('GroupsWriteWebService.Update() User=%s, GroupId=%s, Request=%s', $this->server->GetSession()->UserId, $groupId, json_encode($request));
@@ -106,7 +106,7 @@ class GroupsWriteWebService
      */
     public function Roles($groupId)
     {
-        /** @var $request GroupRolesRequest */
+        /** @var GroupRolesRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug('GroupsWriteWebService.Roles() User=%s, GroupId=%s, Request=%s', $this->server->GetSession()->UserId, $groupId, json_encode($request));
@@ -133,7 +133,7 @@ class GroupsWriteWebService
      */
     public function Permissions($groupId)
     {
-        /** @var $request GroupPermissionsRequest */
+        /** @var GroupPermissionsRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug('GroupsWriteWebService.Permissions() User=%s, GroupId=%s, Request=%s', $this->server->GetSession()->UserId, $groupId, json_encode($request));
@@ -160,7 +160,7 @@ class GroupsWriteWebService
      */
     public function Users($groupId)
     {
-        /** @var $request GroupUsersRequest */
+        /** @var GroupUsersRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug('GroupsWriteWebService.Users() User=%s, GroupId=%s, Request=%s', $this->server->GetSession()->UserId, $groupId, json_encode($request));

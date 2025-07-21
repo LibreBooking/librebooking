@@ -69,7 +69,7 @@ class ScheduleAdminScheduleRepository extends ScheduleRepository
         $user = $this->repo->LoadById($this->user->UserId);
 
         $filteredList = [];
-        /** @var $schedule Schedule */
+        /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             if ($user->IsScheduleAdminFor($schedule)) {
                 $filteredList[] = $schedule;

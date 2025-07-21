@@ -208,7 +208,7 @@ class SlotLabelResource implements IResource
      */
     private $scheduleId;
     /**
-     * @var $scheduleAdminGroupId
+     * @var int|null $scheduleAdminGroupId
      */
     private $scheduleAdminGroupId;
     /**

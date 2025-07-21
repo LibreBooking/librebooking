@@ -163,7 +163,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $schedules = $this->scheduleRepository->GetAll();
         $scheduleList = [];
 
-        /* @var $schedule Schedule */
+        /* @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             $scheduleList[$schedule->GetId()] = $schedule->GetName();
         }
@@ -173,7 +173,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $resourceTypes = $this->resourceRepository->GetResourceTypes();
         $resourceTypeList = [];
 
-        /* @var $resourceType ResourceType */
+        /* @var ResourceType $resourceType */
         foreach ($resourceTypes as $resourceType) {
             $resourceTypeList[$resourceType->Id()] = $resourceType;
         }

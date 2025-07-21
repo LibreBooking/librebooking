@@ -4,22 +4,22 @@ class ViewResourcesPresenter
 {
 
     /**
-     * @var ResourceViewerViewResourcesPage;
+     * @var ResourceViewerViewResourcesPage
      */
     private $page;
 
     /**
-     * @var IResourceRepository;
+     * @var IResourceRepository
      */
     private $resourceRepo;
 
     /**
-     * @var IScheduleRepository;
+     * @var IScheduleRepository
      */
     private $scheduleRepo;
 
     /**
-     * @var IGroupRepository;
+     * @var IGroupRepository
      */
     private $groupRepo;
 
@@ -29,7 +29,7 @@ class ViewResourcesPresenter
     private $attributeService;
 
     /**
-     * @var int;
+     * @var int
      */
     private $userId;
 

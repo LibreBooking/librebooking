@@ -17,8 +17,8 @@ require_once(ROOT_DIR . 'Domain/ReservationAccessoryView.php');
 interface IReservationViewRepository
 {
     /**
+     * @param string $referenceNumber
      * @return ReservationView
-     * @var $referenceNumber string
      */
     public function GetReservationForEditing($referenceNumber);
 

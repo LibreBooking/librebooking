@@ -28,7 +28,7 @@ class ReservationWriteWebService
      */
     public function Create()
     {
-        /** @var $request ReservationRequest */
+        /** @var ReservationRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug(
@@ -70,7 +70,7 @@ class ReservationWriteWebService
      */
     public function Update($referenceNumber)
     {
-        /** @var $request ReservationRequest */
+        /** @var ReservationRequest $request */
         $request = $this->server->GetRequest();
 
         Log::Debug(

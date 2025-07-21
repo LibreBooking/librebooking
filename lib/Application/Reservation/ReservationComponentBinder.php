@@ -212,7 +212,7 @@ class ReservationResourceBinder implements IReservationComponentBinder
             $bindableResourceData->SetReservationResource(reset($resources));
         }
 
-        /** @var $resource ResourceDto */
+        /** @var ResourceDto $resource */
         foreach ($resources as $resource) {
             $bindableResourceData->AddAvailableResource($resource);
             if ($resource->Id == $requestedResourceId) {
@@ -341,7 +341,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
     private function IsCurrentUserParticipating($currentUserId)
     {
-        /** @var $user ReservationUserView */
+        /** @var ReservationUserView $user */
         foreach ($this->reservationView->Participants as $user) {
             if ($user->UserId == $currentUserId) {
                 return true;
@@ -352,7 +352,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
     private function IsCurrentUserInvited($currentUserId)
     {
-        /** @var $user ReservationUserView */
+        /** @var ReservationUserView $user */
         foreach ($this->reservationView->Invitees as $user) {
             if ($user->UserId == $currentUserId) {
                 return true;

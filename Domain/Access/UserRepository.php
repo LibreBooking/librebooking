@@ -676,7 +676,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
     public function LoadGroups($userId, $roleLevels = null)
     {
         /**
-         * @var $groups array|UserGroup[]
+         * @var array|UserGroup[] $groups
          */
         $groups = [];
 

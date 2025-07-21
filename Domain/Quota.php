@@ -84,7 +84,7 @@ class Quota implements IQuota
      * @param int $groupId
      * @param int $scheduleId
      * @param string $enforcedStartTime
-     * @param string null $enforcedEndTime
+     * @param string|null $enforcedEndTime
      * @param array $enforcedDays
      * @param IQuotaScope $scope
      */
@@ -443,7 +443,7 @@ class Quota implements IQuota
     {
         $toBeSkipped = [];
 
-        /** @var $instance Reservation */
+        /** @var Reservation $instance */
         foreach ($series->Instances() as $instance) {
             $toBeSkipped[$instance->ReferenceNumber()] = true;
 
@@ -459,7 +459,7 @@ class Quota implements IQuota
             }
         }
 
-        /** @var $reservation ReservationItemView */
+        /** @var ReservationItemView $reservation */
         foreach ($reservationsWithinRange as $reservation) {
             if (!empty($this->resourceId)) {
                 $applies = ($this->AppliesToResource($reservation->ResourceId) && $series->ContainsResource($reservation->ResourceId));
@@ -611,7 +611,7 @@ abstract class QuotaDuration implements IQuotaDuration
      */
     protected function GetFirstAndLastReservationDates(ReservationSeries $reservationSeries)
     {
-        /** @var $instances Reservation[] */
+        /** @var Reservation[] $instances */
         $instances = $reservationSeries->Instances();
         usort($instances, ['Reservation', 'Compare']);
 
@@ -770,9 +770,9 @@ class QuotaDurationMonth extends QuotaDuration
     {
         $minMax = $this->GetFirstAndLastReservationDates($reservationSeries);
 
-        /** @var $start Date */
+        /** @var Date $start */
         $start = $minMax[0]->ToTimezone($timezone);
-        /** @var $end Date */
+        /** @var Date $end */
         $end = $minMax[1]->ToTimezone($timezone);
 
         $searchStart = Date::Create($start->Year(), $start->Month(), 1, 0, 0, 0, $timezone);
@@ -857,9 +857,9 @@ class QuotaDurationYear extends QuotaDuration
     {
         $minMax = $this->GetFirstAndLastReservationDates($reservationSeries);
 
-        /** @var $start Date */
+        /** @var Date $start */
         $start = $minMax[0]->ToTimezone($timezone);
-        /** @var $end Date */
+        /** @var Date $end */
         $end = $minMax[1]->ToTimezone($timezone);
 
         $searchStart = Date::Create($start->Year(), 1, 1, 0, 0, 0, $timezone);

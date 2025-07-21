@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\|CustomAttribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Controls/AttributeControl.php
-
-		-
 			message: '#^Parameter \$smarty of method AttributeControl\:\:__construct\(\) has invalid type Smarty\.$#'
 			identifier: class.notFound
 			count: 1
@@ -127,24 +121,6 @@ parameters:
 			path: Domain/Access/AttributeFilter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Access/AttributeFilter.php
-
-		-
-			message: '#^PHPDoc tag @return has invalid value \(array\|\$resourceIds\[\] array of all resource IDs\)\: Unexpected token "\$resourceIds", expected type at offset 25 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Access/IResourceRepository.php
-
-		-
-			message: '#^PHPDoc tag @return has invalid value \(array\|\$resourceIds\[\] array of user accessible resources IDs\)\: Unexpected token "\$resourceIds", expected type at offset 25 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Access/IResourceRepository.php
-
-		-
 			message: '#^Parameter \$listBuilder of method PageableDataStore\:\:GetList\(\) has invalid type callback\.$#'
 			identifier: class.notFound
 			count: 1
@@ -155,12 +131,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: Domain/Access/QuotaRepository.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Access/ReservationRepository.php
 
 		-
 			message: '#^Comparison operation "\!\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
@@ -177,12 +147,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$endDate$#'
 			identifier: parameter.notFound
-			count: 1
-			path: Domain/Access/ReservationViewRepository.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$referenceNumber string\)\: Unexpected token "\$referenceNumber", expected type at offset 47 on line 3$#'
-			identifier: phpDoc.parseError
 			count: 1
 			path: Domain/Access/ReservationViewRepository.php
 
@@ -211,26 +175,8 @@ parameters:
 			path: Domain/Access/ScheduleRepository.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$groups array\|UserGroup\[\]\)\: Unexpected token "\$groups", expected type at offset 20 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Access/UserRepository.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\\n     ", expected type at offset 15 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Blackout.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$accessory AttributeValue\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/BookableResource.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
+			identifier: varTag.differentVariable
 			count: 1
 			path: Domain/BookableResource.php
 
@@ -241,21 +187,9 @@ parameters:
 			path: Domain/CustomAttribute.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$accessory ReservationAccessory\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 3
-			path: Domain/ExistingReservationSeries.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
+			identifier: varTag.differentVariable
 			count: 1
-			path: Domain/ExistingReservationSeries.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$resource BookableResource\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
 			path: Domain/ExistingReservationSeries.php
 
 		-
@@ -268,42 +202,6 @@ parameters:
 			message: '#^Method QuotaLimitCount\:\:Amount\(\) has invalid return type decimal\.$#'
 			identifier: class.notFound
 			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @param has invalid value \(string null \$enforcedEndTime\)\: Unexpected token "null", expected variable at offset 251 on line 9$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$end Date\)\: Unexpected token "\$end", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instances Reservation\[\]\)\: Unexpected token "\$instances", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservation ReservationItemView\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$start Date\)\: Unexpected token "\$start", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
 			path: Domain/Quota.php
 
 		-
@@ -331,44 +229,20 @@ parameters:
 			path: Domain/ReservationSeries.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/ReservationSeries.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$references ResourceGroup\[\]\)\: Unexpected token "\$references", expected type at offset 16 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/ResourceGroup.php
-
-		-
 			message: '#^Parameter \$id of method ResourceGroup\:\:WithId\(\) has invalid type long\.$#'
 			identifier: class.notFound
 			count: 1
 			path: Domain/ResourceGroup.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$accessory AttributeValue\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Domain/ResourceType.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
+			identifier: varTag.differentVariable
 			count: 1
 			path: Domain/ResourceType.php
 
 		-
 			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
 			identifier: equal.invalid
-			count: 2
-			path: Domain/ScheduleLayout.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$period LayoutPeriod\)\: Unexpected token "\$period", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
 			count: 2
 			path: Domain/ScheduleLayout.php
 
@@ -421,18 +295,6 @@ parameters:
 			path: Domain/User.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute AttributeValue\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: Domain/User.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$group UserGroup\)\: Unexpected token "\$group", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: Domain/User.php
-
-		-
 			message: '#^Property SeriesUpdateScopeBase\:\:\$series has unknown class ISeriesDistinction as its type\.$#'
 			identifier: class.notFound
 			count: 1
@@ -463,33 +325,15 @@ parameters:
 			path: Pages/Admin/ManageResourcesPage.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$attribute Attribute\)\: Unexpected token "\$attribute", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^Variable \$attribute in PHPDoc tag @var does not match any variable in the foreach loop\: \$id, \$value$#'
+			identifier: varTag.differentVariable
 			count: 1
 			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$path SplFileInfo\)\: Unexpected token "\$path", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Pages/Admin/ServerSettingsPage.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$plugin SplFileInfo\)\: Unexpected token "\$plugin", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Pages/Admin/ServerSettingsPage.php
 
 		-
 			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
-			path: Pages/Ajax/AutoCompletePage.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$result UserItemView\)\: Unexpected token "\$result", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 4
 			path: Pages/Ajax/AutoCompletePage.php
 
 		-
@@ -511,40 +355,10 @@ parameters:
 			path: Pages/Reservation/ExistingReservationPage.php
 
 		-
-			message: '#^PHPDoc tag @param has invalid value \(string\|ScheduleStyle Direction\)\: Unexpected token "Direction", expected variable at offset 39 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Pages/SchedulePage.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$action string\)\: Unexpected token "\$action", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/ActionPresenter.php
-
-		-
 			message: '#^Access to an undefined property Sabre\\VObject\\Document\:\:\$VEVENT\.$#'
 			identifier: property.notFound
 			count: 1
 			path: Presenters/Admin/Import/ICalImportPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$file ConfigFileOption\)\: Unexpected token "\$file", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageConfigurationPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$path SplFileInfo\)\: Unexpected token "\$path", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageConfigurationPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$plugin SplFileInfo\)\: Unexpected token "\$plugin", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageConfigurationPresenter.php
 
 		-
 			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 0 results in an error\.$#'
@@ -583,18 +397,6 @@ parameters:
 			path: Presenters/Admin/ManageQuotasPresenter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservation ReservationItemView\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageReservationsPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservationItemView ReservationItemView\)\: Unexpected token "\$reservationItemView", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Admin/ManageReservationsPresenter.php
-
-		-
 			message: '#^Variable \$group in PHPDoc tag @var does not match any variable in the foreach loop\: \$allGroups, \$user$#'
 			identifier: varTag.differentVariable
 			count: 1
@@ -603,12 +405,6 @@ parameters:
 		-
 			message: '#^Class ResourceDto referenced with incorrect case\: ResourceDTO\.$#'
 			identifier: class.nameCase
-			count: 1
-			path: Presenters/Calendar/CalendarCommon.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
 			count: 1
 			path: Presenters/Calendar/CalendarCommon.php
 
@@ -641,24 +437,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: Presenters/CalendarSubscriptionPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/GuestParticipationPresenter.php
-
-		-
-			message: '#^PHPDoc tag @param has invalid value \(null\)\: Unexpected token "\\n     \* ", expected variable at offset 72 on line 3$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Install/MySqlScript.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$instance Reservation\)\: Unexpected token "\$instance", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/ParticipationPresenter.php
 
 		-
 			message: '#^PHPDoc tag @var with type IReservationValidationRule is not subtype of native type ReservationStartTimeRule\|ResourceMaximumNoticeCurrentInstanceRule\|ResourceMaximumNoticeRule\|ResourceMinimumNoticeCurrentInstanceRuleUpdate\|ResourceMinimumNoticeRuleAdd\.$#'
@@ -721,50 +499,14 @@ parameters:
 			path: Presenters/Schedule/SchedulePageBuilder.php
 
 		-
-			message: '#^PHPDoc tag @param has invalid value \(array \[int\]ISchedule \$schedules\)\: Unexpected token "\[", expected variable at offset 58 on line 3$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
-			message: '#^PHPDoc tag @param has invalid value \(array \[int\]ResourceDto \$resources\)\: Unexpected token "\[", expected variable at offset 58 on line 3$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(IGroupRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 32 on line 2$#'
-			identifier: phpDoc.parseError
+			message: '#^Call to an undefined method IGroupRepository\:\:GetGroupsByRole\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/ViewResourcesPresenter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(IResourceRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(IScheduleRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(ResourceViewerViewResourcesPage;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 47 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(int;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 19 on line 2$#'
-			identifier: phpDoc.parseError
+			message: '#^Call to an undefined method IResourceRepository\:\:GetResourceGroupsList\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/ViewResourcesPresenter.php
 
@@ -772,61 +514,25 @@ parameters:
 			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
 			identifier: notEqual.invalid
 			count: 1
-			path: Presenters/ViewSchedulesPresenter.php
+			path: Presenters/ViewResourcesPresenter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(IResourceRepository;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 35 on line 2$#'
-			identifier: phpDoc.parseError
+			message: '#^Call to an undefined method ResourceViewerViewResourcesPage\:\:BindGroups\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/ViewSchedulesPresenter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(ResourceViewerViewResourcesPage;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 47 on line 2$#'
-			identifier: phpDoc.parseError
+			message: '#^Call to an undefined method ResourceViewerViewResourcesPage\:\:BindSchedules\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/ViewSchedulesPresenter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request CreateAccountRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
+			identifier: notEqual.invalid
 			count: 1
-			path: WebServices/AccountWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateAccountPasswordRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/AccountWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateAccountRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/AccountWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request CustomAttributeRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: WebServices/AttributesWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request AuthenticationRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/AuthenticationWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request SignOutRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/AuthenticationWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(bool;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 20 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/AuthenticationWebService.php
+			path: Presenters/ViewSchedulesPresenter.php
 
 		-
 			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 2 results in an error\.$#'
@@ -899,48 +605,6 @@ parameters:
 			identifier: parameter.notFound
 			count: 1
 			path: WebServices/Controllers/ReservationSaveController.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request GroupPermissionsRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/GroupsWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request GroupRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: WebServices/GroupsWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request GroupRolesRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/GroupsWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request GroupUsersRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/GroupsWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request ReservationRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: WebServices/ReservationWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request ResourceRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
-			path: WebServices/ResourcesWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$accessory AccessoryDto\)\: Unexpected token "\$accessory", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/Responses/AccessoriesResponse.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
@@ -1021,27 +685,9 @@ parameters:
 			path: WebServices/SchedulesWebService.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request CreateUserRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
+			message: '#^PHPDoc tag @var with type IValidator is not subtype of native type PasswordComplexityValidator\|PasswordValidator\.$#'
+			identifier: varTag.nativeType
 			count: 1
-			path: WebServices/UsersWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateUserPasswordRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/UsersWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$request UpdateUserRequest\)\: Unexpected token "\$request", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/UsersWriteWebService.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$validator IValidator\)\: Unexpected token "\$validator", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
 			path: WebServices/Validators/AccountRequestValidator.php
 
 		-
@@ -1049,24 +695,6 @@ parameters:
 			identifier: varTag.nativeType
 			count: 1
 			path: WebServices/Validators/ResourceRequestValidator.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$validator IValidator\)\: Unexpected token "\$validator", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: WebServices/Validators/UserRequestValidator.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$resource BookableResource\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Admin/ResourceAdminResourceRepository.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$schedule Schedule\)\: Unexpected token "\$schedule", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Admin/ScheduleAdminScheduleRepository.php
 
 		-
 			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 2 results in an error\.$#'
@@ -1099,12 +727,6 @@ parameters:
 			path: lib/Application/Authentication/PostRegistration.php
 
 		-
-			message: '#^PHPDoc tag @return has invalid value \(array\[\]int\)\: Unexpected token "int", expected TOKEN_HORIZONTAL_WS at offset 52 on line 3$#'
-			identifier: phpDoc.parseError
-			count: 3
-			path: lib/Application/Authorization/ResourcePermissionStore.php
-
-		-
 			message: '#^Call to method Bind\(\) on an unknown class IExistingReservationComponentBinder\.$#'
 			identifier: class.notFound
 			count: 1
@@ -1117,27 +739,9 @@ parameters:
 			path: lib/Application/Reservation/ExistingReservationInitializer.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$admin UserDto\)\: Unexpected token "\$admin", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/Notification/AdminEmailNotification.php
-
-		-
 			message: '#^Access to an undefined property IBookableResource\:\:\$Id\.$#'
 			identifier: property.notFound
 			count: 1
-			path: lib/Application/Reservation/ReservationComponentBinder.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$resource ResourceDto\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/ReservationComponentBinder.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$user ReservationUserView\)\: Unexpected token "\$user", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 2
 			path: lib/Application/Reservation/ReservationComponentBinder.php
 
 		-
@@ -1149,12 +753,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$resource$#'
 			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/ResourceTypeFilter.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$resourcetypename\)\: Unexpected token "\$resourcetypename", expected type at offset 16 on line 2$#'
-			identifier: phpDoc.parseError
 			count: 1
 			path: lib/Application/Reservation/ResourceTypeFilter.php
 
@@ -1201,72 +799,6 @@ parameters:
 			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$currentPeriod SchedulePeriod\)\: Unexpected token "\$currentPeriod", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationStartTimeRule.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$rule IReservationValidationRule\)\: Unexpected token "\$rule", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationValidationRuleProcessor.php
-
-		-
-			message: '#^PHPDoc tag @return has invalid value \(string;\)\: Unexpected token ";", expected TOKEN_HORIZONTAL_WS at offset 111 on line 4$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Reservation/Validation/ScheduleTotalConcurrentReservationsRule.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarDay.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarMonth.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$week CalendarWeek\)\: Unexpected token "\$week", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarMonth.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$resource ResourceDto\)\: Unexpected token "\$resource", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarReservation.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$day CalendarDay\)\: Unexpected token "\$day", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarWeek.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$reservation CalendarReservation\)\: Unexpected token "\$reservation", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/CalendarWeek.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$periodsToReturn SpanablePeriod\[\]\)\: Unexpected token "\$periodsToReturn", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/DailyLayout.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$_isReservable\)\: Unexpected token "\$_isReservable", expected type at offset 16 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/EmptyReservationSlot.php
-
-		-
 			message: '#^Access to an undefined property IReservedItemView\:\:\$item\.$#'
 			identifier: property.notFound
 			count: 1
@@ -1297,12 +829,6 @@ parameters:
 			path: lib/Application/Schedule/ScheduleResourceFilter.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$scheduleAdminGroupId\)\: Unexpected token "\$scheduleAdminGroupId", expected type at offset 16 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Application/Schedule/SlotLabelFactory.php
-
-		-
 			message: '#^Binary operation "\*" between float\|int and string\|null results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
@@ -1321,18 +847,6 @@ parameters:
 			path: lib/Common/ServiceLocator.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$firstDate Date\)\: Unexpected token "\$firstDate", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Common/Validators/LayoutValidator.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$lastDate Date\)\: Unexpected token "\$lastDate", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Common/Validators/LayoutValidator.php
-
-		-
 			message: '#^PHPDoc tag @param references unknown parameter\: \$param$#'
 			identifier: parameter.notFound
 			count: 1
@@ -1345,28 +859,10 @@ parameters:
 			path: lib/Common/Validators/URI/ParamsValidator.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$current Config_Container\)\: Unexpected token "\$current", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Config/Configurator.php
-
-		-
 			message: '#^Access to an undefined property ISqlCommand\:\:\$Parameters\.$#'
 			identifier: property.notFound
 			count: 1
 			path: lib/Database/MySQL/MySqlConnection.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$criteria Criteria\)\: Unexpected token "\$criteria", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/Database/SqlCommand.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$filter ISqlFilter\)\: Unexpected token "\$filter", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 4
-			path: lib/Database/SqlFilter.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
@@ -1379,18 +875,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: lib/Email/Messages/ReservationEmailMessage.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$a SlimWebServiceRegistryCategory\)\: Unexpected token "\$a", expected type at offset 24 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/WebService/Slim/SlimWebServiceRegistry.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$b SlimWebServiceRegistryCategory\)\: Unexpected token "\$b", expected type at offset 78 on line 3$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: lib/WebService/Slim/SlimWebServiceRegistry.php
 
 		-
 			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
@@ -1609,12 +1093,6 @@ parameters:
 			path: tests/Application/Reservation/AdminExcludedRuleTest.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$allDates DateRange\[\]\)\: Unexpected token "\$allDates", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Application/Reservation/BlackoutsServiceTest.php
-
-		-
 			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
 			identifier: class.notFound
 			count: 3
@@ -1777,18 +1255,6 @@ parameters:
 			path: tests/Application/Reservation/SchedulePeriodRuleTest.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$actualDays array\|CalendarDay\[\]\)\: Unexpected token "\$actualDays", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Application/Schedule/CalendarMonthTest.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$actualWeek1 CalendarWeek\)\: Unexpected token "\$actualWeek1", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Application/Schedule/CalendarMonthTest.php
-
-		-
 			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
 			identifier: class.notFound
 			count: 3
@@ -1811,12 +1277,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$actualDays array\|CalendarDay\[\]\)\: Unexpected token "\$actualDays", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Application/Schedule/CalendarWeekTest.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
@@ -1927,12 +1387,6 @@ parameters:
 			path: tests/Domain/Reservation/ExistingReservationTest.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$quotas Quota\[\]\)\: Unexpected token "\$quotas", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Domain/Reservation/QuotaRepositoryTest.php
-
-		-
 			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 5
@@ -1943,18 +1397,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: tests/Domain/Reservation/QuotaWhenModifyingTest.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$dates DateRange\[\]\)\: Unexpected token "\$dates", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 3
-			path: tests/Domain/Reservation/RepeatOptionsTest.php
-
-		-
-			message: '#^PHPDoc tag @var has invalid value \(\$accessories AccessoryDto\[\]\)\: Unexpected token "\$accessories", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Domain/Resource/ResourceRepositoryTest.php
 
 		-
 			message: '#^Call to an undefined method IScheduleLayout\:\:GetPeakTimes\(\)\.$#'
@@ -2503,21 +1945,15 @@ parameters:
 			path: tests/Presenters/Reports/GenerateReportPresenterTest.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\$row ReportCell\[\]\)\: Unexpected token "\$row", expected type at offset 9 on line 1$#'
-			identifier: phpDoc.parseError
-			count: 5
-			path: tests/Presenters/Reports/ReportDefinitionTest.php
-
-		-
 			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
 
 		-
-			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\\n     ", expected type at offset 15 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 2
+			message: '#^Property FakeSavedReportsPage\:\:\$_BoundReport has unknown class Report as its type\.$#'
+			identifier: class.notFound
+			count: 1
 			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
 
 		-
@@ -2821,12 +2257,6 @@ parameters:
 			path: tests/Presenters/Reservation/ReservationUpdatePresenterTest.php
 
 		-
-			message: '#^PHPDoc tag @param has invalid value \(string\|ScheduleStyle Direction\)\: Unexpected token "Direction", expected variable at offset 39 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/Presenters/SchedulePresenterTest.php
-
-		-
 			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
 			identifier: class.notFound
 			count: 17
@@ -3079,6 +2509,12 @@ parameters:
 			path: tests/fakes/FakeConfig.php
 
 		-
+			message: '#^Method FakeResourceRepository\:\:GetUserResourceIdList\(\) should return array\<int\> but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: tests/fakes/FakeResourceRepository.php
+
+		-
 			message: '#^Method FakeRestServer\:\:GetHeader\(\) should return string\|null but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
@@ -3089,9 +2525,3 @@ parameters:
 			identifier: return.missing
 			count: 1
 			path: tests/fakes/FakeScheduleLayout.php
-
-		-
-			message: '#^PHPDoc tag @return has invalid value \(array\[int\]UserDto\)\: Unexpected token "UserDto", expected TOKEN_HORIZONTAL_WS at offset 29 on line 2$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: tests/fakes/FakeUserRepository.php

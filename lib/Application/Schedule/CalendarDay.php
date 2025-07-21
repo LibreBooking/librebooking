@@ -90,7 +90,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
     }
 
     /**
-     * @param $reservation CalendarReservation
+     * @param CalendarReservation $reservation
      * @return void
      */
     public function AddReservation($reservation)
@@ -184,7 +184,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
      */
     public function AddReservations($reservations)
     {
-        /** @var $reservation CalendarReservation */
+        /** @var CalendarReservation $reservation */
         foreach ($reservations as $reservation) {
             $this->AddReservation($reservation);
         }

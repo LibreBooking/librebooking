@@ -72,7 +72,7 @@ class CalendarWeek implements ICalendarSegment
 
     public function AddReservations($reservations)
     {
-        /** @var $reservation CalendarReservation */
+        /** @var CalendarReservation $reservation */
         foreach ($reservations as $reservation) {
             $this->AddReservation($reservation);
         }
@@ -93,13 +93,13 @@ class CalendarWeek implements ICalendarSegment
     }
 
     /**
-     * @param $reservation CalendarReservation
+     * @param CalendarReservation $reservation
      * @return void
      */
     public function AddReservation($reservation)
     {
         $this->reservations[] = $reservation;
-        /** @var $day CalendarDay */
+        /** @var CalendarDay $day */
         foreach ($this->indexedDays as $day) {
             $day->AddReservation($reservation);
         }

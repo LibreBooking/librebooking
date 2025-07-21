@@ -91,7 +91,7 @@ class ResourceAdminResourceRepository extends ResourceRepository
         $user = $this->repo->LoadById($this->user->UserId);
 
         $filteredResources = [];
-        /** @var $resource BookableResource */
+        /** @var BookableResource $resource */
         foreach ($resources as $resource) {
             if ($user->IsResourceAdminFor($resource)) {
                 $filteredResources[] = $resource;

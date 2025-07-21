@@ -56,7 +56,7 @@ class UpcomingReservationsPresenter
         $thisWeeks = [];
         $nextWeeks = [];
 
-        /* @var $reservation ReservationItemView */
+        /* @var ReservationItemView $reservation */
         foreach ($consolidated as $reservation) {
             $start = $reservation->StartDate->ToTimezone($timezone);
 

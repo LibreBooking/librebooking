@@ -392,7 +392,7 @@ class ReservationSeries
      */
     protected function InstanceStartsOnDate(DateRange $reservationDate)
     {
-        /** @var $instance Reservation */
+        /** @var Reservation $instance */
         foreach ($this->instances as $instance) {
             if ($instance->StartDate()->DateEquals($reservationDate->GetBegin())) {
                 return true;

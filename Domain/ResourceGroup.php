@@ -3,7 +3,7 @@
 class ResourceGroupTree
 {
     /**
-     * @var $references ResourceGroup[]
+     * @var ResourceGroup[] $references
      */
     protected $references = [];
 

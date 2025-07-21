@@ -17,7 +17,7 @@ class AttributeControl extends Control
         $templates[CustomAttributeTypes::SINGLE_LINE_TEXTBOX] = 'SingleLineTextbox.tpl';
         $templates[CustomAttributeTypes::DATETIME] = 'Date.tpl';
 
-        /** @var $attribute Attribute|CustomAttribute */
+        /** @var Attribute|CustomAttribute $attribute */
         $attribute = $this->Get('attribute');
 
         if (is_a($attribute, 'CustomAttribute')) {

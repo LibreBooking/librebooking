@@ -449,7 +449,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
         $default = new NullSchedule();
 
-        /** @var $schedule Schedule */
+        /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             if (!empty($scheduleId) && $schedule->GetId() == $scheduleId) {
                 return $schedule;

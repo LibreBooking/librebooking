@@ -59,7 +59,7 @@ class CalendarWeekTest extends TestBase
         $day7 = new CalendarDay($expectedFirstDay->AddDays(6));
         $day7->AddReservation(CalendarReservation::FromView($endsAfterWeek, $timezone, $this->fakeUser));
 
-        /** @var $actualDays array|CalendarDay[] */
+        /** @var array|CalendarDay[] $actualDays */
         $actualDays = $week->Days();
 
         $this->assertEquals(7, count($actualDays));

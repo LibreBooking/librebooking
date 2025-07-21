@@ -154,7 +154,7 @@ class DailyLayout implements IDailyLayout
             return $periods;
         }
 
-        /** @var $periodsToReturn SpanablePeriod[] */
+        /** @var SpanablePeriod[] $periodsToReturn */
         $periodsToReturn = [];
         for ($i = 0; $i < count($periods); $i++) {
             $span = 1;

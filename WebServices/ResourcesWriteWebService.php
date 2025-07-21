@@ -27,7 +27,7 @@ class ResourcesWriteWebService
      */
     public function Create()
     {
-        /** @var $request ResourceRequest */
+        /** @var ResourceRequest $request */
         $request = new ResourceRequest($this->server->GetRequest());
 
         Log::Debug(
@@ -65,7 +65,7 @@ class ResourcesWriteWebService
      */
     public function Update($resourceId)
     {
-        /** @var $request ResourceRequest */
+        /** @var ResourceRequest $request */
         $request = new ResourceRequest($this->server->GetRequest());
 
         Log::Debug(

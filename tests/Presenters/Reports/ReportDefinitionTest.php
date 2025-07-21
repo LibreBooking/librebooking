@@ -103,7 +103,7 @@ class ReportDefinitionTest extends TestBase
 
         $definition = new ReportDefinition($report, $timezone);
 
-        /** @var $row ReportCell[] */
+        /** @var ReportCell[] $row */
         $row = $definition->GetRow($rows[0]);
 
         $this->assertEquals(4, count($row));
@@ -154,7 +154,7 @@ class ReportDefinitionTest extends TestBase
 
         $definition = new ReportDefinition($report, null);
 
-        /** @var $row ReportCell[] */
+        /** @var ReportCell[] $row */
         $row = $definition->GetRow($rows[0]);
 
         $this->assertEquals(3, count($row));
@@ -174,7 +174,7 @@ class ReportDefinitionTest extends TestBase
 
         $definition = new ReportDefinition($report, null);
 
-        /** @var $row ReportCell[] */
+        /** @var ReportCell[] $row */
         $row = $definition->GetRow($rows[0]);
 
         $this->assertEquals(3, count($row));
@@ -194,7 +194,7 @@ class ReportDefinitionTest extends TestBase
 
         $definition = new ReportDefinition($report, null);
 
-        /** @var $row ReportCell[] */
+        /** @var ReportCell[] $row */
         $row = $definition->GetRow($rows[0]);
 
         $this->assertEquals(3, count($row));
@@ -214,7 +214,7 @@ class ReportDefinitionTest extends TestBase
 
         $definition = new ReportDefinition($report, null);
 
-        /** @var $row ReportCell[] */
+        /** @var ReportCell[] $row */
         $row = $definition->GetRow($rows[0]);
 
         $this->assertEquals(3, count($row));

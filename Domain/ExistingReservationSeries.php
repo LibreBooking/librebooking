@@ -312,12 +312,12 @@ class ExistingReservationSeries extends ReservationSeries
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $resource BookableResource */
+        /** @var BookableResource $resource */
         foreach ($added as $resource) {
             $this->AddEvent(new ResourceAddedEvent($resource, ResourceLevel::Additional, $this));
         }
 
-        /** @var $resource BookableResource */
+        /** @var BookableResource $resource */
         foreach ($removed as $resource) {
             $this->AddEvent(new ResourceRemovedEvent($resource, $this));
         }
@@ -678,12 +678,12 @@ class ExistingReservationSeries extends ReservationSeries
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $accessory ReservationAccessory */
+        /** @var ReservationAccessory $accessory */
         foreach ($added as $accessory) {
             $this->AddEvent(new AccessoryAddedEvent($accessory, $this));
         }
 
-        /** @var $accessory ReservationAccessory */
+        /** @var ReservationAccessory $accessory */
         foreach ($removed as $accessory) {
             $this->AddEvent(new AccessoryRemovedEvent($accessory, $this));
         }
@@ -711,12 +711,12 @@ class ExistingReservationSeries extends ReservationSeries
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $attribute AttributeValue */
+        /** @var AttributeValue $attribute */
         foreach ($added as $attribute) {
             $this->AddEvent(new AttributeAddedEvent($attribute, $this));
         }
 
-        /** @var $accessory ReservationAccessory */
+        /** @var ReservationAccessory $accessory */
         foreach ($removed as $attribute) {
             $this->AddEvent(new AttributeRemovedEvent($attribute, $this));
         }

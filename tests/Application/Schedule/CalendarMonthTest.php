@@ -63,9 +63,9 @@ class CalendarMonthTest extends TestBase
         $day3->AddReservation(CalendarReservation::FromView($secondAndThirdDay, $timezone, $this->fakeUser));
 
         $weeks = $month->Weeks();
-        /** @var $actualWeek1 CalendarWeek */
+        /** @var CalendarWeek $actualWeek1 */
         $actualWeek1 = $weeks[0];
-        /** @var $actualDays array|CalendarDay[] */
+        /** @var array|CalendarDay[] $actualDays */
         $actualDays = $actualWeek1->Days();
 
         $this->assertEquals(5, count($weeks));

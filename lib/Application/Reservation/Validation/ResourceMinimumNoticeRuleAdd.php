@@ -29,7 +29,7 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
             if ($this->EnforceMinimumNotice($resource)) {
                 $minStartDate = Date::Now()->ApplyDifference($this->GetMinimumNotice($resource)->Interval());
 
-                /* @var $instance Reservation */
+                /* @var Reservation $instance */
                 foreach ($this->GetInstances($reservationSeries) as $instance) {
                     if ($this->ViolatesMinStartRule($instance, $minStartDate)) {
                         return new ReservationRuleResult(false, $r->GetString($this->GetErrorKey(), $minStartDate->ToTimezone($this->userSession->Timezone)->Format($r->GeneralDateTimeFormat())));

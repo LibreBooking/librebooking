@@ -1402,12 +1402,12 @@ class BookableResource implements IBookableResource
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $attribute AttributeValue */
+        /** @var AttributeValue $attribute */
         foreach ($added as $attribute) {
             $this->_addedAttributeValues[] = $attribute;
         }
 
-        /** @var $accessory AttributeValue */
+        /** @var AttributeValue $accessory */
         foreach ($removed as $attribute) {
             $this->_removedAttributeValues[] = $attribute;
         }

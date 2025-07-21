@@ -37,7 +37,7 @@ class ReservationStartTimeRule implements IReservationValidationRule
         $dateThatShouldBeLessThanNow = $currentInstance->StartDate();
         if ($constraint == ReservationStartTimeConstraint::CURRENT) {
             $timezone = $dateThatShouldBeLessThanNow->Timezone();
-            /** @var $currentPeriod SchedulePeriod */
+            /** @var SchedulePeriod $currentPeriod */
             $currentPeriod = $this->scheduleRepository
                     ->GetLayout($reservationSeries->ScheduleId(), new ScheduleLayoutFactory($timezone))
                     ->GetPeriod($currentInstance->EndDate());

@@ -58,9 +58,9 @@ class LayoutValidator extends ValidatorBase implements IValidator
                 }
                 $slots = $layout->GetLayout(Date::Now()->AddDays($day)->ToUtc());
 
-                /** @var $firstDate Date */
+                /** @var Date $firstDate */
                 $firstDate = $slots[0]->BeginDate();
-                /** @var $lastDate Date */
+                /** @var Date $lastDate */
                 $lastDate = $slots[count($slots) - 1]->EndDate();
                 if (!$firstDate->IsMidnight() || !$lastDate->IsMidnight()) {
                     Log::Debug('Dates are not midnight');

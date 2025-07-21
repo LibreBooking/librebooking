@@ -9,7 +9,7 @@ require_once(ROOT_DIR . 'WebServices/Requests/SignOutRequest.php');
 class SignedOutResponse extends RestResponse
 {
     /**
-     * @var bool;
+     * @var bool
      */
     public $signedOut;
 }
@@ -43,7 +43,7 @@ class AuthenticationWebService
      */
     public function Authenticate()
     {
-        /** @var $request AuthenticationRequest */
+        /** @var AuthenticationRequest $request */
         $request = $this->server->GetRequest();
         $username = $request->username;
         $password = $request->password;
@@ -86,7 +86,7 @@ class AuthenticationWebService
      */
     public function SignOut()
     {
-        /** @var $request SignOutRequest */
+        /** @var SignOutRequest $request */
         $request = $this->server->GetRequest();
         $userId = $request->userId;
         $sessionToken = $request->sessionToken;

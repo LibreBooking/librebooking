@@ -20,7 +20,7 @@ class EmptyReservationSlot implements IReservationSlot
     protected $_date;
 
     /**
-     * @var $_isReservable
+     * @var bool $_isReservable
      */
     protected $_isReservable;
 

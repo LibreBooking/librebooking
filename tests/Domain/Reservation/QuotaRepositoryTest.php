@@ -61,7 +61,7 @@ class QuotaRepositoryTest extends TestBase
 
         $this->db->SetRows($rows);
 
-        /** @var $quotas Quota[] */
+        /** @var Quota[] $quotas */
         $quotas = $this->repository->LoadAll();
 
         $quota1 = $quotas[0];

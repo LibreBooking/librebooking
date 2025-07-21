@@ -110,12 +110,12 @@ class ResourceType
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $attribute AttributeValue */
+        /** @var AttributeValue $attribute */
         foreach ($added as $attribute) {
             $this->addedAttributeValues[] = $attribute;
         }
 
-        /** @var $accessory AttributeValue */
+        /** @var AttributeValue $accessory */
         foreach ($removed as $attribute) {
             $this->removedAttributeValues[] = $attribute;
         }

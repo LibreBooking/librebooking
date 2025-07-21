@@ -183,7 +183,7 @@ class BlackoutsServiceTest extends TestBase
         $repeatDaily = new RepeatDaily(1, $repeatEnd);
         $repeatDates = $repeatDaily->GetDates($range);
 
-        /** @var $allDates DateRange[] */
+        /** @var DateRange[] $allDates */
         $allDates = array_merge([$range], $repeatDates);
 
         $series = BlackoutSeries::Create($userId, $title, $range);

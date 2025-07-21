@@ -3,7 +3,7 @@
 class ResourceTypeFilter implements IResourceFilter
 {
     /**
-     * @var $resourcetypename
+     * @var int[] $resourcetypeids
      */
     private $resourcetypeids = [];
 

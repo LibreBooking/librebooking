@@ -190,7 +190,7 @@ class CalendarReservation
         $knownSeries = [];
 
         $resourceMap = [];
-        /** @var $resource ResourceDto */
+        /** @var ResourceDto $resource */
         foreach ($resources as $resource) {
             $resourceMap[$resource->GetResourceId()] = $resource->GetName();
         }

@@ -377,7 +377,7 @@ class ScheduleRepository implements IScheduleRepository
             foreach ($days as $day) {
                 $slots = $layout->GetSlots($day);
 
-                /* @var $slot LayoutPeriod */
+                /* @var LayoutPeriod $slot */
                 foreach ($slots as $slot) {
                     $db->Execute(new AddLayoutTimeCommand($layoutId, $slot->Start, $slot->End, $slot->PeriodType, $slot->Label, $day));
                 }

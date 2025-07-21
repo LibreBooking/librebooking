@@ -410,7 +410,7 @@ class Blackout
     protected $date;
 
     /**
-     * @var
+     * @var int
      */
     protected $id;
 

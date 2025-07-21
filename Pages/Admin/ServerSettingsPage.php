@@ -45,11 +45,11 @@ class ServerSettingsPage extends AdminPage
         $plugins = [];
         $dit = new RecursiveDirectoryIterator(ROOT_DIR . 'plugins');
 
-        /** @var $path SplFileInfo  */
+        /** @var SplFileInfo $path  */
         foreach ($dit as $path) {
             if ($path->isDir() && basename($path->getPathname()) != '.' && basename($path->getPathname()) != '..') {
                 $plugins[basename($path->getPathname())] = [];
-                /** @var $plugin SplFileInfo  */
+                /** @var SplFileInfo $plugin  */
                 foreach (new RecursiveDirectoryIterator($path) as $plugin) {
                     if ($plugin->isDir() && basename($plugin->getPathname()) != '.' && basename($plugin->getPathname()) != '..') {
                         $plugins[basename($path->getPathname())][] = basename($plugin->getPathname());

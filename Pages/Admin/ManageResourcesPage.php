@@ -1308,7 +1308,7 @@ class ResourceFilterValues
 
             $attributeFragment = new SqlFilterNull();
 
-            /** @var $attribute Attribute */
+            /** @var Attribute $attribute */
             foreach ($this->Attributes as $id => $value) {
                 if ($value == null || $value == '' || !array_key_exists($id, $attributeDefinitions)) {
                     continue;
