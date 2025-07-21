@@ -115,7 +115,7 @@ class ResourceType
             $this->addedAttributeValues[] = $attribute;
         }
 
-        /** @var AttributeValue $accessory */
+        /** @var AttributeValue $attribute */
         foreach ($removed as $attribute) {
             $this->removedAttributeValues[] = $attribute;
         }

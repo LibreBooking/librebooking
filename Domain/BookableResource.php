@@ -1407,7 +1407,7 @@ class BookableResource implements IBookableResource
             $this->_addedAttributeValues[] = $attribute;
         }
 
-        /** @var AttributeValue $accessory */
+        /** @var AttributeValue $attribute */
         foreach ($removed as $attribute) {
             $this->_removedAttributeValues[] = $attribute;
         }

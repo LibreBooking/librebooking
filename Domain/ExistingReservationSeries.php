@@ -716,7 +716,7 @@ class ExistingReservationSeries extends ReservationSeries
             $this->AddEvent(new AttributeAddedEvent($attribute, $this));
         }
 
-        /** @var ReservationAccessory $accessory */
+        /** @var ReservationAccessory $attribute */
         foreach ($removed as $attribute) {
             $this->AddEvent(new AttributeRemovedEvent($attribute, $this));
         }

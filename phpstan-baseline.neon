@@ -67,22 +67,10 @@ parameters:
 			path: Domain/Access/ScheduleRepository.php
 
 		-
-			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: Domain/BookableResource.php
-
-		-
 			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
 			identifier: notEqual.invalid
 			count: 3
 			path: Domain/CustomAttribute.php
-
-		-
-			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: Domain/ExistingReservationSeries.php
 
 		-
 			message: '#^Method IQuotaLimit\:\:Amount\(\) has invalid return type decimal\.$#'
@@ -125,12 +113,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: Domain/ResourceGroup.php
-
-		-
-			message: '#^Variable \$accessory in PHPDoc tag @var does not match any variable in the foreach loop\: \$removed, \$attribute$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: Domain/ResourceType.php
 
 		-
 			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
@@ -199,12 +181,6 @@ parameters:
 			path: Pages/Admin/ManageResourcesPage.php
 
 		-
-			message: '#^Variable \$attribute in PHPDoc tag @var does not match any variable in the foreach loop\: \$id, \$value$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: Pages/Admin/ManageResourcesPage.php
-
-		-
 			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -263,12 +239,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: Presenters/Admin/ManageQuotasPresenter.php
-
-		-
-			message: '#^Variable \$group in PHPDoc tag @var does not match any variable in the foreach loop\: \$allGroups, \$user$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: Presenters/Admin/ManageResourcesPresenter.php
 
 		-
 			message: '#^Call to an undefined method ICalendarExportPage\:\:GetAccessoryIds\(\)\.$#'

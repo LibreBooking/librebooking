@@ -1177,11 +1177,11 @@ class ManageResourcesPresenter extends ActionPresenter
                     }
 
                     /** @var GroupItemView $group */
-                    foreach ($allGroups as $user) {
-                        $found = array_key_exists($user->Id(), $idsWithPermissions);
+                    foreach ($allGroups as $group) {
+                        $found = array_key_exists($group->Id(), $idsWithPermissions);
 
                         if (!$found) {
-                            $groups[] = new GroupPermissionItemView($user->Id(), $user->Name());
+                            $groups[] = new GroupPermissionItemView($group->Id(), $group->Name());
                         }
                     }
                     $this->page->BindGroupPermissions($groups);
