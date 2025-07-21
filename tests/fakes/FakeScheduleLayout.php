@@ -116,4 +116,49 @@ class FakeScheduleLayout implements IScheduleLayout
         // TODO: Implement UsesCustomLayout() method.
         return null;
     }
+
+    /**
+     * Appends a period to the schedule layout
+     *
+     * @param Time $startTime starting time of the schedule in specified timezone
+     * @param Time $endTime ending time of the schedule in specified timezone
+     * @param string $label optional label for the period
+     * @param DayOfWeek|int|null $dayOfWeek
+     */
+    public function AppendPeriod(Time $startTime, Time $endTime, $label = null, $dayOfWeek = null)
+    {
+        throw new \LogicException('AppendPeriod not implemented in FakeScheduleLayout');
+    }
+
+    /**
+     * Appends a period that is not reservable to the schedule layout
+     *
+     * @param Time $startTime starting time of the schedule in specified timezone
+     * @param Time $endTime ending time of the schedule in specified timezone
+     * @param string $label optional label for the period
+     * @param DayOfWeek|int|null $dayOfWeek
+     * @return void
+     */
+    public function AppendBlockedPeriod(Time $startTime, Time $endTime, $label = null, $dayOfWeek = null)
+    {
+        throw new \LogicException('AppendBlockedPeriod not implemented in FakeScheduleLayout');
+    }
+
+    /**
+     *
+     * @param DayOfWeek|int|null $dayOfWeek
+     * @return LayoutPeriod[] array of LayoutPeriod
+     */
+    public function GetSlots($dayOfWeek = null)
+    {
+        throw new \LogicException('GetSlots not implemented in FakeScheduleLayout');
+    }
+
+    /**
+     * @return int
+     */
+    public function GetType()
+    {
+        throw new \LogicException('GetType not implemented in FakeScheduleLayout');
+    }
 }

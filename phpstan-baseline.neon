@@ -1,21 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 2
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
 			path: Domain/Access/AttributeFilter.php
 
 		-
-			message: '#^Call to an undefined method Attribute\:\:Type\(\)\.$#'
-			identifier: method.notFound
-			count: 3
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
 			path: Domain/Access/AttributeFilter.php
 
 		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 5
+			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 4 results in an error\.$#'
+			identifier: equal.invalid
+			count: 1
 			path: Domain/Access/AttributeFilter.php
 
 		-
@@ -35,18 +35,6 @@ parameters:
 			identifier: notEqual.invalid
 			count: 1
 			path: Domain/Access/ResourceRepository.php
-
-		-
-			message: '#^Call to an undefined method IScheduleLayout\:\:AppendBlockedPeriod\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Domain/Access/ScheduleRepository.php
-
-		-
-			message: '#^Call to an undefined method IScheduleLayout\:\:AppendPeriod\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Domain/Access/ScheduleRepository.php
 
 		-
 			message: '#^PHPDoc tag @var with type ScheduleLayout is not subtype of native type null\.$#'
@@ -247,12 +235,6 @@ parameters:
 			path: Presenters/ParticipationPresenter.php
 
 		-
-			message: '#^Call to an undefined method Attribute\:\:AdminOnly\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/ProfilePresenter.php
-
-		-
 			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -401,60 +383,6 @@ parameters:
 			identifier: equal.invalid
 			count: 1
 			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/Account/AccountResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/Account/AccountResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/Account/AccountResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/ResourceResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/ResourceResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/ResourceResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/UserResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Label\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/UserResponse.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: WebServices/Responses/UserResponse.php
 
 		-
 			message: '#^PHPDoc tag @var with type IValidator is not subtype of native type PasswordComplexityValidator\|PasswordValidator\.$#'
@@ -653,18 +581,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Call to an undefined method IScheduleLayout\:\:AppendBlockedPeriod\(\)\.$#'
-			identifier: method.notFound
-			count: 5
-			path: tests/Application/Schedule/ScheduleLayoutTest.php
-
-		-
-			message: '#^Call to an undefined method IScheduleLayout\:\:AppendPeriod\(\)\.$#'
-			identifier: method.notFound
-			count: 72
-			path: tests/Application/Schedule/ScheduleLayoutTest.php
 
 		-
 			message: '#^Binary operation "\." between non\-falsy\-string and IReservationSlot results in an error\.$#'
