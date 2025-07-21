@@ -3,7 +3,7 @@
 abstract class Control
 {
     /**
-     * @var SmartyPage|Smarty
+     * @var SmartyPage|\Smarty\Smarty
      */
     protected $smarty = null;
 
@@ -13,7 +13,7 @@ abstract class Control
     protected $id = null;
 
     /**
-     * @var Smarty_Data
+     * @var \Smarty\Data
      */
     protected $data = null;
 

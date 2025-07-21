@@ -5,12 +5,12 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php'
 class ReservationNotificationFactoryTest extends TestBase
 {
     /**
-     * @var IPostReservationFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var IPostReservationFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $plugin;
 
     /**
-     * @var IReservationNotificationService|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationNotificationService|PHPUnit\Framework\MockObject\MockObject
      */
     private $service;
 

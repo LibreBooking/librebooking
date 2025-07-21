@@ -5,12 +5,12 @@ require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 class ScheduleResourceFilterTest extends TestBase
 {
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 

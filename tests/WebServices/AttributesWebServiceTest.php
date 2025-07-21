@@ -5,7 +5,7 @@ require_once(ROOT_DIR . 'WebServices/AttributesWebService.php');
 class AttributesWebServiceTest extends TestBase
 {
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 

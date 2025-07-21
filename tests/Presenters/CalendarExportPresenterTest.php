@@ -6,12 +6,12 @@ require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
 class CalendarExportPresenterTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $repo;
 
     /**
-     * @var ICalendarExportPage|PHPUnit_Framework_MockObject_MockObject
+     * @var ICalendarExportPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
@@ -21,7 +21,7 @@ class CalendarExportPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var ICalendarExportValidator|PHPUnit_Framework_MockObject_MockObject
+     * @var ICalendarExportValidator|PHPUnit\Framework\MockObject\MockObject
      */
     private $validator;
 

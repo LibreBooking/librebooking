@@ -1,36 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to method assign\(\) on an unknown class Smarty_Data\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
-			message: '#^Call to method createTemplate\(\) on an unknown class Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
-			message: '#^Call to method getTemplateVars\(\) on an unknown class Smarty_Data\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
-			message: '#^Property Control\:\:\$data has unknown class Smarty_Data as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
-			message: '#^Property Control\:\:\$smarty has unknown class Smarty as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
 			identifier: method.notFound
 			count: 2
@@ -215,12 +185,6 @@ parameters:
 			identifier: equal.invalid
 			count: 1
 			path: Domain/User.php
-
-		-
-			message: '#^Property SeriesUpdateScopeBase\:\:\$series has unknown class ISeriesDistinction as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Values/SeriesUpdateScope.php
 
 		-
 			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
@@ -553,30 +517,6 @@ parameters:
 			path: WebServices/Responses/UserResponse.php
 
 		-
-			message: '#^Call to method GetAll\(\) on an unknown class IScheduleRepositorRCOI\.$#'
-			identifier: class.notFound
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
-			message: '#^Call to method GetLayout\(\) on an unknown class IScheduleRepositorRCOI\.$#'
-			identifier: class.notFound
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
-			message: '#^Call to method LoadById\(\) on an unknown class IScheduleRepositorRCOI\.$#'
-			identifier: class.notFound
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
-			message: '#^Property SchedulesWebService\:\:\$scheduleRepository has unknown class IScheduleRepositorRCOI as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: WebServices/SchedulesWebService.php
-
-		-
 			message: '#^PHPDoc tag @var with type IValidator is not subtype of native type PasswordComplexityValidator\|PasswordValidator\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -617,18 +557,6 @@ parameters:
 			identifier: equal.invalid
 			count: 1
 			path: lib/Application/Authentication/PostRegistration.php
-
-		-
-			message: '#^Call to method Bind\(\) on an unknown class IExistingReservationComponentBinder\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/Application/Reservation/ExistingReservationInitializer.php
-
-		-
-			message: '#^Property ExistingReservationInitializer\:\:\$reservationBinder has unknown class IExistingReservationComponentBinder as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/Application/Reservation/ExistingReservationInitializer.php
 
 		-
 			message: '#^Access to an undefined property IBookableResource\:\:\$Id\.$#'
@@ -697,12 +625,6 @@ parameters:
 			path: lib/Common/ContrastingColor.php
 
 		-
-			message: '#^Property WebExceptionHandler\:\:\$callback has unknown class callback as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: lib/Common/Logging/ExceptionHandler.php
-
-		-
 			message: '#^PHPDoc tag @return with type Server is not subtype of native type IRestServer\|null\.$#'
 			identifier: return.phpDocType
 			count: 1
@@ -727,136 +649,10 @@ parameters:
 			path: lib/Email/Messages/ReservationEmailMessage.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 5
-			path: tests/Application/Admin/ManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ManageReservationsServiceTest\:\:\$persistenceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ManageReservationsServiceTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ManageReservationsServiceTest\:\:\$reservationHandler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ManageReservationsServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ResourceAdminManageReservationsServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ResourceAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ScheduleAdminManageReservationsServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Property ScheduleAdminManageReservationsServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ScheduleAdminManageReservationsServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Application/Admin/ScheduleAdminScheduleRepositoryTest.php
-
-		-
-			message: '#^Property ScheduleAdminScheduleRepositoryTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Admin/ScheduleAdminScheduleRepositoryTest.php
-
-		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
 			identifier: method.notFound
 			count: 4
 			path: tests/Application/Attributes/AttributeServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/Application/Authentication/AccountActivationTest.php
-
-		-
-			message: '#^Property AccountActivationTest\:\:\$activationRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authentication/AccountActivationTest.php
-
-		-
-			message: '#^Property AccountActivationTest\:\:\$userRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authentication/AccountActivationTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/Application/Authentication/AuthenticationTest.php
-
-		-
-			message: '#^Property AuthenticationTest\:\:\$authorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authentication/AuthenticationTest.php
-
-		-
-			message: '#^Property AuthenticationTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authentication/AuthenticationTest.php
-
-		-
-			message: '#^Property AuthenticationTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authentication/AuthenticationTest.php
 
 		-
 			message: '#^Access to an undefined property IPassword\:\:\$Encryption\.$#'
@@ -875,204 +671,6 @@ parameters:
 			identifier: method.notFound
 			count: 7
 			path: tests/Application/Authentication/WebServiceAuthenticationTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 5
-			path: tests/Application/Authorization/AuthorizationServiceTest.php
-
-		-
-			message: '#^Property AuthorizationServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authorization/AuthorizationServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/Application/Authorization/PrivacyFilterTest.php
-
-		-
-			message: '#^Property PrivacyFilterTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Authorization/PrivacyFilterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 11
-			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
-
-		-
-			message: '#^Property AccessoryAvailabilityRuleTest\:\:\$accessoryRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
-
-		-
-			message: '#^Property AccessoryAvailabilityRuleTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/AccessoryAvailabilityRuleTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/Application/Reservation/AdminExcludedRuleTest.php
-
-		-
-			message: '#^Property AdminExcludedRuleTest\:\:\$baseRule has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/AdminExcludedRuleTest.php
-
-		-
-			message: '#^Property AdminExcludedRuleTest\:\:\$user has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/AdminExcludedRuleTest.php
-
-		-
-			message: '#^Property AdminExcludedRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/AdminExcludedRuleTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 3
-			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
-
-		-
-			message: '#^Property CustomAttributeValidationRuleTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
-
-		-
-			message: '#^Property CustomAttributeValidationRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/CustomAttributeValidationRuleTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/Application/Reservation/QuotaRuleTest.php
-
-		-
-			message: '#^Property QuotaRuleTest\:\:\$quotaRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/QuotaRuleTest.php
-
-		-
-			message: '#^Property QuotaRuleTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/QuotaRuleTest.php
-
-		-
-			message: '#^Property QuotaRuleTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/QuotaRuleTest.php
-
-		-
-			message: '#^Property QuotaRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/QuotaRuleTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
-
-		-
-			message: '#^Property RequiresApprovalRuleTest\:\:\$authorizationService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
-
-		-
-			message: '#^Property RequiresApprovalRuleTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/RequiresApprovalRuleTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 92
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$initializer has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$privacyFilter has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$reservationAuthorization has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Property ReservationComponentTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationComponentTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
-
-		-
-			message: '#^Property ReservationNotificationFactoryTest\:\:\$plugin has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
-
-		-
-			message: '#^Property ReservationNotificationFactoryTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Reservation/ReservationNotificationFactoryTest.php
 
 		-
 			message: '#^Call to an undefined method IScheduleLayout\:\:expects\(\)\.$#'
@@ -1105,30 +703,6 @@ parameters:
 			path: tests/Application/Reservation/SchedulePeriodRuleTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 3
-			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionServiceTest\:\:\$resourceRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionServiceTest\:\:\$scheduleRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionServiceTest\:\:\$userRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/CalendarSubscriptionServiceTest.php
-
-		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
 			identifier: method.notFound
 			count: 2
@@ -1137,36 +711,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method IAccessoryRepository\:\:expects\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 17
-			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Property ResourceServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Property ResourceServiceTest\:\:\$permissionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Property ResourceServiceTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/ResourceServiceTest.php
-
-		-
-			message: '#^Property ResourceServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
 			count: 1
 			path: tests/Application/Schedule/ResourceServiceTest.php
 
@@ -1187,24 +731,6 @@ parameters:
 			identifier: binaryOp.invalid
 			count: 1
 			path: tests/Application/Schedule/ScheduleReservationListTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
-
-		-
-			message: '#^Property ScheduleResourceFilterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
-
-		-
-			message: '#^Property ScheduleResourceFilterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Application/Schedule/ScheduleResourceFilterTest.php
 
 		-
 			message: '#^Cannot call method __toString\(\) on string\.$#'
@@ -1279,256 +805,10 @@ parameters:
 			path: tests/Plugins/Authentication/Ldap/LdapTest_BROKEN.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/Presenters/ActivationPresenterTest.php
-
-		-
-			message: '#^Property ActivationPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/ActivationPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 14
-			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
-
-		-
-			message: '#^Property ManageAccessoriesPresenterTest\:\:\$accessoryRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
-
-		-
-			message: '#^Property ManageAccessoriesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
-
-		-
-			message: '#^Property ManageAccessoriesPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageAccessoriesPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 5
-			path: tests/Presenters/Admin/ManageAttributesPresenterTest.php
-
-		-
-			message: '#^Property ManageAttributesPresenterTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageAttributesPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 50
-			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
-
-		-
-			message: '#^Property ManageBlackoutsPresenterTest\:\:\$blackoutsService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
-
-		-
-			message: '#^Property ManageBlackoutsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
-
-		-
-			message: '#^Property ManageBlackoutsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
-
-		-
-			message: '#^Property ManageBlackoutsPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageBlackoutsPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 5
-			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
-
-		-
-			message: '#^Property ManageConfigurationPresenterTest\:\:\$configSettings has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageConfigurationPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 20
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Property ManageQuotasPresenterTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Property ManageQuotasPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Property ManageQuotasPresenterTest\:\:\$quotaRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Property ManageQuotasPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Property ManageQuotasPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageQuotasPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 58
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
 			message: '#^PHPDoc tag @var with type array\<Attribute\> is not subtype of native type array\{LBAttribute\}\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$reservationsService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$termsOfServiceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Property ManageReservationsPresenterTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageReservationsPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 16
-			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
-
-		-
-			message: '#^Property ManageResourceGroupsPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
-
-		-
-			message: '#^Property ManageResourceGroupsPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageResourceGroupsPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 14
-			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
-
-		-
-			message: '#^Property ManageResourceTypesPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
-
-		-
-			message: '#^Property ManageResourceTypesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
-
-		-
-			message: '#^Property ManageResourceTypesPresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageResourceTypesPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 23
-			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
-
-		-
-			message: '#^Property ManageSchedulesPresenterTest\:\:\$groupRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
-
-		-
-			message: '#^Property ManageSchedulesPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
-
-		-
-			message: '#^Property ManageSchedulesPresenterTest\:\:\$resourceRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
-
-		-
-			message: '#^Property ManageSchedulesPresenterTest\:\:\$scheduleRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageSchedulesPresenterTest.php
 
 		-
 			message: '#^Call to an undefined method PasswordEncryption\:\:expects\(\)\.$#'
@@ -1537,142 +817,10 @@ parameters:
 			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 7
-			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
-
-		-
-			message: '#^Property ManageUsersPresenterTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
-
-		-
-			message: '#^Property ManageUsersPresenterTest\:\:\$groupViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
-
-		-
-			message: '#^Property ManageUsersPresenterTest\:\:\$manageUsersService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Admin/ManageUsersPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 8
-			path: tests/Presenters/CalendarExportPresenterTest.php
-
-		-
-			message: '#^Property CalendarExportPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarExportPresenterTest.php
-
-		-
-			message: '#^Property CalendarExportPresenterTest\:\:\$repo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarExportPresenterTest.php
-
-		-
-			message: '#^Property CalendarExportPresenterTest\:\:\$validator has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarExportPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 17
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
 			message: '#^Method CommonCalendarPresenter\:\:PageLoad\(\) invoked with 2 parameters, 1 required\.$#'
 			identifier: arguments.count
 			count: 1
 			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$calendarFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Property CalendarPresenterTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 8
-			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$repo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionPresenterTest\:\:\$validator has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarSubscriptionPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 8
-			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionValidatorTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
-
-		-
-			message: '#^Property CalendarSubscriptionValidatorTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/CalendarSubscriptionValidatorTest.php
 
 		-
 			message: '#^Call to an undefined method IReservationViewRepository\:\:expects\(\)\.$#'
@@ -1687,86 +835,8 @@ parameters:
 			path: tests/Presenters/Dashboard/UpcomingReservationsPresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 33
-			path: tests/Presenters/ParticipationPresenterTest.php
-
-		-
-			message: '#^Property ParticipationPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/ParticipationPresenterTest.php
-
-		-
-			message: '#^Property ParticipationPresenterTest\:\:\$reservationRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/ParticipationPresenterTest.php
-
-		-
-			message: '#^Property ParticipationPresenterTest\:\:\$reservationViewRepo has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/ParticipationPresenterTest.php
-
-		-
-			message: '#^Property ParticipationPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/ParticipationPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 11
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
 			message: '#^Method CommonCalendarPresenter\:\:PageLoad\(\) invoked with 2 parameters, 1 required\.$#'
 			identifier: arguments.count
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$calendarFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$resourceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$scheduleRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$subscriptionService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/PersonalCalendarPresenterTest.php
-
-		-
-			message: '#^Property PersonalCalendarPresenterTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
 			count: 1
 			path: tests/Presenters/PersonalCalendarPresenterTest.php
 
@@ -1783,31 +853,7 @@ parameters:
 			path: tests/Presenters/RegisterPresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Presenters/Reports/GenerateReportPresenterTest.php
-
-		-
-			message: '#^Property GenerateReportPresenterTest\:\:\$reportingService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reports/GenerateReportPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
-
-		-
 			message: '#^Property FakeSavedReportsPage\:\:\$_BoundReport has unknown class Report as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
-
-		-
-			message: '#^Property SavedReportsPresenterTest\:\:\$service has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
@@ -1849,54 +895,6 @@ parameters:
 			path: tests/Presenters/Reservation/GuestReservationPresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
-
-		-
-			message: '#^Property ReservationApprovalPresenterTest\:\:\$auth has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
-
-		-
-			message: '#^Property ReservationApprovalPresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
-
-		-
-			message: '#^Property ReservationApprovalPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
-
-		-
-			message: '#^Property ReservationApprovalPresenterTest\:\:\$persistence has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationApprovalPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 24
-			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
-
-		-
-			message: '#^Property ReservationAttachmentPresenterTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
-
-		-
-			message: '#^Property ReservationAttachmentPresenterTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationAttachmentPresenterTest.php
-
-		-
 			message: '#^Access to an undefined property FakeReservationAuthorization\:\:\$_CanReserveFor\.$#'
 			identifier: property.notFound
 			count: 3
@@ -1913,42 +911,6 @@ parameters:
 			identifier: method.notFound
 			count: 2
 			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 5
-			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
-
-		-
-			message: '#^Property ReservationAttributesPresenterTest\:\:\$attributeRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
-
-		-
-			message: '#^Property ReservationAttributesPresenterTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationAttributesPresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
-
-		-
-			message: '#^Property ReservationCheckinPresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
-
-		-
-			message: '#^Property ReservationCheckinPresenterTest\:\:\$persistence has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationCheckinPresenterTest.php
 
 		-
 			message: '#^Call to an undefined method IDeleteReservationPersistenceService\:\:expects\(\)\.$#'
@@ -1969,48 +931,6 @@ parameters:
 			path: tests/Presenters/Reservation/ReservationDeletePresenterTest.php
 
 		-
-			message: '#^Call to method Initialize\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 3
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 9
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Property ReservationInitializationTest\:\:\$dateBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Property ReservationInitializationTest\:\:\$initializer has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Property ReservationInitializationTest\:\:\$page has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Property ReservationInitializationTest\:\:\$resourceBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
-			message: '#^Property ReservationInitializationTest\:\:\$userBinder has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationInitializationTest.php
-
-		-
 			message: '#^Call to an undefined method IReservationHandler\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -2020,18 +940,6 @@ parameters:
 			message: '#^Call to an undefined method IUpdateReservationPersistenceService\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 3
-			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
-
-		-
-			message: '#^Property ReservationMovePresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
 			path: tests/Presenters/Reservation/ReservationMovePresenterTest.php
 
 		-
@@ -2065,30 +973,6 @@ parameters:
 			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
-
-		-
-			message: '#^Property ReservationSavePresenterTest\:\:\$handler has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
-
-		-
-			message: '#^Property ReservationSavePresenterTest\:\:\$persistenceService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
-
-		-
-			message: '#^Property ReservationSavePresenterTest\:\:\$resourceRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reservation/ReservationSavePresenterTest.php
-
-		-
 			message: '#^Call to an undefined method IReservationHandler\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -2107,24 +991,6 @@ parameters:
 			path: tests/Presenters/Reservation/ReservationUpdatePresenterTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 17
-			path: tests/WebService/WebServiceSecurityTest.php
-
-		-
-			message: '#^Property WebServiceSecurityTest\:\:\$server has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebService/WebServiceSecurityTest.php
-
-		-
-			message: '#^Property WebServiceSecurityTest\:\:\$userSessionRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebService/WebServiceSecurityTest.php
-
-		-
 			message: '#^Call to an undefined method IAccessoryRepository\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 2
@@ -2137,24 +1003,6 @@ parameters:
 			path: tests/WebServices/AccessoriesWebServiceTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 3
-			path: tests/WebServices/AttributesWebServiceTest.php
-
-		-
-			message: '#^Property AttributesWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/AttributesWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 4
-			path: tests/WebServices/AuthenticationWebServiceTest.php
-
-		-
 			message: '#^Method AuthenticationWebService\:\:Authenticate\(\) invoked with 1 parameter, 0 required\.$#'
 			identifier: arguments.count
 			count: 2
@@ -2163,12 +1011,6 @@ parameters:
 		-
 			message: '#^Method AuthenticationWebService\:\:SignOut\(\) invoked with 1 parameter, 0 required\.$#'
 			identifier: arguments.count
-			count: 1
-			path: tests/WebServices/AuthenticationWebServiceTest.php
-
-		-
-			message: '#^Property AuthenticationWebServiceTest\:\:\$authentication has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
 			count: 1
 			path: tests/WebServices/AuthenticationWebServiceTest.php
 
@@ -2215,52 +1057,10 @@ parameters:
 			path: tests/WebServices/GroupsWebServiceTest.php
 
 		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 2
-			path: tests/WebServices/GroupsWebServiceTest.php
-
-		-
-			message: '#^Property GroupsWebServiceTest\:\:\$groupRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/GroupsWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 8
-			path: tests/WebServices/ReservationWriteWebServiceTest.php
-
-		-
-			message: '#^Property ReservationWriteWebServiceTest\:\:\$controller has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ReservationWriteWebServiceTest.php
-
-		-
 			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: tests/WebServices/ReservationsWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/WebServices/ReservationsWebServiceTest.php
-
-		-
-			message: '#^Property ReservationsWebServiceTest\:\:\$reservationViewRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ReservationsWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 18
-			path: tests/WebServices/ResourcesWebServiceTest.php
 
 		-
 			message: '#^Method ResourcesWebService\:\:GetAvailability\(\) invoked with 1 parameter, 0 required\.$#'
@@ -2269,64 +1069,10 @@ parameters:
 			path: tests/WebServices/ResourcesWebServiceTest.php
 
 		-
-			message: '#^Property ResourcesWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ResourcesWebServiceTest.php
-
-		-
-			message: '#^Property ResourcesWebServiceTest\:\:\$repository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ResourcesWebServiceTest.php
-
-		-
-			message: '#^Property ResourcesWebServiceTest\:\:\$reservationRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ResourcesWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 6
-			path: tests/WebServices/ResourcesWriteWebServiceTest.php
-
-		-
-			message: '#^Property ResourcesWriteWebServiceTest\:\:\$controller has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/ResourcesWriteWebServiceTest.php
-
-		-
 			message: '#^Call to an undefined method IScheduleRepository\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 4
 			path: tests/WebServices/SchedulesWebServiceTest.php
-
-		-
-			message: '#^Call to method expects\(\) on an unknown class PHPUnit_Framework_MockObject_MockObject\.$#'
-			identifier: class.notFound
-			count: 17
-			path: tests/WebServices/UsersWebServiceTest.php
-
-		-
-			message: '#^Property UsersWebServiceTest\:\:\$attributeService has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/UsersWebServiceTest.php
-
-		-
-			message: '#^Property UsersWebServiceTest\:\:\$userRepository has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/UsersWebServiceTest.php
-
-		-
-			message: '#^Property UsersWebServiceTest\:\:\$userRepositoryFactory has unknown class PHPUnit_Framework_MockObject_MockObject as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/WebServices/UsersWebServiceTest.php
 
 		-
 			message: '#^Call to an undefined method IAttributeService\:\:expects\(\)\.$#'

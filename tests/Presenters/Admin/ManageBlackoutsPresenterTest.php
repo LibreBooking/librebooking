@@ -10,22 +10,22 @@ class ManageBlackoutsPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IManageBlackoutsPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageBlackoutsPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IManageBlackoutsService|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageBlackoutsService|PHPUnit\Framework\MockObject\MockObject
      */
     private $blackoutsService;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduleRepository;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 

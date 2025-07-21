@@ -6,12 +6,12 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 class AccessoryAvailabilityRuleTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $reservationRepository;
 
     /**
-     * @var IAccessoryRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IAccessoryRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $accessoryRepository;
 

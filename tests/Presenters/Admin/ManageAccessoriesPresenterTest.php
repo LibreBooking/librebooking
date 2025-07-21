@@ -5,17 +5,17 @@ require_once(ROOT_DIR . 'Pages/Admin/ManageAccessoriesPage.php');
 class ManageAccessoriesPresenterTest extends TestBase
 {
     /**
-     * @var IManageAccessoriesPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageAccessoriesPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $resourceRepository;
 
     /**
-     * @var IAccessoryRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IAccessoryRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $accessoryRepository;
 

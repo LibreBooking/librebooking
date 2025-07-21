@@ -15,7 +15,7 @@ class ReservationsWebServiceTest extends TestBase
     private $service;
 
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationViewRepository;
 

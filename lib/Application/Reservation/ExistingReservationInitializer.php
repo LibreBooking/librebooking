@@ -16,7 +16,7 @@ class ExistingReservationInitializer extends ReservationInitializerBase implemen
     private $reservationView;
 
     /**
-     * @var IExistingReservationComponentBinder
+     * @var IReservationComponentBinder
      */
     private $reservationBinder;
 

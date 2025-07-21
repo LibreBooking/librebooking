@@ -15,7 +15,7 @@ class ReservationWriteWebServiceTest extends TestBase
     private $server;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|IReservationSaveController
+     * @var PHPUnit\Framework\MockObject\MockObject|IReservationSaveController
      */
     private $controller;
 

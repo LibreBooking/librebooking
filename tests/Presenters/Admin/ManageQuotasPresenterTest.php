@@ -5,7 +5,7 @@ require_once(ROOT_DIR . 'Pages/Admin/ManageQuotasPage.php');
 class ManageQuotasPresenterTest extends TestBase
 {
     /**
-     * @var IManageQuotasPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageQuotasPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
@@ -15,22 +15,22 @@ class ManageQuotasPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $resourceRepository;
 
     /**
-     * @var IGroupViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IGroupViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $groupRepository;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $scheduleRepository;
 
     /**
-     * @var QuotaRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var QuotaRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $quotaRepository;
 

@@ -15,7 +15,7 @@ class SavedReportsPresenterTest extends TestBase
     public $page;
 
     /**
-     * @var IReportingService|PHPUnit_Framework_MockObject_MockObject
+     * @var IReportingService|PHPUnit\Framework\MockObject\MockObject
      */
     public $service;
 

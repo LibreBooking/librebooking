@@ -11,7 +11,7 @@ class ManageAttributesPresenterTest extends TestBase
     private $page;
 
     /**
-     * @var IAttributeRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepository;
 

@@ -5,7 +5,7 @@ require_once(ROOT_DIR . 'WebServices/AuthenticationWebService.php');
 class AuthenticationWebServiceTest extends TestBase
 {
     /**
-     * @var IWebServiceAuthentication|PHPUnit_Framework_MockObject_MockObject
+     * @var IWebServiceAuthentication|PHPUnit\Framework\MockObject\MockObject
      */
     private $authentication;
 

@@ -6,7 +6,7 @@ require_once(ROOT_DIR . 'Presenters/Calendar/PersonalCalendarPresenter.php');
 class PersonalCalendarPresenterTest extends TestBase
 {
     /**
-     * @var ICommonCalendarPage|PHPUnit_Framework_MockObject_MockObject
+     * @var ICommonCalendarPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
@@ -16,32 +16,32 @@ class PersonalCalendarPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $repository;
 
     /**
-     * @var ICalendarFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ICalendarFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $calendarFactory;
 
     /**
-     * @var ICalendarSubscriptionService|PHPUnit_Framework_MockObject_MockObject
+     * @var ICalendarSubscriptionService|PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionService;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 
     /**
-     * @var IResourceService|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceService|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceService;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduleRepository;
 

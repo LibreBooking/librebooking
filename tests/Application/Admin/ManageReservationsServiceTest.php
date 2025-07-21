@@ -5,22 +5,22 @@ require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
 class ManageReservationsServiceTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationViewRepository;
 
     /**
-     * @var IReservationAuthorization|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationAuthorization|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationAuthorization;
 
     /**
-     * @var IReservationHandler|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationHandler;
 
     /**
-     * @var IUpdateReservationPersistenceService|PHPUnit_Framework_MockObject_MockObject
+     * @var IUpdateReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceService;
 

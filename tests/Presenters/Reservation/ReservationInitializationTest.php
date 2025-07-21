@@ -9,27 +9,27 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/NewReservationInitializer.p
 class ReservationInitializationTest extends TestBase
 {
     /**
-     * @var IReservationComponentBinder|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationComponentBinder|PHPUnit\Framework\MockObject\MockObject
      */
     private $userBinder;
 
     /**
-     * @var IReservationComponentBinder|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationComponentBinder|PHPUnit\Framework\MockObject\MockObject
      */
     private $dateBinder;
 
     /**
-     * @var IReservationComponentBinder|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationComponentBinder|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceBinder;
 
     /**
-     * @var INewReservationPage|PHPUnit_Framework_MockObject_MockObject
+     * @var INewReservationPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var NewReservationInitializer|PHPUnit_Framework_MockObject_MockObject
+     * @var NewReservationInitializer|PHPUnit\Framework\MockObject\MockObject
      */
     private $initializer;
 

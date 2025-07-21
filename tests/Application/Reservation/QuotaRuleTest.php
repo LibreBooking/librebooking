@@ -6,22 +6,22 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 class QuotaRuleTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $reservationViewRepository;
 
     /**
-     * @var IQuotaRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IQuotaRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $quotaRepository;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $userRepository;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $scheduleRepository;
 

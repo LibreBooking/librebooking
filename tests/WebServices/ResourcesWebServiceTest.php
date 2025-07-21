@@ -10,17 +10,17 @@ class ResourcesWebServiceTest extends TestBase
     private $server;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $repository;
 
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationRepository;
 
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 

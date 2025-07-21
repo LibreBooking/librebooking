@@ -10,7 +10,7 @@ class AuthorizationServiceTest extends TestBase
     private $authorizationService;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 

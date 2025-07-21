@@ -5,22 +5,22 @@ require_once(ROOT_DIR . 'Presenters/ParticipationPresenter.php');
 class ParticipationPresenterTest extends TestBase
 {
     /**
-     * @var IParticipationPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IParticipationPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IReservationRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationRepo;
 
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationViewRepo;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduleRepository;
 

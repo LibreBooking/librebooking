@@ -10,7 +10,7 @@ class PrivacyFilterTest extends TestBase
     private $privacyFilter;
 
     /**
-     * @var IReservationAuthorization|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationAuthorization|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationAuthorization;
 

@@ -15,7 +15,7 @@ class ResourcesWriteWebServiceTest extends TestBase
     private $server;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|IResourceSaveController
+     * @var PHPUnit\Framework\MockObject\MockObject|IResourceSaveController
      */
     private $controller;
 

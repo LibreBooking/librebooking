@@ -15,7 +15,7 @@ class ManageConfigurationPresenterTest extends TestBase
     private $page;
 
     /**
-     * @var IConfigurationSettings|PHPUnit_Framework_MockObject_MockObject
+     * @var IConfigurationSettings|PHPUnit\Framework\MockObject\MockObject
      */
     private $configSettings;
 

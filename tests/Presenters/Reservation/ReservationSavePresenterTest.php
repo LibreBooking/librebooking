@@ -27,17 +27,17 @@ class ReservationSavePresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IReservationPersistenceService|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceService;
 
     /**
-     * @var IReservationHandler|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
      */
     private $handler;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 

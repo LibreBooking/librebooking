@@ -39,7 +39,7 @@ class AuthenticationTest extends TestBase
     private $fakeMigration;
 
     /**
-     * @var IRoleService|PHPUnit_Framework_MockObject_MockObject
+     * @var IRoleService|PHPUnit\Framework\MockObject\MockObject
      */
     private $authorization;
 
@@ -54,11 +54,11 @@ class AuthenticationTest extends TestBase
     private $user;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
     /**
-     * @var IGroupRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IGroupRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepository;
 

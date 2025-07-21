@@ -21,7 +21,7 @@ class ManageUsersPresenterTest extends TestBase
     public $resourceRepo;
 
     /**
-     * @var IManageUsersService|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageUsersService|PHPUnit\Framework\MockObject\MockObject
      */
     public $manageUsersService;
 
@@ -41,12 +41,12 @@ class ManageUsersPresenterTest extends TestBase
     public $encryption;
 
     /**
-     * @var IGroupRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IGroupRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $groupRepository;
 
     /**
-     * @var IGroupViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IGroupViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $groupViewRepository;
 
