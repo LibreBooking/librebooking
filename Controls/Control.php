@@ -18,7 +18,7 @@ abstract class Control
     protected $data = null;
 
     /**
-     * @param SmartyPage|Smarty $smarty
+     * @param SmartyPage $smarty
      */
     public function __construct(SmartyPage $smarty)
     {

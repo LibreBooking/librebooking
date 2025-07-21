@@ -36,7 +36,7 @@ class FakeResourceRepository implements IResourceRepository
         return null;
     }
 
-    public function GetUserResourceIdList(): array {
+    public function GetUserResourceIdList(): array { 
         return [];
     }
 

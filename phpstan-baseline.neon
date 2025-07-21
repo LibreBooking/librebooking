@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \$smarty of method AttributeControl\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/AttributeControl.php
-
-		-
 			message: '#^Call to method assign\(\) on an unknown class Smarty_Data\.$#'
 			identifier: class.notFound
 			count: 1
@@ -25,18 +19,6 @@ parameters:
 			path: Controls/Control.php
 
 		-
-			message: '#^PHPDoc tag @param for parameter \$smarty with type Smarty\|SmartyPage is not subtype of native type SmartyPage\.$#'
-			identifier: parameter.phpDocType
-			count: 1
-			path: Controls/Control.php
-
-		-
-			message: '#^Parameter \$smarty of method Control\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Control.php
-
-		-
 			message: '#^Property Control\:\:\$data has unknown class Smarty_Data as its type\.$#'
 			identifier: class.notFound
 			count: 1
@@ -47,60 +29,6 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: Controls/Control.php
-
-		-
-			message: '#^Parameter \$smarty of method AnnouncementsControl\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/AnnouncementsControl.php
-
-		-
-			message: '#^Parameter \$smarty of method DashboardItem\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/DashboardItem.php
-
-		-
-			message: '#^Parameter \$smarty of method MissingCheckInOutReservations\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/PastReservations.php
-
-		-
-			message: '#^Parameter \$smarty of method PastReservations\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/PastReservations.php
-
-		-
-			message: '#^Parameter \$smarty of method ResourceAvailabilityControl\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/ResourceAvailabilityControl.php
-
-		-
-			message: '#^Parameter \$smarty of method GroupUpcomingReservations\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/UpcomingReservations.php
-
-		-
-			message: '#^Parameter \$smarty of method PendingApprovalReservations\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/UpcomingReservations.php
-
-		-
-			message: '#^Parameter \$smarty of method UpcomingReservations\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/Dashboard/UpcomingReservations.php
-
-		-
-			message: '#^Parameter \$smarty of method DatePickerSetupControl\:\:__construct\(\) has invalid type Smarty\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Controls/DatePickerSetupControl.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
@@ -337,20 +265,26 @@ parameters:
 			path: Presenters/Admin/Import/ICalImportPresenter.php
 
 		-
-			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 0 results in an error\.$#'
-			identifier: equal.invalid
+			message: '#^Call to an undefined method IGroupRepository\:\:GetGroupsByRole\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/Admin/ManageGroupsPresenter.php
 
 		-
-			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 1 results in an error\.$#'
-			identifier: equal.invalid
+			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: Presenters/Admin/ManageGroupsPresenter.php
+
+		-
+			message: '#^Call to an undefined method IGroupRepository\:\:GetPermissionList\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/Admin/ManageGroupsPresenter.php
 
 		-
-			message: '#^PHPDoc tag @param for parameter \$groupRepository with type IGroupRepository is not subtype of native type GroupRepository\.$#'
-			identifier: parameter.phpDocType
+			message: '#^Call to an undefined method IGroupRepository\:\:GetUsersInGroup\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: Presenters/Admin/ManageGroupsPresenter.php
 
@@ -363,12 +297,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method IQuotaViewRepository\:\:DeleteById\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: Presenters/Admin/ManageQuotasPresenter.php
-
-		-
-			message: '#^PHPDoc tag @param for parameter \$quotaRepository with type IQuotaRepository\|IQuotaViewRepository is not subtype of native type IQuotaViewRepository\.$#'
-			identifier: parameter.phpDocType
 			count: 1
 			path: Presenters/Admin/ManageQuotasPresenter.php
 
