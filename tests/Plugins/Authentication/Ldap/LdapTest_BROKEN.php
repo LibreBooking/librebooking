@@ -414,6 +414,7 @@ class TestLdapEntry extends Net_LDAP2_Entry
 {
     private $_values = [];
 
+    // @phpstan-ignore class.notFound
     public function __construct()
     {
         $this->Set('givenname', '');

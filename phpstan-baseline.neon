@@ -19,18 +19,6 @@ parameters:
 			path: Domain/Access/AttributeFilter.php
 
 		-
-			message: '#^Parameter \$listBuilder of method PageableDataStore\:\:GetList\(\) has invalid type callback\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Access/PageableDataStore.php
-
-		-
-			message: '#^Parameter \$limit of method QuotaItemView\:\:__construct\(\) has invalid type decimal\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Access/QuotaRepository.php
-
-		-
 			message: '#^Comparison operation "\!\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
 			identifier: notEqual.invalid
 			count: 13
@@ -73,18 +61,6 @@ parameters:
 			path: Domain/CustomAttribute.php
 
 		-
-			message: '#^Method IQuotaLimit\:\:Amount\(\) has invalid return type decimal\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Quota.php
-
-		-
-			message: '#^Method QuotaLimitCount\:\:Amount\(\) has invalid return type decimal\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/Quota.php
-
-		-
 			message: '#^Access to an undefined property IRepeatOptions\:\:\$_daysOfWeek\.$#'
 			identifier: property.notFound
 			count: 1
@@ -107,12 +83,6 @@ parameters:
 			identifier: equal.invalid
 			count: 1
 			path: Domain/ReservationSeries.php
-
-		-
-			message: '#^Parameter \$id of method ResourceGroup\:\:WithId\(\) has invalid type long\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Domain/ResourceGroup.php
 
 		-
 			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
@@ -769,12 +739,6 @@ parameters:
 			path: tests/Plugins/Authentication/ActiveDirectory/ActiveDirectoryTest_BROKEN.php
 
 		-
-			message: '#^Method TestLdapEntry\:\:__construct\(\) has invalid return type none\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Plugins/Authentication/Ldap/LdapTest_BROKEN.php
-
-		-
 			message: '#^PHPDoc tag @var with type array\<Attribute\> is not subtype of native type array\{LBAttribute\}\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -821,12 +785,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: tests/Presenters/RegisterPresenterTest.php
-
-		-
-			message: '#^Property FakeSavedReportsPage\:\:\$_BoundReport has unknown class Report as its type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/Presenters/Reports/SavedReportsPresenterTest.php
 
 		-
 			message: '#^Call to an undefined method IExistingReservationPage\:\:expects\(\)\.$#'

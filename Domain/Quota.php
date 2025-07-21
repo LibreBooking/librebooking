@@ -932,7 +932,7 @@ interface IQuotaLimit
     public function TryAdd($start, $end, $key);
 
     /**
-     * @return decimal
+     * @return float
      */
     public function Amount();
 
@@ -976,7 +976,7 @@ class QuotaLimitCount implements IQuotaLimit
     }
 
     /**
-     * @return decimal
+     * @return float
      */
     public function Amount()
     {

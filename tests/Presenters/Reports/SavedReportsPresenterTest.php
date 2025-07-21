@@ -132,7 +132,7 @@ class FakeSavedReportsPage extends SavedReportsPage
      */
     public $_ReportId;
     /**
-     * @var Report
+     * @var IReport
      */
     public $_BoundReport;
     /**

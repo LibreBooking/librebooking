@@ -7,7 +7,7 @@ class PageableDataStore
      * If nulls are passed for both $pageNumber, $pageSize then all results are returned
      *
      * @param SqlCommand $command
-     * @param callback $listBuilder callback to for each row of results
+     * @param callable $listBuilder callback to for each row of results
      * @param int|null $pageNumber
      * @param int|null $pageSize
      * @param string|null $sortField

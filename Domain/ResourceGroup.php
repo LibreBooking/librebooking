@@ -194,7 +194,7 @@ class ResourceGroup
     }
 
     /**
-     * @param int|long $id
+     * @param int $id
      */
     public function WithId($id)
     {
