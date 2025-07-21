@@ -12,7 +12,7 @@ interface IUserCreditsPage extends IPage, IActionPage
     public function SetCurrentCredits($credits);
 
     /**
-     * @param CreditCost[] $cost
+     * @param CreditCost[] $costs
      */
     public function SetCreditCosts($costs);
 

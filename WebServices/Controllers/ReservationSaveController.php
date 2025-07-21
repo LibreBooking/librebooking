@@ -280,7 +280,7 @@ class ReservationSaveController implements IReservationSaveController
 class ReservationControllerResult
 {
     /**
-     * @param string $referenceNumber
+     * @param string $createdReferenceNumber
      * @param mixed[]|string[] $errors
      * @param bool $requiresApproval
      */

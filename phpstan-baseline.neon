@@ -145,12 +145,6 @@ parameters:
 			path: Domain/Access/ReservationViewRepository.php
 
 		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$endDate$#'
-			identifier: parameter.notFound
-			count: 1
-			path: Domain/Access/ReservationViewRepository.php
-
-		-
 			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
 			identifier: notEqual.invalid
 			count: 1
@@ -301,18 +295,6 @@ parameters:
 			path: Domain/Values/SeriesUpdateScope.php
 
 		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$cost$#'
-			identifier: parameter.notFound
-			count: 1
-			path: Pages/Admin/ManagePaymentsPage.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$currency$#'
-			identifier: parameter.notFound
-			count: 1
-			path: Pages/Admin/ManagePaymentsPage.php
-
-		-
 			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -341,12 +323,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: Pages/Ajax/ReservationSavePage.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$cost$#'
-			identifier: parameter.notFound
-			count: 1
-			path: Pages/Credits/UserCreditsPage.php
 
 		-
 			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
@@ -601,12 +577,6 @@ parameters:
 			path: WebServices/Controllers/AttributeSaveController.php
 
 		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$referenceNumber$#'
-			identifier: parameter.notFound
-			count: 1
-			path: WebServices/Controllers/ReservationSaveController.php
-
-		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -751,12 +721,6 @@ parameters:
 			path: lib/Application/Reservation/ResourceTypeFilter.php
 
 		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$resource$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/ResourceTypeFilter.php
-
-		-
 			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 2 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -773,30 +737,6 @@ parameters:
 			identifier: equal.invalid
 			count: 1
 			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$reservationSeries$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$retryParameters$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedInRule.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$reservationSeries$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$retryParameters$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Application/Reservation/Validation/ReservationCanBeCheckedOutRule.php
 
 		-
 			message: '#^Access to an undefined property IReservedItemView\:\:\$item\.$#'
@@ -845,18 +785,6 @@ parameters:
 			identifier: return.phpDocType
 			count: 1
 			path: lib/Common/ServiceLocator.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$param$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Common/Validators/URI/IParamsValidatorMethods.php
-
-		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$redirectURL$#'
-			identifier: parameter.notFound
-			count: 1
-			path: lib/Common/Validators/URI/ParamsValidator.php
 
 		-
 			message: '#^Access to an undefined property ISqlCommand\:\:\$Parameters\.$#'

@@ -46,7 +46,6 @@ interface IReservationViewRepository
 
     /**
      * @param Date $startDate
-     * @param Date $endDate
      * @param int|null|int[] $userIds
      * @param int|ReservationUserLevel|null $userLevel
      * @param int|int[]|null $scheduleIds
