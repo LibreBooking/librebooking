@@ -65,11 +65,11 @@ class CalendarMonth implements ICalendarSegment
      */
     public function AddReservations($reservations)
     {
-        /** @var $reservation CalendarReservation */
+        /** @var CalendarReservation $reservation */
         foreach ($reservations as $reservation) {
             $this->reservations[] = $reservation;
 
-            /** @var $week CalendarWeek */
+            /** @var CalendarWeek $week */
             foreach ($this->Weeks() as $week) {
                 $week->AddReservation($reservation);
             }

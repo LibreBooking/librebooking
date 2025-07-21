@@ -10,37 +10,37 @@ class ManageReservationsPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IManageReservationsPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageReservationsPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IManageReservationsService|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageReservationsService|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationsService;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduleRepository;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 
     /**
-     * @var ITermsOfServiceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var ITermsOfServiceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $termsOfServiceRepository;
 

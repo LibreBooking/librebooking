@@ -27,7 +27,7 @@ abstract class ExceptionHandler
 class WebExceptionHandler extends ExceptionHandler
 {
     /**
-     * @var callback
+     * @var callable
      */
     private $callback;
 

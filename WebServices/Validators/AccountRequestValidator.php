@@ -80,7 +80,7 @@ class AccountRequestValidator implements IAccountRequestValidator
         $validators[] = new PasswordValidator($request->currentPassword, $this->userRepository->LoadById($session->UserId));
 
         $errors = [];
-        /** @var $validator IValidator */
+        /** @var IValidator $validator */
         foreach ($validators as $validator) {
             $validator->Validate();
             if (!$validator->IsValid()) {
@@ -113,7 +113,7 @@ class AccountRequestValidator implements IAccountRequestValidator
         $validators[] = new AttributeValidator($this->attributeService, CustomAttributeCategory::USER, $attributes);
 
         $errors = [];
-        /** @var $validator IValidator */
+        /** @var IValidator $validator */
         foreach ($validators as $validator) {
             $validator->Validate();
             if (!$validator->IsValid()) {

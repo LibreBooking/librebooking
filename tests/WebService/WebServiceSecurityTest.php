@@ -17,11 +17,11 @@ class WebServiceSecurityTest extends TestBase
      */
     private $security;
     /**
-     * @var IRestServer|PHPUnit_Framework_MockObject_MockObject
+     * @var IRestServer|PHPUnit\Framework\MockObject\MockObject
      */
     private $server;
     /**
-     * @var IUserSessionRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserSessionRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userSessionRepository;
 

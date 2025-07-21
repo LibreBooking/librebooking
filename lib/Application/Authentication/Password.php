@@ -30,7 +30,7 @@ class PasswordMigration
         if (!empty($newpassword)) {
             return new Password($plaintext, $newpassword);
         }
-        return new OldPassword($plaintext, $oldpassword, new RetiredPasswordEncryption());
+        return new OldPassword($plaintext, $oldpassword);
     }
 }
 

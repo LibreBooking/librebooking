@@ -42,7 +42,6 @@ class MySqlScript
 
     /**
      * Contruct and return mySql statement string
-     * @param null
      * @return string $sql query string
      */
     public function GetFullSql()

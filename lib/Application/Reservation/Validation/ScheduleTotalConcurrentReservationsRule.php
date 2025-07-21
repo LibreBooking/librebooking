@@ -71,7 +71,7 @@ class ScheduleTotalConcurrentReservationsRule implements IReservationValidationR
     /**
      * @param $invalidDates Date[]
      * @param $totalConcurrentReservationLimit int
-     * @return string;
+     * @return string
      */
     private function GetErrorMessage($invalidDates, $totalConcurrentReservationLimit)
     {

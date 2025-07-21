@@ -6,22 +6,22 @@ require_once(ROOT_DIR . 'Presenters/Reservation/ReservationApprovalPresenter.php
 class ReservationApprovalPresenterTest extends TestBase
 {
     /**
-     * @var IReservationApprovalPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationApprovalPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IUpdateReservationPersistenceService|PHPUnit_Framework_MockObject_MockObject
+     * @var IUpdateReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
      */
     private $persistence;
 
     /**
-     * @var IReservationHandler|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
      */
     private $handler;
 
     /**
-     * @var IReservationAuthorization|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationAuthorization|PHPUnit\Framework\MockObject\MockObject
      */
     private $auth;
 

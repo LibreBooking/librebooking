@@ -13,7 +13,7 @@ class AccessoriesResponse extends RestResponse
      */
     public function __construct(IRestServer $server, $accessories)
     {
-        /** @var $accessory AccessoryDto */
+        /** @var AccessoryDto $accessory */
         foreach ($accessories as $accessory) {
             $this->accessories[] = new AccessoryItemResponse($server, $accessory);
         }

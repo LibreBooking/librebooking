@@ -317,7 +317,6 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
     public function __construct(
         ICommonCalendarPage $page,
-        ICalendarFactory $calendarFactory,
         IReservationViewRepository $reservationRepository,
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository,
@@ -372,7 +371,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
             $selectedGroup = $resourceGroups->GetGroup($selectedGroupId);
             $this->page->BindSelectedGroup($selectedGroup);
 
-            /** @var ResourceDTO $resource */
+            /** @var ResourceDto $resource */
             foreach ($resources as $resource) {
                 if (in_array($resource->GetId(), $resourceIds)) {
                     $tempResources[] = $resource;
@@ -450,7 +449,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
         $default = new NullSchedule();
 
-        /** @var $schedule Schedule */
+        /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             if (!empty($scheduleId) && $schedule->GetId() == $scheduleId) {
                 return $schedule;

@@ -10,12 +10,12 @@ class ReservationAttachmentPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IReservationAttachmentPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationAttachmentPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IReservationRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationRepository;
 

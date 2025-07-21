@@ -42,7 +42,7 @@ class ManageQuotasPresenter extends ActionPresenter
      * @param IResourceRepository $resourceRepository
      * @param IGroupViewRepository $groupRepository
      * @param IScheduleRepository $scheduleRepository
-     * @param IQuotaViewRepository|IQuotaRepository $quotaRepository
+     * @param IQuotaViewRepository $quotaRepository
      */
     public function __construct(
         IManageQuotasPage $page,

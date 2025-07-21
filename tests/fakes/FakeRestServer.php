@@ -72,9 +72,10 @@ class FakeRestServer implements IRestServer
         return null;
     }
 
-    public function GetHeader($headerName)
+    public function GetHeader($headerName): ?string
     {
         // TODO: Implement GetHeader() method.
+        return null;
     }
 
     public function SetSession(WebServiceUserSession $session)

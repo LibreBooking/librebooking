@@ -15,7 +15,7 @@ class ManageConfigurationPresenterTest extends TestBase
     private $page;
 
     /**
-     * @var IConfigurationSettings|PHPUnit_Framework_MockObject_MockObject
+     * @var IConfigurationSettings|PHPUnit\Framework\MockObject\MockObject
      */
     private $configSettings;
 
@@ -76,10 +76,9 @@ class ManageConfigurationPresenterTest extends TestBase
 
         $this->assertSettingExists($configValues, ConfigKeys::ADMIN_EMAIL, ConfigSettingType::String);
         $this->assertSectionSettingExists(
-            $configValues,
-            ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
-            ConfigSection::PRIVACY,
-            ConfigSettingType::Boolean
+            configValues: $configValues,
+            key: ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
+            section: ConfigSection::PRIVACY
         );
 
         $this->assertSettingMissing(ConfigKeys::INSTALLATION_PASSWORD);
@@ -136,7 +135,7 @@ class ManageConfigurationPresenterTest extends TestBase
     {
         $expectedValue = $configValues[$key];
         $this->assertTrue(
-            in_array(new ConfigSetting($key, null, $expectedValue, $type), $this->page->_Settings),
+            in_array(new ConfigSetting($key, null, $expectedValue), $this->page->_Settings),
             "Missing $key"
         );
     }

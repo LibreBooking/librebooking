@@ -110,8 +110,8 @@ class SlimWebServiceRegistry
 
         usort($categories, function ($a, $b) {
             /**
-             * @var $a SlimWebServiceRegistryCategory
-             * @var $b SlimWebServiceRegistryCategory
+             * @var SlimWebServiceRegistryCategory $a
+             * @var SlimWebServiceRegistryCategory $b
              */
 
             return ($a->Name() < $b->Name()) ? -1 : 1;

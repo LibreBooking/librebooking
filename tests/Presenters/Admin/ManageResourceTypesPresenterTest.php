@@ -10,17 +10,17 @@ class ManageResourceTypesPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IManageResourceTypesPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageResourceTypesPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 
@@ -32,7 +32,7 @@ class ManageResourceTypesPresenterTest extends TestBase
         $this->resourceRepository = $this->createMock('IResourceRepository');
         $this->attributeService = $this->createMock('IAttributeService');
 
-        $this->presenter = new ManageResourceTypesPresenter($this->page, $this->fakeUser, $this->resourceRepository, $this->attributeService);
+        $this->presenter = new ManageResourceTypesPresenter($this->page, $this->resourceRepository, $this->attributeService);
     }
 
     public function testBindsResourceTypes()

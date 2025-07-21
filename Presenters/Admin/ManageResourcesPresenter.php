@@ -163,7 +163,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $schedules = $this->scheduleRepository->GetAll();
         $scheduleList = [];
 
-        /* @var $schedule Schedule */
+        /* @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             $scheduleList[$schedule->GetId()] = $schedule->GetName();
         }
@@ -173,7 +173,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $resourceTypes = $this->resourceRepository->GetResourceTypes();
         $resourceTypeList = [];
 
-        /* @var $resourceType ResourceType */
+        /* @var ResourceType $resourceType */
         foreach ($resourceTypes as $resourceType) {
             $resourceTypeList[$resourceType->Id()] = $resourceType;
         }
@@ -1018,6 +1018,7 @@ class ManageResourcesPresenter extends ActionPresenter
                 )) ? ResourceStatus::AVAILABLE : $resourceStatusesIndexed[$row->status];
                 $autoAssign = $row->autoAssign == 'true' || $row->autoAssign == '1';
 
+                $resource = null;
                 if ($shouldUpdate) {
                     $resource = $this->resourceRepository->LoadByName($row->name);
                     if ($resource->GetId() == null) {
@@ -1034,45 +1035,47 @@ class ManageResourcesPresenter extends ActionPresenter
                     $this->resourceRepository->Add($resource);
                 }
 
-                $resource->ChangeStatus($statusId);
-                $resource->SetResourceTypeId($resourceTypeId);
-                $resource->SetLocation($row->location);
-                $resource->SetContact($row->contact);
-                $resource->SetDescription($row->description);
-                $resource->SetNotes($row->notes);
-                $resource->SetAdminGroupId($adminGroupId);
-                $resource->SetColor($row->color);
-                $resource->SetRequiresApproval($row->approvalRequired == 'true' || $row->approvalRequired == '1');
-                $resource->SetMaxParticipants($row->capacity);
-                $resource->SetMinLength($row->minLength);
-                $resource->SetMaxLength($row->maxLength);
-                $resource->SetBufferTime($row->buffer);
-                $resource->SetAllowMultiday($row->crossDay);
-                $resource->SetMinNoticeAdd($row->addNotice);
-                $resource->SetMinNoticeUpdate($row->updateNotice);
-                $resource->SetMinNoticeDelete($row->deleteNotice);
-                $resource->SetCheckin($row->checkIn, $row->autoreleaseMinutes);
-                $resource->SetCreditsPerSlot($row->credits);
-                $resource->SetPeakCreditsPerSlot($row->creditsPeak);
-                $resource->SetMaxConcurrentReservations($row->maximumConcurrent);
+                if ($resource !== null) {
+                    $resource->ChangeStatus($statusId);
+                    $resource->SetResourceTypeId($resourceTypeId);
+                    $resource->SetLocation($row->location);
+                    $resource->SetContact($row->contact);
+                    $resource->SetDescription($row->description);
+                    $resource->SetNotes($row->notes);
+                    $resource->SetAdminGroupId($adminGroupId);
+                    $resource->SetColor($row->color);
+                    $resource->SetRequiresApproval($row->approvalRequired == 'true' || $row->approvalRequired == '1');
+                    $resource->SetMaxParticipants($row->capacity);
+                    $resource->SetMinLength($row->minLength);
+                    $resource->SetMaxLength($row->maxLength);
+                    $resource->SetBufferTime($row->buffer);
+                    $resource->SetAllowMultiday($row->crossDay);
+                    $resource->SetMinNoticeAdd($row->addNotice);
+                    $resource->SetMinNoticeUpdate($row->updateNotice);
+                    $resource->SetMinNoticeDelete($row->deleteNotice);
+                    $resource->SetCheckin($row->checkIn, $row->autoreleaseMinutes);
+                    $resource->SetCreditsPerSlot($row->credits);
+                    $resource->SetPeakCreditsPerSlot($row->creditsPeak);
+                    $resource->SetMaxConcurrentReservations($row->maximumConcurrent);
 
-                foreach ($row->attributes as $label => $value) {
-                    if (empty($value)) {
-                        continue;
+                    foreach ($row->attributes as $label => $value) {
+                        if (empty($value)) {
+                            continue;
+                        }
+                        if (array_key_exists($label, $attributesIndexed)) {
+                            $attribute = $attributesIndexed[$label];
+                            $resource->ChangeAttribute(new AttributeValue($attribute->Id(), $value));
+                        }
                     }
-                    if (array_key_exists($label, $attributesIndexed)) {
-                        $attribute = $attributesIndexed[$label];
-                        $resource->ChangeAttribute(new AttributeValue($attribute->Id(), $value));
-                    }
-                }
 
-                $this->resourceRepository->Update($resource);
+                    $this->resourceRepository->Update($resource);
 
-                foreach ($row->resourceGroups as $groupName) {
-                    $groupName = strtolower($groupName);
-                    if (array_key_exists($groupName, $resourceGroupsIndexed)) {
-                        Log::Debug('Assigning resource %s to group %s', $row->name, $groupName);
-                        $this->resourceRepository->AddResourceToGroup($resource->GetId(), $resourceGroupsIndexed[$groupName]);
+                    foreach ($row->resourceGroups as $groupName) {
+                        $groupName = strtolower($groupName);
+                        if (array_key_exists($groupName, $resourceGroupsIndexed)) {
+                            Log::Debug('Assigning resource %s to group %s', $row->name, $groupName);
+                            $this->resourceRepository->AddResourceToGroup($resource->GetId(), $resourceGroupsIndexed[$groupName]);
+                        }
                     }
                 }
 
@@ -1174,11 +1177,11 @@ class ManageResourcesPresenter extends ActionPresenter
                     }
 
                     /** @var GroupItemView $group */
-                    foreach ($allGroups as $user) {
-                        $found = array_key_exists($user->Id(), $idsWithPermissions);
+                    foreach ($allGroups as $group) {
+                        $found = array_key_exists($group->Id(), $idsWithPermissions);
 
                         if (!$found) {
-                            $groups[] = new GroupPermissionItemView($user->Id(), $user->Name());
+                            $groups[] = new GroupPermissionItemView($group->Id(), $group->Name());
                         }
                     }
                     $this->page->BindGroupPermissions($groups);

@@ -67,7 +67,6 @@ interface IParamsValidatorMethods
     /**
      * Check if param is a valid redirect in guest-reservation route
      * 
-     * @param string $param         - Query param in URI
      * @param string $requestURI    - Request URI to check the param
      * 
      * @return bool Returns true if is valid

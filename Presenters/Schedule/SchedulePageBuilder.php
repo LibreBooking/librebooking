@@ -4,7 +4,7 @@ interface ISchedulePageBuilder
 {
     /**
      * @param ISchedulePage $page
-     * @param array [int]ISchedule $schedules
+     * @param ISchedule[] $schedules
      * @param ISchedule $currentSchedule
      */
     public function BindSchedules(ISchedulePage $page, $schedules, $currentSchedule);
@@ -43,7 +43,7 @@ interface ISchedulePageBuilder
 
     /**
      * @param ISchedulePage $page
-     * @param array [int]ResourceDto $resources
+     * @param ResourceDto[] $resources
      * @param IDailyLayout $dailyLayout
      */
     public function BindReservations(ISchedulePage $page, $resources, IDailyLayout $dailyLayout);
@@ -282,7 +282,7 @@ class SchedulePageBuilder implements ISchedulePageBuilder
     private function GetSchedule($schedules, $scheduleId)
     {
         foreach ($schedules as $schedule) {
-            /** @var $schedule Schedule */
+            /** @var Schedule $schedule */
             if ($schedule->GetId() == $scheduleId) {
                 return $schedule;
             }

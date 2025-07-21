@@ -33,7 +33,7 @@ class ManageGroupsPresenter extends ActionPresenter
      */
     private $page;
     /**
-     * @var GroupRepository
+     * @var IGroupRepository
      */
     private $groupRepository;
     /**
@@ -58,7 +58,7 @@ class ManageGroupsPresenter extends ActionPresenter
      */
     public function __construct(
         IManageGroupsPage $page,
-        GroupRepository $groupRepository,
+        IGroupRepository $groupRepository,
         IResourceRepository $resourceRepository,
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository

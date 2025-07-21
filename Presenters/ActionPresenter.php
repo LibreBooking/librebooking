@@ -53,7 +53,7 @@ abstract class ActionPresenter
 
     public function ProcessAction()
     {
-        /** @var $action string */
+        /** @var string $action */
         $action = $this->actionPage->GetAction();
 
         if ($this->ActionIsKnown($action)) {

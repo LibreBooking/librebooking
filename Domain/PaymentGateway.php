@@ -318,6 +318,7 @@ class PayPalGateway implements IPaymentGateway
         $resources = Resources::GetInstance();
         $baseUrl = $this->GetBaseUrl();
         $token = $this->GetAuthToken($baseUrl);
+        $body = "";
 
         try {
             Log::Debug('PayPal Checkout/Orders CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());

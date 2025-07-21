@@ -15,7 +15,7 @@ class SavedReportsPresenterTest extends TestBase
     public $page;
 
     /**
-     * @var IReportingService|PHPUnit_Framework_MockObject_MockObject
+     * @var IReportingService|PHPUnit\Framework\MockObject\MockObject
      */
     public $service;
 
@@ -132,11 +132,11 @@ class FakeSavedReportsPage extends SavedReportsPage
      */
     public $_ReportId;
     /**
-     * @var
+     * @var IReport
      */
     public $_BoundReport;
     /**
-     * @var
+     * @var ReportDefinition
      */
     public $_BoundDefinition;
     /**

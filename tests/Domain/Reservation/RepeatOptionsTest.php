@@ -377,7 +377,7 @@ class RepeatOptionsTest extends TestBase
         $firstWednesday = DateRange::Create('2013-02-06 09:00', '2013-02-06 10:00', 'Europe/London');
         $firstWednesdayRepeat = new RepeatWeekDayOfMonth(1, Date::Parse('2013-10-01', 'Europe/London'));
 
-        /** @var $dates DateRange[] */
+        /** @var DateRange[] $dates */
         $dates = $firstWednesdayRepeat->GetDates($firstWednesday);
 
         foreach ($dates as $date) {
@@ -393,7 +393,7 @@ class RepeatOptionsTest extends TestBase
         $firstWednesday = DateRange::Create('2013-03-06 13:00:00', '2013-03-06 14:00:00', 'Europe/London');
         $firstWednesdayRepeat = new RepeatWeekDayOfMonth(1, Date::Parse('2013-12-24', 'Europe/London'));
 
-        /** @var $dates DateRange[] */
+        /** @var DateRange[] $dates */
         $dates = $firstWednesdayRepeat->GetDates($firstWednesday);
 
         foreach ($dates as $date) {
@@ -409,7 +409,7 @@ class RepeatOptionsTest extends TestBase
         $firstFriday = DateRange::Create('2014-04-04 08:00', '2014-04-04 08:00', 'UTC');
         $repeat = new RepeatWeekDayOfMonth(1, Date::Parse('2015-01-01', 'UTC'));
 
-        /** @var $dates DateRange[] */
+        /** @var DateRange[] $dates */
         $dates = $repeat->GetDates($firstFriday);
         $this->assertEquals(1, $dates[3]->GetBegin()->Day());
     }

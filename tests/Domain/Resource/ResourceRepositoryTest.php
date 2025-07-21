@@ -223,7 +223,7 @@ class ResourceRepositoryTest extends TestBase
 
         $getAccessoriesCommand = new GetAllAccessoriesCommand();
 
-        /** @var $accessories AccessoryDto[] */
+        /** @var AccessoryDto[] $accessories */
         $accessories = $this->repository->GetAccessoryList();
 
         $this->assertEquals($getAccessoriesCommand, $this->db->_LastCommand);

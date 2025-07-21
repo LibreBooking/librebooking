@@ -10,7 +10,7 @@ class ActivationPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IActivationPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IActivationPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 

@@ -6,22 +6,22 @@ require_once(ROOT_DIR . 'Pages/Admin/ManageSchedulesPage.php');
 class ManageSchedulesPresenterTest extends TestBase
 {
     /**
-     * @var IUpdateSchedulePage|PHPUnit_Framework_MockObject_MockObject
+     * @var IUpdateSchedulePage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduleRepo;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepo;
 
     /**
-     * @var IGroupViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IGroupViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepo;
 

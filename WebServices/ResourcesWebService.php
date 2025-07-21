@@ -111,7 +111,7 @@ class ResourcesWebService
     {
         $reasons = $this->resourceRepository->GetStatusReasons();
 
-        $this->server->WriteResponse(new ResourceStatusReasonsResponse($this->server, $reasons));
+        $this->server->WriteResponse(new ResourceStatusReasonsResponse($reasons));
     }
 
     /**
@@ -123,7 +123,7 @@ class ResourcesWebService
     public function GetTypes()
     {
         $types = $this->resourceRepository->GetResourceTypes();
-        $this->server->WriteResponse(new ResourceTypesResponse($this->server, $types));
+        $this->server->WriteResponse(new ResourceTypesResponse($types));
     }
 
     /**
@@ -180,7 +180,7 @@ class ResourcesWebService
             }
         }
 
-        $this->server->WriteResponse(new ResourcesAvailabilityResponse($this->server, $resourceAvailability));
+        $this->server->WriteResponse(new ResourcesAvailabilityResponse($resourceAvailability));
     }
 
     /**
@@ -193,7 +193,7 @@ class ResourcesWebService
     {
         $groups = $this->resourceRepository->GetResourceGroups();
 
-        $this->server->WriteResponse(new ResourceGroupsResponse($this->server, $groups));
+        $this->server->WriteResponse(new ResourceGroupsResponse($groups));
     }
 
     /**

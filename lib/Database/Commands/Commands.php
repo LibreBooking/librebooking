@@ -2671,7 +2671,7 @@ class UpdateLoginDataCommand extends SqlCommand
 
 class UpdateFutureReservationsCommand extends SqlCommand
 {
-    public function __construct($referenceNumber, $newSeriesId, $currentSeriesId)
+    public function __construct($referenceNumber, $currentSeriesId)
     {
         parent::__construct(Queries::UPDATE_FUTURE_RESERVATION_INSTANCES);
 

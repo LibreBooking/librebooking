@@ -246,7 +246,7 @@ class MigrationPresenter
             $currentDatabase = ServiceLocator::GetDatabase();
             $runTarget = $this->page->GetRunTarget();
             if (!empty($runTarget)) {
-                $this->Migrate($runTarget, $legacyDatabase, $currentDatabase);
+                $this->Migrate($runTarget);
             } elseif ($this->page->IsLoggingIn()) {
                 if ($this->TestInstallPassword() && $this->TestLegacyConnection()) {
                     $this->page->StartMigration();
@@ -446,6 +446,7 @@ class MigrationPresenter
 
             $newScheduleReader = $currentDatabase->Query(new AdHocCommand("select schedule_id from schedules where legacyId = \"{$row['scheduleid']}\""));
 
+            $newScheduleId = null;
             if ($srow = $newScheduleReader->GetRow()) {
                 $newScheduleId = $srow['schedule_id'];
             }

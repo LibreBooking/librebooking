@@ -10,10 +10,9 @@ class ResourcesAvailabilityResponse extends RestResponse
     public $resources;
 
     /**
-     * @param IRestServer $server
      * @param ResourceAvailabilityResponse[] $resources
      */
-    public function __construct(IRestServer $server, $resources)
+    public function __construct($resources)
     {
         $this->resources[] = $resources;
     }

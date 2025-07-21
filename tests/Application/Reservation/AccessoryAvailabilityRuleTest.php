@@ -6,12 +6,12 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 class AccessoryAvailabilityRuleTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $reservationRepository;
 
     /**
-     * @var IAccessoryRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IAccessoryRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $accessoryRepository;
 
@@ -127,7 +127,7 @@ class AccessoryAvailabilityRuleTest extends TestBase
             ->with($accessory1->AccessoryId)
             ->willReturn(new Accessory($accessory1->AccessoryId, 'name1', $quantityAvailable));
 
-        $this->reservationRepository->expects($this->once(0))
+        $this->reservationRepository->expects($this->once())
             ->method('GetAccessoriesWithin')
             ->with($this->anything())
             ->willReturn([]);

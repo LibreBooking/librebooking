@@ -77,7 +77,7 @@ class GuestParticipationPresenter
                     continue;
                 }
 
-                /** @var $instance Reservation */
+                /** @var Reservation $instance */
                 foreach ($series->Instances() as $instance) {
                     $numberOfParticipants = count($instance->Participants()) + count($instance->ParticipatingGuests());
 

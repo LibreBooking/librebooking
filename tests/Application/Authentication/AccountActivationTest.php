@@ -3,12 +3,12 @@
 class AccountActivationTest extends TestBase
 {
     /**
-     * @var IAccountActivationRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IAccountActivationRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $activationRepo;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepo;
 

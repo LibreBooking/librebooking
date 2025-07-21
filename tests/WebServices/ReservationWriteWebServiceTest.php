@@ -15,7 +15,7 @@ class ReservationWriteWebServiceTest extends TestBase
     private $server;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|IReservationSaveController
+     * @var PHPUnit\Framework\MockObject\MockObject|IReservationSaveController
      */
     private $controller;
 
@@ -120,7 +120,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Delete($referenceNumber);
 
-        $expectedResponse = new DeletedResponse($this->server, $referenceNumber);
+        $expectedResponse = new DeletedResponse();
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::OK_CODE, $this->server->_LastResponseCode);
     }
@@ -141,7 +141,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Create();
 
-        $expectedResponse = new FailedResponse($this->server, $errors);
+        $expectedResponse = new FailedResponse($errors);
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
@@ -163,7 +163,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Update($referenceNumber);
 
-        $expectedResponse = new FailedResponse($this->server, $errors);
+        $expectedResponse = new FailedResponse($errors);
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
@@ -186,7 +186,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Approve($referenceNumber);
 
-        $expectedResponse = new FailedResponse($this->server, $errors);
+        $expectedResponse = new FailedResponse($errors);
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
@@ -205,7 +205,7 @@ class ReservationWriteWebServiceTest extends TestBase
 
         $this->service->Delete($referenceNumber);
 
-        $expectedResponse = new FailedResponse($this->server, $errors);
+        $expectedResponse = new FailedResponse($errors);
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }

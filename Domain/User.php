@@ -853,13 +853,13 @@ class User
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $attribute AttributeValue */
+        /** @var AttributeValue $attribute */
         foreach ($added as $attribute) {
             $this->_addedAttributeValues[] = $attribute;
         }
 
         if ($removeAttrOnDiff) {
-            /** @var $attribute AttributeValue */
+            /** @var AttributeValue $attribute */
             foreach ($removed as $attribute) {
                 if (!in_array($attribute->AttributeId, $this->adminAttributesIds)) {
                     $this->_removedAttributeValues[] = $attribute;
@@ -973,12 +973,12 @@ class User
         $added = $diff->GetAddedToArray1();
         $removed = $diff->GetRemovedFromArray1();
 
-        /** @var $group UserGroup */
+        /** @var UserGroup $group */
         foreach ($added as $group) {
             $this->addedGroups[] = $group;
         }
 
-        /** @var $group UserGroup */
+        /** @var UserGroup $group */
         foreach ($removed as $group) {
             $this->removedGroups[] = $group;
         }

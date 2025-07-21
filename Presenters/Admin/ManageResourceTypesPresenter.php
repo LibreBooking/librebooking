@@ -32,7 +32,6 @@ class ManageResourceTypesPresenter extends ActionPresenter
 
     public function __construct(
         IManageResourceTypesPage $page,
-        UserSession $user,
         IResourceRepository $resourceRepository,
         IAttributeService $attributeService
     ) {

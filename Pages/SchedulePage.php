@@ -91,7 +91,7 @@ interface ISchedulePage extends IActionPage
     public function GetScheduleStyle($scheduleId);
 
     /**
-     * @param string|ScheduleStyle Direction
+     * @param string|ScheduleStyle $direction
      */
     public function SetScheduleStyle($direction);
 

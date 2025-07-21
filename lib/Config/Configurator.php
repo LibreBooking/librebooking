@@ -85,7 +85,7 @@ class Configurator implements IConfigurationSettings
     public function GetSettings($file)
     {
         $config = new Config();
-        /** @var $current Config_Container */
+        /** @var Config_Container $current */
         $current = $config->parseConfig($file, 'PHPArray');
 
         $currentValues = $current->getItem("section", Configuration::SETTINGS)->toArray();

@@ -90,14 +90,14 @@ abstract class BaseSqlFilter implements ISqlFilter
     {
         $criteria = [];
 
-        /** @var $filter ISqlFilter */
+        /** @var ISqlFilter $filter */
         foreach ($this->_and as $filter) {
             foreach ($filter->Criteria() as $c) {
                 $criteria[] = $c;
             }
         }
 
-        /** @var $filter ISqlFilter */
+        /** @var ISqlFilter $filter */
         foreach ($this->_or as $filter) {
             foreach ($filter->Criteria() as $c) {
                 $criteria[] = $c;
@@ -127,12 +127,12 @@ abstract class BaseSqlFilter implements ISqlFilter
     {
         $sql = $this->GetSql();
 
-        /** @var $filter ISqlFilter */
+        /** @var ISqlFilter $filter */
         foreach ($this->_and as $filter) {
             $sql .= " AND ( {$filter->Where()} )";
         }
 
-        /** @var $filter ISqlFilter */
+        /** @var ISqlFilter $filter */
         foreach ($this->_or as $filter) {
             $sql .= " OR ( {$filter->Where()} )";
         }

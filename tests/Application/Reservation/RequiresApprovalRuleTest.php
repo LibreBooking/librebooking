@@ -3,12 +3,12 @@
 class RequiresApprovalRuleTest extends TestBase
 {
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $userRepository;
 
     /**
-     * @var IAuthorizationService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAuthorizationService|PHPUnit\Framework\MockObject\MockObject
      */
     public $authorizationService;
 

@@ -118,7 +118,7 @@ class FakeUserRepository implements IUserRepository
     }
 
     /**
-     * @return array[int]UserDto
+     * @return UserDto[]
      */
     public function GetAll()
     {

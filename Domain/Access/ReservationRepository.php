@@ -67,7 +67,7 @@ class ReservationRepository implements IReservationRepository
 
             $reservationSeries->SetSeriesId($newSeriesId);
 
-            /** @var $instance Reservation */
+            /** @var Reservation $instance */
             foreach ($reservationSeries->Instances() as $instance) {
                 $updateReservationCommand = new UpdateReservationCommand(
                     $instance->ReferenceNumber(),

@@ -15,17 +15,17 @@ class UsersWebServiceTest extends TestBase
     private $service;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 
     /**
-     * @var IUserRepositoryFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepositoryFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepositoryFactory;
 
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 

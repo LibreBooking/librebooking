@@ -261,7 +261,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         );
         $midnight = $layoutDate->GetDate();
 
-        /* @var $period LayoutPeriod */
+        /* @var LayoutPeriod $period */
         foreach ($periods as $period) {
             if ($hideBlockedPeriods && !$period->IsReservable()) {
                 continue;
@@ -377,7 +377,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     private function AddDailyPeriods($day, $baseDateInLayoutTz, $requestedDate, $list, $hideBlockedPeriods = false)
     {
         $periods = $this->_periods[$day];
-        /** @var $period LayoutPeriod */
+        /** @var LayoutPeriod $period */
         foreach ($periods as $period) {
             if ($hideBlockedPeriods && !$period->IsReservable()) {
                 continue;
@@ -516,7 +516,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         $tempDate = $date->ToTimezone($timezone);
         $periods = $this->getPeriods($tempDate);
 
-        /** @var $period LayoutPeriod */
+        /** @var LayoutPeriod $period */
         foreach ($periods as $period) {
             $start = Date::Create(
                 $tempDate->Year(),

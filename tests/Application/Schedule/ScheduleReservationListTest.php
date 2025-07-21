@@ -662,12 +662,11 @@ class ScheduleReservationListTest extends TestBase
         $layout->AppendPeriod(Time::Parse('6:00', $tz), Time::Parse('0:00', $tz));
 
         $item = new TestReservationItemView(
-            1,
-            Date::Parse('2011-02-08 2:00', $tz)->ToUtc(),
-            Date::Parse('2011-02-08 6:00', $tz)->ToUtc(),
-            1,
-            30,
-            60
+            id: 1,
+            startDate: Date::Parse('2011-02-08 2:00', $tz)->ToUtc(),
+            endDate: Date::Parse('2011-02-08 6:00', $tz)->ToUtc(),
+            resourceId: 1,
+            referenceNumber: 30
         );
         $item->WithBufferTime(60*60);
         $r1 = new ReservationListItem($item);

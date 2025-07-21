@@ -1,6 +1,9 @@
+includes:
+    - phpstan-baseline.neon
 parameters:
-    level: 0
+    level: 2
     errorFormat: prettyJson
+    treatPhpDocTypesAsCertain: false
     paths:
         - Controls
         - Domain
@@ -22,7 +25,7 @@ parameters:
             - Web/css/
             - Web/scripts/
             - build/ (?)
-            - lib/external/Slim/Http/Util.php
+            - lib/external/
             - plugins/
             - tpl_c/ (?)
             - vendor/

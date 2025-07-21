@@ -7,10 +7,9 @@ class ResourceStatusReasonsResponse extends RestResponse
     public $reasons = [];
 
     /**
-     * @param IRestServer $server
      * @param ResourceStatusReason[] $reasons
      */
-    public function __construct(IRestServer $server, $reasons)
+    public function __construct($reasons)
     {
         foreach ($reasons as $reason) {
             $this->AddReason($reason->Id(), $reason->Description(), $reason->StatusId());

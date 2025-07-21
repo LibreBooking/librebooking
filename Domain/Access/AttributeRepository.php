@@ -154,7 +154,7 @@ class AttributeRepository implements IAttributeRepository
 
     /**
      * @param int|CustomAttributeCategory $category
-     * @param array|int[] $entityIds
+     * @param int[]|int $entityIds
      * @return array|AttributeEntityValue[]
      */
     public function GetEntityValues($category, $entityIds = null)

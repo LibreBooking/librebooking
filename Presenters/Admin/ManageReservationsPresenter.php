@@ -223,7 +223,7 @@ class ManageReservationsPresenter extends ActionPresenter
         $this->page->BindPageInfo($reservations->PageInfo());
 
         $seriesIds = [];
-        /** @var $reservationItemView ReservationItemView */
+        /** @var ReservationItemView $reservationItemView */
         foreach ($reservationList as $reservationItemView) {
             $seriesIds[] = $reservationItemView->SeriesId;
         }
@@ -309,7 +309,7 @@ class ManageReservationsPresenter extends ActionPresenter
                 $session
             );
 
-            /** @var $reservation ReservationItemView */
+            /** @var ReservationItemView $reservation */
             foreach ($reservations->Results() as $reservation) {
                 $resourceIds[] = $reservation->ResourceId;
             }

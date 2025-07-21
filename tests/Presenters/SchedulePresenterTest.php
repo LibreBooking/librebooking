@@ -1068,7 +1068,7 @@ class FakeSchedulePage implements ISchedulePage
     }
 
     /**
-     * @param string|ScheduleStyle Direction
+     * @param string|ScheduleStyle $direction
      */
     public function SetScheduleStyle($direction)
     {

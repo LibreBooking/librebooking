@@ -65,7 +65,7 @@ class UsersWriteWebServiceTest extends TestBase
 
         $this->service->Create();
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 
@@ -112,7 +112,7 @@ class UsersWriteWebServiceTest extends TestBase
 
         $this->service->Update($userId);
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 
@@ -146,7 +146,7 @@ class UsersWriteWebServiceTest extends TestBase
 
         $this->service->Delete($userId);
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 
@@ -188,7 +188,7 @@ class UsersWriteWebServiceTest extends TestBase
 
         $this->service->UpdatePassword($userId);
 
-        $this->assertEquals(new FailedResponse($this->server, $errors), $this->server->_LastResponse);
+        $this->assertEquals(new FailedResponse($errors), $this->server->_LastResponse);
         $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
     }
 }

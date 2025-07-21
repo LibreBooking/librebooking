@@ -27,7 +27,7 @@ class ResourcesWriteWebService
      */
     public function Create()
     {
-        /** @var $request ResourceRequest */
+        /** @var ResourceRequest $request */
         $request = new ResourceRequest($this->server->GetRequest());
 
         Log::Debug(
@@ -48,7 +48,7 @@ class ResourcesWriteWebService
             Log::Debug('ResourcesWriteWebService.Create() - Resource create failed');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -65,7 +65,7 @@ class ResourcesWriteWebService
      */
     public function Update($resourceId)
     {
-        /** @var $request ResourceRequest */
+        /** @var ResourceRequest $request */
         $request = new ResourceRequest($this->server->GetRequest());
 
         Log::Debug(
@@ -90,7 +90,7 @@ class ResourcesWriteWebService
             Log::Debug('ResourcesWriteWebService.Update() - Resource Update Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }
@@ -120,7 +120,7 @@ class ResourcesWriteWebService
             Log::Debug('ResourcesWriteWebService.Delete() - Resource Delete Failed.');
 
             $this->server->WriteResponse(
-                new FailedResponse($this->server, $result->Errors()),
+                new FailedResponse($result->Errors()),
                 RestResponse::BAD_REQUEST_CODE
             );
         }

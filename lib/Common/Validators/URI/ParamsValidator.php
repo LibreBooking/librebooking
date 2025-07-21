@@ -7,7 +7,7 @@ class ParamsValidator
      *
      * @param array $params       Parameter definitions and validation rules
      * @param string $requestURI  The full request URI (e.g., $_SERVER['REQUEST_URI'])
-     * @param string $redirectURL Where to redirect if validation fails
+     * @param bool $optional      Whether validation is optional
      * @return bool               True if validation passed or skipped; false if validation failed
      */
     public static function validate(array $params, string $requestURI, bool $optional): bool

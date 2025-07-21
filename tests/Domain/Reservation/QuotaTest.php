@@ -305,7 +305,7 @@ class QuotaTest extends TestBase
     public function testWhenTotalLimitIsExceededForWeekAndWeekStartOnToday()
     {
         $tz = 'UTC';
-        Date::_SetNow(Date::Parse('2017-02-21'), $tz);    // tuesday
+        Date::_SetNow(Date::Parse('2017-02-21', $tz));    // tuesday
         $this->schedule->SetTimezone($tz);
         $this->schedule->SetWeekdayStart(Schedule::Today);
 
@@ -343,7 +343,7 @@ class QuotaTest extends TestBase
     public function testWhenTotalLimitIsNotExceededForWeekAndWeekStartOnToday()
     {
         $tz = 'UTC';
-        Date::_SetNow(Date::Parse('2017-02-21'), $tz);    // tuesday
+        Date::_SetNow(Date::Parse('2017-02-21', $tz));    // tuesday
         $this->schedule->SetTimezone($tz);
         $this->schedule->SetWeekdayStart(Schedule::Today);
 

@@ -13,7 +13,7 @@ class FakeResources extends Resources
     {
     }
 
-    public function GetString($key, $args = [])
+    public function GetString($key, $args = []): string
     {
         if (!is_array($args)) {
             $args = [$args];

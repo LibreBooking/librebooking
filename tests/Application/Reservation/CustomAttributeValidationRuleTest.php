@@ -7,12 +7,12 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 class CustomAttributeValidationRuleTest extends TestBase
 {
     /**
-     * @var IAttributeService|PHPUnit_Framework_MockObject_MockObject
+     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeService;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 

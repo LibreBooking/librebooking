@@ -5,17 +5,17 @@ require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
 class ResourceAdminManageReservationsServiceTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationViewRepository;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 
     /**
-     * @var IReservationAuthorization|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationAuthorization|PHPUnit\Framework\MockObject\MockObject
      */
     private $reservationAuthorization;
 

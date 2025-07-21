@@ -10,12 +10,12 @@ class ManageResourceGroupsPresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IManageResourceGroupsPage|PHPUnit_Framework_MockObject_MockObject
+     * @var IManageResourceGroupsPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 
@@ -27,7 +27,7 @@ class ManageResourceGroupsPresenterTest extends TestBase
         $this->page = $this->createMock('IManageResourceGroupsPage');
         $this->resourceRepository = $this->createMock('IResourceRepository');
 
-        $this->presenter = new ManageResourceGroupsPresenter($this->page, $this->fakeUser, $this->resourceRepository);
+        $this->presenter = new ManageResourceGroupsPresenter($this->page, $this->resourceRepository);
     }
 
     public function testBindsResourcesAndGroupsOnLoad()

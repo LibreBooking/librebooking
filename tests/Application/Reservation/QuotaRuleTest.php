@@ -6,22 +6,22 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 class QuotaRuleTest extends TestBase
 {
     /**
-     * @var IReservationViewRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $reservationViewRepository;
 
     /**
-     * @var IQuotaRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IQuotaRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $quotaRepository;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $userRepository;
 
     /**
-     * @var IScheduleRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
      */
     public $scheduleRepository;
 
@@ -72,9 +72,9 @@ class QuotaRuleTest extends TestBase
         );
         $series->AddResource(new FakeBookableResource(22));
 
-        $quota1 = $this->mockQuota('IQuota');
-        $quota2 = $this->mockQuota('IQuota');
-        $quota3 = $this->mockQuota('IQuota');
+        $quota1 = $this->mockQuota();
+        $quota2 = $this->mockQuota();
+        $quota3 = $this->mockQuota();
 
         $quotas = [$quota1, $quota2, $quota3];
 
@@ -134,8 +134,8 @@ class QuotaRuleTest extends TestBase
         );
         $series->AddResource(new FakeBookableResource(22));
 
-        $quota1 = $this->mockQuota('IQuota');
-        $quota2 = $this->mockQuota('IQuota');
+        $quota1 = $this->mockQuota();
+        $quota2 = $this->mockQuota();
 
         $quotas = [$quota1, $quota2];
 

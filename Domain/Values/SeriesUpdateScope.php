@@ -83,7 +83,7 @@ interface ISeriesUpdateScope
 abstract class SeriesUpdateScopeBase implements ISeriesUpdateScope
 {
     /**
-     * @var ISeriesDistinction
+     * @var ExistingReservationSeries
      */
     protected $series;
 

@@ -63,8 +63,6 @@ class ManageResourceTypesPage extends ActionPage implements IManageResourceTypes
         parent::__construct('ManageResourceTypes', 1);
         $this->presenter = new ManageResourceTypesPresenter(
             $this,
-            ServiceLocator::GetServer()
-                                                                          ->GetUserSession(),
             new ResourceRepository(),
             new AttributeService(new AttributeRepository())
         );

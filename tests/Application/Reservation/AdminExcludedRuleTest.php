@@ -8,17 +8,17 @@ class AdminExcludedRuleTest extends TestBase
     private $rule;
 
     /**
-     * @var IReservationValidationRule|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationValidationRule|PHPUnit\Framework\MockObject\MockObject
      */
     private $baseRule;
 
     /**
-     * @var IUserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
 
     /**
-     * @var User|PHPUnit_Framework_MockObject_MockObject
+     * @var User|PHPUnit\Framework\MockObject\MockObject
      */
     private $user;
 

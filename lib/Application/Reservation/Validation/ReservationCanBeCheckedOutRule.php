@@ -7,17 +7,16 @@ class ReservationCanBeCheckedOutRule implements IReservationValidationRule
      */
     private $userSession;
 
-    /**
-     * @param ExistingReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
-     * @return ReservationRuleResult
-     */
-
     public function __construct(UserSession $userSession)
     {
         $this->userSession = $userSession;
     }
 
+    /**
+     * @param ExistingReservationSeries $reservationSeries
+     * @param null|ReservationRetryParameter[] $retryParameters
+     * @return ReservationRuleResult
+     */
     public function Validate($reservationSeries, $retryParameters)
     {
         $isOk = true;

@@ -453,7 +453,7 @@ class ManageSchedulesPresenter extends ActionPresenter
         $resources = $this->manageSchedulesService->GetResources();
 
         $layouts = [];
-        /* @var $schedule Schedule */
+        /* @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             $layout = $this->manageSchedulesService->GetLayout($schedule);
             $layouts[$schedule->GetId()] = $layout;

@@ -34,7 +34,7 @@ class ReservationMovePresenterTest extends TestBase
     private $presenter;
 
     /**
-     * @var IResourceRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
 

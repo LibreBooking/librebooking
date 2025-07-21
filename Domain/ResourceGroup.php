@@ -3,7 +3,7 @@
 class ResourceGroupTree
 {
     /**
-     * @var $references ResourceGroup[]
+     * @var ResourceGroup[] $references
      */
     protected $references = [];
 
@@ -194,7 +194,7 @@ class ResourceGroup
     }
 
     /**
-     * @param int|long $id
+     * @param int $id
      */
     public function WithId($id)
     {

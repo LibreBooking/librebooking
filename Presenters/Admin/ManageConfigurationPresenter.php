@@ -134,11 +134,11 @@ class ManageConfigurationPresenter extends ActionPresenter
         $plugins = [];
         $dit = new RecursiveDirectoryIterator(ROOT_DIR . 'plugins');
 
-        /** @var $path SplFileInfo */
+        /** @var SplFileInfo $path */
         foreach ($dit as $path) {
             if ($path->isDir() && basename($path->getPathname()) != '.' && basename($path->getPathname()) != '..') {
                 $plugins[basename($path->getPathname())] = [];
-                /** @var $plugin SplFileInfo */
+                /** @var SplFileInfo $plugin */
                 foreach (new RecursiveDirectoryIterator($path) as $plugin) {
                     if ($plugin->isDir() && basename($plugin->getPathname()) != '.' && basename($plugin->getPathname()) != '..') {
                         $pluginCategory = basename($path->getPathname());
@@ -276,7 +276,7 @@ class ManageConfigurationPresenter extends ActionPresenter
     {
         $requestedConfigFile = $this->page->GetConfigFileToEdit();
         if (!empty($requestedConfigFile)) {
-            /** @var $file ConfigFileOption */
+            /** @var ConfigFileOption $file */
             foreach ($configFiles as $file) {
                 if ($file->Location == $requestedConfigFile) {
                     $this->page->SetSelectedConfigFile($requestedConfigFile);

@@ -29,7 +29,6 @@ class PersonalCalendarPage extends CommonCalendarPage implements ICommonCalendar
         $this->presenter = new PersonalCalendarPresenter(
             $this,
             new ReservationViewRepository(),
-            new CalendarFactory(),
             $subscriptionService,
             $userRepository,
             $resourceService,

@@ -11,12 +11,12 @@ class ReservationCheckinPresenterTest extends TestBase
     private $page;
 
     /**
-     * @var IUpdateReservationPersistenceService|PHPUnit_Framework_MockObject_MockObject
+     * @var IUpdateReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
      */
     private $persistence;
 
     /**
-     * @var IReservationHandler|PHPUnit_Framework_MockObject_MockObject
+     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
      */
     private $handler;
 

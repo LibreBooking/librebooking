@@ -15,7 +15,7 @@ class AttributeFilter
 
         $attributeFragment = new SqlFilterNull();
 
-        /** @var $attribute Attribute */
+        /** @var Attribute $attribute */
         foreach ($attributes as $i => $attribute) {
             if ($attribute->Value() == null || $attribute->Value() == '') {
                 continue;

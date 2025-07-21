@@ -8,10 +8,9 @@ class FailedResponse extends RestResponse
     public $errors;
 
     /**
-     * @param IRestServer $server
      * @param array|string[] $errors
      */
-    public function __construct(IRestServer $server, $errors)
+    public function __construct($errors)
     {
         $this->message = 'There were errors processing your request';
         $this->errors = $errors;

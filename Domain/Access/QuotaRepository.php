@@ -156,7 +156,7 @@ class QuotaItemView
 
     /**
      * @param int $quotaId
-     * @param decimal $limit
+     * @param float $limit
      * @param string $unit
      * @param string $duration
      * @param string $groupName

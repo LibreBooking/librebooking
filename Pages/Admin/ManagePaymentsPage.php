@@ -23,8 +23,7 @@ interface IManagePaymentsPage extends IActionPage
     public function GetCreditCurrency();
 
     /**
-     * @param float $cost
-     * @param string $currency
+     * @param array $creditCosts
      */
     public function SetCreditCosts($creditCosts);
 

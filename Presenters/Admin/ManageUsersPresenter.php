@@ -610,6 +610,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                 $language = empty($row->language) ? 'en_us' : $row->language;
                 $status = empty($row->status) ? AccountStatus::ACTIVE : $this->DetermineStatus($row->status);
 
+                $user = null;
                 if ($shouldUpdate) {
                     $user = $this->manageUsersService->LoadUser($row->email);
                     if ($user->Id() == null) {
@@ -652,30 +653,32 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                     }
                 }
 
-                if (count($userGroups) > 0) {
-                    $user->ChangeGroups($userGroups);
-                }
-
-                if ($row->credits != null) {
-                    $user->ChangeCurrentCredits($row->credits);
-                }
-
-                if ($row->color != null) {
-                    $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
-                }
-
-                foreach ($row->attributes as $label => $value) {
-                    if (empty($value)) {
-                        continue;
+                if ($user !== null) {
+                    if (count($userGroups) > 0) {
+                        $user->ChangeGroups($userGroups);
                     }
-                    if (array_key_exists($label, $attributesIndexed)) {
-                        $attribute = $attributesIndexed[$label];
-                        $user->ChangeCustomAttribute(new AttributeValue($attribute->Id(), $value));
-                    }
-                }
 
-                if (count($userGroups) > 0 || count($row->attributes) > 0 || $shouldUpdate) {
-                    $this->userRepository->Update($user);
+                    if ($row->credits != null) {
+                        $user->ChangeCurrentCredits($row->credits);
+                    }
+
+                    if ($row->color != null) {
+                        $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
+                    }
+
+                    foreach ($row->attributes as $label => $value) {
+                        if (empty($value)) {
+                            continue;
+                        }
+                        if (array_key_exists($label, $attributesIndexed)) {
+                            $attribute = $attributesIndexed[$label];
+                            $user->ChangeCustomAttribute(new AttributeValue($attribute->Id(), $value));
+                        }
+                    }
+
+                    if (count($userGroups) > 0 || count($row->attributes) > 0 || $shouldUpdate) {
+                        $this->userRepository->Update($user);
+                    }
                 }
 
                 $importCount++;

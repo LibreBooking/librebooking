@@ -33,6 +33,9 @@ class Log
 
         $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
 
+        $log_folder = null;
+        $log_sql = false;
+
         if ($log_level != 'none') {
             $log_folder = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_FOLDER);
             $log_sql = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_SQL, new BooleanConverter());

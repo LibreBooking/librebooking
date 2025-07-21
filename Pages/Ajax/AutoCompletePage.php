@@ -80,7 +80,7 @@ class AutoCompletePage extends Page
 
         $hideUserDetails = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
         $users = [];
-        /** @var $result UserItemView */
+        /** @var UserItemView $result */
         foreach ($results as $result) {
             if (!$hideUserDetails || $result->Id == $currentUser->UserId || $user->IsGroupAdminFor($result->GroupIds) || $currentUser->IsAdmin) {
                 $users[] = new AutocompleteUser($result->Id, $result->First, $result->Last, $result->Email, $result->Username, $result->CurrentCreditCount);
@@ -125,7 +125,7 @@ class AutoCompletePage extends Page
             $groupRepo = new GroupRepository();
             $results = $groupRepo->GetUsersInGroup($groupIds, null, null, $userFilter)->Results();
 
-            /** @var $result UserItemView */
+            /** @var UserItemView $result */
             foreach ($results as $result) {
                 // consolidates results by user id if the user is in multiple groups
                 $users[$result->Id] = new AutocompleteUser($result->Id, $result->First, $result->Last, $result->Email, $result->Username);
@@ -141,7 +141,7 @@ class AutoCompletePage extends Page
         $results = $groupRepo->GetUsersInGroup($groupId)->Results();
 
         $users = [];
-        /** @var $result UserItemView */
+        /** @var UserItemView $result */
         foreach ($results as $result) {
             // consolidates results by user id if the user is in multiple groups
             $users[$result->Id] = new AutocompleteUser($result->Id, $result->First, $result->Last, $result->Email, $result->Username);
@@ -158,7 +158,7 @@ class AutoCompletePage extends Page
         $results = $r->GetList(1, PageInfo::All, null, null, $filter)->Results();
 
         $organizations = [];
-        /** @var $result UserItemView */
+        /** @var UserItemView $result */
         foreach ($results as $result) {
             $organizations[] = $result->Organization;
         }
