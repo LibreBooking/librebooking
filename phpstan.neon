@@ -13,9 +13,7 @@ parameters:
         - Web
         - WebServices
         - config
-        - lang/AvailableLanguage.php
-        - lang/AvailableLanguages.php
-        - lang/Language.php
+        - lang
         - lib
         - phing-tasks
         - plugins
