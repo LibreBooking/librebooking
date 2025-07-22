@@ -413,7 +413,7 @@ class SchedulePageBuilder implements ISchedulePageBuilder
 
     /**
      * @param AttributeValue $attributeFilter
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     private function SetAttributeValue($attributeFilter, $attributes)
     {

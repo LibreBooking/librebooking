@@ -222,7 +222,7 @@ abstract class ReservationEmailMessage extends EmailMessage
         );
 
         $ca = new CustomAttributes();
-        /** @var Attribute $attribute */
+        /** @var LBAttribute $attribute */
         foreach ($attributeValues as $attribute) {
             $ca->Add($attribute->Id(), $attribute->Value());
         }

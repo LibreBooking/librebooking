@@ -145,12 +145,6 @@ parameters:
 			path: Pages/Ajax/AutoCompletePage.php
 
 		-
-			message: '#^Call to an undefined method ReservationSavePresenter\:\:GetRepeatOptions\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Pages/Ajax/ReservationSavePage.php
-
-		-
 			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 1
@@ -163,94 +157,22 @@ parameters:
 			path: Presenters/Admin/Import/ICalImportPresenter.php
 
 		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetGroupsByRole\(\)\.$#'
-			identifier: method.notFound
+			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 0 results in an error\.$#'
+			identifier: equal.invalid
 			count: 1
 			path: Presenters/Admin/ManageGroupsPresenter.php
 
 		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
-			identifier: method.notFound
-			count: 5
-			path: Presenters/Admin/ManageGroupsPresenter.php
-
-		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetPermissionList\(\)\.$#'
-			identifier: method.notFound
+			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 1 results in an error\.$#'
+			identifier: equal.invalid
 			count: 1
 			path: Presenters/Admin/ManageGroupsPresenter.php
-
-		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetUsersInGroup\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Admin/ManageGroupsPresenter.php
-
-		-
-			message: '#^Call to an undefined method IQuotaViewRepository\:\:Add\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Admin/ManageQuotasPresenter.php
-
-		-
-			message: '#^Call to an undefined method IQuotaViewRepository\:\:DeleteById\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Admin/ManageQuotasPresenter.php
-
-		-
-			message: '#^Call to an undefined method ICalendarExportPage\:\:GetAccessoryIds\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/CalendarSubscriptionPresenter.php
-
-		-
-			message: '#^Call to an undefined method ICalendarExportPage\:\:GetFutureNumberOfDays\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/CalendarSubscriptionPresenter.php
-
-		-
-			message: '#^Call to an undefined method ICalendarExportPage\:\:GetPastNumberOfDays\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/CalendarSubscriptionPresenter.php
-
-		-
-			message: '#^Call to an undefined method ICalendarExportPage\:\:GetResourceGroupId\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/CalendarSubscriptionPresenter.php
-
-		-
-			message: '#^Call to an undefined method ICalendarExportPage\:\:GetUserId\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/CalendarSubscriptionPresenter.php
 
 		-
 			message: '#^PHPDoc tag @var with type IReservationValidationRule is not subtype of native type ReservationStartTimeRule\|ResourceMaximumNoticeCurrentInstanceRule\|ResourceMaximumNoticeRule\|ResourceMinimumNoticeCurrentInstanceRuleUpdate\|ResourceMinimumNoticeRuleAdd\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: Presenters/ParticipationPresenter.php
-
-		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetList\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Reports/GenerateReportPresenter.php
-
-		-
-			message: '#^Call to an undefined method IReservationViewRepository\:\:LoadByReferenceNumber\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Reservation/ReservationCreditsPresenter.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Required\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/ResourceDisplayPresenter.php
 
 		-
 			message: '#^Call to an undefined method IResourceDisplayPage\:\:GetStartDate\(\)\.$#'
@@ -265,34 +187,10 @@ parameters:
 			path: Presenters/ResourceDisplayPresenter.php
 
 		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:SetValue\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
 			message: '#^Call to an undefined method ISchedulePage\:\:GetGroupId\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: Presenters/Schedule/SchedulePageBuilder.php
-
-		-
-			message: '#^Call to an undefined method IGroupRepository\:\:GetGroupsByRole\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
-
-		-
-			message: '#^Call to an undefined method IResourceRepository\:\:GetResourceGroupsList\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
 
 		-
 			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
@@ -503,18 +401,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: lib/Database/MySQL/MySqlConnection.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: lib/Email/Messages/ReservationEmailMessage.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: lib/Email/Messages/ReservationEmailMessage.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'

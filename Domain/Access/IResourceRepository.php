@@ -261,4 +261,9 @@ interface IResourceRepository
      * @return array all public resource ids in key value id=>publicid
      */
     public function GetPublicResourceIds();
+
+    /**
+     * @return ResourceGroup[]|array
+     */
+    public function GetResourceGroupsList();
 }

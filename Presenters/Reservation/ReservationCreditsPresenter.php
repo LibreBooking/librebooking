@@ -11,7 +11,7 @@ class ReservationCreditsPresenter
     private $page;
 
     /**
-     * @var IReservationViewRepository
+     * @var IReservationRepository
      */
     private $reservationRepository;
     /**

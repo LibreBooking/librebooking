@@ -19,7 +19,7 @@ class ViewResourcesPresenter
     private $scheduleRepo;
 
     /**
-     * @var IGroupRepository
+     * @var IGroupViewRepository
      */
     private $groupRepo;
 
@@ -37,7 +37,7 @@ class ViewResourcesPresenter
         ResourceViewerViewResourcesPage $page,
         IResourceRepository $resourceRepo,
         IScheduleRepository $scheduleRepo,
-        IGroupRepository $groupRepo,
+        IGroupViewRepository $groupRepo,
         IAttributeService $attributeService,
     ) {
 
