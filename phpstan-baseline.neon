@@ -175,12 +175,6 @@ parameters:
 			path: Presenters/ParticipationPresenter.php
 
 		-
-			message: '#^Call to an undefined method IResourceDisplayPage\:\:GetStartDate\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: Presenters/ResourceDisplayPresenter.php
-
-		-
 			message: '#^PHPDoc tag @var with type ReservationListItem is not subtype of native type null\.$#'
 			identifier: varTag.nativeType
 			count: 1
