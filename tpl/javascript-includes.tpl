@@ -12,6 +12,19 @@
         {jsfile src="js/purify.min.js"}
         {jsfile src="js/trumbowyg.min.js"}
     {/if}
+    {if isset($DataTable) && $DataTable}
+        {jsfile src="js/datatable/cdn.datatables.net/1.13.7/js/jquery.dataTables.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"}
+        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"}
+        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"}
+        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"}
+        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"}
+    {/if}
 {else}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.16.3/lodash.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
@@ -29,6 +42,19 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/resizimg/trumbowyg.resizimg.min.js"></script>
+    {/if}
+    {if isset($DataTable) && $DataTable}
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
     {/if}
 {/if}
 {if isset($InlineEdit) && $InlineEdit}
@@ -52,18 +78,4 @@
     {/if}
 {/if}
 
-{if isset($DataTable) && $DataTable}
-
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
-{/if}
 {jsfile src="phpscheduleit.js"}
