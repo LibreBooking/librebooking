@@ -9,7 +9,7 @@ ini_set('display_startup_errors', 1);
  * Application configuration
  */
 $conf['settings']['app.title'] = 'LibreBooking';            // application title
-$conf['settings']['default.timezone'] = 'Etc/UTC';              // look up here http://php.net/manual/en/timezones.php
+$conf['settings']['default.timezone'] = 'UTC';              // look up here http://php.net/manual/en/timezones.php
 $conf['settings']['allow.self.registration'] = 'true';          // if users can register themselves
 $conf['settings']['admin.email'] = 'admin@example.com';         // email address of admin user
 $conf['settings']['admin.email.name'] = 'LB Administrator'; // name to be used in From: field when sending automatic emails
