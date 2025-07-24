@@ -40,7 +40,7 @@
 {* End slot display formatting *}
 
 {block name="header"}
-    {include file='globalheader.tpl' Qtip=true Select2=true cssFiles='scripts/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
+    {include file='globalheader.tpl' Qtip=true Select2=true DatePicker=true cssFiles='scripts/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
 {/block}
 
 <div id="page-schedule">
@@ -140,18 +140,17 @@
 
             <div id="individualDates" class="collapse">
                 <div class="d-flex justify-content-center align-items-center mt-2">
-                    <div class="form-check">
+                    <div class="form-check form-switch">
                         <input class="form-check-input" type='checkbox' id='multidateselect' />
                         <label class="form-check-label" for='multidateselect'>{translate key=SpecificDates}</label>
                     </div>
-                    <a class="btn btn-link link-primary" href="#" id="individualDatesGo">
-                        <i class="bi bi-caret-right-fill"></i>
-                        <span class="visually-hidden">{translate key=SpecificDates}</span>
-                    </a>
                 </div>
                 <div class="text-center" id="individualDatesList"></div>
+                <button class="btn btn-sm btn-primary mx-auto" href="#" id="individualDatesGo">
+                    <i class="bi bi-search me-1"></i>{translate key=SpecificDates}
+                </button>
+                <div type="text" id="datepicker" class="collapse"></div>
             </div>
-            <div type="text" id="datepicker" class="collapse"></div>
 
 
 
@@ -404,7 +403,7 @@
 
 <div id="loading-schedule" class="d-none">Loading reservations...</div>
 
-{include file="javascript-includes.tpl" Qtip=true Select2=true Clear=true}
+{include file="javascript-includes.tpl" Qtip=true Select2=true Clear=true DatePicker=true}
 
 {block name="scripts-before"}
 
@@ -480,6 +479,8 @@
 
 {control type="DatePickerSetupControl"
 ControlId='datepicker'
+HasTimepicker=false
+Inline=true
 DefaultDate=$FirstDate
 NumberOfMonths=$PopupMonths
 ShowButtonPanel='true'

@@ -25,6 +25,9 @@
         {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"}
         {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"}
     {/if}
+    {if isset($DatePicker) && $DatePicker}
+        {jsfile src="js/flatpickr/cdn.jsdelivr.net/4.6.13/dist/flatpickr.min.js"}
+    {/if}
 {else}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.16.3/lodash.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
@@ -41,7 +44,8 @@
         <script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/resizimg/trumbowyg.resizimg.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/plugins/resizimg/trumbowyg.resizimg.min.js">
+        </script>
     {/if}
     {if isset($DataTable) && $DataTable}
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -55,6 +59,9 @@
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+    {/if}
+    {if isset($DatePicker) && $DatePicker}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
     {/if}
 {/if}
 {if isset($InlineEdit) && $InlineEdit}
