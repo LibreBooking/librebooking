@@ -160,7 +160,7 @@
             window.location.href = url + $(this).val();
         });
 
-        var langCode = readCookie('{CookieKeys::LANGUAGE}');
+        var langCode = '{$smarty.cookies.language|escape:"javascript"}';
 
         if (!langCode) {
             langCode = (navigator.language + "").replace("-", "_").toLowerCase();
