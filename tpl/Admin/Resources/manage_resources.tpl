@@ -10,8 +10,7 @@
 				</button>
 				<button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
 					data-bs-toggle="dropdown">
-					<span class="visually-hidden">{translate key='More'}</span>
-					<i class="bi bi-three-dots"></i>
+					{translate key="MoreResourceActions"}
 				</button>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="moreResourceActions">
 
