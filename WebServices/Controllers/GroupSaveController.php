@@ -134,6 +134,9 @@ class GroupSaveController implements IGroupSaveController
     public function Update($groupId, $request, $session)
     {
         $errors = $this->ValidateRequest($request);
+        if (empty($groupId)) {
+            $errors[] = 'groupId is required';
+        }
 
         if (!empty($errors)) {
             return new GroupControllerResult(null, $errors);
@@ -141,9 +144,9 @@ class GroupSaveController implements IGroupSaveController
 
         $presenter = $this->GetPresenter(new CreateGroupFacade($request, $groupId));
 
-        $id = $presenter->AddGroup();
+        $presenter->UpdateGroup();
 
-        return new GroupControllerResult($id, null);
+        return new GroupControllerResult($groupId);
     }
 
     /**
