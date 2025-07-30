@@ -759,6 +759,7 @@ class es extends en_gb
         $strings['CheckingAvailabilityError'] = 'No es posible obtener la disponibilidad de recursos - demasiados recursos';
         $strings['ScanToSchedule'] = 'Escanee para reservar';
         $strings['MaintenanceNotice'] = 'Actualmente estamos en mantenimiento. Volveremos pronto.';
+        $strings['MoreResourceActions'] = 'Más acciones de recursos';
         // End Strings
 
         // Install
