@@ -27,6 +27,7 @@ class ConfigKeys
     public const REGISTRATION_REQUIRE_ACTIVATION = 'registration.require.email.activation';
     public const REGISTRATION_AUTO_SUBSCRIBE_EMAIL = 'registration.auto.subscribe.email';
     public const REGISTRATION_NOTIFY = 'registration.notify.admin';
+    public const RESOURCE_CONTACT_IS_USER = 'resource.contact.is.user';
 
     public const VERSION = 'version';
 

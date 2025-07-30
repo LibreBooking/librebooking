@@ -393,7 +393,11 @@
 															<div>
 																<label
 																	class="inline fw-bold">{translate key='Contact'}</label>
-																<span class="propertyValue contactValue" data-type="text"
+																{if $ResourceContactIsUser}
+																	<span class="propertyValue contactValue" data-type="select"
+																{else}
+																	<span class="propertyValue contactValue" data-type="text"
+																{/if}
 																	data-pk="{$id}" data-value="{$resource->GetContact()}"
 																	data-name="{FormKeys::RESOURCE_CONTACT}">
 																	{if $resource->HasContact()}
@@ -2180,6 +2184,7 @@
 		};
 
 		var updateUrl = '{$smarty.server.SCRIPT_NAME}?action=';
+        var xUserAutocompleteUrl = "../ajax/autocomplete.php?type={AutoCompleteType::XUser}";
 
 		$('.resourceNameField').editable({
 				url: updateUrl + '{ManageResourcesActions::ActionRename}', validate: function (value) {
@@ -2222,7 +2227,13 @@
 	});
 
 	$('.contactValue').editable({
-		url: updateUrl + '{ManageResourcesActions::ActionChangeContact}', emptytext: "{translate key='NoContactLabel'|escape:'javascript'}"
+		url: updateUrl + '{ManageResourcesActions::ActionChangeContact}',
+		{if $ResourceContactIsUser}
+			emptytext: "{translate key='NoContactLabel'|escape:'javascript'}",
+			source: xUserAutocompleteUrl,
+		{else}
+			emptytext: "{translate key='NoContactLabel'|escape:'javascript'}"
+		{/if}
 	});
 
 	$('.descriptionValue').editable({

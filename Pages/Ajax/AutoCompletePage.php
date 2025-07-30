@@ -12,6 +12,7 @@ class AutoCompletePage extends Page
         parent::__construct();
 
         $this->listMethods[AutoCompleteType::User] = 'GetUsers';
+        $this->listMethods[AutoCompleteType::XUser] = 'XGetUsers';
         $this->listMethods[AutoCompleteType::MyUsers] = 'GetMyUsers';
         $this->listMethods[AutoCompleteType::Group] = 'GetGroups';
         $this->listMethods[AutoCompleteType::Organization] = 'GetOrganizations';
@@ -57,6 +58,10 @@ class AutoCompletePage extends Page
         if ($term == 'group') {
             return $this->GetGroupUsers($this->GetQuerystring(QueryStringKeys::GROUP_ID));
         }
+        if (empty($term)) {
+            $term = '';
+        }
+
 
         $onlyActive = false;
         $activeQS = $this->GetQuerystring(QueryStringKeys::ACCOUNT_STATUS);
@@ -88,6 +93,22 @@ class AutoCompletePage extends Page
         }
 
         return $users;
+    }
+
+    /**
+     * @param $term string
+     * @return array|XAutocompleteUser[]
+     */
+    private function XGetUsers($term)
+    {
+        $users = $this->GetUsers($term);
+
+        $outUsers = [new XAutocompleteUser("", "")];
+        foreach ($users as $user) {
+            $value = $user->Name . " <" . $user->Email . ">";
+            $outUsers[] = new XAutocompleteUser($value, $value);
+        }
+        return $outUsers;
     }
 
     private function GetGroups($term)
@@ -167,6 +188,17 @@ class AutoCompletePage extends Page
     }
 }
 
+class XAutocompleteUser
+{
+    public $value;
+    public $text;
+    public function __construct($value, $text)
+    {
+        $this->value = $value;
+        $this->text = $text;
+    }
+}
+
 class AutocompleteUser
 {
     public $Id;
@@ -195,6 +227,7 @@ class AutocompleteUser
 class AutoCompleteType
 {
     public const User = 'user';
+    public const XUser = 'xuser';
     public const Group = 'group';
     public const MyUsers = 'myUsers';
     public const Organization = 'organization';

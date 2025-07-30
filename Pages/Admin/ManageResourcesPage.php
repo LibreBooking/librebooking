@@ -510,6 +510,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $url = $this->server->GetUrl();
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);
+
+        // If the contact for a resource must be chosen from a list of registered users.
+        $this->Set('ResourceContactIsUser', Configuration::Instance()->GetKey(ConfigKeys::RESOURCE_CONTACT_IS_USER, new BooleanConverter()));
     }
 
     public function ProcessPageLoad()
