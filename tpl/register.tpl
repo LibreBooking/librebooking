@@ -225,7 +225,6 @@
 
     {include file="javascript-includes.tpl" Validator=true}
 
-    {jsfile src="js/jstz.min.js"}
     {jsfile src="ajax-helpers.js"}
     {jsfile src="autocomplete.js"}
     {jsfile src="registration.js"}
@@ -236,14 +235,10 @@
         }
 
         $(document).ready(function() {
-            $('#detectTimezone').click(function(e) {
+            $('#detectTimezone').on('click', function(e) {
                 e.preventDefault();
 
-                if (Intl.DateTimeFormat) {
-                    var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                } else {
-                    var timezone = jstz.determine_timezone().name();
-                }
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
                 $('#timezoneDropDown').val(timezone);
             });
