@@ -40,12 +40,14 @@
             </div>
 
             <div class="row gx-2">
+                {include file='../Custom/avisos.tpl' resource=$Resource}
                 <div class="reservationTitle col-12 border-bottom py-2">
                     <div class="form-group">
                         <label class="fw-bold mb-0" for="reservationTitle">{translate key="ReservationTitle"}
                             {if $TitleRequired}
                             <i class="bi bi-asterisk text-danger align-top text-small"></i>
                             {/if}
+                            (Describa brevemente las actividades a realizar durante la reserva).
                         </label>
                         {textbox name="RESERVATION_TITLE" class="form-control has-feedback" value="ReservationTitle" id="reservationTitle" maxlength="300" required=$TitleRequired}
                     </div>
@@ -56,7 +58,7 @@
                 {assign var="detailsCol" value="col-12 col-sm-6"}
                 {/if}
 
-                <div class="form-group {$detailsCol} py-2 border-bottom">
+                <div class="form-group {$detailsCol} py-2">
                     <label class="fw-bold" for="userName">{translate key='Owner'}</label>
                     {if $ShowUserDetails && $ShowReservationDetails}
                     <a href="#" id="userName" data-userid="{$UserId}" class="link-primary">{$ReservationUserName}</a>
@@ -112,7 +114,7 @@
                     </div>
                 </div>
 
-                <div class="form-group {$detailsCol} py-2 border-bottom">
+                <div class="form-group {$detailsCol} py-2">
                     {if $ShowParticipation && $AllowParticipation && $ShowReservationDetails}
                     {include file="Reservation/participation.tpl"}
                     {else}
@@ -151,7 +153,7 @@
                             <label for="EndDate"
                                 class="reservationDate fw-bold text-md-end pe-md-1">{translate key='EndDate'}</label>
                             <input type="date" id="EndDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
+                                class="form-control form-control-sm d-inline-block dateinput d-none{if $LockPeriods} no-show{/if}"
                                 value="{formatdate date=$EndDate key=system}" />
                             <input type="hidden" id="formattedEndDate" {formname key=END_DATE}
                                 value="{formatdate date=$EndDate key=system}" />
@@ -191,7 +193,8 @@
                         {/if}
                     </div>
 
-                    {if !$HideRecurrence}
+                    {*if !$HideRecurrence*}
+                    {if isset($CanViewResponsibilities) && $CanViewResponsibilities || (isset($CanViewAdmin) && $CanViewAdmin)}
                     <div class="pt-2">{$HideRecurrence}
                         {control type="RecurrenceControl" RepeatTerminationDate=$RepeatTerminationDate}
                     </div>
@@ -243,7 +246,7 @@
                     </div>
                 </div>
 
-                <div class="form-group col-12 py-2 border-bottom">
+                <div class="form-group col-12 py-2">
                     {if $ShowParticipation && $AllowParticipation && $ShowReservationDetails}
                     {include file="Reservation/invitees.tpl"}
                     {else}
@@ -302,7 +305,7 @@
                 {/if}
 
                 <div class="reservationDescription border-bottom py-2">
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label class="fw-bold mb-0" for="description">
                             {translate key="ReservationDescription"}{if $DescriptionRequired}<i
                                 class="bi bi-asterisk text-danger align-top text-small"></i>
@@ -364,7 +367,7 @@
                         <input class="form-check-input" type="checkbox" id="termsAndConditionsAcknowledgement"
                             {formname key=TOS_ACKNOWLEDGEMENT} {if $TermsAccepted}checked="checked" {/if} />
                         <label for="termsAndConditionsAcknowledgement">{translate key=IAccept}</label>
-                        <a href="{$Terms->DisplayUrl()}" class="link-primary"
+                        <a href="{$Terms->DisplayUrl()}" class="link-dark"
                             target="_blank">{translate key=TheTermsOfService}</a>
                     </div>
                     {/if}
@@ -525,7 +528,7 @@
 
 {block name=extras}{/block}
 
-{include file="javascript-includes.tpl" Qtip=false}
+{include file="javascript-includes.tpl" Qtip=false Owl=false}
 
 {control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
 {control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}

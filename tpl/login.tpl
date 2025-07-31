@@ -90,16 +90,16 @@
                             {/if}
                         </div>
 
-                        <section class="d-flex justify-content-center flex-wrap gap-2 my-3 social-login">
+                        <section class="d-grid gap-2">
                             {if $AllowGoogleLogin}
                                 <a type="button" href="{$GoogleUrl}" class="btn btn-outline-primary"><i
                                         class="bi bi-google me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
                                         Google</span></a>
                             {/if}
                             {if $AllowMicrosoftLogin}
-                                <a type="button" href="{$MicrosoftUrl}" class="btn btn-outline-primary"><i
+                                <a type="button" href="{$MicrosoftUrl}" class="btn btn-primary"><i
                                         class="bi bi-microsoft me-1"></i>{translate key='SignInWith'}<span
-                                        class="fw-medium"> Microsoft</span></a>
+                                        class="fw-medium"> Cuenta Institucional</span></a>
                             {/if}
                             {if $AllowFacebookLogin}
                                 <a type="button" href="{$FacebookUrl}" class="btn btn-outline-primary"><i
@@ -116,6 +116,8 @@
                                     class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
                                         {$Oauth2Name}</span></a>
                             {/if}
+                            <a type="button" href="view-schedule.php" class="btn btn-primary" role="button"><i
+                                    class="bi bi-calendar3 me-1"></i>{translate key='ViewSchedule'}</a>
                         </section>
                         {if $facebookError}
                             <p class="text-center my-3">
@@ -123,7 +125,7 @@
                         {/if}
                     </div>
                 </div>
-                <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between">
+                <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between d-none">
                     {if $ShowForgotPasswordPrompt}
                         <div id="forgot-password">
                             <a href="{$ForgotPasswordUrl}" {if isset($ForgotPasswordUrlNew)}{$ForgotPasswordUrlNew}{/if}
