@@ -796,6 +796,7 @@ class en_us extends Language
         $strings['CheckingAvailabilityError'] = 'Cannot get resource availability - too many resources';
         $strings['ScanToSchedule'] = 'Scan to schedule';
         $strings['MaintenanceNotice'] = 'Currently performing maintenance. We will be back soon.';
+        $strings['MoreResourceActions'] = 'More Resource Actions';
         // End Strings
 
         // Install

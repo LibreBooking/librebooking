@@ -769,10 +769,13 @@ function Schedule(opts, resourceGroups) {
         if (options.specificDates.length > 0) {
             CheckMultiDateSelect();
 
-            multidateselect.attr('checked', true);
+            multidateselect.prop('checked', true);
+
             $.each(options.specificDates, function (i, v) {
-                var d = v.split('-');
-                AddSpecificDate(v, { selectedYear: d[0], selectedMonth: d[1] - 1, selectedDay: d[2] });
+                const parts = v.split('-');
+                const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+
+                AddSpecificDate(dateObj);
             });
         }
 
@@ -1198,27 +1201,44 @@ function ChangeGroup(node) {
     });
 }
 
-function AddSpecificDate(dateText, inst) {
-    var formattedDate = inst.selectedYear + '-' + (inst.selectedMonth + 1).toString().padStart(2, '0') + '-' + inst.selectedDay.toString().padStart(2, '0');
-    if (scheduleSpecificDates.indexOf(formattedDate) != -1) {
+function AddSpecificDate(dateObj) {
+    const formattedDate = dateObj.getFullYear() + '-' +
+        String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
+        String(dateObj.getDate()).padStart(2, '0');
+
+    if (scheduleSpecificDates.includes(formattedDate)) {
         return;
     }
+
     $('#individualDatesGo').show();
     scheduleSpecificDates.push(formattedDate);
-    var dateItem = '<div data-date="' + formattedDate + '">' + dateText + ' <i class="bi bi-x-circle text-danger icon remove removeSpecificDate"><i/><div>';
 
-    $('#individualDatesList').html($('#individualDatesList').html() + dateItem);
+    const dateItem = `<div data-date="${formattedDate}">
+        ${formattedDate} <i class="bi bi-x-circle text-danger icon remove removeSpecificDate"></i>
+    </div>`;
+
+    $('#individualDatesList').append(dateItem);
 }
 
-function dpDateChanged(dateText, inst) {
+function dpDateChanged(selectedDates, inst) {
+    const date = selectedDates[0];
+
     if ($('#multidateselect').is(':checked')) {
-        AddSpecificDate(dateText, inst);
+        AddSpecificDate(date);
     } else {
-        if (inst) {
-            ChangeDate(inst.selectedYear, (inst.selectedMonth + 1).toString().padStart(2, '0') , inst.selectedDay.toString().padStart(2, '0'));
+        if (date) {
+            ChangeDate(
+                date.getFullYear(),
+                String(date.getMonth() + 1).padStart(2, '0'),
+                String(date.getDate()).padStart(2, '0')
+            );
         } else {
-            var date = new Date();
-            ChangeDate(date.getFullYear(), (date.getMonth() + 1).toString().padStart(2, '0'), date.getDate().toString().padStart(2, '0'));
+            const now = new Date();
+            ChangeDate(
+                now.getFullYear(),
+                String(now.getMonth() + 1).padStart(2, '0'),
+                String(now.getDate()).padStart(2, '0')
+            );
         }
     }
 }

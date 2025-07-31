@@ -7,7 +7,7 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 class CalendarSubscriptionPresenter
 {
     /**
-     * @var ICalendarExportPage
+     * @var ICalendarSubscriptionPage
      */
     private $page;
 

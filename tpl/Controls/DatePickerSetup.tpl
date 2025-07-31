@@ -1,60 +1,65 @@
 {function name=datePickerDateFormat}
-new Date({$date->Year()}, {$date->Month()-1}, {$date->Day()})
+    new Date({$date->Year()}, {$date->Month()-1}, {$date->Day()})
 {/function}
-<script type="text/javascript">
-    $(function () {
-        $("#{$ControlId}").{if $HasTimepicker}datetimepicker{else}datepicker{/if}({ldelim}
-            numberOfMonths: {$NumberOfMonths},
-            showButtonPanel: {$ShowButtonPanel},
-            onSelect: {$OnSelect},
-            dayNames: {$DayNames},
-            dayNamesShort: {$DayNamesShort},
-            dayNamesMin: {$DayNamesMin},
-            dateFormat: '{$DateFormat}',
-            {if $FirstDay >=0 && $FirstDay <= 6}
-            firstDay: {$FirstDay},
-            {/if}
-            monthNames: {$MonthNames},
-            monthNamesShort: {$MonthNamesShort},
-            currentText: "{{translate key='Today'}|escape:'javascript'}",
-            timeFormat: "{$TimeFormat}",
-            altFieldTimeOnly: false,
-            showWeek: {if $ShowWeekNumbers}true{else}false{/if},
-            controlType: 'select'
-            {if $AltId neq ''}
-            ,
-            altField: "#{$AltId}",
-            altFormat: '{$AltFormat}'
-            {/if}
-            {if $DefaultDate}
-            ,
-            defaultDate: {datePickerDateFormat date=$DefaultDate}
-            {/if}
-            {if $MinDate}
-            ,
-            minDate: {datePickerDateFormat date=$MinDate}
-            {/if}
-            {if $MaxDate}
-            ,
-            maxDate: {datePickerDateFormat date=$MaxDate->AddDays(1)}
-            {/if}
-            {rdelim});
+<script>
+    function initFlatpickr(selector, config) {
+        flatpickr(selector, config);
+    }
 
-        {if $AltId neq ''}
-        $("#{$ControlId}").change(function () {
-            if ($(this).val() == '') {
-                $("#{$AltId}").val('');
-            }
-            else {
-                var dateVal = $("#{$ControlId}").{if $HasTimepicker}datetimepicker{else}datepicker{/if}('getDate');
-                var dateString = dateVal.getFullYear() + '-' + ('0' + (dateVal.getMonth() + 1)).slice(-2) + '-' + ('0' + dateVal.getDate()).slice(-2);
-                {if $HasTimepicker}
-                dateString = dateString + ' ' + dateVal.getHours() + ':' + dateVal.getMinutes();
-                {/if}
-                $("#{$AltId}").val(dateString);
-            }
+    $(document).ready(function() {
+    const hasTimepicker = {if $HasTimepicker}true{else}false{/if};
+    const dateFormat = "{$DateFormat}" + (hasTimepicker ? " {$TimeFormat}" : "");
+
+    const config = {
+        inline: {if $Inline|default:false}true{else}false{/if},
+        enableTime: hasTimepicker,
+        noCalendar: {if $NoCalendar|default:false}true{else}false{/if},
+        dateFormat: dateFormat,
+        locale: {
+            weekdays: {
+                shorthand: {$DayNamesShort},
+                longhand: {$DayNames}
+            },
+            months: {
+                shorthand: {$MonthNamesShort},
+                longhand: {$MonthNames}
+            },
+            firstDayOfWeek: {$FirstDay|default:0}
+        },
+        showMonths: {$NumberOfMonths|default:1},
+        weekNumbers: {if $ShowWeekNumbers}true{else}false{/if},
+        defaultDate: {if $DefaultDate}{datePickerDateFormat date=$DefaultDate}{else}null{/if},
+        minDate: {if $MinDate}{datePickerDateFormat date=$MinDate}{else}null{/if},
+        maxDate: {if $MaxDate}{datePickerDateFormat date=$MaxDate->AddDays(1)}{else}null{/if},
+        onChange: {$OnSelect},
+    };
+
+    {if $AltId neq ''}
+        config.altInput = true;
+        config.altFormat = "{$AltFormat|escape:'javascript'}";
+    {/if}
+
+    // If the control is inside a collapse
+    const $collapse = $("#{$ControlId}").closest('.collapse');
+    if ($collapse.length > 0) {
+        $collapse.on('shown.bs.collapse', function() {
+            initFlatpickr("#{$ControlId}", config);
         });
-        {/if}
+        // If the collapse is already visible upon loading
+        if ($collapse.hasClass('show')) {
+            initFlatpickr("#{$ControlId}", config);
+        }
+    } else {
+        // If not collapsed, initialize normally
+        initFlatpickr("#{$ControlId}", config);
+    }
 
+    {if $AltId neq ''}
+        $("#{$ControlId}").on('change', function () {
+        if ($(this).val() === '') {
+            $("#{$AltId}").val('');
+        }
+        });
+    {/if}
     });
 </script>

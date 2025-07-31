@@ -33,7 +33,7 @@ class ManageQuotasPresenter extends ActionPresenter
     private $scheduleRepository;
 
     /**
-     * @var IQuotaViewRepository
+     * @var IQuotaRepository&IQuotaViewRepository
      */
     private $quotaRepository;
 
@@ -42,14 +42,14 @@ class ManageQuotasPresenter extends ActionPresenter
      * @param IResourceRepository $resourceRepository
      * @param IGroupViewRepository $groupRepository
      * @param IScheduleRepository $scheduleRepository
-     * @param IQuotaViewRepository $quotaRepository
+     * @param IQuotaRepository&IQuotaViewRepository $quotaRepository
      */
     public function __construct(
         IManageQuotasPage $page,
         IResourceRepository $resourceRepository,
         IGroupViewRepository $groupRepository,
         IScheduleRepository $scheduleRepository,
-        IQuotaViewRepository $quotaRepository
+        IQuotaRepository&IQuotaViewRepository $quotaRepository
     ) {
         parent::__construct($page);
 

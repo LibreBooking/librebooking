@@ -46,6 +46,14 @@
         {if isset($Trumbowyg) && $Trumbowyg}
             {cssfile src="css/trumbowyg.min.css" rel="stylesheet"}
         {/if}
+        {if isset($DataTable) && $DataTable}
+            {cssfile src="scripts/css/datatable/cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet"}
+            {cssfile src="scripts/css/datatable/cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet"}
+            {cssfile src="scripts/css/datatable/cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet"}
+        {/if}
+        {if isset($DatePicker) && $DatePicker}
+            {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
+        {/if}
     {else}
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -62,7 +70,15 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
                 type="text/css" />
         {/if}
-
+        {if isset($DataTable) && $DataTable}
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" type="text/css" />
+            <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+            <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"
+                type="text/css">
+        {/if}
+        {if isset($DatePicker) && $DatePicker}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+        {/if}
     {/if}
     {if isset($InlineEdit) && $InlineEdit}
         {cssfile src="scripts/js/x-editable/css/bootstrap-editable.css" rel="stylesheet"}
@@ -103,12 +119,6 @@
         {foreach from=$PrintCssFileList item=cssFile}
             <link rel='stylesheet' type='text/css' href='{$Path}{$cssFile}' media='print' />
         {/foreach}
-    {/if}
-    {if isset($DataTable) && $DataTable}
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" type="text/css" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"
-            type="text/css">
     {/if}
 
     <!-- End CSS -->

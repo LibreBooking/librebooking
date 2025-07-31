@@ -168,7 +168,7 @@ class LoginPresenter
         $languageCode = $this->_page->GetRequestedLanguage();
 
         if ($resources->SetLanguage($languageCode)) {
-            ServiceLocator::GetServer()->SetCookie(new Cookie(CookieKeys::LANGUAGE, $languageCode));
+            ServiceLocator::GetServer()->SetCookie(new Cookie(CookieKeys::LANGUAGE, $languageCode, secure: false));
             $this->_page->SetSelectedLanguage($languageCode);
             $this->_page->Redirect(Pages::LOGIN);
         }

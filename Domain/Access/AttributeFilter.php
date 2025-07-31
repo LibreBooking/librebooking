@@ -4,7 +4,7 @@ class AttributeFilter
 {
     /**
      * @param string $entityTableAndColumn
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      * @return ISqlFilter|null
      */
     public static function Create($entityTableAndColumn, $attributes)
@@ -15,7 +15,7 @@ class AttributeFilter
 
         $attributeFragment = new SqlFilterNull();
 
-        /** @var Attribute $attribute */
+        /** @var LBAttribute $attribute */
         foreach ($attributes as $i => $attribute) {
             if ($attribute->Value() == null || $attribute->Value() == '') {
                 continue;

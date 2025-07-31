@@ -581,4 +581,9 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     {
         // TODO: Implement DisplayInstructions() method.
     }
+
+    public function GetStartDate()
+    {
+        throw new LogicException('GetStartDate() method not implemented in TestResourceDisplayPage');
+    }
 }

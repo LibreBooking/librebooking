@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE);
  * Application configuration
  */
 $conf['settings']['app.title'] = 'LibreBooking';            // application title
-$conf['settings']['default.timezone'] = 'Etc/UTC';              // look up here http://php.net/manual/en/timezones.php
+$conf['settings']['default.timezone'] = 'UTC';              // look up here http://php.net/manual/en/timezones.php
 $conf['settings']['allow.self.registration'] = 'true';             // if users can register themselves
 $conf['settings']['admin.email'] = 'admin@example.com';         // email address of admin user
 $conf['settings']['admin.email.name'] = 'LB Administrator';    // name to be used in From: field when sending automatic emails
@@ -36,6 +36,7 @@ $conf['settings']['disable.password.reset'] = 'false';               // if the p
 $conf['settings']['home.url'] = '';                               // the url to open when the logo is clicked
 $conf['settings']['logout.url'] = '';                               // the url to be directed to after logging out
 $conf['settings']['default.homepage'] = '1';                       // the default homepage to use when new users register (1 = Dashboard, 2 = Schedule, 3 = My Calendar, 4 = Resource Calendar)
+$conf['settings']['resource.contact.is.user'] = 'false';        // If Resource contact must be a registered user
 
 $conf['settings']['schedule']['use.per.user.colors'] = 'false';         // color reservations by user
 $conf['settings']['schedule']['show.inaccessible.resources'] = 'true';  // whether or not resources that are inaccessible to the user are visible

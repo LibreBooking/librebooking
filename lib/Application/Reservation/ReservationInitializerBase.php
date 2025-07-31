@@ -187,7 +187,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
     protected $currentUser;
 
     /**
-     * @var array|Attribute[]
+     * @var array|LBAttribute[]
      */
     private $customAttributes = [];
     /**

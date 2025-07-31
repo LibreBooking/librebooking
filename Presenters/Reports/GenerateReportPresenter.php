@@ -29,7 +29,7 @@ class GenerateReportPresenter extends ActionPresenter
      */
     private $scheduleRepo;
     /**
-     * @var IGroupRepository
+     * @var IGroupViewRepository
      */
     private $groupRepo;
     /**

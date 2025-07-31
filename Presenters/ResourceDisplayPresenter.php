@@ -183,7 +183,7 @@ class ResourceDisplayPresenter extends ActionPresenter
         );
 
         $requiredAttributes = [];
-        /** @var Attribute $attribute */
+        /** @var LBAttribute $attribute */
         foreach ($attributes as $attribute) {
             if ($attribute->Required()) {
                 $requiredAttributes[] = $attribute;

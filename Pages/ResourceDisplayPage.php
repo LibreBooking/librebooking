@@ -124,6 +124,11 @@ interface IResourceDisplayPage extends IPage, IActionPage
      */
     public function GetTermsOfServiceAcknowledgement();
 
+    /**
+     * @return Date
+     */
+    public function GetStartDate();
+
     public function DisplayInstructions();
 }
 

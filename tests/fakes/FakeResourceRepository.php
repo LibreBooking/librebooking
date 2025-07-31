@@ -239,4 +239,9 @@ class FakeResourceRepository implements IResourceRepository
     {
         return $this->_PublicResourceIds;
     }
+
+    public function GetResourceGroupsList()
+    {
+        throw new LogicException('GetResourceGroupsList() method is not implemented in FakeResourceRepository');
+    }
 }

@@ -15,7 +15,7 @@ interface IEntityAttributeList
 
     /**
      * @param $entityId int|null
-     * @return array|Attribute[]
+     * @return array|LBAttribute[]
      */
     public function GetAttributes($entityId = null);
 }

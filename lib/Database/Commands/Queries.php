@@ -669,7 +669,7 @@ class Queries
 		INNER JOIN `reservation_series` `rs` ON `ri`.`series_id` = `rs`.`series_id`
 		INNER JOIN `reservation_reminders` `rr` on `ri`.`series_id` = `rr`.`series_id` INNER JOIN `reservation_users` `ru` on `ru`.`reservation_instance_id` = `ri`.`reservation_instance_id`
 		INNER JOIN `users` `u` on `ru`.`user_id` = `u`.`user_id`
-		WHERE `rs`.`status_id` <> 2 AND (`reminder_type` = @reminder_type AND @reminder_type=0 AND date_sub(`start_date`,INTERVAL `rr`.`minutes_prior` MINUTE) = @current_date) OR (`reminder_type` = @reminder_type AND @reminder_type=1 AND date_sub(`end_date`,INTERVAL `rr`.`minutes_prior` MINUTE) = @current_date)';
+		WHERE `rs`.`status_id` <> 2 AND ((`reminder_type` = @reminder_type AND @reminder_type=0 AND date_sub(`start_date`,INTERVAL `rr`.`minutes_prior` MINUTE) = @current_date) OR (`reminder_type` = @reminder_type AND @reminder_type=1 AND date_sub(`end_date`,INTERVAL `rr`.`minutes_prior` MINUTE) = @current_date))';
 
     public const GET_REMINDERS_BY_USER = 'SELECT * FROM `reminders` WHERE `user_id` = @user_id';
 
