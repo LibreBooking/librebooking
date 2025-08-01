@@ -1,10 +1,10 @@
 {function name="avisoResource"}
     {if $resource->GetId()==44 || $resource->GetId()==42 || $resource->GetId()==177 || $resource->GetId()==180}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning alert-dismissible" role="alert">
             <h4 class="alert-heading d-flex align-items-center justify-content-center">
                 Condiciones de uso para {$resource->GetName()}
             </h4>
-
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{translate key='Close'}"></button>
             {if $resource->GetId()==44} {*Máquina de tensión para aceros*}
                 <p class="mb-3"><strong>Este equipo está destinado exclusivamente para:</strong></p>
                 <ul class="mb-3">
@@ -128,10 +128,11 @@
         {avisoResource resource=$resource}
     {else}
         {if $ScheduleId!==1}
-            <div class="alert alert-warning" role="alert">
+            <div class="alert alert-warning alert-dismissible" role="alert">
                 <h4 class="alert-heading d-flex align-items-center justify-content-center">
                     Condiciones de uso del laboratorio
                 </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{translate key='Close'}"></button>
                 <ul class="mb-0">
                     <li>Se dará una espera máxima de 20 minutos. Si el estudiante llega después, la práctica se cancela.</li>
                     <li>Comer/beber dentro del laboratorio (riesgo de contaminación química).

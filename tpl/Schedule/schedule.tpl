@@ -128,7 +128,7 @@
                                 {/foreach}
                             </select>
                         {/if}
-                        <a class="link-primary d-none" href="#" id="calendar_toggle" title="{translate key=ShowHideNavigation}"
+                        <a class="link-primary" href="#" id="calendar_toggle" title="{translate key=ShowHideNavigation}"
                             data-bs-toggle="collapse" data-bs-target="#individualDates" aria-expanded="false"
                             aria-controls="individualDates">
                             <span class="bi bi-calendar"></span>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
             </div>
-            {include file='Custom/avisos.tpl' resource=$Resource}
+
             <div id="individualDates" class="collapse">
                 <div class="d-flex justify-content-center align-items-center mt-2">
                     <div class="form-check form-switch">
@@ -151,7 +151,6 @@
                 </button>
                 <div type="text" id="datepicker" class="collapse"></div>
             </div>
-
 
             {capture name="date_navigation"}
                 {if !isset($HideSchedule) || !$HideSchedule}
@@ -215,6 +214,8 @@
                 </a>
             </div>
         {/if}
+
+        {include file='Custom/avisos.tpl' resource=$Resource}
 
         {if !isset($HideSchedule) || !$HideSchedule}
             {block name="legend"}
