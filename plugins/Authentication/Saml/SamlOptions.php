@@ -1,4 +1,5 @@
 <?php
+
 /**
 File in Authentication plugin package for ver 2.1.4 LibreBooking
 to implement Single Sign On Capability.  Based on code from the
@@ -7,7 +8,7 @@ Authentication plugin for Moodle 1.9+.
 See http://moodle.org/mod/data/view.php?d=13&rid=2574
 This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
 http://simplesamlphp.org/
-*/
+ */
 
 require_once(ROOT_DIR . '/lib/Config/namespace.php');
 
@@ -21,23 +22,26 @@ class SamlOptions
 
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Saml.config.php',
-            SamlConfig::CONFIG_ID
+            dirname(__FILE__) . '/.env',
+            SamlConfigKeys::CONFIG_ID,
+            false,
+            SamlConfigKeys::class
         );
     }
 
     public function AdSamlOptions()
     {
-        $this->SetOption('ssphp_lib', $this->GetConfig(SamlConfig::SIMPLESAMLPHP_LIB));
-        $this->SetOption('ssphp_config', $this->GetConfig(SamlConfig::SIMPLESAMLPHP_CONFIG));
-        $this->SetOption('ssphp_sp', $this->GetConfig(SamlConfig::SIMPLESAMLPHP_SP));
-        $this->SetOption('ssphp_username', $this->GetConfig(SamlConfig::USERNAME));
-        $this->SetOption('ssphp_firstname', $this->GetConfig(SamlConfig::FIRSTNAME));
-        $this->SetOption('ssphp_lastname', $this->GetConfig(SamlConfig::LASTNAME));
-        $this->SetOption('ssphp_email', $this->GetConfig(SamlConfig::EMAIL));
-        $this->SetOption('ssphp_phone', $this->GetConfig(SamlConfig::PHONE));
-        $this->SetOption('ssphp_organization', $this->GetConfig(SamlConfig::ORGANIZATION));
-        $this->SetOption('ssphp_position', $this->GetConfig(SamlConfig::POSITION));
-        $this->SetOption('ssphp_groups', $this->GetConfig(SamlConfig::GROUPS));
+        $this->SetOption('ssphp_lib', $this->GetConfig(SamlConfigKeys::SIMPLESAMLPHP_LIB));
+        $this->SetOption('ssphp_config', $this->GetConfig(SamlConfigKeys::SIMPLESAMLPHP_CONFIG));
+        $this->SetOption('ssphp_sp', $this->GetConfig(SamlConfigKeys::SIMPLESAMLPHP_SP));
+        $this->SetOption('ssphp_username', $this->GetConfig(SamlConfigKeys::USERNAME));
+        $this->SetOption('ssphp_firstname', $this->GetConfig(SamlConfigKeys::FIRSTNAME));
+        $this->SetOption('ssphp_lastname', $this->GetConfig(SamlConfigKeys::LASTNAME));
+        $this->SetOption('ssphp_email', $this->GetConfig(SamlConfigKeys::EMAIL));
+        $this->SetOption('ssphp_phone', $this->GetConfig(SamlConfigKeys::PHONE));
+        $this->SetOption('ssphp_organization', $this->GetConfig(SamlConfigKeys::ORGANIZATION));
+        $this->SetOption('ssphp_position', $this->GetConfig(SamlConfigKeys::POSITION));
+        $this->SetOption('ssphp_groups', $this->GetConfig(SamlConfigKeys::GROUPS));
 
         return $this->_options;
     }
@@ -47,7 +51,7 @@ class SamlOptions
      */
     public function SyncGroups()
     {
-        return $this->GetConfig(SamlConfig::SYNC_GROUPS, new BooleanConverter());
+        return $this->GetConfig(SamlConfigKeys::SYNC_GROUPS, new BooleanConverter());
     }
 
     private function SetOption($key, $value)
@@ -61,6 +65,6 @@ class SamlOptions
 
     private function GetConfig($keyName, $converter = null)
     {
-        return Configuration::Instance()->File(SamlConfig::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(SamlConfigKeys::CONFIG_ID)->GetKey($keyName, $converter);
     }
 }

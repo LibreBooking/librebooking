@@ -12,7 +12,10 @@ class LdapOptions
 
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Ldap.config.php',
-            LdapConfig::CONFIG_ID
+            '',
+            LdapConfigKeys::CONFIG_ID,
+            false,
+            LdapConfigKeys::class
         );
     }
 
@@ -20,21 +23,21 @@ class LdapOptions
     {
         $hosts = $this->GetHosts();
         $this->SetOption('host', $hosts);
-        $this->SetOption('port', $this->GetConfig(LdapConfig::PORT), new IntConverter());
-        $this->SetOption('starttls', $this->GetConfig(LdapConfig::STARTTLS, new BooleanConverter()));
-        $this->SetOption('version', $this->GetConfig(LdapConfig::VERSION), new IntConverter());
-        $this->SetOption('binddn', $this->GetConfig(LdapConfig::BINDDN));
-        $this->SetOption('bindpw', $this->GetConfig(LdapConfig::BINDPW));
-        $this->SetOption('basedn', $this->GetConfig(LdapConfig::BASEDN));
-        $this->SetOption('filter', $this->GetConfig(LdapConfig::FILTER));
-        $this->SetOption('scope', $this->GetConfig(LdapConfig::SCOPE));
+        $this->SetOption('port', $this->GetConfig(LdapConfigKeys::PORT, new IntConverter()));
+        $this->SetOption('starttls', $this->GetConfig(LdapConfigKeys::STARTTLS, new BooleanConverter()));
+        $this->SetOption('version', $this->GetConfig(LdapConfigKeys::VERSION, new IntConverter()));
+        $this->SetOption('binddn', $this->GetConfig(LdapConfigKeys::BINDDN));
+        $this->SetOption('bindpw', $this->GetConfig(LdapConfigKeys::BINDPW));
+        $this->SetOption('basedn', $this->GetConfig(LdapConfigKeys::BASEDN));
+        $this->SetOption('filter', $this->GetConfig(LdapConfigKeys::FILTER));
+        $this->SetOption('scope', $this->GetConfig(LdapConfigKeys::SCOPE));
 
         return $this->_options;
     }
 
     public function RetryAgainstDatabase()
     {
-        return $this->GetConfig(LdapConfig::RETRY_AGAINST_DATABASE, new BooleanConverter());
+        return $this->GetConfig(LdapConfigKeys::RETRY_AGAINST_DATABASE, new BooleanConverter());
     }
 
     public function Controllers()
@@ -51,14 +54,14 @@ class LdapOptions
         $this->_options[$key] = $value;
     }
 
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(LdapConfig::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(LdapConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 
     private function GetHosts()
     {
-        $hosts = explode(',', $this->GetConfig(LdapConfig::HOST));
+        $hosts = explode(',', $this->GetConfig(LdapConfigKeys::HOST));
 
         for ($i = 0; $i < count($hosts); $i++) {
             $hosts[$i] = trim($hosts[$i]);
@@ -69,7 +72,8 @@ class LdapOptions
 
     public function BaseDn()
     {
-        return $this->_options[LdapConfig::BASEDN];
+        $baseDnKey = LdapConfigKeys::BASEDN['key'];
+        return $this->_options[$baseDnKey];
     }
 
     public function IsLdapDebugOn()
@@ -85,13 +89,15 @@ class LdapOptions
 
     public function AttributeMapping()
     {
-        $attributes = ['sn' => 'sn',
+        $attributes = [
+            'sn' => 'sn',
             'givenname' => 'givenname',
             'mail' => 'mail',
             'telephonenumber' => 'telephonenumber',
             'physicaldeliveryofficename' => 'physicaldeliveryofficename',
-            'title' => 'title'];
-        $configValue = $this->GetConfig(LdapConfig::ATTRIBUTE_MAPPING);
+            'title' => 'title'
+        ];
+        $configValue = $this->GetConfig(LdapConfigKeys::ATTRIBUTE_MAPPING);
 
         if (!empty($configValue)) {
             $attributePairs = explode(',', $configValue);
@@ -109,7 +115,7 @@ class LdapOptions
      */
     public function GetUserIdAttribute()
     {
-        $attribute = $this->GetConfig(LdapConfig::USER_ID_ATTRIBUTE);
+        $attribute = $this->GetConfig(LdapConfigKeys::USER_ID_ATTRIBUTE);
 
         if (empty($attribute)) {
             return 'uid';
@@ -123,7 +129,7 @@ class LdapOptions
      */
     public function GetRequiredGroup()
     {
-        return $this->GetConfig(LdapConfig::REQUIRED_GROUP);
+        return $this->GetConfig(LdapConfigKeys::REQUIRED_GROUP);
     }
 
     /**
@@ -131,7 +137,7 @@ class LdapOptions
      */
     public function Filter()
     {
-        return $this->GetConfig(LdapConfig::FILTER);
+        return $this->GetConfig(LdapConfigKeys::FILTER);
     }
 
     /**
@@ -139,7 +145,7 @@ class LdapOptions
      */
     public function SyncGroups()
     {
-        return $this->GetConfig(LdapConfig::SYNC_GROUPS, new BooleanConverter());
+        return $this->GetConfig(LdapConfigKeys::SYNC_GROUPS, new BooleanConverter());
     }
 
     /**
@@ -147,6 +153,6 @@ class LdapOptions
      */
     public function CleanUsername()
     {
-        return !$this->GetConfig(LdapConfig::PREVENT_CLEAN_USERNAME, new BooleanConverter());
+        return !$this->GetConfig(LdapConfigKeys::PREVENT_CLEAN_USERNAME, new BooleanConverter());
     }
 }

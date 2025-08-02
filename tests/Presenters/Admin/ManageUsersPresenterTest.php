@@ -300,7 +300,7 @@ class ManageUsersPresenterTest extends TestBase
         $group = new Group($groupId, 'name');
         $group->AddUser($userId);
 
-        $this->fakeConfig->SetKey(ConfigKeys::LANGUAGE, $lang);
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, $lang);
 
         $this->page->_FirstName = $fname;
         $this->page->_LastName = $lname;

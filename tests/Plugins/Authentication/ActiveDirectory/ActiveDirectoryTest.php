@@ -66,12 +66,14 @@ class ActiveDirectoryTest extends TestBase
         $ldapEntry->physicaldeliveryofficename = '';
         $ldapEntry->title = '';
 
-        $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'mail',
-                        'telephonenumber' => 'telephonenumber',
-                        'physicaldeliveryofficename' => 'physicaldeliveryofficename',
-                        'title' => 'title'];
+        $mapping = [
+            'sn' => 'sn',
+            'givenname' => 'givenname',
+            'mail' => 'mail',
+            'telephonenumber' => 'telephonenumber',
+            'physicaldeliveryofficename' => 'physicaldeliveryofficename',
+            'title' => 'title'
+        ];
 
         $this->ldapUser = new ActiveDirectoryUser($ldapEntry, $mapping, 'group1,group2,group3');
 
@@ -152,7 +154,7 @@ class ActiveDirectoryTest extends TestBase
         $timezone = 'UTC';
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, $timezone);
         $languageCode = 'en_US';
-        $this->fakeConfig->SetKey(ConfigKeys::LANGUAGE, $languageCode);
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, $languageCode);
 
         $expectedUser = new AuthenticatedUser(
             $this->username,
@@ -204,21 +206,21 @@ class ActiveDirectoryTest extends TestBase
         $accountSuffix = '';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(ActiveDirectoryConfig::DOMAIN_CONTROLLERS, $controllers);
-        $configFile->SetKey(ActiveDirectoryConfig::PORT, $port);
-        $configFile->SetKey(ActiveDirectoryConfig::USERNAME, $username);
-        $configFile->SetKey(ActiveDirectoryConfig::PASSWORD, $password);
-        $configFile->SetKey(ActiveDirectoryConfig::BASEDN, $base);
-        $configFile->SetKey(ActiveDirectoryConfig::USE_SSL, $usessl);
-        $configFile->SetKey(ActiveDirectoryConfig::VERSION, $version);
-        $configFile->SetKey(ActiveDirectoryConfig::ACCOUNT_SUFFIX, $accountSuffix);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::DOMAIN_CONTROLLERS, $controllers);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::PORT, $port);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::USERNAME, $username);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::PASSWORD, $password);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::BASEDN, $base);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::USE_SSL, $usessl);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::VERSION, $version);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::ACCOUNT_SUFFIX, $accountSuffix);
 
-        $this->fakeConfig->SetFile(ActiveDirectoryConfig::CONFIG_ID, $configFile);
+        $this->fakeConfig->SetFile(ActiveDirectoryConfigKeys::CONFIG_ID, $configFile);
 
         $ldapOptions = new ActiveDirectoryOptions();
         $options = $ldapOptions->AdLdapOptions();
 
-        $this->assertNotNull($this->fakeConfig->_RegisteredFiles[ActiveDirectoryConfig::CONFIG_ID]);
+        $this->assertNotNull($this->fakeConfig->_RegisteredFiles[ActiveDirectoryConfigKeys::CONFIG_ID]);
         $this->assertEquals('localhost', $options['domain_controllers'][0], 'domain_controllers must be an array');
         $this->assertEquals(intval($port), $options['ad_port'], 'port should be int');
         $this->assertEquals($username, $options['admin_username']);
@@ -234,8 +236,8 @@ class ActiveDirectoryTest extends TestBase
         $controllers = 'localhost, localhost.2';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(ActiveDirectoryConfig::DOMAIN_CONTROLLERS, $controllers);
-        $this->fakeConfig->SetFile(ActiveDirectoryConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::DOMAIN_CONTROLLERS, $controllers);
+        $this->fakeConfig->SetFile(ActiveDirectoryConfigKeys::CONFIG_ID, $configFile);
 
         $options = new ActiveDirectoryOptions();
 
@@ -269,32 +271,34 @@ class ActiveDirectoryTest extends TestBase
         $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(ActiveDirectoryConfig::ATTRIBUTE_MAPPING, $attributeMapping);
-        $this->fakeConfig->SetFile(ActiveDirectoryConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::ATTRIBUTE_MAPPING, $attributeMapping);
+        $this->fakeConfig->SetFile(ActiveDirectoryConfigKeys::CONFIG_ID, $configFile);
 
         $options = new ActiveDirectoryOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
     public function testGetsDefaultAttributes()
     {
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(ActiveDirectoryConfig::ATTRIBUTE_MAPPING, '');
-        $this->fakeConfig->SetFile(ActiveDirectoryConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(ActiveDirectoryConfigKeys::ATTRIBUTE_MAPPING, '');
+        $this->fakeConfig->SetFile(ActiveDirectoryConfigKeys::CONFIG_ID, $configFile);
 
         $options = new ActiveDirectoryOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
     public function testMapsUserAttributes()
     {
-        $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'fooName',];
+        $mapping = [
+            'sn' => 'sn',
+            'givenname' => 'givenname',
+            'mail' => 'fooName',
+        ];
 
         $entry = new TestAdLdapEntry();
         $entry->sn = 'sn';

@@ -20,21 +20,21 @@ class EmailService implements IEmailService
             $phpMailer->isHTML(true);
             $phpMailer->CharSet = 'UTF-8';
 
-            $mailer = $this->Config('mailer');
+            $mailer = $this->Config(ConfigKeys::PHPMAILER_MAILER);
             if ($mailer === 'smtp') {
                 $phpMailer->isSMTP();
             } elseif ($mailer === 'sendmail') {
                 $phpMailer->isSendmail();
-                $phpMailer->Sendmail = $this->Config('sendmail.path');
+                $phpMailer->Sendmail = $this->Config(ConfigKeys::PHPMAILER_SENDMAIL_PATH);
             }
 
-            $phpMailer->Host = $this->Config('smtp.host');
-            $phpMailer->Port = $this->Config('smtp.port', new IntConverter());
-            $phpMailer->SMTPSecure = $this->Config('smtp.secure');
-            $phpMailer->SMTPAuth = $this->Config('smtp.auth', new BooleanConverter());
-            $phpMailer->Username = $this->Config('smtp.username');
-            $phpMailer->Password = $this->Config('smtp.password');
-            $phpMailer->SMTPDebug = $this->Config('smtp.debug', new BooleanConverter());
+            $phpMailer->Host = $this->Config(ConfigKeys::PHPMAILER_SMTP_HOST);
+            $phpMailer->Port = $this->Config(ConfigKeys::PHPMAILER_SMTP_PORT, new IntConverter());
+            $phpMailer->SMTPSecure = $this->Config(ConfigKeys::PHPMAILER_SMTP_SECURE);
+            $phpMailer->SMTPAuth = $this->Config(ConfigKeys::PHPMAILER_SMTP_AUTH, new BooleanConverter());
+            $phpMailer->Username = $this->Config(ConfigKeys::PHPMAILER_SMTP_USERNAME);
+            $phpMailer->Password = $this->Config(ConfigKeys::PHPMAILER_SMTP_PASSWORD);
+            $phpMailer->SMTPDebug = $this->Config(ConfigKeys::PHPMAILER_SMTP_DEBUG, new BooleanConverter());
         }
 
         $this->phpMailer = $phpMailer;
@@ -49,8 +49,8 @@ class EmailService implements IEmailService
         $this->phpMailer->Body = $emailMessage->Body();
 
         $from = $emailMessage->From();
-        $defaultFrom = Configuration::Instance()->GetSectionKey(ConfigSection::EMAIL, ConfigKeys::DEFAULT_FROM_ADDRESS);
-        $defaultName = Configuration::Instance()->GetSectionKey(ConfigSection::EMAIL, ConfigKeys::DEFAULT_FROM_NAME);
+        $defaultFrom = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
+        $defaultName = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_NAME);
         $address = empty($defaultFrom) ? $from->Address() : $defaultFrom;
         $name = empty($defaultName) ? $from->Name() : $defaultName;
         $this->phpMailer->setFrom($address, $name);
@@ -99,7 +99,7 @@ class EmailService implements IEmailService
      */
     private function Config($key, $converter = null)
     {
-        return Configuration::Instance()->GetSectionKey('phpmailer', $key, $converter);
+        return Configuration::Instance()->GetKey($key, $converter);
     }
 
     /**

@@ -344,7 +344,7 @@ class MigrationPresenter
      */
     private function TestInstallPassword()
     {
-        $password = Configuration::Instance()->GetKey(ConfigKeys::INSTALLATION_PASSWORD);
+        $password = Configuration::Instance()->GetKey(ConfigKeys::INSTALL_PASSWORD);
 
         if (empty($password) || $password != $this->page->GetInstallPassword()) {
             MigrationSession::SetPasswordOK(null);
@@ -647,7 +647,7 @@ class MigrationPresenter
                 '',
                 '',
                 Configuration::Instance()->GetDefaultTimezone(),
-                empty($row['lang']) ? Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE) : $row['lang'],
+                empty($row['lang']) ? Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE) : $row['lang'],
                 Pages::DEFAULT_HOMEPAGE_ID,
                 $row['phone'],
                 $row['institution'],

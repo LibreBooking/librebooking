@@ -6,39 +6,37 @@ class MellonOptions
 {
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/MellonConfig.php');
-
-        Configuration::Instance()->Register(dirname(__FILE__) . '/Mellon.config.php', MellonConfig::CONFIG_ID);
+        Configuration::Instance()->Register(dirname(__FILE__) . '/Mellon.config.php', '', MellonConfigKeys::CONFIG_ID, false, MellonConfigKeys::class);
     }
 
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(MellonConfig::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(MellonConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 
     public function EmailDomain()
     {
-        return $this->GetConfig(MellonConfig::EMAIL_DOMAIN);
+        return $this->GetConfig(MellonConfigKeys::EMAIL_DOMAIN);
     }
 
     public function KeyGivenName()
     {
-        return $this->GetConfig(MellonConfig::KEY_GIVEN_NAME);
+        return $this->GetConfig(MellonConfigKeys::KEY_GIVEN_NAME);
     }
 
     public function KeySurname()
     {
-        return $this->GetConfig(MellonConfig::KEY_SURNAME);
+        return $this->GetConfig(MellonConfigKeys::KEY_SURNAME);
     }
 
     public function KeyGroups()
     {
-        return $this->GetConfig(MellonConfig::KEY_GROUPS);
+        return $this->GetConfig(MellonConfigKeys::KEY_GROUPS);
     }
 
     public function GroupMappings()
     {
-        $configValue = $this->GetConfig(MellonConfig::GROUP_MAPPINGS);
+        $configValue = $this->GetConfig(MellonConfigKeys::GROUP_MAPPINGS);
         $mappings = [];
         if (!empty($configValue)) {
             $mappingPairs = explode(',', $configValue);

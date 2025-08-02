@@ -84,17 +84,17 @@ class Moodle extends Authentication implements IAuthentication
         if ($moodleCookie = $server->GetCookie($this->options->GetMoodleCookieId())) {
             $moodlesid = $_COOKIE[$this->options->GetMoodleCookieId()];
 
-            Log::Debug('Moodle authentication plugin - using Moodle session: '.$moodleCookie);
+            Log::Debug('Moodle authentication plugin - using Moodle session: ' . $moodleCookie);
 
-            require_once($this->options->GetPath().'config.php');
+            require_once($this->options->GetPath() . 'config.php');
 
-            Log::Debug('Moodle authentication plugin - Moodle config loaded from '.$this->options->GetPath().'config.php');
+            Log::Debug('Moodle authentication plugin - Moodle config loaded from ' . $this->options->GetPath() . 'config.php');
 
             // get Moodle username from existing Moodle session in database
             $moodledb = new Database(new MySqlConnection($CFG->dbuser, $CFG->dbpass, $CFG->dbhost, $CFG->dbname));
             $reader = $moodledb->Query(new GetMoodleSessionCommand($moodlesid));
-            if ($moodleuser = (object)$reader->GetRow()) {
-                Log::Debug('Moodle authentication plugin - valid Moodle user found: '.$moodleuser->username);
+            if ($moodleuser = (object) $reader->GetRow()) {
+                Log::Debug('Moodle authentication plugin - valid Moodle user found: ' . $moodleuser->username);
 
                 $userRepository = new UserRepository();
                 if ($this->user = $userRepository->LoadByUsername($moodleuser->username)) {
@@ -121,22 +121,22 @@ class Moodle extends Authentication implements IAuthentication
 
         Log::Debug('Moodle authentication plugin - Validate');
 
-        if ($username=='api') {
+        if ($username == 'api') {
             return $this->authToDecorate->Validate($username, $password);
         }
 
         Log::Debug('Attempting to authenticate user against Moodle. User=%s', $username);
 
-        require_once($this->options->GetPath().'config.php');
+        require_once($this->options->GetPath() . 'config.php');
 
-        Log::Debug('Moodle authentication plugin - Moodle config loaded from '.$this->options->GetPath().'config.php');
+        Log::Debug('Moodle authentication plugin - Moodle config loaded from ' . $this->options->GetPath() . 'config.php');
 
         $moodledb = new Database(new MySqlConnection($CFG->dbuser, $CFG->dbpass, $CFG->dbhost, $CFG->dbname));
 
         // Note: only teachers are allowed to login using their Moodle account
         // This is checked by looking at mdl_role_assignments for users with a role_id = 3
         $reader = $moodledb->Query(new GetMoodleUserCommand($username));
-        if ($moodleuser = (object)$reader->GetRow()) {
+        if ($moodleuser = (object) $reader->GetRow()) {
             require_once($this->options->GetPath() . 'lib/moodlelib.php');
 
             if (validate_internal_user_password($moodleuser, $password)) {
@@ -187,7 +187,7 @@ class Moodle extends Authentication implements IAuthentication
     {
         Log::Debug('Moodle authentication plugin - UserExists');
 
-        return ($this->user!=null) && $this->user->exists();
+        return ($this->user != null) && $this->user->exists();
     }
 
     private function Synchronize()
@@ -201,8 +201,8 @@ class Moodle extends Authentication implements IAuthentication
             $this->user->firstname,
             $this->user->lastname,
             $this->password,
-            Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
-            Configuration::Instance()->GetKey(ConfigKeys::SERVER_TIMEZONE),
+            Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
+            Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_TIMEZONE),
             null,
             null,
             null

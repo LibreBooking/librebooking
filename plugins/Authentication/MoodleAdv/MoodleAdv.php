@@ -2,6 +2,7 @@
 
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
+require_once(ROOT_DIR . 'plugins/Authentication/MoodleAdv/MoodleAdvOptions.php');
 
 class MoodleAdv extends Authentication implements IAuthentication
 {
@@ -16,6 +17,11 @@ class MoodleAdv extends Authentication implements IAuthentication
     private $_registration;
 
     /**
+     * @var MoodleAdvOptions
+     */
+    private $options;
+
+    /**
      * Needed to register user if they are logging in to Moodle but do not have a LibreBooking account yet
      */
     private function GetRegistration()
@@ -28,20 +34,9 @@ class MoodleAdv extends Authentication implements IAuthentication
     }
 
     private $db;
-
-    //
     private $retryDB;
-
-    private $moodleDBHost;
-    private $moodleDBName;
-    private $moodleDBUser;
-    private $moodleDBPass;
-    private $moodlePrefix;
-
     private $authmethod;
-
     private $moodleRoles;
-
     private $moodleField;
 
     /**
@@ -49,30 +44,15 @@ class MoodleAdv extends Authentication implements IAuthentication
      */
     public function __construct(IAuthentication $authentication)
     {
-        $moodleadv_config_path = dirname(__FILE__) . '/MoodleAdv.config.php';
-        require_once($moodleadv_config_path);
+        $this->options = new MoodleAdvOptions();
 
-        $config = Configuration::Instance();
-        $config->Register($moodleadv_config_path, 'MOODLEADV');
+        $this->authmethod = $this->options->GetAuthMethod();
 
-        $this->moodleDBHost = $config->File('MOODLEADV')->GetKey('moodleadv.dbhost');
-        $this->moodleDBName = $config->File('MOODLEADV')->GetKey('moodleadv.dbname');
-        $this->moodleDBUser = $config->File('MOODLEADV')->GetKey('moodleadv.dbuser');
-        $this->moodleDBPass = $config->File('MOODLEADV')->GetKey('moodleadv.dbpass');
-        $this->moodlePrefix = $config->File('MOODLEADV')->GetKey('moodleadv.prefix');
-
-
-        $this->authmethod = $config->File('MOODLEADV')->GetKey('moodleadv.authmethod');
-
-        switch ($this->authmethod) {
-            case 'roles':
-                $roles = $config->File('MOODLEADV')->GetKey('moodleadv.roles');
-                $this->moodleRoles = $roles ? explode(',', $roles) : [];
-                break;
-            case 'field':
-                $this->moodleField = $config->File('MOODLEADV')->GetKey('moodleadv.field');
-                break;
-        };
+        if ($this->authmethod === 'roles') {
+            $this->moodleRoles = $this->options->GetRoles();
+        } elseif ($this->authmethod === 'field') {
+            $this->moodleField = $this->options->GetField();
+        }
 
         $this->authToDecorate = $authentication;
     }
@@ -87,7 +67,8 @@ class MoodleAdv extends Authentication implements IAuthentication
         $account = $this->GetMoodleUser($username);
         if ($account && $this->user_check_password($password, $account)) {
             return true;
-        };
+        }
+        ;
         Log::Debug('MOODLEADV: User not found or wrong password');
         return false;
     }
@@ -105,7 +86,7 @@ class MoodleAdv extends Authentication implements IAuthentication
             $account->firstname,
             $account->lastname,
             '',
-            Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+            Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
             Configuration::Instance()->GetDefaultTimezone(),
             null,
             null,
@@ -141,13 +122,20 @@ class MoodleAdv extends Authentication implements IAuthentication
      */
     private function GetMoodleUser($username)
     {
-        // $db['port'] should be passed as a separate argument, per http://php.net/manual/mysqli.construct.php
-        $moodleDb = new Database(new MySqlConnection($this->moodleDBUser, $this->moodleDBPass, $this->moodleDBHost, $this->moodleDBName));
+        // Connect to Moodle database using settings from configuration
+        $moodleDb = new Database(new MySqlConnection(
+            $this->options->GetDbUser(),
+            $this->options->GetDbPass(),
+            $this->options->GetDbHost(),
+            $this->options->GetDbName()
+        ));
+
+        $prefix = $this->options->GetTablePrefix();
 
         switch ($this->authmethod) {
             case 'roles':
                 if ($m_roles = count($this->moodleRoles)) {
-                    $query = 'SELECT u.* FROM '.$this->moodlePrefix.'user u JOIN '.$this->moodlePrefix.'role_assignments a ';
+                    $query = 'SELECT u.* FROM ' . $prefix . 'user u JOIN ' . $prefix . 'role_assignments a ';
                     $query .= 'ON u.id=a.userid WHERE u.deleted=0 AND u.suspended=0 ';
                     $query .= 'AND u.username=@user AND a.roleid IN (';
                     $delimiter = '';
@@ -167,7 +155,7 @@ class MoodleAdv extends Authentication implements IAuthentication
                 }
                 break;
             case 'field':
-                $query ='SELECT u.* FROM '.$this->moodlePrefix.'user u JOIN '.$this->moodlePrefix.'user_info_data a ';
+                $query = 'SELECT u.* FROM ' . $prefix . 'user u JOIN ' . $prefix . 'user_info_data a ';
                 $query .= 'ON u.id=a.userid WHERE u.deleted=0 AND u.suspended=0 AND a.data=1 ';
                 $query .= 'AND u.username=@user AND a.fieldid=@field';
                 $command = new AdHocCommand($query);
@@ -175,7 +163,7 @@ class MoodleAdv extends Authentication implements IAuthentication
                 $command->AddParameter(new Parameter('@field', $this->moodleField));
                 break;
             case 'all':
-                $query ='SELECT u.* FROM '.$this->moodlePrefix.'user u ';
+                $query = 'SELECT u.* FROM ' . $prefix . 'user u ';
                 $query .= 'WHERE u.deleted=0 AND u.suspended=0 ';
                 $query .= 'AND u.username=@user ';
                 $command = new AdHocCommand($query);
@@ -195,7 +183,6 @@ class MoodleAdv extends Authentication implements IAuthentication
 
         return false;
     }
-
 
     public function AllowUsernameChange()
     {
@@ -231,7 +218,6 @@ class MoodleAdv extends Authentication implements IAuthentication
     {
         return false;
     }
-
 
     public function user_check_password($password, $account)
     {

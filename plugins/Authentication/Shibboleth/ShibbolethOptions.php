@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file ShibbolethOptions.php
  */
@@ -28,7 +29,10 @@ class ShibbolethOptions
         // load the plugin configuration from file.
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Shibboleth.config.php',
-            ShibbolethConfig::CONFIG_ID
+            dirname(__FILE__) . '/.env',
+            ShibbolethConfigKeys::CONFIG_ID,
+            false,
+            ShibbolethConfigKeys::class
         );
     }
 
@@ -39,7 +43,7 @@ class ShibbolethOptions
      */
     public function GetShibbolethOptions()
     {
-        if (! isset($this->_options)) {
+        if (!isset($this->_options)) {
             $this->InitShibbolethOptions();
         }
         return $this->_options;
@@ -51,12 +55,12 @@ class ShibbolethOptions
     protected function InitShibbolethOptions()
     {
         $this->_options = [];
-        $this->SetOption(ShibbolethConfig::USERNAME, $this->GetConfig(ShibbolethConfig::USERNAME));
-        $this->SetOption(ShibbolethConfig::FIRSTNAME, $this->GetConfig(ShibbolethConfig::FIRSTNAME));
-        $this->SetOption(ShibbolethConfig::LASTNAME, $this->GetConfig(ShibbolethConfig::LASTNAME));
-        $this->SetOption(ShibbolethConfig::EMAIL, $this->GetConfig(ShibbolethConfig::EMAIL));
-        $this->SetOption(ShibbolethConfig::PHONE, $this->GetConfig(ShibbolethConfig::PHONE));
-        $this->SetOption(ShibbolethConfig::ORGANIZATION, $this->GetConfig(ShibbolethConfig::ORGANIZATION));
+        $this->SetOption("shibboleth.username", $this->GetConfig(ShibbolethConfigKeys::USERNAME));
+        $this->SetOption("shibboleth.firstname", $this->GetConfig(ShibbolethConfigKeys::FIRSTNAME));
+        $this->SetOption("shibboleth.lastname", $this->GetConfig(ShibbolethConfigKeys::LASTNAME));
+        $this->SetOption("shibboleth.email", $this->GetConfig(ShibbolethConfigKeys::EMAIL));
+        $this->SetOption("shibboleth.phone", $this->GetConfig(ShibbolethConfigKeys::PHONE));
+        $this->SetOption("shibboleth.organization", $this->GetConfig(ShibbolethConfigKeys::ORGANIZATION));
     }
 
     /**
@@ -77,12 +81,12 @@ class ShibbolethOptions
     /**
      * Retrieves a configuration option value by its key.
      *
-     * @param string $keyName The config key.
+     * @param array $configDef The config key.
      * @param IConvert $converter A value converter.
      * @return mixed The config value.
      */
-    protected function GetConfig($keyName, IConvert $converter = null)
+    protected function GetConfig($configDef, IConvert $converter = null)
     {
-        return Configuration::Instance()->File(ShibbolethConfig::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(ShibbolethConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 }

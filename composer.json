@@ -27,7 +27,8 @@
         "egulias/email-validator": "^4.0",
         "phpmailer/phpmailer": "^6.10",
         "claviska/simpleimage": "^4.2",
-        "mashape/unirest-php": "^3.0"
+        "mashape/unirest-php": "^3.0",
+        "vlucas/phpdotenv": "^5.6"
     },
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",

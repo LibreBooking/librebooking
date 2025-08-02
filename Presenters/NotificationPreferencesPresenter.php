@@ -24,8 +24,8 @@ class NotificationPreferencesPresenter
 
     public function PageLoad()
     {
-        $this->page->SetEmailEnabled(Configuration::Instance()->GetKey(ConfigKeys::ENABLE_EMAIL, new BooleanConverter()));
-        $this->page->SetParticipationEnabled(!Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
+        $this->page->SetEmailEnabled(Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter()));
+        $this->page->SetParticipationEnabled(!Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
 
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $user = $this->userRepository->LoadById($userSession->UserId);

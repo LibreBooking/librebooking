@@ -4,7 +4,7 @@ class ImageUploadDirectory
 {
     public function GetDirectory()
     {
-        $uploadDir = Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_DIRECTORY);
+        $uploadDir = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
         if (is_dir($uploadDir)) {
             return $uploadDir;
         }
@@ -24,6 +24,6 @@ class ImageUploadDirectory
 
     public function GetPath()
     {
-        return Configuration::Instance()->GetScriptUrl() . '/' . Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
+        return Configuration::Instance()->GetScriptUrl() . '/' . Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
     }
 }

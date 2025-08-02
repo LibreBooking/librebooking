@@ -4,15 +4,16 @@ require_once(ROOT_DIR . '/lib/Config/namespace.php');
 
 class MoodleOptions
 {
-    public const CONFIG_ID = 'moodle';
-
     public function __construct()
     {
         require_once(dirname(__FILE__) . '/Moodle.config.php');
 
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Moodle.config.php',
-            self::CONFIG_ID
+            dirname(__FILE__) . '/.env',
+            MoodleConfigKeys::CONFIG_ID,
+            false,
+            MoodleConfigKeys::class
         );
 
         Log::Debug('Moodle authentication plugin - Moodle options loaded');
@@ -20,12 +21,12 @@ class MoodleOptions
 
     public function RetryAgainstDatabase()
     {
-        return $this->GetConfig('database.auth.when.user.not.found', new BooleanConverter());
+        return $this->GetConfig(MoodleConfigKeys::RETRY_AGAINST_DATABASE, new BooleanConverter());
     }
 
     public function GetPath()
     {
-        $path = $this->GetConfig('moodle.root.directory');
+        $path = $this->GetConfig(MoodleConfigKeys::ROOT_DIRECTORY);
 
         if (!BookedStringHelper::StartsWith($path, '/')) {
             $path = ROOT_DIR . "/$path";
@@ -39,12 +40,11 @@ class MoodleOptions
 
     public function GetMoodleCookieId()
     {
-        return $this->GetConfig('moodle.cookie.id');
+        return $this->GetConfig(MoodleConfigKeys::COOKIE_ID);
     }
 
-
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(self::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(MoodleConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 }

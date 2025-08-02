@@ -5,7 +5,7 @@ class FakeConfig extends Configuration implements IConfiguration
     public $_RegisteredFiles = [];
     public $_ScriptUrl = '';
 
-    public function Register($configFile, $configId, $overwrite = false)
+    public function Register($configFile, $envFile, $configId, $overwrite = false, $configKeysClass = null)
     {
         $this->_RegisteredFiles[$configId] = $configFile;
     }
@@ -20,14 +20,9 @@ class FakeConfig extends Configuration implements IConfiguration
         $this->_configs[$configId] = $file;
     }
 
-    public function SetKey($keyName, $value)
+    public function SetKey($configDef, $value)
     {
-        $this->File(self::DEFAULT_CONFIG_ID)->SetKey($keyName, $value);
-    }
-
-    public function SetSectionKey($section, $keyName, $value)
-    {
-        $this->File(self::DEFAULT_CONFIG_ID)->SetSectionKey($section, $keyName, $value);
+        $this->File(self::DEFAULT_CONFIG_ID)->SetKey($configDef, $value);
     }
 
     public function SetTimezone($timezone)
@@ -41,8 +36,12 @@ class FakeConfig extends Configuration implements IConfiguration
     }
 
     public function EnableSubscription()
-    {
-    }
+    { }
+
+    /**
+     * @param string $configId
+     * @return FakeConfigFile
+     */
 
     public function File($configId)
     {
@@ -61,12 +60,26 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
         parent::__construct([Configuration::SETTINGS => []]);
     }
 
-    public function GetKey($keyName, $converter = null)
+    public function GetKey($configDef, $converter = null)
     {
-        $value = null;
+        if (!is_array($configDef) || !isset($configDef['key'])) {
+            throw new InvalidArgumentException('Config definition not found"');
+        }
 
-        if (array_key_exists($keyName, $this->_values)) {
-            $value = $this->_values[$keyName];
+        $value = null;
+        $fullKey = $configDef['key'];
+        $section = $configDef['section'] ?? null;
+        $converter = $converter ?? $this->GetDefaultConverter($configDef);
+
+        if ($section !== null) {
+            $sectionKey = str_starts_with($fullKey, $section . '.') ? substr($fullKey, strlen($section) + 1) : $fullKey;
+            if (isset($this->_values[$section][$sectionKey])) {
+                $value = $this->_values[$section][$sectionKey];
+            }
+        } else {
+            if (array_key_exists($fullKey, $this->_values)) {
+                $value = $this->_values[$fullKey];
+            }
         }
 
         return $this->Convert($value, $converter);
@@ -74,24 +87,17 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function GetSectionKey($section, $keyName, $converter = null)
     {
-        $value = null;
-        if (array_key_exists($section, $this->_sections)) {
-            if (array_key_exists($keyName, $this->_sections[$section])) {
-                $value = $this->_sections[$section][$keyName];
-            }
-        }
-
-        return $this->Convert($value, $converter);
+        $this->GetKey( $keyName, $converter);
     }
 
-    public function SetKey($keyName, $value)
+    private function GetDefaultConverter(array $config): ?IConvert
     {
-        $this->_values[$keyName] = $value;
-    }
-
-    public function SetSectionKey($section, $keyName, $value)
-    {
-        $this->_sections[$section][$keyName] = $value;
+        return match ($config['type'] ?? ConfigSettingType::String) {
+            ConfigSettingType::Integer => new IntConverter(),
+            ConfigSettingType::Boolean => new BooleanConverter(),
+            ConfigSettingType::String => new StringConverter(),
+            default => null
+        };
     }
 
     protected function Convert($value, $converter)
@@ -100,7 +106,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
             return $converter->Convert($value);
         }
 
-        return $value;
+        return $value != null ? trim($value) : $value;
     }
 
     public function GetScriptUrl()
@@ -114,6 +120,29 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
     public function GetDefaultTimezone()
     {
         return 'UTC';
+    }
+
+    public function SetKey($configDef, $value)
+    {
+        if (is_array($configDef) && isset($configDef['key'])) {
+            $fullKey = $configDef['key'];
+            $section = $configDef['section'] ?? null;
+
+            if ($section !== null) {
+                $sectionKey = str_starts_with($fullKey, $section . '.') ?
+                    substr($fullKey, strlen($section) + 1) :
+                    $fullKey;
+
+                if (!isset($this->_values[$section])) {
+                    $this->_values[$section] = [];
+                }
+                $this->_values[$section][$sectionKey] = $value;
+            } else {
+                $this->_values[$fullKey] = $value;
+            }
+        } else {
+            $this->_values[$configDef] = $value;
+        }
     }
 
     public function EnableSubscription()

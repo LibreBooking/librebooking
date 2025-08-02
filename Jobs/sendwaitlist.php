@@ -15,7 +15,7 @@ Log::Debug('Running sendwaitlist.php');
 JobCop::EnsureCommandLine();
 
 try {
-    $emailEnabled = Configuration::Instance()->GetKey(ConfigKeys::ENABLE_EMAIL, new BooleanConverter());
+    $emailEnabled = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter());
     if (!$emailEnabled) {
         return;
     }

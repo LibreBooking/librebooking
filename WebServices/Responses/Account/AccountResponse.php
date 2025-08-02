@@ -60,7 +60,7 @@ class ExampleAccountResponse extends AccountResponse
     {
         $this->emailAddress = 'email@address.com';
         $this->timezone = Configuration::Instance()->GetDefaultTimezone();
-        $this->language = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+        $this->language = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         $this->userId = 1;
         $this->position = 'position';
         $this->organization = 'organization';

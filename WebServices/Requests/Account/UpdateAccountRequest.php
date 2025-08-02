@@ -12,7 +12,7 @@ class UpdateAccountRequest extends AccountRequestBase
         $request->emailAddress = 'email@address.com';
         $request->userName = 'username';
         $request->timezone = Configuration::Instance()->GetDefaultTimezone();
-        $request->language = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+        $request->language = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         $request->organization = 'organization';
         $request->phone = 'phone';
         $request->position = 'position';

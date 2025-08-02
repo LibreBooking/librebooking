@@ -389,6 +389,7 @@ class es extends en_gb
         $strings['ConfigurationUpdated'] = 'Se actualizó el fichero de configuración';
         $strings['ConfigurationUiNotEnabled'] = 'No se puede acceder a esta página porque $conf[\'settings\'][\'pages\'][\'enable.configuration\'] está configurado a Falso.';
         $strings['ConfigurationFileNotWritable'] = 'El fichero de configuración no es editable. Por favor compruebe los permisos de este fichero e inténtelo de nuevo.';
+        $strings['ConfigurationEnvWarning'] = 'Algunos valores de configuración están siendo anulados por sus variables de entorno o archivo <code>.env</code>. Es posible que solo pueda realizar cambios si elimina las variables de entorno correspondientes.';
         $strings['ConfigurationUpdateHelp'] = 'Vaya a la sección de Configuración del <a target=_blank href=%s class=link-primary>Archivo de ayuda</a> para documentación sobre estas opciones.';
         $strings['GeneralConfigSettings'] = 'opciones';
         $strings['UseSameLayoutForAllDays'] = 'Usar la misma distribución horaria para todos los días';

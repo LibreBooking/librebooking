@@ -63,9 +63,9 @@ class AdminEmailNotificationTest extends TestBase
                  ->with($this->equalTo($ownerId))
                  ->willReturn($groupAdmins);
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_ADD);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_ADD);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_ADD);
 
         $notification = new AdminEmailCreatedNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -123,9 +123,9 @@ class AdminEmailNotificationTest extends TestBase
                  ->with($this->equalTo($ownerId))
                  ->willReturn($groupAdmins);
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_UPDATE_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_UPDATE_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_UPDATE_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_UPDATE);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_UPDATE);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_UPDATE);
 
         $notification = new AdminEmailUpdatedNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -184,9 +184,9 @@ class AdminEmailNotificationTest extends TestBase
                  ->with($this->equalTo($ownerId))
                  ->willReturn($groupAdmins);
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_APPROVAL);
 
         $notification = new AdminEmailApprovalNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -215,9 +215,9 @@ class AdminEmailNotificationTest extends TestBase
         $attributeRepo = $this->createMock('IAttributeRepository');
         $userRepo = $this->createMock('IUserRepository');
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_APPROVAL);
 
         $notification = new AdminEmailApprovalNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -270,9 +270,9 @@ class AdminEmailNotificationTest extends TestBase
                  ->with($this->equalTo($ownerId))
                  ->willReturn($groupAdmins);
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_APPROVAL_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_APPROVAL);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_APPROVAL);
 
         $notification = new AdminEmailApprovalNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -330,9 +330,9 @@ class AdminEmailNotificationTest extends TestBase
                  ->with($this->equalTo($ownerId))
                  ->willReturn($groupAdmins);
 
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_DELETE_RESOURCE_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_DELETE_APPLICATION_ADMINS);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_DELETE_GROUP_ADMINS);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_DELETE);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_DELETE);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_DELETE);
 
         $notification = new AdminEmailDeletedNotification($userRepo, $userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -347,9 +347,9 @@ class AdminEmailNotificationTest extends TestBase
 
     public function testNothingSentIfConfiguredOff()
     {
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_RESOURCE_ADMINS, false);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_APPLICATION_ADMINS, false);
-        $this->EnableNotifyFor(ConfigKeys::NOTIFY_CREATE_GROUP_ADMINS, false);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_ADD, false);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_ADD, false);
+        $this->EnableNotifyFor(ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_ADD, false);
 
         $notification = new AdminEmailCreatedNotification(
             $this->createMock('IUserRepository'),
@@ -363,6 +363,6 @@ class AdminEmailNotificationTest extends TestBase
 
     private function EnableNotifyFor($configKey, $enabled = true)
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION_NOTIFY, $configKey, $enabled);
+        $this->fakeConfig->SetKey($configKey, $enabled);
     }
 }

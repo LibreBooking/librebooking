@@ -96,7 +96,7 @@ class GuestParticipationPage extends Page implements IGuestParticipationPage
 
     public function PageLoad()
     {
-        $this->Set('AllowRegistration', Configuration::Instance()->GetKey(ConfigKeys::ALLOW_REGISTRATION, new BooleanConverter()));
+        $this->Set('AllowRegistration', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
         $this->presenter->PageLoad();
     }
 

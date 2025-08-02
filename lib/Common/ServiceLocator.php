@@ -85,7 +85,7 @@ class ServiceLocator
         require_once(ROOT_DIR . 'lib/Email/namespace.php');
 
         if (self::$_emailService == null) {
-            if (Configuration::Instance()->GetKey(ConfigKeys::ENABLE_EMAIL, new BooleanConverter())) {
+            if (Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter())) {
                 self::$_emailService = new EmailService();
 //                self::$_emailService = new EmailLogger();
             } else {

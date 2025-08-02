@@ -137,7 +137,7 @@ class WordPress extends Authentication implements IAuthentication
                 $this->user->user_firstname,
                 $this->user->user_lastname,
                 $this->password,
-                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
                 Configuration::Instance()->GetDefaultTimezone(),
                 null,
                 null,

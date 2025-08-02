@@ -1062,7 +1062,7 @@ class GuestUser extends User
     {
         parent::__construct();
         $this->emailAddress = $email;
-        $this->language = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+        $this->language = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         $this->timezone = Configuration::Instance()->GetDefaultTimezone();
     }
 }

@@ -164,7 +164,7 @@ class CAS extends Authentication implements IAuthentication
                 $this->getAttribute($username, $attributes, 'givenName'),
                 $this->getAttribute($username, $attributes, 'surName'),
                 BookedStringHelper::Random(12),
-                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
                 Configuration::Instance()->GetDefaultTimezone(),
                 null,
                 null,

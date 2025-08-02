@@ -111,7 +111,7 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
     public function FormatReservationDescription(iCalendarReservationView $reservation, UserSession $user)
     {
         $factory = new SlotLabelFactory($user);
-        return $factory->Format($reservation->ReservationItemView, Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_RSS_DESCRIPTION));
+        return $factory->Format($reservation->ReservationItemView, Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_RSS_DESCRIPTION));
     }
 
     public function GetPastNumberOfDays()

@@ -10,6 +10,12 @@
         </div>
     {/if}
 
+    {if $IsEnvPresent}
+        <div class="alert alert-warning">
+            {translate key=ConfigurationEnvWarning}
+        </div>
+    {/if}
+
     <form id="frmConfigFile" method="GET" action="{$SCRIPT_NAME}" role="form">
         <div class="form-group mb-2">
             <label for="cf" class="fw-bold">{translate key=File}</label>
@@ -28,74 +34,40 @@
             {foreach from=$settings item=setting}
                 {assign value='col-sm-6' var=rowCss}
                 {assign var="name" value=$setting->Name}
+                {assign var="disabled" value=$setting->hasEnv ? 'disabled' : ''}
                 <div class="{$rowCss}">
                     <div class="form-group">
-                        <label for="{$name}" class="fw-bold">{$setting->Key}</label>
-                        {if $setting->Key == ConfigKeys::DEFAULT_TIMEZONE}
-                            <i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
-                                title="Look up here http://php.net/manual/en/timezones.php"></i>
-                            <select id="{$name}" name="{$name}" class="form-select">
+                        <label for="{$name}" class="fw-bold" data-bs-toggle="tooltip" title="{$setting->Description}">{$setting->Label} <span class="fw-normal">({$setting->Key})</span></label>
+                        {if $setting->Key == $DefaultTimezoneKey}
+                            <select id="{$name}" name="{$name}" {$disabled} class="form-select">
                                 {html_options values=$TimezoneValues output=$TimezoneOutput selected=$setting->Value}
                             </select>
-                        {elseif $setting->Key == ConfigKeys::CSS_THEME}
-                            <i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
-                                title="default, dimgray, dark_red, dark_green, french_blue, orange"></i>
-                            <input id="{$name}" type="text" size="50" name="{$name}" value="{$setting->Value|escape}"
-                                class="form-control" />
-                        {elseif $setting->Key == ConfigKeys::LANGUAGE}
-                            <i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
-                                title="Find your language in the lang directory"></i>
-                            <select id="{$name}" name="{$name}" class="form-select">
+                        {elseif $setting->Key == $DefaultLanguageKey}
+                            <select id="{$name}" name="{$name}" {$disabled} class="form-select">
                                 {object_html_options options=$Languages key='GetLanguageCode' label='GetDisplayName' selected=$setting->Value|strtolower}
                             </select>
-                        {elseif $setting->Key == ConfigKeys::DEFAULT_HOMEPAGE}
-                            <label for="default__homepage" class="visually-hidden">Homepage</label><i
-                                class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
-                                title="The default homepage to use when new users register"></i>
-                            <select id="default__homepage" name="{$name}" class="form-select">
-                                {html_options values=$HomepageValues output=$HomepageOutput selected=$setting->Value|strtolower}
+                        {elseif $setting->Key == $DefaultHomepageKey}
+                            <select id="default__homepage" name="{$name}" {$disabled} class="form-select">
+                                {html_options options=$setting->Choices  selected=$setting->Value}
                             </select> <a href="#" id="applyHomepage" class="link-primary">{translate key=ApplyToCurrentUsers}</a>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_AUTHENTICATION}
+                        {elseif $setting->IsPrivate}
+                            <input id="{$name}" type="password" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
+                        {elseif is_array($setting->Choices)}
                             <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$AuthenticationPluginValues output=$AuthenticationPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_AUTHORIZATION}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$AuthorizationPluginValues output=$AuthorizationPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_PERMISSION}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$PermissionPluginValues output=$PermissionPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_POSTREGISTRATION}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$PostRegistrationPluginValues output=$PostRegistrationPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_PRERESERVATION}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$PreReservationPluginValues output=$PreReservationPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_POSTRESERVATION}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$PostReservationPluginValues output=$PostReservationPluginValues selected=$setting->Value}
-                            </select>
-                        {elseif $setting->Key == ConfigKeys::PLUGIN_STYLING}
-                            <select id="{$name}" name="{$name}" class="form-select">
-                                {html_options values=$StylingPluginValues output=$StylingPluginValues selected=$setting->Value}
+                                {html_options options=$setting->Choices  selected=$setting->Value}
                             </select>
                         {elseif $setting->Type == ConfigSettingType::String}
-                            <input id="{$name}" type="text" size="50" name="{$name}" value="{$setting->Value|escape}"
-                                class="form-control" />
+                            <input id="{$name}" type="text" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
+                        {elseif $setting->Type == ConfigSettingType::Integer}
+                            <input id="{$name}" type="number" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
                         {else}
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" id="radio{$name}t" type="radio" value="true" name="{$name}"
-                                        {if $setting->Value == 'true'} checked="checked" {/if} />
+                                    <input class="form-check-input" id="radio{$name}t" type="radio" value="true" name="{$name}" {$disabled} {if $setting->Value} checked="checked" {/if} />
                                     <label class="form-check-label" for="radio{$name}t">{translate key="True"}</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" id="radio{$name}f" type="radio" value="false" name="{$name}"
-                                        {if $setting->Value == 'false'} checked="checked" {/if} />
+                                    <input class="form-check-input" id="radio{$name}f" type="radio" value="false" name="{$name}" {$disabled} {if !$setting->Value} checked="checked" {/if} />
                                     <label class="form-check-label" for="radio{$name}f">{translate key="False"}</label>
                                 </div>
                             </div>
@@ -132,20 +104,16 @@
                         <input type="button" value="{translate key=Update}" class='btn btn-primary save' />
                     </div>
 
-                    <form id="frmConfigSettings" method="post" ajaxAction="{ConfigActions::Update}"
-                        action="{$smarty.server.SCRIPT_NAME}">
+                    <form id="frmConfigSettings" method="post" ajaxAction="{ConfigActions::Update}" action="{$smarty.server.SCRIPT_NAME}">
                         <div class="accordion my-3" id="accordionConfig">
                             <div>
                                 <div class="accordion-item shadow mb-2">
                                     <h2 class="accordion-header text-capitalize">
-                                        <button class="accordion-button text-capitalize" type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#{translate key=GeneralConfigSettings}">
+                                        <button class="accordion-button text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{translate key=GeneralConfigSettings}">
                                             {translate key=GeneralConfigSettings}
                                         </button>
                                     </h2>
-                                    <div id="{translate key=GeneralConfigSettings}"
-                                        class="accordion-collapse collapse show">
+                                    <div id="{translate key=GeneralConfigSettings}" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
                                             <fieldset>
                                                 <div class="no-style config-settings">
@@ -161,8 +129,7 @@
                                 <div>
                                     <div class="accordion-item shadow mb-2">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed text-capitalize" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#{$section}">
+                                            <button class="accordion-button collapsed text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{$section}">
                                                 {$section}
                                             </button>
                                         </h2>
@@ -188,8 +155,7 @@
 
                 </div>
 
-                <form id="updateHomepageForm" method="post" ajaxAction="{ConfigActions::SetHomepage}"
-                    action="{$smarty.server.SCRIPT_NAME}">
+                <form id="updateHomepageForm" method="post" ajaxAction="{ConfigActions::SetHomepage}" action="{$smarty.server.SCRIPT_NAME}">
                     <input type="hidden" name="homepage_id" id="homepage_id" />
                 </form>
 
@@ -208,8 +174,7 @@
                 config.init();
             });
         </script>
-        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
-            data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static" aria-hidden="true">
             {include file="wait-box.tpl" translateKey='Working'}
         </div>
     {/if}

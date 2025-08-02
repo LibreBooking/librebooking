@@ -34,7 +34,7 @@ abstract class AccountRequestBase extends JsonRequest
     public function GetLanguage()
     {
         if (empty($this->language)) {
-            return Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         }
 
         return $this->language;

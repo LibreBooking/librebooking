@@ -142,7 +142,7 @@ class LdapTest extends TestBase
         $timezone = 'UTC';
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, $timezone);
         $languageCode = 'en_US';
-        $this->fakeConfig->SetKey(ConfigKeys::LANGUAGE, $languageCode);
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, $languageCode);
 
         $expectedUser = new AuthenticatedUser(
             $this->username,
@@ -193,20 +193,20 @@ class LdapTest extends TestBase
         $version = '3';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::HOST, $hosts);
-        $configFile->SetKey(LdapConfig::PORT, $port);
-        $configFile->SetKey(LdapConfig::BINDDN, $binddn);
-        $configFile->SetKey(LdapConfig::BINDPW, $password);
-        $configFile->SetKey(LdapConfig::BASEDN, $base);
-        $configFile->SetKey(LdapConfig::STARTTLS, $starttls);
-        $configFile->SetKey(LdapConfig::VERSION, $version);
+        $configFile->SetKey(LdapConfigKeys::HOST, $hosts);
+        $configFile->SetKey(LdapConfigKeys::PORT, $port);
+        $configFile->SetKey(LdapConfigKeys::BINDDN, $binddn);
+        $configFile->SetKey(LdapConfigKeys::BINDPW, $password);
+        $configFile->SetKey(LdapConfigKeys::BASEDN, $base);
+        $configFile->SetKey(LdapConfigKeys::STARTTLS, $starttls);
+        $configFile->SetKey(LdapConfigKeys::VERSION, $version);
 
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $ldapOptions = new LdapOptions();
         $options = $ldapOptions->Ldap2Config();
 
-        $this->assertNotNull($this->fakeConfig->_RegisteredFiles[LdapConfig::CONFIG_ID]);
+        $this->assertNotNull($this->fakeConfig->_RegisteredFiles[LdapConfigKeys::CONFIG_ID]);
         $this->assertEquals('localhost', $options['host'][0], 'domain_controllers must be an array');
         $this->assertEquals(intval($port), $options['port'], 'port should be int');
         $this->assertEquals($binddn, $options['binddn']);
@@ -221,8 +221,8 @@ class LdapTest extends TestBase
         $controllers = 'localhost, localhost.2';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::HOST, $controllers);
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(LdapConfigKeys::HOST, $controllers);
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
@@ -265,32 +265,32 @@ class LdapTest extends TestBase
         $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::ATTRIBUTE_MAPPING, $attributeMapping);
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(LdapConfigKeys::ATTRIBUTE_MAPPING, $attributeMapping);
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
     public function testGetsDefaultAttributes()
     {
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::ATTRIBUTE_MAPPING, '');
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(LdapConfigKeys::ATTRIBUTE_MAPPING, '');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
     public function testGetsUserIdAttribute()
     {
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::USER_ID_ATTRIBUTE, 'user_id');
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(LdapConfigKeys::USER_ID_ATTRIBUTE, 'user_id');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
@@ -300,8 +300,8 @@ class LdapTest extends TestBase
     public function testGetsDefaultUserIdAttribute()
     {
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfig::USER_ID_ATTRIBUTE, '');
-        $this->fakeConfig->SetFile(LdapConfig::CONFIG_ID, $configFile);
+        $configFile->SetKey(LdapConfigKeys::USER_ID_ATTRIBUTE, '');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
@@ -310,9 +310,11 @@ class LdapTest extends TestBase
 
     public function testMapsUserAttributes()
     {
-        $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'fooName',];
+        $mapping = [
+            'sn' => 'sn',
+            'givenname' => 'givenname',
+            'mail' => 'fooName',
+        ];
 
         $entry = new TestLdapEntry();
         $entry->Set('sn', 'sn');

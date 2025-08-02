@@ -67,14 +67,15 @@ class CaptchaService implements ICaptchaService
      */
     public static function Create()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ENABLE_CAPTCHA, new BooleanConverter()) ||
-            (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter()))
+        if (
+            Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_CAPTCHA_ENABLED, new BooleanConverter()) ||
+            (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter()))
         ) {
-            if (Configuration::Instance()->GetSectionKey(
-                ConfigSection::RECAPTCHA,
-                ConfigKeys::RECAPTCHA_ENABLED,
-                new BooleanConverter()
-            )
+            if (
+                Configuration::Instance()->GetKey(
+                    ConfigKeys::RECAPTCHA_ENABLED,
+                    new BooleanConverter()
+                )
             ) {
                 //				Log::Debug('Using ReCaptchaService');
                 return new ReCaptchaService();
@@ -105,9 +106,9 @@ class ReCaptchaService implements ICaptchaService
     {
         $server = ServiceLocator::GetServer();
 
-        $privatekey = Configuration::Instance()->GetSectionKey(ConfigSection::RECAPTCHA, ConfigKeys::RECAPTCHA_PRIVATE_KEY);
+        $privatekey = Configuration::Instance()->GetKey(ConfigKeys::RECAPTCHA_PRIVATE_KEY);
 
-        $configuredMethod = Configuration::Instance()->GetSectionKey(ConfigSection::RECAPTCHA, ConfigKeys::RECAPTCHA_REQUEST_METHOD);
+        $configuredMethod = Configuration::Instance()->GetKey(ConfigKeys::RECAPTCHA_REQUEST_METHOD);
         $method = new \ReCaptcha\RequestMethod\Post();
         switch ($configuredMethod)
         {

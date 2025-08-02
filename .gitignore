@@ -66,3 +66,4 @@ php8-report.log
 
 # phpunit cache
 .phpunit.cache/
+.env

@@ -314,8 +314,7 @@ class ExistingReservationTest extends TestBase
 
     public function testWhenApplyingSimpleUpdatesToFullSeriesCurrentTimesCanBeEdited()
     {
-        $this->fakeConfig->SetSectionKey(
-            ConfigSection::RESERVATION,
+        $this->fakeConfig->SetKey(
             ConfigKeys::RESERVATION_START_TIME_CONSTRAINT,
             ReservationStartTimeConstraint::CURRENT
         );
@@ -341,8 +340,7 @@ class ExistingReservationTest extends TestBase
 
     public function testWhenApplyingSimpleUpdatesToFullSeriesAndThereIsNoStartTimeConstraint()
     {
-        $this->fakeConfig->SetSectionKey(
-            ConfigSection::RESERVATION,
+        $this->fakeConfig->SetKey(
             ConfigKeys::RESERVATION_START_TIME_CONSTRAINT,
             ReservationStartTimeConstraint::NONE
         );
@@ -1073,7 +1071,7 @@ class ExistingReservationTest extends TestBase
     {
         $admin = $this->fakeUser;
         $admin->IsAdmin = true;
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'future');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'future');
         $tz = 'America/Chicago';
         Date::_SetNow(Date::Parse('2018-10-01 22:00', $tz));
 
@@ -1110,7 +1108,7 @@ class ExistingReservationTest extends TestBase
 
     public function testChangingTimeOfExistingCustomRepeat()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'none');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'none');
 
         $admin = $this->fakeUser;
         $admin->IsAdmin = false;
@@ -1171,7 +1169,7 @@ class ExistingReservationTest extends TestBase
 
     public function testAddingDateToExistingCustomRepeat()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'none');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'none');
 
         $admin = $this->fakeUser;
         $admin->IsAdmin = false;
@@ -1221,7 +1219,7 @@ class ExistingReservationTest extends TestBase
 
     public function testRemovingDateFromExistingCustomRepeat()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'future');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, 'future');
 
         $admin = $this->fakeUser;
         $admin->IsAdmin = false;

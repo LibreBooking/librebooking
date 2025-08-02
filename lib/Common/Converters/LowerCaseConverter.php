@@ -6,4 +6,9 @@ class LowerCaseConverter implements IConvert
     {
         return strtolower($value);
     }
+
+    public function IsValid($value): bool
+    {
+        return is_string($value);
+    }
 }

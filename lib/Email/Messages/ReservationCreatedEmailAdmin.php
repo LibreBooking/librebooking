@@ -155,6 +155,6 @@ class ReservationCreatedEmailAdmin extends EmailMessage
 
     private function GetFullImagePath($img)
     {
-        return Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL) . '/' . $img;
+        return Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL) . '/' . $img;
     }
 }

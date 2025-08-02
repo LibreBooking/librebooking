@@ -6,4 +6,9 @@ class IntConverter implements IConvert
     {
         return intval($value);
     }
+
+    public function IsValid($value): bool
+    {
+        return is_numeric($value) && intval($value) == $value;
+    }
 }

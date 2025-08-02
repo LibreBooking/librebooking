@@ -6,19 +6,23 @@ class CASOptions
 {
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/CASConfig.php');
-
-        Configuration::Instance()->Register(dirname(__FILE__) . '/CAS.config.php', CASConfig::CONFIG_ID);
+        Configuration::Instance()->Register(
+            dirname(__FILE__) . '/CAS.config.php',
+            dirname(__FILE__) . '/.env',
+            CASConfigKeys::CONFIG_ID,
+            false,
+            CASConfigKeys::class
+        );
     }
 
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(CASConfig::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(CASConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 
     public function IsCasDebugOn()
     {
-        return $this->GetConfig(CASConfig::CAS_DEBUG_ENABLED, new BooleanConverter());
+        return $this->GetConfig(CASConfigKeys::CAS_DEBUG_ENABLED, new BooleanConverter());
     }
 
     public function HasCertificate()
@@ -29,37 +33,37 @@ class CASOptions
 
     public function Certificate()
     {
-        return $this->GetConfig(CASConfig::CAS_CERTIFICATE);
+        return $this->GetConfig(CASConfigKeys::CAS_CERTIFICATES);
     }
 
     public function CasVersion()
     {
-        return $this->GetConfig(CASConfig::CAS_VERSION);
+        return $this->GetConfig(CASConfigKeys::CAS_VERSION);
     }
 
     public function HostName()
     {
-        return $this->GetConfig(CASConfig::CAS_SERVER_HOSTNAME);
+        return $this->GetConfig(CASConfigKeys::CAS_SERVER_HOSTNAME);
     }
 
     public function Port()
     {
-        return $this->GetConfig(CASConfig::CAS_PORT, new IntConverter());
+        return $this->GetConfig(CASConfigKeys::CAS_PORT, new IntConverter());
     }
 
     public function ServerUri()
     {
-        return $this->GetConfig(CASConfig::CAS_SERVER_URI);
+        return $this->GetConfig(CASConfigKeys::CAS_SERVER_URI);
     }
 
     public function DebugFile()
     {
-        return $this->GetConfig(CASConfig::DEBUG_FILE);
+        return $this->GetConfig(CASConfigKeys::DEBUG_FILE);
     }
 
     public function ChangeSessionId()
     {
-        return $this->GetConfig(CASConfig::CAS_CHANGESESSIONID, new BooleanConverter());
+        return $this->GetConfig(CASConfigKeys::CAS_CHANGESESSIONID, new BooleanConverter());
     }
 
     public function CasHandlesLogouts()
@@ -70,7 +74,7 @@ class CASOptions
 
     public function LogoutServers()
     {
-        $servers = $this->GetConfig(CASConfig::CAS_LOGOUT_SERVERS);
+        $servers = $this->GetConfig(CASConfigKeys::CAS_LOGOUT_SERVERS);
 
         if (empty($servers)) {
             return [];
@@ -87,22 +91,26 @@ class CASOptions
 
     public function EmailSuffix()
     {
-        return $this->GetConfig(CASConfig::EMAIL_SUFFIX);
+        return $this->GetConfig(CASConfigKeys::EMAIL_SUFFIX);
     }
+
     public function AttributeMapping()
     {
         $attributes = [
             'surName' => 'sn',
             'givenName' => 'givenname',
             'email' => 'mail',
-            'groups' => 'Role'];
-        $configValue = $this->GetConfig(CASConfig::ATTRIBUTE_MAPPING);
+            'groups' => 'Role'
+        ];
+        $configValue = $this->GetConfig(CASConfigKeys::ATTRIBUTE_MAPPING);
 
         if (!empty($configValue)) {
             $attributePairs = explode(',', $configValue);
             foreach ($attributePairs as $attributePair) {
                 $pair = explode('=', trim($attributePair));
-                $attributes[trim($pair[0])] = trim($pair[1]);
+                if (count($pair) == 2) {
+                    $attributes[trim($pair[0])] = trim($pair[1]);
+                }
             }
         }
 

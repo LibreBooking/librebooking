@@ -1,5 +1,6 @@
 <?php
 
+require_once(ROOT_DIR . 'lib/Config/PluginConfigKeys.php');
 require_once(ROOT_DIR . 'plugins/Authentication/Drupal/Drupal.config.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
@@ -9,6 +10,28 @@ define('DRUPAL_MIN_HASH_COUNT', 7);
 define('DRUPAL_MAX_HASH_COUNT', 30);
 define('DRUPAL_HASH_LENGTH', 55);
 
+
+
+class DrupalConfigKeys extends PluginConfigKeys
+{
+    public const DRUPAL_ROOT_DIR = [
+        'key' => 'drupal.root.dir',
+        'type' => 'string',
+        'default' => '/full/drupal/path',
+        'label' => 'Drupal Root Directory',
+        'description' => 'Path to the Drupal root directory',
+        'section' => 'drupal'
+    ];
+
+    public const DRUPAL_ALLOWED_ROLES = [
+        'key' => 'drupal.allowed_roles',
+        'type' => 'string',
+        'default' => '',
+        'label' => 'Allowed Drupal Roles',
+        'description' => 'Comma-separated list of Drupal roles that are allowed to log in. Leaving this parameter empty will allow all authenticated users.',
+        'section' => 'drupal'
+    ];
+}
 class Drupal extends Authentication implements IAuthentication
 {
     /**
@@ -46,14 +69,20 @@ class Drupal extends Authentication implements IAuthentication
         require_once($drupal_config_path);
 
         $config = Configuration::Instance();
-        $config->Register($drupal_config_path, 'DRUPAL');
+        $config->Register(
+            $drupal_config_path,
+            '',
+            'DRUPAL',
+            false,
+            DrupalConfigKeys::class
+        );
 
-        $drupalDir = $config->File('DRUPAL')->GetKey('drupal.root.dir');
+        $drupalDir = $config->File('DRUPAL')->GetKey(DrupalConfigKeys::DRUPAL_ROOT_DIR);
         require_once($drupalDir . '/sites/default/settings.php');
 
         $this->db = $databases['default']['default'];
 
-        $drupalRoles = $config->File('DRUPAL')->GetKey('drupal.allowed_roles');
+        $drupalRoles = $config->File('DRUPAL')->GetKey(DrupalConfigKeys::DRUPAL_ALLOWED_ROLES);
         $this->allowed_roles = $drupalRoles ? explode(',', $drupalRoles) : [];
 
         $this->authToDecorate = $authentication;
@@ -222,7 +251,7 @@ class Drupal extends Authentication implements IAuthentication
                 $hash = $this->_password_crypt('sha512', $password, $stored_hash);
                 break;
             case '$H$':
-                // phpBB3 uses "$H$" for the same thing as "$P$".
+            // phpBB3 uses "$H$" for the same thing as "$P$".
             case '$P$':
                 // A phpass password generated using md5.  This is an
                 // imported password or from an earlier Drupal version.

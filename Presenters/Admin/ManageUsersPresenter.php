@@ -242,7 +242,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             $this->page->GetLastName(),
             $this->page->GetPassword(),
             $this->page->GetTimezone(),
-            Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+            Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
             empty($defaultHomePageId) ? Pages::DEFAULT_HOMEPAGE_ID : $defaultHomePageId,
             $extraAttributes,
             $this->GetAttributeValues()
