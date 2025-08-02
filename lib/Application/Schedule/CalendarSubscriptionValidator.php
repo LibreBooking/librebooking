@@ -29,7 +29,7 @@ class CalendarSubscriptionValidator implements ICalendarExportValidator
 
     public function IsValid()
     {
-        $key = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_SUBSCRIPTION_KEY);
+        $key = Configuration::Instance()->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
         $providedKey = $this->page->GetSubscriptionKey();
 
         if (empty($key) || $providedKey != $key) {

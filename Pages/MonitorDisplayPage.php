@@ -147,6 +147,6 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
      */
     private function IsEnabled()
     {
-        return Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
+        return Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
     }
 }

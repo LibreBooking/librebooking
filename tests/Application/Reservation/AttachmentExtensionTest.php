@@ -24,7 +24,7 @@ class AttachmentExtensionTest extends TestBase
 
     public function testRuleIsValidIfExtensionIsInListWithDot()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_EXTENSIONS, '.pdf, .doc');
+        $this->fakeConfig->SetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENT_EXTENSIONS, '.pdf, .doc');
 
         $attachment = new FakeReservationAttachment();
         $attachment->SetExtension('doc');
@@ -37,7 +37,7 @@ class AttachmentExtensionTest extends TestBase
 
     public function testRuleIsValidIfExtensionIsInListWithoutDot()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_EXTENSIONS, 'pdf,doc');
+        $this->fakeConfig->SetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENT_EXTENSIONS, 'pdf,doc');
 
         $attachment = new FakeReservationAttachment();
         $attachment->SetExtension('doc');
@@ -50,7 +50,7 @@ class AttachmentExtensionTest extends TestBase
 
     public function testRuleIsValidIfExtensionListIsEmpty()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_EXTENSIONS, '');
+        $this->fakeConfig->SetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENT_EXTENSIONS, '');
 
         $attachment = new FakeReservationAttachment();
         $attachment->SetExtension('doc');
@@ -63,7 +63,7 @@ class AttachmentExtensionTest extends TestBase
 
     public function testRuleIsInvalidIfExtensionIsNotInList()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_EXTENSIONS, '.pdf');
+        $this->fakeConfig->SetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENT_EXTENSIONS, '.pdf');
 
         $attachment = new FakeReservationAttachment();
         $attachment->SetExtension('doc');

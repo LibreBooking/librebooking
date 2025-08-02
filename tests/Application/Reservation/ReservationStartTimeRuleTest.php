@@ -21,7 +21,7 @@ class ReservationStartTimeRuleTest extends TestBase
         $this->scheduleRepository = $this->createMock('IScheduleRepository');
         $this->layout = $this->createMock('IScheduleLayout');
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
     }
 
     public function teardown(): void
@@ -89,7 +89,7 @@ class ReservationStartTimeRuleTest extends TestBase
 
     public function testWhenAllowedToWorkWithCurrentSlot()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
 
         $scheduleId = 123;
         $now = Date::Parse('2011-04-04 12:13:15', 'UTC');
@@ -125,7 +125,7 @@ class ReservationStartTimeRuleTest extends TestBase
 
     public function testWhenPeriodStartTimeIsInPast()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
 
         $scheduleId = 123;
         $now = Date::Parse('2011-04-04 12:13:15', 'UTC');
@@ -161,7 +161,7 @@ class ReservationStartTimeRuleTest extends TestBase
 
     public function testWhenNotConstrainedByTime()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
         $now = Date::Parse('2011-04-04 12:13:15', 'UTC');
         Date::_SetNow($now);
         $start = Date::Parse('2011-04-04 12:13:14', 'UTC');

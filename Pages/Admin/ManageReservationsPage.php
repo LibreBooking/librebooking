@@ -357,7 +357,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
          */
         $this->pageablePage = new PageablePage($this);
 
-        $this->Set('CreditsEnabled', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('CreditsEnabled', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
         $this->SetCanUpdateResourceStatus(true);
     }
 

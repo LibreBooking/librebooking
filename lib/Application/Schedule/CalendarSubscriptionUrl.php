@@ -12,7 +12,7 @@ class CalendarSubscriptionUrl
     public function __construct($userPublicId, $schedulePublicId, $resourcePublicId)
     {
         $config = Configuration::Instance();
-        $subscriptionKey = $config->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_SUBSCRIPTION_KEY);
+        $subscriptionKey = $config->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
 
         if (empty($subscriptionKey)) {
             $this->url = new Url('#');

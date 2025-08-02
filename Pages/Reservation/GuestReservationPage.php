@@ -32,7 +32,7 @@ class GuestReservationPage extends NewReservationPage implements IGuestReservati
     {
         $this->RouteValidation();
 
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_ALLOW_GUEST_BOOKING, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter())) {
             $this->presenter = $this->GetPresenter();
             $this->presenter->PageLoad();
             $this->Set('ReturnUrl', Pages::SCHEDULE);

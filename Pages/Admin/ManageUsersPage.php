@@ -218,8 +218,8 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('ManageGroupsUrl', Pages::MANAGE_GROUPS);
         $this->Set('ManageReservationsUrl', Pages::MANAGE_RESERVATIONS);
         $this->Set('FilterStatusId', $this->GetFilterStatusId());
-        $this->Set('PerUserColors', $config->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_PER_USER_COLORS, new BooleanConverter()));
-        $this->Set('CreditsEnabled', $config->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('PerUserColors', $config->GetKey(ConfigKeys::SCHEDULE_USE_PER_USER_COLORS, new BooleanConverter()));
+        $this->Set('CreditsEnabled', $config->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
         $url = $this->server->GetUrl();
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);

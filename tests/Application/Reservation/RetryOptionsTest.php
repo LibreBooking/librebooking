@@ -20,7 +20,7 @@ class RetryOptionsTest extends TestBase
         $this->conflictIdentifier = new FakeReservationConflictIdentifier();
         $this->scheduleRepository = new FakeScheduleRepository();
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, "true");
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ENABLED, "true");
     }
 
     public function testRemovesConflictsFromReservation()

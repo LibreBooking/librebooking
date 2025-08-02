@@ -22,7 +22,7 @@ class AccountWebServiceTest extends TestBase
 
         $this->server = new FakeRestServer();
         $this->controller = new FakeAccountController();
-        $this->fakeConfig->SetSectionKey(ConfigSection::API, ConfigKeys::ALLOW_REGISTRATION, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'true');
         $this->service = new AccountWebService($this->server, $this->controller);
     }
 

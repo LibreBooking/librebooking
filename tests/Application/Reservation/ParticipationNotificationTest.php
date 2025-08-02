@@ -16,7 +16,7 @@ class ParticipationNotificationTest extends TestBase
         parent::setup();
         $this->userRepository = new FakeUserRepository();
         $this->participationNotification = new ParticipationNotification($this->userRepository);
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, 'false');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, 'false');
     }
 
     public function testWhenOwnerWantsEmails()

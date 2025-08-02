@@ -93,18 +93,18 @@ class ManageConfigurationPresenterTest extends TestBase
         $setting2 = ConfigSetting::ParseForm('key2|section1', '10');
         $setting3 = ConfigSetting::ParseForm('key3|section1', 'some string');
 
-        $expectedSettings['key1'] = 'true';
-        $expectedSettings['section1']['key2'] = '10';
-        $expectedSettings['section1']['key3'] = 'some string';
+        $newSettings['key1'] = 'true';
+        $newSettings['section1']['key2'] = '10';
+        $newSettings['section1']['key3'] = 'some string';
 
         $existingValues['oldKey1'] = 'old1';
         $existingValues['section2']['oldKey2'] = 'old2';
 
-        $newSettings['key1'] = 'true';
-        $newSettings['section1']['key2'] = '10';
-        $newSettings['section1']['key3'] = 'some string';
-        $newSettings['oldKey1'] = 'old1';
-        $newSettings['section2']['oldKey2'] = 'old2';
+        $expectedMergedSettings['key1'] = 'true';
+        $expectedMergedSettings['section1']['key2'] = '10';
+        $expectedMergedSettings['section1']['key3'] = 'some string';
+        $expectedMergedSettings['oldKey1'] = 'old1';
+        $expectedMergedSettings['section2']['oldKey2'] = 'old2';
 
         $this->page->_SubmittedSettings = [$setting1, $setting2, $setting3];
 
@@ -113,9 +113,19 @@ class ManageConfigurationPresenterTest extends TestBase
                 ->with($this->equalTo($this->configFilePath))
                 ->willReturn($existingValues);
 
+        // Expect BuildConfig to be called with the right parameters
+        $this->configSettings->expects($this->once())
+                ->method('BuildConfig')
+                ->with(
+                    $this->equalTo($existingValues),
+                    $this->equalTo($newSettings),
+                    $this->equalTo(true)
+                )
+                ->willReturn($expectedMergedSettings);
+
         $this->configSettings->expects($this->once())
                 ->method('WriteSettings')
-                ->with($this->equalTo($this->configFilePath), $this->equalTo($newSettings));
+                ->with($this->equalTo($this->configFilePath), $this->equalTo($expectedMergedSettings));
 
         $this->presenter->Update();
     }

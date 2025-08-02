@@ -110,8 +110,7 @@ class ReservationHandler implements IReservationHandler
             $view->SetCanBeRetried($validationResult->CanBeRetried());
             $view->SetRetryParameters($validationResult->GetRetryParameters());
             $view->SetRetryMessages($validationResult->GetRetryMessages());
-            $view->SetCanJoinWaitList($validationResult->CanJoinWaitList() && Configuration::Instance()->GetSectionKey(
-                ConfigSection::RESERVATION,
+            $view->SetCanJoinWaitList($validationResult->CanJoinWaitList() && Configuration::Instance()->GetKey(
                 ConfigKeys::RESERVATION_ALLOW_WAITLIST,
                 new BooleanConverter()
             ));

@@ -270,13 +270,13 @@ class ReservationListItem
 
     private function GetIsNew()
     {
-        $newMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
+        $newMinutes = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
         return $this->item->GetIsNew($newMinutes);
     }
 
     private function GetIsUpdated()
     {
-        $updatedMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
+        $updatedMinutes = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
         return $this->item->GetIsUpdated($updatedMinutes);
     }
 

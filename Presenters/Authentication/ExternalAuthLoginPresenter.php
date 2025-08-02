@@ -49,9 +49,9 @@ class ExternalAuthLoginPresenter
     private function ProcessGoogleSingleSignOn()
     {
         $client = new Google\Client();
-        $client->setClientId(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_CLIENT_ID));
-        $client->setClientSecret(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_CLIENT_SECRET));
-        $client->setRedirectUri(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_REDIRECT_URI));
+        $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
+        $client->setClientSecret(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET));
+        $client->setRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI));
         $client->addScope("email");
         $client->addScope("profile");
 
@@ -84,13 +84,13 @@ class ExternalAuthLoginPresenter
             $code = filter_input(INPUT_GET, 'code');
 
             $tokenEndpoint = 'https://login.microsoftonline.com/'
-                . urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_TENANT_ID))
+                . urlencode(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID))
                 . '/oauth2/v2.0/token';
 
             $postData = [
-                'client_id' => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_CLIENT_ID),
-                'client_secret' => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_CLIENT_SECRET),
-                'redirect_uri' => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_REDIRECT_URI),
+                'client_id' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID),
+                'client_secret' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_SECRET),
+                'redirect_uri' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI),
                 'code' => $code, // The authorization code obtained earlier
                 'grant_type' => 'authorization_code',
                 'scope' => 'user.read',
@@ -139,8 +139,8 @@ class ExternalAuthLoginPresenter
     {
 
         $facebook_Client = new Facebook\Facebook([
-            'app_id'                => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_ID),
-            'app_secret'            => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_SECRET),
+            'app_id'                => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_ID),
+            'app_secret'            => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_SECRET),
             'default_graph_version' => 'v2.5'
         ]);
 
@@ -164,11 +164,11 @@ class ExternalAuthLoginPresenter
     {
         $code = $_GET['code'];
 
-        $keycloakUrl  = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_URL);
-        $realm        = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REALM);
-        $clientId     = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_CLIENT_ID);
-        $clientSecret = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_CLIENT_SECRET);
-        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REDIRECT_URI);
+        $keycloakUrl  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL);
+        $realm        = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
+        $clientId     = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
+        $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_SECRET);
+        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI);
 
         $tokenEndpoint = rtrim($keycloakUrl, '/') . '/realms/' . urlencode($realm) . '/protocol/openid-connect/token';
 
@@ -235,11 +235,11 @@ class ExternalAuthLoginPresenter
     {
         $code = $_GET['code'];
 
-        $oauth2UrlToken  = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_URL_TOKEN);
-        $oauth2UrlUserinfo = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_URL_USERINFO);
-        $clientId     = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_CLIENT_ID);
-        $clientSecret = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_CLIENT_SECRET);
-        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_REDIRECT_URI);
+        $oauth2UrlToken  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_TOKEN);
+        $oauth2UrlUserinfo = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_USERINFO);
+        $clientId     = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
+        $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_SECRET);
+        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI);
 
         // Prepare the POST data for the token request.
         $postData = [

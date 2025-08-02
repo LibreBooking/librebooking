@@ -149,7 +149,7 @@ class ReservationUpdatePresenter implements IReservationUpdatePresenter
             $existingSeries->RemoveEndReminder();
         }
 
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
             $layout = $this->scheduleRepository->GetLayout($existingSeries->ScheduleId(), new ScheduleLayoutFactory($this->userSession->Timezone));
             $existingSeries->CalculateCredits($layout);
         }

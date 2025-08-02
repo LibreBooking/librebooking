@@ -39,7 +39,7 @@ class iCalendarReservationView
     public function __construct($res, UserSession $currentUser, IPrivacyFilter $privacyFilter, $summaryFormat = null)
     {
         if ($summaryFormat == null) {
-            $summaryFormat = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
+            $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
         }
         $factory = new SlotLabelFactory($currentUser);
         $this->ReservationItemView = $res;

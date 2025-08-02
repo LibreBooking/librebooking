@@ -126,7 +126,7 @@ class ManageUsersServiceTest extends TestBase
 
     public function testDeleteDelegatesToRepositoryAndSendsEmails()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_NOTIFY, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_NOTIFY_ADMIN, 'true');
 
         $userId = 809;
         $user = new FakeUser($userId);

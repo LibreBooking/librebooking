@@ -60,8 +60,8 @@ class CalendarSubscriptionPresenter
         $daysAgo = $this->page->GetPastNumberOfDays();
         $daysAhead = $this->page->GetFutureNumberOfDays();
 
-        $pastDays = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_PAST_DAYS, new IntConverter());
-        $futureDays = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_FUTURE_DAYS, new IntConverter());
+        $pastDays = Configuration::Instance()->GetKey(ConfigKeys::ICS_PAST_DAYS, new IntConverter());
+        $futureDays = Configuration::Instance()->GetKey(ConfigKeys::ICS_FUTURE_DAYS, new IntConverter());
         if ($futureDays == 0) {
             $futureDays = 30;
         }
@@ -81,7 +81,7 @@ class CalendarSubscriptionPresenter
         $reservations = [];
         $res = [];
 
-        $summaryFormat = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
+        $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
 
         $reservationUserLevel = ReservationUserLevel::OWNER;
         if (!empty($scheduleId)) {
@@ -101,7 +101,7 @@ class CalendarSubscriptionPresenter
             $user = $this->subscriptionService->GetUser($userId);
             $uid = $user->Id();
             $reservationUserLevel = ReservationUserLevel::ALL;
-            $summaryFormat = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_MY_ICS_SUMMARY);
+            $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY);
         }
         if (!empty($resourceGroupId)) {
             $resourceIds = $this->subscriptionService->GetResourcesInGroup($resourceGroupId);

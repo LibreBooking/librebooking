@@ -47,8 +47,8 @@ class ReservationCreditsPresenterTest extends TestBase
             $this->paymentRepository
         );
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, 'true');
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ALLOW_PURCHASE, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ALLOW_PURCHASE, 'true');
     }
 
     public function testReturnsNumberOfCreditsConsumedForNewReservation()

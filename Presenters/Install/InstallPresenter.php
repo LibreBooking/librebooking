@@ -37,9 +37,9 @@ class InstallPresenter
             return;
         }
 
-        $dbname = Configuration::Instance()->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_NAME);
-        $dbuser = Configuration::Instance()->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_USER);
-        $dbhost = Configuration::Instance()->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_HOSTSPEC);
+        $dbname = Configuration::Instance()->GetKey(ConfigKeys::DATABASE_NAME);
+        $dbuser = Configuration::Instance()->GetKey(ConfigKeys::DATABASE_USER);
+        $dbhost = Configuration::Instance()->GetKey(ConfigKeys::DATABASE_HOSTSPEC);
 
         $this->page->SetDatabaseConfig($dbname, $dbuser, $dbhost);
 

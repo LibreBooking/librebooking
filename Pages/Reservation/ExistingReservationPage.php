@@ -142,7 +142,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
 
     public function PageLoad()
     {
-        $this->Set('CanJoinWaitList', Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_ALLOW_WAITLIST, new BooleanConverter()));
+        $this->Set('CanJoinWaitList', Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_ALLOW_WAITLIST, new BooleanConverter()));
         parent::PageLoad();
     }
 

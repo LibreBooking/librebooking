@@ -218,7 +218,7 @@ class ReservationView
 
     public function IsCheckinAvailable()
     {
-        $checkinMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_MINUTES, new IntConverter());
+        $checkinMinutes = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_CHECKIN_MINUTES_PRIOR, new IntConverter());
 
         if ($this->CheckinDate->ToString() == '' && Date::Now()->AddMinutes($checkinMinutes)->GreaterThanOrEqual($this->StartDate)) {
             return $this->IsCheckinEnabled();

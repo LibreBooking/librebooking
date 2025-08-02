@@ -74,8 +74,7 @@ class UsersWebService
     {
         $responseCode = RestResponse::OK_CODE;
 
-        $hideUsers = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
+        $hideUsers = Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
             new BooleanConverter()
         );

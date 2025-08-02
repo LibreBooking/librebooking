@@ -28,7 +28,7 @@ class SlackPresenterTest extends TestBase
         $this->presenter = new SlackPresenter($this->page, $this->resourceRepository);
 
         $this->fakeConfig->_ScriptUrl = 'http://something/Web';
-        $this->fakeConfig->SetSectionKey(ConfigSection::SLACK, ConfigKeys::SLACK_TOKEN, 'token');
+        $this->fakeConfig->SetKey(ConfigKeys::SLACK_TOKEN, 'token');
     }
 
     public function testWhenResourceNameIsProvided_AndFound_ReturnLinkToResource()

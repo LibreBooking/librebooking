@@ -78,7 +78,7 @@ class CalendarPresenterTest extends TestBase
     public function testBindsDefaultScheduleByMonthWhenNothingSelected()
     {
         $showInaccessible = true;
-        $this->fakeConfig->SetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, 'true');
 
         $userId = $this->fakeUser->UserId;
         $defaultScheduleId = 10;

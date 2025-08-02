@@ -22,7 +22,7 @@ class ReservationStartTimeRule implements IReservationValidationRule
      */
     public function Validate($reservationSeries, $retryParameters)
     {
-        $constraint = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT);
+        $constraint = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT);
 
         if (empty($constraint)) {
             $constraint = ReservationStartTimeConstraint::_DEFAULT;

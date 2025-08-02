@@ -109,7 +109,7 @@ class ReservationComponentTest extends TestBase
                                        ->with($this->fakeUser)
                                        ->willReturn(true);
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
         $this->initializer->expects($this->once())
                           ->method('SetShowParticipation')
                           ->with($this->equalTo(false));
@@ -713,7 +713,7 @@ class ReservationComponentTest extends TestBase
 
     public function testCheckInIsRequiredIfAtLeastOneResourceRequiresIt_And_ReservationIsNotCheckedIn_And_WithinCheckinWindow()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_MINUTES, 5);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_CHECKIN_MINUTES_PRIOR, 5);
 
         $page = new FakeExistingReservationPage();
         $this->reservationView->StartDate = Date::Now()->AddMinutes(4);
@@ -746,7 +746,7 @@ class ReservationComponentTest extends TestBase
 
     public function testCheckInNotRequiredIfCheckedIn()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_MINUTES, 5);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_CHECKIN_MINUTES_PRIOR, 5);
 
         $page = new FakeExistingReservationPage();
         $this->reservationView->StartDate = Date::Now()->AddMinutes(4);

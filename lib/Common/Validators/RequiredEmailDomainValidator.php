@@ -13,7 +13,7 @@ class RequiredEmailDomainValidator extends ValidatorBase implements IValidator
     {
         $this->isValid = true;
 
-        $domains = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_REQUIRED_EMAIL_DOMAINS);
+        $domains = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_REQUIRED_EMAIL_DOMAINS);
 
         if (empty($domains)) {
             return;

@@ -116,27 +116,24 @@ class AdminEmailCreatedNotification extends AdminEmailNotification
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_CREATE_RESOURCE_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_ADD,
             new BooleanConverter()
         );
     }
 
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_CREATE_APPLICATION_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_ADD,
             new BooleanConverter()
         );
     }
 
     protected function SendForGroupAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_CREATE_GROUP_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_ADD,
             new BooleanConverter()
         );
     }
@@ -151,9 +148,8 @@ class AdminEmailUpdatedNotification extends AdminEmailNotification
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_UPDATE_RESOURCE_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_UPDATE,
             new BooleanConverter()
         );
     }
@@ -161,18 +157,16 @@ class AdminEmailUpdatedNotification extends AdminEmailNotification
 
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_UPDATE_APPLICATION_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_UPDATE,
             new BooleanConverter()
         );
     }
 
     protected function SendForGroupAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_UPDATE_GROUP_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_UPDATE,
             new BooleanConverter()
         );
     }
@@ -187,9 +181,8 @@ class AdminEmailDeletedNotification extends AdminEmailNotification
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_DELETE_RESOURCE_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_DELETE,
             new BooleanConverter()
         );
     }
@@ -197,18 +190,16 @@ class AdminEmailDeletedNotification extends AdminEmailNotification
 
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_DELETE_APPLICATION_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_DELETE,
             new BooleanConverter()
         );
     }
 
     protected function SendForGroupAdmins(ReservationSeries $reservationSeries)
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_DELETE_GROUP_ADMINS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_DELETE,
             new BooleanConverter()
         );
     }
@@ -224,30 +215,27 @@ class AdminEmailApprovalNotification extends AdminEmailNotification
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
     {
         return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_APPROVAL_RESOURCE_ADMINS,
-            new BooleanConverter()
-        );
+            Configuration::Instance()->GetKey(
+                ConfigKeys::RESERVATION_NOTIFY_RESOURCE_ADMIN_APPROVAL,
+                new BooleanConverter()
+            );
     }
 
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
         return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_APPROVAL_APPLICATION_ADMINS,
-            new BooleanConverter()
-        );
+            Configuration::Instance()->GetKey(
+                ConfigKeys::RESERVATION_NOTIFY_APPLICATION_ADMIN_APPROVAL,
+                new BooleanConverter()
+            );
     }
 
     protected function SendForGroupAdmins(ReservationSeries $reservationSeries)
     {
         return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_NOTIFY,
-            ConfigKeys::NOTIFY_APPROVAL_GROUP_ADMINS,
-            new BooleanConverter()
-        );
+            Configuration::Instance()->GetKey(
+                ConfigKeys::RESERVATION_NOTIFY_GROUP_ADMIN_APPROVAL,
+                new BooleanConverter()
+            );
     }
 }

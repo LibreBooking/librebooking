@@ -47,7 +47,7 @@ class ReservationHandlerTest extends TestBase
 
     public function testPreventsPersistenceAndNotificationAndShowsFailedMessageWhenValidationFails()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_ALLOW_WAITLIST, true);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_ALLOW_WAITLIST, true);
         $persistenceService = $this->createMock('IReservationPersistenceService');
         $validationService = $this->createMock('IReservationValidationService');
         $notificationService = $this->createMock('IReservationNotificationService');

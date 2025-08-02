@@ -10,7 +10,7 @@ class Paths
      */
     public static function ReservationAttachments()
     {
-        $uploadDir = Configuration::Instance()->GetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_ATTACHMENTS);
+        $uploadDir = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENT_PATH);
 
         if (empty($uploadDir)) {
             $uploadDir = dirname(__FILE__) . '/' . ROOT_DIR . 'uploads/reservation';

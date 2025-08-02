@@ -21,7 +21,7 @@ class CreditsRule implements IReservationValidationRule
 
     public function Validate($reservationSeries, $retryParameters)
     {
-        if (!Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
             return new ReservationRuleResult();
         }
 

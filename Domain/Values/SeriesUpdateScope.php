@@ -208,10 +208,7 @@ class SeriesUpdateScope_Full extends SeriesUpdateScopeBase
      */
     public function EarliestDateToKeep($series)
     {
-        $startTimeConstraint = Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION,
-            ConfigKeys::RESERVATION_START_TIME_CONSTRAINT
-        );
+        $startTimeConstraint = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT);
 
         if (ReservationStartTimeConstraint::IsCurrent($startTimeConstraint)) {
             return $series->CurrentInstance()->StartDate();

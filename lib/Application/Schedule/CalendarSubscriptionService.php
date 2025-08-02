@@ -84,7 +84,7 @@ class CalendarSubscriptionDetails
      */
     public function IsEnabled()
     {
-        $key = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_SUBSCRIPTION_KEY);
+        $key = Configuration::Instance()->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
         return !empty($key);
     }
 

@@ -150,10 +150,7 @@ class CalendarReservation
 
         $res->Title = $reservation->Title;
         $res->Description = $reservation->Description;
-        $res->DisplayTitle = $factory->Format($reservation, Configuration::Instance()->GetSectionKey(
-            ConfigSection::RESERVATION_LABELS,
-            ConfigKeys::RESERVATION_LABELS_MY_CALENDAR
-        ));
+        $res->DisplayTitle = $factory->Format($reservation, Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_MY_CALENDAR));
         $res->Invited = $reservation->UserLevelId == ReservationUserLevel::INVITEE;
         $res->Participant = $reservation->UserLevelId == ReservationUserLevel::PARTICIPANT;
         $res->Owner = $reservation->UserLevelId == ReservationUserLevel::OWNER;
@@ -218,10 +215,7 @@ class CalendarReservation
             $cr->OwnerName = new FullName($reservation->FirstName, $reservation->LastName);
             $cr->OwnerFirst = $reservation->FirstName;
             $cr->OwnerLast = $reservation->LastName;
-            $cr->DisplayTitle = $factory->Format($reservation, Configuration::Instance()->GetSectionKey(
-                ConfigSection::RESERVATION_LABELS,
-                ConfigKeys::RESERVATION_LABELS_RESOURCE_CALENDAR
-            ));
+            $cr->DisplayTitle = $factory->Format($reservation, Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_RESOURCE_CALENDAR));
             $color = $reservation->GetColor();
             if (!empty($color)) {
                 $cr->Color = $reservation->GetColor() . ' !important';

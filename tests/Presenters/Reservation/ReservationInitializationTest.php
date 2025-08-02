@@ -184,8 +184,8 @@ class ReservationInitializationTest extends TestBase
             ->method('SetEndReminder')
             ->with($this->equalTo('2'), $this->equalTo('days'));
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_REMINDER, '10 minutes');
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_END_REMINDER, '2 days');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_REMINDER_DEFAULT_START, '10 minutes');
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_REMINDER_DEFAULT_END, '2 days');
         $this->initializer->Initialize();
     }
 }

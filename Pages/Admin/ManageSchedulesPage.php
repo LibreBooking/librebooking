@@ -273,7 +273,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
             new GroupRepository()
         );
 
-        $this->Set('CreditsEnabled', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('CreditsEnabled', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
     }
 
     public function ProcessPageLoad()

@@ -241,7 +241,7 @@ class ResourceDisplayPresenter extends ActionPresenter
         $reservationDate = Date::Parse($this->page->GetBeginDate(), $timezone)->Format('Y-m-d ');
         $date = DateRange::Create($reservationDate . $this->page->GetBeginTime(), $reservationDate . $this->page->GetEndTime(), $timezone);
 
-        $maxFutureDays = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
+        $maxFutureDays = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
         if ($maxFutureDays == 0) {
             $maxFutureDays = 1;
         }
@@ -299,7 +299,7 @@ class ResourceDisplayPresenter extends ActionPresenter
     {
         if ($action == 'reserve') {
             $this->page->RegisterValidator('emailformat', new EmailValidator($this->page->GetEmail()));
-            if (!Configuration::Instance()->GetSectionKey(ConfigSection::TABLET_VIEW, ConfigKeys::TABLET_VIEW_ALLOW_GUESTS, new BooleanConverter())) {
+            if (!Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_ALLOW_GUEST_RESERVATIONS, new BooleanConverter())) {
                 $this->page->RegisterValidator('guestdenied', new RestrictedGuestValidator($this->page->GetEmail(), $this->guestUserService));
             }
         }

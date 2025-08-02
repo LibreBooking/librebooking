@@ -127,8 +127,8 @@ class NewReservationInitializer extends ReservationInitializerBase
 
     private function SetDefaultReminders()
     {
-        $start = $this->GetReminderPieces(Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_REMINDER));
-        $end = $this->GetReminderPieces(Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_END_REMINDER));
+        $start = $this->GetReminderPieces(Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_REMINDER_DEFAULT_START));
+        $end = $this->GetReminderPieces(Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_REMINDER_DEFAULT_END));
 
         if ($start != null) {
             $this->page->SetStartReminder($start['value'], $start['interval']);

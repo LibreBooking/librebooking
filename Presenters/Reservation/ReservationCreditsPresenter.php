@@ -43,7 +43,7 @@ class ReservationCreditsPresenter
 
     public function PageLoad(UserSession $userSession)
     {
-        if (!Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
             $this->page->SetCreditRequired(0, null);
             return;
         }
@@ -54,7 +54,7 @@ class ReservationCreditsPresenter
         $creditsRequired = $reservation->GetCreditsRequired();
 
         $cost = '';
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter())) {
             $creditCost = $this->paymentRepository->GetCreditCosts();
             // Only give an estimation of costs if there is only one cost configured
             if (count($creditCost) == 1) {

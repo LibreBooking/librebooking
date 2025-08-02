@@ -36,7 +36,7 @@ class ReservationAuthorizationTest extends TestBase
 
     public function testCanEditIfTheCurrentUserIsTheOwnerIfReservationHasNotBegun()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
         $futureDate = Date::Now()->AddDays(1);
 
         $reservationView = new ReservationView();
@@ -51,7 +51,7 @@ class ReservationAuthorizationTest extends TestBase
 
     public function testCanEditIfTheCurrentUserIsTheOwnerIfReservationHasNotEnded()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
         $future = Date::Now()->AddDays(1);
 
         $reservationView = new ReservationView();
@@ -66,7 +66,7 @@ class ReservationAuthorizationTest extends TestBase
 
     public function testCanEditIfTheCurrentUserIsTheOwnerAndThereIsNoConstraint()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
         $past = Date::Now()->AddDays(-11);
 
         $reservationView = new ReservationView();
@@ -81,7 +81,7 @@ class ReservationAuthorizationTest extends TestBase
 
     public function testIsNotEditableIfReservationHasBegunAndCurrentUserIsNotAdmin()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
         $past = Date::Now()->AddDays(-1);
 
         $reservationView = new ReservationView();
@@ -96,7 +96,7 @@ class ReservationAuthorizationTest extends TestBase
 
     public function testIsNotEditableIfReservationHasEndedAndCurrentUserIsNotAdmin()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::CURRENT);
         $past = Date::Now()->AddDays(-1);
 
         $reservationView = new ReservationView();
