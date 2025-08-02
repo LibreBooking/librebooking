@@ -107,23 +107,24 @@ X-WR-CALNAME:Testkalender
 X-WR-TIMEZONE:Europe/Berlin
 X-WR-CALDESC:Nur zum testen vom Google Kalender
 BEGIN:VEVENT
-ATTENDEE;CN="Page, Larry <l.page@google.com> (l.page@google.com)";ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:l.page@google.com
-ATTENDEE;CN="Brin, Sergey <s.brin@google.com> (s.brin@google.com)";ROLE=REQ-PARTICIPANT;RSVP=TRUE:mailto:s.brin@google.com
+ATTENDEE;CN="Page, Larry <l.page@google.com> (l.page@google.com)";
+ ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:l.page@google.com
+ATTENDEE;CN="Page, Larry <l.page@google.com> (l.page@google.com)";
+ ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:l.page@google.com
 DTSTART;VALUE=DATE:20160112
 DTEND;VALUE=DATE:20160116
 DTSTAMP;TZID="GMT Standard Time":20110121T195741Z
 UID:1koigufm110c5hnq6ln57murd4@google.com
 CREATED:20110119T142901Z
-DESCRIPTION;LANGUAGE=en-gb:Project xyz Review Meeting Minutes\n
- Agenda\n1. Review of project version 1.0 requirements.\n2.
- Definition
-  of project processes.\n3. Review of project schedule.\n
- Participants: John Smith, Jane Doe, Jim Dandy\n-It was
-  decided that the requirements need to be signed off by
-  product marketing.\n-Project processes were accepted.\n
+DESCRIPTION;LANGUAGE=en-gb:Project xyz Review Meeting Minutes
+ Agenda 1. Review of project version 1.0 requirements. 2.
+ Definition of project processes.\\n3. Review of project schedule.
+ Participants: John Smith, Jane Doe, Jim Dandy\\n-It was
+ decided that the requirements need to be signed off by
+ product marketing.\\n-Project processes were accepted.\\n
  -Project schedule needs to account for scheduled holidays
-  and employee vacation time. Check with HR for specific
-  dates.\n-New schedule will be distributed by Friday.\n-
+ and employee vacation time. Check with HR for specific
+ dates.\\n-New schedule will be distributed by Friday.\\n-
  Next weeks meeting is cancelled. No meeting until 3/23.
 LAST-MODIFIED:20150409T150000Z
 LOCATION:name1
