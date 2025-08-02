@@ -39,7 +39,7 @@ return [
         'database.auth.when.ldap.user.not.found' => false,
 
         // if LDAP2 should use debug logging
-        'ldap.debug.enabled' =>false,
+        'ldap.debug.enabled' => false,
 
         // mapping of required attributes to attribute names in your directory
         'attribute.mapping' => 'sn=sn,givenname=givenname,mail=mail,telephonenumber=telephonenumber,physicaldeliveryofficename=physicaldeliveryofficename,title=title',

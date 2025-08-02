@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/PluginConfigKeys.php');
+require_once(ROOT_DIR . 'plugins/Authentication/Drupal/DrupalConfigKeys.php');
 require_once(ROOT_DIR . 'plugins/Authentication/Drupal/Drupal.config.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
@@ -12,26 +12,6 @@ define('DRUPAL_HASH_LENGTH', 55);
 
 
 
-class DrupalConfigKeys extends PluginConfigKeys
-{
-    public const DRUPAL_ROOT_DIR = [
-        'key' => 'drupal.root.dir',
-        'type' => 'string',
-        'default' => '/full/drupal/path',
-        'label' => 'Drupal Root Directory',
-        'description' => 'Path to the Drupal root directory',
-        'section' => 'drupal'
-    ];
-
-    public const DRUPAL_ALLOWED_ROLES = [
-        'key' => 'drupal.allowed_roles',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Allowed Drupal Roles',
-        'description' => 'Comma-separated list of Drupal roles that are allowed to log in. Leaving this parameter empty will allow all authenticated users.',
-        'section' => 'drupal'
-    ];
-}
 class Drupal extends Authentication implements IAuthentication
 {
     /**

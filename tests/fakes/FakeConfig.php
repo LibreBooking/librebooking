@@ -63,7 +63,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
     public function GetKey($configDef, $converter = null)
     {
         if (!is_array($configDef) || !isset($configDef['key'])) {
-            throw new InvalidArgumentException('Config definition not found"');
+            throw new InvalidArgumentException('Config definition not found');
         }
 
         $value = null;
@@ -87,7 +87,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function GetSectionKey($section, $keyName, $converter = null)
     {
-        $this->GetKey( $keyName, $converter);
+        return $this->GetKey( $keyName, $converter);
     }
 
     private function GetDefaultConverter(array $config): ?IConvert

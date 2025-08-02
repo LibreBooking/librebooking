@@ -108,7 +108,7 @@ class CASOptions
             $attributePairs = explode(',', $configValue);
             foreach ($attributePairs as $attributePair) {
                 $pair = explode('=', trim($attributePair));
-                if (count($pair) == 2) {
+                if (count($pair) === 2) {
                     $attributes[trim($pair[0])] = trim($pair[1]);
                 }
             }
