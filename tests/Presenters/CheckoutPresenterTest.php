@@ -92,7 +92,7 @@ class CheckoutPresenterTest extends TestBase
 
         $gateway = new FakePayPalGateway();
         $this->paymentRepository->_PayPal = $gateway;
-        $gateway->_Payment->state = "approved";
+        $gateway->_Payment->status = "COMPLETED";
 
         $this->presenter->ExecutePayPalPayment();
 

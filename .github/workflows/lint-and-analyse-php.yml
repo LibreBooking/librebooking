@@ -72,11 +72,29 @@ jobs:
           # Ignore zip for php-webdriver/webdriver
           composer-options: "--ignore-platform-req=ext-zip"
 
-      - name: Create config.php for unit tests
+      - name: Create main config.php for unit tests
         run: cp config/config.dist.php config/config.php
 
+      - name: Create plugin config.php for unit tests
+        run: |
+          for source in $(find plugins -type f -name "*dist*"); do
+            target=$(echo "${source}" | sed -e "s/.dist//")
+            if ! [ -f "config/$(basename ${target})" ]; then
+              cp --no-clobber "${source}" "config/$(basename ${target})"
+              sudo chown www-data:www-data "config/$(basename ${target})"
+            fi
+            if ! [ -f ${target} ]; then
+              ln -s "config/$(basename ${target})" "${target}"
+            fi
+          done
+
       - name: Unit Tests
-        run: composer phpunit
+        run: |
+          composer phpunit | tee phpunit.log
+           if ! grep -qE "Tests:|OK \(" phpunit.log; then
+            echo "❌ PHPUnit exited early (no summary line found)"
+            exit 1
+          fi
 
   lint-php-files:
     runs-on: ubuntu-latest

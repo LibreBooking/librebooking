@@ -532,7 +532,7 @@ parameters:
 			message: '#^Access to an undefined property TestAdLdapEntry\:\:\$fooName\.$#'
 			identifier: property.notFound
 			count: 1
-			path: tests/Plugins/Authentication/ActiveDirectory/ActiveDirectoryTest_BROKEN.php
+			path: tests/Plugins/Authentication/ActiveDirectory/ActiveDirectoryTest.php
 
 		-
 			message: '#^PHPDoc tag @var with type array\<Attribute\> is not subtype of native type array\{LBAttribute\}\.$#'

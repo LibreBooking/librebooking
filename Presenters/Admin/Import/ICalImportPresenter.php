@@ -98,14 +98,14 @@ class ICalImportPresenter extends ActionPresenter
 
         foreach ($events as $event) {
             try {
-                if (empty($event->LOCATION)) {
+                $location = (string) $event->LOCATION;
+                if (empty($location)) {
                     $numberSkipped++;
                     Log::Debug('Skipping ics import - missing resource');
                     continue;
                 }
 
-                $location = (string)$event->LOCATION;
-                $organizer = isset($event->ORGANIZER) ? (string)$event->ORGANIZER : '';
+                $organizer = isset($event->ORGANIZER) ? (string) $event->ORGANIZER : '';
 
                 $user = $this->GetOrCreateUser($organizer);
                 $resource = $this->GetOrCreateResource($location);

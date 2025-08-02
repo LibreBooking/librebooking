@@ -14,6 +14,13 @@ class EmailValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
+        // Check for null or empty email first
+        if (empty($this->email)) {
+            $this->isValid = false;
+            $this->AddMessageKey('ValidEmailRequired');
+            return;
+        }
+
         $validator = new EguliasValidator();
         $this->isValid = $validator->isValid($this->email, new RFCValidation());
 
