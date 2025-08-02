@@ -517,18 +517,6 @@ parameters:
 			path: tests/Domain/Schedule/ScheduleRepositoryTest.php
 
 		-
-			message: '#^Call to an undefined method IConfigurationFile\:\:File\(\)\.$#'
-			identifier: method.notFound
-			count: 3
-			path: tests/Infrastructure/Config/ConfigTest.php
-
-		-
-			message: '#^Call to an undefined method IConfigurationFile\:\:Register\(\)\.$#'
-			identifier: method.notFound
-			count: 3
-			path: tests/Infrastructure/Config/ConfigTest.php
-
-		-
 			message: '#^Access to an undefined property TestAdLdapEntry\:\:\$fooName\.$#'
 			identifier: property.notFound
 			count: 1
@@ -816,14 +804,3 @@ parameters:
 			count: 3
 			path: tests/WebServices/Validators/UserRequestValidatorTest.php
 
-		-
-			message: '#^Call to an undefined method Configuration\:\:SetKey\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: tests/fakes/FakeConfig.php
-
-		-
-			message: '#^Call to an undefined method Configuration\:\:SetSectionKey\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: tests/fakes/FakeConfig.php
