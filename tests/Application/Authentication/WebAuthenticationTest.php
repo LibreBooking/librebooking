@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once(ROOT_DIR . 'Pages/LoginPage.php');
 
 class WebAuthenticationTest extends TestBase
 {
