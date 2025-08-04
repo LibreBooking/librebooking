@@ -69,7 +69,7 @@ class SlotLabelFactory
         }
 
         if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
-            return '';
+            //return '';
         }
 
         if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
