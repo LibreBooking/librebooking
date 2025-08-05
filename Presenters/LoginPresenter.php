@@ -290,8 +290,24 @@ class LoginPresenter
             if (!session_id()) {
                 session_start();
             }
+
+            // Build the full redirect URL
+            $redirectUri = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_REDIRECT_URI);
+            $scriptUrl = Configuration::Instance()->GetScriptUrl();
+
+            $scriptUrl = rtrim($scriptUrl, '/');
+            if (!str_starts_with($redirectUri, '/')) {
+                $redirectUri = '/' . $redirectUri;
+            }
+
+            if (str_ends_with($scriptUrl, '/Web') && str_starts_with($redirectUri, '/Web/')) {
+                $redirectUri = substr($redirectUri, 4); // Remove the first "/Web"
+            }
+
+            $fullRedirectUrl = $scriptUrl . $redirectUri;
+
             $FacebookUrl = $helper->getLoginUrl(
-                Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_REDIRECT_URI),
+                $fullRedirectUrl,
                 $permissions
             );
 
