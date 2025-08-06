@@ -63,8 +63,8 @@ class SamlOptions
         $this->_options[$key] = $value;
     }
 
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(SamlConfigKeys::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(SamlConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 }

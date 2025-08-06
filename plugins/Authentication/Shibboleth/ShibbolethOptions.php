@@ -85,7 +85,7 @@ class ShibbolethOptions
      * @param IConvert $converter A value converter.
      * @return mixed The config value.
      */
-    protected function GetConfig($configDef, IConvert $converter = null)
+    protected function GetConfig($configDef, $converter = null)
     {
         return Configuration::Instance()->File(ShibbolethConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }

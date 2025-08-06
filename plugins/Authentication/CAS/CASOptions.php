@@ -110,6 +110,8 @@ class CASOptions
                 $pair = explode('=', trim($attributePair));
                 if (count($pair) === 2) {
                     $attributes[trim($pair[0])] = trim($pair[1]);
+                }else {
+                    Log::Debug("Invalid attribute mapping pair: %s", $attributePair);
                 }
             }
         }

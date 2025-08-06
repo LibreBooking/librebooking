@@ -67,8 +67,7 @@ class MoodleAdv extends Authentication implements IAuthentication
         $account = $this->GetMoodleUser($username);
         if ($account && $this->user_check_password($password, $account)) {
             return true;
-        }
-        ;
+        };
         Log::Debug('MOODLEADV: User not found or wrong password');
         return false;
     }
