@@ -17,7 +17,7 @@ class UserRepositoryFactory implements IUserRepositoryFactory
 {
     public function Create(UserSession $session)
     {
-        $hideUsers = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
+        $hideUsers = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
 
         if ($session->IsAdmin || !$hideUsers) {
             return new UserRepository();

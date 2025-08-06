@@ -148,7 +148,7 @@ class PreReservationFactory implements IPreReservationFactory
 
     private function CreateUpdateService(ReservationValidationRuleProcessor $ruleProcessor, UserSession $userSession)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_UPDATES_REQUIRE_APPROVAL, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_UPDATES_REQUIRE_APPROVAL, new BooleanConverter())) {
             $ruleProcessor->AddRule(new AdminExcludedRule(new RequiresApprovalRule(PluginManager::Instance()->LoadAuthorization()), $userSession, $this->userRepository));
         }
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleUpdate($userSession), $userSession, $this->userRepository));
@@ -183,10 +183,10 @@ class PreReservationFactory implements IPreReservationFactory
     {
         $ruleProcessor = $this->GetRuleProcessor($userSession);
 
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter())) {
             $ruleProcessor->AddRule(new AdminExcludedRule(new TitleRequiredRule(), $userSession, $this->userRepository));
         }
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_DESCRIPTION_REQUIRED, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_DESCRIPTION_REQUIRED, new BooleanConverter())) {
             $ruleProcessor->AddRule(new AdminExcludedRule(new DescriptionRequiredRule(), $userSession, $this->userRepository));
         }
 

@@ -77,7 +77,7 @@ class ReservationSavePresenterTest extends TestBase
 
     public function testCreationBuildsReservationFromPageData()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ENABLED, 'true');
         $timezone = $this->user->Timezone;
 
         $userId = $this->page->GetUserId();

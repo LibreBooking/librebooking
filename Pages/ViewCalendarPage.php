@@ -23,8 +23,8 @@ class ViewCalendarPage extends CalendarPage
         $subscriptionService = new CalendarSubscriptionService($userRepository, $resourceRepository, $scheduleRepository);
         $privacyFilter = new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization()));
 
-        $viewReservations = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
-        $allowGuestBookings = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_ALLOW_GUEST_BOOKING, new BooleanConverter());
+        $viewReservations = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
+        $allowGuestBookings = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter());
         $factory = ($viewReservations || $allowGuestBookings) ? new SlotLabelFactory() : new NullSlotLabelFactory();
 
         $this->presenter = new CalendarPresenter(
@@ -43,10 +43,10 @@ class ViewCalendarPage extends CalendarPage
     {
         URIScriptValidator::validate($_SERVER['REQUEST_URI']);
         ParamsValidator::validate(RouteParamsKeys::VIEW_CALENDAR, $_SERVER['REQUEST_URI'], true);
-        
+
         $this->Set('pageUrl', Pages::VIEW_CALENDAR);
         $this->Set('CreateReservationPage', Pages::GUEST_RESERVATION);
-        $this->Set('HideCreate', !Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_ALLOW_GUEST_BOOKING, new BooleanConverter()));
+        $this->Set('HideCreate', !Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter()));
         parent::DisplayPage();
     }
 

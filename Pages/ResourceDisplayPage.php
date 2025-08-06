@@ -167,7 +167,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
             new TermsOfServiceRepository()
         );
 
-        $this->Set('AllowAutocomplete', Configuration::Instance()->GetSectionKey(ConfigSection::TABLET_VIEW, ConfigKeys::TABLET_VIEW_AUTOCOMPLETE, new BooleanConverter()));
+        $this->Set('AllowAutocomplete', Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_AUTO_SUGGEST_EMAILS, new BooleanConverter()));
         $this->Set('ShouldLogout', false);
     }
 
@@ -286,7 +286,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
     {
         $this->Set('PublicResourceId', $this->GetPublicResourceId());
         $this->Set('InitialDate', $this->GetStartDate()->Format('Y-m-d H:i:s'));
-        $futureDays = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
+        $futureDays = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
         if ($futureDays == 0) {
             $futureDays = 1;
         }

@@ -48,8 +48,8 @@ class ViewSchedulePage extends SchedulePage
         $user = new NullUserSession();
         $this->_presenter->PageLoad($user);
 
-        $viewReservations = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
-        $allowGuestBookings = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_ALLOW_GUEST_BOOKING, new BooleanConverter());
+        $viewReservations = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
+        $allowGuestBookings = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter());
 
         $this->Set('DisplaySlotFactory', new DisplaySlotFactory());
         $this->Set('SlotLabelFactory', $viewReservations || $allowGuestBookings ? new SlotLabelFactory($user) : new NullSlotLabelFactory());
@@ -76,7 +76,7 @@ class ViewSchedulePage extends SchedulePage
 
     public function ShowInaccessibleResources()
     {
-        return Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, new BooleanConverter());
+        return Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, new BooleanConverter());
     }
 
     protected function GetShouldAutoLogout()

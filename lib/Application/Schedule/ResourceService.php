@@ -206,7 +206,7 @@ class ResourceService implements IResourceService
     public function GetResourceGroups($scheduleId, UserSession $user)
     {
         $filter = new CompositeResourceFilter();
-        if (!Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, new BooleanConverter())) {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, new BooleanConverter())) {
             $filter->Add(new ResourcePermissionFilter($this->_permissionService, $user));
         }
         $filter->Add(new ResourceStatusFilter($this->_userRepository, $user));

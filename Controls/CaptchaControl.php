@@ -11,8 +11,7 @@ class CaptchaControl extends Control
 {
     public function PageLoad()
     {
-        if (Configuration::Instance()->GetSectionKey(
-            ConfigSection::RECAPTCHA,
+        if (Configuration::Instance()->GetKey(
             ConfigKeys::RECAPTCHA_ENABLED,
             new BooleanConverter()
         )
@@ -27,7 +26,7 @@ class CaptchaControl extends Control
     {
         Log::Debug('CaptchaControl using Recaptcha');
 
-        $publicKey = Configuration::Instance()->GetSectionKey(ConfigSection::RECAPTCHA, ConfigKeys::RECAPTCHA_PUBLIC_KEY);
+        $publicKey = Configuration::Instance()->GetKey(ConfigKeys::RECAPTCHA_PUBLIC_KEY);
 
         echo <<<ReCaptcha
         <script src="https://www.google.com/recaptcha/api.js?onload=ReCaptchaCallbackV3&render=$publicKey"></script>

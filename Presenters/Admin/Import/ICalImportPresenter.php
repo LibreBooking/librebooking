@@ -177,7 +177,7 @@ class ICalImportPresenter extends ActionPresenter
                 '',
                 Password::GenerateRandom(),
                 Configuration::Instance()->GetDefaultTimezone(),
-                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
                 Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_HOMEPAGE)
             );
         }

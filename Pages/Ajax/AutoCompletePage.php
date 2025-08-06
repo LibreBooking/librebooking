@@ -83,7 +83,7 @@ class AutoCompletePage extends Page
         }
         $results = $r->GetList(1, PageInfo::All, null, null, $filter, $status)->Results();
 
-        $hideUserDetails = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
+        $hideUserDetails = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
         $users = [];
         /** @var UserItemView $result */
         foreach ($results as $result) {

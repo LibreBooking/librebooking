@@ -387,6 +387,7 @@ class de_de extends en_gb
         $strings['ConfigurationUpdated'] = 'Konfigurationsdatei wurde upgedated';
         $strings['ConfigurationUiNotEnabled'] = 'Auf diese Seite kann nicht zugegriffen werden, da $conf[\'settings\'][\'pages\'][\'enable.configuration\'] auf false gesetzt wurde oder fehlt.';
         $strings['ConfigurationFileNotWritable'] = 'Die Konfigurationsdatei ist nicht beschreibbar. Bitte überprüfen Sie die Berechtigungen dieser Datei und versuchen Sie es erneut.';
+        $strings['ConfigurationEnvWarning'] = 'Einige Konfigurationswerte werden durch Ihre Umgebungsvariablen oder die <code>.env</code>-Datei überschrieben. Änderungen an dieser Stelle werden erst möglich, wenn Sie die entsprechenden Umgebungsvariablen entfernt haben.';
         $strings['ConfigurationUpdateHelp'] = 'Siehe den Abschnitt Konfiguration der <a target=_blank href=%s>Hilfe-Datei</a> für die Dokumentation zu diesen Einstellungen.';
         $strings['GeneralConfigSettings'] = 'Einstellungen';
         $strings['UseSameLayoutForAllDays'] = 'Verwende gleiches Layout für alle Tage';
@@ -475,7 +476,7 @@ class de_de extends en_gb
         $strings['AllResourceTypes'] = 'Alle Ressourcentypen';
         $strings['AllResourceStatuses'] = 'Alle Ressourcen-Statusangaben';
         $strings['AllowParticipantsToJoin'] = 'Erlaube Teilnehmern, beizutreten';
-//        $strings['JoinThisReservation'] = 'Dieser Reservierung hinzufügen';
+        //        $strings['JoinThisReservation'] = 'Dieser Reservierung hinzufügen';
         $strings['Join'] = 'Beitreten';
         $strings['YouAreAParticipant'] = 'Sie sind Teilnehmer dieser Reservierung';
         $strings['YouAreInvited'] = 'Sie sind zu dieser Reservierung eingeladen';
@@ -984,7 +985,7 @@ class de_de extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'Ihre Gruppe hat keine kommenden Reservierungen';
         $strings['GroupUpcomingReservations'] = 'Kommende Reservierungen meiner Gruppe(n)';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Bei der Anmeldung mit Facebook ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
         //End Facebook Login SDK Error
@@ -994,12 +995,12 @@ class de_de extends en_gb
         $strings['PendingApprovalReservations'] = 'Reservierungen zur Genehmigung ausstehend';
         $strings['LaterThisMonth'] = 'Später in diesem Monat';
         $strings['LaterThisYear'] = 'Später in diesem Jahr';
-        $strings['Remaining'] = 'Verbleibend';  
+        $strings['Remaining'] = 'Verbleibend';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Es gibt keine fehlenden Auscheck-Reservierungen';
-        $strings['MissingCheckOutReservations'] = 'Fehlende Auscheck-Reservierungen';       
+        $strings['MissingCheckOutReservations'] = 'Fehlende Auscheck-Reservierungen';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

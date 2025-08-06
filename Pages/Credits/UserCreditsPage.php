@@ -71,7 +71,7 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
     public function __construct()
     {
         parent::__construct('Credits');
-        $this->Set('AllowPurchasingCredits', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter()));
+        $this->Set('AllowPurchasingCredits', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter()));
 
         $this->pageable = new PageablePage($this);
 

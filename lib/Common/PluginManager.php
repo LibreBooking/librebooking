@@ -210,15 +210,16 @@ class PluginManager
     }
 
     /**
-     * @param string $configKey key to use
+     * @param array $configDef key to use
      * @param string $pluginSubDirectory subdirectory name under 'plugins'
      * @param mixed $baseImplementation the base implementation of the plugin.  allows decorating
      * @return mixed|null plugin implementation
      */
-    private function LoadPlugin($configKey, $pluginSubDirectory, $baseImplementation)
+    private function LoadPlugin($configDef, $pluginSubDirectory, $baseImplementation)
     {
+        $configKey = $configDef['key'];
         if (!$this->Cached($configKey)) {
-            $plugin = Configuration::Instance()->GetSectionKey(ConfigSection::PLUGINS, $configKey);
+            $plugin = Configuration::Instance()->GetKey($configDef);
             $pluginFile = ROOT_DIR . "plugins/$pluginSubDirectory/$plugin/$plugin.php";
 
             if (!empty($plugin) && file_exists($pluginFile)) {

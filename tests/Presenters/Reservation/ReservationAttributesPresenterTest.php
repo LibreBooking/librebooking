@@ -43,7 +43,7 @@ class ReservationAttributesPresenterTest extends TestBase
     {
         parent::setup();
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_RESERVATIONS, true);
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, true);
         $this->page = new FakeReservationAttributesPage();
 
         $this->attributeRepository = $this->createMock('IAttributeRepository');

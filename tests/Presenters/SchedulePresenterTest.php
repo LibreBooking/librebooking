@@ -21,8 +21,7 @@ class SchedulePresenterTest extends TestBase
         $otherSchedule = new Schedule(2, 'not default', false, 0, $this->numDaysVisible);
 
         $this->schedules = [$this->currentSchedule, $otherSchedule];
-        $this->fakeConfig->SetSectionKey(
-            ConfigSection::SCHEDULE,
+        $this->fakeConfig->SetKey(
             ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
             $this->showInaccessibleResources
         );

@@ -38,7 +38,7 @@ class ResourcesTest extends TestBase
         $langFile = 'en_us.php';
         $lang = 'en_us';
 
-        $this->fakeConfig->SetKey(ConfigKeys::LANGUAGE, $lang);
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, $lang);
 
         $this->Resources = Resources::GetInstance();
 

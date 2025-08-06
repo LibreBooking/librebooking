@@ -53,7 +53,7 @@ class SlackPresenter
 
     private function ValidateToken($token)
     {
-        $expectedToken = Configuration::Instance()->GetSectionKey(ConfigSection::SLACK, ConfigKeys::SLACK_TOKEN);
+        $expectedToken = Configuration::Instance()->GetKey(ConfigKeys::SLACK_TOKEN);
 
         return !empty($expectedToken) && !empty($token) && $expectedToken == $token;
     }

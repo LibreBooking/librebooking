@@ -74,7 +74,7 @@ class ReservationUserAvailabilityPage extends Page implements IReservationUserAv
 
     public function PageLoad()
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter())) {
             return;
         }
 

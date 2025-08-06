@@ -1220,7 +1220,7 @@ class ManageResourcesPresenter extends ActionPresenter
      */
     private function GetResourceImageDirectory($fileName)
     {
-        $imageUploadDirectory = Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_DIRECTORY);
+        $imageUploadDirectory = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY);
 
         $path = '';
 

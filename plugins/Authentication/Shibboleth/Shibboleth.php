@@ -75,7 +75,7 @@ class Shibboleth extends Authentication
                 $user->GetFirstName(),
                 $user->GetLastName(),
                 null,
-                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
                 Configuration::Instance()->GetDefaultTimezone(),
                 $user->GetPhone(),
                 $user->GetOrganization(),

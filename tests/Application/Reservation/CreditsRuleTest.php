@@ -23,7 +23,7 @@ class CreditsRuleTest extends TestBase
 
         $this->rule = new CreditsRule($this->userRepository, $this->fakeUser);
 
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ENABLED, 'true');
     }
 
     public function testRuleIsValidIfUserHasEnoughCredits()

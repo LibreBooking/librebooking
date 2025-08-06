@@ -29,10 +29,10 @@ class Installer
         $results = [];
         $config = Configuration::Instance();
 
-        $hostname = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_HOSTSPEC);
-        $database_name = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_NAME);
-        $database_user = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_USER);
-        $database_password = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_PASSWORD);
+        $hostname = $config->GetKey(ConfigKeys::DATABASE_HOSTSPEC);
+        $database_name = $config->GetKey(ConfigKeys::DATABASE_NAME);
+        $database_user = $config->GetKey(ConfigKeys::DATABASE_USER);
+        $database_password = $config->GetKey(ConfigKeys::DATABASE_PASSWORD);
         $timezone = $config->GetKey(ConfigKeys::DEFAULT_TIMEZONE);
 
         $create_database = new MySqlScript(ROOT_DIR . 'database_schema/create-db.sql');
@@ -119,8 +119,8 @@ class Installer
 
             if ($greaterThanCurrent) {
                 $config = Configuration::Instance();
-                $hostname = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_HOSTSPEC);
-                $database_name = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_NAME);
+                $hostname = $config->GetKey(ConfigKeys::DATABASE_HOSTSPEC);
+                $database_name = $config->GetKey(ConfigKeys::DATABASE_NAME);
                 $database_user = $this->user;
                 $database_password = $this->password;
 
@@ -195,10 +195,10 @@ class Installer
         // if dbversion table does not exist or version in db is less than current
 
         $config = Configuration::Instance();
-        $hostname = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_HOSTSPEC);
-        $database_name = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_NAME);
-        $database_user = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_USER);
-        $database_password = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_PASSWORD);
+        $hostname = $config->GetKey(ConfigKeys::DATABASE_HOSTSPEC);
+        $database_name = $config->GetKey(ConfigKeys::DATABASE_NAME);
+        $database_user = $config->GetKey(ConfigKeys::DATABASE_USER);
+        $database_password = $config->GetKey(ConfigKeys::DATABASE_PASSWORD);
 
         $link = mysqli_connect($hostname, $database_user, $database_password);
         if (!$link) {

@@ -16,6 +16,7 @@ class ManageConfigurationPresenterTest extends TestBase
 
     /**
      * @var IConfigurationSettings|PHPUnit\Framework\MockObject\MockObject
+     * @var IConfigurationSettings|PHPUnit\Framework\MockObject\MockObject
      */
     private $configSettings;
 
@@ -34,12 +35,12 @@ class ManageConfigurationPresenterTest extends TestBase
         $this->configFilePath = ROOT_DIR . 'config/config.php';
 
         $this->presenter = new ManageConfigurationPresenter($this->page, $this->configSettings);
-        $this->fakeConfig->SetSectionKey(ConfigSection::PAGES, ConfigKeys::PAGES_ENABLE_CONFIGURATION, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PAGES_CONFIGURATION_ENABLED, 'true');
     }
 
     public function testDoesNothingIfPageIsNotEnabled()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PAGES, ConfigKeys::PAGES_ENABLE_CONFIGURATION, 'false');
+        $this->fakeConfig->SetKey(ConfigKeys::PAGES_CONFIGURATION_ENABLED, 'false');
 
         $this->presenter->PageLoad();
 
@@ -75,19 +76,15 @@ class ManageConfigurationPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertSettingExists($configValues, ConfigKeys::ADMIN_EMAIL, ConfigSettingType::String);
-        $this->assertSectionSettingExists(
-            configValues: $configValues,
-            key: ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
-            section: ConfigSection::PRIVACY
-        );
+        $this->assertSettingExists($configValues, ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS);
 
-        $this->assertSettingMissing(ConfigKeys::INSTALLATION_PASSWORD);
-        $this->assertSettingMissing(ConfigKeys::PAGES_ENABLE_CONFIGURATION);
-        $this->assertSettingMissing(ConfigKeys::DATABASE_PASSWORD, ConfigSection::DATABASE);
-        $this->assertSettingMissing(ConfigKeys::DATABASE_USER, ConfigSection::DATABASE);
-        $this->assertSettingMissing(ConfigKeys::DATABASE_HOSTSPEC, ConfigSection::DATABASE);
-        $this->assertSettingMissing(ConfigKeys::DATABASE_NAME, ConfigSection::DATABASE);
-        $this->assertSettingMissing(ConfigKeys::DATABASE_TYPE, ConfigSection::DATABASE);
+        $this->assertSettingMissing(ConfigKeys::INSTALL_PASSWORD);
+        $this->assertSettingMissing(ConfigKeys::PAGES_CONFIGURATION_ENABLED);
+        $this->assertSettingMissing(ConfigKeys::DATABASE_PASSWORD);
+        $this->assertSettingMissing(ConfigKeys::DATABASE_USER);
+        $this->assertSettingMissing(ConfigKeys::DATABASE_HOSTSPEC);
+        $this->assertSettingMissing(ConfigKeys::DATABASE_NAME);
+        $this->assertSettingMissing(ConfigKeys::DATABASE_TYPE);
     }
 
     public function testUpdatesConfigFileWithSettings()
@@ -96,18 +93,18 @@ class ManageConfigurationPresenterTest extends TestBase
         $setting2 = ConfigSetting::ParseForm('key2|section1', '10');
         $setting3 = ConfigSetting::ParseForm('key3|section1', 'some string');
 
-        $expectedSettings['key1'] = 'true';
-        $expectedSettings['section1']['key2'] = '10';
-        $expectedSettings['section1']['key3'] = 'some string';
+        $newSettings['key1'] = 'true';
+        $newSettings['section1']['key2'] = '10';
+        $newSettings['section1']['key3'] = 'some string';
 
         $existingValues['oldKey1'] = 'old1';
         $existingValues['section2']['oldKey2'] = 'old2';
 
-        $newSettings['key1'] = 'true';
-        $newSettings['section1']['key2'] = '10';
-        $newSettings['section1']['key3'] = 'some string';
-        $newSettings['oldKey1'] = 'old1';
-        $newSettings['section2']['oldKey2'] = 'old2';
+        $expectedMergedSettings['key1'] = 'true';
+        $expectedMergedSettings['section1']['key2'] = '10';
+        $expectedMergedSettings['section1']['key3'] = 'some string';
+        $expectedMergedSettings['oldKey1'] = 'old1';
+        $expectedMergedSettings['section2']['oldKey2'] = 'old2';
 
         $this->page->_SubmittedSettings = [$setting1, $setting2, $setting3];
 
@@ -116,28 +113,58 @@ class ManageConfigurationPresenterTest extends TestBase
                 ->with($this->equalTo($this->configFilePath))
                 ->willReturn($existingValues);
 
+        // Expect BuildConfig to be called with the right parameters
+        $this->configSettings->expects($this->once())
+                ->method('BuildConfig')
+                ->with(
+                    $this->equalTo($existingValues),
+                    $this->equalTo($newSettings),
+                    $this->equalTo(true)
+                )
+                ->willReturn($expectedMergedSettings);
+
         $this->configSettings->expects($this->once())
                 ->method('WriteSettings')
-                ->with($this->equalTo($this->configFilePath), $this->equalTo($newSettings));
+                ->with($this->equalTo($this->configFilePath), $this->equalTo($expectedMergedSettings));
 
         $this->presenter->Update();
     }
-
     private function getDefaultConfigValues()
     {
-        $config = new Config();
-        $current = $config->parseConfig(ROOT_DIR . 'config/config.dist.php', 'PHPArray');
-        $currentValues = $current->getItem("section", Configuration::SETTINGS)->toArray();
-        return $currentValues[Configuration::SETTINGS];
+        $configFile = realpath(ROOT_DIR . 'config/config.dist.php');
+        $config = @require $configFile;
+
+        if (isset($config['settings'])) {
+            return $config['settings'];
+        }
+        return $config[Configuration::SETTINGS] ?? $config;
     }
 
-    private function assertSettingExists($configValues, $key, $type = ConfigSettingType::String)
+    private function assertSettingExists($configValues, $configKey, $type = null)
     {
-        $expectedValue = $configValues[$key];
-        $this->assertTrue(
-            in_array(new ConfigSetting($key, null, $expectedValue), $this->page->_Settings),
-            "Missing $key"
-        );
+        $section = $configKey['section'] ?? null;
+        $type = $type ?: ($configKey['type'] ?? ConfigSettingType::String);
+        $key = $section ? str_replace("$section.", '', $configKey['key']) : $configKey['key'];
+
+        if ($section) {
+            $expectedValue = $configValues[$section][$key];
+        } else {
+            $expectedValue = $configValues[$key];
+        }
+
+        $expectedConfig = new ConfigSetting($key, $configKey['section'], $expectedValue, $type, $configKey['choices'] ?? '', $configKey['label'], $configKey['description'], $configKey['is_private']);
+
+        if ($section) {
+            $this->assertTrue(
+                in_array($expectedConfig, $this->page->_SectionSettings[$section] ?? []),
+                "Missing $key in section $section"
+            );
+        } else {
+            $this->assertTrue(
+                in_array($expectedConfig, $this->page->_Settings),
+                "Missing $key"
+            );
+        }
     }
 
     private function assertSectionSettingExists($configValues, $key, $section)

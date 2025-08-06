@@ -203,11 +203,11 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('MaxUploadSize', UploadedFile::GetMaxSize());
         $this->Set('MaxUploadCount', UploadedFile::GetMaxUploadCount());
         $config = Configuration::Instance();
-        $this->Set('UploadsEnabled', $config->GetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_ENABLE_RESERVATION_ATTACHMENTS, new BooleanConverter()));
-        $this->Set('AllowParticipation', !$config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
-        $this->Set('AllowGuestParticipation', $config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_ALLOW_GUESTS, new BooleanConverter()));
-        $remindersEnabled = $config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_REMINDERS_ENABLED, new BooleanConverter());
-        $emailEnabled = $config->GetKey(ConfigKeys::ENABLE_EMAIL, new BooleanConverter());
+        $this->Set('UploadsEnabled', $config->GetKey(ConfigKeys::UPLOAD_RESERVATION_ATTACHMENTS_ENABLED, new BooleanConverter()));
+        $this->Set('AllowParticipation', !$config->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
+        $this->Set('AllowGuestParticipation', $config->GetKey(ConfigKeys::RESERVATION_ALLOW_GUEST_PARTICIPATION, new BooleanConverter()));
+        $remindersEnabled = $config->GetKey(ConfigKeys::RESERVATION_REMINDERS_ENABLED, new BooleanConverter());
+        $emailEnabled = $config->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter());
         $this->Set('RemindersEnabled', $remindersEnabled && $emailEnabled);
 
         $this->Set('RepeatEveryOptions', range(1, 20));
@@ -234,10 +234,10 @@ abstract class ReservationPage extends Page implements IReservationPage
                              ]
         );
 
-        $this->Set('TitleRequired', $config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter()));
-        $this->Set('DescriptionRequired', $config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_DESCRIPTION_REQUIRED, new BooleanConverter()));
+        $this->Set('TitleRequired', $config->GetKey(ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter()));
+        $this->Set('DescriptionRequired', $config->GetKey(ConfigKeys::RESERVATION_DESCRIPTION_REQUIRED, new BooleanConverter()));
 
-        $this->Set('CreditsEnabled', $config->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('CreditsEnabled', $config->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
 
         if ($this->IsUnavailable()) {
             $this->RedirectToError(ErrorMessages::RESERVATION_NOT_AVAILABLE);

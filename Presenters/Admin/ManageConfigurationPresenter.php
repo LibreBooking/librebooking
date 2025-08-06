@@ -29,16 +29,25 @@ class ManageConfigurationPresenter extends ActionPresenter
     private $configFilePath;
 
     /**
+     * @var string
+     */
+    private $configKeyClass;
+
+    /**
+     * @var string
+     */
+    private $configKeyClassPath;
+    /**
      * @var string[]|array[]
      */
     private $deletedSettings = [
         'password.pattern',
-        'use.local.jquery'];
-
-    private $deletedSectionSettings = [
-        ConfigSection::AUTHENTICATION => ['allow.social.login'],
-        ConfigSection::ICS => ['require.login', 'import', 'import.key'],
-        ConfigSection::RESERVATION => ['maximum.resources']
+        'use.local.jquery',
+        'authentification.allow.social.login',
+        'ics.require.login',
+        'ics.import',
+        'ics.import.key',
+        'reservation.maximum.resources'
     ];
 
     /**
@@ -60,9 +69,8 @@ class ManageConfigurationPresenter extends ActionPresenter
 
     public function PageLoad()
     {
-        $shouldShowConfig = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PAGES,
-            ConfigKeys::PAGES_ENABLE_CONFIGURATION,
+        $shouldShowConfig = Configuration::Instance()->GetKey(
+            ConfigKeys::PAGES_CONFIGURATION_ENABLED,
             new BooleanConverter()
         );
         $this->page->SetIsPageEnabled($shouldShowConfig);
@@ -87,6 +95,12 @@ class ManageConfigurationPresenter extends ActionPresenter
             return;
         }
 
+        if (empty($this->configKeyClassPath) || !file_exists($this->configKeyClassPath)) {
+            $this->configKeyClass = ConfigKeys::class;
+        } else {
+            include_once($this->configKeyClassPath);
+        }
+
         Log::Debug(
             'Loading and displaying config file for editing by %s',
             ServiceLocator::GetServer()->GetUserSession()->Email
@@ -98,74 +112,49 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         foreach ($settings as $key => $value) {
             if (is_array($value)) {
-                $section = $key;
-                foreach ($value as $sectionkey => $sectionvalue) {
-                    if (!$this->ShouldBeSkipped($sectionkey, $section)) {
-                        $this->page->AddSectionSetting(new ConfigSetting($sectionkey, $section, $sectionvalue));
-                    }
+                foreach ($value as $subKey => $subValue) {
+                    $fullKey = "$key.$subKey";
+                    $this->AddSettingFromMeta($fullKey, $key, $subValue);
                 }
             } else {
-                if (!$this->ShouldBeSkipped($key)) {
-                    $this->page->AddSetting(new ConfigSetting($key, null, $value));
-                }
+                $this->AddSettingFromMeta($key, null, $value);
             }
         }
-
-        $this->PopulateHomepages();
-        $this->PopulatePlugins();
     }
 
-    private function PopulateHomepages()
+    private function AddSettingFromMeta($key, $section, $value)
     {
-        $homepageValues = [];
-        $homepageOutput = [];
-
-        $pages = Pages::GetAvailablePages();
-        foreach ($pages as $pageid => $page) {
-            $homepageValues[] = $pageid;
-            $homepageOutput[] = Resources::GetInstance()->GetString($page['name']);
+        $meta = call_user_func([$this->configKeyClass, 'findByKey'], $key);
+        if ($this->ShouldBeSkipped($key, $meta)) {
+            return;
         }
 
-        $this->page->SetHomepages($homepageValues, $homepageOutput);
-    }
+        $isPrivate = call_user_func([$this->configKeyClass, 'isPrivate'], $meta) ?? false;
+        $hasEnv = call_user_func([$this->configKeyClass, 'hasEnv'], $meta) ?? false;
 
-    private function PopulatePlugins()
-    {
-        $plugins = [];
-        $dit = new RecursiveDirectoryIterator(ROOT_DIR . 'plugins');
+        $setting = new ConfigSetting(
+            $section ? str_replace("$section.", '', $key) : $key,
+            $section ?: null,
+            $value,
+            $meta['type'] ?? 'string',
+            $meta['choices'] ?? '',
+            $meta['label'] ?? '',
+            $meta['description'] ?? '',
+            $isPrivate,
+            $hasEnv
+        );
 
-        /** @var SplFileInfo $path */
-        foreach ($dit as $path) {
-            if ($path->isDir() && basename($path->getPathname()) != '.' && basename($path->getPathname()) != '..') {
-                $plugins[basename($path->getPathname())] = [];
-                /** @var SplFileInfo $plugin */
-                foreach (new RecursiveDirectoryIterator($path) as $plugin) {
-                    if ($plugin->isDir() && basename($plugin->getPathname()) != '.' && basename($plugin->getPathname()) != '..') {
-                        $pluginCategory = basename($path->getPathname());
-                        if (!isset($plugins[$pluginCategory]) || empty($plugins[$pluginCategory])) {
-                            $plugins[$pluginCategory][] = '';
-                        }
-                        $plugins[$pluginCategory][] = basename($plugin->getPathname());
-                    }
-                }
-            }
+        if ($section) {
+            $this->page->AddSectionSetting($setting);
+        } else {
+            $this->page->AddSetting($setting);
         }
-
-        $this->page->SetAuthenticationPluginValues($plugins['Authentication']);
-        $this->page->SetAuthorizationPluginValues($plugins['Authorization']);
-        $this->page->SetPermissionPluginValues($plugins['Permission']);
-        $this->page->SetPostRegistrationPluginValues($plugins['PostRegistration']);
-        $this->page->SetPreReservationPluginValues($plugins['PreReservation']);
-        $this->page->SetPostReservationPluginValues($plugins['PostReservation']);
-        $this->page->SetStylingPluginValues($plugins['Styling']);
-        $this->page->SetExportPluginValues($plugins['Export']);
     }
 
     public function Update()
     {
-        $shouldShowConfig = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PAGES,
-            ConfigKeys::PAGES_ENABLE_CONFIGURATION,
+        $shouldShowConfig = Configuration::Instance()->GetKey(
+            ConfigKeys::PAGES_CONFIGURATION_ENABLED,
             new BooleanConverter()
         );
 
@@ -190,20 +179,13 @@ class ManageConfigurationPresenter extends ActionPresenter
         }
 
         $existingSettings = $this->configSettings->GetSettings($this->configFilePath);
-        $mergedSettings = array_merge($existingSettings, $newSettings);
+
+        // Use the Configurator's BuildConfig method which handles env vars and private fields
+        $mergedSettings = $this->configSettings->BuildConfig($existingSettings, $newSettings, true);
 
         foreach ($this->deletedSettings as $deletedSetting) {
             if (array_key_exists($deletedSetting, $mergedSettings)) {
                 unset($mergedSettings[$deletedSetting]);
-            }
-        }
-
-        foreach ($this->deletedSectionSettings as $section => $setting) {
-            if (array_key_exists($section, $mergedSettings) && in_array($setting, $mergedSettings[$section])) {
-                unset($mergedSettings[$section][$setting]);
-                if (count($mergedSettings[$section]) == 0) {
-                    unset($mergedSettings[$section]);
-                }
             }
         }
 
@@ -224,30 +206,29 @@ class ManageConfigurationPresenter extends ActionPresenter
         ServiceLocator::GetDatabase()->Execute($command);
     }
 
-    private function ShouldBeSkipped($key, $section = null)
+    private function ShouldBeSkipped(string $key, ?array $meta): bool
     {
-        if ($section == ConfigSection::DATABASE) {
-            return true;
+        if ($meta === null) {
+            Log::Debug("[CONFIG] No metadata found for key '%s'. Not skipped.", $key);
+            return false;
         }
-        if (in_array($key, $this->deletedSettings)) {
-            return true;
-        }
-        if (array_key_exists($section, $this->deletedSectionSettings) && in_array($key, $this->deletedSectionSettings[$section])) {
+
+        if ($meta['is_hidden'] ?? false) {
+            Log::Debug("[CONFIG] Skipping hidden config key '%s'.", $key);
             return true;
         }
 
-        switch ($key) {
-            case ConfigKeys::INSTALLATION_PASSWORD:
-            case ConfigKeys::PAGES_ENABLE_CONFIGURATION && $section == ConfigSection::PAGES:
-                return true;
-            default:
-                return false;
+        if (in_array($key, $this->deletedSettings)) {
+            Log::Debug("[CONFIG] Skipping deleted config key '%s'.", $key);
+            return true;
         }
+
+        return false;
     }
 
     private function GetConfigFiles()
     {
-        $files = [new ConfigFileOption('config.php', '')];
+        $files = [new ConfigFileOption('config.php', '', ConfigKeys::class, ROOT_DIR . 'lib/Config/ConfigKeys.php')];
 
         $pluginBaseDir = ROOT_DIR . 'plugins/';
         if ($h = opendir($pluginBaseDir)) {
@@ -259,7 +240,9 @@ class ManageConfigurationPresenter extends ActionPresenter
                         if (is_dir("$pluginDir/$plugin") && $plugin != "." && $plugin != ".." && strpos($plugin, 'Example') === false) {
                             $configFiles = array_merge(glob("$pluginDir/$plugin/*.config.php"), glob("$pluginDir/$plugin/*.config.dist.php"));
                             if (count($configFiles) > 0) {
-                                $files[] = new ConfigFileOption("$entry-$plugin", "$entry/$plugin");
+                                $configKeysFile = "/" . $plugin . "ConfigKeys.php";
+                                $configKeysClass = $plugin . "ConfigKeys";
+                                $files[] = new ConfigFileOption("$entry-$plugin", "$entry/$plugin", $configKeysClass, $configKeysFile);
                             }
                         }
                     }
@@ -275,24 +258,54 @@ class ManageConfigurationPresenter extends ActionPresenter
     private function HandleSelectedConfigFile($configFiles)
     {
         $requestedConfigFile = $this->page->GetConfigFileToEdit();
-        if (!empty($requestedConfigFile)) {
-            /** @var ConfigFileOption $file */
-            foreach ($configFiles as $file) {
-                if ($file->Location == $requestedConfigFile) {
-                    $this->page->SetSelectedConfigFile($requestedConfigFile);
+        if (empty($requestedConfigFile)) {
+            return;
+        }
 
-                    $rootDir = ROOT_DIR . 'plugins/' . $requestedConfigFile;
+        $found = false;
+        foreach ($configFiles as $file) {
+            if ($file->Location == $requestedConfigFile) {
+                $found = true;
+                $this->page->SetSelectedConfigFile($requestedConfigFile);
+                $this->configKeyClass = $file->ConfigKeysClass;
+                $rootDir = ROOT_DIR . 'plugins/' . $requestedConfigFile;
 
-                    $distFile = glob("$rootDir/*config.dist.php");
-                    $configFile = glob("$rootDir/*config.php");
-                    if (count($distFile) == 1 && count($configFile) == 0) {
+                // Check if directory exists
+                if (!is_dir($rootDir)) {
+                    Log::Error("Plugin directory not found: $rootDir");
+                    return;
+                }
+
+                // Handle config file creation if needed
+                $distFile = glob("$rootDir/*config.dist.php");
+                $configFile = glob("$rootDir/*config.php");
+
+                if (count($distFile) == 1 && count($configFile) == 0) {
+                    try {
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));
+                        Log::Debug("Created new config file from dist template: {$distFile[0]}");
+                    } catch (Exception $e) {
+                        Log::Error("Failed to create config file: " . $e->getMessage());
+                        return;
                     }
                     $configFile = glob("$rootDir/*config.php");
-                    $this->configFilePath = $configFile[0];
-                    $this->configFilePathDist = str_replace('.php', '.dist.php', $configFile[0]);
                 }
+
+                if (count($configFile) == 0) {
+                    Log::Error("No config file found for plugin: $requestedConfigFile");
+                    return;
+                }
+
+                $this->configFilePath = $configFile[0];
+                $this->configFilePathDist = str_replace('.php', '.dist.php', $configFile[0]);
+                $this->configKeyClassPath = $rootDir . $file->ConfigKeysClassLocation;
+
+                break;
             }
+        }
+
+        if (!$found) {
+            Log::Error("Requested config file not found: $requestedConfigFile");
         }
     }
 
@@ -330,10 +343,15 @@ class ConfigFileOption
 {
     public $Name;
     public $Location;
-    public function __construct($name, $location)
+    public $ConfigKeysClass;
+    public $ConfigKeysClassLocation;
+
+    public function __construct($name, $location, $configKeysClass, $configKeysClassLocation)
     {
         $this->Name = $name;
         $this->Location = $location;
+        $this->ConfigKeysClass = $configKeysClass;
+        $this->ConfigKeysClassLocation = $configKeysClassLocation;
     }
 }
 
@@ -343,9 +361,15 @@ class ConfigSetting
     public $Section;
     public $Value;
     public $Type;
+    public $Choices;
     public $Name;
+    public $Label;
+    public $Description;
+    public $IsPrivate;
+    public $hasEnv;
 
-    public function __construct($key, $section, $value)
+
+    public function __construct($key, $section, $value, $type = 'string', $choices = '', $label = '', $description = '', $isPrivate = false, $hasEnv = false)
     {
         $key = trim($key ?? '');
         $section = trim($section ?? '');
@@ -355,18 +379,12 @@ class ConfigSetting
         $this->Key = $key;
         $this->Section = $section;
         $this->Value = $value . '';
-
-        $type = strtolower($value) == 'true' || strtolower($value) == 'false' ? ConfigSettingType::Boolean : ConfigSettingType::String;
-
-        if ($key == ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS && $section == ConfigSection::PRIVACY) {
-            $type = ConfigSettingType::String;
-        }
-
         $this->Type = $type;
-
-        if ($type == ConfigSettingType::Boolean) {
-            $this->Value = strtolower($this->Value);
-        }
+        $this->Choices = $choices;
+        $this->Label = $label;
+        $this->Description = $description;
+        $this->IsPrivate = $isPrivate;
+        $this->hasEnv = $hasEnv;
     }
 
     public static function ParseForm($key, $value)
@@ -387,8 +405,4 @@ class ConfigSetting
     }
 }
 
-class ConfigSettingType
-{
-    public const String = 'string';
-    public const Boolean = 'boolean';
-}
+

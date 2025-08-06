@@ -426,6 +426,7 @@ class en_us extends Language
         $strings['ConfigurationUpdated'] = 'The configuration file was updated';
         $strings['ConfigurationUiNotEnabled'] = 'This page cannot be accessed because $conf[\'settings\'][\'pages\'][\'enable.configuration\'] is set to false or missing.';
         $strings['ConfigurationFileNotWritable'] = 'The config file is not writable. Please check the permissions of this file and try again.';
+        $strings['ConfigurationEnvWarning'] = 'Some configuration values are being overridden by your environment variables or <code>.env</code> file. Changes may only be possible if you remove the corresponding environment variables.';
         $strings['ConfigurationUpdateHelp'] = 'Refer to the Configuration section of the <a target=_blank href=%s class=link-primary>Help File</a> for documentation on these settings.';
         $strings['GeneralConfigSettings'] = 'settings';
         $strings['UseSameLayoutForAllDays'] = 'Use the same layout for all days';

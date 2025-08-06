@@ -31,14 +31,14 @@ class Log
         $this->logger = new Logger('app');
         $this->sqlLogger = new Logger('sql');
 
-        $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
+        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
 
         $log_folder = null;
         $log_sql = false;
 
         if ($log_level != 'none') {
-            $log_folder = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_FOLDER);
-            $log_sql = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_SQL, new BooleanConverter());
+            $log_folder = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER);
+            $log_sql = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter());
             switch ($log_level) {
                 case 'debug':
                     $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Logger::DEBUG));
@@ -72,7 +72,7 @@ class Log
      */
     public static function Debug($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
+        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
         if ($log_level == 'none') {
             return;
         }
@@ -103,7 +103,7 @@ class Log
      */
     public static function Error($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
+        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
         if ($log_level == 'none') {
             return;
         }
@@ -136,7 +136,7 @@ class Log
     public static function Sql($message, $args = [])
     {
         try {
-            if (!Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_SQL, new BooleanConverter())) {
+            if (!Configuration::Instance()->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter())) {
                 return;
             }
             $args = func_get_args();
@@ -148,7 +148,7 @@ class Log
     }
     public static function DebugEnabled()
     {
-        $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
+        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
         return $log_level != 'none';
     }
 }

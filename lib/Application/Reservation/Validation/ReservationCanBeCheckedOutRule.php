@@ -21,7 +21,7 @@ class ReservationCanBeCheckedOutRule implements IReservationValidationRule
     {
         $isOk = true;
         $atLeastOneReservationRequiresCheckIn = false;
-        $checkoutAdminOnly = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKOUT_ADMIN_ONLY, new BooleanConverter());
+        $checkoutAdminOnly = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_CHECKOUT_ADMIN_ONLY, new BooleanConverter());
         $tooEarly = Date::Now()->LessThan($reservationSeries->CurrentInstance()->StartDate());
         $isAdministrator = $this->userSession->IsAdmin;
 

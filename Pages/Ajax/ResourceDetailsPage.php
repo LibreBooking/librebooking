@@ -44,7 +44,7 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
         $this->Set('textColor', $resource->GetTextColor());
         $this->Set('autoReleaseMinutes', $resource->GetAutoReleaseMinutes());
         $this->Set('isCheckInEnabled', $resource->IsCheckInEnabled());
-        $this->Set('creditsEnabled', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('creditsEnabled', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
         $this->Set('peakCredits', $resource->GetPeakCreditsPerSlot());
         $this->Set('offPeakCredits', $resource->GetCreditsPerSlot());
 

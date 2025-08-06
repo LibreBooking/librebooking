@@ -1,6 +1,19 @@
 History
 =======
 
+LibreBooking Evolution
+----------------------
+
+Since forking from Booked Scheduler, LibreBooking has evolved significantly:
+
+- Modernized PHP codebase with improved compatibility
+- Enhanced configuration system with comprehensive documentation
+- Improved Docker deployment support  
+- Updated dependencies and security fixes
+- Enhanced user interface and user experience
+- Expanded API capabilities
+- Better documentation and installation guides
+
 Unfortunately the source code for Booked Scheduler is no longer being
 distributed and version 2.8.5 seems to have been the last open source
 release, see https://www.bookedscheduler.com/the-future-of-booked/ and

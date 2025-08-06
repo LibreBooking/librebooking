@@ -62,7 +62,7 @@ class RegistrationTest extends TestBase
 
     public function testRegistersUserWhenNoManualActivationRequired()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_ACTIVATION, null);
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_EMAIL_ACTIVATION, null);
 
         $this->groups = [new UserGroup(1, 'whaterver')];
 
@@ -109,7 +109,7 @@ class RegistrationTest extends TestBase
 
     public function testDoesNotActivateUserIfManualActivationIsRequired()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_ACTIVATION, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_EMAIL_ACTIVATION, 'true');
 
         $user = User::CreatePending(
             $this->fname,
@@ -150,7 +150,7 @@ class RegistrationTest extends TestBase
 
     public function testAdminRegistrationNeverNeedsActivation()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_ACTIVATION, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_REQUIRE_EMAIL_ACTIVATION, 'true');
 
         $user = User::Create(
             $this->fname,

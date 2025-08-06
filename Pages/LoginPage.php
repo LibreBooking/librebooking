@@ -136,11 +136,11 @@ class LoginPage extends Page implements ILoginPage
         $this->Set('Languages', Resources::GetInstance()->AvailableLanguages);
 
         $this->SetFacebookErrorMessage();
-        $this->Set('AllowFacebookLogin', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_FACEBOOK, new BooleanConverter()));
-        $this->Set('AllowGoogleLogin', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_GOOGLE, new BooleanConverter()));
-        $this->Set('AllowMicrosoftLogin', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_MICROSOFT, new BooleanConverter()));
-        $this->Set('AllowKeycloakLogin', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_KEYCLOAK, new BooleanConverter()));
-        $this->Set('AllowOauth2Login', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_OAUTH2, new BooleanConverter()));
+        $this->Set('AllowFacebookLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter()));
+        $this->Set('AllowGoogleLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter()));
+        $this->Set('AllowMicrosoftLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter()));
+        $this->Set('AllowKeycloakLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter()));
+        $this->Set('AllowOauth2Login', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter()));
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
         $parts = explode('://', $scriptUrl);
         $this->Set('Protocol', $parts[0]);
@@ -148,7 +148,7 @@ class LoginPage extends Page implements ILoginPage
             $this->Set('ScriptUrlNoProtocol', $parts[1]);
         }
         $this->Set('GoogleState', strtr(base64_encode("resume=$scriptUrl/external-auth.php%3Ftype%3Dgoogle%26redirect%3D$resumeUrl"), '+/=', '-_,'));
-        $this->Set('EnableCaptcha', Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter()));
+        $this->Set('EnableCaptcha', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter()));
     }
 
     public function PageLoad()
@@ -316,7 +316,7 @@ class LoginPage extends Page implements ILoginPage
      */
     public function SetGoogleUrl($googleUrl)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_GOOGLE, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('GoogleUrl', $googleUrl);
         }
     }
@@ -326,7 +326,7 @@ class LoginPage extends Page implements ILoginPage
      */
     public function SetMicrosoftUrl($microsoftUrl)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_MICROSOFT, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('MicrosoftUrl', $microsoftUrl);
         }
     }
@@ -336,7 +336,7 @@ class LoginPage extends Page implements ILoginPage
      */
     public function SetFacebookUrl($FacebookUrl)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_FACEBOOK, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('FacebookUrl', $FacebookUrl);
         }
     }
@@ -356,21 +356,21 @@ class LoginPage extends Page implements ILoginPage
 
     public function SetKeycloakUrl($KeycloakUrl)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_KEYCLOAK, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('KeycloakUrl', $KeycloakUrl);
         }
     }
 
     public function SetOauth2Url($Oauth2Url)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_OAUTH2, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('Oauth2Url', $Oauth2Url);
         }
     }
 
     public function SetOauth2Name($Oauth2Name)
     {
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_OAUTH2, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
             $this->Set('Oauth2Name', $Oauth2Name);
         }
     }

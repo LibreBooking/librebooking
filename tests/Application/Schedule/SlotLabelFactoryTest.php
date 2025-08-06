@@ -109,8 +109,8 @@ class SlotLabelFactoryTest extends TestBase
     public function testHidesUserDetails()
     {
         $this->SetConfig('{name}');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'false');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'false');
 
         $authService = new FakeAuthorizationService();
         $this->fakeUser->AdminGroups = [];
@@ -129,8 +129,8 @@ class SlotLabelFactoryTest extends TestBase
     public function testShowsUserDetailsIfCanEditResource()
     {
         $this->SetConfig('{name}');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'true');
 
         $authService = new FakeAuthorizationService();
         $this->fakeUser->AdminGroups = [];
@@ -149,8 +149,8 @@ class SlotLabelFactoryTest extends TestBase
     public function testHidesReservationDetails()
     {
         $this->SetConfig('{name} {title}');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'false');
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, 'false');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, 'true');
 
         $authService = new FakeAuthorizationService();
         $this->reservation->WithOwnerGroupIds([1]);
@@ -168,6 +168,6 @@ class SlotLabelFactoryTest extends TestBase
 
     private function SetConfig($value)
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_RESERVATION_LABEL, $value);
+        $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_RESERVATION_LABEL, $value);
     }
 }

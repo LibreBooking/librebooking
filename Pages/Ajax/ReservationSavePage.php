@@ -424,9 +424,8 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
 
     private function AttachmentsEnabled()
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::UPLOADS,
-            ConfigKeys::UPLOAD_ENABLE_RESERVATION_ATTACHMENTS,
+        return Configuration::Instance()->GetKey(
+            ConfigKeys::UPLOAD_RESERVATION_ATTACHMENTS_ENABLED,
             new BooleanConverter()
         );
     }

@@ -274,7 +274,7 @@ class ParticipationPresenterTest extends TestBase
 
     public function testWhenReservationStartConstraintIsViolated()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
 
         $referenceNumber = 'abc';
         $currentUserId = 1029;
@@ -317,7 +317,7 @@ class ParticipationPresenterTest extends TestBase
 
     private function assertUpdatesSeriesParticipation($invitationAction, $seriesMethod)
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
         $currentUserId = 1029;
         $referenceNumber = 'abc123';
         $series = $this->createMock('ExistingReservationSeries');

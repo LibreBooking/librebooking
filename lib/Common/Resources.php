@@ -258,7 +258,7 @@ class Resources implements IResourceLocalization
         if ($cookie != null) {
             return $cookie;
         } else {
-            return Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         }
     }
 

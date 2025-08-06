@@ -19,7 +19,7 @@ class AccountCreationEmail extends EmailMessage
     {
         $this->user = $user;
         $this->userSession = $userSession;
-        parent::__construct(Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE));
+        parent::__construct(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE));
     }
 
     /**

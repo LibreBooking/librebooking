@@ -97,7 +97,7 @@ class SmartyPage extends Smarty
         $hasCustomTemplate = file_exists($localizedPath . '/' . $customTemplateName);
 
         if ($enforceCustomTemplate && !$hasCustomTemplate) {
-            $defaultLanguageCode = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
+            $defaultLanguageCode = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
             $defaultLocalizedPath = $langPath . $defaultLanguageCode;
             $hasCustomDefaultTemplate = file_exists($defaultLocalizedPath . '/' . $customTemplateName);
             if ($languageCode != $defaultLanguageCode && $hasCustomDefaultTemplate) {
@@ -738,8 +738,7 @@ class SmartyPage extends Smarty
         }
 
         if (
-            !$ignorePrivacy && $config->GetSectionKey(
-                ConfigSection::PRIVACY,
+            !$ignorePrivacy && $config->GetKey(
                 ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
                 new BooleanConverter()
             ) && !ServiceLocator::GetServer()->GetUserSession()->IsAdmin
@@ -763,7 +762,7 @@ class SmartyPage extends Smarty
 
     public function GetResourceImage($params, $smarty)
     {
-        $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
+        $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
 
         if (!str_contains((string) $imageUrl, 'http://')) {
             $imageUrl = Configuration::Instance()->GetScriptUrl() . "/$imageUrl";

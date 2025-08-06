@@ -1,5 +1,45 @@
 # CHANGELOG
 
+## 4.0.0 - 2025-08-06
+
+### Highlights
+
+* New configuration file format. Please read the documentation for more
+  details. Thanks to @lucs7 for all of their work.
+* Initial work on getting PHPStan setup and working. We have level 1 working
+  with no baseline and are currently using level 2 with a baseline.
+* Add configuration option to be able to choose the resource contact from a
+  drop-down list of registered users.
+* Language selector now working on the login page.
+* New date selector library used, thanks @labmecanicatec
+
+### What's Changed
+
+* style(manage_resources): don't default collapse CustomAttributes by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/682>
+* fix: EmailMessage.php variable defined after use by @lucs7 in <https://github.com/LibreBooking/app/pull/683>
+* fix: captchas not working by @lucs7 in <https://github.com/LibreBooking/app/pull/684>
+* fix(participation): add missing ParticipationNotification import by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/686>
+* chore: ensure all config variables are in both config files by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/689>
+* fix(reservation): fix the delete reason not submitted when a reservation is not approved. by @belcirelk in <https://github.com/LibreBooking/app/pull/696>
+* fix(reservation): pdf generation is not working in French by @belcirelk in <https://github.com/LibreBooking/app/pull/697>
+* fix(API): stop storing multiple custom attributes of same type for Reources by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/681>
+* chore: Replace jQuery UI datepicker with flatpickr by @labmecanicatec in <https://github.com/LibreBooking/app/pull/756>
+* fix(login): Language selector is not working due to httponly cookie by @belcirelk in <https://github.com/LibreBooking/app/pull/763>
+* fix: allow setting language for non-HTTPS by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/764>
+* chore: remove exec permission from some files by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/765>
+* chore: add text to the "More Resource Actions" drop-down by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/766>
+* refactor: timezone handling and remove jstz library by @labmecanicatec in <https://github.com/LibreBooking/app/pull/769>
+* feat: optional: resource contact may be chosen via a drop-down list of users by @JohnVillalovos in <https://github.com/LibreBooking/app/pull/770>
+* Fix for reminders on cancelled reservations by @cgutteridge in <https://github.com/LibreBooking/app/pull/773>
+* Fix for phpunit tests and additional error check by @lucs7 in <https://github.com/LibreBooking/app/pull/774>
+* fix: error in WebAuthenticationTest and Facebook login by @lucs7 in <https://github.com/LibreBooking/app/pull/781>
+
+### New Contributors
+
+* @belcirelk made their first contribution in <https://github.com/LibreBooking/app/pull/696>
+
+**Full Changelog**: <https://github.com/LibreBooking/app/compare/v3.0.3...v4.0.0>
+
 ## 3.0.3 - 2025-07-09
 
 ### Highlights

@@ -85,7 +85,7 @@ class ReportDefinition implements IReportDefinition
             ColumnNames::UTILIZATION => new ReportUtilizationColumn('Utilization', ChartColumnDefinition::Total()),
         ];
 
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
+        if (Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
             $orderedColumns[ColumnNames::CREDIT_COUNT] = new ReportStringColumn('Credits', ChartColumnDefinition::Null());
         }
 

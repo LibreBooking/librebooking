@@ -246,6 +246,6 @@ class UsersWebServiceTest extends TestBase
 
     private function HideUsers($hide)
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, $hide);
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, $hide);
     }
 }

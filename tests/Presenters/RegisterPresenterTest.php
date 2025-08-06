@@ -252,7 +252,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testRedirectsToLoginIfAllowSelfRegistrationIsOff()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::ALLOW_REGISTRATION, 'false');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'false');
 
         $this->presenter = new RegistrationPresenter($this->page, $this->fakeReg, $this->fakeAuth);
         $this->presenter->PageLoad();

@@ -254,8 +254,8 @@ class SchedulePage extends ActionPage implements ISchedulePage
     {
         parent::__construct('Schedule');
 
-        $this->Set('CanViewUsers', !Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()));
-        $this->Set('AllowParticipation', !Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
+        $this->Set('CanViewUsers', !Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()));
+        $this->Set('AllowParticipation', !Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
         $this->Set('AllowCreatePastReservationsButton', ServiceLocator::GetServer()->GetUserSession()->IsAdmin);
 
         $permissionServiceFactory = new PermissionServiceFactory();
@@ -307,8 +307,8 @@ class SchedulePage extends ActionPage implements ISchedulePage
         $this->Set('ShowSubscription', true);
         $this->Set('UserIdFilter', $this->GetOwnerId());
         $this->Set('ParticipantIdFilter', $this->GetParticipantId());
-        $this->Set('ShowWeekNumbers', Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_SHOW_WEEK_NUMBERS, new BooleanConverter()));
-        $this->Set('FastReservationLoad', Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_FAST_RESERVATION_LOAD, new BooleanConverter()) ?? false);
+        $this->Set('ShowWeekNumbers', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_SHOW_WEEK_NUMBERS, new BooleanConverter()));
+        $this->Set('FastReservationLoad', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_FAST_RESERVATION_LOAD, new BooleanConverter()) ?? false);
 
         if ($this->IsMobile && !$this->IsTablet) {
             if ($this->ScheduleStyle == ScheduleStyle::Tall) {
@@ -422,9 +422,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function ShowInaccessibleResources()
     {
-        return Configuration::Instance()
-            ->GetSectionKey(
-                ConfigSection::SCHEDULE,
+        return Configuration::Instance()->GetKey(
                 ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
                 new BooleanConverter()
             );

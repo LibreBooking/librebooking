@@ -74,13 +74,13 @@ class RegistrationPage extends ActionPage implements IRegistrationPage
 
     public function ProcessPageLoad()
     {
-        $this->Set('EnableCaptcha', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ENABLE_CAPTCHA, new BooleanConverter()));
-        $this->Set('RequirePhone', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_REQUIRE_PHONE, new BooleanConverter()));
-        $this->Set('RequirePosition', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_REQUIRE_POSITION, new BooleanConverter()));
-        $this->Set('RequireOrganization', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_REQUIRE_ORGANIZATION, new BooleanConverter()));
-        $this->Set('HidePhone', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_HIDE_PHONE, new BooleanConverter()));
-        $this->Set('HidePosition', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_HIDE_POSITION, new BooleanConverter()));
-        $this->Set('HideOrganization', Configuration::Instance()->GetSectionKey(ConfigSection::REGISTRATION, ConfigKeys::REGISTRATION_HIDE_ORGANIZATION, new BooleanConverter()));
+        $this->Set('EnableCaptcha', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_CAPTCHA_ENABLED, new BooleanConverter()));
+        $this->Set('RequirePhone', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_PHONE, new BooleanConverter()));
+        $this->Set('RequirePosition', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_POSITION, new BooleanConverter()));
+        $this->Set('RequireOrganization', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_ORGANIZATION, new BooleanConverter()));
+        $this->Set('HidePhone', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_HIDE_PHONE, new BooleanConverter()));
+        $this->Set('HidePosition', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_HIDE_POSITION, new BooleanConverter()));
+        $this->Set('HideOrganization', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_HIDE_ORGANIZATION, new BooleanConverter()));
 
         $this->_presenter->PageLoad();
 

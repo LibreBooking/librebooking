@@ -74,7 +74,7 @@ class DailyLayout implements IDailyLayout
     public function GetLayout(Date $date, $resourceId)
     {
         try {
-            $hideBlocked = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
+            $hideBlocked = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
             $sw = new StopWatch();
             $sw->Start();
 
@@ -125,7 +125,7 @@ class DailyLayout implements IDailyLayout
 
     public function GetLabels(Date $displayDate)
     {
-        $hideBlocked = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
+        $hideBlocked = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
 
         $labels = [];
 
@@ -146,7 +146,7 @@ class DailyLayout implements IDailyLayout
 
     public function GetPeriods(Date $displayDate, $fitToHours = false)
     {
-        $hideBlocked = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
+        $hideBlocked = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_HIDE_BLOCKED_PERIODS, new BooleanConverter());
 
         $periods = $this->_scheduleLayout->GetLayout($displayDate, $hideBlocked);
 

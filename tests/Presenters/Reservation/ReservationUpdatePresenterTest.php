@@ -74,7 +74,7 @@ class ReservationUpdatePresenterTest extends TestBase
 
     public function testLoadsExistingReservationAndUpdatesData()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::CREDITS_ENABLED, 'true');
 
         $seriesId = 109809;
         $expectedSeries = new ExistingReservationSeries();

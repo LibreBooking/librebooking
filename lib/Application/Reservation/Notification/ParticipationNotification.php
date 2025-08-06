@@ -34,7 +34,7 @@ class ParticipationNotification implements IParticipationNotification
     public function __construct(IUserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->disabled = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter());
+        $this->disabled = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter());
     }
 
     public function Notify(ExistingReservationSeries $series, $participantId, $invitationAction)

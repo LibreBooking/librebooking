@@ -97,7 +97,7 @@ class AccountControllerTest extends TestBase
     public function testUpdatesAccount()
     {
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, 'America/New_York');
-        $this->fakeConfig->SetKey(ConfigKeys::LANGUAGE, 'en_us');
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, 'en_us');
         $request = UpdateAccountRequest::Example();
         $this->requestValidator->_Errors = [];
 

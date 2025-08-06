@@ -179,7 +179,7 @@ class Ldap extends Authentication implements IAuthentication
                 $this->user->GetFirstName(),
                 $this->user->GetLastName(),
                 $password,
-                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
                 Configuration::Instance()->GetDefaultTimezone(),
                 $this->user->GetPhone(),
                 $this->user->GetInstitution(),

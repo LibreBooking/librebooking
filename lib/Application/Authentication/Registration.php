@@ -120,7 +120,7 @@ class Registration implements IRegistration
      */
     protected function CreatePending()
     {
-        return Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_ACTIVATION, new BooleanConverter());
+        return Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_EMAIL_ACTIVATION, new BooleanConverter());
     }
 
     public function UserExists($loginName, $emailAddress)

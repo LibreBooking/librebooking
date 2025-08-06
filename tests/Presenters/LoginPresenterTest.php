@@ -101,7 +101,7 @@ class LoginPresenterTest extends TestBase
 
     public function testPageLoadSetsVariablesCorrectly()
     {
-        $this->fakeConfig->SetKey(ConfigKeys::ALLOW_REGISTRATION, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'true');
 
         $this->auth->_ShowUsernamePrompt = true;
         $this->auth->_ShowPasswordPrompt = true;
@@ -223,17 +223,29 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_ShowScheduleLink = false;
     public $_Announcements;
 
-    public function SetGoogleUrl($URL) {}
+    public function SetGoogleUrl($URL)
+    {
+    }
 
-    public function SetMicrosoftUrl($URL) {}
+    public function SetMicrosoftUrl($URL)
+    {
+    }
 
-    public function SetFacebookUrl($URL) {}
+    public function SetFacebookUrl($URL)
+    {
+    }
 
-    public function SetKeycloakUrl($URL) {}
+    public function SetKeycloakUrl($URL)
+    {
+    }
 
-    public function SetOauth2Url($URL) {}
+    public function SetOauth2Url($URL)
+    {
+    }
 
-    public function SetOauth2Name($Name) {}
+    public function SetOauth2Name($Name)
+    {
+    }
 
     public function PageLoad()
     {

@@ -48,7 +48,7 @@ class ReservationAuthorization implements IReservationAuthorization
             return true;
         }
 
-        $startTimeConstraint = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_TIME_CONSTRAINT);
+        $startTimeConstraint = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT);
         $allowedForAdmin = $reservationView->EndDate->GreaterThanOrEqual(Date::Now());
 
         $adminForUser = $this->authorizationService->IsAdminFor($currentUser, $reservationView->OwnerId);

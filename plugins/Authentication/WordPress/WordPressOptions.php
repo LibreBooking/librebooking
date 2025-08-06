@@ -4,25 +4,27 @@ require_once(ROOT_DIR . '/lib/Config/namespace.php');
 
 class WordPressOptions
 {
-    public const CONFIG_ID = 'wordPress';
     public function __construct()
     {
         require_once(dirname(__FILE__) . '/WordPress.config.php');
 
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/WordPress.config.php',
-            self::CONFIG_ID
+            dirname(__FILE__) . '/.env',
+            WordPressConfigKeys::CONFIG_ID,
+            false,
+            WordPressConfigKeys::class
         );
     }
 
     public function RetryAgainstDatabase()
     {
-        return $this->GetConfig('database.auth.when.wp.user.not.found', new BooleanConverter());
+        return $this->GetConfig(WordPressConfigKeys::RETRY_AGAINST_DATABASE, new BooleanConverter());
     }
 
     public function GetPath()
     {
-        $path = $this->GetConfig('wp_includes.directory');
+        $path = $this->GetConfig(WordPressConfigKeys::WP_INCLUDES_DIRECTORY);
 
         if (!BookedStringHelper::StartsWith($path, '/')) {
             $path = ROOT_DIR . "/$path";
@@ -34,8 +36,8 @@ class WordPressOptions
         return $path . '/';
     }
 
-    private function GetConfig($keyName, $converter = null)
+    private function GetConfig($configDef, $converter = null)
     {
-        return Configuration::Instance()->File(self::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(WordPressConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 }

@@ -53,9 +53,9 @@ class SlotLabelFactory
      */
     public function Format(ReservationItemView $reservation, $format = null)
     {
-        $shouldHideUser = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
+        $shouldHideUser = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
         $shouldHideDetails = ReservationDetailsFilter::HideReservationDetails($reservation->StartDate, $reservation->EndDate);
-        $shouldHideReservations = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
+        $shouldHideReservations = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
 
         if ($shouldHideUser || $shouldHideDetails) {
             $canSeeUserDetails = $reservation->OwnerId == $this->user->UserId || $this->user->IsAdmin || $this->user->IsAdminForGroup($reservation->OwnerGroupIds());
@@ -77,10 +77,7 @@ class SlotLabelFactory
         }
 
         if (empty($format)) {
-            $format = Configuration::Instance()->GetSectionKey(
-                ConfigSection::SCHEDULE,
-                ConfigKeys::SCHEDULE_RESERVATION_LABEL
-            );
+            $format = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_RESERVATION_LABEL);
         }
 
         if ($format == 'none' || empty($format)) {

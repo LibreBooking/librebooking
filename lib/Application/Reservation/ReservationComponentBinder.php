@@ -48,7 +48,7 @@ class ReservationDateBinder implements IReservationComponentBinder
         $initializer->SetDates($startDate, $endDate, $startPeriods, $endPeriods, $schedule->GetWeekdayStart(), $layout->UsesCustomLayout());
 
         $hideRecurrence = (!$initializer->CurrentUser()->IsAdmin &&
-            Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_RECURRENCE, new BooleanConverter())
+            Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_RECURRENCE, new BooleanConverter())
             || $layout->UsesCustomLayout());
 
         $initializer->HideRecurrence($hideRecurrence);
@@ -141,8 +141,7 @@ class ReservationUserBinder implements IReservationComponentBinder
         $reservationUser = $this->userRepository->GetById($userId);
         $initializer->SetReservationUser($reservationUser);
 
-        $hideUser = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
+        $hideUser = Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
             new BooleanConverter()
         );
@@ -393,7 +392,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
         $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 

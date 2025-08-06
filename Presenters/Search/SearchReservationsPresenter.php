@@ -185,7 +185,7 @@ class ReservationsSearchFilter
         if (!empty($userId)) {
             $filter->_And(new SqlFilterEquals(new SqlFilterColumn(TableNames::USERS, ColumnNames::USER_ID), $userId));
         } else {
-            if (Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, new BooleanConverter())) {
+            if (Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS, new BooleanConverter())) {
                 $filter->_And(new SqlFilterEquals(new SqlFilterColumn(TableNames::USERS, ColumnNames::USER_ID), ServiceLocator::GetServer()->GetUserSession()->UserId));
             }
         }

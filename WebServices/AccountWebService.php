@@ -50,7 +50,7 @@ class AccountWebService
      */
     public function Create()
     {
-        if (!Configuration::Instance()->GetSectionKey(ConfigSection::API, ConfigKeys::ALLOW_REGISTRATION, new BooleanConverter())) {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter())) {
             $this->server->WriteResponse(
                 new FailedResponse(['allow.self.registration is not enabled for the API']),
                 RestResponse::UNAUTHORIZED_CODE

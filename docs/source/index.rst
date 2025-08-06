@@ -14,6 +14,9 @@ LibreBooking documentation
    :caption: Table of Contents:
 
    INSTALLATION
+   CONFIGURATION
+   BASIC-CONFIGURATION
+   ADVANCED-CONFIGURATION
    DEVELOPER-README
    API
    Oauth2-Configuration

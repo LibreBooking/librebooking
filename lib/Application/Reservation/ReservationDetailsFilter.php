@@ -9,8 +9,7 @@ class ReservationDetailsFilter
      */
     public static function HideReservationDetails($reservationStart = null, $reservationEnd = null)
     {
-        $hideReservationDetails = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
+        $hideReservationDetails = Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
             new LowerCaseConverter()
         );

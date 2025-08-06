@@ -39,7 +39,7 @@ class DatePickerSetupControl extends Control
         $this->Set('DayNames', $this->GetJsDayNames('full'));
         $this->Set('MonthNames', $this->GetJsMonthNames('full'));
         $this->Set('MonthNamesShort', $this->GetJsMonthNames('abbr'));
-        $this->Set('ShowWeekNumbers', Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_SHOW_WEEK_NUMBERS, new BooleanConverter()));
+        $this->Set('ShowWeekNumbers', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_SHOW_WEEK_NUMBERS, new BooleanConverter()));
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 

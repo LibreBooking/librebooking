@@ -6,5 +6,5 @@
  */
 require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/Shibboleth.php';
 require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/ShibbolethOptions.php';
-require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/ShibbolethConfig.php';
+require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/ShibbolethConfigKeys.php';
 require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/ShibbolethUser.php';

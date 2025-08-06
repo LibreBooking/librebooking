@@ -1,5 +1,8 @@
 <?php
 
+
+
+
 class AdminCheckInOnlyValidation implements IReservationValidationService
 {
     /**
@@ -37,7 +40,7 @@ class AdminCheckInOnlyValidation implements IReservationValidationService
     private function EvaluateCustomRule($series)
     {
         $configFile = Configuration::Instance()->File('AdminCheckOnly'); // Gets config file
-        $customAttributeId = $configFile->GetKey('admincheckonly.attribute.checkin.id'); //Gets ID from AdminCheckInOnly
+        $customAttributeId = $configFile->GetKey(AdminCheckOnlyConfigKeys::ATTRIBUTE_CHECKIN_ID); //Gets ID from AdminCheckInOnly
         $resources = $series->AllResources();
         $adminChecks=0; //Number of resources with AdminCheckInOnly
         $userChecks=0;	//Number of resources without AdminCheckInOnly
@@ -64,9 +67,9 @@ class AdminCheckInOnlyValidation implements IReservationValidationService
 
         //Changes message in case there is a conflict with other resources that don't have AdminCheckOnly
         if ($userChecks) {
-            $customMessage = $configFile->GetKey('admincheckonly.message.checkin.resource.conflict');
+            $customMessage = $configFile->GetKey(AdminCheckOnlyConfigKeys::MESSAGE_CHECKIN_RESOURCE_CONFLICT);
         } else {
-            $customMessage = $configFile->GetKey('admincheckonly.message.checkin');
+            $customMessage = $configFile->GetKey(AdminCheckOnlyConfigKeys::MESSAGE_CHECKIN);
         }
 
         //If AdminCheckInOnly is on and user doesn't have priviliges,

@@ -42,8 +42,8 @@ class CalendarPage extends CommonCalendarPage implements ICommonCalendarPage
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('calendar_time'));
         $this->Set('DateFormat', Resources::GetInstance()->GetDateFormat('calendar_dates'));
         $this->Set('CreateReservationPage', Pages::RESERVATION);
-        $this->Set('CanViewUsers', !Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()));
-        $this->Set('AllowParticipation', !Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
+        $this->Set('CanViewUsers', !Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()));
+        $this->Set('AllowParticipation', !Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
 
         $this->DisplayPage();
     }

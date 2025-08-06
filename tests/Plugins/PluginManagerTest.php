@@ -18,7 +18,7 @@ class PluginManagerTest extends TestBase
 
     public function testCanLoadAuthPluginThatExists()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PLUGINS, ConfigKeys::PLUGIN_AUTHENTICATION, 'ActiveDirectory');
+        $this->fakeConfig->SetKey(ConfigKeys::PLUGIN_AUTHENTICATION, 'ActiveDirectory');
 
         $auth = PluginManager::Instance()->LoadAuthentication();
 
@@ -34,7 +34,7 @@ class PluginManagerTest extends TestBase
 
     public function testLoadsDefaultPluginNotFound()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PLUGINS, ConfigKeys::PLUGIN_AUTHENTICATION, 'foo');
+        $this->fakeConfig->SetKey(ConfigKeys::PLUGIN_AUTHENTICATION, 'foo');
         $auth = PluginManager::Instance()->LoadAuthentication();
 
         $this->assertEquals('Authentication', get_class($auth));
@@ -42,7 +42,7 @@ class PluginManagerTest extends TestBase
 
     public function testPreReservationPlugin()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PLUGINS, ConfigKeys::PLUGIN_PRERESERVATION, 'foo');
+        $this->fakeConfig->SetKey(ConfigKeys::PLUGIN_PRERESERVATION, 'foo');
 
         $plugin = PluginManager::Instance()->LoadPreReservation();
 
@@ -51,7 +51,7 @@ class PluginManagerTest extends TestBase
 
     public function testPostReservationPlugin()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PLUGINS, ConfigKeys::PLUGIN_POSTRESERVATION, 'foo');
+        $this->fakeConfig->SetKey(ConfigKeys::PLUGIN_POSTRESERVATION, 'foo');
 
         $plugin = PluginManager::Instance()->LoadPostReservation();
 
@@ -60,7 +60,7 @@ class PluginManagerTest extends TestBase
 
     public function testPostRegistrationPlugin()
     {
-        $this->fakeConfig->SetSectionKey(ConfigSection::PLUGINS, ConfigKeys::PLUGIN_POSTREGISTRATION, 'foo');
+        $this->fakeConfig->SetKey(ConfigKeys::PLUGIN_POSTREGISTRATION, 'foo');
 
         $plugin = PluginManager::Instance()->LoadPostRegistration();
 

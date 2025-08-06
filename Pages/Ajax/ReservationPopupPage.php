@@ -129,7 +129,7 @@ class PopupFormatter
 
     public function Display()
     {
-        $label = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_RESERVATION_POPUP);
+        $label = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_RESERVATION_POPUP);
 
         if (empty($label)) {
             $label = "{pending} {name} {email} {dates} {duration} {title} {resources} {participants} {accessories} {description} {attributes}";
@@ -188,8 +188,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
     public function IsAuthenticated()
     {
-        return Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
+        return Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
             new BooleanConverter()
         ) ||
@@ -357,8 +356,7 @@ class ReservationPopupPresenter
 
     public function PageLoad()
     {
-        $hideUserInfo = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
+        $hideUserInfo = Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
             new BooleanConverter()
         );

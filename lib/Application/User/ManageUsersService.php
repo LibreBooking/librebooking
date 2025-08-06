@@ -177,7 +177,7 @@ class ManageUsersService implements IManageUsersService
         $user = $this->userRepository->LoadById($userId);
         $this->userRepository->DeleteById($userId);
 
-        if ($notify && Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_NOTIFY, new BooleanConverter())) {
+        if ($notify && Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_NOTIFY_ADMIN, new BooleanConverter())) {
             $applicationAdmins = $this->userViewRepository->GetApplicationAdmins();
             $groupAdmins = $this->userViewRepository->GetGroupAdmins($userId);
 

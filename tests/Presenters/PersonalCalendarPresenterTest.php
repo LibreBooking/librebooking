@@ -76,7 +76,7 @@ class PersonalCalendarPresenterTest extends TestBase
         $calendarType = CalendarTypes::Month;
 
         $showInaccessible = true;
-        $this->fakeConfig->SetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES, 'true');
 
         $resourceId = 1;
         $resourceName = 'rn';

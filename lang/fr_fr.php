@@ -389,6 +389,7 @@ class fr_fr extends en_gb
         $strings['ConfigurationUpdated'] = 'Le fichier de configuration a été mis à jour';
         $strings['ConfigurationUiNotEnabled'] = 'Cette page est inacessible car $conf[\'settings\'][\'pages\'][\'enable.configuration\'] est égal à false ou manquant.';
         $strings['ConfigurationFileNotWritable'] = 'Le fichier de configuration n\'est pas accessible en écriture. Veuillez vérifier les permissions de ce fichier et essayez à nouveau.';
+        $strings['ConfigurationEnvWarning'] = 'Certaines valeurs de configuration sont remplacées par vos variables d\'environnement ou le fichier <code>.env</code>. Il se peut que des modifications ne soient possibles que si vous supprimez les variables d\'environnement correspondantes.';
         $strings['ConfigurationUpdateHelp'] = 'Veuillez vous référer à la section Configuration du <a target=_blank href=%s>fichier d\'aide</a> pour la documentation concernant ces paramètres.';
         $strings['GeneralConfigSettings'] = 'paramètres';
         $strings['UseSameLayoutForAllDays'] = 'Utiliser la même disposition pour tous les jours';
@@ -995,7 +996,7 @@ class fr_fr extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'Votre groupe n\'a aucune réservation à venir';
         $strings['GroupUpcomingReservations'] = 'Prochaines réservations de mon/des groupes';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Une erreur est survenue lors de la connexion avec Facebook. Veuillez réessayer.';
         //End Facebook Login SDK Error
@@ -1005,12 +1006,12 @@ class fr_fr extends en_gb
         $strings['PendingApprovalReservations'] = 'Réservations en attente d\'approbation';
         $strings['LaterThisMonth'] = 'Plus tard ce mois-ci';
         $strings['LaterThisYear'] = 'Plus tard cette année';
-        $strings['Remaining'] = 'Restant';    
+        $strings['Remaining'] = 'Restant';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Il n\'y a pas de réservations de départ manquantes';
-        $strings['MissingCheckOutReservations'] = 'Réservations de départ manquantes';        
+        $strings['MissingCheckOutReservations'] = 'Réservations de départ manquantes';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

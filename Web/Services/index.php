@@ -22,7 +22,7 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
-if (!Configuration::Instance()->GetSectionKey(ConfigSection::API, ConfigKeys::API_ENABLED, new BooleanConverter())) {
+if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
     die("LibreBooking API has been configured as disabled.<br/><br/>Set \$conf['settings']['api']['enabled'] = 'true' to enable.");
 }
 
@@ -262,7 +262,7 @@ function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
 }
 
 function GetConfigGroup(string $config_group): string|null {
-    $group_name = Configuration::Instance()->GetSectionKey(ConfigSection::API, $config_group) ?? '';
+    $group_name = Configuration::Instance()->GetKey($config_group) ?? '';
     if ($group_name == '') {
         return null;
     }

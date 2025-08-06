@@ -44,11 +44,7 @@ class PrivacyFilter implements IPrivacyFilter
 
     public function CanViewUser(UserSession $currentUser, $reservationView = null, $ownerId = null)
     {
-        $hideUserDetails = Configuration::Instance()->GetSectionKey(
-            ConfigSection::PRIVACY,
-            ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
-            new BooleanConverter()
-        );
+        $hideUserDetails = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
 
         return $this->CanView($hideUserDetails, $currentUser, $ownerId, $reservationView);
     }
