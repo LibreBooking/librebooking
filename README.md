@@ -130,14 +130,19 @@ docker-compose up -d
 
 ## 🎨 Configuration & Theming
 
+For configuration options, see the
+[Configuration Guide](https://github.com/LibreBooking/app/blob/develop/docs/source/CONFIGURATION.rst).
+
+Recent configuration highlights:
+
 - Change theme via `config.php`:
 
   ```php
-  $conf['settings']['css.theme'] = 'default';
+  'css.theme' = 'default';
   ```
 
 - Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
-- Customize `Web/css/librebooking.css`.
+- Customize `Web/css/librebooking.css`
 
 ## 🔒 ReCaptcha
 

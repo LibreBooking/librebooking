@@ -62,12 +62,16 @@ Install PHP dependencies using Composer:
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
 
-Important! The web server must have write access (0755) to
-``/librebooking/tpl_c`` and ``/librebooking/tpl`` `want to know
-why? <http://www.smarty.net/docs/en/variable.compile.dir.tpl>`__
+Important! The web server must have write access to the following directories:
 
-If using an (S)FTP client, check read/write/execute for Owner and Group
-on ``/tpl``, ``/tpl_c``, and ``/uploads``
+-  ``/tpl_c`` - Template compilation cache
+-  ``/tpl`` - Template files
+-  ``/uploads`` - File uploads (if enabled)
+-  Configured log directory (if logging is enabled)
+
+Recommended permissions are 755 for directories and 644 for files, with the web server user having write access.
+
+`Want to know why? <http://www.smarty.net/docs/en/variable.compile.dir.tpl>`__
 
 LibreBooking will not work if PHP
 `session.autostart <http://www.php.net/manual/en/session.configuration.php#ini.session.auto-start>`__
@@ -76,22 +80,24 @@ is enabled. Ensure this setting is disabled.
 Application Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can configure LibreBooking to fit your environments and needs or use the
-minimal default settings which should be enough for the application to work. We
-recommend you to change according to your specifics. Additional information on
-all configuration settings can be found in the application help page. To
-configure the application, you can open ``/config/config.php`` and alter any
-settings accordingly.
+You can configure LibreBooking to fit your environment and needs or use the
+minimal default settings which should be enough for the application to work.
 
-The admin email address can be set in the ``librebooking/config/config.php``
-file of ``$conf['settings']['admin.email']``
+Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
+the settings for your environment.
 
-When later register an account with admin email address the user will be given
-admin privilege.
+For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION` 
+for essential settings or :doc:`ADVANCED-CONFIGURATION` for comprehensive options.
+
+The admin email address can be set in the ``config/config.php`` file in the 
+settings array as ``'admin.email' => 'admin@example.com'``
+
+When you later register an account with the admin email address, the user will be given
+admin privileges.
 
 In addition, to allow resource image uploads, the web server must also have
-read/write access to your configurable uploads directory of
-``$conf['settings']['image.upload.directory']`` in the ``config.php``.
+read/write access to your configurable uploads directory specified by
+``'uploads' => ['image.upload.directory' => 'path']`` in the ``config.php``.
 
 By default, LibreBooking uses standard username/password for user
 authentication.
@@ -113,11 +119,17 @@ Open the configuration file (located at `config/config.php`) and ensure the foll
 
 .. code-block:: php
 
-    $conf['settings']['database']['type'] = 'mysql';
-    $conf['settings']['database']['user'] = 'lb_user';         // Database user with permission to access the LibreBooking database
-    $conf['settings']['database']['password'] = 'password';    // Database password
-    $conf['settings']['database']['hostspec'] = '127.0.0.1';   // IP address, DNS name, or named pipe
-    $conf['settings']['database']['name'] = 'librebooking';    // Name of the database used by LibreBooking
+    return [
+        'settings' => [
+            'database' => [
+                'type' => 'mysql',
+                'user' => 'lb_user',         // Database user with permission to access the LibreBooking database
+                'password' => 'password',    // Database password
+                'hostspec' => '127.0.0.1',   // IP address, DNS name, or named pipe
+                'name' => 'librebooking',    // Name of the database used by LibreBooking
+            ],
+        ]
+    ];
 
 Ensure that the database user has the necessary privileges to create the database (if it does not exist), and to create, read, insert, update, and modify tables within it.
 
@@ -134,7 +146,11 @@ automated install.
 
 .. code-block:: php
 
-    $conf['settings']['install.password'] = 'your_secure_password';
+    return [
+        'settings' => [
+            'install.password' => 'your_secure_password',
+        ]
+    ];
 
 This password is required to access the installer.
 
@@ -155,8 +171,16 @@ Manual Database Setup
   database configuration and set default values.
 | Please edit them to suit your environment before running. The files
   are located in ``librebooking/database_schema/``
-| Import the following sql files in the listed order (we recommend
-  `phpMyAdmin <https://www.phpmyadmin.net/>`__)
+| 
+| The following SQL files are available:
+| - ``create-db.sql`` - Creates the database
+| - ``create-user.sql`` - Creates the database user (optional)
+| - ``create-schema.sql`` - Creates all tables and structure
+| - ``create-data.sql`` - Inserts initial application data
+| - ``sample-data-utf8.sql`` - Sample data for testing (optional)
+|
+| Import the SQL files in the following order (we recommend
+  `phpMyAdmin <https://www.phpmyadmin.net/>`__):
 
 | On a remote host with no database creation privileges
 | If you are installing LibreBooking on a remote host, please follow
@@ -192,23 +216,270 @@ file.
   whatever database name was used in the creation process)
 
 | If you have database creation privileges in MySQL
-| Open ``/database_schema/full-install.sql`` and edit the database name
-  and username/password to match your ``config.php`` database values
-| Run or import ``/database_schema/full-install.sql`` Optionally -
-  run/import ``/database_schema/testdata-utf8.sql`` to librebooking
-  (sample application data will be created with 2 users: admin/password
-  and user/password).
-| These users are available for testing your installation.
+| Open ``/database_schema/create-db.sql`` to create the database
+| Import ``/database_schema/create-schema.sql`` to create the table structure
+| Import ``/database_schema/create-data.sql`` to populate initial data
+| Optionally - import ``/database_schema/sample-data-utf8.sql`` to add
+  sample application data (this will create 2 test users: admin/password
+  and user/password for testing your installation).
 
 You are done. Try to load the application at (eg.
 http://yourhostname/librebooking/Web/).
+
+Building from Source
+---------------------
+
+If you want to build LibreBooking from source code, the project includes a Phing build configuration.
+
+Prerequisites
+~~~~~~~~~~~~~
+
+-  PHP with MySQL support
+-  `Phing <https://www.phing.info/>`__ build tool
+-  MySQL server access for database setup
+-  Composer for PHP dependencies
+
+Build Process
+~~~~~~~~~~~~~
+
+The build process is configured in ``build.xml`` and includes several targets:
+
+**Database Setup:**
+
+.. code-block:: bash
+
+   # Set up a fresh database with latest schema
+   phing setup.db
+
+**Package Creation:**
+
+.. code-block:: bash
+
+   # Create a distribution package
+   phing package
+
+The packaging process will:
+
+-  Create a clean staging directory
+-  Copy application files while excluding development artifacts
+-  Combine database schema files
+-  Create a distribution ZIP file
+-  Generate a build bundle in ``build/bundle/``
+
+**Files Excluded from Package:**
+
+The build process automatically excludes development files:
+
+-  Configuration files (``config.php``, ``*.config.php``)
+-  User uploads and temporary files
+-  Development tools and IDE files
+-  Testing files and documentation
+-  Version control files
+-  Build artifacts
+
+**Database Upgrades:**
+
+For upgrading existing installations:
+
+.. code-block:: bash
+
+   # Upgrade database to latest version
+   phing upgrade.db
+
+This will run any pending database migrations from the ``database_schema/upgrades/`` directory.
+
+**Database File Combination:**
+
+The build process creates optimized database installation files by combining:
+
+-  ``create-schema.sql`` - Table structure
+-  ``create-data.sql`` - Initial data
+
+This creates consolidated installation files for easier deployment.
+
+Docker Installation (Recommended)
+----------------------------------
+
+LibreBooking can be easily deployed using Docker containers, which provides a consistent environment and simplifies setup. This is the recommended method for new installations.
+
+Prerequisites
+~~~~~~~~~~~~~
+
+-  Docker and Docker Compose installed on your system
+-  Basic understanding of Docker concepts
+
+Quick Start with Docker Compose
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. **Create a docker-compose.yml file:**
+
+   .. code-block:: yaml
+
+      name: librebooking
+
+      services:
+        db:
+          image: linuxserver/mariadb:10.6.13
+          restart: always
+          volumes:
+            - db_data:/config
+          environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/New_York
+            - MYSQL_ROOT_PASSWORD=your_secure_root_password
+        
+        app:
+          image: librebooking/librebooking:develop
+          restart: always
+          depends_on:
+            - db
+          ports:
+            - "80:80"
+          volumes:
+            - app_config:/config
+          environment:
+            - LB_DB_NAME=librebooking
+            - LB_DB_USER=lb_user
+            - LB_DB_USER_PWD=your_secure_user_password
+            - LB_DB_HOST=db
+            - LB_INSTALL_PWD=your_installation_password
+            - TZ=America/New_York
+
+      volumes:
+        db_data:
+        app_config:
+
+2. **Start the services:**
+
+   .. code-block:: bash
+
+      docker-compose up -d
+
+3. **Complete the installation:**
+
+   -  Open your browser to ``http://localhost/install``
+   -  Enter the installation password (``LB_INSTALL_PWD`` from docker-compose.yml)
+   -  Enter database root user: ``root``
+   -  Enter database root password (``MYSQL_ROOT_PASSWORD`` from docker-compose.yml)
+   -  Select "Create the database" and "Create the database user"
+   -  Click the register link to create your admin account
+
+Docker Environment Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Required Environment Variables (when config.php doesn't exist):**
+
+``LB_DB_NAME``
+  Database name for LibreBooking (e.g., ``librebooking``)
+
+``LB_DB_USER``
+  Database username (e.g., ``lb_user``)
+
+``LB_DB_USER_PWD``
+  Database user password
+
+``LB_DB_HOST``
+  Database hostname (e.g., ``db`` when using docker-compose)
+
+``LB_INSTALL_PWD``
+  Password for accessing the installation wizard
+
+``TZ``
+  Timezone (e.g., ``America/New_York``, ``Europe/London``)
+
+**Optional Environment Variables:**
+
+``LB_ENV``
+  Environment mode: ``production`` (default) or ``dev``
+
+``LB_LOG_FOLDER``
+  Log directory (default: ``/var/log/librebooking``)
+
+``LB_LOG_LEVEL``
+  Logging level: ``none`` (default), ``debug``, ``error``
+
+``LB_LOG_SQL``
+  Enable SQL logging: ``false`` (default), ``true``
+
+``LB_CRON_ENABLED``
+  Enable background cron jobs: ``false`` (default), ``true``
+
+Docker Image Versions
+~~~~~~~~~~~~~~~~~~~~~
+
+**Stable Release:**
+
+.. code-block:: bash
+
+   docker pull librebooking/librebooking:v3.0.3
+
+**Development Version:**
+
+.. code-block:: bash
+
+   docker pull librebooking/librebooking:develop
+
+Persistent Data Storage
+~~~~~~~~~~~~~~~~~~~~~~~
+
+To persist data beyond container lifecycle, mount these directories:
+
+**Configuration:**
+  Mount ``/config`` volume to persist configuration files
+
+**File Uploads:**
+  Mount ``/var/www/html/Web/uploads/images`` for uploaded images
+  Mount ``/var/www/html/Web/uploads/reservation`` for reservation attachments
+
+Background Jobs (Cron)
+~~~~~~~~~~~~~~~~~~~~~~
+
+LibreBooking requires background jobs for features like reminder emails:
+
+.. code-block:: yaml
+
+   environment:
+     - LB_CRON_ENABLED=true
+
+Or run them manually:
+
+.. code-block:: bash
+
+   docker exec <container_name> php -f /var/www/html/Jobs/sendreminders.php
+
+Docker Troubleshooting
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Container won't start:**
+  -  Check Docker logs: ``docker-compose logs app``
+  -  Verify environment variables are set correctly
+  -  Ensure database container is running: ``docker-compose ps``
+
+**Cannot access installation:**
+  -  Verify port mapping: ``docker-compose ps``
+  -  Check firewall settings
+  -  Ensure ``LB_INSTALL_PWD`` is set
+
+**Database connection failed:**
+  -  Verify database container is healthy: ``docker-compose logs db``
+  -  Check database environment variables match between services
+  -  Ensure containers are on the same network
+
+**Configuration not persisting:**
+  -  Verify volume mounts are correct
+  -  Check container has write permissions to volumes
+  -  Use named volumes instead of bind mounts for easier management
+
+For more detailed Docker configuration options and advanced setups, see the 
+`LibreBooking Docker repository <https://github.com/LibreBooking/docker>`__.
 
 Registering the Administrator Account
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After the database has been set up you will need to register the account
 for your application administrator. Navigate to register.php register an
-account with email address set in ``$conf['settings']['admin.email']``.
+account with email address set as the ``'admin.email'`` value in your configuration.
 
 Upgrading
 ---------
@@ -291,9 +562,9 @@ There are 2 main types of accounts, they are admin and user account.
    admin/password and user/password to login and make changes or
    addition via the application.
 -  If not, **you will need to register an account with your configured
-   admin email address**. The admin email address can be set in the
-   ``librebooking/config/config.php`` file of setting
-   ``$conf['settings']['admin.email']``
+   admin email address**. The admin email address is set in the
+   ``librebooking/config/config.php`` file as ``'admin.email' => 'admin@example.com'``
+   within the settings array.
 
 Other self registration accounts are defaulted to normal users.
 
@@ -316,10 +587,14 @@ application or database logs. To do this:
 -  Levels used by LibreBooking are OFF, DEBUG, ERROR. For normal
    operation, ERROR is appropriate. If trace logs are needed, DEBUG is
    appropriate.
--  To turn on application logging, change the
-   ``$conf['settings']['logging']['level'] =`` to an appropriate level
-   for either the default or sql loggers. For example,
-   ``$conf['settings']['logging']['level'] = 'debug';``
+-  To turn on application logging, change the logging level setting
+   in your configuration file to an appropriate level. For example,
+   set ``'logging' => ['level' => 'debug']`` within the settings array.
+
+For detailed information on all logging and other configuration options, 
+see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION` 
+for comprehensive options.
+
 
 Enabling LibreBooking API
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -338,8 +613,7 @@ Prerequisites
 Configuration
 ^^^^^^^^^^^^^
 
--  Set ``$conf['settings']['api']['enabled'] = 'true'``; in your config
-   file.
+-  Set ``'api' => ['enabled' => true]`` in your config file's settings array.
 -  If you want friendly URL paths, mod_rewrite or URL rewriting must be
    enabled. Note, this is not required in order to use the API.
 -  If using mod_rewrite and an Apache alias, ensure RewriteBase in
