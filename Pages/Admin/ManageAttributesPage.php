@@ -13,12 +13,12 @@ interface IManageAttributesPage extends IActionPage
 
     /**
      * @abstract
-     * return int|CustomAttributeTypes
+     * return CustomAttributeTypes
      */
     public function GetType();
 
     /**
-     * return int|CustomAttributeCategory
+     * return CustomAttributeCategory
      */
     public function GetCategory();
 
@@ -43,7 +43,7 @@ interface IManageAttributesPage extends IActionPage
     public function GetPossibleValues();
 
     /**
-     * return int|CustomAttributeCategory
+     * return CustomAttributeCategory
      */
     public function GetRequestedCategory();
 
@@ -63,7 +63,7 @@ interface IManageAttributesPage extends IActionPage
     public function BindAttributes($attributes);
 
     /**
-     * @param $categoryId int|CustomAttributeCategory
+     * @param $categoryId CustomAttributeCategory
      */
     public function SetCategory($categoryId);
 
@@ -78,7 +78,7 @@ interface IManageAttributesPage extends IActionPage
     public function GetSecondaryEntityIds();
 
     /**
-     * @return CustomAttributeCategory|int|null
+     * @return CustomAttributeCategory|null
      */
     public function GetSecondaryCategory();
 

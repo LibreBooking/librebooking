@@ -308,7 +308,7 @@ class CustomAttribute
         $this->category = $category;
         $this->SetRegex($regex);
         $this->required = $required;
-        if ($category != CustomAttributeCategory::RESERVATION) {
+        if ((int)$category !== CustomAttributeCategory::RESERVATION) {
             $this->entityIds = is_array($entityIds) ? $entityIds : ($entityIds);
         }
         $this->adminOnly = $adminOnly;
@@ -452,7 +452,7 @@ class CustomAttribute
         $this->SetRegex($regex);
         $this->required = $required;
 
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if ((int)$this->category !== CustomAttributeCategory::RESERVATION) {
             $entityIds = is_array($entityIds) ? $entityIds : [$entityIds];
             $removed = array_diff($this->entityIds, $entityIds);
             $added = array_diff($entityIds, $this->entityIds);
@@ -503,7 +503,7 @@ class CustomAttribute
      */
     public function WithSecondaryEntities($category, $entityIds, $entityDescriptions = null)
     {
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if ((int)$this->category != CustomAttributeCategory::RESERVATION) {
             return;
         }
 

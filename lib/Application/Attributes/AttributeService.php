@@ -231,9 +231,9 @@ class AttributeService implements IAttributeService
             $secondaryCategory = $attribute->SecondaryCategory();
             if (empty($secondaryCategory) ||
                     (
-                        $secondaryCategory == CustomAttributeCategory::USER &&
+                        (int)$secondaryCategory === CustomAttributeCategory::USER &&
                             $this->AvailableForUser($userSession, $requestedUserId, $secondaryCategory, $attribute) ||
-                    (($secondaryCategory == CustomAttributeCategory::RESOURCE || $secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE)
+                    (((int)$secondaryCategory === CustomAttributeCategory::RESOURCE || (int)$secondaryCategory === CustomAttributeCategory::RESOURCE_TYPE)
                             && $this->AvailableForResource($userSession, $secondaryCategory, $attribute, $requestedResourceIds))
                     )
             ) {
@@ -276,8 +276,8 @@ class AttributeService implements IAttributeService
      */
     private function AvailableForResource($userSession, $secondaryCategory, $attribute, $requestedResourceIds)
     {
-        if ($secondaryCategory == CustomAttributeCategory::RESOURCE || $secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE) {
-            if ($secondaryCategory == CustomAttributeCategory::RESOURCE) {
+        if ((int)$secondaryCategory === CustomAttributeCategory::RESOURCE || (int)$secondaryCategory === CustomAttributeCategory::RESOURCE_TYPE) {
+            if ((int)$secondaryCategory === CustomAttributeCategory::RESOURCE) {
                 $applies = array_intersect($attribute->SecondaryEntityIds(), $requestedResourceIds);
                 $allowed = array_intersect($attribute->SecondaryEntityIds(), array_keys($this->GetAllowedResources($userSession)));
 

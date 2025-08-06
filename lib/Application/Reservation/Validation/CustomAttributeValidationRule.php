@@ -38,15 +38,15 @@ class CustomAttributeValidationRule implements IReservationValidationRule
                 $secondaryCategory = $invalidAttribute->Attribute->SecondaryCategory();
                 $secondaryEntityIds = $invalidAttribute->Attribute->SecondaryEntityIds();
 
-                if ($secondaryCategory == CustomAttributeCategory::USER && !in_array($reservationSeries->UserId(), $secondaryEntityIds)) {
+                if ((int)$secondaryCategory === CustomAttributeCategory::USER && !in_array($reservationSeries->UserId(), $secondaryEntityIds)) {
                     // the attribute applies to a different user
                     continue;
                 }
-                if ($secondaryCategory == CustomAttributeCategory::RESOURCE && count(array_intersect($secondaryEntityIds, $reservationSeries->AllResourceIds())) == 0) {
+                if ((int)$secondaryCategory === CustomAttributeCategory::RESOURCE && count(array_intersect($secondaryEntityIds, $reservationSeries->AllResourceIds())) == 0) {
                     // the attribute is not for a resource that is being booked
                     continue;
                 }
-                if ($secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE) {
+                if ((int)$secondaryCategory === CustomAttributeCategory::RESOURCE_TYPE) {
                     $appliesToResourceType = false;
                     foreach ($reservationSeries->AllResources() as $resource) {
                         if ($appliesToResourceType) {

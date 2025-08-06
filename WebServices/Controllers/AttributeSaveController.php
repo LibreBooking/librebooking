@@ -169,24 +169,26 @@ class AttributeSaveController implements IAttributeSaveController
             $errors[] = 'label is required';
         }
 
-        if ($request->type != CustomAttributeTypes::CHECKBOX &&
-                $request->type != CustomAttributeTypes::MULTI_LINE_TEXTBOX &&
-                $request->type != CustomAttributeTypes::SELECT_LIST &&
-                $request->type != CustomAttributeTypes::SINGLE_LINE_TEXTBOX
+        if ((int)$request->type !== CustomAttributeTypes::CHECKBOX &&
+                (int)$request->type !== CustomAttributeTypes::MULTI_LINE_TEXTBOX &&
+                (int)$request->type !== CustomAttributeTypes::SELECT_LIST &&
+                (int)$request->type !== CustomAttributeTypes::SINGLE_LINE_TEXTBOX &&
+                (int)$request->type !== CustomAttributeTypes::DATETIME
         ) {
             $errors[] = sprintf(
-                'type is invalid. Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line)',
+                'type is invalid. Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line), %s (datetime)',
                 CustomAttributeTypes::CHECKBOX,
                 CustomAttributeTypes::MULTI_LINE_TEXTBOX,
                 CustomAttributeTypes::SELECT_LIST,
-                CustomAttributeTypes::SINGLE_LINE_TEXTBOX
+                CustomAttributeTypes::SINGLE_LINE_TEXTBOX,
+                CustomAttributeTypes::DATETIME
             );
         }
 
-        if ($request->categoryId != CustomAttributeCategory::RESERVATION &&
-                $request->categoryId != CustomAttributeCategory::RESOURCE &&
-                $request->categoryId != CustomAttributeCategory::RESOURCE_TYPE &&
-                $request->categoryId != CustomAttributeCategory::USER
+        if ((int)$request->categoryId !== CustomAttributeCategory::RESERVATION &&
+                (int)$request->categoryId !== CustomAttributeCategory::RESOURCE &&
+                (int)$request->categoryId !== CustomAttributeCategory::RESOURCE_TYPE &&
+                (int)$request->categoryId !== CustomAttributeCategory::USER
         ) {
             $errors[] = sprintf(
                 'categoryId is invalid. Allowed values for category: %s (reservation), %s (resource), %s (resource type), %s (user)',
@@ -197,15 +199,15 @@ class AttributeSaveController implements IAttributeSaveController
             );
         }
 
-        if ($request->type == CustomAttributeTypes::SELECT_LIST && empty($request->possibleValues)) {
+        if ((int)$request->type === CustomAttributeTypes::SELECT_LIST && empty($request->possibleValues)) {
             $errors[] = 'possibleValues is required when the type is a select list';
         }
 
-        if ($request->type != CustomAttributeTypes::SELECT_LIST && !empty($request->possibleValues)) {
+        if ((int)$request->type !== CustomAttributeTypes::SELECT_LIST && !empty($request->possibleValues)) {
             $errors[] = 'possibleValues is only valid when the type is a select list';
         }
 
-        if ($request->categoryId == CustomAttributeCategory::RESERVATION && !empty($request->appliesToIds)) {
+        if ((int)$request->categoryId === CustomAttributeCategory::RESERVATION && !empty($request->appliesToIds)) {
             $errors[] = 'appliesToId is not valid when the type is reservation';
         }
 
