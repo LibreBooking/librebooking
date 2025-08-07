@@ -151,9 +151,9 @@ class Configuration implements IConfiguration
             // directly load new config format
             $conf = $loadedConfig;
         } elseif (isset($conf['settings'])) {
-            error_log("Legacy config format detected in $configFile. Please consider updating to the new format.");
+            error_log("[CONFIG] Legacy config format detected in $configFile. Please consider updating to the new format.");
         } else {
-            throw new Exception("Invalid config file: 'settings' section missing");
+            throw new Exception("[CONFIG] Invalid config file: 'settings' section missing");
         }
 
         $this->AddConfig($configId, $conf, $overwrite, $configKeysClass);
