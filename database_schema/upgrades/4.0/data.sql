@@ -1,0 +1,1 @@
+insert into `dbversion` values('4.0', now());
