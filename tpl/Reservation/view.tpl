@@ -29,7 +29,7 @@
                 <div id="reservationDetails" class="{$detailsCol}">
                     <div class="col-12">
                         <label class="fw-bold">{translate key='User'}</label>
-                        {if $ShowUserDetails && $ShowReservationDetails && $isResourcePermitted}
+                        {if isset($CanViewResponsibilities) && $CanViewResponsibilities}
                             <a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName}</a>
                             <input id="userId" type="hidden" value="{$UserId}" />
                         {else}
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="col-12">
-                        {*<span class="like-label class="fw-bold"">{translate key=ReservationLength}</span>*}
+                        <span class="like-label fw-bold">{translate key=ReservationLength}</span>
                         <span class="durationText">
                             <span id="durationDays">0</span> {translate key=days}
                             <span id="durationHours">0</span> {translate key=hours}
@@ -75,7 +75,7 @@
                         {translate key=$RepeatOptions[$RepeatType]['key']}
                         {if $IsRecurring}
                             <div class="repeat-details">
-                                <label class="fw-bold">{translate key='RepeatEveryPrompt'}</label> {$RepeatInterval}
+                                <label class="fw-bold">{translate key='RepeatEveryPrompt'}</label>{$RepeatInterval}
                                 {$RepeatOptions[$RepeatType]['everyKey']}
                                 {if $RepeatMonthlyType neq ''}
                                     ({$RepeatMonthlyType})

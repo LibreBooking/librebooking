@@ -152,8 +152,6 @@
                 <div type="text" id="datepicker" class="collapse"></div>
             </div>
 
-
-
             {capture name="date_navigation"}
                 {if !isset($HideSchedule) || !$HideSchedule}
                     <div class="schedule-dates d-flex justify-content-center mt-2 fs-5 gap-2">
@@ -176,7 +174,7 @@
                         <a href="#" class="change-date link-primary" data-year="{$NextDate->Year()}" data-month="{$NextDate->Month()}"
                             data-day="{$NextDate->Day()}"><i class="bi bi-arrow-right-circle-fill"></i></a>
                     </div>
-                    {if $ShowFullWeekLink}
+                    {if !$ShowFullWeekLink}
                         <div class="d-flex justify-content-center fs-5">
                             <a class="link-primary" href="{add_querystring key=SHOW_FULL_WEEK value=1}"
                                 id="showFullWeek">({translate key=ShowFullWeek})</a>
@@ -217,6 +215,8 @@
             </div>
         {/if}
 
+        {include file='Custom/avisos.tpl' resource=$Resource}
+
         {if !isset($HideSchedule) || !$HideSchedule}
             {block name="legend"}
                 <div class="schedule-legend mt-3">
@@ -253,12 +253,12 @@
             {/block}
 
             <div>
-                <a href="#" title="Show Reservation Filter" class="toggle-sidebar link-primary"><i
+                <a href="#" title="Show Reservation Filter" class="d-none toggle-sidebar link-primary"><i
                         class="bi bi-funnel-fill me-1"></i>{translate key=ResourceFilter}
                     <i id="restore-sidebar" class="bi bi-chevron-double-right"></i></a>
             </div>
             <div class="row g-2">
-                <div id="reservations-left" class="col-md-2 col-sm-12">
+                <div id="reservations-left" class="d-none no-show col-md-2 col-sm-12">
                     <div class="card h-100">
                         <div
                             class="reservations-left-header card-header d-flex justify-content-between align-items-center px-3 py-2">
@@ -349,7 +349,7 @@
                     </div>
                 </div>
 
-                <div id="reservations" class="col-md-10 col-sm-12">
+                <div id="reservations" class="col-md-12 col-sm-12">
                     {block name="reservations"}
                         {include file="Schedule/schedule-reservations-grid.tpl" }
                     {/block}
