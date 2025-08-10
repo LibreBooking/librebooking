@@ -28,37 +28,51 @@ class ConfigTest extends TestBase
 
     public function testLegacyConfigLoadsAllValues()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_legacy_config.php', '', self::CONFIG_ID, true);
-        $config = Configuration::Instance()->File(self::CONFIG_ID);
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_legacy_config.php', '', self::CONFIG_ID, true);
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
-        $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
-        $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
-        $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
+            $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
+            $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+            $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
+        });
+
+        $this->assertLogMessage($errorLogs, 'Legacy config format detected', 'legacy config format detection');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'allow.self.registration'", 'deprecated allow.self.registration key');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'plugins.Authentication'", 'deprecated plugins.Authentication key');
     }
 
     public function testMainConfigValidation()
     {
-        Configuration::Instance()->Register(
-            ROOT_DIR . 'tests/data/test_invalid_config.php',
-            '',
-            self::CONFIG_ID,
-            true
-        );
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_invalid_config.php',
+                '',
+                self::CONFIG_ID,
+                true
+            );
 
-        $config = Configuration::Instance()->File(self::CONFIG_ID);
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $appDebug = $config->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
-        $this->assertFalse($appDebug, "Invalid boolean should be replaced with default");
+            $appDebug = $config->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
+            $this->assertFalse($appDebug, "Invalid boolean should be replaced with default");
 
-        $timeout = $config->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
-        $this->assertEquals(30, $timeout, "Invalid integer should be replaced with default");
+            $timeout = $config->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
+            $this->assertEquals(30, $timeout, "Invalid integer should be replaced with default");
 
-        $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
-        $this->assertEquals('none', $loggingLevel, "Invalid choice should be replaced with default");
+            $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
+            $this->assertEquals('none', $loggingLevel, "Invalid choice should be replaced with default");
 
-        $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-        $this->assertEquals(6, $minimumLetters, "Type conversion should return integer");
+            $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
+            $this->assertEquals(6, $minimumLetters, "Type conversion should return integer");
+        });
+
+        $this->assertLogMessage($errorLogs, "Invalid type for 'app.debug'. Should be 'boolean'", 'app.debug type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'app.title'. Should be 'string'", 'app.title type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid value 'super-verbose' for 'logging.level'", 'logging.level value validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'inactivity.timeout'. Should be 'integer'", 'inactivity.timeout type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'password.minimum.letters'. Should be 'integer'", 'password.minimum.letters type validation error');
     }
 
     public function testRegistersPluginConfigFiles()
@@ -78,17 +92,18 @@ class ConfigTest extends TestBase
 
     public function testPluginConfigValidation()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_invalid_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
-        $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_invalid_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
+            $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
-        // Test that invalid string is replaced with default
-        $this->assertEquals('default1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+            $this->assertEquals('default1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+            $this->assertEquals('default2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+            $this->assertEquals('option1', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+        });
 
-        // Test that invalid string is replaced with default
-        $this->assertEquals('default2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
-
-        // Test that invalid choice is replaced with default
-        $this->assertEquals('option1', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+        $this->assertLogMessage($errorLogs, "Invalid type for 'key1'. Should be 'string', using default.", 'key1 type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'server1.key'. Should be 'string', using default.", 'server1.key type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid value 'invalid' for 'server2.key'. Should be one of the following options: [Option 1, Option 2, Option 3]", 'server2.key value validation error');
     }
 
     public function testEnvOverridesConfigWithPutenv()
@@ -103,10 +118,10 @@ class ConfigTest extends TestBase
         $this->assertEquals('UCT', $config->GetDefaultTimezone());
     }
 
-    /**
-     * Test that the actual config.dist.php loads correctly
-     * and all its nested values are accessible
-     */
+    // /**
+    //  * Test that the actual config.dist.php loads correctly
+    //  * and all its nested values are accessible
+    //  */
     public function testConfigDistLoadsCorrectly()
     {
         // Load the config.dist.php file

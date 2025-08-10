@@ -10,7 +10,7 @@ return [
             'type' => 'mysql',
         ],
         'plugins' => [
-            'Authentication' => 'ActiveDirectory',
+            'authentication' => 'ActiveDirectory',
         ],
     ],
 ];
