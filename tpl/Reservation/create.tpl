@@ -40,12 +40,14 @@
             </div>
 
             <div class="row gx-2">
+                {include file='../Custom/avisos.tpl' resource=$Resource}
                 <div class="reservationTitle col-12 border-bottom py-2">
                     <div class="form-group">
                         <label class="fw-bold mb-0" for="reservationTitle">{translate key="ReservationTitle"}
                             {if $TitleRequired}
                             <i class="bi bi-asterisk text-danger align-top text-small"></i>
                             {/if}
+                            (Describa brevemente las actividades a realizar durante la reserva).
                         </label>
                         {textbox name="RESERVATION_TITLE" class="form-control has-feedback" value="ReservationTitle" id="reservationTitle" maxlength="300" required=$TitleRequired}
                     </div>
@@ -191,7 +193,8 @@
                         {/if}
                     </div>
 
-                    {if !$HideRecurrence}
+                    {*if !$HideRecurrence*}
+                    {if isset($CanViewResponsibilities) && $CanViewResponsibilities || (isset($CanViewAdmin) && $CanViewAdmin)}
                     <div class="pt-2">{$HideRecurrence}
                         {control type="RecurrenceControl" RepeatTerminationDate=$RepeatTerminationDate}
                     </div>
@@ -302,7 +305,7 @@
                 {/if}
 
                 <div class="reservationDescription border-bottom py-2">
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label class="fw-bold mb-0" for="description">
                             {translate key="ReservationDescription"}{if $DescriptionRequired}<i
                                 class="bi bi-asterisk text-danger align-top text-small"></i>
@@ -364,7 +367,7 @@
                         <input class="form-check-input" type="checkbox" id="termsAndConditionsAcknowledgement"
                             {formname key=TOS_ACKNOWLEDGEMENT} {if $TermsAccepted}checked="checked" {/if} />
                         <label for="termsAndConditionsAcknowledgement">{translate key=IAccept}</label>
-                        <a href="{$Terms->DisplayUrl()}" class="link-primary"
+                        <a href="{$Terms->DisplayUrl()}" class="link-dark"
                             target="_blank">{translate key=TheTermsOfService}</a>
                     </div>
                     {/if}
