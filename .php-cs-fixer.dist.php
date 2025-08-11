@@ -4,7 +4,8 @@ define('PHP_CS_FIXER_CACHE_FILE', __DIR__ . '/var/cache/.php-cs-fixer.cache');
 
 try {
     mkdir(dirname(PHP_CS_FIXER_CACHE_FILE), 0755, true);
-} catch (exception $e) {}
+} catch (exception $e) {
+}
 
 // doc: https://github.com/FriendsOfPhp/PHP-CS-Fixer#usage
 // https://symfony.com/doc/current/components/finder.html
@@ -21,7 +22,11 @@ return $config
     ->setCacheFile(PHP_CS_FIXER_CACHE_FILE)
     ->setRiskyAllowed(true)
     ->setRules([
+        '@Symfony' => true,
         '@PSR12' => true, // https://www.php-fig.org/psr/psr-12/
         'array_syntax' => ['syntax' => 'short'],
+        'array_indentation' => true,
+        'combine_consecutive_unsets' => true,
+        'single_quote' => true,
     ])
     ->setFinder($finder);

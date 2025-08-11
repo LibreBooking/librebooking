@@ -1,0 +1,10 @@
+# Enforce LF line endings for all text files
+* text=auto eol=lf
+
+# Optional: explicitly define file types
+*.php text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.tpl text eol=lf
+*.md text eol=lf

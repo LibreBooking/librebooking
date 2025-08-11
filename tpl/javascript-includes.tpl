@@ -9,8 +9,10 @@
         {jsfile src="js/bootstrapvalidator/bootstrapValidator.min.js"}
     {/if}
     {if isset($Trumbowyg) && $Trumbowyg}
+        {jsfile src="js/rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"}
         {jsfile src="js/purify.min.js"}
-        {jsfile src="js/trumbowyg.min.js"}
+        {jsfile src="js/trumbowyg/cdnjs.cloudflare.com/2.27.3/trumbowyg.min.js"}
+        {jsfile src="js/trumbowyg/cdnjs.cloudflare.com/2.27.3/plugins/resizimg/trumbowyg.resizimg.min.js"}
     {/if}
     {if isset($DataTable) && $DataTable}
         {jsfile src="js/datatable/cdn.datatables.net/1.13.7/js/jquery.dataTables.js"}
