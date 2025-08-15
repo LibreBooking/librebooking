@@ -31,9 +31,7 @@ jobs:
       - name: Install dependencies
         run: pip install tox
       - name: Build docs
-        env:
-          TOXENV: docs
-        run: tox
+        run: tox -c ci/tox.ini --workdir . -e docs
       - name: Archive generated docs
         uses: actions/upload-artifact@v4.6.0
         with:

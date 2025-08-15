@@ -29,11 +29,11 @@ jobs:
           python-version: "3.13"
       - run: pip install --upgrade tox
       - name: Run commitizen (https://commitizen-tools.github.io/commitizen/)
-        run: tox -e cz
+        run: tox -c ci/tox.ini --workdir . -e cz
       - name: Run config-check
-        run: tox -e config-check
+        run: tox -c ci/tox.ini --workdir . -e config-check
       - name: Run configKeys-check
-        run: tox -e configKeys-check
+        run: tox -c ci/tox.ini --workdir .  -e configKeys-check
 
   lint-markdown:
     runs-on: ubuntu-latest
