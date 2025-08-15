@@ -12,7 +12,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - develop
-  workflow_dispatch:  
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -61,6 +61,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          tools: cs2pr
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -86,6 +87,9 @@ jobs:
       - name: Lint PHP files
         run: ./ci/ci-phplint
 
+      # - name: PHP-CS-Fixer (dry-run for CI)
+      #   run: composer php-cs-fixer:lint --format=checkstyle | cs2pr
+
       # TODO: Enable this after resolving issues
       # - name: Check coding-standard
       #   # Allow the previous check to fail but not abort
@@ -106,13 +110,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          tools: cs2pr
 #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
 
       - name: Analyse files with PHPStan
-        run: composer phpstan -- --memory-limit 2G
+        run: composer phpstan --error-format=checkstyle | cs2pr
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
