@@ -199,6 +199,7 @@ return [
 
             # full or relative path to show uploaded images from
             'image.upload.url' => 'uploads/images',
+
             # Enable reservation attachments (true/false)
             'reservation.attachments.enabled' => false,
 
@@ -567,6 +568,7 @@ return [
             # X-Content-Type-Options header value
             'x-content-type' => 'nosniff',
 
+            # Set the Content-Security-Policy header value
             'content-security-policy' => '',
         ],
 
