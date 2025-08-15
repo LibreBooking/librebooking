@@ -12,6 +12,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - develop
+  workflow_dispatch:  
 
 permissions:
   contents: read
