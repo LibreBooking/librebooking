@@ -2,15 +2,40 @@
 
 FILES=$(find . -name '*.php' -not -path './vendor/*' -not -path './tmp/*' -not -path './node_modules/*')
 
-result=0
+TOTAL=$(echo "$FILES" | wc -l)
+COUNT=0
+BAR_WIDTH=50
+
+print_progress() {
+    progress=$(( COUNT * BAR_WIDTH / TOTAL ))
+    printf "\r["
+    for i in $(seq 1 $BAR_WIDTH); do
+        if [ $i -le $progress ]; then
+            printf "#"
+        else
+            printf "."
+        fi
+    done
+    printf "] %d%% (%d/%d)" $(( COUNT * 100 / TOTAL )) "$COUNT" "$TOTAL"
+}
+
+echo "::group::Linting PHP files"
+echo "Linting PHP files..."
 for FILE in $FILES ; do
-    if [ -f "$FILE" ] ; then
-        php -l "$FILE"
-        ret=$?
-        if [ $ret != 0 ] ; then
-            result=$ret
+    if [ -f "$FILE" ]; then
+        if ! php -l "$FILE" > /dev/null 2>&1 ; then
+            echo
+            echo "❌ Syntax error in $FILE"
+            php -l "$FILE"
+            result=1
+        fi
+        COUNT=$((COUNT + 1))
+        # only show progress if not in CI
+        if [ "$CI" != "true" ]; then
+            print_progress
         fi
     fi
 done
+echo "::endgroup::"
 
 exit $result
