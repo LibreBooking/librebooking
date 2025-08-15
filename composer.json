@@ -8,7 +8,8 @@
         "phpcompatibility/php-compatibility": "^9.3.5",
         "kint-php/kint": "^4.2.3",
         "phpunit/phpunit": "^11.3",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.86"
     },
     "require": {
         "php": ">=8.2",
@@ -33,14 +34,15 @@
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
-        "fix": "./tools/php-cs-fixer fix -v",
-        "lint": "./tools/php-cs-fixer fix -vv --dry-run",
+        "php-cs-fixer:fix": "./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v",
+        "php-cs-fixer:lint": "./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
-        "phpstan": "./vendor/bin/phpstan analyse",
-        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
+        "phpstan": "./vendor/bin/phpstan analyse --memory-limit=2G",
+        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline --memory-limit=2G",
         "test": [
             "@phpunit",
-            "@lint"
+            "@phpstan",
+            "@php-cs-fixer:lint"
         ],
         "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0"
     },
