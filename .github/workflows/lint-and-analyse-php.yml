@@ -34,7 +34,7 @@ jobs:
       - name: Run configKeys-check
         run: tox -e configKeys-check
 
-  markdownlint:
+  lint-markdown:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -47,7 +47,79 @@ jobs:
           globs: |
             *.md
 
+  lint-php-files:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.3", "8.4"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v2
+        with:
+          # Ignore zip for php-webdriver/webdriver
+          composer-options: "--ignore-platform-reqs"
+
+      - name: Update the composer.lock file
+        run: composer update
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      # TODO: Enable this after resolving issues
+      # - name: Cache coding-standard
+      #   # Allow the previous check to fail but not abort
+      #   if: always()
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: .phpcs-cache
+      #     key: phpcs-cache
+
+      - name: Lint PHP files
+        run: ./ci/ci-phplint
+
+      # TODO: Enable this after resolving issues
+      # - name: Check coding-standard
+      #   # Allow the previous check to fail but not abort
+      #   if: always()
+      #   run: composer phpcs
+
+  analyse-php:
+    needs: [basic-checks, lint-php-files]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.4"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+#          extensions: mbstring, iconv, mysqli, zip, gd, bz2
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Analyse files with PHPStan
+        run: composer phpstan -- --memory-limit 2G
+
+#      - name: Analyse files with Psalm
+#        # Allow the previous check to fail but not abort
+#        if: always()
+#        run: composer psalm -- --shepherd
+
   phpunit:
+    needs: [analyse-php]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -97,73 +169,3 @@ jobs:
             echo "❌ PHPUnit exited early (no summary line found)"
             exit 1
           fi
-
-  lint-php-files:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ["8.2", "8.3", "8.4"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-reqs"
-
-      - name: Update the composer.lock file
-        run: composer update
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      # TODO: Enable this after resolving issues
-      # - name: Cache coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .phpcs-cache
-      #     key: phpcs-cache
-
-      - name: Lint PHP files
-        run: ./ci/ci-phplint
-
-      # TODO: Enable this after resolving issues
-      # - name: Check coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   run: composer phpcs
-
-  analyse-php:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ["8.4"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-#          extensions: mbstring, iconv, mysqli, zip, gd, bz2
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-
-      - name: Analyse files with PHPStan
-        run: composer phpstan -- --memory-limit 2G
-
-#      - name: Analyse files with Psalm
-#        # Allow the previous check to fail but not abort
-#        if: always()
-#        run: composer psalm -- --shepherd
