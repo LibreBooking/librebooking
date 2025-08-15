@@ -31,6 +31,8 @@ jobs:
         run: tox -e cz
       - name: Run config-check
         run: tox -e config-check
+      - name: Run configKeys-check
+        run: tox -e configKeys-check
 
   markdownlint:
     runs-on: ubuntu-latest
