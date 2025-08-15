@@ -57,12 +57,12 @@ class ShibbolethUser
     public function __construct(array $values, ShibbolethOptions $options)
     {
         $config = $options->GetShibbolethOptions();
-        $this->_username = $this->GetValue($values, $config[ShibbolethConfig::USERNAME]);
-        $this->_firstname = $this->GetValue($values, $config[ShibbolethConfig::FIRSTNAME]);
-        $this->_lastname = $this->GetValue($values, $config[ShibbolethConfig::LASTNAME]);
-        $this->_email = $this->GetValue($values, $config[ShibbolethConfig::EMAIL]);
-        $this->_phone = $this->GetValue($values, $config[ShibbolethConfig::PHONE]);
-        $this->_organization = $this->GetValue($values, $config[ShibbolethConfig::ORGANIZATION]);
+        $this->_username = $this->GetValue($values, $config[ShibbolethConfigKeys::USERNAME['key']] ?? null);
+        $this->_firstname = $this->GetValue($values, $config[ShibbolethConfigKeys::FIRSTNAME['key']] ?? null);
+        $this->_lastname = $this->GetValue($values, $config[ShibbolethConfigKeys::LASTNAME['key']] ?? null);
+        $this->_email = $this->GetValue($values, $config[ShibbolethConfigKeys::EMAIL['key']] ?? null);
+        $this->_phone = $this->GetValue($values, $config[ShibbolethConfigKeys::PHONE['key']] ?? null);
+        $this->_organization = $this->GetValue($values, $config[ShibbolethConfigKeys::ORGANIZATION['key']] ?? null);
     }
 
     /**

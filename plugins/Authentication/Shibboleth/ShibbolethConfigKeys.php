@@ -1,6 +1,6 @@
 <?php
 /**
- * @file ShibbolethConfig.php
+ * @file ShibbolethConfigKeys.php
  */
 
 require_once(ROOT_DIR . 'lib/Config/PluginConfigKeys.php');
