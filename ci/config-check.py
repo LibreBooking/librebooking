@@ -4,63 +4,98 @@
 import argparse
 import dataclasses
 import pathlib
-import pprint
+from typing import Set
 import re
 import sys
 
 
+def parse_php_config_array(content: str) -> Set[str]:
+    keys = set()
+    stack = []
+    lines = content.splitlines()
+
+    skipping_first_level = True
+    for line in lines:
+        line = line.strip()
+
+        if not line or line.startswith("//") or line.startswith("#"):
+            continue
+
+        # Match a key like 'key' =>
+        match = re.match(r"'([^']+)'\s*=>", line)
+        if match:
+            key = match.group(1)
+
+            if "=> [" in line or line.endswith("["):
+                # Nested array starts
+                stack.append(key)
+                # Skip top-level 'settings' entry
+                if skipping_first_level and key == "settings":
+                    stack = []
+                    continue
+                skipping_first_level = False
+            else:
+                full_key = ".".join(stack + [key])
+                keys.add(full_key)
+
+        # Handle array closing
+        if line in ("]", "],"):
+            if stack:
+                stack.pop()
+
+    return keys
+
+
+def to_env_key(config_key: str) -> str:
+    return "LB_" + config_key.upper().replace(".", "_").replace("-", "_")
+
+def extract_keys_from_env(env_path: pathlib.Path) -> Set[str]:
+    keys = set()
+    for line in env_path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        match = re.match(r"([A-Z0-9_]+)\s*=", line)
+        if match:
+            keys.add(match.group(1))
+    return keys
+
 def main() -> int:
+
     args = parse_args()
+    config_text= args.config_path.read_text()
+    config_keys = parse_php_config_array(config_text)
+    env_keys = extract_keys_from_env(args.env_path)
 
-    dist_path = args.config_dir / "config.dist.php"
-    devel_path = args.config_dir / "config.devel.php"
-    dist_configs = read_config_values(filepath=dist_path)
-    devel_configs = read_config_values(filepath=devel_path)
+    missing_keys = []
+    for key in sorted(config_keys):
+        env_key = to_env_key(key)
+        if env_key not in env_keys:
+            missing_keys.append((key, env_key))
 
-    exit_value = 0
-    missing_devel = dist_configs - devel_configs
-    if missing_devel:
-        print(f"Config values set in {dist_path} but not in {devel_path}")
-        pprint.pprint(sorted(missing_devel))
-        print()
-        exit_value = 1
+    if missing_keys:
+        print("❌ Missing environment variables:")
+        for key, env_key in missing_keys:
+            print(f"  - {env_key} (from '{key}')")
+        return 1
 
-    missing_dist = devel_configs - dist_configs
-    if missing_dist:
-        print(f"Config values set in {devel_path} but not in {dist_path}")
-        pprint.pprint(sorted(missing_dist))
-        exit_value = 1
-    return exit_value
-
-
-def read_config_values(*, filepath: pathlib.Path) -> set[str]:
-    configs = set()
-    with open(filepath) as in_file:
-        for line in in_file.readlines():
-            line = line.strip()
-            if not line.startswith("$conf"):
-                continue
-            result = re.search(r"^\$conf\S+", line)
-            if not result:
-                raise ValueError(f"Invalid configuration line: {line}")
-            conf_value = result.group()[5:]
-            configs.add(conf_value)
-    return configs
-
+    print("✅ All config keys are covered by environment variables.")
+    return 0
 
 @dataclasses.dataclass(kw_only=True)
 class ProgramArgs:
-    config_dir: pathlib.Path
+    config_path: pathlib.Path
+    env_path: pathlib.Path
+
 
 
 def parse_args() -> ProgramArgs:
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("config_dir")
-
+    parser.add_argument("config_path", type=pathlib.Path)
+    parser.add_argument("env_path", type=pathlib.Path)
     args = parser.parse_args()
-    args.config_dir = pathlib.Path(args.config_dir).expanduser().resolve()
-    return ProgramArgs(**vars(args))
+    return ProgramArgs(config_path=args.config_path, env_path=args.env_path)
+
 
 
 if "__main__" == __name__:
