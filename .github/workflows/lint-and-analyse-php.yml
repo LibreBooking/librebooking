@@ -85,7 +85,7 @@ jobs:
       #     key: phpcs-cache
 
       - name: Lint PHP files
-        run: ./ci/ci-phplint
+        run: vendor/bin/parallel-lint . --exclude vendor --exclude tmp --exclude node_modules --checkstyle | cs2pr
 
       # - name: PHP-CS-Fixer (dry-run for CI)
       #   run: composer php-cs-fixer:lint --format=checkstyle | cs2pr
@@ -117,7 +117,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Analyse files with PHPStan
-        run: composer phpstan --error-format=checkstyle | cs2pr
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G --error-format=checkstyle | cs2pr
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort

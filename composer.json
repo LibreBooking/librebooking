@@ -9,7 +9,8 @@
         "kint-php/kint": "^4.2.3",
         "phpunit/phpunit": "^11.3",
         "phpstan/phpstan": "^2.1",
-        "friendsofphp/php-cs-fixer": "^3.86"
+        "friendsofphp/php-cs-fixer": "^3.86",
+        "php-parallel-lint/php-parallel-lint": "^1.4"
     },
     "require": {
         "php": ">=8.2",
@@ -34,8 +35,9 @@
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
+        "php:lint": "vendor/php-parallel-lint/php-parallel-lint/parallel-lint --exclude vendor --exclude tmp --exclude node_modules .",
         "php-cs-fixer:fix": "./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v",
-        "php-cs-fixer:lint": "./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -vv --dry-run",
+        "php-cs-fixer:check": "./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
         "phpstan": "./vendor/bin/phpstan analyse --memory-limit=2G",
         "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline --memory-limit=2G",
