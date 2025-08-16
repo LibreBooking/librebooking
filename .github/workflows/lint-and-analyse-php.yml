@@ -63,11 +63,18 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: cs2pr
 
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
         with:
           # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-reqs"
+          composer-options: "--ignore-platform-reqs --no-progress --no-scripts"
 
       - name: Update the composer.lock file
         run: composer update
@@ -113,6 +120,13 @@ jobs:
           tools: cs2pr
 #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
 
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
 
@@ -144,13 +158,20 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+            
       - name: Install Composer dependencies
         # Allow the previous check to fail but not abort
         if: always()
         uses: ramsey/composer-install@v2
         with:
           # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-req=ext-zip"
+          composer-options: "--ignore-platform-req=ext-zip --no-progress --no-scripts"
 
       - name: Create main config.php for unit tests
         run: cp config/config.dist.php config/config.php
