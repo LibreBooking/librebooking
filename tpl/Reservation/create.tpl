@@ -153,7 +153,7 @@
                             <label for="EndDate"
                                 class="reservationDate fw-bold text-md-end pe-md-1">{translate key='EndDate'}</label>
                             <input type="date" id="EndDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
+                                class="form-control form-control-sm d-inline-block dateinput d-none{if $LockPeriods} no-show{/if}"
                                 value="{formatdate date=$EndDate key=system}" />
                             <input type="hidden" id="formattedEndDate" {formname key=END_DATE}
                                 value="{formatdate date=$EndDate key=system}" />
