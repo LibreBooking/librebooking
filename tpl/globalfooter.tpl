@@ -166,18 +166,17 @@
 	init();
 </script>
 
-{if !empty($GoogleAnalyticsTrackingId)}
-	<!-- Google tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id={$GoogleAnalyticsTrackingId}"></script>
-	{literal}
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-		{/literal}
-		gtag('config', '{$GoogleAnalyticsTrackingId}');
-	</script>
-{/if}
+<!-- Google tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-605SGLR94J"></script>
+{literal}
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+	{/literal}
+	gtag('config', 'G-605SGLR94J');
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
 <script>
 	var slider = tns({
