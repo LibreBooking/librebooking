@@ -1257,7 +1257,7 @@ class ConfigKeys
         'default' => '',
         'label' => 'Google Analytics Tracking ID',
         'description' => 'Tracking ID for Google Analytics integration',
-        'section' => 'External integrations',
+        'section' => '',
         'is_private' => true
     ];
 
@@ -1268,7 +1268,7 @@ class ConfigKeys
         'default' => '',
         'label' => 'Slack Token',
         'description' => 'Token for Slack integration',
-        'section' => 'External integrations',
+        'section' => '',
         'is_private' => true
     ];
 
