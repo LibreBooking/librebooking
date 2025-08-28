@@ -414,16 +414,14 @@ class ConfigKeys
     public const LOGGING_LEVEL = [
         'key' => 'logging.level',
         'type' => 'string',
-        'default' => 'none',
+        'default' => 'error',
         'choices' => [
             'none' => 'None',
-            'WARNING' => 'WARNING',
-            'ERROR' => 'ERROR',
-            'INFO' => 'INFO',
-            'DEBUG' => 'DEBUG',
+            'error' => 'error',
+            'debug' => 'debug',
         ],
         'label' => 'Logging Level',
-        'description' => 'Logging level: none, DEBUG, INFO, WARNING, ERROR',
+        'description' => 'Logging level: none, debug, error',
         'section' => 'logging'
     ];
 
