@@ -105,30 +105,45 @@ class LoginPresenter
         $allowRegistration = Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter());
         $allowAnonymousSchedule = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
         $allowGuestBookings = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter());
-        $this->_page->SetShowRegisterLink($allowRegistration);
-        $this->_page->SetShowScheduleLink($allowAnonymousSchedule || $allowGuestBookings);
+        $hideLogin = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_HIDE_LOGIN_PROMPT, new BooleanConverter());
+        $resetDisabled = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_DISABLE_RESET, new BooleanConverter());
 
-        $hideLogin = Configuration::Instance()
-            ->GetKey(ConfigKeys::AUTHENTICATION_HIDE_LOGIN_PROMPT, new BooleanConverter());
+        $showRegisterLink = ($allowRegistration && !$hideLogin);
+        $showScheduleLink = ($allowAnonymousSchedule || $allowGuestBookings);
 
-        $this->_page->ShowForgotPasswordPrompt(!Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_DISABLE_RESET, new BooleanConverter()) &&
-            $this->authentication->ShowForgotPasswordPrompt() &&
-            !$hideLogin);
-        $this->_page->ShowPasswordPrompt($this->authentication->ShowPasswordPrompt() && !$hideLogin);
-        $this->_page->ShowPersistLoginPrompt($this->authentication->ShowPersistLoginPrompt());
+        $showForgot = (!$resetDisabled && $this->authentication->ShowForgotPasswordPrompt() && !$hideLogin);
 
-        $this->_page->ShowUsernamePrompt($this->authentication->ShowUsernamePrompt() && !$hideLogin);
-        $this->_page->SetRegistrationUrl($this->authentication->GetRegistrationUrl() && !$hideLogin);
-        $this->_page->SetPasswordResetUrl($this->authentication->GetPasswordResetUrl());
+        $showPasswordPrompt   = ($this->authentication->ShowPasswordPrompt() && !$hideLogin);
+        $showPersistLogin     = ($this->authentication->ShowPersistLoginPrompt() && !$hideLogin);
+        $showUsernamePrompt   = ($this->authentication->ShowUsernamePrompt() && !$hideLogin);
+
+        $this->_page->SetShowRegisterLink($showRegisterLink);
+        $this->_page->SetShowScheduleLink($showScheduleLink);
+
+        $this->_page->ShowForgotPasswordPrompt($showForgot);
+        $this->_page->ShowPasswordPrompt($showPasswordPrompt);
+        $this->_page->ShowPersistLoginPrompt($showPersistLogin);
+        $this->_page->ShowUsernamePrompt($showUsernamePrompt);
+
+        $registrationUrl = $this->authentication->GetRegistrationUrl();
+        $this->_page->SetRegistrationUrl($showRegisterLink ? $registrationUrl : null);
+        $this->_page->SetPasswordResetUrl($showForgot ? $this->authentication->GetPasswordResetUrl() : null);
+
         $this->_page->SetAnnouncements($this->announcementRepository->GetFuture(Pages::ID_LOGIN));
         $this->_page->SetSelectedLanguage(Resources::GetInstance()->CurrentLanguage);
 
-        $this->_page->SetGoogleUrl($this->GetGoogleUrl());
-        $this->_page->SetMicrosoftUrl($this->GetMicrosoftUrl());
-        $this->_page->SetFacebookUrl($this->GetFacebookUrl());
-        $this->_page->SetKeycloakUrl($this->GetKeycloakUrl());
-        $this->_page->SetOauth2Url($this->GetOauth2Url());
-        $this->_page->SetOauth2Name($this->GetOauth2Name());
+        $googleEnabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter());
+        $microsoftEnabled = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter());
+        $facebookEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter());
+        $keycloakEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter());
+        $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
+
+        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
+        $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl() : null);
+        $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
+        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
+        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
+        $this->_page->SetOauth2Name($oauth2Enabled ? $this->GetOauth2Name() : null);
     }
 
     public function Login()
