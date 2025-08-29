@@ -124,7 +124,6 @@ class LoginPresenter
         $this->_page->ShowPasswordPrompt($showPasswordPrompt);
         $this->_page->ShowPersistLoginPrompt($showPersistLogin);
         $this->_page->ShowUsernamePrompt($showUsernamePrompt);
-
         $registrationUrl = $this->authentication->GetRegistrationUrl();
         $this->_page->SetRegistrationUrl($showRegisterLink ? $registrationUrl : null);
         $this->_page->SetPasswordResetUrl($showForgot ? $this->authentication->GetPasswordResetUrl() : null);
@@ -143,7 +142,7 @@ class LoginPresenter
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
         $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
         $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
-        $this->_page->SetOauth2Name($oauth2Enabled ? $this->GetOauth2Name() : null);
+        $this->_page->SetOauth2Name($oauth2Enabled ? Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME) : null);
     }
 
     public function Login()
@@ -243,24 +242,33 @@ class LoginPresenter
         }
     }
 
+    private function buildRedirectUri(string $configuredPath): string
+    {
+        $scriptUrl = rtrim(Configuration::Instance()->GetScriptUrl(), '/');
+        $path = '/' . ltrim($configuredPath, '/');
+        if (str_ends_with($scriptUrl, '/Web') && str_starts_with($path, '/Web/')) {
+            $path = substr($path, 4); // remove the first "/Web"
+        }
+
+        return $scriptUrl . $path;
+    }
+
     /**
      * Checks in the config files if google authentication is active creating a new client if true and setting it's config keys.
      * Returns the created google url for the authentication
      */
     public function GetGoogleUrl()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter())) {
-            $client = new Google\Client();
-            $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
-            $client->setClientSecret(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET));
-            $client->setRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI));
-            $client->addScope("email");
-            $client->addScope("profile");
-            $client->setPrompt("select_account");
-            $GoogleUrl = $client->createAuthUrl();
+        $client = new Google\Client();
+        $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
+        $client->setClientSecret(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET));
+        $client->setRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI));
+        $client->addScope("email");
+        $client->addScope("profile");
+        $client->setPrompt("select_account");
+        $GoogleUrl = $client->createAuthUrl();
 
-            return $GoogleUrl;
-        }
+        return $GoogleUrl;
     }
 
     /**
@@ -269,18 +277,22 @@ class LoginPresenter
      */
     public function GetMicrosoftUrl()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter())) {
-            $MicrosoftUrl = 'https://login.microsoftonline.com/'
-                . urlencode(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID))
-                . '/oauth2/v2.0/authorize?'
-                . 'client_id=' . urlencode(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID))
-                . '&redirect_uri=' . urlencode(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI))
-                . '&scope=user.read'
-                . '&response_type=code'
-                . '&prompt=select_account';
 
-            return $MicrosoftUrl;
-        }
+        $tenantId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID);
+        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID);
+        $redirectUri = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI);
+
+        $baseUrl = 'https://login.microsoftonline.com/' . rawurlencode($tenantId) . '/oauth2/v2.0/authorize';
+        $params = [
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
+            'scope' => 'user.read',
+            'response_type' => 'code',
+            'prompt' => 'select_account'
+        ];
+
+        $MicrosoftUrl = $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        return $MicrosoftUrl;
     }
 
     /**
@@ -289,95 +301,69 @@ class LoginPresenter
      */
     public function GetFacebookUrl()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter())) {
-            $facebook_Client = new Facebook\Facebook([
-                'app_id' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_ID),
-                'app_secret' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_SECRET),
-                'default_graph_version' => 'v2.5'
-            ]);
+        $facebook_Client = new Facebook\Facebook([
+            'app_id' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_ID),
+            'app_secret' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_SECRET),
+            'default_graph_version' => 'v2.5'
+        ]);
 
-            $helper = $facebook_Client->getRedirectLoginHelper();
+        $helper = $facebook_Client->getRedirectLoginHelper();
 
-            $permissions = ['email', 'public_profile']; // Add other permissions as needed
+        $permissions = ['email', 'public_profile']; // Add other permissions as needed
 
-            //The FacebookRedirectLoginHelper makes use of sessions to store a CSRF value.
-            //You need to make sure you have sessions enabled before invoking the getLoginUrl() method.
-            if (!session_id()) {
-                session_start();
-            }
-
-            // Build the full redirect URL
-            $redirectUri = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_REDIRECT_URI);
-            $scriptUrl = Configuration::Instance()->GetScriptUrl();
-
-            $scriptUrl = rtrim($scriptUrl, '/');
-            if (!str_starts_with($redirectUri, '/')) {
-                $redirectUri = '/' . $redirectUri;
-            }
-
-            if (str_ends_with($scriptUrl, '/Web') && str_starts_with($redirectUri, '/Web/')) {
-                $redirectUri = substr($redirectUri, 4); // Remove the first "/Web"
-            }
-
-            $fullRedirectUrl = $scriptUrl . $redirectUri;
-
-            $FacebookUrl = $helper->getLoginUrl(
-                $fullRedirectUrl,
-                $permissions
-            );
-
-            return $FacebookUrl;
+        //The FacebookRedirectLoginHelper makes use of sessions to store a CSRF value.
+        //You need to make sure you have sessions enabled before invoking the getLoginUrl() method.
+        if (!session_id()) {
+            session_start();
         }
+
+        // Build the full redirect URL
+        $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_REDIRECT_URI));
+
+        $FacebookUrl = $helper->getLoginUrl(
+            $redirectUri,
+            $permissions
+        );
+
+        return $FacebookUrl;
     }
 
     public function GetKeycloakUrl()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter())) {
-            // Retrieve Keycloak configuration values
-            $baseUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL);
-            $realm = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
-            $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
-            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI);
+        // Retrieve Keycloak configuration values
+        $baseUrl    = rtrim(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL), '/');
+        $realm = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
+        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
+        $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI));
 
-            // Construct the Keycloak authentication URL
-            $keycloakUrl = rtrim($baseUrl, '/')
-                . '/realms/' . urlencode($realm)
-                . '/protocol/openid-connect/auth?'
-                . 'client_id=' . urlencode($clientId)
-                . '&redirect_uri=' . urlencode($redirectUri)
-                . '&response_type=code'
-                . '&scope=' . urlencode('openid email profile');
+        $authorizeEndpoint = $baseUrl . '/realms/' . rawurlencode($realm) . '/protocol/openid-connect/auth';
 
-            return $keycloakUrl;
-        }
+        $params = [
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
+            'scope' => 'openid email profile',
+            'response_type' => 'code'
+        ];
+
+        return $authorizeEndpoint . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     }
 
     public function GetOauth2Url()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            // Retrieve Oauth2 configuration values
-            $baseUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
-            $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
-            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI);
+        // Retrieve Oauth2 configuration values
+        $baseUrl = rtrim(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE), '/');
+        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
+        $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI));
 
-            // Construct the Oauth2 authentication URL
-            $Oauth2Url = $baseUrl
-                . '?client_id=' . urlencode($clientId)
-                . '&redirect_uri=' . urlencode($redirectUri)
-                . '&response_type=code'
-                . '&scope=' . urlencode('openid email profile');
+        $params = [
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
+            'scope' => 'openid email profile',
+            'response_type' => 'code'
+        ];
 
-            return $Oauth2Url;
-        }
+        $Oauth2Url = $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        return $Oauth2Url;
     }
 
-    public function GetOauth2Name()
-    {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            // Retrieve Oauth2 configuration values
-            $Oauth2Name = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME);
-
-            return $Oauth2Name;
-        }
-    }
 }
