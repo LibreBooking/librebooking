@@ -43,6 +43,16 @@ class ExternalAuthLoginPresenter
         }
     }
 
+    private function buildRedirectUri(string $configuredPath): string
+    {
+        $scriptUrl = rtrim(Configuration::Instance()->GetScriptUrl(), '/');
+        $path = '/' . ltrim($configuredPath, '/');
+        if (str_ends_with($scriptUrl, '/Web') && str_starts_with($path, '/Web/')) {
+            $path = substr($path, 4);
+        }
+        return $scriptUrl . $path;
+    }
+
     /**
      * Exchanges the code given by google in _GET for a token and with said token retrieves client data
      */
@@ -162,85 +172,81 @@ class ExternalAuthLoginPresenter
 
     private function ProcessKeycloakSingleSignOn()
     {
-        $code = $_GET['code'];
+        $code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
+        if (!$code) {
+            $this->page->ShowError(['Missing authorization code.']);
+            return;
+        }
 
-        $keycloakUrl  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL);
-        $realm        = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
-        $clientId     = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
+        $keycloakUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL);
+        $realm = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
+        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
         $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_SECRET);
-        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI);
+        $redirectUri = $this->buildRedirectUri(
+            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI)
+        );
 
-        $tokenEndpoint = rtrim($keycloakUrl, '/') . '/realms/' . urlencode($realm) . '/protocol/openid-connect/token';
+        $openIdConnectEndpoint = rtrim($keycloakUrl, '/') . '/realms/' . rawurlencode($realm) . '/protocol/openid-connect/';
+        $tokenEndpoint = $openIdConnectEndpoint . 'token';
+        $userInfoEndpoint = $openIdConnectEndpoint . 'userinfo';
 
-        // Prepare the POST data for the token request.
         $postData = [
-            'grant_type'    => 'authorization_code',
-            'code'          => $code,
-            'redirect_uri'  => $redirectUri,
-            'client_id'     => $clientId,
+            'grant_type' => 'authorization_code',
+            'code' => $code,
+            'redirect_uri' => $redirectUri,
+            'client_id' => $clientId,
             'client_secret' => $clientSecret,
         ];
 
         $client = new \GuzzleHttp\Client();
 
         try {
-            $response = $client->post($tokenEndpoint, [
-                'form_params' => $postData,
-            ]);
+            $response = $client->post($tokenEndpoint, ['form_params' => $postData]);
+            $tokenData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $accessToken = $tokenData['access_token'] ?? null;
+            if (!$accessToken) {
+                $this->page->ShowError(['Keycloak: access_token missing.']);
+                return;
+            }
+            $uResp = $client->get($userInfoEndpoint, ['headers' => ['Authorization' => 'Bearer ' . $accessToken]]);
+            $user = json_decode((string) $uResp->getBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\Exception $e) {
             $this->page->ShowError(['Error retrieving Keycloak token: ' . $e->getMessage()]);
             return;
         }
 
-        $tokenData = json_decode($response->getBody(), true);
-        if (!isset($tokenData['access_token'])) {
-            $this->page->ShowError(['Access token not found in Keycloak response']);
-            return;
-        }
-        $accessToken = $tokenData['access_token'];
-
-        // Build the userinfo endpoint URL (again, without '/auth').
-        $userInfoEndpoint = rtrim($keycloakUrl, '/') . '/realms/' . urlencode($realm) . '/protocol/openid-connect/userinfo';
-
-        try {
-            $userResponse = $client->get($userInfoEndpoint, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ],
-            ]);
-        } catch (\Exception $e) {
-            $this->page->ShowError(['Error retrieving Keycloak user info: ' . $e->getMessage()]);
+        $email = $user['email'] ?? '';
+        if ($email === '') {
+            $this->page->ShowError(['Email is not set in your Keycloak profile.']);
             return;
         }
 
-        $userData = json_decode($userResponse->getBody(), true);
-
-        $email     = isset($userData['email']) ? $userData['email'] : '';
-        $firstName = isset($userData['given_name']) ? $userData['given_name'] : 'not set';
-        $lastName  = isset($userData['family_name']) ? $userData['family_name'] : 'not set';
-        $username  = isset($userData['preferred_username']) ? $userData['preferred_username'] : $email;
-        $phone  = isset($userData['phone_number']) ? $userData['phone_number'] : '';
-        $organization  = isset($userData['organization']) ? $userData['organization'] : '';
-        $title  = isset($userData['title']) ? $userData['title'] : '';
-
-        if (empty($email)) {
-            $this->page->ShowError(["Email is not set in your Keycloak profile. Please update your profile and try again."]);
-            return;
-        }
-
-        $this->processUserData($username, $email, $firstName, $lastName, $phone, $organization, $title);
+        $this->processUserData(
+            $user['preferred_username'] ?? $email,
+            $email,
+            $user['given_name'] ?? '',
+            $user['family_name'] ?? '',
+            $user['phone_number'] ?? '',
+            $user['organization'] ?? '',
+            $user['title'] ?? ''
+        );
     }
 
     private function ProcessOauth2SingleSignOn()
     {
-        $code = $_GET['code'];
+        $code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
+        if (!$code) {
+            $this->page->ShowError(['Missing authorization code.']);
+            return;
+        }
 
         $oauth2UrlToken  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_TOKEN);
         $oauth2UrlUserinfo = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_USERINFO);
         $clientId     = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
         $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_SECRET);
-        $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI);
-
+        $redirectUri = $this->buildRedirectUri(
+            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI)
+        );
         // Prepare the POST data for the token request.
         $postData = [
             'grant_type'    => 'authorization_code',
@@ -253,48 +259,35 @@ class ExternalAuthLoginPresenter
         $client = new \GuzzleHttp\Client();
 
         try {
-            $response = $client->post($oauth2UrlToken, [
-                'form_params' => $postData,
-            ]);
+            $response = $client->post($oauth2UrlToken, ['form_params' => $postData]);
+            $tokenData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $accessToken = $tokenData['access_token'] ?? null;
+            if (!$accessToken) {
+                $this->page->ShowError(['Oauth2: access_token missing.']);
+                return;
+            }
+            $uResp = $client->get($oauth2UrlUserinfo, ['headers' => ['Authorization' => 'Bearer ' . $accessToken]]);
+            $user = json_decode((string) $uResp->getBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\Exception $e) {
             $this->page->ShowError(['Error retrieving Oauth2 token: ' . $e->getMessage()]);
             return;
         }
 
-        $tokenData = json_decode($response->getBody(), true);
-        if (!isset($tokenData['access_token'])) {
-            $this->page->ShowError(['Access token not found in Oauth2 response']);
-            return;
-        }
-        $accessToken = $tokenData['access_token'];
-
-        try {
-            $userResponse = $client->get($oauth2UrlUserinfo, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ],
-            ]);
-        } catch (\Exception $e) {
-            $this->page->ShowError(['Error retrieving Oauth2 user info: ' . $e->getMessage()]);
+        $email = $user['email'] ?? '';
+        if ($email === '') {
+            $this->page->ShowError(['Email is not set in your Oauth2 profile.']);
             return;
         }
 
-        $userData = json_decode($userResponse->getBody(), true);
-
-        $email     = isset($userData['email']) ? $userData['email'] : '';
-        $firstName = isset($userData['given_name']) ? $userData['given_name'] : 'not set';
-        $lastName  = isset($userData['family_name']) ? $userData['family_name'] : 'not set';
-        $username  = isset($userData['preferred_username']) ? $userData['preferred_username'] : $email;
-        $phone  = isset($userData['phone_number']) ? $userData['phone_number'] : '';
-        $organization  = isset($userData['organization']) ? $userData['organization'] : '';
-        $title  = isset($userData['title']) ? $userData['title'] : '';
-
-        if (empty($email)) {
-            $this->page->ShowError(["Email is not set in your Oauth2 profile. Please update your profile and try again."]);
-            return;
-        }
-
-        $this->processUserData($username, $email, $firstName, $lastName, $phone, $organization, $title);
+        $this->processUserData(
+            $user['preferred_username'] ?? $email,
+            $email,
+            $user['given_name'] ?? '',
+            $user['family_name'] ?? '',
+            $user['phone_number'] ?? '',
+            $user['organization'] ?? '',
+            $user['title'] ?? ''
+        );
     }
 
 
