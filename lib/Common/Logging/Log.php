@@ -37,7 +37,7 @@ class Log
         $log_sql = false;
 
         if ($log_level != 'none') {
-            $log_folder = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER);
+            $log_folder = rtrim(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER), '/');
             $log_sql = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter());
             switch ($log_level) {
                 case 'debug':
@@ -72,7 +72,7 @@ class Log
      */
     public static function Debug($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
+        $log_level = strtolower(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL));
         if ($log_level == 'none') {
             return;
         }

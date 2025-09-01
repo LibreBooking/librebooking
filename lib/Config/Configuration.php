@@ -462,6 +462,15 @@ class ConfigurationFile implements IConfigurationFile
                 $value = $this->_values[$fullKey];
             }
         }
+
+        if ($value === null || $value === '') {
+            if (array_key_exists('default', $configDef)) {
+                $value = $configDef['default'];
+            } else {
+                $value = null;
+            }
+        }
+
         return $this->Convert($value, $converter);
     }
 

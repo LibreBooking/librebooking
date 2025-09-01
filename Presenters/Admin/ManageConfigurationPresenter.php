@@ -125,7 +125,7 @@ class ManageConfigurationPresenter extends ActionPresenter
     private function AddSettingFromMeta($key, $section, $value)
     {
         $meta = call_user_func([$this->configKeyClass, 'findByKey'], $key);
-        if ($this->ShouldBeSkipped($key, $meta)) {
+        if (!isset($meta) || $this->ShouldBeSkipped($key, $meta)) {
             return;
         }
 
