@@ -439,7 +439,10 @@ class ConfigurationFile implements IConfigurationFile
     public function GetKey($configDef, $converter = null)
     {
         if (!is_array($configDef) || !isset($configDef['key'])) {
-            throw new InvalidArgumentException('Config definition not found"');
+            throw new InvalidArgumentException(sprintf(
+                'Config definition not found for: %s',
+                json_encode($configDef, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            ));
         }
 
         $value = null;

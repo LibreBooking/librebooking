@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'WebServices/AuthenticationWebService.php');
+require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceUserSession.php');
 
 class AuthenticationWebServiceTest extends TestBase
 {
@@ -33,7 +34,7 @@ class AuthenticationWebServiceTest extends TestBase
     {
         $username = 'un';
         $password = 'pw';
-        $session = new UserSession(1);
+    $session = new WebServiceUserSession(1);
 
         $request = new AuthenticationRequest($username, $password);
         $this->server->SetRequest($request);
@@ -48,10 +49,12 @@ class AuthenticationWebServiceTest extends TestBase
                 ->with($this->equalTo($username))
                 ->willReturn($session);
 
-        $this->service->Authenticate($this->server);
+    $this->service->Authenticate();
 
         $expectedResponse = AuthenticationResponse::Success($this->server, $session, 0);
+        $expectedResponseCode = RestResponse::OK_CODE;
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
+        $this->assertEquals($expectedResponseCode, $this->server->_LastResponseCode);
     }
 
     public function testRestrictsUserIfInvalidCredentials()
@@ -67,10 +70,12 @@ class AuthenticationWebServiceTest extends TestBase
                 ->with($this->equalTo($username), $this->equalTo($password))
                 ->willReturn(false);
 
-        $this->service->Authenticate($this->server);
+    $this->service->Authenticate();
 
         $expectedResponse = AuthenticationResponse::Failed();
+        $expectedResponseCode = RestResponse::UNAUTHORIZED_CODE;
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
+        $this->assertEquals($expectedResponseCode, $this->server->_LastResponseCode);
     }
 
     public function testSignsUserOut()
@@ -85,6 +90,6 @@ class AuthenticationWebServiceTest extends TestBase
                 ->method('Logout')
                 ->with($this->equalTo($userId), $this->equalTo($sessionToken));
 
-        $this->service->SignOut($this->server);
+    $this->service->SignOut();
     }
 }

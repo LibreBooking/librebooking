@@ -715,18 +715,6 @@ parameters:
 			path: tests/WebServices/AccessoriesWebServiceTest.php
 
 		-
-			message: '#^Method AuthenticationWebService\:\:Authenticate\(\) invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 2
-			path: tests/WebServices/AuthenticationWebServiceTest.php
-
-		-
-			message: '#^Method AuthenticationWebService\:\:SignOut\(\) invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: tests/WebServices/AuthenticationWebServiceTest.php
-
-		-
 			message: '#^Call to an undefined method IReservationPresenterFactory\:\:expects\(\)\.$#'
 			identifier: method.notFound
 			count: 4

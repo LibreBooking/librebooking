@@ -22,17 +22,26 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
-if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
-    die("LibreBooking API has been configured as disabled.<br/><br/>Set \$conf['settings']['api']['enabled'] = 'true' to enable.");
-}
+set_exception_handler(function ($e) {
+    Log::Error('Uncaught bootstrap exception: %s', $e);
+    $accept    = $_SERVER['HTTP_ACCEPT'] ?? '';
+    $wantsJson = stripos($accept, 'application/json') !== false;
+
+    header('Content-Type: ' . ($wantsJson ? 'application/json; charset=utf-8'
+                                          : 'text/plain; charset=utf-8'), true, 500);
+    echo $wantsJson
+        ? json_encode(['error' => 'server_error', 'message' => $e->getMessage()], JSON_UNESCAPED_SLASHES)
+        : 'Server error: ' . $e->getMessage();
+    exit;
+});
 
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
 
 $server = new SlimServer($app);
 ServiceLocator::SetApiServer(apiServer: $server);
-
 $registry = new SlimWebServiceRegistry($app);
+
 
 RegisterHelp($registry, $app);
 RegisterAuthentication($server, $registry);
@@ -46,6 +55,10 @@ RegisterAccessories($server, $registry);
 RegisterAccounts($server, $registry);
 
 $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
+if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
+        $app->halt(RestResponse::SERVICE_UNAVAILABLE, 'LibreBooking API is disabled. Set ["api"]["enabled"] = true');
+    }
+
     $routeName = $app->router()->getCurrentRoute()->getName();
     if ($registry->IsSecure($routeName)) {
         $security = new WebServiceSecurity(new UserSessionRepository());
@@ -66,7 +79,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
         // Check if the user is allowed API access to the route
         if (!$registry->IsUserAllowedApiAccess(routeName: $routeName, userId: $userSession->UserId)) {
             $app->halt(
-                RestResponse::FORBIDDEN,
+                RestResponse::FORBIDDEN_CODE,
                 'You are not authorized to access this service.<br/>'
             );
         }
@@ -98,7 +111,7 @@ function RegisterHelp(SlimWebServiceRegistry $registry, \Slim\Slim $app)
 
 function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry)
 {
-    $api_access_group_id = GetConfigGroup(config_group: "Authentication.group");
+    $api_access_group_id = GetConfigGroup(ConfigKeys::API_AUTHENTICATION_GROUP);
     $webService = new AuthenticationWebService(
         $server,
         new WebServiceAuthentication(PluginManager::Instance()->LoadAuthentication(), new UserSessionRepository()),
@@ -116,8 +129,8 @@ function RegisterReservations(SlimServer $server, SlimWebServiceRegistry $regist
     $readService = new ReservationsWebService($server, new ReservationViewRepository(), new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization())), new AttributeService(new AttributeRepository()));
     $writeService = new ReservationWriteWebService($server, new ReservationSaveController(new ReservationPresenterFactory()));
 
-    $roGroupId = GetConfigGroup('Reservations.ro.group');
-    $rwGroupId = GetConfigGroup('Reservations.rw.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_RESERVATIONS_RO_GROUP);
+    $rwGroupId = GetConfigGroup(ConfigKeys::API_RESERVATIONS_RW_GROUP);
     $category = new SlimWebServiceRegistryCategory('Reservations', roGroupId: $roGroupId, rwGroupId: $rwGroupId);
 
     $category->AddSecurePost('/', [$writeService, 'Create'], WebServices::CreateReservation);
@@ -139,7 +152,7 @@ function RegisterResources(SlimServer $server, SlimWebServiceRegistry $registry)
     $webService = new ResourcesWebService($server, $resourceRepository, $attributeService, new ReservationViewRepository());
     $writeWebService = new ResourcesWriteWebService($server, new ResourceSaveController($resourceRepository, new ResourceRequestValidator($attributeService)));
 
-    $roGroupId = GetConfigGroup('Resources.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_RESOURCES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Resources', roGroupId: $roGroupId);
 
     $category->AddGet('/Status', [$webService, 'GetStatuses'], WebServices::GetStatuses);
@@ -160,7 +173,7 @@ function RegisterAccessories(SlimServer $server, SlimWebServiceRegistry $registr
 {
     $webService = new AccessoriesWebService($server, new ResourceRepository(), new AccessoryRepository());
 
-    $roGroupId = GetConfigGroup('Accessories.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_ACCESSORIES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Accessories', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetAll'], WebServices::AllAccessories);
@@ -177,7 +190,7 @@ function RegisterUsers(SlimServer $server, SlimWebServiceRegistry $registry)
         new UserSaveController(new ManageUsersServiceFactory(), new UserRequestValidator($attributeService, new UserRepository()))
     );
 
-    $roGroupId = GetConfigGroup('Users.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_USERS_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Users', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetUsers'], WebServices::AllUsers);
@@ -193,7 +206,7 @@ function RegisterSchedules(SlimServer $server, SlimWebServiceRegistry $registry)
 {
     $webService = new SchedulesWebService($server, new ScheduleRepository(), new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization())));
 
-    $roGroupId = GetConfigGroup('Schedules.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_SCHEDULES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Schedules', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetSchedules'], WebServices::AllSchedules);
@@ -207,7 +220,7 @@ function RegisterAttributes(SlimServer $server, SlimWebServiceRegistry $registry
     $webService = new AttributesWebService($server, new AttributeService(new AttributeRepository()));
     $writeWebService = new AttributesWriteWebService($server, new AttributeSaveController(new AttributeRepository()));
 
-    $roGroupId = GetConfigGroup('Attributes.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_ATTRIBUTES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Attributes', roGroupId: $roGroupId);
 
     $category->AddSecureGet('Category/:categoryId', [$webService, 'GetAttributes'], WebServices::AllCustomAttributes);
@@ -215,7 +228,7 @@ function RegisterAttributes(SlimServer $server, SlimWebServiceRegistry $registry
     $category->AddAdminPost('/', [$writeWebService, 'Create'], WebServices::CreateCustomAttribute);
     $category->AddAdminPost('/:attributeId', [$writeWebService, 'Update'], WebServices::UpdateCustomAttribute);
     $category->AddAdminDelete('/:attributeId', [$writeWebService, 'Delete'], WebServices::DeleteCustomAttribute);
-    $registry->AddCategory($category);
+    $registry->AddCategory(category: $category);
 }
 
 function RegisterGroups(SlimServer $server, SlimWebServiceRegistry $registry)
@@ -224,7 +237,7 @@ function RegisterGroups(SlimServer $server, SlimWebServiceRegistry $registry)
     $webService = new GroupsWebService($server, $groupRepository, $groupRepository);
     $writeWebService = new GroupsWriteWebService($server, new GroupSaveController($groupRepository, new ResourceRepository(), new ScheduleRepository()));
 
-    $roGroupId = GetConfigGroup('Groups.ro.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_GROUPS_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Groups', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetGroups'], WebServices::AllGroups);
@@ -249,30 +262,41 @@ function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
 
     $webService = new AccountWebService($server, $controller);
 
-    $roGroupId = GetConfigGroup('Accounts.ro.group');
-    $rwGroupId = GetConfigGroup('Accounts.rw.group');
+    $roGroupId = GetConfigGroup(ConfigKeys::API_ACCOUNTS_RO_GROUP);
+    $rwGroupId = GetConfigGroup(ConfigKeys::API_ACCOUNTS_RW_GROUP);
     $category = new SlimWebServiceRegistryCategory('Accounts', roGroupId: $roGroupId, rwGroupId: $rwGroupId);
 
     $category->AddPost('/', [$webService, 'Create'], WebServices::CreateAccount);
     $category->AddSecurePost('/:userId', [$webService, 'Update'], WebServices::UpdateAccount);
     $category->AddSecurePost('/:userId/Password', [$webService, 'UpdatePassword'], WebServices::UpdateAccountPassword);
-    $category->AddSecureGet('/:userId', [$webService, 'GetAccount'], WebServices::GetAccount);
+    $category->AddSecureGet('/:userId',  [$webService, 'GetAccount'], WebServices::GetAccount);
 
     $registry->AddCategory($category);
 }
 
-function GetConfigGroup(string $config_group): string|null {
-    $group_name = Configuration::Instance()->GetKey($config_group) ?? '';
-    if ($group_name == '') {
+
+/**
+ * Resolve a group ID from a configuration key that stores a group name.
+ *
+ * @param string|array $configDef Configuration key whose value is the desired group name.
+ * @return string|null The matching group ID, or `null` if the config value is empty.
+ */
+function GetConfigGroup($configDef): string|null
+{
+    $groupName = Configuration::Instance()->GetKey($configDef) ?? '';
+    if ($groupName == '') {
         return null;
     }
     $groupRepository = new GroupRepository();
     $groups = $groupRepository->GetList()->Results();
     foreach ($groups as $group) {
-        if ($group->Name == $group_name) {
+        if ($group->Name == $groupName) {
             return $group->Id();
         }
     }
-    die("Unable to find group: '$group_name' for API group '$config_group'. Please contact the administrator to resolve this issue in the `config.php` file.");
-    return null;
+
+    $confKeyLabel = is_string($configDef) ? $configDef : 'config key';
+    throw new \RuntimeException(
+        "Group '{$groupName}' for {$confKeyLabel} not found. Please fix config.php."
+    );
 }
