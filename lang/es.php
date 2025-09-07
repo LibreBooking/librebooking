@@ -718,6 +718,7 @@ class es extends en_gb
         $strings['EmailReservation'] = 'Dirección de correo electrónico de la reserva';
         $strings['AdHocMeeting'] = 'Ad hoc Meeting';
         $strings['NextReservation'] = 'Próxima Reserva';
+        $strings['CurrentReservation'] = 'Reserva actual';
         $strings['MissedCheckin'] = 'Registro perdido';
         $strings['MissedCheckout'] = 'Salida Perdida';
         $strings['Utilization'] = 'Uso';

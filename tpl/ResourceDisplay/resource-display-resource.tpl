@@ -1,9 +1,19 @@
 {function name=displayReservation}
-    <div class="resource-display-reservation fs-5">
-        {format_date date=$reservation->StartDate() key=res_popup_time timezone=$Timezone}
-        - {format_date date=$reservation->EndDate() key=res_popup_time timezone=$Timezone}
-        | {$reservation->GetUserName()}
-        <div class="title fst-italic">{$reservation->GetTitle()|default:$NoTitle}</div>
+    <div class="card shadow-sm mb-3">
+        <div class="card-body p-2">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">
+                    {format_date date=$reservation->StartDate() key=res_popup_time timezone=$Timezone}
+                    – {format_date date=$reservation->EndDate() key=res_popup_time timezone=$Timezone}
+                </small>
+                <span class="badge bg-primary">
+                    {$reservation->GetUserName()}
+                </span>
+            </div>
+            <div class="fw-bold text-truncate" title="{$reservation->GetTitle()|default:$NoTitle}">
+                {$reservation->GetTitle()|default:$NoTitle}
+            </div>
+        </div>
     </div>
 {/function}
 
@@ -25,39 +35,58 @@
                 </div>
             </h4>
             <div class="row pt-5">
-                <div class="col-6 ">
-                    <div class="fw-bold text-uppercase fs-6 text-secondary">
-                        {translate key=NextReservation}</div>
+                {if $CurrentReservation != null}
+                    {assign var="colClass" value="col-md-4"}
+                    <div class="{$colClass}">
+                        <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                            {translate key=CurrentReservation}
+                        </div>
+                        {call name=displayReservation reservation=$CurrentReservation}
+                    </div>
+                {else}
+                    {assign var="colClass" value="col-md-6"}
+                {/if}
+
+                <div class="{$colClass}">
+                    <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                        {translate key=NextReservation}
+                    </div>
+
                     {if $NextReservation != null}
                         {call name=displayReservation reservation=$NextReservation}
                     {else}
-                        <div class="resource-display-reservation">{translate key=None}</div>
+                        <div class="alert alert-light text-muted p-2 small mb-3">
+                            {translate key=None}
+                        </div>
                     {/if}
 
                     {if $RequiresCheckin}
                         <form role="form" method="post" id="formCheckin"
-                            action="{$smarty.server.SCRIPT_NAME}?action=checkin" class="inline-block">
+                            action="{$smarty.server.SCRIPT_NAME}?action=checkin" class="d-inline">
                             <input type="hidden" {formname key=REFERENCE_NUMBER} value="{$CheckinReferenceNumber}" />
-                            <div class="resource-display-action btn btn-primary" id="checkin"><i class="bi bi-check-lg"></i>
-                                {translate key=CheckIn}
-                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary mt-2">
+                                <i class="bi bi-check-lg"></i> {translate key=CheckIn}
+                            </button>
                         </form>
                     {/if}
-
                 </div>
-                <div class="col-6">
-                    <h5 class="fw-bold text-uppercase fs-6 text-secondary">{translate key=UpcomingReservations}</h5>
+
+                <div class="{$colClass}">
+                    <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                        {translate key=UpcomingReservations}
+                    </div>
+
                     {if $UpcomingReservations|default:array()|count > 0}
                         {foreach from=$UpcomingReservations item=r name=upcoming}
-                            <div class="resource-display-upcoming">
-                                {call name=displayReservation reservation=$r}
-                            </div>
+                            {call name=displayReservation reservation=$r}
                             {if !$smarty.foreach.upcoming.last}
-                                <hr class="border border-dark-subtle">
+                                <hr class="my-2 text-muted">
                             {/if}
                         {/foreach}
                     {else}
-                        <div class="resource-display-none">{translate key=None}</div>
+                        <div class="alert alert-light text-muted p-2 small">
+                            {translate key=None}
+                        </div>
                     {/if}
                 </div>
                 <div class="col-12 mt-3">
