@@ -6,7 +6,7 @@
     {if $readonly}
         <span class="attributeValue {$class}">{$attribute->Value()}</span>
     {else}
-        <select id="{$attributeId}" name="{$attributeName}"
+        <select id="{$attributeId}" name="{$attributeName}" data-value="{$attribute->Value()}"
             class="customAttribute form-select {if !$searchmode && $attribute->Required()}has-feedback{/if} {$inputClass}"
             {if $attribute->Required() && !$searchmode}required{/if}>
             <option value="">--</option>

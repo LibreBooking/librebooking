@@ -682,85 +682,66 @@
 </script>
 
 <script>
-    async function fetchDocentes() {
+    // Función genérica para llenar selects dinámicos
+    async function fillSelect({ url, fieldName, selector }) {
         try {
-            const response = await fetch("http://localhost/adminlab/docentes");
-            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error en la API: " + url);
+
             const result = await response.json();
-            return result.data;
+            const data = result.data || result;
+
+            const select = document.querySelector(selector);
+            if (!select) return;
+
+            // valor guardado desde LibreBooking
+            const valorGuardado = select.getAttribute("data-value") || "";
+
+            // limpiar opciones
+            select.innerHTML = '<option value="">--</option>';
+
+            data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item[fieldName];
+                option.textContent = item[fieldName];
+
+                if (option.value === valorGuardado) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
         } catch (error) {
-            console.error("Error cargando docentes:", error);
-            return [];
+            console.error("Error llenando select", selector, error);
         }
     }
 
-    async function fillDocentesSelect(select) {
-        console.log("Select encontrado, llenando con docentes...");
-
-        const docentes = await fetchDocentes();
-        docentes.forEach(docente => {
-            const option = document.createElement("option");
-            option.value = docente.id;
-            option.textContent = docente.name;
-            select.appendChild(option);
+    // Función para observar el DOM hasta que aparezca el select
+    function observeSelect(params) {
+        const observer = new MutationObserver((mutations, obs) => {
+            if (document.querySelector(params.selector)) {
+                fillSelect(params);
+                obs.disconnect();
+            }
         });
 
-        console.log("Select llenado con " + docentes.length + " docentes");
-    }
-
-    // Observa el DOM y espera a que aparezca el select
-    const observer = new MutationObserver((mutations, obs) => {
-        const docenteSelect = document.querySelector('select[name="psiattribute[13]"]');
-        if (docenteSelect) {
-            fillDocentesSelect(docenteSelect);
-            obs.disconnect(); // deja de observar cuando ya encontró el select
-        }
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-</script>
-<script>
-    async function fetchAsignaturas() {
-        try {
-            const response = await fetch("http://localhost/adminlab/asignaturas");
-            if (!response.ok) throw new Error("Error en la respuesta de la API");
-            const result = await response.json();
-            return result.data || result; // usa .data si existe, si no devuelve el objeto crudo
-        } catch (error) {
-            console.error("Error cargando asignaturas:", error);
-            return [];
-        }
-    }
-
-    async function fillAsignaturasSelect(select) {
-        console.log("Select encontrado, llenando con asignaturas...");
-
-        const asignaturas = await fetchAsignaturas();
-        asignaturas.forEach(asignatura => {
-            const option = document.createElement("option");
-            option.value = asignatura.id;
-            option.textContent = asignatura.asignatura;
-            select.appendChild(option);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
         });
-
-        console.log("Select llenado con " + asignaturas.length + " asignaturas");
     }
 
-    // Observa el DOM y espera a que aparezca el select
-    const observerAsignaturas = new MutationObserver((mutations, obs) => {
-        const asignaturaSelect = document.querySelector('select[name="psiattribute[12]"]');
-        if (asignaturaSelect) {
-            fillAsignaturasSelect(asignaturaSelect);
-            obs.disconnect(); // deja de observar cuando ya encontró el select
-        }
+    // Configuración de los selects dinámicos
+    observeSelect({
+        url: "https://rita.udistrital.edu.co:23604/adminlab/asignaturas",
+        fieldName: "asignatura",
+        selector: 'select[name="psiattribute[12]"]'
     });
 
-    observerAsignaturas.observe(document.body, {
-        childList: true,
-        subtree: true
+    observeSelect({
+        url: "https://rita.udistrital.edu.co:23604/adminlab/docentes",
+        fieldName: "name",
+        selector: 'select[name="psiattribute[13]"]'
     });
 </script>
 {include file='globalfooter.tpl'}
