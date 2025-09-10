@@ -542,7 +542,7 @@
 
     {include file="javascript-includes.tpl" DataTable=true}
     {datatable tableId=$tableId}
-    {datatablefilter tableId=$tableIdFilter}
+    {*datatablefilter tableId=$tableIdFilter*}
     {jsfile src="ajax-helpers.js"}
     {jsfile src="autocomplete.js"}
     {jsfile src="admin/group.js"}

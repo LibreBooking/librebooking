@@ -673,12 +673,94 @@
             }
             if (tooltipType === 'autorelease') {
                 var text = "{translate key=AutoReleaseNotification args='%s'}";
-                    var tooltipText = text.replace('%s', resource.getAttribute('data-autorelease'));
-                }
-                resource.setAttribute('data-bs-title', tooltipText);
-                new bootstrap.Tooltip(resource);
-            });
-        }
-    </script>
+                var tooltipText = text.replace('%s', resource.getAttribute('data-autorelease'));
+            }
+            resource.setAttribute('data-bs-title', tooltipText);
+            new bootstrap.Tooltip(resource);
+        });
+    }
+</script>
 
-    {include file='globalfooter.tpl'}
+<script>
+    async function fetchDocentes() {
+        try {
+            const response = await fetch("http://localhost/adminlab/docentes");
+            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const result = await response.json();
+            return result.data;
+        } catch (error) {
+            console.error("Error cargando docentes:", error);
+            return [];
+        }
+    }
+
+    async function fillDocentesSelect(select) {
+        console.log("Select encontrado, llenando con docentes...");
+
+        const docentes = await fetchDocentes();
+        docentes.forEach(docente => {
+            const option = document.createElement("option");
+            option.value = docente.id;
+            option.textContent = docente.name;
+            select.appendChild(option);
+        });
+
+        console.log("Select llenado con " + docentes.length + " docentes");
+    }
+
+    // Observa el DOM y espera a que aparezca el select
+    const observer = new MutationObserver((mutations, obs) => {
+        const docenteSelect = document.querySelector('select[name="psiattribute[13]"]');
+        if (docenteSelect) {
+            fillDocentesSelect(docenteSelect);
+            obs.disconnect(); // deja de observar cuando ya encontró el select
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+</script>
+<script>
+    async function fetchAsignaturas() {
+        try {
+            const response = await fetch("http://localhost/adminlab/asignaturas");
+            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const result = await response.json();
+            return result.data || result; // usa .data si existe, si no devuelve el objeto crudo
+        } catch (error) {
+            console.error("Error cargando asignaturas:", error);
+            return [];
+        }
+    }
+
+    async function fillAsignaturasSelect(select) {
+        console.log("Select encontrado, llenando con asignaturas...");
+
+        const asignaturas = await fetchAsignaturas();
+        asignaturas.forEach(asignatura => {
+            const option = document.createElement("option");
+            option.value = asignatura.id;
+            option.textContent = asignatura.asignatura;
+            select.appendChild(option);
+        });
+
+        console.log("Select llenado con " + asignaturas.length + " asignaturas");
+    }
+
+    // Observa el DOM y espera a que aparezca el select
+    const observerAsignaturas = new MutationObserver((mutations, obs) => {
+        const asignaturaSelect = document.querySelector('select[name="psiattribute[12]"]');
+        if (asignaturaSelect) {
+            fillAsignaturasSelect(asignaturaSelect);
+            obs.disconnect(); // deja de observar cuando ya encontró el select
+        }
+    });
+
+    observerAsignaturas.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+</script>
+{include file='globalfooter.tpl'}
