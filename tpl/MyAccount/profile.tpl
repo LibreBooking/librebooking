@@ -142,18 +142,11 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6">
-                        {if $Attributes|default:array()|count > 0}
-                            {control type="AttributeControl" attribute=$Attributes[0]}
-                        {/if}
-                    </div>
-
-
-                    {if $Attributes|default:array()|count > 1}
-                        <div class="col-12 col-sm-6">
-                            {control type="AttributeControl" attribute=$Attributes[$i]}
+                    {foreach from=$Attributes item=attribute}
+		                <div class="col-12 col-sm-6">
+            		            {control type="AttributeControl" attribute=$attribute}
                         </div>
-                    {/if}
+                    {/foreach}
 
                     <div class="d-grid mt-3">
                         <button type="submit" class="update btn btn-primary btn-block" name="{Actions::SAVE}"
