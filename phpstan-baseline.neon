@@ -379,12 +379,6 @@ parameters:
 			path: lib/Application/Schedule/ScheduleResourceFilter.php
 
 		-
-			message: '#^Binary operation "\*" between float\|int and string\|null results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: lib/Common/ContrastingColor.php
-
-		-
 			message: '#^PHPDoc tag @return with type Server is not subtype of native type IRestServer\|null\.$#'
 			identifier: return.phpDocType
 			count: 1
