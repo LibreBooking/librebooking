@@ -145,7 +145,7 @@
                     {foreach from=$Attributes item=attribute}
 		                <div class="col-12 col-sm-6">
             		            {control type="AttributeControl" attribute=$attribute}
-        	                </div>
+                        </div>
                     {/foreach}
 
                     <div class="d-grid mt-3">
