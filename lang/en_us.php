@@ -755,6 +755,7 @@ class en_us extends Language
         $strings['EmailReservation'] = 'Email Reservation';
         $strings['AdHocMeeting'] = 'Ad hoc Meeting';
         $strings['NextReservation'] = 'Next Reservation';
+        $strings['CurrentReservation'] = 'Current Reservation';
         $strings['MissedCheckin'] = 'Missed Checkin';
         $strings['MissedCheckout'] = 'Missed Checkout';
         $strings['Utilization'] = 'Utilization';
