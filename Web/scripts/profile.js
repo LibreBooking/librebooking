@@ -36,6 +36,17 @@ function Profile() {
 		if (!bv.isValid() && bv.$invalidFields.length > 0) {
 			return false;
 		}
+		jqForm.find('input[type="checkbox"][name^="psiattribute["]').each(function () {
+			var $el = $(this);
+			var name = $el.attr('name');
+			var value = $el.is(':checked') ? 1 : 0;
+			var index = formData.findIndex(function(item) { return item.name === name; });
+			if (index >= 0) {
+				formData[index].value = value;
+			} else {
+				formData.push({ name: name, value: value });
+			}
+		});
 
 		$('#profileUpdatedMessage').addClass('d-none');
 
