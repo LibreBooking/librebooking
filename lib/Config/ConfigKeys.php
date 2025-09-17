@@ -725,7 +725,7 @@ class ConfigKeys
         'type' => 'string',
         'default' => 'future',
         'choices' => [
-            'any' => 'Any time',
+            'none' => 'Any time',
             'future' => 'Future',
             'same_day' => 'Same day'
         ],
@@ -1257,7 +1257,7 @@ class ConfigKeys
         'default' => '',
         'label' => 'Google Analytics Tracking ID',
         'description' => 'Tracking ID for Google Analytics integration',
-        'section' => 'External integrations',
+        'section' => '',
         'is_private' => true
     ];
 
@@ -1268,7 +1268,7 @@ class ConfigKeys
         'default' => '',
         'label' => 'Slack Token',
         'description' => 'Token for Slack integration',
-        'section' => 'External integrations',
+        'section' => '',
         'is_private' => true
     ];
 
@@ -1792,18 +1792,23 @@ class ConfigKeys
         return null;
     }
 
-    public static function isPrivate($config): bool
+    public static function isPrivate($configDef): bool
     {
-        if (empty($config)) {
+        if (empty($configDef)) {
             return false;
         }
-        return $config['is_private'] ?? false;
+        return $configDef['is_private'] ?? false;
     }
 
-    public static function hasEnv($config): bool
+    public static function hasEnv($configDef): bool
     {
+        $key = $configDef['key'] ?? null;
+        if (!is_string($key) || $key === '') {
+            return false;
+        }
+
         $loadedEnvVars = getenv();
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $config['key']));
+        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', (string)$key));
         return array_key_exists($envKey, $loadedEnvVars) ?? false;
     }
 }

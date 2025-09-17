@@ -415,8 +415,7 @@ class ConfigurationFile implements IConfigurationFile
             }
 
             if (isset($configDef['choices']) && !array_key_exists($value, $configDef['choices'])) {
-                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', $configDef['choices']) . "]");
-
+                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map( fn($key, $value) => "{$key} => {$value}", array_keys($configDef['choices']), $configDef['choices'])) . "]");
                 $validated[$key] = $configDef['default'];
                 continue;
             }

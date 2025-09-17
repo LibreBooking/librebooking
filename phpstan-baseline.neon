@@ -1,52 +1,10 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/Access/AttributeFilter.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/Access/AttributeFilter.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 4 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/Access/AttributeFilter.php
-
-		-
-			message: '#^Comparison operation "\!\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 13
-			path: Domain/Access/ReservationViewRepository.php
-
-		-
-			message: '#^Comparison operation "\=\=" between non\-empty\-array\<int\>\|int\<min, \-1\>\|int\<1, max\> and \-1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 13
-			path: Domain/Access/ReservationViewRepository.php
-
-		-
-			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: Domain/Access/ResourceRepository.php
-
-		-
 			message: '#^PHPDoc tag @var with type ScheduleLayout is not subtype of native type null\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: Domain/Access/ScheduleRepository.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 3
-			path: Domain/CustomAttribute.php
 
 		-
 			message: '#^Access to an undefined property IRepeatOptions\:\:\$_daysOfWeek\.$#'
@@ -61,112 +19,16 @@ parameters:
 			path: Domain/RepeatOptions.php
 
 		-
-			message: '#^Comparison operation "\=\=" between int\|ReservationUserLevel and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/ReservationItemView.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|ReservationStatus and 3 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/ReservationSeries.php
-
-		-
 			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 2
 			path: Domain/ScheduleLayout.php
 
 		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 3 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel and 4 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 3 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|RoleLevel\|null and 4 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Domain/User.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Pages/Admin/ManageResourcesPage.php
-
-		-
-			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Pages/Ajax/AutoCompletePage.php
-
-		-
-			message: '#^Comparison operation "\=\=" between array\|string\|null and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Pages/Reservation/ExistingReservationPage.php
-
-		-
 			message: '#^Access to an undefined property Sabre\\VObject\\Document\:\:\$VEVENT\.$#'
 			identifier: property.notFound
 			count: 1
 			path: Presenters/Admin/Import/ICalImportPresenter.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 0 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Presenters/Admin/ManageGroupsPresenter.php
-
-		-
-			message: '#^Comparison operation "\=\=" between int\|ResourcePermissionType and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: Presenters/Admin/ManageGroupsPresenter.php
 
 		-
 			message: '#^PHPDoc tag @var with type IReservationValidationRule is not subtype of native type ReservationStartTimeRule\|ResourceMaximumNoticeCurrentInstanceRule\|ResourceMaximumNoticeRule\|ResourceMinimumNoticeCurrentInstanceRuleUpdate\|ResourceMinimumNoticeRuleAdd\.$#'
@@ -187,12 +49,6 @@ parameters:
 			path: Presenters/Schedule/SchedulePageBuilder.php
 
 		-
-			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: Presenters/ViewResourcesPresenter.php
-
-		-
 			message: '#^Call to an undefined method ResourceViewerViewResourcesPage\:\:BindGroups\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -203,78 +59,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: Presenters/ViewSchedulesPresenter.php
-
-		-
-			message: '#^Comparison operation "\!\=" between int\|ResourceStatus and 0 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: Presenters/ViewSchedulesPresenter.php
-
-		-
-			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: WebServices/Controllers/AccountController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 2 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 4 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeCategory\|int and 5 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 1 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 2 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 3 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 2
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\!\=" between CustomAttributeTypes\|int and 4 results in an error\.$#'
-			identifier: notEqual.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeTypes\|int and 3 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: WebServices/Controllers/AttributeSaveController.php
 
 		-
 			message: '#^PHPDoc tag @var with type IValidator is not subtype of native type PasswordComplexityValidator\|PasswordValidator\.$#'
@@ -289,36 +73,6 @@ parameters:
 			path: WebServices/Validators/ResourceRequestValidator.php
 
 		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Attributes/AttributeService.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 4 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Attributes/AttributeService.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\<min, \-1\>\|int\<1, max\> and 5 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Attributes/AttributeService.php
-
-		-
-			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Authentication/Authentication.php
-
-		-
-			message: '#^Comparison operation "\=\=" between AccountStatus\|int\|null and 1 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Authentication/PostRegistration.php
-
-		-
 			message: '#^Access to an undefined property IBookableResource\:\:\$Id\.$#'
 			identifier: property.notFound
 			count: 1
@@ -331,24 +85,6 @@ parameters:
 			path: lib/Application/Reservation/ResourceTypeFilter.php
 
 		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 2 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 4 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
-
-		-
-			message: '#^Comparison operation "\=\=" between CustomAttributeCategory\|int\|null and 5 results in an error\.$#'
-			identifier: equal.invalid
-			count: 1
-			path: lib/Application/Reservation/Validation/CustomAttributeValidationRule.php
-
-		-
 			message: '#^Access to an undefined property IReservedItemView\:\:\$item\.$#'
 			identifier: property.notFound
 			count: 1
@@ -359,6 +95,12 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: lib/Application/Schedule/ReservationListItem.php
+
+		-
+			message: '#^Comparison operation "\>" between \*NEVER\* and 100 results in an error\.$#'
+			identifier: greater.invalid
+			count: 1
+			path: lib/Application/Schedule/ReservationService.php
 
 		-
 			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'

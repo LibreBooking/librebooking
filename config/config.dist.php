@@ -199,6 +199,7 @@ return [
 
             # full or relative path to show uploaded images from
             'image.upload.url' => 'uploads/images',
+
             # Enable reservation attachments (true/false)
             'reservation.attachments.enabled' => false,
 
@@ -306,7 +307,7 @@ return [
             # Enable a waitlist for fully booked reservations (true/false)
             'allow.wait.list' => false,
 
-            # Restrict start times (e.g., 'future', 'any', 'same_day')
+            # Restrict start times (e.g., 'future', 'none', 'same_day')
             'start.time.constraint' => 'future',
 
             # Require approval when an existing reservation is updated (true/false)
@@ -567,6 +568,7 @@ return [
             # X-Content-Type-Options header value
             'x-content-type' => 'nosniff',
 
+            # Set the Content-Security-Policy header value
             'content-security-policy' => '',
         ],
 
