@@ -31,6 +31,18 @@ jobs:
         run: tox -e cz
       - name: Run config-check
         run: tox -e config-check
+      - name: Ensure no merge-commits in the Pull Request (PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
+          echo "HEAD_SHA: ${HEAD_SHA}"
+          git fetch origin "${GITHUB_BASE_REF}"
+          MERGE_COMMITS=$(git rev-list --merges origin/${GITHUB_BASE_REF}..${HEAD_SHA})
+          if [[ -n "${MERGE_COMMITS}" ]]; then
+            echo "ERROR: The Pull Request (PR) contains a 'merge commit' which is not allowed: ${MERGE_COMMITS}"
+            exit 1
+          fi
 
   markdownlint:
     runs-on: ubuntu-latest
