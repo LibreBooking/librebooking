@@ -725,7 +725,7 @@ class ConfigKeys
         'type' => 'string',
         'default' => 'future',
         'choices' => [
-            'any' => 'Any time',
+            'none' => 'Any time',
             'future' => 'Future',
             'same_day' => 'Same day'
         ],
