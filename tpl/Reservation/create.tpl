@@ -680,68 +680,128 @@
         });
     }
 </script>
-
 <script>
-    // Función genérica para llenar selects dinámicos
-    async function fillSelect({ url, fieldName, selector }) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("Error en la API: " + url);
+(async function () {
+  // Caché y control de fetchs concurrentes
+  const cache = new Map();
+  const ongoingFetches = new Map();
 
-            const result = await response.json();
-            const data = result.data || result;
+  async function fetchData(url) {
+    if (cache.has(url)) return cache.get(url);
+    if (ongoingFetches.has(url)) return ongoingFetches.get(url);
 
-            const select = document.querySelector(selector);
-            if (!select) return;
+    const p = fetch(url)
+      .then(async res => {
+        if (!res.ok) throw new Error('Error en la API: ' + url + ' (' + res.status + ')');
+        const json = await res.json();
+        const data = json.data ?? json;
+        cache.set(url, data);
+        ongoingFetches.delete(url);
+        return data;
+      })
+      .catch(err => {
+        ongoingFetches.delete(url);
+        throw err;
+      });
 
-            // valor guardado desde LibreBooking
-            const valorGuardado = select.getAttribute("data-value") || "";
+    ongoingFetches.set(url, p);
+    return p;
+  }
 
-            // limpiar opciones
-            select.innerHTML = '<option value="">--</option>';
+  // Rellena todos los selects que coincidan con selector
+  async function fillSelect({ url, fieldName, selector }) {
+    const nodes = Array.from(document.querySelectorAll(selector));
+    if (nodes.length === 0) return;
 
-            data.forEach(item => {
-                const option = document.createElement("option");
-                option.value = item[fieldName];
-                option.textContent = item[fieldName];
+    let data;
+    try {
+      data = await fetchData(url);
+    } catch (err) {
+      console.error('Error fetch:', url, err);
+      return;
+    }
 
-                if (option.value === valorGuardado) {
-                    option.selected = true;
-                }
+    nodes.forEach(select => {
+      try {
+        // valor guardado desde LibreBooking o valor actual si existe
+        const valorGuardado = select.getAttribute('data-value') ?? select.value ?? "";
 
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error("Error llenando select", selector, error);
+        // limpiar opciones (recreo desde 0)
+        while (select.firstChild) select.removeChild(select.firstChild);
+
+        const placeholder = document.createElement('option');
+        placeholder.value = "";
+        placeholder.textContent = "--";
+        select.appendChild(placeholder);
+
+        data.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item[fieldName];
+          option.textContent = item[fieldName];
+          if (String(option.value) === String(valorGuardado)) option.selected = true;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        console.error('Error llenando select', selector, err);
+      }
+    });
+  }
+
+  // Observador persistente que evita setAttribute problemático
+  function observeSelect(params) {
+    // WeakSet para recordar nodes ya llenados; no causa errores si el nodo se elimina
+    const filled = new WeakSet();
+
+    const checkAndFill = async () => {
+      const nodes = Array.from(document.querySelectorAll(params.selector));
+      if (nodes.length === 0) return;
+
+      // rellenar si el nodo no fue marcado como llenado, o si sus opciones fueron vaciadas
+      let need = false;
+      for (const node of nodes) {
+        if (!filled.has(node) || node.options.length <= 1) {
+          need = true;
+          break;
         }
-    }
+      }
+      if (!need) return;
 
-    // Función para observar el DOM hasta que aparezca el select
-    function observeSelect(params) {
-        const observer = new MutationObserver((mutations, obs) => {
-            if (document.querySelector(params.selector)) {
-                fillSelect(params);
-                obs.disconnect();
-            }
-        });
+      try {
+        await fillSelect(params);
+        // marcar los nodes actuales como llenados
+        document.querySelectorAll(params.selector).forEach(el => filled.add(el));
+      } catch (err) {
+        console.error('Error en checkAndFill', err);
+      }
+    };
 
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    }
-
-    // Configuración de los selects dinámicos
-    observeSelect({
-        url: "https://rita.udistrital.edu.co:23604/adminlab/asignaturas",
-        fieldName: "asignatura",
-        selector: 'select[name="psiattribute[12]"]'
+    const observer = new MutationObserver(() => {
+      // no await dentro del callback directamente — delegamos
+      checkAndFill().catch(e => console.error(e));
     });
 
-    observeSelect({
-        url: "https://rita.udistrital.edu.co:23604/adminlab/docentes",
-        fieldName: "name",
-        selector: 'select[name="psiattribute[13]"]'
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
     });
+
+    // intento inmediato (para cuando el select ya existe al cargar)
+    checkAndFill().catch(e => console.error(e));
+  }
+
+  // Configura tus selects dinámicos
+  observeSelect({
+    url: "https://rita.udistrital.edu.co:23604/adminlab/asignaturas",
+    fieldName: "asignatura",
+    selector: 'select[name="psiattribute[12]"]'
+  });
+
+  observeSelect({
+    url: "https://rita.udistrital.edu.co:23604/adminlab/docentes",
+    fieldName: "name",
+    selector: 'select[name="psiattribute[13]"]'
+  });
+
+})();
 </script>
 {include file='globalfooter.tpl'}
