@@ -160,20 +160,18 @@ function Recurrence(recurOptions, recurElements, prefix) {
             ChangeRepeatOptions();
 
             for (var i = 0; i < options.repeatWeekdays.length; i++) {
-                var id = '#' + prefix + 'repeatDay' + options.repeatWeekdays[i];
-                if (!$(id).is(':checked')) {
-                    //$(id).closest('label').button('toggle');
-                    $('label[for="' + id.replace(/#/g, '') + '"]').addClass('active');
-                }
+                var id = prefix + 'repeatDay' + options.repeatWeekdays[i];
+                $('#' + id).prop('checked', true);
             }
 
             $("#" + prefix + "repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").prop('checked', true);
         }
 
-        elements.repeatOnWeeklyDiv.find('label').click(function (e) {
+        elements.repeatOnWeeklyDiv.find('input[type="checkbox"]').off('change').on('change', function() {
             NotifyChange();
         });
-        elements.repeatOnMonthlyDiv.find('label').click(function (e) {
+
+        elements.repeatOnMonthlyDiv.find('input[type="radio"]').off('change').on('change', function() {
             NotifyChange();
         });
     }
