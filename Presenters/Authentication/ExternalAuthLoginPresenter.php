@@ -298,6 +298,7 @@ class ExternalAuthLoginPresenter
     {
         $requiredDomainValidator = new RequiredEmailDomainValidator($email);
         $requiredDomainValidator->Validate();
+        $allowRegistration = Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter());
         if (!$requiredDomainValidator->IsValid()) {
             $this->page->ShowError(array(Resources::GetInstance()->GetString('InvalidEmailDomain')));
             return;
@@ -306,24 +307,29 @@ class ExternalAuthLoginPresenter
             $this->authentication->Login($email, new WebLoginContext(new LoginData()));
             LoginRedirector::Redirect($this->page);
         } else {
-            $this->registration->Synchronize(
-                new AuthenticatedUser(
-                    $username,
-                    $email,
-                    $firstName,
-                    $lastName,
-                    Password::GenerateRandom(),
-                    Resources::GetInstance()->CurrentLanguage,
-                    Configuration::Instance()->GetDefaultTimezone(),
-                    $phone,
-                    $organization,
-                    $title
-                ),
-                false,
-                false
-            );
-            $this->authentication->Login($email, new WebLoginContext(new LoginData()));
-            LoginRedirector::Redirect($this->page);
+            if ($allowRegistration) {
+                $this->registration->Synchronize(
+                    user: new AuthenticatedUser(
+                        $username,
+                        $email,
+                        $firstName,
+                        $lastName,
+                        Password::GenerateRandom(),
+                        Resources::GetInstance()->CurrentLanguage,
+                        Configuration::Instance()->GetDefaultTimezone(),
+                        $phone,
+                        $organization,
+                        $title
+                    ),
+                    insertOnly: false,
+                    overwritePassword: false
+                );
+                $this->authentication->Login($email, new WebLoginContext(new LoginData()));
+                LoginRedirector::Redirect($this->page);
+            } else {
+                $this->page->ShowError(array(Resources::GetInstance()->GetString('SelfRegistrationDisabled')));
+                return;
+            }
         }
     }
 }
