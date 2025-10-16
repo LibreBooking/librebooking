@@ -4,7 +4,7 @@
 {else}
     <p>{$UserName} l&apos;ha invitata ad una prenotazione.</p>
 {/if}
-{if preg_match("/[a-zA-Z]+/",$DeleteReason)}
+{if !empty($DeleteReason)}
     <p><strong>Motivazione:</strong> <em>{$DeleteReason|nl2br}</em></p>
 {/if}
 <p>Dettagli della prenotazione:</p>

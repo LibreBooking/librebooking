@@ -101,10 +101,10 @@
         {/if}
     </p>
 {/if}
-{if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+{if !empty($CreatedBy)}
 	  <p><strong>Creata da:</strong> {$CreatedBy}</p>
 {/if}
-{if preg_match("/[a-zA-Z]+/",$ApprovedBy)}
+{if !empty($ApprovedBy)}
 	  <p><strong>Approvata da:</strong> {$ApprovedBy}</p>
 {/if}
 <p><strong>Numero riferimento:</strong> {$ReferenceNumber}</p>

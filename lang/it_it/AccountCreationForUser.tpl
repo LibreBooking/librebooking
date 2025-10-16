@@ -9,7 +9,7 @@
     <strong>Password:</strong> <em>{$Password}</em>
 </p>
 <p>
-    {if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+    {if !empty($CreatedBy)}
         <strong>Created by:</strong> {$CreatedBy}
     {/if}
 </p>

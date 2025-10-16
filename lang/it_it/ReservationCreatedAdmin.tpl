@@ -2,7 +2,7 @@
 <p>Dettagli della prenotazione:</p>
 <p>
     <strong>Utente:</strong> {$UserName}<br />
-    {if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+    {if !empty($CreatedBy)}
         <strong>Creata da:</strong> {$CreatedBy}<br />
     {/if}
     <strong>Inizio:</strong> {formatdate date=$StartDate key=reservation_email}<br />
