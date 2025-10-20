@@ -31,8 +31,8 @@ class CalendarPage extends CommonCalendarPage implements ICommonCalendarPage
 
     public function ProcessPageLoad()
     {
-        URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/calendar.php');
-        ParamsValidator::validateOrRedirect(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/calendar.php', true);
+        //URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/calendar.php');
+        //ParamsValidator::validateOrRedirect(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/calendar.php', true);
 
         $user = ServiceLocator::GetServer()->GetUserSession();
         $this->presenter->PageLoad($user);
