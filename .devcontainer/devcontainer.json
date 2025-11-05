@@ -1,0 +1,15 @@
+{
+	"name": "LibreBooking Dev",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/git-lfs:1": {}
+	},
+	"postCreateCommand": "composer install",
+	"postStartCommand": "bash .devcontainer/ldap_setup.sh",
+	"forwardPorts": [
+		8080
+	],
+	"remoteUser": "root"
+}
