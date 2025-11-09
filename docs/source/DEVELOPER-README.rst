@@ -22,7 +22,7 @@ The easiest way to run LibreBooking locally is with VS Code’s
 **Dev Containers** feature. This automatically provisions a fully configured environment with PHP, MariaDB, and all dependencies pre-installed.
 
 If Using VScode (Recommended)
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Make sure `Docker <https://docs.docker.com/get-docker/>`_ and the `Dev Containers <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>`_ extension are both installed.
 - Ensure Docker is running and port 80 is free.
 
