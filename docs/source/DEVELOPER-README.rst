@@ -15,6 +15,39 @@ Working on the project
   so they can be looked over, and pull requested to the ``develop``
   branch and will eventually end up in a release on ``master``.
 
+Running The Project
+----------------------
+
+The easiest way to run LibreBooking locally is with VS Code’s
+**Dev Containers** feature. This automatically provisions a fully configured environment with PHP, MariaDB, and all dependencies pre-installed.
+
+If Using VScode (Recommended)
+~~~~~~~~~~~~~~~~~~~
+- Make sure `Docker <https://docs.docker.com/get-docker/>`_ and the `Dev Containers <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>`_ extension are both installed.
+- Ensure Docker is running and port 80 is free.
+
+
+Steps
+^^^^^
+1. Open the project in VS Code.
+2. Press **Ctrl+Shift+P** → select **Dev Containers: Reopen in Container**
+3. Wait for the container to build (this may take several minutes the first time)
+4. Once loaded, you will be inside a container with PHP, Composer,and MariaDB ready to use.
+5. Browse via ``http://localhost:80``
+
+If Not Using VScode
+~~~~~~~~~~~~~~~~~~~
+
+- Make sure `Docker <https://docs.docker.com/get-docker/>`_ is installed.
+- Ensure Docker is running and port 80 is free.
+
+Steps
+^^^^^
+1. cd into the project root directory and run ``docker compose -f .devcontainer/docker-compose.devcontainer.yml up -d --build``
+2. Wait for the container to build (this may take several minutes the first time)
+3. Once loaded, you will be inside a container with PHP, Composer,and MariaDB ready to use with your chosen IDE/Text Editor.
+4. Browse via ``http://localhost:80``
+
 Design philosophy
 -----------------
 
