@@ -7,7 +7,7 @@ class LdapConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'ldap';
 
     public const HOST = [
-        'key' => 'host',
+        'key' => 'ldap.host',
         'type' => 'string',
         'default' => '',
         'label' => 'LDAP Host',
@@ -16,7 +16,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const PORT = [
-        'key' => 'port',
+        'key' => 'ldap.port',
         'type' => 'integer',
         'default' => 389,
         'label' => 'LDAP Port',
@@ -25,7 +25,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const VERSION = [
-        'key' => 'version',
+        'key' => 'ldap.version',
         'type' => 'integer',
         'default' => 3,
         'label' => 'LDAP Version',
@@ -34,7 +34,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const STARTTLS = [
-        'key' => 'starttls',
+        'key' => 'ldap.starttls',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Use StartTLS',
@@ -43,7 +43,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const BINDDN = [
-        'key' => 'binddn',
+        'key' => 'ldap.binddn',
         'type' => 'string',
         'default' => '',
         'label' => 'Bind DN',
@@ -52,7 +52,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const BINDPW = [
-        'key' => 'bindpw',
+        'key' => 'ldap.bindpw',
         'type' => 'string',
         'default' => '',
         'label' => 'Bind Password',
@@ -62,7 +62,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const BASEDN = [
-        'key' => 'basedn',
+        'key' => 'ldap.basedn',
         'type' => 'string',
         'default' => '',
         'label' => 'Base DN',
@@ -71,7 +71,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const FILTER = [
-        'key' => 'filter',
+        'key' => 'ldap.filter',
         'type' => 'string',
         'default' => '(uid=%s)',
         'label' => 'Search Filter',
@@ -80,7 +80,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const SCOPE = [
-        'key' => 'scope',
+        'key' => 'ldap.scope',
         'type' => 'string',
         'default' => 'sub',
         'label' => 'Search Scope',
@@ -94,7 +94,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const RETRY_AGAINST_DATABASE = [
-        'key' => 'database.auth.when.ldap.user.not.found',
+        'key' => 'ldap.database.auth.when.ldap.user.not.found',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Retry Against Database',
@@ -103,7 +103,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const ATTRIBUTE_MAPPING = [
-        'key' => 'attribute.mapping',
+        'key' => 'ldap.attribute.mapping',
         'type' => 'string',
         'default' => 'sn=sn,givenname=givenname,mail=mail,telephonenumber=telephonenumber,physicaldeliveryofficename=physicaldeliveryofficename,title=title',
         'label' => 'Attribute Mapping',
@@ -112,7 +112,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const USER_ID_ATTRIBUTE = [
-        'key' => 'user.id.attribute',
+        'key' => 'ldap.user.id.attribute',
         'type' => 'string',
         'default' => 'uid',
         'label' => 'User ID Attribute',
@@ -121,7 +121,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const REQUIRED_GROUP = [
-        'key' => 'required.group',
+        'key' => 'ldap.required.group',
         'type' => 'string',
         'default' => '',
         'label' => 'Required Group',
@@ -130,7 +130,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const SYNC_GROUPS = [
-        'key' => 'sync.groups',
+        'key' => 'ldap.sync.groups',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Sync Groups',
@@ -139,7 +139,7 @@ class LdapConfigKeys extends PluginConfigKeys
     ];
 
     public const PREVENT_CLEAN_USERNAME = [
-        'key' => 'prevent.clean.username',
+        'key' => 'ldap.prevent.clean.username',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Prevent Clean Username',

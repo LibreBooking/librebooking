@@ -6,7 +6,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
 {
     public const CONFIG_ID = 'activeDirectory';
     public const DOMAIN_CONTROLLERS = [
-        'key' => 'domain.controllers',
+        'key' => 'activedirectory.domain.controllers',
         'type' => 'string',
         'default' => '',
         'label' => 'Domain Controllers',
@@ -15,7 +15,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const PORT = [
-        'key' => 'port',
+        'key' => 'activedirectory.port',
         'type' => 'integer',
         'default' => 389,
         'label' => 'LDAP Port',
@@ -24,7 +24,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const USERNAME = [
-        'key' => 'username',
+        'key' => 'activedirectory.username',
         'type' => 'string',
         'default' => '',
         'label' => 'Admin Username',
@@ -33,7 +33,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const PASSWORD = [
-        'key' => 'password',
+        'key' => 'activedirectory.password',
         'type' => 'string',
         'default' => '',
         'label' => 'Admin Password',
@@ -43,7 +43,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const BASEDN = [
-        'key' => 'basedn',
+        'key' => 'activedirectory.basedn',
         'type' => 'string',
         'default' => '',
         'label' => 'Base DN',
@@ -52,7 +52,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const USE_SSL = [
-        'key' => 'use.ssl',
+        'key' => 'activedirectory.use.ssl',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Use SSL',
@@ -61,7 +61,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const VERSION = [
-        'key' => 'version',
+        'key' => 'activedirectory.version',
         'type' => 'integer',
         'default' => 3,
         'label' => 'LDAP Protocol Version',
@@ -70,7 +70,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const ACCOUNT_SUFFIX = [
-        'key' => 'account.suffix',
+        'key' => 'activedirectory.account.suffix',
         'type' => 'string',
         'default' => '',
         'label' => 'Account Suffix',
@@ -79,7 +79,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const SECTION_AD = [
-        'key' => 'ad',
+        'key' => 'activedirectory.ad',
         'type' => 'string',
         'default' => '',
         'label' => 'Active Directory Section',
@@ -88,7 +88,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
         'is_hidden' => true
     ];
     public const RETRY_AGAINST_DATABASE = [
-        'key' => 'database.auth.when.ldap.user.not.found',
+        'key' => 'activedirectory.database.auth.when.ldap.user.not.found',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Retry Against Database',
@@ -97,7 +97,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const ATTRIBUTE_MAPPING = [
-        'key' => 'attribute.mapping',
+        'key' => 'activedirectory.attribute.mapping',
         'type' => 'string',
         'default' => 'sn=sn,givenname=givenname,mail=mail,telephonenumber=telephonenumber,physicaldeliveryofficename=physicaldeliveryofficename,title=title',
         'label' => 'Attribute Mapping',
@@ -106,7 +106,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const REQUIRED_GROUPS = [
-        'key' => 'required.groups',
+        'key' => 'activedirectory.required.groups',
         'type' => 'string',
         'default' => '',
         'label' => 'Required Groups',
@@ -115,7 +115,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const SYNC_GROUPS = [
-        'key' => 'sync.groups',
+        'key' => 'activedirectory.sync.groups',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Sync Groups',
@@ -124,7 +124,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const USE_SSO = [
-        'key' => 'use.sso',
+        'key' => 'activedirectory.use.sso',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Use SSO',
@@ -133,7 +133,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
     ];
 
     public const PREVENT_CLEAN_USERNAME = [
-        'key' => 'prevent.clean.username',
+        'key' => 'activedirectory.prevent.clean.username',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Prevent Clean Username',
