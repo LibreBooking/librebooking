@@ -91,7 +91,7 @@ class Ldap2Wrapper
     {
         $uidAttribute = $this->options->GetUserIdAttribute();
         $requiredGroup = $this->options->GetRequiredGroup();
-        Log::Error('LDAP - uid attribute: %s', $uidAttribute);
+        Log::Debug('LDAP - uid attribute: %s', $uidAttribute);
 
         $filter = Net_LDAP2_Filter::create($uidAttribute, 'equals', $username);
 
