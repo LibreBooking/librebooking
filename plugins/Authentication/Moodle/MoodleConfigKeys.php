@@ -7,7 +7,7 @@ class MoodleConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'moodle';
 
     public const ROOT_DIRECTORY = [
-        'key' => 'moodle.root.directory',
+        'key' => 'root.directory',
         'type' => 'string',
         'default' => '/home/user/public_html/moodle',
         'label' => 'Moodle Root Directory',
@@ -25,7 +25,7 @@ class MoodleConfigKeys extends PluginConfigKeys
     ];
 
     public const COOKIE_ID = [
-        'key' => 'moodle.cookie.id',
+        'key' => 'cookie.id',
         'type' => 'string',
         'default' => 'MoodleSession',
         'label' => 'Moodle Cookie ID',

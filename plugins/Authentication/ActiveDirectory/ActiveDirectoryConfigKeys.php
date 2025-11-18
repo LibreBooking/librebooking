@@ -28,7 +28,7 @@ class ActiveDirectoryConfigKeys extends PluginConfigKeys
         'type' => 'string',
         'default' => '',
         'label' => 'Admin Username',
-        'description' => 'Username for binding to LDAP service',
+        'description' => 'Username for binding to LDAP service. Will have account.suffix appended automatically',
         'section' => 'activedirectory'
     ];
 

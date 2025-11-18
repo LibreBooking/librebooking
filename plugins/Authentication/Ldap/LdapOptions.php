@@ -31,7 +31,7 @@ class LdapOptions
         $this->SetOption('basedn', $this->GetConfig(LdapConfigKeys::BASEDN));
         $this->SetOption('filter', $this->GetConfig(LdapConfigKeys::FILTER));
         $this->SetOption('scope', $this->GetConfig(LdapConfigKeys::SCOPE));
-
+        
         return $this->_options;
     }
 

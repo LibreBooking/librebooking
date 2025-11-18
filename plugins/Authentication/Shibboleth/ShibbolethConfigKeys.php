@@ -10,7 +10,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'shibboleth';
 
     public const USERNAME = [
-        'key' => 'shibboleth.username',
+        'key' => 'username',
         'type' => 'string',
         'default' => 'REMOTE_USER',
         'label' => 'Username Attribute',
@@ -19,7 +19,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const FIRSTNAME = [
-        'key' => 'shibboleth.firstname',
+        'key' => 'firstname',
         'type' => 'string',
         'default' => 'givenName',
         'label' => 'First Name Attribute',
@@ -28,7 +28,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const LASTNAME = [
-        'key' => 'shibboleth.lastname',
+        'key' => 'lastname',
         'type' => 'string',
         'default' => 'sn',
         'label' => 'Last Name Attribute',
@@ -37,7 +37,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const EMAIL = [
-        'key' => 'shibboleth.email',
+        'key' => 'email',
         'type' => 'string',
         'default' => 'mail',
         'label' => 'Email Attribute',
@@ -46,7 +46,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const PHONE = [
-        'key' => 'shibboleth.phone',
+        'key' => 'phone',
         'type' => 'string',
         'default' => 'telephone',
         'label' => 'Phone Attribute',
@@ -55,7 +55,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const ORGANIZATION = [
-        'key' => 'shibboleth.organization',
+        'key' => 'organization',
         'type' => 'string',
         'default' => 'ou',
         'label' => 'Organization Attribute',
@@ -65,7 +65,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
 
     // Additional attributes can be added here
     public const GROUPS = [
-        'key' => 'shibboleth.groups',
+        'key' => 'groups',
         'type' => 'string',
         'default' => 'groups',
         'label' => 'Groups Attribute',
@@ -74,7 +74,7 @@ class ShibbolethConfigKeys extends PluginConfigKeys
     ];
 
     public const SYNC_GROUPS = [
-        'key' => 'shibboleth.sync.groups',
+        'key' => 'sync.groups',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Sync Groups',

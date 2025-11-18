@@ -351,8 +351,9 @@ class ConfigurationFile implements IConfigurationFile
                         if (!call_user_func([$this->_configKeysClass, 'findByKey'], $fullKey)) {
                             error_log("[CONFIG] Deprecated config key '$fullKey' used. It maps to '$finalKey'. Support for legacy keys will be removed in a future release.");
                         }
-
-                        continue;
+                    } else {
+                        // Unknown subkey - preserve in original structure for validation
+                        $rewritten[$key][$subKey] = $subValue;
                     }
                 }
 
@@ -415,7 +416,7 @@ class ConfigurationFile implements IConfigurationFile
             }
 
             if (isset($configDef['choices']) && !array_key_exists($value, $configDef['choices'])) {
-                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map( fn($key, $value) => "{$key} => {$value}", array_keys($configDef['choices']), $configDef['choices'])) . "]");
+                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map(fn($key, $value) => "{$key} => {$value}", array_keys($configDef['choices']), $configDef['choices'])) . "]");
                 $validated[$key] = $configDef['default'];
                 continue;
             }

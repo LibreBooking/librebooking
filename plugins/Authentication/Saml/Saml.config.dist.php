@@ -12,46 +12,48 @@
 
 return [
     'settings' => [
-        // path to SimpleSAMLphp Service Provider(SP) base directory
-        // the SP should be installed on the same server as LibreBooking
-        'simplesamlphp.lib' => '/var/simplesamlphp',
+        'saml' => [
+            // path to SimpleSAMLphp Service Provider(SP) base directory
+            // the SP should be installed on the same server as LibreBooking
+            'simplesamlphp.lib' => '/var/simplesamlphp',
 
-        // path to SimpleSAML SP configuration directory
-        'simplesamlphp.config' => '/var/simplesamlphp/config',
+            // path to SimpleSAML SP configuration directory
+            'simplesamlphp.config' => '/var/simplesamlphp/config',
 
-        // name of the SimpleSAML authentication source configured
-        // in SimpleSAML SP /var/simplesamlphp/config/authsources.php
-        'simplesamlphp.sp' => 'default-sp',
+            // name of the SimpleSAML authentication source configured
+            // in SimpleSAML SP /var/simplesamlphp/config/authsources.php
+            'simplesamlphp.sp' => 'default-sp',
 
-        // SAML attribute names found in SimpleSAMLphp Identify Provider (Idp)
-        // configuration /var/simplesamlphp/config/authsources.php
-        // The Idp will most likely be installed on another server
+            // SAML attribute names found in SimpleSAMLphp Identify Provider (Idp)
+            // configuration /var/simplesamlphp/config/authsources.php
+            // The Idp will most likely be installed on another server
 
-        // SAML attribute that is mapped to LibreBooking username
-        'simplesamlphp.username' => 'sAMAccountName',
+            // SAML attribute that is mapped to LibreBooking username
+            'simplesamlphp.username' => 'sAMAccountName',
 
-        // SAML attribute that is mapped to LibreBooking firstname
-        'simplesamlphp.firstname' => 'givenName',
+            // SAML attribute that is mapped to LibreBooking firstname
+            'simplesamlphp.firstname' => 'givenName',
 
-        // SAML attribute that is mapped to LibreBooking lastname
-        'simplesamlphp.lastname' => 'sn',
+            // SAML attribute that is mapped to LibreBooking lastname
+            'simplesamlphp.lastname' => 'sn',
 
-        // SAML attribute that is mapped to LibreBooking email
-        'simplesamlphp.email' => 'mail',
+            // SAML attribute that is mapped to LibreBooking email
+            'simplesamlphp.email' => 'mail',
 
-        // SAML attribute that is mapped to LibreBooking phone
-        'simplesamlphp.phone' => 'telephoneNumber',
+            // SAML attribute that is mapped to LibreBooking phone
+            'simplesamlphp.phone' => 'telephoneNumber',
 
-        // SAML attribute that is mapped to LibreBooking organization
-        'simplesamlphp.organization' => 'department',
+            // SAML attribute that is mapped to LibreBooking organization
+            'simplesamlphp.organization' => 'department',
 
-        // SAML attribute that is mapped to LibreBooking position
-        'simplesamlphp.position' => 'title',
+            // SAML attribute that is mapped to LibreBooking position
+            'simplesamlphp.position' => 'title',
 
-        // SAML attribute that is mapped to LibreBooking groups
-        'simplesamlphp.groups' => 'groups',
+            // SAML attribute that is mapped to LibreBooking groups
+            'simplesamlphp.groups' => 'groups',
 
-        // Whether or not groups should be synced into LibreBooking
-        'simplesamlphp.sync.groups' => false,
+            // Whether or not groups should be synced into LibreBooking
+            'simplesamlphp.sync.groups' => false,
+        ],
     ],
 ];

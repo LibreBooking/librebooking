@@ -28,8 +28,14 @@ abstract class PluginConfigKeys
     public static function findByKey(string $key): ?array
     {
         foreach (static::all() as $config) {
-            if (($config['key'] ?? null) === $key) {
-                return $config;
+            $configKey = $config['key'] ?? null;
+            $section = $config['section'] ?? null;
+
+            // If this config has a section, ONLY match the section-prefixed key
+            if ($section) {
+                if ("{$section}.{$configKey}" === $key) {
+                    return $config;
+                }
             }
         }
 
