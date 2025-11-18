@@ -7,7 +7,7 @@ class DrupalConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'Drupal';
 
     public const DRUPAL_ROOT_DIR = [
-        'key' => 'drupal.root.dir',
+        'key' => 'root.dir',
         'type' => 'string',
         'default' => 'S1',
         'label' => 'Drupal Root Directory',
@@ -16,7 +16,7 @@ class DrupalConfigKeys extends PluginConfigKeys
     ];
 
     public const DRUPAL_ALLOWED_ROLES = [
-        'key' => 'drupal.allowed_roles',
+        'key' => 'allowed_roles',
         'type' => 'string',
         'default' => 'comma,separated,roles',
         'label' => 'Drupal Allowed Roles',

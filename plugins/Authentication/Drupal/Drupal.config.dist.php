@@ -2,11 +2,13 @@
 
 return [
     'settings' => [
-        // Path to the Drupal root directory.
-        'drupal.root.dir' => '/full/drupal/path',
+        'drupal' => [
+            // Path to the Drupal root directory.
+            'root.dir' => '/full/drupal/path',
 
-        // Leaving this parameter empty will allow all authenticated users.
-        'drupal.allowed_roles' => 'comma,separated,roles',
+            // Leaving this parameter empty will allow all authenticated users.
+            'allowed_roles' => 'comma,separated,roles',
+        ],
     ],
 ];
 

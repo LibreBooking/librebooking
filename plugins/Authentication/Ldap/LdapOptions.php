@@ -31,7 +31,7 @@ class LdapOptions
         $this->SetOption('basedn', $this->GetConfig(LdapConfigKeys::BASEDN));
         $this->SetOption('filter', $this->GetConfig(LdapConfigKeys::FILTER));
         $this->SetOption('scope', $this->GetConfig(LdapConfigKeys::SCOPE));
-
+        
         return $this->_options;
     }
 
@@ -78,7 +78,7 @@ class LdapOptions
 
     public function IsLdapDebugOn()
     {
-        return $this->GetConfig('ldap.debug.enabled', new BooleanConverter());
+        return $this->GetConfig(LdapConfigKeys::DEBUG_ENABLED, new BooleanConverter());
     }
 
     public function Attributes()

@@ -11,7 +11,7 @@ class LdapConfigKeys extends PluginConfigKeys
         'type' => 'string',
         'default' => '',
         'label' => 'LDAP Host',
-        'description' => 'Hostname or IP address of LDAP server',
+        'description' => 'Hostname or IP address of LDAP server. Should start with ldap:// or ldaps://',
         'section' => 'ldap'
     ];
 
@@ -73,9 +73,9 @@ class LdapConfigKeys extends PluginConfigKeys
     public const FILTER = [
         'key' => 'filter',
         'type' => 'string',
-        'default' => '(uid=%s)',
+        'default' => '',
         'label' => 'Search Filter',
-        'description' => 'LDAP search filter (use %s for username)',
+        'description' => 'Optional LDAP search filter for additional constraints (leave empty for default)',
         'section' => 'ldap'
     ];
 
@@ -85,12 +85,7 @@ class LdapConfigKeys extends PluginConfigKeys
         'default' => 'sub',
         'label' => 'Search Scope',
         'description' => 'LDAP search scope (base, one, or sub)',
-        'section' => 'ldap',
-        'choices' => [
-            'base' => 'Base',
-            'one' => 'One Level',
-            'sub' => 'Subtree'
-        ]
+        'section' => 'ldap'
     ];
 
     public const RETRY_AGAINST_DATABASE = [
@@ -149,7 +144,7 @@ class LdapConfigKeys extends PluginConfigKeys
 
     // Adding the debug setting that's referenced in LdapOptions::IsLdapDebugOn()
     public const DEBUG_ENABLED = [
-        'key' => 'ldap.debug.enabled',
+        'key' => 'debug.enabled',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable LDAP Debug',
