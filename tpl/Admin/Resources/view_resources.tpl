@@ -170,7 +170,7 @@
                                 </td>
                                 <td>
                                     {*5th column: Actions*}
-                                    <a href="#" onclick="return false;" class="btn btn-sm btn-primary"> {*Button to the individual page: coming soon, for now it is disabled*}
+                                    <a href="resource_detail.php?id={$resource->GetResourceId()}" class="btn btn-sm btn-primary"> {*Button to the individual page: coming soon, for now it is disabled*}
                                         <i class="bi bi-eye"></i> {translate key="ViewDetails"}
                                     </a>
                                 </td>
