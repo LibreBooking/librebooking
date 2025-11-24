@@ -1073,6 +1073,15 @@ class en_us extends Language
         $strings['LengthMenu'] = "Display _MENU_ records per page";
         //End Datatables
 
+        // Resource detail page translations
+        $strings['Details'] = 'Details';
+        $strings['ResourceId'] = 'Resource ID';
+        $strings['MaxParticipants'] = 'Max Participants';
+        $strings['MinimumDuration'] = 'Minimum Duration';
+        $strings['MaximumDuration'] = 'Maximum Duration';
+        $strings['BackToList'] = 'Back to List';
+        // End Resource detail page translations
+
         $this->Strings = $strings;
 
         return $this->Strings;

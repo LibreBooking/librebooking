@@ -1,5 +1,8 @@
 {include file='globalheader.tpl'}
 
+{* Font Awesome for lab icons *}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 {* 
  * TODO for Institute Integration:
  * - Add Division/Department field
@@ -16,13 +19,13 @@
             <i class="bi bi-exclamation-triangle"></i> {$ErrorMessage|default:'Unknown error'}
         </div>
         <a href="view_resources.php" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> {translate key='BackToList'}
+            <i class="fas fa-arrow-left"></i> {translate key='BackToList'}
         </a>
     {else}
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
                 <h2 class="mb-0">
-                    <i class="bi bi-door-open"></i> {$ResourceName}
+                    <i class="fas fa-microscope"></i> {$ResourceName}
                 </h2>
             </div>
             
@@ -122,10 +125,10 @@
             <div class="card-footer">
                 <div class="d-flex justify-content-between">
                     <a href="view_resources.php" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> {translate key='BackToList'|default:'Back to list'}
+                        <i class="fas fa-arrow-left"></i> {translate key='BackToList'|default:'Back to list'}
                     </a>
                     <a href="reservation.php?rid={$ResourceId}" class="btn btn-primary btn-lg">
-                        <i class="bi bi-calendar-plus"></i> {translate key='CreateReservation'|default:'Create Reservation'}
+                        <i class="fas fa-calendar-plus"></i> {translate key='CreateReservation'|default:'Create Reservation'}
                     </a>
                 </div>
             </div>
