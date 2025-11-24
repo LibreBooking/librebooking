@@ -119,8 +119,35 @@
                         {/if}
                     </div>
                 </div> {* End of description row *}
-            </div> {* End of card-body *}
-            
+               
+                {* Calendar availability link *}
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-2">
+                            <i class="fas fa-calendar-alt"></i> Resource Availability
+                        </h5>
+                        
+                        {* Debug div to show iframe status *}
+                        <div id="iframe-debug" class="alert alert-warning mb-2">
+                            <i class="fas fa-info-circle"></i> Loading calendar...
+                        </div>
+                        
+                        <iframe 
+                            id="scheduleFrame"
+                            src="schedule-minimal.php?rid={$ResourceId}" 
+                            width="100%" 
+                            height="400" 
+                            style="border: 1px solid #dee2e6; border-radius: 4px;"
+                            onload="checkIframe()"
+                            onerror="iframeError()">
+                        </iframe>
+                        
+                    </div>
+                </div>
+
+
+            </div> {* End of card-body *}   
+
             {* Card footer at same level as card-body *}
             <div class="card-footer">
                 <div class="d-flex justify-content-between">
@@ -131,9 +158,44 @@
                         <i class="fas fa-calendar-plus"></i> {translate key='CreateReservation'|default:'Create Reservation'}
                     </a>
                 </div>
-            </div>
+            </div>    
         </div> {* End of card *}
     {/if}
-</div> {* End of container *}
+
+    <script>
+    function checkIframe() {
+        console.log('iframe loaded - event triggered');
+        const iframe = document.getElementById('scheduleFrame');
+        
+        try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const bodyHTML = iframeDoc.body.innerHTML;
+            
+            console.log('Iframe content length:', bodyHTML.length);
+            console.log('First 200 chars:', bodyHTML.substring(0, 200));
+            
+            if(bodyHTML.length > 100) {
+                document.getElementById('iframe-debug').style.display = 'none';
+            }
+        } catch(e) {
+            console.log('🔒 Cannot access iframe (CORS):', e);
+        }
+    }
+
+    function iframeError() {
+        console.error('❌ Iframe failed to load');
+        document.getElementById('iframe-debug').innerHTML = '❌ Failed to load calendar';
+    }
+
+    // Check after page loads
+    window.addEventListener('load', function() {
+        setTimeout(checkIframe, 1000);
+    });
+    </script>    
+
+</div> {* End of container *}           
+
+
 
 {include file='globalfooter.tpl'}
+
