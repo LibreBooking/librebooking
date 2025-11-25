@@ -134,7 +134,7 @@
                         
                         <iframe 
                             id="scheduleFrame"
-                            src="schedule-minimal.php?rid={$ResourceId}" 
+                            src="schedule-minimal.php?rid={$smarty.get.id|default:$ResourceId|default:1}" 
                             width="100%" 
                             height="400" 
                             style="border: 1px solid #dee2e6; border-radius: 4px;"

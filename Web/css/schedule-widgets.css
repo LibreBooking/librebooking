@@ -1,0 +1,111 @@
+/**
+ * Schedule Widgets Styles
+ * Used for minimal schedule views, availability calendars, and similar widgets
+ */
+
+/* Week Grid Layout */
+.schedule-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+/* Day Cards */
+.schedule-day-card {
+    padding: 10px 5px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    min-height: 80px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.schedule-day-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Day States */
+.schedule-day-available {
+    background: #d1f2eb;
+    border-color: #28a745;
+}
+
+.schedule-day-booked {
+    background: #f8d7da;
+    border-color: #dc3545;
+}
+
+.schedule-day-pending {
+    background: #fff3cd;
+    border-color: #ffc107;
+}
+
+/* Typography within cards */
+.schedule-day-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.schedule-day-date {
+    font-size: 12px;
+    color: #6c757d;
+    margin: 3px 0 8px 0;
+}
+
+/* Widget Container */
+.schedule-widget-container {
+    padding: 10px;
+}
+
+.schedule-widget-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.schedule-widget-footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Override Bootstrap default to match LibreBooking theme */
+.schedule-widget-footer .btn-primary {
+    background-color: #669999;  /* Exact match from computed */
+    border-color: #527a7a;      /* Exact border color */
+}
+
+.schedule-widget-footer .btn-primary:hover,
+.schedule-widget-footer .btn-primary:focus,
+.schedule-widget-footer .btn-primary:active {
+    background-color: #527a7a;  /* Use border color for hover */
+    border-color: #527a7a;
+}
+
+/* Extra specificity if needed */
+.schedule-widget-footer .btn.btn-primary:not(:hover) {
+    background-color: #669999;
+    border-color: #527a7a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .schedule-week-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .schedule-day-card {
+        min-height: 70px;
+        padding: 8px 3px;
+    }
+    
+    .schedule-day-name {
+        font-size: 12px;
+    }
+    
+    .schedule-day-date {
+        font-size: 11px;
+    }
+}
+

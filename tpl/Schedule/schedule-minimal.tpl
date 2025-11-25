@@ -3,45 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/librebooking.css">
-    <style>
-        .mini-schedule { max-height: 350px; overflow-y: auto; }
-        .available { background: #d4edda; padding: 5px; margin: 2px; cursor: pointer; }
-        .booked { background: #f8d7da; padding: 5px; margin: 2px; }
-    </style>
+    <link rel="stylesheet" href="css/schedule-widgets.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body style="margin: 0; padding: 10px;">
+<body style="margin: 0;">
     {assign var="rid" value=$smarty.get.rid|default:1}
     
-    <div class="text-center mb-3">
-        <h5>Resource #{$rid} - This Week</h5>
-    </div>
-    
-    <div class="mini-schedule">
-        {* Check if we have real schedule data *}
-        {if $BoundDates && $DailyLayout}
-            <div class="alert alert-info">
-                Week of {$BoundDates[0]->Format('M j')} - {$BoundDates[6]->Format('M j, Y')}
+    <div class="schedule-widget-container">
+        <div class="schedule-widget-header">
+            <h5 style="margin: 0;">Equipment #{$rid} - Week Availability</h5>
+        </div>
+        
+        {if $WeekAvailability}
+            <div class="schedule-week-grid">
+                {foreach from=$WeekAvailability item=day}
+                    <div class="schedule-day-card schedule-day-{$day.status}">
+                        <div class="schedule-day-name">{$day.dayName}</div>
+                        <div class="schedule-day-date">{$day.date}</div>
+                        {if $day.isAvailable}
+                            <span class="badge bg-success" style="font-size: 11px;">Available</span>
+                        {else}
+                            <span class="badge bg-danger" style="font-size: 11px;">Booked</span>
+                        {/if}
+                    </div>
+                {/foreach}
             </div>
-            
-            {* Try to show something from actual data *}
-            {foreach from=$BoundDates item=date}
-                <div class="day">
-                    <strong>{$date->Format('D')}</strong>: 
-                    <span class="available">Check schedule for availability</span>
-                </div>
-            {/foreach}
         {else}
-            {* Fallback static display *}
-            <div class="alert alert-warning">
-                Quick view not available - click below for full schedule
+            <div class="alert alert-info">
+                No schedule data available
             </div>
         {/if}
-    </div>
-    
-    <div class="text-center mt-3">
-        <a href="schedule.php?rid={$rid}" target="_parent" class="btn btn-primary">
-            <i class="fas fa-calendar"></i> View Full Schedule
-        </a>
+        
+        <div class="schedule-widget-footer">
+            <a href="schedule.php?rid={$rid}" target="_parent" class="btn btn-primary">
+               <i class="fas fa-calendar-alt"></i> View Full Schedule
+            </a>
+        </div>
     </div>
 </body>
 </html>
