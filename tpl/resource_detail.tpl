@@ -135,13 +135,12 @@
                         <iframe 
                             id="scheduleFrame"
                             src="schedule-minimal.php?rid={$smarty.get.id|default:$ResourceId|default:1}" 
+                            data-auto-resize="true"
                             width="100%" 
-                            height="400" 
                             style="border: 1px solid #dee2e6; border-radius: 4px;"
                             onload="checkIframe()"
                             onerror="iframeError()">
-                        </iframe>
-                        
+                        </iframe>                        
                     </div>
                 </div>
 
@@ -164,15 +163,11 @@
 
     <script>
     function checkIframe() {
-        console.log('iframe loaded - event triggered');
         const iframe = document.getElementById('scheduleFrame');
         
         try {
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
             const bodyHTML = iframeDoc.body.innerHTML;
-            
-            console.log('Iframe content length:', bodyHTML.length);
-            console.log('First 200 chars:', bodyHTML.substring(0, 200));
             
             if(bodyHTML.length > 100) {
                 document.getElementById('iframe-debug').style.display = 'none';
@@ -195,7 +190,14 @@
 
 </div> {* End of container *}           
 
-
+<script src="/Web/scripts/iframe-manager.js"></script>
+<script>
+    // Configuración específica para esta página
+    IframeManager.configure({
+        defaultPadding: 30,
+        resizeDebounce: 100
+    });
+</script>
 
 {include file='globalfooter.tpl'}
 
