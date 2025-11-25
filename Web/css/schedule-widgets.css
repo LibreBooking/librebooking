@@ -72,34 +72,81 @@
 
 /* Override Bootstrap default to match LibreBooking theme */
 .schedule-widget-footer .btn-primary {
-    background-color: #669999;  /* Exact match from computed */
-    border-color: #527a7a;      /* Exact border color */
+    background-color: #669999;
+    border-color: #527a7a;
 }
 
 .schedule-widget-footer .btn-primary:hover,
 .schedule-widget-footer .btn-primary:focus,
 .schedule-widget-footer .btn-primary:active {
-    background-color: #527a7a;  /* Use border color for hover */
+    background-color: #527a7a;
     border-color: #527a7a;
 }
 
-/* Extra specificity if needed */
 .schedule-widget-footer .btn.btn-primary:not(:hover) {
     background-color: #669999;
     border-color: #527a7a;
 }
 
-/* Responsive adjustments */
+/* Week Navigation Styles */
+.schedule-week-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.schedule-week-navigation h5 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.schedule-week-navigation h5 small {
+    display: block;
+    color: #6c757d;
+    font-weight: normal;
+    margin-top: 3px;
+}
+
+/* Navigation buttons */
+.schedule-widget-header .btn-outline-secondary {
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.schedule-widget-header .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+/* Today button */
+.schedule-widget-header .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Window resize iframe calendar widget */
+iframe[data-auto-resize="true"] {
+    transition: height 0.2s ease-out;
+}
+
+/* =============================================
+   RESPONSIVE - ALL MOBILE STYLES TOGETHER
+   ============================================= */
 @media (max-width: 576px) {
+    /* Grid adjustments */
     .schedule-week-grid {
         grid-template-columns: repeat(4, 1fr);
     }
     
+    /* Card adjustments */
     .schedule-day-card {
         min-height: 70px;
         padding: 8px 3px;
     }
     
+    /* Typography adjustments */
     .schedule-day-name {
         font-size: 12px;
     }
@@ -107,5 +154,13 @@
     .schedule-day-date {
         font-size: 11px;
     }
+    
+    /* Navigation adjustments */
+    .schedule-week-navigation h5 {
+        font-size: 14px;
+    }
+    
+    .schedule-week-navigation h5 small {
+        font-size: 11px;
+    }
 }
-

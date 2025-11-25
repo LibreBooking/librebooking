@@ -11,8 +11,33 @@
     {assign var="rid" value=$smarty.get.rid|default:1}
     
     <div class="schedule-widget-container">
+        {* Week navigation header *}
         <div class="schedule-widget-header">
-            <h5 style="margin: 0;">Equipment #{$rid} - Week Availability</h5>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <a href="?rid={$rid}&week={$PreviousWeekOffset}" 
+                   class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                
+                <h5 style="margin: 0;">
+                    Equipment #{$rid}<br>
+                    <small>{$WeekRangeText|default:'Current Week'}</small>
+                </h5>
+                
+                <a href="?rid={$rid}&week={$NextWeekOffset}" 
+                   class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+            
+            {* Today button - returns to current week *}
+            {if $WeekOffset != 0}
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <a href="?rid={$rid}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-calendar-day"></i> Today
+                    </a>
+                </div>
+            {/if}
         </div>
         
         {if $WeekAvailability}
