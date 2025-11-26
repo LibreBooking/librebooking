@@ -126,6 +126,11 @@
     border-color: #6c757d;
 }
 
+/* Window resize iframe calendar widget */
+iframe[data-auto-resize="true"] {
+    transition: height 0.2s ease-out;
+}
+
 /* =============================================
    RESPONSIVE - ALL MOBILE STYLES TOGETHER
    ============================================= */

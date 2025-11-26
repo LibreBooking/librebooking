@@ -126,20 +126,13 @@
                         <h5 class="border-bottom pb-2">
                             <i class="fas fa-calendar-alt"></i> Resource Availability
                         </h5>
-                        
-                        {* Debug div to show iframe status *}
-                        <div id="iframe-debug" class="alert alert-warning mb-2">
-                            <i class="fas fa-info-circle"></i> Loading calendar...
-                        </div>
-                        
                         <iframe 
                             id="scheduleFrame"
                             src="schedule-minimal.php?rid={$smarty.get.id|default:$ResourceId|default:1}" 
                             data-auto-resize="true"
                             width="100%" 
                             style="border: 1px solid #dee2e6; border-radius: 4px;"
-                            onload="checkIframe()"
-                            onerror="iframeError()">
+                        >
                         </iframe>                        
                     </div>
                 </div>
@@ -159,42 +152,14 @@
                 </div>
             </div>    
         </div> {* End of card *}
-    {/if}
-
-    <script>
-    function checkIframe() {
-        const iframe = document.getElementById('scheduleFrame');
-        
-        try {
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            const bodyHTML = iframeDoc.body.innerHTML;
-            
-            if(bodyHTML.length > 100) {
-                document.getElementById('iframe-debug').style.display = 'none';
-            }
-        } catch(e) {
-            console.log('🔒 Cannot access iframe (CORS):', e);
-        }
-    }
-
-    function iframeError() {
-        console.error('❌ Iframe failed to load');
-        document.getElementById('iframe-debug').innerHTML = '❌ Failed to load calendar';
-    }
-
-    // Check after page loads
-    window.addEventListener('load', function() {
-        setTimeout(checkIframe, 1000);
-    });
-    </script>    
-
+    {/if}    
 </div> {* End of container *}           
 
 <script src="/Web/scripts/iframe-manager.js"></script>
 <script>
     // Configuración específica para esta página
     IframeManager.configure({
-        defaultPadding: 30,
+        defaultPadding: 0,
         resizeDebounce: 100
     });
 </script>
