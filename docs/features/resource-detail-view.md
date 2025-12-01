@@ -255,4 +255,4 @@ Short, medium, long-term plans.
 ## Contact
 
 Developer: Moreno  
-Branch: feat/schedule-week-navigation
+Branch: `feat/schedule-week-navigation`
