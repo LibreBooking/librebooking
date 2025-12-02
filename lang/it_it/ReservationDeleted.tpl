@@ -39,7 +39,7 @@
         {/foreach}
 		</p>
 {/if}
-{if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+{if !empty($CreatedBy)}
     <p>
 		    <strong>Cancellata da:</strong> {$CreatedBy}
 		    <br />

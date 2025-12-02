@@ -14,7 +14,7 @@
 				<label class="fw-bold" for="username">{translate key="Username"}<i
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="USERNAME"} class="required form-control has-feedback" required
-					id="username" value="{$User->Username()|escape:html}" />
+					id="username" value="{$User->Username()}" />
 			</div>
 		</div>
 
@@ -23,7 +23,7 @@
 				<label class="fw-bold" for="email">{translate key="Email"}<i
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="EMAIL"} class="required form-control has-feedback" required id="email"
-					value="{$User->EmailAddress()|escape:html}" />
+					value="{$User->EmailAddress()}" />
 			</div>
 		</div>
 
@@ -32,7 +32,7 @@
 				<label class="fw-bold" for="fname">{translate key="FirstName"}<i
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="FIRST_NAME"} class="required form-control has-feedback" required
-					id="fname" value="{$User->FirstName()|escape:html}" />
+					id="fname" value="{$User->FirstName()}" />
 			</div>
 		</div>
 
@@ -41,7 +41,7 @@
 				<label class="fw-bold" for="lname">{translate key="LastName"}<i
 						class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 				<input type="text" {formname key="LAST_NAME"} class="required form-control has-feedback" required
-					id="lname" value="{$User->LastName()|escape:html}" />
+					id="lname" value="{$User->LastName()}" />
 			</div>
 		</div>
 
@@ -58,7 +58,7 @@
 			<div class="form-group">
 				<label class="fw-bold" for="phone">{translate key="Phone"}</label>
 				<input type="text" {formname key="PHONE"} class="form-control" id="phone"
-					value="{$User->GetAttribute(UserAttribute::Phone)|escape:html}" />
+					value="{$User->GetAttribute(UserAttribute::Phone)}" />
 			</div>
 		</div>
 
@@ -66,7 +66,7 @@
 			<div class="form-group">
 				<label class="fw-bold" for="organization">{translate key="Organization"}</label>
 				<input type="text" {formname key="ORGANIZATION"} class="form-control" id="organization"
-					value="{$User->GetAttribute(UserAttribute::Organization)|escape:html}" />
+					value="{$User->GetAttribute(UserAttribute::Organization)}" />
 			</div>
 		</div>
 
@@ -74,7 +74,7 @@
 			<div class="form-group">
 				<label class="fw-bold" for="position">{translate key="Position"}</label>
 				<input type="text" {formname key="POSITION"} class="form-control" id="position"
-					value="{$User->GetAttribute(UserAttribute::Position)|escape:html}" />
+					value="{$User->GetAttribute(UserAttribute::Position)}" />
 			</div>
 		</div>
 

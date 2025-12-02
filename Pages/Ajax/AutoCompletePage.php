@@ -212,7 +212,7 @@ class AutocompleteUser
 
     public function __construct($userId, $firstName, $lastName, $email, $userName, $currentCreditCount = null)
     {
-        $full = new FullName($firstName, $lastName);
+        $full = new FullName(htmlspecialchars_decode($firstName, ENT_QUOTES), htmlspecialchars_decode($lastName, ENT_QUOTES));
         $this->Id = $userId;
         $this->First = $firstName;
         $this->Last = $lastName;

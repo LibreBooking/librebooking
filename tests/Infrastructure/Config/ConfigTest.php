@@ -62,7 +62,7 @@ class ConfigTest extends TestBase
             $this->assertEquals(30, $timeout, "Invalid integer should be replaced with default");
 
             $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
-            $this->assertEquals('none', $loggingLevel, "Invalid choice should be replaced with default");
+            $this->assertEquals('error', $loggingLevel, "Invalid choice should be replaced with default");
 
             $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
             $this->assertEquals(6, $minimumLetters, "Type conversion should return integer");

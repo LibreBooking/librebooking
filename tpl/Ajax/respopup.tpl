@@ -56,7 +56,7 @@
 
         {capture "title"}
             {if !$hideDetails && $isResourcePermitted}
-                <div class="title">{if $title neq ''}{$title}{else}{translate key=NoTitleLabel}{/if}</div>
+                <div class="title">{if $title neq ''}{$title|escape:'html'}{else}{translate key=NoTitleLabel}{/if}</div>
             {/if}
         {/capture}
         {$formatter->Add('title', $smarty.capture.title)}
@@ -82,7 +82,7 @@
                     {translate key="Participants"} ({$participants|@count}):
                     {foreach from=$participants item=user name=participant_loop}
                         {if !$user->IsOwner()}
-                            {fullname first=$user->FirstName last=$user->LastName}
+                            {fullname first=$user->FirstName|unescape:'html' last=$user->LastName|unescape:'html'}
                         {/if}
                         {if !$smarty.foreach.participant_loop.last}, {/if}
                     {/foreach}
@@ -107,7 +107,7 @@
         {capture "description"}
             {if !$hideDetails && $isResourcePermitted}
                 <div class="summary">
-                    {if $summary neq ''}{$summary|truncate:300:"..."|nl2br}{else}{translate key=NoDescriptionLabel}{/if}</div>
+                    {if $summary neq ''}{$summary|truncate:300:"..."|escape:'html'|nl2br}{else}{translate key=NoDescriptionLabel}{/if}</div>
             {/if}
         {/capture}
         {$formatter->Add('description', $smarty.capture.description)}

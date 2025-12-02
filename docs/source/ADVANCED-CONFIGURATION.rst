@@ -12,14 +12,14 @@ LibreBooking supports overriding any configuration setting using environment var
 
 **Naming Convention**
   Environment variables follow the pattern: ``LB_`` + config key with special characters converted:
-  
+
   - Dots (``.``) and dashes (``-``) become underscores (``_``)
   - All letters converted to uppercase
-  
+
 **Examples**
-  
+
   .. code-block:: bash
-  
+
      # Configuration key → Environment variable
      app.title → LB_APP_TITLE
      database.hostspec → LB_DATABASE_HOSTSPEC
@@ -28,9 +28,9 @@ LibreBooking supports overriding any configuration setting using environment var
 
 **Using .env Files**
   Create a ``.env`` file in your application root directory:
-  
+
   .. code-block:: bash
-  
+
      LB_APP_TITLE='My Company Booking'
      LB_DATABASE_HOSTSPEC='db.example.com'
      LB_ADMIN_EMAIL='admin@mycompany.com'
@@ -39,9 +39,9 @@ LibreBooking supports overriding any configuration setting using environment var
 
 **Docker Integration**
   Environment variables work seamlessly with Docker:
-  
+
   .. code-block:: yaml
-  
+
      # docker-compose.yml
      services:
        librebooking:
@@ -58,16 +58,16 @@ Application Advanced Settings
 
 **app.debug**
   Enable or disable debug mode for the application.
-  
+
   .. code-block:: php
-  
+
      'app.debug' => false,
 
 **admin.email.name**
   Display name used for outgoing admin emails.
-  
+
   .. code-block:: php
-  
+
      'admin.email.name' => 'LB Administrator',
 
 Frontend Advanced Settings
@@ -75,44 +75,44 @@ Frontend Advanced Settings
 
 **inactivity.timeout**
   Time in minutes before a user is logged out due to inactivity.
-  
+
   .. code-block:: php
-  
+
      'inactivity.timeout' => 30,
 
 **use.local.js.libs**
   Use local JavaScript libraries instead of CDN.
-  
+
   .. code-block:: php
-  
+
      'use.local.js.libs' => false,
 
 **home.url**
   URL to redirect users after login.
-  
+
   .. code-block:: php
-  
+
      'home.url' => '',
 
 **logout.url**
   URL to redirect users after logout.
-  
+
   .. code-block:: php
-  
+
      'logout.url' => '',
 
 **css.extension.file**
   Path to a custom CSS file to extend the default styles.
-  
+
   .. code-block:: php
-  
+
      'css.extension.file' => '',
 
 **name.format**
   Format for displaying user names.
-  
+
   .. code-block:: php
-  
+
      'name.format' => '{first} {last}',
 
 Page Control
@@ -129,9 +129,9 @@ Page Control
 
 **default.page.size**
   Default number of items per page in listings.
-  
+
   .. code-block:: php
-  
+
      'default.page.size' => 50,
 
 Advanced Email Configuration
@@ -139,9 +139,9 @@ Advanced Email Configuration
 
 **email.enforce.custom.template**
   Force the use of a custom email template for all emails.
-  
+
   .. code-block:: php
-  
+
      'email' => [
          'enforce.custom.template' => false,
      ],
@@ -484,10 +484,14 @@ Advanced Privacy Settings
 .. code-block:: php
 
    'privacy' => [
+       'view.schedules' => true,
        'hide.user.details' => false,
        'hide.reservation.details' => false,
        'public.future.days' => 30,
    ],
+
+**privacy.view.schedules**
+  Hide schedule and calendar from unauthenticated users.
 
 **privacy.hide.user.details**
   Hide user details from other users.
@@ -563,9 +567,9 @@ Analytics Integration
 
 **google.analytics.tracking.id**
   Google Analytics tracking ID.
-  
+
   .. code-block:: php
-  
+
      'google.analytics.tracking.id' => '',
 
 Third-Party Integrations
@@ -573,9 +577,9 @@ Third-Party Integrations
 
 **slack.token**
   Slack webhook token for notifications.
-  
+
   .. code-block:: php
-  
+
      'slack.token' => '',
 
 Authentication Providers

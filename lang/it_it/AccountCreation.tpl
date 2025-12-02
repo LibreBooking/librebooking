@@ -7,7 +7,7 @@
     <strong>Posizione:</strong> {$Position}
 </p>
 <p>
-    {if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+    {if !empty($CreatedBy)}
         <strong>Creato da:</strong> {$CreatedBy}
     {/if}
 </p>

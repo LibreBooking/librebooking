@@ -31,7 +31,7 @@ class Log
         $this->logger = new Logger('app');
         $this->sqlLogger = new Logger('sql');
 
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
+        $log_level = self::getLogLevel();
 
         $log_folder = null;
         $log_sql = false;
@@ -55,6 +55,15 @@ class Log
     }
 
     /**
+     * Gets the configured log level in lowercase, with a fallback to 'error' if not set.
+     * @return string The log level ('none', 'error', or 'debug')
+     */
+    private static function getLogLevel(): string
+    {
+        return strtolower(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL) ?? 'error');
+    }
+
+    /**
      * @return Log
      */
     private static function &GetInstance()
@@ -72,8 +81,7 @@ class Log
      */
     public static function Debug($message, $args = [])
     {
-        $log_level = strtolower(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL));
-        if ($log_level == 'none') {
+        if (self::getLogLevel() == 'none') {
             return;
         }
 
@@ -103,8 +111,7 @@ class Log
      */
     public static function Error($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
-        if ($log_level == 'none') {
+        if (self::getLogLevel() == 'none') {
             return;
         }
 
@@ -148,8 +155,7 @@ class Log
     }
     public static function DebugEnabled()
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
-        return $log_level != 'none';
+        return self::getLogLevel() != 'none';
     }
 }
 

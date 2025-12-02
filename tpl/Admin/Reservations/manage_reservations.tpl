@@ -230,7 +230,7 @@
 								data-bs-html="true">
 								<td class="id d-none">{$reservationId}</td>
 								<td class="user">
-									{fullname first=$reservation->FirstName last=$reservation->LastName ignorePrivacy=true}
+									{fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=true}
 								</td>
 								<td class="resource">{$reservation->ResourceName}
 									{if $reservation->ResourceStatusId == ResourceStatus::AVAILABLE}
@@ -244,8 +244,8 @@
 										{*<span class="reservationResourceStatusReason">{$StatusReasons[$reservation->ResourceStatusReasonId]->Description()}</span>*}
 									{*{/if}*}
 								</td>
-								<td class="reservationTitle">{$reservation->Title}</td>
-								<td class="description">{$reservation->Description}</td>
+								<td class="reservationTitle">{$reservation->Title|escape:'html'}</td>
+								<td class="description">{$reservation->Description|escape:'html'}</td>
 								<td class="date">
 									{formatdate date=$reservation->StartDate timezone=$Timezone key=short_reservation_date}
 								</td>

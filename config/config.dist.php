@@ -508,7 +508,7 @@ return [
         ##########################################
 
         'privacy' => [
-            # Allow users to view schedules (true/false)
+            # Allow unauthenticated users to view schedules (true/false)
             'view.schedules' => true,
 
             # Allow users to view reservation details (true/false)

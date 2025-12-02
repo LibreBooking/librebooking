@@ -74,7 +74,7 @@ $('.btnPDF').click(function (e) {
 		  styles: { lineWidth: 0.02},
 		  theme: 'plain',
 		  body: [
-			{ user: '{$ReservationUserName|escape:'javascript'}'},
+			{ user: '{$ReservationUserName|unescape:'html'|escape:'javascript'}'},
 		  ],
 		  columns: [
 			{ header: '{translate key='User'}', dataKey: 'user' },
@@ -184,7 +184,7 @@ $('.btnPDF').click(function (e) {
 		 { content: '{translate key="Email"}', styles: { fontStyle: 'bold', fontSize: 7}},
 		],
 		{foreach from=$Participants item=user}
-			[{ content: '{$user->FullName|escape:'javascript'}'},
+			[{ content: '{$user->FullName|unescape:'html'|escape:'javascript'}'},
 			 { content: '{$user->Email}'},
 			],
 		{/foreach}
@@ -202,7 +202,7 @@ $('.btnPDF').click(function (e) {
 		 { content: '{translate key="Email"}', styles: { fontStyle: 'bold', fontSize: 7}},
 		],
 		{foreach from=$Invitees item=user}
-			[{ content: '{$user->FullName|escape:'javascript'}'},
+			[{ content: '{$user->FullName|unescape:'html'|escape:'javascript'}'},
 			 { content: '{$user->Email}'},
 			],
 		{/foreach}
@@ -217,11 +217,11 @@ $('.btnPDF').click(function (e) {
 		body: [
 		[{ content: '{translate key="ReservationTitle"}', styles: { fontStyle: 'bold'}},
 		],
-		[{ content: '{$ReservationTitle|escape:'javascript'}'},
+		[{ content: '{$ReservationTitle|unescape:'html'|escape:'javascript'}'},
 		],
 		[{ content: '{translate key="ReservationDescription"}', styles: { fontStyle: 'bold'}},
 		],
-		[{ content: '{$Description|escape:'javascript'}'},
+		[{ content: '{$Description|unescape:'html'|escape:'javascript'}'},
 		],
 		]
 	});
