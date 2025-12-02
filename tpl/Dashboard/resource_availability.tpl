@@ -1,13 +1,10 @@
-<div class="dashboard accordion-item shadow mb-2 availabilityDashboard" id="availabilityDashboard">
-    <div class="accordion-header dashboardHeader">
-        <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
-            data-bs-target="#ResourceAvailabilityContents" aria-expanded="false"
-            aria-controls="ResourceAvailabilityContents">
+<div class="availabilityDashboard card shadow mb-2 " id="availabilityDashboard"> {*class dashboard accordion-item added*}
+    
+    <div class="card-header fw-bold"> {* Class accordion deleted *}
             {translate key="ResourceAvailability"}
-        </button>
     </div>
-    <div id="ResourceAvailabilityContents" class="dashboardContents accordion-collapse collapse">
-        <div class="accordion-body">
+    <div id="ResourceAvailabilityContents" class="dashboardContents"> {* ID accordion deleted *}
+        <div class="card-body"> {* class accordion-body deleted *}
             <div class="header fw-bold fs-5">{translate key=Available}</div>
             {foreach from=$Schedules item=s}
                 {assign var=availability value=$Available[$s->GetId()]}
@@ -124,4 +121,3 @@
             {/if}
         </div>
     </div>
-</div>
