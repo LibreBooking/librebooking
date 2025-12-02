@@ -18,14 +18,12 @@ class ResourceDetailPage extends SecurePage
     }
 
     public function PageLoad()
-    {
-        //check if user is logged in
-        // if(!$this->IsLoggedIn()) {
-        //    $this->Redirect('../index.php');
-        //    return;
-        //}
-        
+    {        
         $this->presenter->PageLoad();
+
+        $resourceNAme = $this->GetVar('ResourceName');
+
+        $this->Set('Title', $resourceNAme . ' - Equipment Details');
 
         $this->Display('resource_detail.tpl');
     }

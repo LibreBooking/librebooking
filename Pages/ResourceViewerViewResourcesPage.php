@@ -1,7 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'Presenters/ViewResourcesPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageResourcesPage.php');     //AttributeService
+require_once(ROOT_DIR . 'Pages/Admin/ManageResourcesPage.php');    
 
 class ResourceViewerViewResourcesPage extends Page implements IPageable
 {
@@ -24,6 +24,9 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
 
     public function PageLoad(){
         $this->presenter->PageLoad();
+
+        $this->Set('Title', 'Manage Resources');
+
         $this->Display(ROOT_DIR.'tpl/Admin/Resources/view_resources.tpl');
     }
 
