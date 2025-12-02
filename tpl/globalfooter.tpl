@@ -8,10 +8,6 @@
 				v{$Version}</a></div>
 	</footer>
 
-	<script type="text/javascript">
-		init();
-	</script>
-
 	{if !empty($GoogleAnalyticsTrackingId)}
 		<!-- Google tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id={$GoogleAnalyticsTrackingId}"></script>

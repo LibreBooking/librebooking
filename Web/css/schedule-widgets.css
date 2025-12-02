@@ -1,0 +1,166 @@
+/**
+ * Schedule Widgets Styles
+ * Used for minimal schedule views, availability calendars, and similar widgets
+ */
+
+/* Week Grid Layout */
+.schedule-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+/* Day Cards */
+.schedule-day-card {
+    padding: 10px 5px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    min-height: 80px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.schedule-day-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Day States */
+.schedule-day-available {
+    background: #d1f2eb;
+    border-color: #28a745;
+}
+
+.schedule-day-booked {
+    background: #f8d7da;
+    border-color: #dc3545;
+}
+
+.schedule-day-pending {
+    background: #fff3cd;
+    border-color: #ffc107;
+}
+
+/* Typography within cards */
+.schedule-day-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.schedule-day-date {
+    font-size: 12px;
+    color: #6c757d;
+    margin: 3px 0 8px 0;
+}
+
+/* Widget Container */
+.schedule-widget-container {
+    padding: 10px;
+}
+
+.schedule-widget-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.schedule-widget-footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Override Bootstrap default to match LibreBooking theme */
+.schedule-widget-footer .btn-primary {
+    background-color: #669999;
+    border-color: #527a7a;
+}
+
+.schedule-widget-footer .btn-primary:hover,
+.schedule-widget-footer .btn-primary:focus,
+.schedule-widget-footer .btn-primary:active {
+    background-color: #527a7a;
+    border-color: #527a7a;
+}
+
+.schedule-widget-footer .btn.btn-primary:not(:hover) {
+    background-color: #669999;
+    border-color: #527a7a;
+}
+
+/* Week Navigation Styles */
+.schedule-week-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.schedule-week-navigation h5 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.schedule-week-navigation h5 small {
+    display: block;
+    color: #6c757d;
+    font-weight: normal;
+    margin-top: 3px;
+}
+
+/* Navigation buttons */
+.schedule-widget-header .btn-outline-secondary {
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.schedule-widget-header .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+/* Today button */
+.schedule-widget-header .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Window resize iframe calendar widget */
+iframe[data-auto-resize="true"] {
+    transition: height 0.2s ease-out;
+}
+
+/* =============================================
+   RESPONSIVE - ALL MOBILE STYLES TOGETHER
+   ============================================= */
+@media (max-width: 576px) {
+    /* Grid adjustments */
+    .schedule-week-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Card adjustments */
+    .schedule-day-card {
+        min-height: 70px;
+        padding: 8px 3px;
+    }
+    
+    /* Typography adjustments */
+    .schedule-day-name {
+        font-size: 12px;
+    }
+    
+    .schedule-day-date {
+        font-size: 11px;
+    }
+    
+    /* Navigation adjustments */
+    .schedule-week-navigation h5 {
+        font-size: 14px;
+    }
+    
+    .schedule-week-navigation h5 small {
+        font-size: 11px;
+    }
+}

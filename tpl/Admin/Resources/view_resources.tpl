@@ -119,13 +119,17 @@
     <div id="globalError" class="error d-none"></div>
 
     <div class="card shadow panel-default admin-panel" id="list-resources-panel">
-        <div class="card-body accordion" id="resourceList">
+        <div class="card-body" id="resourceList"> {* this div creates the containter for the accordion. Before class="card-body accordion" *}
             {if !empty($Resources)}
                 {assign var=tableId value=resourcesTable}
-                <table class="table table-borderless w-100" id="{$tableId}">
-                    <thead class="d-none">
+                <table class="table table-striped table-hover w-100" id="{$tableId}" data-no-accordion="true"> {* Before <table class="table table-borderless w-100" id="{$tableId}" add data no accordion because dom does not show>*}
+                    <thead> {* Before: <thead class="d-none">*}
                         <tr>
-                            <th>{translate key="Resources"}</th>
+                            <th>{translate key="Name"}</th>
+                            <th>{translate key="ResourceType"}</th>
+                            <th>{translate key="Status"}</th>
+                            <th>{translate key="Location"}</th>
+                            <th>{translate key="Actions"}</th>                        
                         </tr>
                     </thead>
                     <tbody>
@@ -133,257 +137,42 @@
                             {assign var=id value=$resource->GetResourceId()}
                             <tr>
                                 <td>
-                                    <div class="accordion-item shadow mb-2">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#id{$resource->GetResourceId()}" aria-expanded="false"
-                                                aria-controls="id{$resource->GetResourceId()}">
-                                                {$resource->GetName()}
-                                            </button>
-                                        </h2>
-                                        <div id="id{$id}" class="accordion-collapse collapse">
-                                            <div class="accordion-body resourceDetails row" data-resourceId="{$id}">
-                                                <div class="col-12 col-sm-5">
-                                                    <input type="hidden" class="id" value="{$id}" />
-                                                    <div class="row gy-2">
-                                                        <div class="col-sm-3 col-6 resourceImage">
-                                                            <div class="">
-                                                                {if $resource->HasImage()}
-
-                                                                    <div id="resourceImageCarousel" class="carousel slide">
-                                                                        <div class="carousel-inner">
-                                                                            <div class="carousel-item active">
-                                                                                <img src="{resource_image image=$resource->GetImage()}"
-                                                                                    alt="{$resource->GetName()}"
-                                                                                    class="rounded d-block w-100" />
-                                                                            </div>
-                                                                            {foreach from=$resource->GetImages() item=image}
-                                                                                <div class="carousel-item">
-                                                                                    <img src="{resource_image image=$image}"
-                                                                                        alt="{$resource->GetName()}"
-                                                                                        class="rounded d-block w-100" />
-                                                                                </div>
-                                                                            {/foreach}
-                                                                        </div>
-
-                                                                        <div class="carousel-indicators">
-                                                                            {if $resource->GetImages()|count > 0}
-                                                                                {assign var=slide value=1}
-                                                                                <button type="button"
-                                                                                    data-bs-target="#resourceImageCarousel"
-                                                                                    data-bs-slide-to="0" class="active"></button>
-                                                                                {foreach from=$resource->GetImages() item=image}
-                                                                                    <button type="button"
-                                                                                        data-bs-target="#resourceImageCarousel"
-                                                                                        data-bs-slide-to="{$slide}"></button>
-                                                                                    {assign var=slide value=$slide+1}
-                                                                                {/foreach}
-                                                                            {/if}
-                                                                        </div>
-                                                                    </div>
-                                                                {else}
-                                                                    <div class="text-center">
-                                                                        <div
-                                                                            class="noImage w-100 bg-light border rounded-3 mx-auto">
-                                                                            <span class="bi bi-image fs-1"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                {/if}
-                                                            </div>
-                                                            <div class="text-center mt-4">
-                                                                {translate key=ResourceColor}
-                                                                <div class="border rounded-1 mx-auto w-100"
-                                                                    style="height: 23px;background-color:{if $resource->HasColor()}{$resource->GetColor()}{else}#ffffff{/if}">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-9 col-6">
-                                                            <div class="title resourceNameField fs-5 fw-bold">
-                                                                {$resource->GetName()}</div>
-                                                            <div>
-                                                                <label class="inline fw-bold">ResourceId:</label>
-                                                                <span>{$id}</span>
-                                                            </div>
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key='Status'}</label>
-                                                                {if $resource->IsAvailable()}
-                                                                    <span>{translate key='Available'}<i
-                                                                            class="bi bi-check-circle-fill text-success ms-1"></i></span>
-                                                                {elseif $resource->IsUnavailable()}
-                                                                    <span>{translate key='Unavailable'}<i
-                                                                            class="bi bi-exclamation-circle-fill text-warning ms-1"></i></span>
-                                                                {else}
-                                                                    <span>{translate key='Hidden'}<i
-                                                                            class="bi bi-x-circle-fill text-danger ms-1"></i></span>
-                                                                {/if}
-                                                                {if array_key_exists($resource->GetStatusReasonId(),$StatusReasons)}
-                                                                    <span
-                                                                        class="statusReason">{$StatusReasons[$resource->GetStatusReasonId()]->Description()}</span>
-                                                                {/if}
-                                                            </div>
-
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key='Schedule'}</label>
-                                                                <span>{$Schedules[$resource->GetScheduleId()]->GetName()}</span>
-                                                            </div>
-
-                                                            <div>
-                                                                <label
-                                                                    class="inline fw-bold">{translate key='ResourceType'}</label>
-                                                                <span>
-                                                                    {if $resource->HasResourceType()}
-                                                                        {$ResourceTypes[$resource->GetResourceTypeId()]->Name()}
-                                                                    {else}
-                                                                        {translate key='NoResourceTypeLabel'}
-                                                                    {/if}
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key=SortOrder}</label>
-                                                                <span>{$resource->GetSortOrder()|default:"0"}</span>
-                                                            </div>
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key='Location'}</label>
-                                                                <span>
-                                                                    {if $resource->HasLocation()}
-                                                                        {$resource->GetLocation()}
-                                                                    {else}
-                                                                        {translate key='NoLocationLabel'}
-                                                                    {/if}
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key='Contact'}</label>
-                                                                <span>
-                                                                    {if $resource->HasContact()}
-                                                                        {$resource->GetContact()}
-                                                                    {else}
-                                                                        {translate key='NoContactLabel'}
-                                                                    {/if}
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <label
-                                                                    class="inline fw-bold">{translate key='Description'}</label>
-                                                                {if $resource->HasDescription()}
-                                                                    {assign var=description value=$resource->GetDescription()}
-                                                                {else}
-                                                                    {assign var=description value=''}
-                                                                {/if}
-                                                                {strip}
-                                                                    <div class="descriptionValue">
-                                                                        {if $resource->HasDescription()}
-                                                                            {$description|unescape:'html'}
-                                                                        {else}
-                                                                            {translate key='NoDescriptionLabel'}
-                                                                        {/if}
-                                                                    </div>
-                                                                {/strip}
-                                                            </div>
-                                                            <div>
-                                                                <label class="inline fw-bold">{translate key='Notes'}</label>
-                                                                <div class="notesValue">
-                                                                    {if $resource->HasNotes()}
-                                                                        {$resource->GetNotes()|unescape:'html'}
-                                                                    {else}
-                                                                        {translate key='NoNotesLabel'}
-                                                                    {/if}
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <label
-                                                                    class="inline fw-bold">{translate key='ResourceAdministrator'}</label>
-                                                                <span>{$ResourceAdminGroup[$resource->GetAdminGroupId()]->Name}</span>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-12 col-sm-7">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-12">
-                                                            <div class="mb-4">
-                                                                <span class="fs-6 fw-bold">{translate key=Duration}</span>
-                                                                <div class="durationPlaceHolder">
-                                                                    {include file="Admin/Resources/manage_resources_duration.tpl" resource=$resource}
-                                                                </div>
-                                                            </div>
-
-                                                            {if $CreditsEnabled}
-                                                                <div class="mb-4">
-                                                                    <span class="fs-6 fw-bold">{translate key='Credits'}</span>
-                                                                    <div class="creditsPlaceHolder">
-                                                                        {include file="Admin/Resources/manage_resources_credits.tpl" resource=$resource}
-                                                                    </div>
-                                                                </div>
-                                                            {/if}
-
-                                                            <div style="mb-4">
-                                                                <span class="fs-6 fw-bold">{translate key='Capacity'}</span>
-                                                                <div class="capacityPlaceHolder">
-                                                                    {include file="Admin/Resources/manage_resources_capacity.tpl" resource=$resource}
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12">
-                                                            <div style="mb-4">
-                                                                <span class="fs-6 fw-bold">{translate key=Access}</span>
-                                                                <div class="accessPlaceHolder">
-                                                                    {include file="Admin/Resources/manage_resources_access.tpl" resource=$resource}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12 mt-4">
-                                                            <span class="fs-6 fw-bold">{translate key='PermissionType'}</span>
-                                                            <div class="resourcePermissionTypePlaceHolder">
-                                                                {if $ResourcePermissionTypes[$resource->GetId()] == 0}
-                                                                    {translate key=FullAccess}
-                                                                {else}
-                                                                    {translate key=ViewOnly}
-                                                                {/if}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12 mt-4">
-                                                            <span class="fs-6 fw-bold">{translate key='ResourceGroups'}</span>
-                                                            <div class="resourceGroupsPlaceHolder">
-                                                                {if $resource->GetResourceGroupIds()|default:array()|count == 0}
-                                                                    {translate key=None}
-                                                                {/if}
-                                                                {foreach from=$resource->GetResourceGroupIds() item=resourceGroupId name=eachGroup}
-                                                                    <span class="resourceGroupId"
-                                                                        data-value="{$resourceGroupId}">{$ResourceGroup[$resourceGroupId]->name}</span>{if !$smarty.foreach.eachGroup.last},
-                                                                    {/if}
-                                                                {/foreach}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-12 mt-2">
-                                                            <div class="fs-6 fw-bold">{translate key='Public'}</div>
-                                                            <div class="publicSettingsPlaceHolder">
-                                                                {include file="Admin/Resources/manage_resources_public.tpl" resource=$resource modeEdit=true}
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="customAttributes">
-                                                    {if $AttributeList|default:array()|count > 0}
-                                                        {foreach from=$AttributeList item=attribute}
-                                                            {include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
-                                                        {/foreach}
-                                                    {/if}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {*1st column: Resource name and color*}
+                                    <span class="badge"  style="background-color:{if $resource->HasColor()}}{$resource->GetColor()}{else}#e0e0e0{/if}">
+                                        {$resource->GetName()}
+                                    </span>
+                                </td>
+                                <td>
+                                    {*2nd column: Resource type*}
+                                    {if $resource->HasResourceType()}
+                                        {$ResourceTypes[$resource->GetResourceTypeID()]->Name()}
+                                    {else}
+                                        <span>-</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {*3nd column: Resource Status with color badges*}
+                                    {if $resource->IsAvailable()}
+                                        <span class="badge bg-success">{translate key='Available'}</span>
+                                    {elseif $resource->IsUnavailable()}
+                                        <span class="badge bg-warning">{translate key='Unavailable'}</span>
+                                    {else}
+                                        <span class="badge bg-danger">{translate key='Hidden'}</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {*4th column: Resource Location*}
+                                    {if $resource->HasLocation()}
+                                        {$resource->GetLocation()}
+                                    {else}
+                                        <span>-</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {*5th column: Actions*}
+                                    <a href="resource_detail.php?id={$resource->GetResourceId()}" class="btn btn-sm btn-primary"> {*Button to the individual page: coming soon, for now it is disabled*}
+                                        <i class="bi bi-eye"></i> {translate key="ViewDetails"}
+                                    </a>
                                 </td>
                             </tr>
                         {/foreach}
@@ -397,10 +186,10 @@
 
     {csrf_token}
 
+
     {include file="javascript-includes.tpl" DataTable=true}
     {datatable tableId=$tableId}
     {jsfile src="search-clear.js"}
 </div>
-
 
 {include file='globalfooter.tpl'}

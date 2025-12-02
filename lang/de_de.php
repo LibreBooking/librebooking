@@ -1008,6 +1008,15 @@ class de_de extends en_gb
         //End Schedule Resource Permissions
         //END NEEDS CHECKING
 
+        // Resource detail page translations
+        $strings['Details'] = 'Details';
+        $strings['ResourceId'] = 'Ressourcen-ID';
+        $strings['MaxParticipants'] = 'Maximale Teilnehmer';
+        $strings['MinimumDuration'] = 'Mindestdauer';
+        $strings['MaximumDuration'] = 'Maximaldauer';
+        $strings['BackToList'] = 'Zurück zur Liste';
+        // End Resource detail page translations
+
         $this->Strings = $strings;
 
         return $this->Strings;
