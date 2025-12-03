@@ -25,7 +25,7 @@
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
                 <h2 class="mb-0">
-                    <i class="fas fa-microscope"></i> {$ResourceName}
+                    <i class="fas fa-flask"></i> {$ResourceName}
                 </h2>
             </div>
             

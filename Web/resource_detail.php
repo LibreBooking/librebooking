@@ -8,7 +8,7 @@
     // Check if ResourceDetailPage.php exists
     $pageFile = ROOT_DIR . 'Pages/ResourceDetailPage.php';
     if (!file_exists($pageFile)) {
-        die("ERROR: No se encuentra " . $pageFile);
+        throw new Exception("Required file not found: " . basename($pageFile));
     }
 
     require_once($pageFile);
