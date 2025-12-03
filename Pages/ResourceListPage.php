@@ -3,6 +3,7 @@
 /**
  * Resource List Page - Mock implementation for Device Hub migration
  */
+
 class ResourceListPage extends Page
 {
     public function __construct()
@@ -16,6 +17,9 @@ class ResourceListPage extends Page
         $this->Set('TotalRecords', 388);
         
         // Back to main template
+
+        $this->Set('Title', 'Equiment List');   
+
         $this->Display('resource_list.tpl');
     }
 }

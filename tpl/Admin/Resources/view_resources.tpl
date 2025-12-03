@@ -171,7 +171,7 @@
                                 <td>
                                     {*5th column: Actions*}
                                     <a href="resource_detail.php?id={$resource->GetResourceId()}" class="btn btn-sm btn-primary"> {*Button to the individual page: coming soon, for now it is disabled*}
-                                        <i class="bi bi-eye"></i> {translate key="ViewDetails"}
+                                        <i class="bi bi-eye"></i> {translate key='Details'|default:'Details'}
                                     </a>
                                 </td>
                             </tr>
@@ -192,4 +192,4 @@
     {jsfile src="search-clear.js"}
 </div>
 
-{include file='globalfooter.tpl'}
+{include file='globalfooter.tpl'}x

@@ -53,7 +53,7 @@
             <div class="card shadow">
                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
-                        <i class="fas fa-microscope"></i> Equipment List
+                        <i class="fas fa-flask"></i> Equipment List
                     </h4>
                 </div>
 
