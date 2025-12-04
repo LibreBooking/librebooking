@@ -4,7 +4,7 @@ class ImageUploadDirectory
 {
     public function GetDirectory()
     {
-        $uploadDir = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
+        $uploadDir = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY);
         if (is_dir($uploadDir)) {
             return $uploadDir;
         }
