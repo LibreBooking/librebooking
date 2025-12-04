@@ -26,7 +26,7 @@
             <div class="card-header bg-primary text-white">
                 <h2 class="mb-0">
                     <i class="fas fa-flask"></i> {$ResourceName}
-                </h2>
+                                    </h2>
             </div>
             
             <div class="card-body">
@@ -120,20 +120,16 @@
                     </div>
                 </div> {* End of description row *}
                
-                {* Calendar availability link *}
+                {* Link to schedule *}
                 <div class="row mt-4">
                     <div class="col-12">
-                        <h5 class="border-bottom pb-2">
-                            <i class="fas fa-calendar-alt"></i> Resource Availability
+                        <h5 class="boder-bottom pb-2">
+                            <i class="fas fa-calendar-alt"></i> Schedule
                         </h5>
-                        <iframe 
-                            id="scheduleFrame"
-                            src="schedule-minimal.php?rid={$smarty.get.id|default:$ResourceId|default:1}" 
-                            data-auto-resize="true"
-                            width="100%" 
-                            style="border: 1px solid #dee2e6; border-radius: 4px;"
-                        >
-                        </iframe>                        
+                        <p class="text-muted">View complete availability:</p>
+                        <a href="schedule.php?rid={$ResourceId}" class="btn btn-primary">
+                            <i class="fas fa-calendar-check"></i> Schedule
+                        </a>
                     </div>
                 </div>
 
@@ -154,15 +150,6 @@
         </div> {* End of card *}
     {/if}    
 </div> {* End of container *}           
-
-<script src="/Web/scripts/iframe-manager.js"></script>
-<script>
-    // Configuración específica para esta página
-    IframeManager.configure({
-        defaultPadding: 0,
-        resizeDebounce: 100
-    });
-</script>
 
 {include file='globalfooter.tpl'}
 
