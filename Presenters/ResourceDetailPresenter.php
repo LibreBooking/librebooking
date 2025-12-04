@@ -88,7 +88,7 @@ private function PopulateTemplate($resource)
 
     // Use ternary operator to check if empty
     $this->page->Set('ResourceDescription',
-        $resource->HasDescription() ? $resource->GetDescription() : null
+        $resource->HasDescription() ? $resource->GetDescription() : 'This is a sample resource used for testing and demonstration purposes. Full description will be populated from database.'
     );
 
     $this->page->Set('ResourceLocation',
@@ -100,7 +100,8 @@ private function PopulateTemplate($resource)
     );
 
     // Additional info
-    $this->page->Set('ResourceNotes', $resource->GetNotes());
+    $this->page->Set('ResourceNotes', $resource->GetNotes() ?: 'Important: Please handle with care. Contact administrator for special requirements.'
+    );
     $this->page->Set('RequiresApproval', $resource->GetRequiresApproval());
     $this->page->Set('MaxParticipants', $resource->GetMaxParticipants());
 
