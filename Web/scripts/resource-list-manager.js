@@ -224,7 +224,9 @@ const ResourceListManager = {
                     resource.name,
                     resource.location,
                     resource.department,
-                    resource.method
+                    resource.method,
+                    resource.description || '',
+                    resource.notes || ''
                 ].join(' ').toLowerCase();
                 
                 if (!searchableText.includes(filters.search)) {
