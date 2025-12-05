@@ -224,7 +224,9 @@ const ResourceListManager = {
                     resource.name,
                     resource.location,
                     resource.department,
-                    resource.method
+                    resource.method,
+                    resource.description || '',
+                    resource.notes || ''
                 ].join(' ').toLowerCase();
                 
                 if (!searchableText.includes(filters.search)) {
@@ -334,13 +336,17 @@ const ResourceListManager = {
             <td>${resource.location ? this.escapeHtml(resource.location) : '<em class="text-muted">-</em>'}</td>
             <td>${this.escapeHtml(resource.department)}</td>
             <td><span class="badge bg-secondary">${this.escapeHtml(resource.method)}</span></td>
+            <td style="white-space: nowrap;" >
+                <a href="resource_detail.php?id=${resource.id}" class="btn btn-sm btn-outline-secondary me-1">
+                    <i class="fas fa-eye"></i> Details
+                </a>
+                <a href="reservation.php?rid=${resource.id}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-calendar-plus"></i> Reserve
+                </a>
+            </td>
         `;
         
         // Click handler to view details
-        row.addEventListener('click', () => {
-            window.location.href = 'resource_detail.php?id=' + resource.id;
-        });
-        
         return row;
     },
 
