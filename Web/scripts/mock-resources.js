@@ -7,8 +7,24 @@
  */
 
 const mockResources = [
-    { id: 1, name: "Gadget 1", location: "", department: "M1", method: "Method 1: SIM" },
-    { id: 2, name: "Gadget 2", location: "H224", department: "C4", method: "Method 2: CHROM" },
+    { 
+        id: 1, 
+        name: "Gadget 1", 
+        location: "", 
+        department: "M1", 
+        method: "Method 1: SIM",
+        description: "High-performance simulation software for finite element analysis",
+        notes: "Requires advanced training"
+    },
+    { 
+        id: 2, 
+        name: "Gadget 2", 
+        location: "H224", 
+        department: "C4", 
+        method: "Method 2: CHROM",
+        description: "Automated chromatography system with size exclusion capabilities",
+        notes: "Contact lab supervisor before use"
+    },
     { id: 3, name: "Gadget 3", location: "H224", department: "C4", method: "Method 2: CHROM" },
     { id: 4, name: "Gadget 4", location: "H224", department: "C4", method: "Method 2: CHROM" },
     { id: 5, name: "Gadget 5", location: "H224", department: "C4", method: "Method 2: CHROM" },

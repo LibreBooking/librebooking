@@ -1,3 +1,12 @@
+<script>
+// Compatibility shim for globalfooter.tpl init() call
+// ResourceListManager already handles initialization via auto-init
+    function init() {
+        // Empty - ResourceListManager.init() already called on DOMContentLoaded
+    }
+</script>
+
+{include file='globalfooter.tpl'}
 {include file='globalheader.tpl'}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -80,6 +89,8 @@
                                     </th>
                                     <th data-sort="method" style="cursor: pointer;">
                                         Method <i class="fas fa-sort ms-1"></i>
+                                    </th>
+                                    <th style="width: 15%;">Actions
                                     </th>
                                 </tr>
                             </thead>
