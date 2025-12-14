@@ -20,6 +20,7 @@ class en_us extends Language
         $dates['general_datetime'] = 'm/d/Y g:i:s A';
         $dates['short_datetime'] = 'n/j/y g:i A';
         $dates['schedule_daily'] = 'l, n/j/y';
+        $dates['schedule_daily_time'] = 'l, n/j/y H:i';
         $dates['reservation_email'] = 'm/d/Y @ g:i A (e)';
         $dates['res_popup'] = 'D, n/d g:i A';
         $dates['res_popup_time'] = 'g:i A';

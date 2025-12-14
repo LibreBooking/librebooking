@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' HideNavBar=true cssFiles='css/schedule.css'}
+{include file='globalheader.tpl' HideNavBar=true cssFiles='css/schedule.css' DatePicker=true}
 
 <div id="page-resource-display-resource">
 
@@ -6,26 +6,29 @@
                 <div class="date form-group w-50">
                         <label class="fw-bold text-uppercase fs-6 text-secondary"
                                 for="availabilityStartDate">{translate key='Date'}</label>
-                        <input type="date" id="availabilityStartDate" class="form-control w-auto hasDatepicker"
-                                {formname key=ANNOUNCEMENT_START} />
-                        <input type="hidden" id="formattedBeginDate" {formname key=ANNOUNCEMENT_START} />
+                        <input type="date" id="availabilityStartDate" class="form-control w-auto hasDatepicker" />
+                        <input type="hidden" id="formattedBeginDate" />
                 </div>
         </div>
 
         <div id="placeholder"></div>
 </div>
 
-<div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
+<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
         aria-hidden="true">
         {include file="wait-box.tpl" translateKey='Working'}
 </div>
 
-{include file="javascript-includes.tpl"}
+{include file="javascript-includes.tpl" DatePicker=true}
 {jsfile src="resourceDisplay.js"}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
 
-{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" MaxDate=$MaxFutureDate}
+{control type="DatePickerSetupControl" 
+ControlId="availabilityStartDate" 
+AltId="formattedBeginDate"
+MaxDate=$MaxFutureDate 
+AltFormat=Resources::GetInstance()->GetDateFormat('schedule_daily')}
 
 <script type="text/javascript">
         function getResourceId() {

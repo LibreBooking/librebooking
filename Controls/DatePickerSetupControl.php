@@ -33,7 +33,7 @@ class DatePickerSetupControl extends Control
         $this->Set('HasTimepicker', $hasTimepicker);
         $this->Set('DateFormat', Resources::GetInstance()->GetDateFormat('general_date_js'));
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('general_time_js'));
-        $this->Set('AltFormat', Resources::GetInstance()->GetDateFormat($hasTimepicker ? 'js_general_datetime' : 'js_general_date'));
+        $this->SetDefault('AltFormat', Resources::GetInstance()->GetDateFormat($hasTimepicker ? 'schedule_daily_time' : 'schedule_daily'));
         $this->Set('DayNamesMin', $this->GetJsDayNames('two'));
         $this->Set('DayNamesShort', $this->GetJsDayNames('abbr'));
         $this->Set('DayNames', $this->GetJsDayNames('full'));
@@ -43,7 +43,7 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 
-        if ($controlId == 'datepicker') {
+        if ($controlId == 'datepicker' || $controlId == 'availabilityStartDate') {
             $this->Display('Controls/DatePickerSetup.tpl');
         } else {
             $this->Display('Controls/DateSetup.tpl');

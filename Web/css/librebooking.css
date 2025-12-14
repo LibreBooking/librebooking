@@ -698,3 +698,8 @@ span.flatpickr-weekday {
 .flatpickr-months .flatpickr-next-month {
     fill: var(--text-color-btn) !important;
 }
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month{
+    background-color: #ffffff !important;
+    color: var(--bs-body-color);
+}

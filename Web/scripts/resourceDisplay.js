@@ -59,10 +59,39 @@ function ResourceDisplay(opts) {
 
         var url = opts.url;
 
-        if (_.isEmpty(elements.startDate.val())) {
-            elements.rawStartDate.datepicker("setDate", new Date(opts.initialDate));
-        }
+        elements.rawStartDate.on('change', function () {
+            
+            let val = $(this).val();
 
+            if (!val) {
+                elements.startDate.val("");
+                return;
+            }
+
+            let date = new Date(val);
+
+            if (isNaN(date.getTime())) {
+                let parts = val.split(/[-/]/);
+                if (parts.length >= 3) {
+                    date = new Date(parts[0], parts[1] - 1, parts[2]);
+                }
+            }
+
+            if (!isNaN(date.getTime())) {
+
+                date.setDate(date.getDate() + 1);
+
+                const formatted =
+                    date.getFullYear() +
+                    "-" +
+                    String(date.getMonth() + 1).padStart(2, "0") +
+                    "-" +
+                    String(date.getDate()).padStart(2, "0");
+
+                elements.startDate.val(formatted);
+            }
+        });
+        
         refreshResource();
 
         setInterval(refreshResource, 60000);
@@ -79,11 +108,9 @@ function ResourceDisplay(opts) {
 
         elements.placeholder.on('click', '#reservePopup', function (e) {
             pauseRefresh();
-            //showPopup();
         });
 
         elements.placeholder.on('click', '#reserveCancel', function (e) {
-            //hidePopup();
             resumeRefresh();
             refreshResource();
         });
@@ -101,7 +128,6 @@ function ResourceDisplay(opts) {
                 var validationErrors = $('#validationErrors');
                 if (data.success) {
                     validationErrors.find('ul').empty().addClass('d-none');
-                    //hidePopup();
                     resumeRefresh();
                     refreshResource();
                     $('#reservation-box').modal('hide');
@@ -154,25 +180,8 @@ function ResourceDisplay(opts) {
 
         var beginIndex = 0;
 
-        function showPopup() {
-            /*$('#reservation-box-wrapper').show();
-            var reservationBox = $('#reservation-box');
-            reservationBox.show();
-            var offsetFromTop = ($('body').height() - reservationBox.height()) / 2;
-            reservationBox.css(
-                { top: offsetFromTop + 'px' }
-            );
-
-            $('#emailAddress').focus();*/
-        }
-
         function pauseRefresh() {
             _refreshEnabled = false;
-        }
-
-        function hidePopup() {
-            // $('#reservation-box').hide();
-            // $('#reservation-box-wrapper').hide();
         }
 
         function resumeRefresh() {
@@ -196,8 +205,6 @@ function ResourceDisplay(opts) {
                     return;
                 }
                 elements.placeholder.html(data);
-
-                //$('#resource-display').height($('body').height());
 
                 var formCheckin = $('#formCheckin');
                 formCheckin.unbind('submit');

@@ -8,7 +8,7 @@
 
     $(document).ready(function() {
     const hasTimepicker = {if $HasTimepicker}true{else}false{/if};
-    const dateFormat = "{$DateFormat}" + (hasTimepicker ? " {$TimeFormat}" : "");
+    const dateFormat = "Y-m-d" + (hasTimepicker ? "  H:i" : "");
 
     const config = {
         inline: {if $Inline|default:false}true{else}false{/if},
@@ -30,7 +30,7 @@
         },
         showMonths: {$NumberOfMonths|default:1},
         weekNumbers: {if $ShowWeekNumbers}true{else}false{/if},
-        defaultDate: {if $DefaultDate}{datePickerDateFormat date=$DefaultDate}{else}null{/if},
+        defaultDate: {if $DefaultDate}{datePickerDateFormat date=$DefaultDate}{else}new Date(){/if},
         minDate: {if $MinDate}{datePickerDateFormat date=$MinDate}{else}null{/if},
         maxDate: {if $MaxDate}{datePickerDateFormat date=$MaxDate->AddDays(1)}{else}null{/if},
         onChange: {$OnSelect},
