@@ -59,8 +59,8 @@ function ResourceDisplay(opts) {
 
         var url = opts.url;
 
-        elements.rawStartDate.on('change', function () {
-            
+        elements.rawStartDate.on("change", function () {
+
             let val = $(this).val();
 
             if (!val) {
@@ -68,30 +68,19 @@ function ResourceDisplay(opts) {
                 return;
             }
 
-            let date = new Date(val);
+            // Standardize separators in case they come with /
+            let parts = val.split(/[-/]/);
 
-            if (isNaN(date.getTime())) {
-                let parts = val.split(/[-/]/);
-                if (parts.length >= 3) {
-                    date = new Date(parts[0], parts[1] - 1, parts[2]);
-                }
-            }
-
-            if (!isNaN(date.getTime())) {
-
-                date.setDate(date.getDate() + 1);
-
+            if (parts.length >= 3) {
                 const formatted =
-                    date.getFullYear() +
-                    "-" +
-                    String(date.getMonth() + 1).padStart(2, "0") +
-                    "-" +
-                    String(date.getDate()).padStart(2, "0");
+                    parts[0] + "-" +
+                    String(parts[1]).padStart(2, "0") + "-" +
+                    String(parts[2]).padStart(2, "0");
 
                 elements.startDate.val(formatted);
             }
         });
-        
+
         refreshResource();
 
         setInterval(refreshResource, 60000);

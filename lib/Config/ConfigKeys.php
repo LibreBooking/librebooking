@@ -968,7 +968,7 @@ class ConfigKeys
         'type' => 'boolean',
         'default' => true,
         'label' => 'Allows reservations',
-        'description' => 'Allows you to make or not make reservations in the tablet view',
+        'description' => 'Allows users to make reservations in the tablet view',
         'section' => 'tablet.view'
     ];
 
