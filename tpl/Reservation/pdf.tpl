@@ -104,7 +104,7 @@ $('.btnPDF').click(function (e) {
 		 { content: '{$RepeatInterval}'},	
 		 { content: '{translate key=$RepeatOptions[$RepeatType]['everyKey']}'},
 		{else}
-		 { colSpan: 3, content: '{translate key=$RepeatOptions[$RepeatType]['key']}'},
+		 { colSpan: 3, content: '{translate key=$RepeatOptions[$RepeatType|default:'none']['key']}'},
 		{/if}
 		],
 		{if $IsRecurring}
@@ -217,11 +217,11 @@ $('.btnPDF').click(function (e) {
 		body: [
 		[{ content: '{translate key="ReservationTitle"}', styles: { fontStyle: 'bold'}},
 		],
-		[{ content: '{$ReservationTitle|unescape:'html'|escape:'javascript'}'},
+		[{ content: '{$ReservationTitle|default:''|unescape:'html'|escape:'javascript'}'},
 		],
 		[{ content: '{translate key="ReservationDescription"}', styles: { fontStyle: 'bold'}},
 		],
-		[{ content: '{$Description|unescape:'html'|escape:'javascript'}'},
+		[{ content: '{$Description|default:''|unescape:'html'|escape:'javascript'}'},
 		],
 		]
 	});
