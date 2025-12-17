@@ -131,10 +131,24 @@ class UpgradeDbTask // extends Task
     }
 }
 
-$task = new UpgradeDbTask();
-$task->setUsername($argv[1]);
-$task->setPassword($argv[2]);
-$task->setHost($argv[3]);
-$task->setDatabase($argv[4]);
-$task->setSchemadir($argv[5]);
-$task->main();
+if (PHP_SAPI === 'cli' && isset($argv, $argc)) {
+    if ($argc < 6 || in_array('--help', $argv) || in_array('-h', $argv)) {
+        echo "Usage: php {$argv[0]} <username> <password> <host> <database> <schema_dir>\n";
+        echo "\n";
+        echo "Arguments:\n";
+        echo "  username    - MySQL database username\n";
+        echo "  password    - MySQL database password\n";
+        echo "  host        - MySQL database host\n";
+        echo "  database    - MySQL database name\n";
+        echo "  schema_dir  - Directory containing database schema upgrades\n";
+        exit($argc < 6 ? 1 : 0);
+    }
+
+    $task = new UpgradeDbTask();
+    $task->setUsername($argv[1]);
+    $task->setPassword($argv[2]);
+    $task->setHost($argv[3]);
+    $task->setDatabase($argv[4]);
+    $task->setSchemadir($argv[5]);
+    $task->main();
+}
