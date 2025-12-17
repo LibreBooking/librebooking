@@ -131,7 +131,7 @@ class Resources implements IResourceLocalization
     public function IsLanguageSupported($languageCode)
     {
         return !empty($languageCode) &&
-        (array_key_exists($languageCode, $this->AvailableLanguages) &&
+            (array_key_exists($languageCode, $this->AvailableLanguages) &&
                 file_exists($this->LanguageDirectory . $this->AvailableLanguages[$languageCode]->LanguageFile));
     }
 
@@ -143,7 +143,7 @@ class Resources implements IResourceLocalization
 
         $strings = $this->_lang->Strings;
 
-        if (!isset($strings[$key]) || empty($strings[$key])) {
+        if ($key === null || $key === '' || !isset($strings[$key]) || empty($strings[$key])) {
             return '?';
         }
 
