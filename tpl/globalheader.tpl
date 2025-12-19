@@ -347,6 +347,19 @@
                                 </ul>
                             </li>
                         {/if}
+
+                        {* Language Switcher *}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link link-primary dropdown-toggle" 
+                               data-bs-toggle="dropdown" title="Language">
+                                <i class="bi bi-globe-americas"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{$Path}change-language.php?lang=en_us">English</a></li>
+                                <li><a class="dropdown-item" href="{$Path}change-language.php?lang=de_de">Deutsch</a></li>
+                            </ul>   
+                        </li>
+
                         {if isset($CanViewAdmin) && $CanViewAdmin}
                             <li class="nav-item dropdown" id="navHelpDropdown">
                                 <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
