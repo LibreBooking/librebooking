@@ -54,6 +54,7 @@ class TestBase extends TestCase
         $this->fakeEmailService = new FakeEmailService();
         $this->fakeConfig = new FakeConfig();
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, 'America/Chicago');
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS, true);
 
         $this->fakeResources = new FakeResources();
         $this->fakeUser = $this->fakeServer->UserSession;
