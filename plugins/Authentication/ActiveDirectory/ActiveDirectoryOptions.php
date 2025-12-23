@@ -8,10 +8,15 @@ class ActiveDirectoryOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/ActiveDirectory.config.php');
+        $configPath = dirname(__FILE__) . '/ActiveDirectory.config.php';
+        if (!file_exists($configPath) && getenv('APP_ENV') === 'testing') {
+            $configPath = dirname(__FILE__) . '/ActiveDirectory.config.dist.php';
+        }
+
+        require_once($configPath);
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/ActiveDirectory.config.php',
+            $configPath,
             '',
             ActiveDirectoryConfigKeys::CONFIG_ID,
             false,
