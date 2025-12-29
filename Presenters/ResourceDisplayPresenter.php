@@ -163,9 +163,9 @@ class ResourceDisplayPresenter extends ActionPresenter
 
         $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory($timezone));
         $slots = $layout->GetLayout($now, true);
-        if(!empty($startDate)){
+        if (!empty($startDate)) {
             $reservationDate = $startDate;
-        }else{
+        } else {
             $reservationDate = $now;
             if ($slots[count($slots) - 1]->EndDate()->LessThanOrEqual($now)) {
                 $now = $now->AddDays(1)->GetDate();
@@ -234,6 +234,15 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     public function Reserve()
     {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS)) {
+            $resultCollector = new ReservationResultCollector();
+            $resultCollector->SetSaveSuccessfulMessage(false);
+            $resultCollector->SetErrors(['Reservations are disabled in tablet view']);
+
+            $this->page->SetReservationSaveResults(false, $resultCollector);
+            return;
+        }
+
         $timezone = $this->page->GetTimezone();
         $resourceId = $this->page->GetResourceId();
         $email = $this->page->GetEmail();
@@ -245,7 +254,7 @@ class ResourceDisplayPresenter extends ActionPresenter
         if ($maxFutureDays == 0) {
             $maxFutureDays = 1;
         }
-        $maxDate = Date::Now()->ToTimezone($timezone)->AddDays($maxFutureDays+1)->GetDate();
+        $maxDate = Date::Now()->ToTimezone($timezone)->AddDays($maxFutureDays + 1)->GetDate();
 
         $resultCollector = new ReservationResultCollector();
 
@@ -253,7 +262,7 @@ class ResourceDisplayPresenter extends ActionPresenter
             $resultCollector->SetSaveSuccessfulMessage(false);
             $resultCollector->SetErrors(["Unauthorized"]);
             $success = false;
-        }else{
+        } else {
 
             $userSession = $this->guestUserService->CreateOrLoad($email);
             $resource = $this->resourceRepository->LoadById($resourceId);
@@ -380,23 +389,17 @@ class ReservationResultCollector implements IReservationSaveResultsView
     /**
      * @param array|string[] $messages
      */
-    public function SetRetryMessages($messages)
-    {
-    }
+    public function SetRetryMessages($messages) {}
 
     /**
      * @param bool $canBeRetried
      */
-    public function SetCanBeRetried($canBeRetried)
-    {
-    }
+    public function SetCanBeRetried($canBeRetried) {}
 
     /**
      * @param ReservationRetryParameter[] $retryParameters
      */
-    public function SetRetryParameters($retryParameters)
-    {
-    }
+    public function SetRetryParameters($retryParameters) {}
 
     /**
      * @return ReservationRetryParameter[]

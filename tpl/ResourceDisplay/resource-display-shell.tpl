@@ -15,7 +15,7 @@
         <div id="placeholder"></div>
 </div>
 
-<div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
+<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
         aria-hidden="true">
         {include file="wait-box.tpl" translateKey='Working'}
 </div>
@@ -25,7 +25,7 @@
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
 
-{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" MaxDate=$MaxFutureDate}
+{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" MaxDate=$MaxFutureDate MinDate=$MinDate DefaultDate=$MinDate}
 
 <script type="text/javascript">
         function getResourceId() {

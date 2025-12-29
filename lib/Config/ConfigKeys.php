@@ -962,6 +962,14 @@ class ConfigKeys
     ];
 
     // Tablet View Options
+    public const TABLET_VIEW_ALLOW_RESERVATIONS = [
+        'key' => 'tablet.view.allow.reservations',
+        'type' => 'boolean',
+        'default' => true,
+        'label' => 'Allows reservations',
+        'description' => 'Allows users to make reservations in the tablet view',
+        'section' => 'tablet.view'
+    ];
 
     # previously TABLET_VIEW_ALLOW_GUESTS
     public const TABLET_VIEW_ALLOW_GUEST_RESERVATIONS = [

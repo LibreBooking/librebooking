@@ -79,11 +79,9 @@ function ResourceDisplay(opts) {
 
         elements.placeholder.on('click', '#reservePopup', function (e) {
             pauseRefresh();
-            //showPopup();
         });
 
         elements.placeholder.on('click', '#reserveCancel', function (e) {
-            //hidePopup();
             resumeRefresh();
             refreshResource();
         });
@@ -101,7 +99,6 @@ function ResourceDisplay(opts) {
                 var validationErrors = $('#validationErrors');
                 if (data.success) {
                     validationErrors.find('ul').empty().addClass('d-none');
-                    //hidePopup();
                     resumeRefresh();
                     refreshResource();
                     $('#reservation-box').modal('hide');
@@ -147,32 +144,15 @@ function ResourceDisplay(opts) {
             $(this).removeClass('hilite');
         });
 
-        elements.startDate.on('change', function () {
+        elements.rawStartDate.on('change', function () {
             showWait();
             refreshResource(hideWait);
         });
 
         var beginIndex = 0;
 
-        function showPopup() {
-            /*$('#reservation-box-wrapper').show();
-            var reservationBox = $('#reservation-box');
-            reservationBox.show();
-            var offsetFromTop = ($('body').height() - reservationBox.height()) / 2;
-            reservationBox.css(
-                { top: offsetFromTop + 'px' }
-            );
-
-            $('#emailAddress').focus();*/
-        }
-
         function pauseRefresh() {
             _refreshEnabled = false;
-        }
-
-        function hidePopup() {
-            // $('#reservation-box').hide();
-            // $('#reservation-box-wrapper').hide();
         }
 
         function resumeRefresh() {
@@ -196,8 +176,6 @@ function ResourceDisplay(opts) {
                     return;
                 }
                 elements.placeholder.html(data);
-
-                //$('#resource-display').height($('body').height());
 
                 var formCheckin = $('#formCheckin');
                 formCheckin.unbind('submit');

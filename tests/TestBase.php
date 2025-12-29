@@ -54,6 +54,7 @@ class TestBase extends TestCase
         $this->fakeEmailService = new FakeEmailService();
         $this->fakeConfig = new FakeConfig();
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, 'America/Chicago');
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS, true);
 
         $this->fakeResources = new FakeResources();
         $this->fakeUser = $this->fakeServer->UserSession;
@@ -88,7 +89,7 @@ class TestBase extends TestCase
         if (ini_set('error_log', $tempLogFile) === false) {
             throw new \RuntimeException("Failed to set error_log to temporary file: $tempLogFile");
         }
-        
+
         try {
             // Execute the test function
             $testFunction();

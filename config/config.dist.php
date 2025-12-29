@@ -440,6 +440,9 @@ return [
         ##########################################
 
         'tablet.view' => [
+            # Allow users to make reservations in the tablet view (true/false)
+            'allow.reservations' => true,
+
             # Allow guest users to make reservations in tablet view (true/false)
             'allow.guest.reservations' => false,
 
