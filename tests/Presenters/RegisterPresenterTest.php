@@ -49,7 +49,7 @@ class RegisterPresenterTest extends TestBase
     private $phone = '123.123.1234';
     private $password = 'password';
     private $confirm = 'password';
-    private $timezone = 'US/Eastern';
+    private $timezone = 'America/New_York';
     private $homepageId = '1';
     private $acknowledgedTerms = true;
 
@@ -184,10 +184,10 @@ class RegisterPresenterTest extends TestBase
         $this->LoadPageValues();
 
         $additionalFields = [
-                    'phone' => $this->phone,
-                    'instituntion' => '',
-                    'position' => ''
-                    ];
+            'phone' => $this->phone,
+            'instituntion' => '',
+            'position' => ''
+        ];
 
         $this->page->_Action = RegisterActions::Register;
 
@@ -276,9 +276,9 @@ class RegisterPresenterTest extends TestBase
     {
         $list = new FakeAttributeList($attributes);
         $this->attributeService->expects($this->once())
-                ->method('GetAttributes')
-                ->with($this->equalTo(CustomAttributeCategory::USER))
-                ->willReturn($list);
+            ->method('GetAttributes')
+            ->with($this->equalTo(CustomAttributeCategory::USER))
+            ->willReturn($list);
     }
 
     private function LoadPageValues()

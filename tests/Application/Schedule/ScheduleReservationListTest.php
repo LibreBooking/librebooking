@@ -72,13 +72,13 @@ class ScheduleReservationListTest extends TestBase
 
         $layout = $this->createMock('IScheduleLayout');
         $layout->expects($this->once())
-                ->method('Timezone')
-                ->willReturn($userTz);
+            ->method('Timezone')
+            ->willReturn($userTz);
 
         $layout->expects($this->once())
-                ->method('GetLayout')
-                ->with($this->equalTo($date), $this->equalTo($hideBlocked))
-                ->willReturn($layoutPeriods);
+            ->method('GetLayout')
+            ->with($this->equalTo($date), $this->equalTo($hideBlocked))
+            ->willReturn($layoutPeriods);
 
         $scheduleList = new ScheduleReservationList([$r1], $layout, $date, $hideBlocked);
         $slots = $scheduleList->BuildSlots();
@@ -408,8 +408,8 @@ class ScheduleReservationListTest extends TestBase
         $this->assertFalse($reservation->OccursOn($startDate->AddDays(-2)));
         $this->assertFalse($reservation->OccursOn($endDate->AddDays(2)));
 
-        $this->assertTrue($reservation->OccursOn($startDate->ToTimezone('US/Central')));
-        $this->assertTrue($reservation->OccursOn($endDate->ToTimezone('US/Central')));
+        $this->assertTrue($reservation->OccursOn($startDate->ToTimezone('America/Chicago')));
+        $this->assertTrue($reservation->OccursOn($endDate->ToTimezone('America/Chicago')));
     }
 
     public function testReservationDoesNotOccurOnDateIfNoneOfTheReservationOccursAtAnyTimeOnThatDate()
@@ -428,8 +428,8 @@ class ScheduleReservationListTest extends TestBase
 
         $builder = new ReservationItemViewBuilder();
         $builder
-                ->WithStartDate($date->AddDays(-1))
-                ->WithEndDate($date);
+            ->WithStartDate($date->AddDays(-1))
+            ->WithEndDate($date);
 
         $res = $builder->Build();
 
@@ -668,7 +668,7 @@ class ScheduleReservationListTest extends TestBase
             resourceId: 1,
             referenceNumber: 30
         );
-        $item->WithBufferTime(60*60);
+        $item->WithBufferTime(60 * 60);
         $r1 = new ReservationListItem($item);
 
         $list = new ScheduleReservationList([$r1], $layout, $listDate, false);
@@ -716,8 +716,8 @@ class ScheduleReservationListTest extends TestBase
             Date::Parse('2011-02-08 2:00', $tz)->ToUtc(),
             1
         );
-        $item1->WithBufferTime(60*60);
-        $item2->WithBufferTime(60*60);
+        $item1->WithBufferTime(60 * 60);
+        $item2->WithBufferTime(60 * 60);
         $r1 = new ReservationListItem($item1);
         $r2 = new ReservationListItem($item2);
 

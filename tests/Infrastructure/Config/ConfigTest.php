@@ -20,7 +20,7 @@ class ConfigTest extends TestBase
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
         $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
         $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
         $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
         $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
@@ -32,7 +32,7 @@ class ConfigTest extends TestBase
             Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_legacy_config.php', '', self::CONFIG_ID, true);
             $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-            $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+            $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
             $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
             $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
             $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
@@ -79,11 +79,10 @@ class ConfigTest extends TestBase
     {
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
-        $config = Configuration::Instance()->File(self::CONFIG_ID);
-        ;
+        $config = Configuration::Instance()->File(self::CONFIG_ID);;
         $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
         $this->assertEquals('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
         $this->assertEquals('value2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
         $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
