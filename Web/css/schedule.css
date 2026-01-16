@@ -173,7 +173,6 @@ table.reservations.mobile div.reservable {
 .buffer {
   background-color: var(--unreservable);
   color: #fff;
-  /*border-color: #482423;*/
 }
 
 td.reservable,
@@ -209,7 +208,6 @@ td.dropped {
 }
 
 .reserved.hilite {
-  /*background-color: #59A8EF;*/
   opacity: 0.75;
 }
 
@@ -218,7 +216,6 @@ td.dropped {
 }
 
 .reserved.mine.hilite {
-  /*background-color: #3f4446;*/
   opacity: 0.75;
   color: #ffffff;
 }
@@ -229,7 +226,6 @@ td.dropped {
 
 .reserved.participating.hilite {
   opacity: 0.75;
-  /*background-color: #a979d1;*/
 }
 
 .past {
@@ -242,7 +238,6 @@ td.dropped {
 }
 
 .reserved.pending.hilite {
-  /*background-color: #ffc973;*/
   opacity: 0.75;
 }
 
@@ -278,11 +273,9 @@ td.dropped {
   vertical-align: top;
 }
 
-/*.schedule-dates {
-  text-align: center;
-  font-size: 1.5em;
-  padding-bottom: 10px;
-}*/
+.removeSpecificDate {
+  cursor: pointer;
+}
 
 .ui-datepicker {
   margin-left: auto;
@@ -316,7 +309,6 @@ div.legend {
   border: solid #555 1px;
   text-align: center;
   display: inline-block;
-  /*display: inline;*/
   margin: 0 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -524,24 +516,4 @@ a.toggle-sidebar {
 
 #reservations {
   position: relative;
-}
-
-#reservationsToTop {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 30px;
-  z-index: 999;
-  border: none;
-  background-color: #D5DED9;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  color: #585754;
-  cursor: pointer;
-  padding: 5px;
-}
-
-#reservationsToTop:hover {
-  color: #000;
 }

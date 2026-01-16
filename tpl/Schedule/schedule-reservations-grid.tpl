@@ -6,7 +6,6 @@
 {assign var=TodaysDate value=Date::Now()}
 {* Is this a view page and guests are allowed to book *}
 {assign var=GuestViewBookable value=($LoadViewOnly && $AllowGuestBooking)}
-<br/>
 {foreach from=$BoundDates item=date}
     {assign var=ts value=$date->Timestamp()}
     {$periods.$ts = $DailyLayout->GetPeriods($date, true)}
