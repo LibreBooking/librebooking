@@ -234,7 +234,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     public function Reserve()
     {
-        if (!Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS)) {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS, new BooleanConverter())) {
             $resultCollector = new ReservationResultCollector();
             $resultCollector->SetSaveSuccessfulMessage(false);
             $resultCollector->SetErrors(['Reservations are disabled in tablet view']);
