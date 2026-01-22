@@ -112,6 +112,8 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
+        $this->Set('BeginDate', Date::Now());
+        $this->Set('EndDate', Date::Now()->AddDays(7));
         $this->Display('Search/search-reservations.tpl');
     }
 

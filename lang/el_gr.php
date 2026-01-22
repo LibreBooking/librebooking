@@ -27,11 +27,9 @@ class el_gr extends en_gb
         $dates['short_reservation_date'] = 'j/n/y g:i A';
         $dates['dashboard'] = 'D, d/n g:i A';
         $dates['period_time'] = 'g:i A';
-        $dates['timepicker'] = 'h:i a';
         $dates['mobile_reservation_date'] = 'j/n g:i A';
         $dates['general_date_js'] = 'dd/mm/yy';
         $dates['general_time_js'] = 'h:mm tt';
-        $dates['timepicker_js'] = 'h:i a';
         $dates['momentjs_datetime'] = 'D/M/YY h:mm A';
         $dates['calendar_time'] = 'h:mmt';
         $dates['calendar_dates'] = 'M d';
@@ -1030,7 +1028,7 @@ class el_gr extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'Η ομάδα σας δεν έχει καμία προσεχή κράτηση';
         $strings['GroupUpcomingReservations'] = 'Μελλοντικές κρατήσεις της ομάδας(ών) μου';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Προέκυψε σφάλμα κατά τη σύνδεση με το Facebook. Παρακαλούμε δοκιμάστε ξανά.';
         //End Facebook Login SDK Error
@@ -1045,7 +1043,7 @@ class el_gr extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Δεν υπάρχουν λείπουσες κρατήσεις εξόδου';
-        $strings['MissingCheckOutReservations'] = 'Λείπουσες κρατήσεις εξόδου';        
+        $strings['MissingCheckOutReservations'] = 'Λείπουσες κρατήσεις εξόδου';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

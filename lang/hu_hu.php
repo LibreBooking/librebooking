@@ -21,11 +21,9 @@ class hu_hu extends en_us
         $dates['short_reservation_date'] = 'n/j/y g:i A';
         $dates['dashboard'] = 'D, n/d g:i A';
         $dates['period_time'] = 'g:i A';
-        $dates['timepicker'] = 'h:i a';
         $dates['mobile_reservation_date'] = 'n/j g:i A';
         $dates['general_date_js'] = 'mm/dd/yy';
         $dates['general_time_js'] = 'h:mm tt';
-        $dates['timepicker_js'] = 'h:i a';
         $dates['momentjs_datetime'] = 'M/D/YY h:mm A';
         $dates['calendar_time'] = 'h:mmt';
         $dates['calendar_dates'] = 'M d';
@@ -415,7 +413,7 @@ class hu_hu extends en_us
         $strings['ReservedResources'] = 'Foglalt elemek';
         $strings['ReservedAccessories'] = 'Foglalt kiegészítők';
         $strings['ResourceUsageTimeBooked'] = 'Elem kihasználtság - foglalás idő szerint';
-        $strings['ResourceUsageReservationCount'] = 'Elem kihasználtság - foglalások száma'	;
+        $strings['ResourceUsageReservationCount'] = 'Elem kihasználtság - foglalások száma';
         $strings['Top20UsersTimeBooked'] = 'Top 20 felhasználó - foglalási idő szerint';
         $strings['Top20UsersReservationCount'] = 'Top 20 felhasználó - fogalások száma alapján';
         $strings['ConfigurationUpdated'] = 'A konfigurációs fájl mentve';
@@ -1003,7 +1001,7 @@ class hu_hu extends en_us
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nincsenek hiányzó kijelentkezési foglalások';
-        $strings['MissingCheckOutReservations'] = 'Hiányzó kijelentkezési foglalások';        
+        $strings['MissingCheckOutReservations'] = 'Hiányzó kijelentkezési foglalások';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
