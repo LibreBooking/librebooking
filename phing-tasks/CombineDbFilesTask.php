@@ -128,8 +128,20 @@ class CombineDbFilesTask
     }
 }
 
-$task = new CombineDbFilesTask();
-$task->setSchemadir($argv[1]);
-$task->setSchemafile($argv[2]);
-$task->setDatafile($argv[3]);
-$task->main();
+if (PHP_SAPI === 'cli' && isset($argv, $argc)) {
+    if ($argc < 4 || in_array('--help', $argv) || in_array('-h', $argv)) {
+        echo "Usage: php {$argv[0]} <schema_dir> <schema_file> <data_file>\n";
+        echo "\n";
+        echo "Arguments:\n";
+        echo "  schema_dir   - Directory containing database schema upgrades\n";
+        echo "  schema_file  - Output file path for combined schema SQL\n";
+        echo "  data_file    - Output file path for combined data SQL\n";
+        exit($argc < 4 ? 1 : 0);
+    }
+
+    $task = new CombineDbFilesTask();
+    $task->setSchemadir($argv[1]);
+    $task->setSchemafile($argv[2]);
+    $task->setDatafile($argv[3]);
+    $task->main();
+}

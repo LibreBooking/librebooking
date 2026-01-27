@@ -283,7 +283,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $resources = Resources::GetInstance();
         $this->Set('DayNames', $resources->GetDays('full'));
         $this->Set('Today', Resources::GetInstance()->GetString('Today'));
-        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('timepicker_js'));
+        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
         $this->Set('DefaultDate', Date::Now()->SetTimeString('08:00'));
         $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
         $this->Set('DayList', range(1, 31));

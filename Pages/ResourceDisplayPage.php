@@ -167,6 +167,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
             new TermsOfServiceRepository()
         );
 
+        $this->Set('AllowReservations', Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS, new BooleanConverter()));
         $this->Set('AllowAutocomplete', Configuration::Instance()->GetKey(ConfigKeys::TABLET_VIEW_AUTO_SUGGEST_EMAILS, new BooleanConverter()));
         $this->Set('ShouldLogout', false);
     }
@@ -243,7 +244,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $parsedDate = $this->GetQuerystring(QueryStringKeys::START_DATE);
         if (!empty($parsedDate)) {
             $startDate = Date::Parse($parsedDate, $userTimezone);
-        }else{
+        } else {
             $startDate = Date::Now()->ToTimezone($userTimezone);
         }
         return $startDate;
@@ -290,7 +291,8 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         if ($futureDays == 0) {
             $futureDays = 1;
         }
-        $this->Set('MaxFutureDate', Date::Now()->AddDays($futureDays-1));
+        $this->Set('MinDate', Date::Now());
+        $this->Set('MaxFutureDate', Date::Now()->AddDays($futureDays - 1));
         $this->Display('ResourceDisplay/resource-display-shell.tpl');
     }
 

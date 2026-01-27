@@ -106,25 +106,27 @@
 
                     <form id="frmConfigSettings" method="post" ajaxAction="{ConfigActions::Update}" action="{$smarty.server.SCRIPT_NAME}">
                         <div class="accordion my-3" id="accordionConfig">
-                            <div>
-                                <div class="accordion-item shadow mb-2">
-                                    <h2 class="accordion-header text-capitalize">
-                                        <button class="accordion-button text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{translate key=GeneralConfigSettings}">
-                                            {translate key=GeneralConfigSettings}
-                                        </button>
-                                    </h2>
-                                    <div id="{translate key=GeneralConfigSettings}" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <fieldset>
-                                                <div class="no-style config-settings">
-                                                    {list_settings settings=$Settings}
-                                                </div>
-                                            </fieldset>
+                            {if !empty($Settings)}
+                                <div>
+                                    <div class="accordion-item shadow mb-2">
+                                        <h2 class="accordion-header text-capitalize">
+                                            <button class="accordion-button text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{translate key=GeneralConfigSettings}">
+                                                {translate key=GeneralConfigSettings}
+                                            </button>
+                                        </h2>
+                                        <div id="{translate key=GeneralConfigSettings}" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <fieldset>
+                                                    <div class="no-style config-settings">
+                                                        {list_settings settings=$Settings}
+                                                    </div>
+                                                </fieldset>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            {/if}
+                            
                             {foreach from=$SectionSettings key=section item=settings}
                                 <div>
                                     <div class="accordion-item shadow mb-2">

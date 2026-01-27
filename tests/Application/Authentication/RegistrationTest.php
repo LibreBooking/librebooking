@@ -33,7 +33,7 @@ class RegistrationTest extends TestBase
     private $position = 'position';
     private $additionalFields = [];
     private $password = 'password';
-    private $timezone = 'US/Eastern';
+    private $timezone = 'America/New_York';
     private $language = 'en_US';
     private $homepageId = 1;
     private $attributes = [];

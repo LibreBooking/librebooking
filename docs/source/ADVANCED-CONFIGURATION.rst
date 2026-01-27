@@ -730,6 +730,13 @@ Plugin System
 
 Available authentication plugins: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress.
 
+For authentication plugin configuration, see:
+
+- LDAP: :doc:`LDAP-Authentication`
+- Active Directory: :doc:`ActiveDirectory-Authentication`
+- OAuth2: :doc:`Oauth2-Configuration`
+- SAML: :doc:`SAML-Configuration`
+
 API Configuration
 -----------------
 

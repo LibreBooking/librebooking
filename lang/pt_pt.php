@@ -20,16 +20,14 @@ class pt_pt extends en_gb
         $dates['reservation_email'] = 'd/m/Y @ H:i (e)';
         $dates['res_popup'] = 'd/m/Y H:i';
         $dates['dashboard'] = 'l, d/m/Y H:i';
-        $dates['period_time'] = "H:i";
-        $dates['timepicker'] = 'H:i';
-        $dates['general_date_js'] = "dd/mm/yy";
+        $dates['period_time'] = 'H:i';
+        $dates['general_date_js'] = 'dd/mm/yy';
         $dates['short_datetime'] = 'j/n/y H:i';
         $dates['schedule_daily'] = 'l, d/m/Y';
         $dates['res_popup_time'] = 'D, d/n H:i';
         $dates['short_reservation_date'] = 'j/n/y H:i';
         $dates['mobile_reservation_date'] = 'j/n H:i';
         $dates['general_time_js'] = 'H:mm';
-        $dates['timepicker_js'] = 'H:i';
         $dates['momentjs_datetime'] = 'D/M/YY H:mm';
         $dates['calendar_time'] = 'H:mm';
         $dates['calendar_dates'] = 'd M';
@@ -1025,7 +1023,7 @@ class pt_pt extends en_gb
         $strings['NoMissingCheckOutReservations'] = 'Não há reservas de check-out em falta';
         $strings['MissingCheckOutReservations'] = 'Reservas que Falharam Check Out';
         //End Missing Check In/Out Reservations in Dashboard
-        
+
         //Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Não é possível ver os detalhes da reserva uma vez que não tem permissões para nenhum dos recursos';
         //End Schedule Resource Permissions

@@ -7,7 +7,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'MOODLEADV';
 
     public const DB_HOST = [
-        'key' => 'moodleadv.dbhost',
+        'key' => 'dbhost',
         'type' => 'string',
         'default' => 'localhost',
         'label' => 'Moodle Database Host',
@@ -16,7 +16,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const DB_NAME = [
-        'key' => 'moodleadv.dbname',
+        'key' => 'dbname',
         'type' => 'string',
         'default' => 'moodle',
         'label' => 'Moodle Database Name',
@@ -25,7 +25,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const DB_USER = [
-        'key' => 'moodleadv.dbuser',
+        'key' => 'dbuser',
         'type' => 'string',
         'default' => '',
         'label' => 'Moodle Database User',
@@ -34,7 +34,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const DB_PASS = [
-        'key' => 'moodleadv.dbpass',
+        'key' => 'dbpass',
         'type' => 'string',
         'default' => '',
         'label' => 'Moodle Database Password',
@@ -44,7 +44,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const DB_PREFIX = [
-        'key' => 'moodleadv.prefix',
+        'key' => 'prefix',
         'type' => 'string',
         'default' => 'mdl_',
         'label' => 'Moodle Table Prefix',
@@ -53,7 +53,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const AUTH_METHOD = [
-        'key' => 'moodleadv.authmethod',
+        'key' => 'authmethod',
         'type' => 'string',
         'default' => 'all',
         'label' => 'Authentication Method',
@@ -67,7 +67,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const ROLES = [
-        'key' => 'moodleadv.roles',
+        'key' => 'roles',
         'type' => 'string',
         'default' => '',
         'label' => 'Required Roles',
@@ -76,7 +76,7 @@ class MoodleAdvConfigKeys extends PluginConfigKeys
     ];
 
     public const FIELD = [
-        'key' => 'moodleadv.field',
+        'key' => 'field',
         'type' => 'string',
         'default' => '',
         'label' => 'Custom Field ID',

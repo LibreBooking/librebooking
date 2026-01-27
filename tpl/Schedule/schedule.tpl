@@ -149,7 +149,9 @@
                 <button class="btn btn-sm btn-primary mx-auto" href="#" id="individualDatesGo">
                     <i class="bi bi-search me-1"></i>{translate key=SpecificDates}
                 </button>
-                <div type="text" id="datepicker" class="collapse"></div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div id="datepicker" class="collapse"></div>
+                </div>
             </div>
 
 
@@ -410,7 +412,6 @@
 {/block}
 
 {jsfile src="js/html2canvas.min.js"}
-{jsfile src="js/moment.min.js"}
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="js/tree.jquery.js"}
@@ -447,6 +448,7 @@
         fastReservationLoad: "{$FastReservationLoad}",
         resourceMaxConcurrentReservations,
         autoScrollToday: {$AutoScrollToday|@json_encode},
+        altFormatDate: "{Resources::GetInstance()->GetDateFormat('schedule_daily')}",
     };
 
     const resourceOrder = [];
@@ -479,7 +481,7 @@
 
 {control type="DatePickerSetupControl"
 ControlId='datepicker'
-HasTimepicker=false
+AltInput=false
 Inline=true
 DefaultDate=$FirstDate
 NumberOfMonths=$PopupMonths

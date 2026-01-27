@@ -122,7 +122,7 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
 
         $this->Set('Today', Date::Now()->ToTimezone($user->Timezone));
         $this->Set('Tomorrow', Date::Now()->AddDays(1)->ToTimezone($user->Timezone));
-        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('timepicker'));
+        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
     }
 
     public function ProcessAction()

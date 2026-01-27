@@ -21,16 +21,13 @@ class en_gb extends en_us
         $dates['reservation_email'] = 'd/m/Y @ H:i (e)';
         $dates['res_popup'] = 'd/m/Y H:i';
         $dates['dashboard'] = 'l, d/m/Y H:i';
-        $dates['period_time'] = "H:i";
-        $dates['timepicker'] = 'H:i';
+        $dates['period_time'] = 'H:i';
         $dates['general_date_js'] = "dd/mm/yy";
         $dates['short_datetime'] = 'j/n/y H:i';
-        $dates['schedule_daily'] = 'l, d/m/Y';
         $dates['res_popup_time'] = 'D, d/n H:i';
         $dates['short_reservation_date'] = 'j/n/y H:i';
         $dates['mobile_reservation_date'] = 'j/n H:i';
         $dates['general_time_js'] = 'H:mm';
-        $dates['timepicker_js'] = 'H:i';
         $dates['momentjs_datetime'] = 'D/M/YY H:mm';
         $dates['calendar_time'] = 'H:mm';
         $dates['calendar_dates'] = 'd M';

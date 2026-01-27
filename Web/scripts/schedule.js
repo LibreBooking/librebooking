@@ -1205,6 +1205,7 @@ function AddSpecificDate(dateObj) {
     const formattedDate = dateObj.getFullYear() + '-' +
         String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
         String(dateObj.getDate()).padStart(2, '0');
+    const stringDate = flatpickr.formatDate(dateObj, scheduleOpts.altFormatDate);
 
     if (scheduleSpecificDates.includes(formattedDate)) {
         return;
@@ -1214,7 +1215,7 @@ function AddSpecificDate(dateObj) {
     scheduleSpecificDates.push(formattedDate);
 
     const dateItem = `<div data-date="${formattedDate}">
-        ${formattedDate} <i class="bi bi-x-circle text-danger icon remove removeSpecificDate"></i>
+        ${stringDate} <i class="bi bi-x-circle text-danger icon remove removeSpecificDate"></i>
     </div>`;
 
     $('#individualDatesList').append(dateItem);

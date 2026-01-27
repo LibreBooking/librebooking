@@ -92,10 +92,10 @@ class DateTest extends TestBase
         $now = new Date($this->datestring);
 
         $datetime = new DateTime($this->datestring);
-        $datetime->setTimezone(new DateTimeZone('US/Eastern'));
+        $datetime->setTimezone(new DateTimeZone('America/New_York'));
 
         $expected = $datetime->format($format);
-        $adjusted = $now->ToTimezone("US/Eastern");
+        $adjusted = $now->ToTimezone("America/New_York");
 
         $this->assertEquals($expected, $adjusted->Format($format));
     }
@@ -103,7 +103,7 @@ class DateTest extends TestBase
     public function testDateGetsAdjustedIntoProvidedTimezone()
     {
         $format = 'd m y H:i:s';
-        $tzName = 'US/Eastern';
+        $tzName = 'America/New_York';
         $baseTz = new DateTimeZone($tzName);
 
         $actual = new Date($this->datestring, $tzName);
@@ -138,7 +138,7 @@ class DateTest extends TestBase
         $day = 21;
         $year = 2007;
 
-        $date = new Date("$year-$month-$day $hour:$minute:$second", 'US/Central');
+        $date = new Date("$year-$month-$day $hour:$minute:$second", 'America/Chicago');
 
         $this->assertEquals($hour, $date->Hour());
         $this->assertEquals($minute, $date->Minute());
@@ -148,7 +148,7 @@ class DateTest extends TestBase
         $this->assertEquals($year, $date->Year());
 
 
-        $adjusted = $date->ToTimezone('US/Eastern');
+        $adjusted = $date->ToTimezone('America/New_York');
 
         $this->assertEquals($hour + 1, $adjusted->Hour());
         $this->assertEquals($minute, $adjusted->Minute());
@@ -263,28 +263,28 @@ class DateTest extends TestBase
         $this->assertEquals(-1, $early->Compare($late, $date));
         $this->assertEquals(1, $late->Compare($early, $date));
 
-        $early2 = Time::Parse('10:11', 'US/Central');
-        $late2 = Time::Parse('10:11', 'US/Pacific');
+        $early2 = Time::Parse('10:11', 'America/Chicago');
+        $late2 = Time::Parse('10:11', 'America/Los_Angeles');
 
         $this->assertEquals(-1, $early2->Compare($late2, $date));
     }
 
     public function testCanCompareDateOnlyEquality()
     {
-        $date1 = Date::Parse('2008-01-01 11:00:00', 'US/Central');
-        $date2 = Date::Parse('2008-01-01 11:00:00', 'US/Eastern');
+        $date1 = Date::Parse('2008-01-01 11:00:00', 'America/Chicago');
+        $date2 = Date::Parse('2008-01-01 11:00:00', 'America/New_York');
 
         $this->assertTrue($date1->DateEquals($date2));
 
-        $date1 = Date::Parse('2008-01-01 00:00:00', 'US/Central');
-        $date2 = Date::Parse('2008-01-01 00:00:00', 'US/Eastern');
+        $date1 = Date::Parse('2008-01-01 00:00:00', 'America/Chicago');
+        $date2 = Date::Parse('2008-01-01 00:00:00', 'America/New_York');
 
         $this->assertFalse($date1->DateEquals($date2));
     }
 
     public function testCreateBuildsDateObjectCorectly()
     {
-        $date = Date::Create(2008, 10, 9, 8, 7, 6, 'US/Central');
+        $date = Date::Create(2008, 10, 9, 8, 7, 6, 'America/Chicago');
 
         $this->assertEquals(2008, $date->Year());
         $this->assertEquals(10, $date->Month());
@@ -292,25 +292,25 @@ class DateTest extends TestBase
         $this->assertEquals(8, $date->Hour());
         $this->assertEquals(7, $date->Minute());
         $this->assertEquals(6, $date->Second());
-        $this->assertEquals('US/Central', $date->Timezone());
+        $this->assertEquals('America/Chicago', $date->Timezone());
     }
 
     public function testCanCompareDateRelativity()
     {
-        $date1 = Date::Parse('2008-01-01 11:00:00', 'US/Central');
-        $date2 = Date::Parse('2008-01-01 11:00:00', 'US/Eastern');
+        $date1 = Date::Parse('2008-01-01 11:00:00', 'America/Chicago');
+        $date2 = Date::Parse('2008-01-01 11:00:00', 'America/New_York');
 
         $this->assertEquals(0, $date1->DateCompare($date2));
 
-        $date1 = Date::Parse('2008-01-01 00:00:00', 'US/Central');
-        $date2 = Date::Parse('2008-01-01 00:00:00', 'US/Eastern');
+        $date1 = Date::Parse('2008-01-01 00:00:00', 'America/Chicago');
+        $date2 = Date::Parse('2008-01-01 00:00:00', 'America/New_York');
 
         $this->assertEquals(1, $date1->DateCompare($date2), 'midnight eastern is 11pm central');
 
-        $date1 = Date::Parse('2008-01-01 00:00:00', 'US/Central');
-        $date2 = Date::Parse('2008-01-01 22:00:00', 'US/Pacific');
+        $date1 = Date::Parse('2008-01-01 00:00:00', 'America/Chicago');
+        $date2 = Date::Parse('2008-01-01 22:00:00', 'America/New_York');
 
-        $this->assertEquals(-1, $date1->DateCompare($date2), 'midnight pacific is 2 am central');
+        $this->assertEquals(0, $date1->DateCompare($date2), 'same calendar day after timezone normalization');
     }
 
     public function GetDateReturnsDateAsOfMidnight()

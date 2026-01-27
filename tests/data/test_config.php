@@ -2,7 +2,7 @@
 
 return [
     'settings' => [
-        'default.timezone' => 'US/Central',
+        'default.timezone' => 'America/Chicago',
         'registration' => [
             'allow.self.registration' => 'true',
         ],
