@@ -6,9 +6,9 @@
 				value="{formatdate date=$BlackoutStartDate format='Y-m-d'}" />
 			<input {formname key=BEGIN_DATE} id="formattedUpdateStartDate" type="hidden"
 				value="{formatdate date=$BlackoutStartDate key=system}" />
-			<input {formname key=BEGIN_TIME} type="text" id="updateStartTime"
-				class="form-select form-select-sm dateinput timepicker"
-				value="{formatdate date=$BlackoutStartDate format='h:i A'}" />
+			<select {formname key=BEGIN_TIME} id="updateStartTime" class="form-select form-select-sm w-auto timepicker"
+				data-format="{$TimeFormat}" data-step="30" data-default="{$BlackoutStartDate->format('H:i')}"
+				title="{translate key=StartTime}"></select>
 		</div>
 
 		<div class="form-group col-12 col-md-6 d-flex align-items-center gap-1">
@@ -17,9 +17,9 @@
 				value="{formatdate date=$BlackoutEndDate format='Y-m-d'}" />
 			<input {formname key=END_DATE} type="hidden" id="formattedUpdateEndDate"
 				value="{formatdate date=$BlackoutEndDate key=system}" />
-			<input {formname key=END_TIME} type="text" id="updateEndTime"
-				class="form-select form-select-sm dateinput timepicker"
-				value="{formatdate date=$BlackoutEndDate format='h:i A'}" />
+			<select {formname key=END_TIME} id="updateEndTime" class="form-select form-select-sm w-auto timepicker"
+				data-format="{$TimeFormat}" data-step="30" data-default="{$BlackoutEndDate->format('H:i')}"
+				title="{translate key=EndTime}"></select>
 		</div>
 
 		<label class="col-12 mt-2 mb-0 fw-bold">{translate key=Resources}</label>

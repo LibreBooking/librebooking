@@ -252,8 +252,8 @@ function BlackoutManagement(opts) {
 	}
 
 	function wireUpTimePickers() {
-		$('.timepicker').timepicker({
-			timeFormat: options.timeFormat
+		document.querySelectorAll('.timepicker').forEach(el => {
+			dateHelper.initTimePicker(el);
 		});
 	}
 

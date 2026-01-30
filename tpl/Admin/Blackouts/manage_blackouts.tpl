@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Timepicker=true DataTable=true}
+{include file='globalheader.tpl' DataTable=true}
 <div id="page-manage-blackouts" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=ManageBlackouts}</h1>
 	<div class="accordion">
@@ -20,9 +20,10 @@
 									value="{formatdate date=$AddStartDate format='Y-m-d'}" />
 								<input {formname key=BEGIN_DATE} id="formattedAddStartDate" type="hidden"
 									value="{formatdate date=$AddStartDate key=system}" />
-								<input {formname key=BEGIN_TIME} type="text" id="addStartTime"
-									class="form-select form-select-sm dateinput timepicker"
-									value="{format_date format='h:00 A' date=now}" title="{translate key=StartTime}" />
+								<select {formname key=BEGIN_TIME} id="addStartTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{format_date format='H:00' date=now}">
+								</select>
 								<label for="addStartTime" class="visually-hidden">{translate key=StartTime}</label>
 							</div>
 							<div class="d-flex align-items-center flex-wrap gap-1">
@@ -31,10 +32,11 @@
 									size="10" value="{formatdate date=$AddEndDate format='Y-m-d'}" />
 								<input {formname key=END_DATE} type="hidden" id="formattedAddEndDate"
 									value="{formatdate date=$AddEndDate key=system}" />
-								<input {formname key=END_TIME} type="text" id="addEndTime"
-									class="form-select form-select-sm dateinput timepicker"
-									value="{format_date format='h:00 A' date=Date::Now()->AddHours(1)}"
-									title="{translate key=EndTime}" />
+								<select {formname key=END_TIME} id="addEndTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30"
+									data-default="{format_date format='H:00' date=Date::Now()->AddHours(1)}">
+								</select>
 								<label for="addEndTime" class="visually-hidden">{translate key=EndTime}</label>
 							</div>
 						</div>
@@ -311,7 +313,7 @@
 	</div>
 
 	{csrf_token}
-	{include file="javascript-includes.tpl" Timepicker=true DataTable=true}
+	{include file="javascript-includes.tpl" DataTable=true}
 	{datatable tableId=$tableId}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="ajax-helpers.js"}
