@@ -168,6 +168,9 @@ class AuthenticatedUser
 
     private function EnsureNull($value)
     {
+        if ($value === null) {
+            return null;
+        }
         $value = trim($value);
         if (empty($value)) {
             return null;
