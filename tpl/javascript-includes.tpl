@@ -76,10 +76,6 @@
 {if isset($Select2) && $Select2}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {/if}
-{if isset($Timepicker) && $Timepicker}
-    {jsfile src="js/jquery.timePicker.min.js"}
-    {jsfile src="js/jquery-ui-timepicker-addon.js"}
-{/if}
 {if isset($Fullcalendar) && $Fullcalendar}
     {jsfile src="js/fullcalendar.js"}
     {if $HtmlLang != 'en'}
