@@ -283,10 +283,9 @@ fieldset:disabled .btn {
     z-index: 5000;
 }
 
-li.ui-timepicker-selected,
-.ui-timepicker-list li:hover,
-.ui-timepicker-list .ui-timepicker-selected:hover {
-    background: var(--primary);
+.enforce-days-inner {
+    min-width: 420px;
+    white-space: nowrap;
 }
 
 .updateCustomAttribute,

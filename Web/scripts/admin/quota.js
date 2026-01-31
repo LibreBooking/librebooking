@@ -32,13 +32,9 @@ function QuotaManagement(opts) {
 			$(this).closest('.dialog').modal("hide");
 		});
 
-		elements.enforceAllDayToggle.click(function (e) {
-			handleEnforceAllDayToggle(e);
-		});
+		elements.enforceAllDayToggle.on('change', handleEnforceAllDayToggle);
 
-		elements.enforceEveryDayToggle.click(function (e) {
-			handleEnforceEveryDayToggle(e);
-		});
+		elements.enforceEveryDayToggle.on('change', handleEnforceEveryDayToggle);
 
 		ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.addQuota), null, handleAddError, { onBeforeSubmit: validateTimes });
 		ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.actions.deleteQuota), null, handleAddError);
@@ -62,36 +58,47 @@ function QuotaManagement(opts) {
 		return activeQuotaId;
 	};
 
-	var handleEnforceAllDayToggle = function (e) {
+	var handleEnforceAllDayToggle = function () {
 		if (elements.enforceAllDayToggle.is(':checked')) {
-			elements.enforceHoursTimes.addClass('d-none');
-		}
-		else {
-			elements.enforceHoursTimes.removeClass('d-none');
+			elements.enforceHoursTimes.collapse('hide');
+		} else {
+			elements.enforceHoursTimes.collapse('show');
 		}
 	};
 
-	var handleEnforceEveryDayToggle = function (e) {
+	var handleEnforceEveryDayToggle = function () {
 		if (elements.enforceEveryDayToggle.is(':checked')) {
-			elements.enforceDays.addClass('d-none');
+			elements.enforceDays.collapse('hide');
 		}
 		else {
-			elements.enforceDays.removeClass('d-none');
+			elements.enforceDays.collapse('show');
 		}
 	};
 
 	var validateTimes = function () {
-		$('#timeError').addClass('d-none');
-		if (!elements.enforceAllDayToggle.is(':checked')) {
-			var start = moment('2010-01-01 ' + elements.enforceStartTime.val(), 'YYYY-MM-DD hh:mm a');
-			var end = moment('2010-01-01 ' + elements.enforceEndTime.val(), 'YYYY-MM-DD hh:mm a');
-			var valid = start.isBefore(end) || (end.hour() == 0 && end.minute() == 0);
-
-			if (!valid) {
-				$('#timeError').removeClass('d-none');
-			}
-			return valid;
+		if (document.getElementById('enforce-all-day').checked) {
+			return true;
 		}
-		return true;
+
+		// NOTE(jlvillal): 2026-01-31: If we update datehelper.ValidateTimeRangeElements()
+		// to handle the 'midnight' case we can simplify this code.
+		var startElement = document.getElementById('enforce-time-start');
+		var endElement = document.getElementById('enforce-time-end');
+		// Preserve legacy behavior: allow midnight (00:00) as a valid end time,
+		// representing an interval that spans into the next day.
+		if (endElement && typeof endElement.value === 'string') {
+			var endValue = endElement.value;
+			if (endValue) {
+				var timeParts = endValue.split(':');
+				if (timeParts.length >= 2) {
+					var endHour = parseInt(timeParts[0], 10);
+					var endMinute = parseInt(timeParts[1], 10);
+					if (!isNaN(endHour) && !isNaN(endMinute) && endHour === 0 && endMinute === 0) {
+						return true;
+					}
+				}
+			}
+		}
+		return dateHelper.ValidateTimeRangeElements(startElement, endElement);
 	};
 }
