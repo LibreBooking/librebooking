@@ -13,12 +13,6 @@ parameters:
 			path: Domain/RepeatOptions.php
 
 		-
-			message: '#^Access to an undefined property IRepeatOptions\:\:\$_interval\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Domain/RepeatOptions.php
-
-		-
 			message: '#^Comparison operation "\=\=" between PeriodTypes and 1 results in an error\.$#'
 			identifier: equal.invalid
 			count: 2
@@ -527,4 +521,16 @@ parameters:
 			identifier: method.notFound
 			count: 3
 			path: tests/WebServices/Validators/UserRequestValidatorTest.php
+
+		-
+			message: '#^Method FakeMailer\:\:AddAddress\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: tests/fakes/EmailFakes.php
+
+		-
+			message: '#^Method FakeMailer\:\:Send\(\) should return bool but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: tests/fakes/EmailFakes.php
 
