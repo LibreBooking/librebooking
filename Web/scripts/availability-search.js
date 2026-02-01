@@ -20,7 +20,7 @@ function AvailabilitySearch(options) {
     var init = function () {
         ConfigureAsyncForm(elements.searchForm, function () {
             elements.availabilityResults.empty();
-        }, showSearchResults);
+        }, showSearchResults, null, { onBeforeSubmit: validateTimes });
 
         elements.availabilityResults.on('click', '.opening', function (e) {
             var opening = $(this);
@@ -52,6 +52,9 @@ function AvailabilitySearch(options) {
         });
 
         elements.specificTime.on('click', function (e) {
+            elements.beginTime.removeClass('is-invalid');
+            elements.endTime.removeClass('is-invalid');
+
             if (elements.specificTime.is(':checked')) {
                 elements.beginTime.removeAttr('disabled');
                 elements.endTime.removeAttr('disabled');
@@ -75,5 +78,14 @@ function AvailabilitySearch(options) {
         });
     };
 
+    var validateTimes = function () {
+        if (document.getElementById('specificTime').checked) {
+            return dateHelper.ValidateTimeRangeElements(
+                document.getElementById('startTime'),
+                document.getElementById('endTime')
+            );
+        }
+        return true;
+    };
     return { init: init };
 }

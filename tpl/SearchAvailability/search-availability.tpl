@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Select2=true Timepicker=true}
+{include file='globalheader.tpl' Select2=true}
 
 <div class="page-search-availability">
     <div class="card shadow mb-3">
@@ -44,15 +44,16 @@
                                 {formname key=SPECIFIC_TIME} />
                             <label class="form-check-label" for="specificTime">{translate key=SpecificTime}</label>
                         </div>
-                        <input {formname key=BEGIN_TIME} type="text" id="startTime"
-                            class="form-control form-control-sm dateinput d-inline-block timepicker"
-                            value="{format_date format='h:00 A' date=now}" title="Start time" disabled="disabled" />
-                        <span>-</span>
-                        <input {formname key=END_TIME} type="text" id="endTime"
-                            class="form-control form-control-sm dateinput d-inline-block timepicker"
-                            value="{format_date format='h:00 A' date=Date::Now()->AddHours(1)}" title="End time"
-                            disabled="disabled" />
-
+                        <select {formname key=BEGIN_TIME} id="startTime" aria-label="{translate key=StartTime}"
+                            class="form-select form-select-sm w-auto timepicker" data-format='{$TimeFormat}'
+                            data-step='30' data-default="{Date::Now()->format('H:00')}" disabled="disabled">
+                        </select>
+                        <div class='mx-1'>-</div>
+                        <select {formname key=END_TIME} id="endTime" aria-label="{translate key=EndTime}"
+                            class="form-select form-select-sm w-auto timepicker" data-format='{$TimeFormat}'
+                            data-step='30' data-default="{Date::Now()->AddHours(1)->format('H:00')}"
+                            disabled="disabled">
+                        </select>
                     </div>
                 </div>
 
@@ -155,7 +156,7 @@
 
     {csrf_token}
 
-    {include file="javascript-includes.tpl" Select2=true Timepicker=true}
+    {include file="javascript-includes.tpl" Select2=true}
     {jsfile src="js/tree.jquery.js"}
     {jsfile src="js/jquery.cookie.js"}
     {jsfile src="ajax-helpers.js"}
@@ -192,8 +193,8 @@
                 placeholder: '{translate key=Resources}'
             });
 
-            $('.timepicker').timepicker({
-                timeFormat: '{$TimeFormat}'
+            document.querySelectorAll('.timepicker').forEach(el => {
+                dateHelper.initTimePicker(el);
             });
         });
     </script>
