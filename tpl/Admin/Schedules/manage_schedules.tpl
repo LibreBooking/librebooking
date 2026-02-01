@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' InlineEdit=true Fullcalendar=true Timepicker=true DataTable=true}
+{include file='globalheader.tpl' InlineEdit=true Fullcalendar=true DataTable=true}
 
 <div id="page-manage-schedules" class="admin-page">
 
@@ -68,7 +68,13 @@
 															<span class="propertyValue scheduleAdmin fw-bold"
 																data-type="select" data-pk="{$id}"
 																data-value="{$schedule->GetAdminGroupId()}"
-																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">{($GroupLookup[$schedule->GetAdminGroupId()]) ? $GroupLookup[$schedule->GetAdminGroupId()]->Name : 'None'}</span>
+																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">
+																{if isset($GroupLookup[$schedule->GetAdminGroupId()])}
+																	{$GroupLookup[$schedule->GetAdminGroupId()]->Name|escape:'html'}
+																{else}
+																	None
+																{/if}
+															</span>
 															{if $AdminGroups|default:array()|count > 0}
 																<a class="link-primary update changeScheduleAdmin"><span
 																		class="visually-hidden">{translate key='ScheduleAdministrator'}</span><span
@@ -538,18 +544,18 @@
 								<label class="form-check-label" for="peakAllDay">{translate key=AllDay}</label>
 							</div>
 							<div id="peakTimes" class="d-flex align-items-center flex-wrap gap-1">
-								<label class="fw-bold" for="peakStartTime"> {translate key=Between}</label>
+								<label class="fw-bold" for="peakStartTime">{translate key=Between}</label>
 								<label for="peakStartTime" class="visually-hidden">Peak Begin Time</label>
 								<label for="peakEndTime" class="visually-hidden">Peak End Time</label>
-								<input type="text" id="peakStartTime"
-									class="form-control form-control-sm w-auto timeinput timepicker"
-									value="{formatdate date=$DefaultDate format='h:i A'}"
-									{formname key=PEAK_BEGIN_TIME} />
-								-
-								<input type="text" id="peakEndTime"
-									class="form-control form-control-sm w-auto timeinput timepicker"
-									value="{formatdate date=$DefaultDate->AddHours(9) format='h:i A'}"
-									{formname key=PEAK_END_TIME} />
+								<select {formname key=PEAK_BEGIN_TIME} id="peakStartTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{$DefaultDate->format('H:i')}">
+								</select>
+								<div class='mx-1'>-</div>
+								<select {formname key=PEAK_END_TIME} id="peakEndTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{$DefaultDate->AddHours(9)->format('H:i')}">
+								</select>
 							</div>
 						</div>
 						<div class="form-group mb-2">
@@ -838,9 +844,10 @@
 	{control type="DatePickerSetupControl" ControlId="availabilityEndDate" AltId="formattedEndDate" DefaultDate=$EndDate}
 
 	{csrf_token}
-	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true Timepicker=true DataTable=true}
+	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true DataTable=true}
 	{datatablefilter tableId=$tableIdFilter}
 	{jsfile src="ajax-helpers.js"}
+	{jsfile src="date-helper.js"}
 	{jsfile src="admin/schedule.js"}
 	{jsfile src="js/jquery.form-3.09.min.js"}
 
@@ -857,91 +864,97 @@
 			var updateUrl = '{$smarty.server.SCRIPT_NAME}?action=';
 
 			$('.scheduleName').editable({
-					url: updateUrl + '{ManageSchedules::ActionRename}', validate: function (value) {
-					if ($.trim(value) == '') {
-						return '{translate key=RequiredValue|escape:'javascript'}';
+				url: updateUrl + '{ManageSchedules::ActionRename}',
+				validate: function(value) {
+					if ($.trim(value) === '') {
+						return "{{translate key=RequiredValue}|escape:'javascript'}";
 					}
 				}
 			});
 
-		$('.daysVisible').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeDaysVisible}'
-		});
+			$('.daysVisible').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeDaysVisible}'
+			});
 
-		$('.dayName').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeStartDay}', source: [{
-			value: '{Schedule::Today}', text: '{$Today|escape:'javascript'}'
-		},
-		{foreach from=$DayNames item="dayName" key="dayIndex"}
-			{
-				value:{$dayIndex}, text: '{$dayName|escape:'javascript'}'
-			},
-		{/foreach}
-		]
-		});
+			$('.dayName').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeStartDay}',
+				source: [{
+						value: '{Schedule::Today}',
+						text: "{$Today|escape:'javascript'}"
+					}
+					{foreach from=$DayNames item="dayName" key="dayIndex"}
+						, {
+							value: {$dayIndex},
+							text: "{$dayName|escape:'javascript'}"
+						}
+					{/foreach}
+				]
+			});
 
-		$('.defaultScheduleStyle').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeDefaultStyle}', source: [
-			{foreach from=$StyleNames item="styleName" key="styleIndex"}
-				{
-					value: '{$styleIndex}', text: '{$styleName|escape:'javascript'}'
-				},
-			{/foreach}
-		]
-		});
+			$('.defaultScheduleStyle').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeDefaultStyle}',
+				source: [
+					{foreach from=$StyleNames item="styleName" key="styleIndex"}
+						{
+							value: '{$styleIndex}',
+							text: "{$styleName|escape:'javascript'}"
+						},
+					{/foreach}
+				]
+			});
 
-		$('.scheduleAdmin').editable({
-			url: updateUrl + '{ManageSchedules::ChangeAdminGroup}', emptytext: '{{translate key=None}|escape:'javascript'}', source: [{
-			value: '0', text: '{{translate key=None}|escape:'javascript'}'
-		},
-		{foreach from=$AdminGroups item=group}
-			{
-				value:{$group->Id()}, text: '{$group->Name()|escape:'javascript'}'
-			},
-		{/foreach}
-		]
-		});
+			$('.scheduleAdmin').editable({
+				url: updateUrl + '{ManageSchedules::ChangeAdminGroup}',
+				emptytext: "{{translate key=None}|escape:'javascript'}",
+				source: [{
+						value: '0',
+						text: "{{translate key=None}|escape:'javascript'}",
+					}
+					{foreach from=$AdminGroups item=group}
+						, {
+							value: {$group->Id()},
+							text: "{$group->Name()|escape:'javascript'}"
+						}
+					{/foreach}
+				]
+			});
 		}
 
 		$(document).ready(function() {
-					setUpEditables();
+			setUpEditables();
 
-					var opts = {
-						submitUrl: '{$smarty.server.SCRIPT_NAME}',
-						saveRedirect: '{$smarty.server.SCRIPT_NAME}',
-						changeLayoutAction: '{ManageSchedules::ActionChangeLayout}',
-						addAction: '{ManageSchedules::ActionAdd}',
-						peakTimesAction: '{ManageSchedules::ActionChangePeakTimes}',
-						makeDefaultAction: '{ManageSchedules::ActionMakeDefault}',
-						deleteAction: '{ManageSchedules::ActionDelete}',
-						availabilityAction: '{ManageSchedules::ActionChangeAvailability}',
-						enableSubscriptionAction: '{ManageSchedules::ActionEnableSubscription}',
-						disableSubscriptionAction: '{ManageSchedules::ActionDisableSubscription}',
-						switchLayout: '{ManageSchedules::ActionSwitchLayoutType}',
-						addLayoutSlot: '{ManageSchedules::ActionAddLayoutSlot}',
-						updateLayoutSlot: '{ManageSchedules::ActionUpdateLayoutSlot}',
-						deleteLayoutSlot: '{ManageSchedules::ActionDeleteLayoutSlot}',
-						maximumConcurrentAction: '{ManageSchedules::ActionChangeMaximumConcurrent}',
-						maximumResourcesAction: '{ManageSchedules::ActionChangeResourcesPerReservation}',
-						calendarOptions: {
-							buttonText: {
-								today: '{{translate key=Today}|escape:'javascript'}',
-								month: '{{translate key=Month}|escape:'javascript'}',
-								week: '{{translate key=Week}|escape:'javascript'}',
-								day: '{{translate key=Day}|escape:'javascript'}'
-								}, defaultDate: moment('{Date::Now()->ToTimezone({$Timezone})->Format('Y-m-d')}', 'YYYY-MM-DD'), eventsUrl: '{$smarty.server.SCRIPT_NAME}'
-							}
-						};
+			var opts = {
+				submitUrl: '{$smarty.server.SCRIPT_NAME}',
+				saveRedirect: '{$smarty.server.SCRIPT_NAME}',
+				changeLayoutAction: '{ManageSchedules::ActionChangeLayout}',
+				addAction: '{ManageSchedules::ActionAdd}',
+				peakTimesAction: '{ManageSchedules::ActionChangePeakTimes}',
+				makeDefaultAction: '{ManageSchedules::ActionMakeDefault}',
+				deleteAction: '{ManageSchedules::ActionDelete}',
+				availabilityAction: '{ManageSchedules::ActionChangeAvailability}',
+				enableSubscriptionAction: '{ManageSchedules::ActionEnableSubscription}',
+				disableSubscriptionAction: '{ManageSchedules::ActionDisableSubscription}',
+				switchLayout: '{ManageSchedules::ActionSwitchLayoutType}',
+				addLayoutSlot: '{ManageSchedules::ActionAddLayoutSlot}',
+				updateLayoutSlot: '{ManageSchedules::ActionUpdateLayoutSlot}',
+				deleteLayoutSlot: '{ManageSchedules::ActionDeleteLayoutSlot}',
+				maximumConcurrentAction: '{ManageSchedules::ActionChangeMaximumConcurrent}',
+				maximumResourcesAction: '{ManageSchedules::ActionChangeResourcesPerReservation}',
+				calendarOptions: {
+					buttonText: {
+						today: "{{translate key=Today}|escape:'javascript'}",
+						month: "{{translate key=Month}|escape:'javascript'}",
+						week: "{{translate key=Week}|escape:'javascript'}",
+						day: "{{translate key=Day}|escape:'javascript'}"
+					},
+					defaultDate: '{Date::Now()->ToTimezone({$Timezone})->Format("Y-m-d")}',
+					eventsUrl: '{$smarty.server.SCRIPT_NAME}'
+				}
+			};
 
-						var scheduleManagement = new ScheduleManagement(opts);
-						scheduleManagement.init();
-
-						$('.timepicker').timepicker({
-							timeFormat: '{$TimeFormat}'
-						});
-
-
-					});
+			var scheduleManagement = new ScheduleManagement(opts);
+			scheduleManagement.init();
+		});
 	</script>
 
 </div>

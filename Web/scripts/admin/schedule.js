@@ -149,6 +149,8 @@ function ScheduleManagement(opts) {
 
 		elements.scheduleList.on('click', '.changePeakTimes', function (e) {
 			e.preventDefault();
+			document.getElementById('peakStartTime').classList.remove('is-invalid');
+			document.getElementById('peakEndTime').classList.remove('is-invalid');
 			showPeakTimesDialog(getActiveScheduleId());
 		});
 
@@ -285,7 +287,7 @@ function ScheduleManagement(opts) {
 		ConfigureAsyncForm(elements.changeLayoutForm, getSubmitCallback(options.changeLayoutAction));
 		ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.addAction), null, handleAddError);
 		ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.deleteAction));
-		ConfigureAsyncForm(elements.peakTimesForm, getSubmitCallback(options.peakTimesAction), refreshPeakTimes);
+		ConfigureAsyncForm(elements.peakTimesForm, getSubmitCallback(options.peakTimesAction), refreshPeakTimes, null, { onBeforeSubmit: validateTimes });
 		ConfigureAsyncForm(elements.availabilityForm, getSubmitCallback(options.availabilityAction), refreshAvailability);
 		ConfigureAsyncForm(elements.switchLayoutForm, getSubmitCallback(options.switchLayout));
 		ConfigureAsyncForm(elements.deleteCustomTimeSlotForm, getSubmitCallback(options.deleteLayoutSlot), afterDeleteSlot);
@@ -516,6 +518,8 @@ function ScheduleManagement(opts) {
 			peakOnAllYearChanged();
 		}
 
+		wireUpTimePickers(startTime, endTime);
+
 		elements.deletePeakTimes.val('');
 		elements.peakTimesDialog.modal('show');
 	};
@@ -698,4 +702,27 @@ function ScheduleManagement(opts) {
 		elements.deleteCustomLayoutDialog.hide();
 		_fullCalendar.fullCalendar('refetchEvents');
 	}
+
+	function wireUpTimePickers(startTime, endTime) {
+		document.querySelectorAll('.timepicker').forEach(el => {
+			if (el.id === 'peakStartTime') {
+				dateHelper.initTimePicker(el, startTime);
+			} else if (el.id === 'peakEndTime') {
+				dateHelper.initTimePicker(el, endTime);
+			} else {
+				dateHelper.initTimePicker(el);
+			}
+		});
+	}
+
+	var validateTimes = function () {
+		if (document.getElementById('peakAllDay').checked) {
+			return true;
+		}
+
+		return dateHelper.ValidateTimeRangeElements(
+			document.getElementById('peakStartTime'),
+			document.getElementById('peakEndTime')
+		);
+	};
 }
