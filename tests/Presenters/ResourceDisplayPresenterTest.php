@@ -190,6 +190,7 @@ class ResourceDisplayPresenterTest extends TestBase
 
     public function testDisplaysAvailable()
     {
+        Date::_SetNow(TestBase::GetTestDate());
         $now = Date::Now();
 
         $this->setupStandardExpectations();
@@ -211,6 +212,7 @@ class ResourceDisplayPresenterTest extends TestBase
 
     public function testDisplaysUnavailable()
     {
+        Date::_SetNow(TestBase::GetTestDate());
         $now = Date::Now();
 
         $this->setupStandardExpectations();

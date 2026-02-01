@@ -25,7 +25,7 @@ class RetryOptionsTest extends TestBase
 
     public function testRemovesConflictsFromReservation()
     {
-        $now = Date::Now();
+        $now = TestBase::GetTestDate();
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(1, 0);
 

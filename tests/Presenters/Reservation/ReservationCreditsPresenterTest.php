@@ -187,7 +187,7 @@ class FakeReservationCreditsPage implements IReservationCreditsPage
 
     public function __construct()
     {
-        $start = Date::Now()->AddHours(1);
+        $start = TestBase::GetTestDate();
         $end = $start->AddHours(1);
 
         $this->_ResourceId = 1;

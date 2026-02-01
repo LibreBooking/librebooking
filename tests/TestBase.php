@@ -151,4 +151,31 @@ class TestBase extends TestCase
         $this->fakeResources = null;
         Date::_ResetNow();
     }
+
+    /**
+     * Creates a Date safely in the middle of the day to avoid timezone-related
+     * day boundary issues in tests.
+     *
+     * When tests use Date::Now()->AddHours() or similar, the resulting dates can
+     * cross midnight boundaries depending on when the tests run and which timezones
+     * are involved. This causes flaky tests that fail only at certain times of day.
+     *
+     * This helper creates a date at 10:00 AM tomorrow, which is safe from midnight
+     * boundary issues regardless of timezone conversions.
+     *
+     * @return Date A date set to 10:00 AM tomorrow in the server's timezone
+     */
+    public static function GetTestDate(): Date
+    {
+        $tomorrow = Date::Now()->AddDays(1);
+        return Date::Create(
+            year: $tomorrow->Year(),
+            month: $tomorrow->Month(),
+            day: $tomorrow->Day(),
+            hour: 10,
+            minute: 0,
+            second: 0,
+            timezone: $tomorrow->Timezone()
+        );
+    }
 }

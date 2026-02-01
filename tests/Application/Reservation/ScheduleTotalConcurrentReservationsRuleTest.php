@@ -30,7 +30,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testValidWhenScheduleIsUnlimited()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
 
@@ -46,7 +46,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testValidWhenUpdating()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -64,7 +64,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testValidWhenNotConflicting()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -88,7 +88,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenOverLimitDuringCreate()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -106,7 +106,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenOverLimitDuringUpdate()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -129,7 +129,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenSingleReservationContainsMoreResourcesThanLimit()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $this->reservationViewRepository->_Reservations = [];
         $series = ReservationSeries::Create($this->fakeUser->UserId, new FakeBookableResource(1), '', '', new DateRange($start, $end), new RepeatNone(), $this->fakeUser);
@@ -144,7 +144,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testChecksEachInstanceOfASeries()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $this->reservationViewRepository->_Reservations = [new TestReservationItemView(1, $start->AddDays(2), $end->AddDays(2), $resourceId, "another res"),];
@@ -159,7 +159,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testIncludesBufferTime()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(90);
         $resourceId = 1;
         $testReservationItemView = new TestReservationItemView(1, $end, $end->AddMinutes(30), $resourceId, "another res");

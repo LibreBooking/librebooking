@@ -39,7 +39,8 @@ class ExistingReservationSeriesBuilder
     {
         $series = new ExistingReservationSeries();
 
-        $this->currentInstance = new Reservation($series, new DateRange(Date::Now()->AddMinutes(30), Date::Now()->AddMinutes(60)));
+        $start = TestBase::GetTestDate();
+        $this->currentInstance = new Reservation($series, new DateRange($start, $start->AddMinutes(30)));
         $this->repeatOptions = new RepeatNone();
         $this->instances = [];
         $this->events = [];
