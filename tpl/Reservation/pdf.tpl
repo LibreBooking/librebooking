@@ -218,11 +218,11 @@ $('.btnPDF').click(function (e) {
 			body: [
 			[{ content: '{translate key="ReservationTitle"}', styles: { fontStyle: 'bold'}},
 			],
-			[{ content: '{$ReservationTitle|unescape:'html'|escape:'javascript'}'},
+			[{ content: '{if $ReservationTitle}{$ReservationTitle|unescape:'html'|escape:'javascript'}{/if}'},
 			],
 			[{ content: '{translate key="ReservationDescription"}', styles: { fontStyle: 'bold'}},
 			],
-			[{ content: '{$Description|unescape:'html'|escape:'javascript'}'},
+			[{ content: '{if $Description}{$Description|unescape:'html'|escape:'javascript'}{/if}'},
 			],
 			]
 		});
