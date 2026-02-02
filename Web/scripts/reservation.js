@@ -632,6 +632,11 @@ function Reservation(opts) {
         elements.durationDays.text(rounded.RoundedDays);
         elements.durationHours.text(rounded.RoundedHours);
         elements.durationMinutes.text(rounded.RoundedMinutes);
+
+        const durationText = document.querySelector('.durationText');
+        if (durationText) {
+            durationText.classList.toggle('text-danger', rounded.isNonPositive);
+        }
     };
 
     var ShowReservationAjaxResponse = function () {
@@ -903,7 +908,7 @@ function Reservation(opts) {
             participation.showAllGroupsToAdd(elements.participantGroupDialog);
         });
 
-        elements.participantDialog.on('click', '.add',  function (e) {
+        elements.participantDialog.on('click', '.add', function (e) {
             e.preventDefault();
             participation.addParticipant($(this).find('.name').text(), $(this).attr('user-id'));
         });
