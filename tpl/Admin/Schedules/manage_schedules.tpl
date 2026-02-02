@@ -84,15 +84,16 @@
 
 														</div>
 
-														<div>
-															<div class="availabilityPlaceHolder d-inline-block">
+														<div class="availabilityPlaceHolder d-flex align-items-center">
+															<div class="availabilityContent">
 																{include file="Admin/Schedules/manage_availability.tpl" schedule=$schedule timezone=$Timezone}
-																<a class="update changeAvailability link-primary" href="#">
-																	<span
-																		class="visually-hidden">{translate key='Availability'}</span>
-																	<span class="bi bi-pencil-square"></span>
-																</a>
 															</div>
+
+															<a class="update changeAvailability link-primary ms-1" href="#">
+																<span
+																	class="visually-hidden">{translate key='Availability'}</span>
+																<span class="bi bi-pencil-square"></span>
+															</a>
 														</div>
 
 														<div class="maximumConcurrentContainer"
