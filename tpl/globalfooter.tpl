@@ -2,11 +2,6 @@
 	<div id="button-up" class="bg-primary rounded-circle text-white">
 		<i class="bi bi-chevron-double-up" aria-hidden="true"></i>
 	</div>
-	<footer class="bg-light border-top text-center pt-2">
-		<div><a class="link-primary" href="{$CompanyUrl}">{$CompanyName}</a></div>
-		<div><a class="link-primary" href="https://github.com/LibreBooking/app">LibreBooking - GPLv3
-				v{$Version}</a></div>
-	</footer>
 
 	<script type="text/javascript">
 		init();

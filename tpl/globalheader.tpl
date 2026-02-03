@@ -385,22 +385,6 @@
                                 </ul>
                             </li>
                         {/if}
-                        <li class="nav-item dropdown" id="navHelpDropdown">
-                            <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
-                                data-bs-toggle="dropdown">{translate key="Help"}</a>
-                            <ul class="dropdown-menu  dropdown-menu-end">
-                                <li id="navHelp"><a class="dropdown-item"
-                                        href="https://github.com/LibreBooking/app/wiki">{translate key=Help}</a>
-                                </li>
-                                {if isset($CanViewAdmin) && $CanViewAdmin}
-                                    <li id="navHelpAdmin"><a class="dropdown-item"
-                                            href="https://github.com/LibreBooking/app/wiki/Administration">{translate key=Administration}</a>
-                                    </li>
-                                {/if}
-                                <li id="navAbout"><a class="dropdown-item"
-                                        href="{$Path}help.php?ht=about">{translate key=About}</a></li>
-                            </ul>
-                        </li>
                         {if isset($LoggedIn) && $LoggedIn}
                             <li class="nav-item" id="navSignOut"><a class="nav-link link-primary"
                                     href="{$Path}logout.php">{translate key="SignOut"}</a></li>
