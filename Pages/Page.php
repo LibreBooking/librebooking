@@ -91,7 +91,7 @@ abstract class Page implements IPage
 
         $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
 
-        $this->smarty->assign('LogoUrl', 'librebooking.png');
+        $this->smarty->assign('LogoUrl', 'bremor.png');
         if (file_exists($this->path . 'img/custom-logo.png')) {
             $this->smarty->assign('LogoUrl', 'custom-logo.png');
         }
