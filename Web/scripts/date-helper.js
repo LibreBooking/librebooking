@@ -259,7 +259,15 @@ var dateHelper = (function () {
 				return false;
 			}
 
-			const diff = this.GetTimeDifference(startEl.value, endEl.value);
+			let startValue = startEl.value;
+			let endValue = endEl.value;
+
+			// Special case: '00:00' is treated as the end of the day (24:00) for validation
+			if (endValue === '00:00') {
+				endValue = '24:00';
+			}
+
+			const diff = this.GetTimeDifference(startValue, endValue);
 
 			if (diff <= 0) {
 				startEl.classList.add(invalidClass);

@@ -80,25 +80,9 @@ function QuotaManagement(opts) {
 			return true;
 		}
 
-		// NOTE(jlvillal): 2026-01-31: If we update datehelper.ValidateTimeRangeElements()
-		// to handle the 'midnight' case we can simplify this code.
 		var startElement = document.getElementById('enforce-time-start');
 		var endElement = document.getElementById('enforce-time-end');
-		// Preserve legacy behavior: allow midnight (00:00) as a valid end time,
-		// representing an interval that spans into the next day.
-		if (endElement && typeof endElement.value === 'string') {
-			var endValue = endElement.value;
-			if (endValue) {
-				var timeParts = endValue.split(':');
-				if (timeParts.length >= 2) {
-					var endHour = parseInt(timeParts[0], 10);
-					var endMinute = parseInt(timeParts[1], 10);
-					if (!isNaN(endHour) && !isNaN(endMinute) && endHour === 0 && endMinute === 0) {
-						return true;
-					}
-				}
-			}
-		}
+
 		return dateHelper.ValidateTimeRangeElements(startElement, endElement);
 	};
 }
