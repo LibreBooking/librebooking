@@ -1,0 +1,18 @@
+[semantic_release]
+branch = "develop"
+tag_format = "v{version}"
+commit_message = "chore: release v{version}"
+commit_parser = "conventional"
+
+version_variables = [
+  "lib/Config/Configuration.php:VERSION:nf",
+  "docs/source/conf.py:release:nf",
+  "SECURITY.md:supported_version:nf",
+]
+
+[semantic_release.changelog]
+mode = "update"
+insertion_flag = "<!-- next-release -->"
+exclude_commit_patterns = [
+  '''chore\(deps\): .+''',  # Exclude dependency updates from the changelog
+]

@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  schedule:
+    - cron: "0 0 3 * *" # Monthly on day 3 (UTC)
+  workflow_dispatch:
+
+# default: least privileged permissions across all jobs
+permissions:
+  contents: read
+
+jobs:
+  release:
+    if: github.repository == 'LibreBooking/app'
+    runs-on: ubuntu-latest
+    concurrency: release
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6.0.1
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Semantic Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v10.5.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          config_file: releaserc.toml
+          build: false
+
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/publish-action@v10.5.3
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}

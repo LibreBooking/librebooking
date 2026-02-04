@@ -4,9 +4,7 @@
 
 Only the most current stable version will receive patches for security vulnerabilities.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 4.0.0   | :white_check_mark: |
+supported_version: 4.0.0
 
 Please report (suspected) security vulnerabilities to
 **[librebooking@outlook.com](mailto:librebooking@outlook.com)**. I will try to
