@@ -44,6 +44,7 @@ class EmailService implements IEmailService
     {
         $this->phpMailer->clearAllRecipients();
         $this->phpMailer->clearReplyTos();
+        $this->phpMailer->clearAttachments();
         $this->phpMailer->CharSet = $emailMessage->Charset();
         $this->phpMailer->Subject = $emailMessage->Subject();
         $this->phpMailer->Body = $emailMessage->Body();
