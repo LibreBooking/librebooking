@@ -12,6 +12,7 @@ jobs:
     if: github.repository == 'LibreBooking/app'
     runs-on: ubuntu-latest
     concurrency: release-dry-run
+    environment: release
 
     permissions:
       contents: write
