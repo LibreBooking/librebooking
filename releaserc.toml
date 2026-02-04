@@ -1,5 +1,4 @@
 [semantic_release]
-branch = "develop"
 tag_format = "v{version}"
 commit_message = "chore: release v{version}"
 commit_parser = "conventional"
@@ -9,6 +8,10 @@ version_variables = [
   "docs/source/conf.py:release:nf",
   "SECURITY.md:supported_version:nf",
 ]
+
+[semantic_release.branches.develop]
+match = "^develop$"
+prerelease = false
 
 [semantic_release.changelog]
 mode = "update"
