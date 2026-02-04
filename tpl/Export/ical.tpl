@@ -13,6 +13,7 @@ DTEND:{formatdate date=$reservation->DateEnd key=ical}
 LAST-MODIFIED:{formatdate date=$reservation->LastModified key=ical}
 LOCATION:{$reservation->Location}
 ORGANIZER;CN={$reservation->Organizer}:MAILTO:{$reservation->OrganizerEmail}
+{if $reservation->AttendeeLines != null}{$reservation->AttendeeLines}{/if}
 STATUS:{if $reservation->IsPending}TENTATIVE{else}CONFIRMED
 {/if}
 {if $reservation->RecurRule neq ''}

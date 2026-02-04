@@ -21,6 +21,12 @@ class iCalendarReservationView
     public $ExtraIcalLines;
 
     /**
+     * Готовые строки ATTENDEE для вставки в VEVENT (каждая строка оканчивается \n)
+     * @var string|null
+     */
+    public $AttendeeLines;
+
+    /**
      * @var ExportFactory
      */
     private $ExportFactory;
@@ -35,8 +41,9 @@ class iCalendarReservationView
      * @param UserSession $currentUser
      * @param IPrivacyFilter $privacyFilter
      * @param string|null $summaryFormat
+     * @param mixed|null $userRepository (ожидается объект с методом GetById($id)->EmailAddress()/FullName())
      */
-    public function __construct($res, UserSession $currentUser, IPrivacyFilter $privacyFilter, $summaryFormat = null)
+    public function __construct($res, UserSession $currentUser, IPrivacyFilter $privacyFilter, $summaryFormat = null, $userRepository = null)
     {
         if ($summaryFormat == null) {
             $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
@@ -51,14 +58,15 @@ class iCalendarReservationView
         $privateNotice = 'Private';
 
         $this->Classification = method_exists($this->ExportFactory, 'GetIcalendarClassification') ? $this->ExportFactory->GetIcalendarClassification($res) : 'PUBLIC';
-        if ($res->DateCreated){
-                $this->DateCreated = $res->DateCreated;
+        if ($res->DateCreated) {
+            $this->DateCreated = $res->DateCreated;
+        } else {
+            $this->DateCreated = Date::Now();
         }
-        else $this->DateCreated = Date::Now();
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
-        $this->Description =  $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
+        $this->Description = $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
         $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateNotice;
@@ -84,6 +92,143 @@ class iCalendarReservationView
         }
 
         $this->ExtraIcalLines = method_exists($this->ExportFactory, 'GetIcalendarExtraLines') ? $this->ExportFactory->GetIcalendarExtraLines($res) : null;
+
+        // NEW: сформировать ATTENDEE-линии (participants/invitees/guests)
+        $this->AttendeeLines = $this->BuildAttendeeLines($res, $canViewUser, $userRepository);
+    }
+
+    private function BuildAttendeeLines($res, $canViewUser, $userRepository)
+    {
+        if (!$canViewUser) {
+            return null;
+        }
+
+        // Если репозиторий не передали — попробуем подхватить дефолтный (если существует)
+        if ($userRepository == null && class_exists('UserRepository')) {
+            $userRepository = new UserRepository();
+        }
+        if ($userRepository == null || !method_exists($userRepository, 'GetById')) {
+            // Без репозитория не достанем email пользователей => ATTENDEE корректно не собрать
+            return null;
+        }
+
+        $lines = [];
+        $seen = [];
+
+        // Организатора тоже добавим как attendee (как часто делает Exchange)
+        if (!empty($this->OrganizerEmail) && $this->OrganizerEmail !== 'Private') {
+            $this->AddAttendeeLine($lines, $seen, 'REQ-PARTICIPANT', $this->Organizer, $this->OrganizerEmail);
+        }
+
+        // Обязательные участники
+        if (!empty($res->ParticipantIds) && is_array($res->ParticipantIds)) {
+            foreach ($res->ParticipantIds as $id) {
+                $user = $userRepository->GetById($id);
+                if ($user == null) {
+                    continue;
+                }
+                $email = method_exists($user, 'EmailAddress') ? $user->EmailAddress() : null;
+                $name = method_exists($user, 'FullName') ? $user->FullName() : null;
+                $this->AddAttendeeLine($lines, $seen, 'REQ-PARTICIPANT', $name, $email);
+            }
+        }
+
+        // Необязательные (invitees)
+        if (!empty($res->InviteeIds) && is_array($res->InviteeIds)) {
+            foreach ($res->InviteeIds as $id) {
+                $user = $userRepository->GetById($id);
+                if ($user == null) {
+                    continue;
+                }
+                $email = method_exists($user, 'EmailAddress') ? $user->EmailAddress() : null;
+                $name = method_exists($user, 'FullName') ? $user->FullName() : null;
+                $this->AddAttendeeLine($lines, $seen, 'OPT-PARTICIPANT', $name, $email);
+            }
+        }
+
+        // Гости-участники (строки обычно "Name <mail>" или просто mail)
+        if (!empty($res->ParticipatingGuests) && is_array($res->ParticipatingGuests)) {
+            foreach ($res->ParticipatingGuests as $guest) {
+                [$name, $email] = $this->ParseGuest($guest);
+                $this->AddAttendeeLine($lines, $seen, 'REQ-PARTICIPANT', $name, $email);
+            }
+        }
+
+        // Гости-приглашённые
+        if (!empty($res->InvitedGuests) && is_array($res->InvitedGuests)) {
+            foreach ($res->InvitedGuests as $guest) {
+                [$name, $email] = $this->ParseGuest($guest);
+                $this->AddAttendeeLine($lines, $seen, 'OPT-PARTICIPANT', $name, $email);
+            }
+        }
+
+        if (empty($lines)) {
+            return null;
+        }
+
+        return implode("\n", $lines) . "\n";
+    }
+
+    private function AddAttendeeLine(&$lines, &$seen, $role, $cn, $email)
+    {
+        $email = is_string($email) ? trim($email) : '';
+        if ($email === '' || strpos($email, '@') === false) {
+            // Без email нельзя сделать нормальный CAL-ADDRESS (MAILTO:)
+            return;
+        }
+
+        $key = mb_strtolower($email);
+        if (isset($seen[$key])) {
+            return;
+        }
+        $seen[$key] = true;
+
+        $cn = is_string($cn) && trim($cn) !== '' ? trim($cn) : $email;
+
+        $cnEscaped = $this->EscapeIcalParamValue($cn);
+        $emailEscaped = $this->EscapeIcalParamValue($email);
+
+        $lines[] = sprintf(
+            'ATTENDEE;ROLE=%s;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=%s:MAILTO:%s',
+            $role,
+            $cnEscaped,
+            $emailEscaped
+        );
+    }
+
+    private function ParseGuest($raw)
+    {
+        $raw = is_string($raw) ? trim($raw) : '';
+        if ($raw === '') {
+            return [null, null];
+        }
+
+        // "Name <email@domain>"
+        if (preg_match('/^(.*?)<([^>]+)>$/u', $raw, $m)) {
+            $name = trim($m[1]);
+            $email = trim($m[2]);
+            return [$name !== '' ? $name : $email, $email];
+        }
+
+        // просто email
+        if (strpos($raw, '@') !== false) {
+            return [$raw, $raw];
+        }
+
+        // имя без email — attendee не добавим (email=null)
+        return [$raw, null];
+    }
+
+    private function EscapeIcalParamValue($value)
+    {
+        $value = (string)$value;
+        $value = str_replace('\\', '\\\\', $value);
+        $value = str_replace(';', '\;', $value);
+        $value = str_replace(',', '\,', $value);
+        $value = str_replace("\r\n", ' ', $value);
+        $value = str_replace("\n", ' ', $value);
+        $value = str_replace("\r", ' ', $value);
+        return $value;
     }
 
     /**

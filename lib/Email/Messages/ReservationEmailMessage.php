@@ -221,6 +221,7 @@ abstract class ReservationEmailMessage extends EmailMessage
             $this->reservationOwner->GetAttribute(UserAttribute::Position)
         );
 
+
         $ca = new CustomAttributes();
         /** @var LBAttribute $attribute */
         foreach ($attributeValues as $attribute) {
@@ -230,7 +231,18 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
-        $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
+        $rv->InvitedGuests = $currentInstance->InvitedGuests();
+        $rv->ParticipatingGuests = $currentInstance->ParticipatingGuests();
+        $rv->ParticipantIds = $currentInstance->Participants();
+        $rv->InviteeIds = $currentInstance->Invitees();
+
+        $icsView = new iCalendarReservationView(
+            $rv,
+            $this->reservationSeries->BookedBy(),
+            new NullPrivacyFilter(),
+            null,
+            $this->userRepository
+        );
 
         $display = new CalendarExportDisplay();
         $icsContents = $display->Render([$icsView]);
