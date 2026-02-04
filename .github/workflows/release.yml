@@ -18,6 +18,7 @@ jobs:
 
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - uses: actions/checkout@v6.0.1
