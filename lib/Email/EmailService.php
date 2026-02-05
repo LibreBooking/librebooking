@@ -78,7 +78,21 @@ class EmailService implements IEmailService
 
         if ($emailMessage->HasStringAttachment()) {
             Log::Debug('Adding email attachment %s', $emailMessage->AttachmentFileName());
-            $this->phpMailer->addStringAttachment($emailMessage->AttachmentContents(), $emailMessage->AttachmentFileName());
+
+            $filename = $emailMessage->AttachmentFileName();
+            $contents = $emailMessage->AttachmentContents();
+
+            if ($emailMessage instanceof ReservationDeletedEmail) {
+                $this->phpMailer->addStringAttachment(
+                    $contents,
+                    $filename,             
+                    'quoted-printable',                
+                    'text/calendar; charset=UTF-8; method=CANCEL',  
+                    'inline'                 
+                );
+            } else {
+                $this->phpMailer->addStringAttachment($contents, $filename);
+            }
         }
 
         Log::Debug('Sending %s email to: %s from: %s', get_class($emailMessage), $toAddresses->ToString(), $this->phpMailer->From);
