@@ -25,6 +25,7 @@ jobs:
         with:
           ref: develop
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Semantic Release
         id: release
