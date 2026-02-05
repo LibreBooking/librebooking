@@ -23,7 +23,7 @@ jobs:
   sphinx:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6.2.0
         with:
