@@ -5,6 +5,7 @@ if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
 }
 
 use Monolog\Logger;
+use Monolog\Level;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\WebProcessor;
 
@@ -41,16 +42,16 @@ class Log
             $log_sql = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter());
             switch ($log_level) {
                 case 'debug':
-                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Logger::DEBUG));
+                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Level::Debug));
                     break;
                 case 'error':
-                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Logger::ERROR));
+                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Level::Error));
                     break;
             }
             $this->logger->pushProcessor(new WebProcessor());
         }
         if ($log_sql) {
-            $this->sqlLogger->pushHandler(new StreamHandler($log_folder.'/sql.log', Logger::ERROR));
+            $this->sqlLogger->pushHandler(new StreamHandler($log_folder.'/sql.log', Level::Error));
         }
     }
 
