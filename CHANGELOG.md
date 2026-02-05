@@ -1,7 +1,7 @@
 # CHANGELOG
 <!-- markdownlint-configure-file { "blank_lines": { "maximum": 2 } } -->
 
-<!-- next-release -->
+<!-- version list -->
 
 ## v4.1.0 (2026-02-05)
 

@@ -23,6 +23,7 @@ LibreBooking documentation
    ActiveDirectory-Authentication
    Oauth2-Configuration
    SAML-Configuration
+   changelog
    HISTORY
    LICENSE
 
