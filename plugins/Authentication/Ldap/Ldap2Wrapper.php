@@ -1,7 +1,5 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/Ldap/LDAP2.php');
-
 class Ldap2Wrapper
 {
     /**
@@ -32,9 +30,12 @@ class Ldap2Wrapper
     {
         Log::Debug('Trying to connect to LDAP');
 
+        if (!class_exists('Net_LDAP2')) {
+            throw new RuntimeException('The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2');
+        }
+
         $this->ldap = Net_LDAP2::connect($this->options->Ldap2Config());
-        $p = new Pear();
-        if ($p->isError($this->ldap)) {
+        if (PEAR::isError($this->ldap)) {
             $message = 'Could not connect to LDAP server. Check your settings in Ldap.config.php : ' . $this->ldap->getMessage();
             Log::Error($message);
             throw new Exception($message);
@@ -73,8 +74,7 @@ class Ldap2Wrapper
             return $populated;
         }
 
-        $l = new Net_LDAP2();
-        if ($l->isError($result)) {
+        if (PEAR::isError($result)) {
             $message = 'Could not authenticate user against ldap %s: ' . $result->getMessage();
             Log::Error($message, $username);
         }
@@ -95,14 +95,19 @@ class Ldap2Wrapper
 
         $filter = Net_LDAP2_Filter::create($uidAttribute, 'equals', $username);
 
-        $l = new Net_LDAP2();
         if ($configFilter) {
             $configFilter = Net_LDAP2_Filter::parse($configFilter);
-            if ($l->isError($configFilter)) {
+            if (PEAR::isError($configFilter)) {
                 $message = 'Could not parse search filter %s: ' . $configFilter->getMessage();
                 Log::Error($message, $username);
+                return false;
             }
             $filter = Net_LDAP2_Filter::combine('and', [$filter, $configFilter]);
+            if (PEAR::isError($filter)) {
+                $message = 'Could not combine search filters for user %s: ' . $filter->getMessage();
+                Log::Error($message, $username);
+                return false;
+            }
         }
 
         $attributes = $this->options->Attributes();
@@ -118,9 +123,10 @@ class Ldap2Wrapper
         Log::Debug('Searching ldap for user %s', $username);
         $searchResult = $this->ldap->search(null, $filter, $options);
 
-        if ($l->isError($searchResult)) {
+        if (PEAR::isError($searchResult)) {
             $message = 'Could not search ldap for user %s: ' . $searchResult->getMessage();
             Log::Error($message, $username);
+            return false;
         }
 
         $currentResult = $searchResult->current();

@@ -57,7 +57,9 @@ Install PHP dependencies using Composer:
    .. code-block:: bash
 
        cd librebooking
-       composer install
+       # Install without the developer dependencies
+       composer install --no-dev
+       # If you will be working on the code then use: `composer install`
 
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
