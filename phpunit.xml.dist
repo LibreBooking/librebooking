@@ -40,7 +40,7 @@
       <directory suffix=".php">Jobs</directory>
       <directory suffix=".php">lib</directory>
       <directory suffix=".php">Pages</directory>
-      <directory suffix=".php">Plugins</directory>
+      <directory suffix=".php">plugins</directory>
       <directory suffix=".php">Presenters</directory>
       <directory suffix=".php">Web</directory>
       <directory suffix=".php">WebServices</directory>
