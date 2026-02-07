@@ -11,7 +11,7 @@ assignees: ''
 <!--
 Please validate that the issue is a bug and not a question. If you have a
 question please ask it in the Discussions area:
-https://github.com/LibreBooking/app/discussions
+https://github.com/LibreBooking/librebooking/discussions
 -->
 
 []: I understand that the best way to resolve this issue is to solve it and propose a Pull Request.

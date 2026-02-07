@@ -8,7 +8,7 @@
 
                 <h2>Support</h2>
 
-                <p><a class="link-primary" href="https://github.com/LibreBooking/app">LibreBooking Support</a></p>
+                <p><a class="link-primary" href="https://github.com/LibreBooking/librebooking">LibreBooking Support</a></p>
 
                 <p><a class="link-primary" href="https://discord.gg/4TGThPtmX8">LibreBooking Community discussion channel
                         on Discord</a></p>
@@ -16,7 +16,7 @@
                 <h2>Credits</h2>
 
                 <p>see <a class="link-primary"
-                        href="https://github.com/LibreBooking/app/blob/master/CONTRIBUTORS.md">CONTRIBUTORS.md</a>
+                        href="https://github.com/LibreBooking/librebooking/blob/develop/CONTRIBUTORS.md">CONTRIBUTORS.md</a>
                 </p>
 
                 <h2>License</h2>

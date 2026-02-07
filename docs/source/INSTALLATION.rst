@@ -48,7 +48,7 @@ Alternatively, you can clone the application directly from the official GitHub r
 
 .. code-block:: bash
 
-    git clone https://github.com/LibreBooking/app.git
+    git clone https://github.com/LibreBooking/librebooking.git
 
 After copying or cloning the application to your web server:
 
@@ -56,7 +56,7 @@ Install PHP dependencies using Composer:
 
    .. code-block:: bash
 
-       cd app
+       cd librebooking
        composer install
 
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
@@ -86,10 +86,10 @@ minimal default settings which should be enough for the application to work.
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
 
-For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION` 
+For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION`
 for essential settings or :doc:`ADVANCED-CONFIGURATION` for comprehensive options.
 
-The admin email address can be set in the ``config/config.php`` file in the 
+The admin email address can be set in the ``config/config.php`` file in the
 settings array as ``'admin.email' => 'admin@example.com'``
 
 When you later register an account with the admin email address, the user will be given
@@ -170,7 +170,7 @@ Manual Database Setup
   database configuration and set default values.
 | Please edit them to suit your environment before running. The files
   are located in ``librebooking/database_schema/``
-| 
+|
 | The following SQL files are available:
 | - ``create-db.sql`` - Creates the database
 | - ``create-user.sql`` - Creates the database user (optional)
@@ -183,16 +183,16 @@ Manual Database Setup
 
 .. important::
    **Correct Import Order**
-   
+
    The automated installer (Web/install) follows this sequence:
-   
+
    1. ``create-schema.sql`` - Base table structure
    2. All upgrade scripts in ``database_schema/upgrades/`` (in version order)
    3. ``create-data.sql`` - Initial data (depends on upgraded schema)
    4. ``sample-data-utf8.sql`` (optional) - Sample data for testing
-   
-   **Warning:** Simply running create-schema.sql followed by create-data.sql will fail 
-   because create-data.sql expects the fully upgraded schema including all modifications 
+
+   **Warning:** Simply running create-schema.sql followed by create-data.sql will fail
+   because create-data.sql expects the fully upgraded schema including all modifications
    from the upgrade scripts.
 
 | Import the SQL files in the following order (we recommend
@@ -229,7 +229,7 @@ file.
 | Import ``/database_schema/create-schema.sql`` to librebooking (or
   whatever database name was used in the creation process)
 | Import all upgrade scripts from ``/database_schema/upgrades/`` in version order.
-  For each version directory (2.1, 2.2, 2.3, etc.), import first the ``schema.sql`` 
+  For each version directory (2.1, 2.2, 2.3, etc.), import first the ``schema.sql``
   then the ``data.sql`` file if they exist.
 | Import ``/database_schema/create-data.sql`` to librebooking (or
   whatever database name was used in the creation process)
@@ -349,7 +349,7 @@ Quick Start with Docker Compose
             - PGID=1000
             - TZ=America/New_York
             - MYSQL_ROOT_PASSWORD=your_secure_root_password
-        
+
         app:
           image: librebooking/librebooking:develop
           restart: always
@@ -492,7 +492,7 @@ Docker Troubleshooting
   -  Check container has write permissions to volumes
   -  Use named volumes instead of bind mounts for easier management
 
-For more detailed Docker configuration options and advanced setups, see the 
+For more detailed Docker configuration options and advanced setups, see the
 `LibreBooking Docker repository <https://github.com/LibreBooking/docker>`__.
 
 Registering the Administrator Account
@@ -611,8 +611,8 @@ application or database logs. To do this:
    in your configuration file to an appropriate level. For example,
    set ``'logging' => ['level' => 'debug']`` within the settings array.
 
-For detailed information on all logging and other configuration options, 
-see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION` 
+For detailed information on all logging and other configuration options,
+see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION`
 for comprehensive options.
 
 

@@ -1,13 +1,13 @@
 
 # Librebooking
 
-[![GitHub issues](https://img.shields.io/github/issues/LibreBooking/app)](https://github.com/LibreBooking/app/issues)
-[![Last commit](https://img.shields.io/github/last-commit/LibreBooking/app)](https://github.com/LibreBooking/app/commits)
-[![GitHub release](https://img.shields.io/github/v/release/LibreBooking/app?include_prereleases)](https://github.com/LibreBooking/app/releases)
-[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/LibreBooking/app/blob/develop/LICENSE.md)
+[![GitHub issues](https://img.shields.io/github/issues/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/issues)
+[![Last commit](https://img.shields.io/github/last-commit/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/commits)
+[![GitHub release](https://img.shields.io/github/v/release/LibreBooking/librebooking?include_prereleases)](https://github.com/LibreBooking/librebooking/releases)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/LibreBooking/librebooking/blob/develop/LICENSE.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/LibreBooking/app?style=flat)](https://github.com/LibreBooking/app/network)
+[![GitHub stars](https://img.shields.io/github/stars/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/network)
 
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-brightgreen.svg?logo=php)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-5.5%2B-blue.svg?logo=mysql)](https://www.mysql.com/)
@@ -18,7 +18,7 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/librebooking/librebooking)](https://github.com/LibreBooking/docker)
 
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/4TGThPtmX8)
-[![Wiki](https://img.shields.io/badge/Wiki-Available-lightgrey?logo=read-the-docs)](https://github.com/LibreBooking/app/wiki)
+[![Wiki](https://img.shields.io/badge/Wiki-Available-lightgrey?logo=read-the-docs)](https://github.com/LibreBooking/librebooking/wiki)
 
 ⭐ Star us on GitHub — it motivates us a lot!
 
@@ -46,7 +46,7 @@ flexible, mobile-friendly, and extensible interface for organizations to manage
 resource reservations.
 
 The repository for LibreBooking is hosted on GitHub at
-<https://github.com/LibreBooking/app>; the `develop` branch contains the latest
+<https://github.com/LibreBooking/librebooking>; the `develop` branch contains the latest
 code.
 
 LibreBooking is a fork of Booked Scheduler, based on Booked Scheduler's last
@@ -100,7 +100,7 @@ To run LibreBooking from a prebuilt release, your server needs:
 - Git (optional, useful for cloning the repository or managing updates)
 
 For full setup instructions, see
-[INSTALLATION](https://github.com/LibreBooking/app/blob/develop/docs/source/INSTALLATION.rst)
+[INSTALLATION](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/INSTALLATION.rst)
 
 ### Docker Deployment
 
@@ -115,23 +115,22 @@ docker-compose up -d
 ## 💻 Developer Documentation
 
 - See
-  [docs/source/README.md](https://github.com/LibreBooking/app/blob/develop/docs/source/DEVELOPER-README.rst
-)
+  [docs/source/README.md](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/DEVELOPER-README.rst)
   for developer notes.
-- See [docs/source/API.md](https://github.com/LibreBooking/app/blob/develop/docs/source/API.rst)
+- See [docs/source/API.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/API.rst)
   for API notes.
 - See
-  [docs/source/Oauth2-Configuration.md](https://github.com/LibreBooking/app/blob/develop/docs/source/Oauth2-Configuration.rst)
+  [docs/source/Oauth2-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/Oauth2-Configuration.rst)
   for Oauth2 configuration.
 - See
-  [docs/source/SAML-Configuration.md](https://github.com/LibreBooking/app/blob/develop/docs/source/SAML-Configuration.rst)
+  [docs/source/SAML-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/SAML-Configuration.rst)
   for SAML configuration.
 - Codebase follows PSR-12 standards and GitHub Flow.
 
 ## 🎨 Configuration & Theming
 
 For configuration options, see the
-[Configuration Guide](https://github.com/LibreBooking/app/blob/develop/docs/source/CONFIGURATION.rst).
+[Configuration Guide](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/CONFIGURATION.rst).
 
 Recent configuration highlights:
 
@@ -151,9 +150,9 @@ As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for yo
 ## 💬 Community & Support
 
 - [Discord](https://discord.gg/4TGThPtmX8)
-- [Wiki](https://github.com/LibreBooking/app/wiki)
-- [Issues](https://github.com/LibreBooking/app/issues)
-- [Discussions](https://github.com/LibreBooking/app/discussions)
+- [Wiki](https://github.com/LibreBooking/librebooking/wiki)
+- [Issues](https://github.com/LibreBooking/librebooking/issues)
+- [Discussions](https://github.com/LibreBooking/librebooking/discussions)
 
 ## 🤝 Contributing
 
@@ -165,7 +164,7 @@ As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for yo
 ## 💡 Roadmap
 
 _Work in progress – roadmap to be defined._  
-Want to suggest a feature? [Open an issue](https://github.com/LibreBooking/app/issues) or join the [Discord discussion channel](https://discord.gg/4TGThPtmX8).
+Want to suggest a feature? [Open an issue](https://github.com/LibreBooking/librebooking/issues) or join the [Discord discussion channel](https://discord.gg/4TGThPtmX8).
 
 ## 📜 License
 

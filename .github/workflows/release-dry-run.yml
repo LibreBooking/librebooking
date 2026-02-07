@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   release_dry_run:
-    if: github.repository == 'LibreBooking/app'
+    if: github.repository == 'LibreBooking/librebooking'
     runs-on: ubuntu-latest
     concurrency: release-dry-run
     environment: release

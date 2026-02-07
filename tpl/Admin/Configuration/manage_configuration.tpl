@@ -94,7 +94,7 @@
     {if $IsPageEnabled && $IsConfigFileWritable}
         <div class="card shadow">
             <div class="card-body">
-                {assign var=HelpUrl value="https://github.com/LibreBooking/app/wiki/Administration"}
+                {assign var=HelpUrl value="https://github.com/LibreBooking/librebooking/wiki/Administration"}
                 <h3 class="text-center border-bottom mb-3">{translate key=ConfigurationUpdateHelp args=$HelpUrl}</h3>
                 <div id="updatedMessage" class="alert alert-success" style="display:none;">
                     {translate key=ConfigurationUpdated}
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             {/if}
-                            
+
                             {foreach from=$SectionSettings key=section item=settings}
                                 <div>
                                     <div class="accordion-item shadow mb-2">

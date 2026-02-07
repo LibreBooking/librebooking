@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   release:
-    if: github.repository == 'LibreBooking/app'
+    if: github.repository == 'LibreBooking/librebooking'
     runs-on: ubuntu-latest
     concurrency: release
     environment: release
