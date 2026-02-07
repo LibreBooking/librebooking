@@ -71,11 +71,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-
       - name: Install Composer dependencies
         # Allow the previous check to fail but not abort
         if: always()
