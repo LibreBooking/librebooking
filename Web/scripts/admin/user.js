@@ -204,11 +204,11 @@ function UserManagement(opts) {
 		elements.deleteMultipleSelectAll.click(function (e) {
 			e.stopPropagation();
 			var isChecked = elements.deleteMultipleSelectAll.is(":checked");
-			elements.deleteMultipleCheckboxes.prop('checked', isChecked);
+			elements.userList.find('.delete-multiple').prop('checked', isChecked);
 			elements.deleteMultiplePrompt.toggleClass('d-none', !isChecked);
 		});
 
-		elements.deleteMultipleCheckboxes.click(function (e) {
+		elements.userList.on('click', '.delete-multiple', function (e) {
 			e.stopPropagation();
 			var numberChecked = elements.userList.find('.delete-multiple:checked').length;
 			var allSelected = numberChecked == elements.userList.find('.delete-multiple').length;
