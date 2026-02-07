@@ -1,9 +1,11 @@
 SAML (Security Assertion Markup Language) Configuration
 =======================================================
 
-**It is important to make sure registration.require.email.activation is
-set to false in Application Configuration. If email activation is
-enabled users will never be able to log in.**
+.. attention::
+
+   It is important to make sure ``registration.require.email.activation`` is
+   set to false in Application Configuration. If email activation is enabled
+   users will never be able to log in.
 
 LibreBooking SAML Introduction
 ------------------------------
@@ -49,6 +51,7 @@ I’ll go through each of the settings that need to be updated
 individually.
 
 .. note::
+
    At the time of writing this post, the latest version of SimpleSAMLphp was
    1.18.5. It’s possible that the names of the options will change in future
    versions.
