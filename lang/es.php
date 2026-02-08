@@ -688,6 +688,7 @@ class es extends en_gb
         $strings['DeleteBlackoutsBefore'] = 'Borrar agenda de no disponibilidad antes de';
         $strings['DeletedReservations'] = 'Reservas Borradas';
         $strings['DeleteReservationsBefore'] = 'Borrar reservas anteriores a';
+        $strings['PermanentlyPurgeAllDeletedReservations'] = 'Purgar permanentemente todas las reservas eliminadas';
         $strings['SwitchToACustomLayout'] = 'Cambiar a un diseño personalizado';
         $strings['SwitchToAStandardLayout'] = 'Cambiar a un diseño estándar';
         $strings['ThisScheduleUsesACustomLayout'] = 'Este horario usa un diseño personalizado';

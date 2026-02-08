@@ -683,6 +683,7 @@ class de_de extends en_gb
         $strings['DeleteBlackoutsBefore'] = 'Lösche Sperrzeiten älter als';
         $strings['DeletedReservations'] = 'Gelöschte Reservierungen';
         $strings['DeleteReservationsBefore'] = 'Lösche Reservierungen älter als';
+        $strings['PermanentlyPurgeAllDeletedReservations'] = 'Alle gelöschten Reservierungen endgültig löschen';
         $strings['SwitchToACustomLayout'] = 'Layout zu einem angepassten Layout ändern';
         $strings['SwitchToAStandardLayout'] = 'Layout zu einem Standardlayout ändern';
         $strings['ThisScheduleUsesACustomLayout'] = 'Dieser Terminplan nutzt ein angepasstes Layout';

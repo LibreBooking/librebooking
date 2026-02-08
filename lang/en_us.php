@@ -723,6 +723,7 @@ class en_us extends Language
         $strings['DeleteBlackoutsBefore'] = 'Delete blackout times before';
         $strings['DeletedReservations'] = 'Deleted Reservations';
         $strings['DeleteReservationsBefore'] = 'Delete reservations before';
+        $strings['PermanentlyPurgeAllDeletedReservations'] = 'Permanently purge all deleted reservations';
         $strings['SwitchToACustomLayout'] = 'Switch to a custom layout';
         $strings['SwitchToAStandardLayout'] = 'Switch to a standard layout';
         $strings['ThisScheduleUsesACustomLayout'] = 'This schedule uses a custom layout';
