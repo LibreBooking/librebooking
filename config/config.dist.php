@@ -19,7 +19,8 @@ return [
         # The public name of the application
         'app.title' => 'LibreBooking',
 
-        # The public name of the application
+        # Enable or disable debug mode for the application
+        # if enabled it will enable 'display_errors' and 'display_startup_errors'
         'app.debug' => false,
 
         # Administrator email address
