@@ -477,13 +477,13 @@ Docker Environment Variables
 ``LB_ENV``
   Environment mode: ``production`` (default) or ``dev``
 
-``LB_LOG_FOLDER``
+``LB_LOGGING_FOLDER``
   Log directory (default: ``/var/log/librebooking``)
 
-``LB_LOG_LEVEL``
+``LB_LOGGING_LEVEL``
   Logging level: ``none`` (default), ``debug``, ``error``
 
-``LB_LOG_SQL``
+``LB_LOGGING_SQL``
   Enable SQL logging: ``false`` (default), ``true``
 
 ``LB_CRON_ENABLED``
