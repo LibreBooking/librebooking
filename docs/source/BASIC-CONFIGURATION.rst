@@ -1,9 +1,14 @@
 Basic Configuration
 ===================
 
-This guide covers the essential configuration settings needed to get LibreBooking up and running. All settings are configured in the ``/config/config.php`` file, which should be created by copying ``/config/config.dist.php``.
+This guide covers the essential configuration settings needed to get
+LibreBooking up and running. All settings are configured in the
+``/config/config.php`` file, which should be created by copying
+``/config/config.dist.php``.
 
-The configuration file uses a PHP array format that returns a settings array. Some settings use nested arrays (like database settings), while others use flat dot notation.
+The configuration file uses a PHP array format that returns a settings array.
+Some settings use nested arrays (like database settings), while others use flat
+dot notation.
 
 Getting Started
 ---------------
@@ -19,10 +24,13 @@ Then edit the file with your preferred settings.
 Environment Variable Override
 -----------------------------
 
-LibreBooking supports overriding configuration settings using environment variables. This is especially useful for Docker deployments or when you want to keep sensitive information separate from configuration files.
+LibreBooking supports overriding configuration settings using environment
+variables. This is especially useful for Docker deployments or when you want to
+keep sensitive information separate from configuration files.
 
 **Pattern**
-  Environment variables follow the pattern ``LB_`` + the config key with dots and dashes converted to underscores and converted to uppercase.
+  Environment variables follow the pattern ``LB_`` + the config key with dots
+  and dashes converted to underscores and converted to uppercase.
 
 **Examples**
 
@@ -32,10 +40,13 @@ LibreBooking supports overriding configuration settings using environment variab
 - ``default.timezone`` → ``LB_DEFAULT_TIMEZONE``
 
 **Using .env Files**
-  LibreBooking automatically loads ``.env`` files if present in the root directory. See ``develop/app/.env.example`` for a complete list of available environment variables.
+  LibreBooking automatically loads ``.env`` files if present in the root
+  directory. See ``develop/app/.env.example`` for a complete list of available
+  environment variables.
 
 **Priority**
-  Environment variables take precedence over configuration file settings. The order of precedence is:
+  Environment variables take precedence over configuration file settings. The
+  order of precedence is:
 
   1. Environment variables (highest priority)
   2. Configuration file settings
@@ -49,30 +60,30 @@ Application Identity
 
 **app.title**
   The title of the application displayed in the header and browser tab.
-  
+
   .. code-block:: php
-  
+
      'app.title' => 'LibreBooking',
 
 **admin.email**
   Administrator email address.
-  
+
   .. code-block:: php
-  
+
      'admin.email' => 'admin@example.com',
 
 **company.name**
   Company name to show in the page header.
-  
+
   .. code-block:: php
-  
+
      'company.name' => '',
 
 **company.url**
   URL to the company's website.
-  
+
   .. code-block:: php
-  
+
      'company.url' => '',
 
 Time and Language
@@ -80,16 +91,16 @@ Time and Language
 
 **default.timezone**
   Look up here http://php.net/manual/en/timezones.php.
-  
+
   .. code-block:: php
-  
+
      'default.timezone' => 'Europe/London',
 
 **default.language**
   Default language for the application.
-  
+
   .. code-block:: php
-  
+
      'default.language' => 'en_us',
 
 Database Configuration
@@ -273,7 +284,8 @@ Frontend Settings
   Public URL to the Web directory of this instance.
 
 **css.theme**
-  Theme to use for the application. Options: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange.
+  Theme to use for the application. Options: default, dimgray, dark_red,
+  dark_green, french_blue, cake_blue, orange.
 
 **cache.templates**
   Enable or disable template caching.
@@ -286,9 +298,9 @@ Installation
 
 **install.password**
   Password required for installation or upgrades.
-  
+
   .. code-block:: php
-  
+
      'install.password' => '',
 
 Basic Privacy Settings
@@ -325,7 +337,8 @@ After configuring these basic settings:
 Docker Installation
 ===================
 
-LibreBooking can be easily deployed using Docker containers. This is the recommended method for quick setup and testing.
+LibreBooking can be easily deployed using Docker containers. This is the
+recommended method for quick setup and testing.
 
 Prerequisites
 -------------
@@ -353,7 +366,7 @@ Quick Start with Docker Compose
             - PGID=1000
             - TZ=America/New_York
             - MYSQL_ROOT_PASSWORD=your_secure_root_password
-        
+
         app:
           image: librebooking/librebooking:develop
           restart: always

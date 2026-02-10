@@ -31,6 +31,8 @@ jobs:
         run: tox -e cz
       - name: Run config-check
         run: tox -e config-check
+      - name: Run doc8
+        run: tox -e doc8
       - name: Ensure no merge-commits in the Pull Request (PR)
         if: github.event_name == 'pull_request'
         run: |

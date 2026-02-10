@@ -33,7 +33,8 @@ This covers:
 Configuration File Format
 -------------------------
 
-LibreBooking uses a PHP array-based configuration format. The file returns a settings array with both flat dot notation and nested arrays:
+LibreBooking uses a PHP array-based configuration format. The file returns a
+settings array with both flat dot notation and nested arrays:
 
 .. code-block:: php
 
@@ -43,7 +44,7 @@ LibreBooking uses a PHP array-based configuration format. The file returns a set
            // Flat keys
            'app.title' => 'LibreBooking',
            'admin.email' => 'admin@example.com',
-           
+
            // Nested arrays
            'database' => [
                'type' => 'mysql',
@@ -52,7 +53,7 @@ LibreBooking uses a PHP array-based configuration format. The file returns a set
                'user' => 'lb_user',
                'password' => 'password',
            ],
-           
+
            'email' => [
                'enabled' => true,
                'default.from.address' => 'noreply@example.com',
@@ -71,4 +72,6 @@ Quick Start
 Migration from Old Format
 -------------------------
 
-If upgrading from an older version that used ``$conf['settings'][...]`` format, you'll need to convert your configuration to the new array return format. The new format is more modern and provides better IDE support and validation.
+If upgrading from an older version that used ``$conf['settings'][...]`` format,
+you'll need to convert your configuration to the new array return format. The
+new format is more modern and provides better IDE support and validation.

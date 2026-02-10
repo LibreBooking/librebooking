@@ -1,14 +1,18 @@
 Advanced Configuration
 ======================
 
-This guide covers all advanced configuration options available in LibreBooking. For basic setup, see :doc:`BASIC-CONFIGURATION` first.
+This guide covers all advanced configuration options available in LibreBooking.
+For basic setup, see :doc:`BASIC-CONFIGURATION` first.
 
-All settings are configured in the ``/config/config.php`` file. The configuration uses a mix of flat dot notation and nested arrays.
+All settings are configured in the ``/config/config.php`` file. The
+configuration uses a mix of flat dot notation and nested arrays.
 
 Environment Variable Override
 -----------------------------
 
-LibreBooking supports overriding any configuration setting using environment variables. This provides flexibility for deployment scenarios and keeps sensitive data separate from configuration files.
+LibreBooking supports overriding any configuration setting using environment
+variables. This provides flexibility for deployment scenarios and keeps
+sensitive data separate from configuration files.
 
 **Naming Convention**
   Environment variables follow the pattern: ``LB_`` + config key with special characters converted:
@@ -51,7 +55,8 @@ LibreBooking supports overriding any configuration setting using environment var
            - LB_ADMIN_EMAIL=admin@company.com
 
 **Complete Example**
-  See ``develop/app/.env.example`` for a comprehensive list of all available environment variables with their default values and descriptions.
+  See ``develop/app/.env.example`` for a comprehensive list of all available
+  environment variables with their default values and descriptions.
 
 Application Advanced Settings
 -----------------------------
@@ -262,7 +267,10 @@ Schedule Display Settings
   Show resources that users cannot book (grayed out).
 
 **schedule.reservation.label**
-  Template for reservation labels. Available tokens: {name}, {title}, {description}, {email}, {phone}, {organization}, {position}, {startdate}, {enddate}, {resourcename}, {participants}, {invitees}, {reservationAttributes}, and custom attributes like {att1}.
+  Template for reservation labels. Available tokens: {name}, {title},
+  {description}, {email}, {phone}, {organization}, {position}, {startdate},
+  {enddate}, {resourcename}, {participants}, {invitees},
+  {reservationAttributes}, and custom attributes like {att1}.
 
 **schedule.use.per.user.colors**
   Use different colors for each user's reservations.
@@ -354,7 +362,8 @@ Reservation Label Templates
        'reservation.popup' => '',
    ],
 
-These templates control how reservations appear in different contexts using the same tokens as schedule.reservation.label.
+These templates control how reservations appear in different contexts using the
+same tokens as schedule.reservation.label.
 
 Reports Settings
 ----------------
@@ -728,7 +737,8 @@ Plugin System
        'styling' => '',
    ],
 
-Available authentication plugins: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress.
+Available authentication plugins: ActiveDirectory, Apache, CAS, Drupal, Krb5,
+Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress.
 
 For authentication plugin configuration, see:
 

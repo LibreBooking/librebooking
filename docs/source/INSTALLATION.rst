@@ -71,7 +71,8 @@ Important! The web server must have write access to the following directories:
 -  ``/uploads`` - File uploads (if enabled)
 -  Configured log directory (if logging is enabled)
 
-Recommended permissions are 755 for directories and 644 for files, with the web server user having write access.
+Recommended permissions are 0755 for directories and 0644 for files, with the
+web server user having write access.
 
 `Want to know why? <http://www.smarty.net/docs/en/variable.compile.dir.tpl>`__
 
@@ -104,7 +105,9 @@ read/write access to your configurable uploads directory specified by
 By default, LibreBooking uses standard username/password for user
 authentication.
 
-Alternatively, you can use LDAP or Active Directory authentication. See :doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for setup instructions.
+Alternatively, you can use LDAP or Active Directory authentication. See
+:doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for setup
+instructions.
 
 .. note::
    If you try to load the application at this time (eg.
@@ -116,7 +119,8 @@ Database Setup
 ~~~~~~~~~~~~~~
 Edit the configuration file to set up the database connection.
 
-Open the configuration file (located at `config/config.php`) and ensure the following database settings are properly filled out:
+Open the configuration file (located at `config/config.php`) and ensure the
+following database settings are properly filled out:
 
 .. code-block:: php
 
@@ -132,7 +136,9 @@ Open the configuration file (located at `config/config.php`) and ensure the foll
         ]
     ];
 
-Ensure that the database user has the necessary privileges to create the database (if it does not exist), and to create, read, insert, update, and modify tables within it.
+Ensure that the database user has the necessary privileges to create the
+database (if it does not exist), and to create, read, insert, update, and
+modify tables within it.
 
 You have 2 ways to set up your database for the application to work.
 
@@ -143,7 +149,8 @@ You must have the application configured correctly before running the
 automated install.
 
 | The automated database setup only supports MySQL at this time.
-| To run the automated database setup, make sure to first set an installation password in the configuration file:
+| To run the automated database setup, make sure to first set an installation
+| password in the configuration file:
 
 .. code-block:: php
 
@@ -252,7 +259,8 @@ http://yourhostname/librebooking/Web/).
 Building from Source
 ---------------------
 
-If you want to build LibreBooking from source code, the project includes a Phing build configuration.
+If you want to build LibreBooking from source code, the project includes a
+Phing build configuration.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -323,7 +331,9 @@ This creates consolidated installation files for easier deployment.
 Docker Installation (Recommended)
 ----------------------------------
 
-LibreBooking can be easily deployed using Docker containers, which provides a consistent environment and simplifies setup. This is the recommended method for new installations.
+LibreBooking can be easily deployed using Docker containers, which provides a
+consistent environment and simplifies setup. This is the recommended method for
+new installations.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -595,7 +605,9 @@ After registration you will be logged in automatically.
 
 At this time, it is recommended to change your password.
 
--  For LDAP or Active Directory authentication, login with your directory username/password. See :doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for configuration details.
+-  For LDAP or Active Directory authentication, login with your directory
+   username/password. See :doc:`LDAP-Authentication` or
+   :doc:`ActiveDirectory-Authentication` for configuration details.
 
 Log Files
 ^^^^^^^^^

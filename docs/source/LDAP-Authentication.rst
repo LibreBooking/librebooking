@@ -1,7 +1,8 @@
 LDAP Authentication
 ===================
 
-The LDAP authentication plugin allows users to authenticate against OpenLDAP and other generic LDAP directory servers.
+The LDAP authentication plugin allows users to authenticate against OpenLDAP
+and other generic LDAP directory servers.
 
 Prerequisites
 -------------
@@ -34,7 +35,8 @@ Edit ``/config/config.php`` and set:
        'authentication' => 'Ldap',
    ],
 
-Alternatively, enable the plugin through the web admin interface at **Application Configuration** (``/Web/admin/manage_configuration.php``).
+Alternatively, enable the plugin through the web admin interface at
+**Application Configuration** (``/Web/admin/manage_configuration.php``).
 
 Configuration
 -------------
@@ -45,7 +47,10 @@ If not existing already, copy the template and edit with your LDAP settings:
 
    cp /plugins/Authentication/Ldap/Ldap.config.dist.php /config/Ldap.config.php
 
-The configuration file at ``/config/Ldap.config.php`` contains all available options with detailed comments explaining each setting. You can also view and modify these settings through the web admin interface at **Application Management > Configuration**. Key settings include:
+The configuration file at ``/config/Ldap.config.php`` contains all available
+options with detailed comments explaining each setting. You can also view and
+modify these settings through the web admin interface at **Application
+Management > Configuration**. Key settings include:
 
 - **host**: LDAP server URL(s)
 - **binddn/bindpw**: Service account credentials for directory searches
@@ -55,8 +60,11 @@ The configuration file at ``/config/Ldap.config.php`` contains all available opt
 - **sync.groups**: Enable group membership synchronization
 - **database.auth.when.ldap.user.not.found**: Fallback to database authentication
 
-Alternatively, configure the plugin through the web admin interface at **Application Configuration** (``/Web/admin/manage_configuration.php``) and select **Authentification-Ldap**.
-Refer to ``/plugins/Authentication/Ldap/Ldap.config.dist.php`` for complete documentation of all options.
+Alternatively, configure the plugin through the web admin interface at
+**Application Configuration** (``/Web/admin/manage_configuration.php``) and
+select **Authentification-Ldap**.
+Refer to ``/plugins/Authentication/Ldap/Ldap.config.dist.php`` for complete
+documentation of all options.
 
 Troubleshooting
 ---------------
@@ -101,4 +109,5 @@ To migrate existing users:
 3. Users automatically switch to LDAP auth on next login
 4. Existing reservations and data are preserved
 
-Users are matched by username - if a LibreBooking account exists with the same username, it will be updated with LDAP information.
+Users are matched by username - if a LibreBooking account exists with the same
+username, it will be updated with LDAP information.
