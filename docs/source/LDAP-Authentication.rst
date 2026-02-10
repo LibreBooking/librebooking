@@ -3,6 +3,26 @@ LDAP Authentication
 
 The LDAP authentication plugin allows users to authenticate against OpenLDAP and other generic LDAP directory servers.
 
+Prerequisites
+-------------
+
+Before enabling the LDAP plugin, install LDAP support for PHP and the LDAP client library package:
+
+.. code-block:: bash
+
+   # install/enable PHP LDAP extension (package name varies by distro)
+   # examples:
+   #   dnf install php-ldap
+   #   apt install php-ldap
+
+   composer require pear/net_ldap2
+
+If ``pear/net_ldap2`` is not installed, enabling the LDAP plugin will fail with:
+
+.. code-block:: text
+
+   The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2
+
 Enable the Plugin
 -----------------
 
@@ -19,7 +39,7 @@ Alternatively, enable the plugin through the web admin interface at **Applicatio
 Configuration
 -------------
 
-If not existing already, copy the template and edit with your Active Directory settings:
+If not existing already, copy the template and edit with your LDAP settings:
 
 .. code-block:: bash
 

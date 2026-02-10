@@ -412,11 +412,11 @@ class FakeLdapWrapper extends Ldap2Wrapper
     }
 }
 
-class TestLdapEntry extends Net_LDAP2_Entry
+class TestLdapEntry
 {
     private $_values = [];
+    private $_dn = 'cn=test,dc=example,dc=org';
 
-    // @phpstan-ignore class.notFound
     public function __construct()
     {
         $this->Set('givenname', '');
@@ -430,6 +430,11 @@ class TestLdapEntry extends Net_LDAP2_Entry
     public function getValue($attr, $option = null)
     {
         return $this->_values[$attr];
+    }
+
+    public function dn()
+    {
+        return $this->_dn;
     }
 
     public function Set($attr, $value)
