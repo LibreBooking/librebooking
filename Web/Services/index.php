@@ -2,6 +2,9 @@
 
 define('ROOT_DIR', '../../');
 
+require_once(ROOT_DIR . 'lib/ComposerDependenciesGuard.php');
+EnsureComposerDependenciesInstalledForRequest();
+
 require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
 
