@@ -93,7 +93,8 @@ Note: This instance is public and **resets every 20 minutes** to ensure a clean 
 
 To run LibreBooking from a prebuilt release, your server needs:
 
-- PHP >= 8.2 with the  extensions: pdo, mbstring, openssl, tokenizer, json, curl, xml, ctype, bcmath, fileinfo
+- PHP >= 8.2 with the extensions: ctype, curl, fileinfo, json, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
+- Optional PHP extensions: bcmath (needed for Active Directory authentication), gd (image processing), ldap (LDAP authentication)
 - A web server like Apache or Nginx
 - MySQL >= 5.5
 - Composer (for managing PHP dependencies)

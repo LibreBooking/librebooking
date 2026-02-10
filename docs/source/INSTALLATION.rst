@@ -115,6 +115,9 @@ instructions.
 
 This is because there is no backend database configured yet. So continue on …
 
+If you want you could try running the :ref:`Preflight Check <preflight-check>` now to check your
+work. But make sure to continue on to the next section to setup the database.
+
 Database Setup
 ~~~~~~~~~~~~~~
 Edit the configuration file to set up the database connection.
@@ -142,8 +145,8 @@ modify tables within it.
 
 You have 2 ways to set up your database for the application to work.
 
-Automatic Database Setup
-^^^^^^^^^^^^^^^^^^^^^^^^
+Automatic Database Setup (Recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must have the application configured correctly before running the
 automated install.
@@ -252,6 +255,54 @@ file.
 | Optionally - import ``/database_schema/sample-data-utf8.sql`` to add
   sample application data (this will create 2 test users: admin/password
   and user/password for testing your installation).
+
+.. _preflight-check:
+
+Preflight Check
+~~~~~~~~~~~~~~~
+
+At any point during or after installation, you can run the preflight check to
+verify that your server meets all the requirements for LibreBooking:
+
+.. code-block:: bash
+
+    composer preflight
+
+This validates:
+
+- PHP version and required/optional extensions
+- Composer dependencies are installed
+- Configuration file (``config/config.php``) exists and is valid
+- Required directories are writable
+- Database connection and schema
+
+Missing or invalid configuration will be reported as a failure. Database issues
+may also be reported as either failures or warnings, depending on the issue.
+
+To pass options, use ``--`` so Composer forwards them to the script:
+
+.. code-block:: bash
+
+    composer preflight -- --skip-db
+    composer preflight -- --help
+
+You can also run the script directly with PHP:
+
+.. code-block:: bash
+
+    php lib/preflight.php --skip-db
+
+Available options:
+
+``--no-color``
+  Disable colored output
+
+``--skip-db``
+  Skip the database connection check
+
+``--help``
+  Show help
+
 
 You are done. Try to load the application at (eg.
 http://yourhostname/librebooking/Web/).
