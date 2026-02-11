@@ -47,6 +47,7 @@ interface ILoginPage extends IPage, ILoginBasePage
     public function SetResumeUrl($value);
 
     public function SetShowLoginError();
+    public function SetLoginErrorMessage(?string $message): void;
 
     /**
      * @param $languageCode string
@@ -133,6 +134,7 @@ class LoginPage extends Page implements ILoginPage
         if ($resumeUrl !== NULL) $resumeUrl = str_replace('&amp;&amp;', '&amp;', $resumeUrl);
         $this->Set('ResumeUrl', $resumeUrl);
         $this->Set('ShowLoginError', false);
+        $this->Set('LoginErrorMessage', null);
         $this->Set('Languages', Resources::GetInstance()->AvailableLanguages);
 
         $this->SetFacebookErrorMessage();
@@ -248,6 +250,11 @@ class LoginPage extends Page implements ILoginPage
     public function SetShowLoginError()
     {
         $this->Set('ShowLoginError', true);
+    }
+
+    public function SetLoginErrorMessage(?string $message): void
+    {
+        $this->Set('LoginErrorMessage', $message);
     }
 
     public function GetRequestedLanguage()

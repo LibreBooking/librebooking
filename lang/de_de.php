@@ -799,6 +799,8 @@ class de_de extends en_gb
 
         // Errors
         $strings['LoginError'] = 'Benutzername oder Passwort falsch';
+        $strings['LdapConnectionErrorMessage'] = 'Es konnte keine Verbindung zum LDAP-Server hergestellt werden. Bitte kontaktieren Sie Ihren Administrator.';
+        $strings['LdapDependencyMissingMessage'] = 'Die LDAP-Authentifizierung ist nicht verfügbar, da pear/net_ldap2 fehlt. Installieren Sie es mit: composer require pear/net_ldap2';
         $strings['ReservationFailed'] = 'Ihre Reservierung konnte nicht angelegt werden';
         $strings['MinNoticeError'] = 'Diese Reservierung benötigt eine Vorankündigung. Der früheste zu reservierende Zeitpunkt ist %s.';
         $strings['MinNoticeErrorUpdate'] = 'Ändern dieser Reservierung benötigt eine Vorankündigung. Reservierungen vor %s dürfen nicht verändert werden.';

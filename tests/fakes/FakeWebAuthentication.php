@@ -171,6 +171,7 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_LoginCalled = false;
 
     public $_ValidateResult = false;
+    public $_ValidateException = null;
 
     public $_ShowUsernamePrompt = false;
     public $_ShowPasswordPrompt = false;
@@ -186,6 +187,10 @@ class FakeWebAuthentication implements IWebAuthentication
     {
         $this->_LastLogin = $username;
         $this->_LastPassword = $password;
+
+        if ($this->_ValidateException instanceof Throwable) {
+            throw $this->_ValidateException;
+        }
 
         return $this->_ValidateResult;
     }

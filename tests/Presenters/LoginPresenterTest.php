@@ -141,6 +141,59 @@ class LoginPresenterTest extends TestBase
 
         $this->assertEquals("", $this->page->_LastRedirect, "Does not redirect if auth fails");
         $this->assertTrue($this->page->_ShowLoginError, "Should show login error if auth fails");
+        $this->assertNull($this->page->_LoginErrorMessage);
+    }
+
+    public function testLdapDependencyErrorIsDisplayedIfAuthenticationThrowsRuntimeException()
+    {
+        $this->auth->_ValidateException = new RuntimeException('The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError, 'Should show login error when validation throws');
+        $this->assertEquals(
+            'LdapDependencyMissingMessage',
+            $this->page->_LoginErrorMessage
+        );
+        $this->assertNull($this->auth->_LastLoginContext, 'Should not call login when validation throws');
+    }
+
+    public function testNetLdap2ClassErrorIsDisplayedAsMissingDependencyMessage()
+    {
+        $this->auth->_ValidateException = new Exception('Class "Net_LDAP2" not found');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertEquals(
+            'LdapDependencyMissingMessage',
+            $this->page->_LoginErrorMessage
+        );
+    }
+
+    public function testLdapConnectionErrorContainingNetLdap2DoesNotLookLikeMissingDependency()
+    {
+        $this->auth->_ValidateException = new Exception(
+            "Could not connect to LDAP server. Check your settings in Ldap.config.php : Bind failed: Can't contact LDAP server: Unknown Net_LDAP2 Error (-1)"
+        );
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertEquals(
+            'LdapConnectionErrorMessage',
+            $this->page->_LoginErrorMessage
+        );
+    }
+
+    public function testNonLdapExceptionFallsBackToGenericLoginErrorPath()
+    {
+        $this->auth->_ValidateException = new Exception('Some unexpected auth error');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertNull($this->page->_LoginErrorMessage);
     }
 
     public function testAutoLoginIfCookieIsSet()
@@ -213,6 +266,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_UseLogonName = false;
     public $_ResumeUrl = "";
     public $_ShowLoginError = false;
+    public $_LoginErrorMessage = null;
     public $_requestedLanguage;
     public $_selectedLanguage;
     public $_CurrentCode = '';
@@ -315,6 +369,11 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public function SetShowLoginError()
     {
         $this->_ShowLoginError = true;
+    }
+
+    public function SetLoginErrorMessage(?string $message): void
+    {
+        $this->_LoginErrorMessage = $message;
     }
 
     public function GetRequestedLanguage()

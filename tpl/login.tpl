@@ -32,7 +32,11 @@
 
                         {if $ShowLoginError}
                             <div id="loginError" class="alert alert-danger">
-                                {translate key='LoginError'}
+                                {if !empty($LoginErrorMessage)}
+                                    {$LoginErrorMessage}
+                                {else}
+                                    {translate key='LoginError'}
+                                {/if}
                             </div>
                         {/if}
 

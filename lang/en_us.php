@@ -843,6 +843,8 @@ class en_us extends Language
 
         // Errors
         $strings['LoginError'] = 'We could not match your username or password';
+        $strings['LdapConnectionErrorMessage'] = 'Could not connect to the LDAP server. Please contact your administrator.';
+        $strings['LdapDependencyMissingMessage'] = 'LDAP authentication is not available because pear/net_ldap2 is missing. Install it with: composer require pear/net_ldap2';
         $strings['ReservationFailed'] = 'Your reservation could not be made';
         $strings['MinNoticeError'] = 'This reservation requires advance notice. The earliest date and time that can be reserved is %s.';
         $strings['MinNoticeErrorUpdate'] = 'Changing this reservation requires advance notice. Reservations before %s are not allowed to be changed.';

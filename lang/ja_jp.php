@@ -815,6 +815,8 @@ class ja_jp extends en_gb
 
         // Errors
         $strings['LoginError'] = 'ユーザー名またはパスワードが一致しません';
+        $strings['LdapConnectionErrorMessage'] = 'LDAPサーバーに接続できませんでした。管理者にお問い合わせください。';
+        $strings['LdapDependencyMissingMessage'] = 'pear/net_ldap2 が見つからないため、LDAP 認証は利用できません。次のコマンドでインストールしてください: composer require pear/net_ldap2';
         $strings['ReservationFailed'] = '予約できませんでした';
         $strings['MinNoticeError'] = 'このリソースが今から予約できるのは %s 以降です。';
         $strings['MinNoticeErrorUpdate'] = 'この予約を変更するには事前の通知が必要です。 %s 以前の予約は変更できません。';

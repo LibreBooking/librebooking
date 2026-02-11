@@ -808,6 +808,8 @@ class es extends en_gb
 
         // Errors
         $strings['LoginError'] = 'No se ha encontrado una correspondencia para tu Nombre de Usuario (Identificador) y contraseña';
+        $strings['LdapConnectionErrorMessage'] = 'No se pudo conectar al servidor LDAP. Por favor, contacte con su administrador.';
+        $strings['LdapDependencyMissingMessage'] = 'La autenticación LDAP no está disponible porque falta pear/net_ldap2. Instálelo con: composer require pear/net_ldap2';
         $strings['ReservationFailed'] = 'Tu reserva no se ha podido realizar';
         $strings['MinNoticeError'] = 'Esta reserva se debe realizar por anticipado.  La fecha más temprana que puede ser reservada %s.';
         $strings['MinNoticeErrorUpdate'] = 'Cambiar esta reserva requiere aviso previo. Las reservas antes del %s no se pueden cambiar.';
