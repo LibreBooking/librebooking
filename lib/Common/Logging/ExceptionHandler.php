@@ -42,7 +42,14 @@ class WebExceptionHandler extends ExceptionHandler
         ob_start();
         debug_print_backtrace();
         error_log(ob_get_clean());
-        call_user_func($this->callback);
+        $errorMessageId = ErrorMessages::UNKNOWN_ERROR;
+        if (is_a($exception, 'DatabaseConnectionException')) {
+            $errorMessageId = ErrorMessages::DATABASE_CONNECTION;
+        } elseif (is_a($exception, 'DatabaseNotFoundException')) {
+            $errorMessageId = ErrorMessages::DATABASE_NOT_FOUND;
+        }
+
+        call_user_func($this->callback, $errorMessageId);
     }
 }
 

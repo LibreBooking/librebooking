@@ -57,6 +57,8 @@ class de_de extends en_gb
         $strings['Error'] = 'Fehler';
         $strings['ReturnToPreviousPage'] = 'Zurück zur vorigen Seite';
         $strings['UnknownError'] = 'Unbekannter Fehler';
+        $strings['DatabaseConnectionError'] = 'Verbindung zum Datenbankserver konnte nicht hergestellt werden.<br/>Bitten Sie den Website-Administrator, Host, Benutzername und Passwort der Datenbank in <code>config/config.php</code> zu prüfen.';
+        $strings['DatabaseNotFoundError'] = 'Die konfigurierte Datenbank konnte nicht ausgewählt werden.<br/>Bitten Sie den Website-Administrator, den Datenbanknamen in <code>config/config.php</code> zu prüfen und zu bestätigen, dass die Datenbank erstellt/initialisiert wurde.';
         $strings['InsufficientPermissionsError'] = 'Sie haben keinen Zugriff auf diese Ressource.';
         $strings['MissingReservationResourceError'] = 'Keine Ressource ausgewählt';
         $strings['MissingReservationScheduleError'] = 'Kein Terminplan ausgewählt';

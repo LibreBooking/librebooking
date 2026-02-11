@@ -95,6 +95,8 @@ class ja_jp extends en_gb
         $strings['Error'] = 'エラー';
         $strings['ReturnToPreviousPage'] = '直近のページへ戻る';
         $strings['UnknownError'] = '不明なエラー';
+        $strings['DatabaseConnectionError'] = 'データベースサーバーに接続できませんでした。<br/>Webサイト管理者に、<code>config/config.php</code> のデータベースのホスト名・ユーザー名・パスワード設定を確認するよう依頼してください。';
+        $strings['DatabaseNotFoundError'] = '設定されたデータベースを選択できませんでした。<br/>Webサイト管理者に、<code>config/config.php</code> のデータベース名を確認し、データベースが作成／初期化済みであることを確認するよう依頼してください。';
         $strings['InsufficientPermissionsError'] = 'このリソースを操作する権限がありません';
         $strings['MissingReservationResourceError'] = 'リソースが選択されていません';
         $strings['MissingReservationScheduleError'] = 'スケジュールが選択されていません';

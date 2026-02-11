@@ -59,6 +59,8 @@ class es extends en_gb
         $strings['Error'] = 'Error';
         $strings['ReturnToPreviousPage'] = 'Volver a la página anterior';
         $strings['UnknownError'] = 'Error desconocido';
+        $strings['DatabaseConnectionError'] = 'No se pudo conectar al servidor de base de datos.<br/>Pide al administrador del sitio web que verifique el host, usuario y contraseña de la base de datos en <code>config/config.php</code>.';
+        $strings['DatabaseNotFoundError'] = 'No se pudo seleccionar la base de datos configurada.<br/>Pide al administrador del sitio web que verifique el nombre de la base de datos en <code>config/config.php</code> y confirme que la base de datos ha sido creada/inicializada.';
         $strings['InsufficientPermissionsError'] = 'No tienes permiso para acceder a este recurso';
         $strings['MissingReservationResourceError'] = 'No se ha seleccionado un recurso';
         $strings['MissingReservationScheduleError'] = 'No se ha seleccionado una planificación';

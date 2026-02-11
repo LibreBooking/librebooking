@@ -43,14 +43,14 @@ class MySqlConnection implements IDbConnection
         if (!$this->_db) {
             $connectError = mysqli_connect_error();
             Log::Error("Error connecting to database\nCheck your database settings in the config file\n%s", $connectError);
-            throw new Exception("Error connecting to database\nError: " . $connectError);
+            throw new DatabaseConnectionException("Error connecting to database\nError: " . $connectError);
         }
 
         $selected = mysqli_select_db($this->_db, $this->_dbName);
 
         if (!$selected) {
             Log::Error("Error selecting database '%s'\nCheck your database settings in the config file\n%s", $this->_dbName, mysqli_error($this->_db));
-            throw new Exception("Error selecting database\nError: " . mysqli_error($this->_db));
+            throw new DatabaseNotFoundException("Error selecting database\nError: " . mysqli_error($this->_db));
         }
         mysqli_set_charset($this->_db, 'utf8mb4');
 
