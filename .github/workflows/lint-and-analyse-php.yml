@@ -76,7 +76,7 @@ jobs:
       - name: Install Composer dependencies
         # Allow the previous check to fail but not abort
         if: always()
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           # Ignore zip for php-webdriver/webdriver
           composer-options: "--ignore-platform-req=ext-zip"
@@ -108,7 +108,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           # Ignore zip for php-webdriver/webdriver
           composer-options: "--ignore-platform-reqs"
@@ -152,7 +152,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
 
       - name: Analyse files with PHPStan
         run: composer phpstan -- --memory-limit 2G
