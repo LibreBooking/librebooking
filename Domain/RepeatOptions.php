@@ -682,7 +682,7 @@ class RepeatConfiguration
      */
     public static function Create($repeatType, $configurationString)
     {
-        $allparts = explode('|', $configurationString);
+        $allparts = explode('|', (string) ($configurationString ?? ''));
         $configParts = [];
 
         if (!empty($allparts[0])) {

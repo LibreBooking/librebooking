@@ -2,12 +2,12 @@
 
 class BooleanConverter implements IConvert
 {
-    public function Convert($value)
+    public function Convert(mixed $value): bool
     {
         return self::ConvertValue($value);
     }
 
-    public function IsValid($value): bool
+    public function IsValid(mixed $value): bool
     {
         if (is_null($value)) {
             return false;
@@ -25,7 +25,7 @@ class BooleanConverter implements IConvert
      * @param mixed $value
      * @return bool
      */
-    public static function ConvertValue($value)
+    public static function ConvertValue(mixed $value): bool
     {
         if (is_bool($value)) {
             return $value;

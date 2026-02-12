@@ -25,7 +25,7 @@ class AttributeValue
     public function __construct($attributeId, $value, $attributeLabel = null)
     {
         $this->AttributeId = $attributeId;
-        $this->Value = trim($value);
+        $this->Value = trim((string) ($value ?? ''));
         $this->AttributeLabel = $attributeLabel;
     }
 

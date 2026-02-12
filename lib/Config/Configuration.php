@@ -47,10 +47,10 @@ interface IConfigurationFile
     public function GetDefaultTimezone();
 
     /**
-     * @param $emailAddress
+     * @param string|null $emailAddress
      * @return bool
      */
-    public function IsAdminEmail($emailAddress);
+    public function IsAdminEmail(?string $emailAddress): bool;
 
     /**
      * @return string[]
@@ -234,10 +234,10 @@ class Configuration implements IConfiguration
 
     /**
      * Checks if the given email address is an admin email.
-     * @param string $emailAddress The email address to check.
+     * @param string|null $emailAddress The email address to check.
      * @return bool True if the email address is an admin email, false otherwise.
      */
-    public function IsAdminEmail($emailAddress)
+    public function IsAdminEmail(?string $emailAddress): bool
     {
         return $this->File(self::DEFAULT_CONFIG_ID)->IsAdminEmail($emailAddress);
     }
@@ -550,15 +550,19 @@ class ConfigurationFile implements IConfigurationFile
 
     /**
      * Checks if the given email address is an admin email.
-     * @param string $emailAddress The email address to check.
+     * @param string|null $emailAddress The email address to check.
      * @return bool True if the email address is an admin email, false otherwise.
      */
-    public function IsAdminEmail($emailAddress)
+    public function IsAdminEmail(?string $emailAddress): bool
     {
+        if ($emailAddress === null || $emailAddress === '') {
+            return false;
+        }
+
         $adminEmails = $this->GetAllAdminEmails();
 
         foreach ($adminEmails as $email) {
-            if (strtolower($emailAddress) == strtolower($email)) {
+            if (strtolower((string) $emailAddress) == strtolower((string) $email)) {
                 return true;
             }
         }

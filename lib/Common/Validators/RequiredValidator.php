@@ -11,7 +11,7 @@ class RequiredValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        $trimmed = trim($this->value);
-        $this->isValid = !empty($trimmed);
+        $trimmed = trim((string) ($this->value ?? ''));
+        $this->isValid = ($trimmed !== '');
     }
 }

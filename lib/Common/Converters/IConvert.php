@@ -8,7 +8,7 @@ interface IConvert
      * @param mixed $value The value to convert.
      * @return mixed The converted value.
      */
-    public function Convert($value);
+    public function Convert(mixed $value): mixed;
 
     /**
      * Checks if the value is valid for conversion.
@@ -16,5 +16,5 @@ interface IConvert
      * @param mixed $value The value to check.
      * @return bool True if valid, false otherwise.
      */
-    public function IsValid($value);
+    public function IsValid(mixed $value): bool;
 }

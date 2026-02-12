@@ -14,6 +14,10 @@ class CustomAttributeTest extends TestBase
         $this->assertFalse($customAttributeRequired->SatisfiesRequired("\t"));
         $this->assertFalse($customAttributeRequired->SatisfiesRequired(null));
 
+        // "0" should satisfy required: empty('0') is true, but it is numeric.
+        $this->assertTrue($customAttributeRequired->SatisfiesRequired('0'));
+        $this->assertTrue($customAttributeRequired->SatisfiesRequired(0));
+
         $this->assertTrue($customAttributeRequired->SatisfiesRequired('  something  '));
         $this->assertTrue($customAttributeNotRequired->SatisfiesRequired(''));
         $this->assertTrue($customAttributeNotRequired->SatisfiesRequired('something'));
