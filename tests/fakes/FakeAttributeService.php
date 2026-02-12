@@ -18,6 +18,11 @@ class FakeAttributeService implements IAttributeService
     public $_EntityAttributeList;
 
     /**
+     * @var Attribute[]
+     */
+    public $_ResourceAttributes = [];
+
+    /**
      * @param $category CustomAttributeCategory|int
      * @param $entityIds array|int[]|int
      * @return IEntityAttributeList
@@ -68,5 +73,73 @@ class FakeAttributeService implements IAttributeService
     public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = [])
     {
         return $this->_ReservationAttributes;
+    }
+
+    /**
+     * @param UserSession $userSession
+     * @param int $resourceId
+     * @param int $resourceTypeId
+     * @return Attribute[]
+     */
+    public function GetResourceAttributes(UserSession $userSession, $resourceId = 0, $resourceTypeId = 0)
+    {
+        return $this->_ResourceAttributes;
+    }
+
+    /**
+     * @param $reservationSeries
+     * @param $isAdmin
+     * @return mixed
+     */
+    public function ValidateReservation($reservationSeries, $isAdmin)
+    {
+        return $this->_ValidationResult;
+    }
+
+    /**
+     * @param $userId int|null
+     * @return array
+     */
+    public function GetUserManagedAttributes($userId = null)
+    {
+        return [];
+    }
+
+    /**
+     * @param $userId
+     * @param $attributeId
+     * @return array
+     */
+    public function GetUserManagedPossibleValues($userId, $attributeId)
+    {
+        return [];
+    }
+
+    /**
+     * @param $userId
+     * @param $attributeId
+     * @param $valuesAsString
+     * @return void
+     */
+    public function UpdateUserManagedPossibleValues($userId, $attributeId, $valuesAsString)
+    {
+        // Stub implementation
+    }
+
+    /**
+     * @param array $attributeValues
+     * @return array
+     */
+    public function RemoveValuesMissingDependencies(array $attributeValues): array
+    {
+        return $attributeValues;
+    }
+
+    /**
+     * @return int
+     */
+    public function GetTimeConstrainedAttributeCount(): int
+    {
+        return 0;
     }
 }

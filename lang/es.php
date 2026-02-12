@@ -467,6 +467,9 @@ class es extends en_gb
         $strings['AddReservationColorRule'] = 'Agregar regla de color de reserva';
         $strings['LimitAttributeScope'] = 'Recopilar en casos específicos';
         $strings['CollectFor'] = 'Recopilar para';
+        $strings['AdminOnlyHelp'] = 'Solo los administradores pueden ver y editar este valor de atributo';
+        $strings['PrivateHelp'] = 'Este valor de atributo solo es visible para el usuario que posee la reserva y los administradores';
+        $strings['LimitAttributeScopeHelp'] = 'Recopilar este atributo solo para entidades específicas en lugar de todas las entidades de esta categoría';
         $strings['SignIn'] = 'Iniciar sesión';
         $strings['SignInWith'] = 'Iniciar sesión con';
         $strings['AllParticipants'] = 'Todos los participantes';

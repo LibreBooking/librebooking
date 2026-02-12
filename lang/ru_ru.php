@@ -472,6 +472,9 @@ class ru_ru extends en_gb
         $strings['AddReservationColorRule'] = 'Добавить правило окраса бронирования';
         $strings['LimitAttributeScope'] = 'Сбор по конкретным случаям';
         $strings['CollectFor'] = 'Собрать для';
+        $strings['AdminOnlyHelp'] = 'Только администраторы могут просматривать и редактировать это значение атрибута';
+        $strings['PrivateHelp'] = 'Это значение атрибута видно только пользователю, который владеет бронированием, и администраторам';
+        $strings['LimitAttributeScopeHelp'] = 'Собирать этот атрибут только для конкретных объектов, а не для всех объектов этой категории';
         $strings['SignIn'] = 'Войти в систему';
         $strings['AllParticipants'] = 'Все участники';
         $strings['RegisterANewAccount'] = 'Регистрация новой учетной записи';

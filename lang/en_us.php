@@ -502,6 +502,9 @@ class en_us extends Language
         $strings['AddReservationColorRule'] = 'Add Reservation Color Rule';
         $strings['LimitAttributeScope'] = 'Collect In Specific Cases';
         $strings['CollectFor'] = 'Collect For';
+        $strings['AdminOnlyHelp'] = 'Only administrators can see and edit this attribute value';
+        $strings['PrivateHelp'] = 'This attribute value is only visible to the user who owns the reservation and administrators';
+        $strings['LimitAttributeScopeHelp'] = 'Collect this attribute only for specific entities instead of all entities of this category';
         $strings['SignIn'] = 'Sign In';
         $strings['SignInWith'] = 'Sign in with';
         $strings['AllParticipants'] = 'All Participants';

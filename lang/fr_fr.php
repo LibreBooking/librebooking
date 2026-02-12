@@ -465,6 +465,9 @@ class fr_fr extends en_gb
         $strings['AddReservationColorRule'] = 'Ajouter une Règle de Couleur pour les Réservations';
         $strings['LimitAttributeScope'] = 'Afficher dans des Cas Spécifiques';
         $strings['CollectFor'] = 'Afficher pour';
+        $strings['AdminOnlyHelp'] = 'Seuls les administrateurs peuvent voir et modifier cette valeur d\'attribut';
+        $strings['PrivateHelp'] = 'Cette valeur d\'attribut n\'est visible que pour l\'utilisateur qui possède la réservation et les administrateurs';
+        $strings['LimitAttributeScopeHelp'] = 'Collecter cet attribut uniquement pour des entités spécifiques plutôt que pour toutes les entités de cette catégorie';
         $strings['SignIn'] = 'Connexion';
         $strings['AllParticipants'] = 'Tous les Participants';
         $strings['RegisterANewAccount'] = 'Enregistrer un Nouveau Compte';

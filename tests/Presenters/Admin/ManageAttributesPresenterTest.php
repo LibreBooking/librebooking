@@ -59,6 +59,7 @@ class ManageAttributesPresenterTest extends TestBase
         $entityIds = [10];
         $adminOnly = true;
         $secondaryEntityIds = ['1029', '2028'];
+        $isPrivate = false;
 
         $this->page->_label = $label;
         $this->page->_type = $type;
@@ -72,9 +73,130 @@ class ManageAttributesPresenterTest extends TestBase
         $this->page->_limitAttributeScope = true;
         $this->page->_secondaryCategory = CustomAttributeCategory::USER;
         $this->page->_secondaryEntityIds = $secondaryEntityIds;
+        $this->page->_isPrivate = $isPrivate;
 
         $expectedAttribute = CustomAttribute::Create($label, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
         $expectedAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, $secondaryEntityIds);
+        $expectedAttribute->WithIsPrivate($isPrivate);
+
+        $this->attributeRepository->expects($this->once())
+                ->method('Add')
+                ->with($this->equalTo($expectedAttribute))
+                ->willReturn(1);
+
+        $this->presenter->AddAttribute();
+    }
+
+    public function testAddsNewAttributeWithoutSecondaryEntities()
+    {
+        $label = 'simple attribute';
+        $scope = CustomAttributeCategory::USER;
+        $type = CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+        $required = false;
+        $regex = null;
+        $possibleValues = null;
+        $sortOrder = "2";
+        $entityIds = [5, 10, 15];
+        $adminOnly = false;
+        $isPrivate = false;
+
+        $this->page->_label = $label;
+        $this->page->_type = $type;
+        $this->page->_category = $scope;
+        $this->page->_required = $required;
+        $this->page->_regex = $regex;
+        $this->page->_possibleValues = $possibleValues;
+        $this->page->_sortOrder = $sortOrder;
+        $this->page->_entityIds = $entityIds;
+        $this->page->_adminOnly = $adminOnly;
+        $this->page->_limitAttributeScope = false; // No secondary entities
+        $this->page->_secondaryCategory = null;
+        $this->page->_secondaryEntityIds = [];
+        $this->page->_isPrivate = $isPrivate;
+
+        $expectedAttribute = CustomAttribute::Create($label, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
+        // No secondary entities when limitAttributeScope is false
+        $expectedAttribute->WithIsPrivate($isPrivate);
+
+        $this->attributeRepository->expects($this->once())
+                ->method('Add')
+                ->with($this->equalTo($expectedAttribute))
+                ->willReturn(1);
+
+        $this->presenter->AddAttribute();
+    }
+
+    public function testAddsNewAttributeWithSecondaryResources()
+    {
+        $label = 'resource attribute';
+        $scope = CustomAttributeCategory::RESERVATION;
+        $type = CustomAttributeTypes::SELECT_LIST;
+        $required = false;
+        $regex = null;
+        $possibleValues = 'option1,option2,option3';
+        $sortOrder = "3";
+        $entityIds = [];
+        $adminOnly = false;
+        $secondaryEntityIds = ['101', '102', '103']; // Resource IDs
+        $isPrivate = false;
+
+        $this->page->_label = $label;
+        $this->page->_type = $type;
+        $this->page->_category = $scope;
+        $this->page->_required = $required;
+        $this->page->_regex = $regex;
+        $this->page->_possibleValues = $possibleValues;
+        $this->page->_sortOrder = $sortOrder;
+        $this->page->_entityIds = $entityIds;
+        $this->page->_adminOnly = $adminOnly;
+        $this->page->_limitAttributeScope = true;
+        $this->page->_secondaryCategory = CustomAttributeCategory::RESOURCE;
+        $this->page->_secondaryEntityIds = $secondaryEntityIds;
+        $this->page->_isPrivate = $isPrivate;
+
+        $expectedAttribute = CustomAttribute::Create($label, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
+        $expectedAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, $secondaryEntityIds);
+        $expectedAttribute->WithIsPrivate($isPrivate);
+
+        $this->attributeRepository->expects($this->once())
+                ->method('Add')
+                ->with($this->equalTo($expectedAttribute))
+                ->willReturn(1);
+
+        $this->presenter->AddAttribute();
+    }
+
+    public function testAddsNewAttributeWithSecondaryResourceTypes()
+    {
+        $label = 'resource type attribute';
+        $scope = CustomAttributeCategory::RESERVATION;
+        $type = CustomAttributeTypes::MULTI_LINE_TEXTBOX;
+        $required = true;
+        $regex = null;
+        $possibleValues = null;
+        $sortOrder = "1";
+        $entityIds = [];
+        $adminOnly = true;
+        $secondaryEntityIds = ['201', '202']; // Resource Type IDs
+        $isPrivate = true;
+
+        $this->page->_label = $label;
+        $this->page->_type = $type;
+        $this->page->_category = $scope;
+        $this->page->_required = $required;
+        $this->page->_regex = $regex;
+        $this->page->_possibleValues = $possibleValues;
+        $this->page->_sortOrder = $sortOrder;
+        $this->page->_entityIds = $entityIds;
+        $this->page->_adminOnly = $adminOnly;
+        $this->page->_limitAttributeScope = true;
+        $this->page->_secondaryCategory = CustomAttributeCategory::RESOURCE_TYPE;
+        $this->page->_secondaryEntityIds = $secondaryEntityIds;
+        $this->page->_isPrivate = $isPrivate;
+
+        $expectedAttribute = CustomAttribute::Create($label, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
+        $expectedAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, $secondaryEntityIds);
+        $expectedAttribute->WithIsPrivate($isPrivate);
 
         $this->attributeRepository->expects($this->once())
                 ->method('Add')
@@ -132,6 +254,57 @@ class ManageAttributesPresenterTest extends TestBase
         $this->assertEquals($adminOnly, $expectedAttribute->AdminOnly());
         $this->assertEquals($secondaryEntityIds, $expectedAttribute->SecondaryEntityIds());
         $this->assertEquals(CustomAttributeCategory::USER, $expectedAttribute->SecondaryCategory());
+        $this->assertEquals($isPrivate, $expectedAttribute->IsPrivate());
+    }
+
+    public function testUpdatesAttributeWithSecondaryResources()
+    {
+        $attributeId = 2092;
+        $label = 'updated resource attribute';
+        $required = false;
+        $regex = '/^[A-Z]+$/';
+        $possibleValues = 'High,Medium,Low';
+        $sortOrder = "8";
+        $entityIds = [];
+        $isPrivate = false;
+        $adminOnly = true;
+        $secondaryEntityIds = ['301', '302', '303'];
+
+        $this->page->_label = $label;
+        $this->page->_required = $required;
+        $this->page->_regex = $regex;
+        $this->page->_possibleValues = $possibleValues;
+        $this->page->_attributeId = $attributeId;
+        $this->page->_sortOrder = $sortOrder;
+        $this->page->_entityIds = $entityIds;
+        $this->page->_adminOnly = $adminOnly;
+        $this->page->_limitAttributeScope = true;
+        $this->page->_secondaryCategory = CustomAttributeCategory::RESOURCE;
+        $this->page->_secondaryEntityIds = $secondaryEntityIds;
+        $this->page->_isPrivate = $isPrivate;
+
+        $expectedAttribute = CustomAttribute::Create('old label', CustomAttributeTypes::SELECT_LIST, CustomAttributeCategory::RESERVATION, null, true, null, 1, [], false);
+
+        $this->attributeRepository->expects($this->once())
+                ->method('LoadById')
+                ->with($this->equalTo($attributeId))
+                ->willReturn($expectedAttribute);
+
+        $this->attributeRepository->expects($this->once())
+                ->method('Update')
+                ->with($this->anything());
+
+        $this->presenter->UpdateAttribute();
+
+        $this->assertEquals($label, $expectedAttribute->Label());
+        $this->assertEquals($regex, $expectedAttribute->Regex());
+        $this->assertEquals($required, $expectedAttribute->Required());
+        $this->assertEquals($possibleValues, $expectedAttribute->PossibleValues());
+        $this->assertEquals($sortOrder, $expectedAttribute->SortOrder());
+        $this->assertEquals([], $expectedAttribute->EntityIds(), 'cannot set entityids for reservation');
+        $this->assertEquals($adminOnly, $expectedAttribute->AdminOnly());
+        $this->assertEquals($secondaryEntityIds, $expectedAttribute->SecondaryEntityIds());
+        $this->assertEquals(CustomAttributeCategory::RESOURCE, $expectedAttribute->SecondaryCategory());
         $this->assertEquals($isPrivate, $expectedAttribute->IsPrivate());
     }
 
@@ -251,5 +424,10 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
     public function GetIsPrivate()
     {
         return $this->_isPrivate;
+    }
+
+    public function SetCategoryVisibilityRules()
+    {
+        // Stub implementation for testing
     }
 }

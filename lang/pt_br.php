@@ -464,6 +464,9 @@ class pt_br extends en_gb
         $strings['AddReservationColorRule'] = 'Adicionar regra de cor de reserva';
         $strings['LimitAttributeScope'] = 'Coletar em casos específicos';
         $strings['CollectFor'] = 'Recolher para';
+        $strings['AdminOnlyHelp'] = 'Apenas administradores podem ver e editar este valor de atributo';
+        $strings['PrivateHelp'] = 'Este valor de atributo é visível apenas para o usuário que possui a reserva e administradores';
+        $strings['LimitAttributeScopeHelp'] = 'Coletar este atributo apenas para entidades específicas em vez de todas as entidades desta categoria';
         $strings['SignIn'] = 'Entrar';
         $strings['AllParticipants'] = 'Todos os participantes';
         $strings['RegisterANewAccount'] = 'Registrar Nova Conta';

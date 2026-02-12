@@ -566,34 +566,55 @@
 														</div>
 													</div>
 													<hr class="hr" />
-													{if $AttributeList|default:array()|count > 0}
-														{assign var="hasResults" value=false}
-														{foreach from=$AttributeList item=attribute name=attrLoop}
-															{if $attribute->AppliesToEntity($id)}
-																{if !$hasResults}
-																	{assign var="hasResults" value=true}
-																	{* Content at the start of the iteration *}
-																	<div class="mb-4">
-																		<span class="fs-6 fw-bold">{translate key='CustomAttributes'}</span>
-																		<a id="customAttributesControl" class="link-primary" href="#"
-																			data-bs-toggle="collapse"
-																			data-bs-target="#customAttributes{$id}">
-																			<i id="customAttributesIcon{$id}"
-																				class="bi bi-chevron-down"></i>
-																		</a>
-																		<div id="customAttributes{$id}" class="collapse show">
-																			<div class="row">
-																			{/if}
-																			{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+													{* Custom attributes section *}
+													<div class="mb-4">
+														<span class="fs-6 fw-bold">{translate key='CustomAttributes'}</span>
+														<a id="customAttributesControl" class="link-primary" href="#"
+															data-bs-toggle="collapse"
+															data-bs-target="#customAttributes{$id}">
+															<i id="customAttributesIcon{$id}"
+																class="bi bi-chevron-down"></i>
+														</a>
+														<div id="customAttributes{$id}" class="collapse show">
+															<div class="row">
+																{* All attributes - check resource type filtering first, then direct assignment *}
+																{foreach from=$AttributeList item=attribute name=attrLoop}
+																	{assign var=showAttribute value=false}
+
+																	{* If attribute has secondary entities, check them based on category *}
+																	{if $attribute->HasSecondaryEntities()}
+																		{if $attribute->SecondaryCategory() == CustomAttributeCategory::RESOURCE_TYPE}
+																			{* Check if resource's type matches any secondary entity (resource type) *}
+																			{foreach from=$attribute->SecondaryEntityIds() item=secondaryId}
+																				{if $secondaryId == $resource->GetResourceTypeId()}
+																					{assign var=showAttribute value=true}
+																					{break}
+																				{/if}
+																			{/foreach}
+																		{elseif $attribute->SecondaryCategory() == CustomAttributeCategory::RESOURCE}
+																			{* Check if this specific resource matches any secondary entity (resource) *}
+																			{foreach from=$attribute->SecondaryEntityIds() item=secondaryId}
+																				{if $secondaryId == $id}
+																					{assign var=showAttribute value=true}
+																					{break}
+																				{/if}
+																			{/foreach}
 																		{/if}
-																	{/foreach}
-																	{if $hasResults}
-																		{* Content at the end of the iteration *}
-																	</div>
-																</div>
+																	{* Otherwise, show if attribute applies directly to this specific resource *}
+																	{elseif $attribute->AppliesToEntity($id)}
+																		{assign var=showAttribute value=true}
+																	{* Or show if attribute has no specific entity assignments (applies to all) *}
+																	{elseif $attribute->EntityIds()|count == 0}
+																		{assign var=showAttribute value=true}
+																	{/if}
+
+																	{if $showAttribute}
+																		{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+																	{/if}
+																{/foreach}
 															</div>
-														{/if}
-													{/if}
+														</div>
+													</div>
 													<div class="">
 														<div class="fs-6 fw-bold me-2">{translate key='Public'}</div>
 														<div class="publicSettingsPlaceHolder">
@@ -2215,7 +2236,11 @@
 					value:{$id}, text: "{$resourceType->Name()|escape:'javascript'}"
 				},
 			{/foreach}
-		]
+		],
+		success: function(response, newValue) {
+			// Trigger custom event for dynamic attribute loading
+			$(this).trigger('save', [{ newValue: newValue }]);
+		}
 	});
 
 	$('.sortOrderValue').editable({

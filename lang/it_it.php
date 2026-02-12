@@ -496,8 +496,11 @@ class it_it extends en_us
         $strings['RequiredValue'] = 'Obbligatori';
         $strings['ReservationCustomRuleAdd'] = 'Se %s allora la prenotazione apparir&agrave; in';
         $strings['AddReservationColorRule'] = 'Aggiungi un colore di ruolo per la prenotazione';
-        $strings['LimitAttributeScope'] = 'Limitata l&apos;attributo a...';
+        $strings['LimitAttributeScope'] = 'Limitata l\'attributo a...';
         $strings['CollectFor'] = 'Limitato a';
+        $strings['AdminOnlyHelp'] = 'Solo gli amministratori possono vedere e modificare questo valore di attributo';
+        $strings['PrivateHelp'] = 'Questo valore di attributo è visibile solo all\'utente che possiede la prenotazione e agli amministratori';
+        $strings['LimitAttributeScopeHelp'] = 'Raccogliere questo attributo solo per entità specifiche invece di tutte le entità di questa categoria';
         $strings['SignIn'] = 'Iscriviti';
         $strings['AllParticipants'] = 'Tutti i partecipanti';
         $strings['RegisterANewAccount'] = 'Crea un nuovo profilo';

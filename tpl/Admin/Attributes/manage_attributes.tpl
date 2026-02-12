@@ -61,9 +61,9 @@
 							</div>
 
 							<div class="attributePossibleValues form-group mb-2" style="display:none">
-								<label for="ATTRIBUTE_POSSIBLE_VALUES">{translate key=PossibleValues} <span
+								<label for="addAttributePossibleValues">{translate key=PossibleValues} <span
 										class="note fw-bold">({translate key=CommaSeparated})</span></label>
-								{textbox name=ATTRIBUTE_POSSIBLE_VALUES class="required has-feedback"}
+								{textbox name=ATTRIBUTE_POSSIBLE_VALUES class="required has-feedback" id="addAttributePossibleValues"}
 							</div>
 
 							<div class="attributeSortOrder form-group mb-2">
@@ -72,8 +72,11 @@
 									maxlength=3 id="ATTRIBUTE_SORT_ORDER" />
 							</div>
 
+							{* Conditional form fields based on category - moved from JavaScript *}
+
+							{* AppliesTo field - conditionally visible based on category *}
 							<div class="attributeUnique form-group">
-								<label for="addAttributeEntityId">{translate key=AppliesTo}</label>
+								<label for="appliesTo">{translate key=AppliesTo}</label>
 								<a href="#" id="appliesTo" class="link-primary">{translate key=All}</a>
 								<div class="appliesToId" id="addAttributeEntityId" style="display:none;"></div>
 							</div>
@@ -87,48 +90,61 @@
 								</div>
 							</div>
 
+							{* AdminOnly field - conditionally visible based on category *}
 							<div class="attributeAdminOnly form-group">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox"
 										{formname key=ATTRIBUTE_IS_ADMIN_ONLY} id="ATTRIBUTE_IS_ADMIN_ONLY" />
 									<label class="form-check-label"
 										for="ATTRIBUTE_IS_ADMIN_ONLY">{translate key=AdminOnly}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=AdminOnlyHelp}"></i>
 								</div>
 							</div>
+
+							{* Private field - conditionally visible based on category *}
 							<div class="attributeIsPrivate form-group">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" {formname key=ATTRIBUTE_IS_PRIVATE}
 										id='attributePrivate' />
 									<label class="form-check-label"
 										for="attributePrivate">{translate key=Private}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=PrivateHelp}"></i>
 								</div>
 							</div>
 
-							<div class="secondaryEntities d-none form-group">
+							{* Secondary entities - conditionally visible based on category *}
+							<div class="secondaryEntities form-group">
 								<div class="form-check">
 									<input type="checkbox" class="limitScope form-check-input"
 										{formname key=ATTRIBUTE_LIMIT_SCOPE} id="attributeLimitScope" />
 									<label class="form-check-label"
 										for="attributeLimitScope">{translate key=LimitAttributeScope}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=LimitAttributeScopeHelp}"></i>
 								</div>
 							</div>
-							<div class="attributeSecondary d-none form-group">
+
+							{* Secondary category selection - show when limitScope is checked *}
+							<div class="attributeSecondary form-group scope-conditional"
+								data-depends-on="attributeLimitScope" style="display:none;">
 								<label for="attributeSecondaryCategory"
 									class="visually-hidden">{translate key=Category}</label>
 								<select class="secondaryAttributeCategory form-select"
 									{formname key=ATTRIBUTE_SECONDARY_CATEGORY} id="attributeSecondaryCategory">
 									<option value="{CustomAttributeCategory::USER}">{translate key=User}</option>
-									<option value="{CustomAttributeCategory::RESOURCE}">{translate key=Resource}
-									</option>
-									<option value="{CustomAttributeCategory::RESOURCE_TYPE}">
-										{translate key=ResourceType}</option>
+									<option value="{CustomAttributeCategory::RESOURCE}">{translate key=Resource}</option>
+									<option value="{CustomAttributeCategory::RESOURCE_TYPE}">{translate key=ResourceType}</option>
 								</select>
 							</div>
-							<div class="attributeSecondary d-none form-group">
+
+							{* Secondary entity selection - show when limitScope is checked *}
+							<div class="attributeSecondary form-group scope-conditional"
+								data-depends-on="attributeLimitScope" style="display:none;">
 								<label for="attributeSecondaryEntityDescription">{translate key=CollectFor}</label>
 								<a href="#" class="secondaryPrompt link-primary"
 									id="attributeSecondaryEntityDescription">{translate key=All}</a>
-
 							</div>
 						</div>
 
@@ -193,13 +209,16 @@
 									id="editAttributeSortOrder" />
 							</div>
 
-							<div class="form-group attributeUnique">
-								<label for="editAttributeEntityId">{translate key=AppliesTo}</label>
+							{* Conditional form fields based on category - moved from JavaScript *}
+
+							{* AppliesTo field - conditionally visible based on category *}
+							<div class="attributeUnique form-group">
+								<label for="editAppliesTo">{translate key=AppliesTo}</label>
 								<a href="#" id="editAppliesTo" class="link-primary">{translate key=All}</a>
 								<div class="appliesToId" id='editAttributeEntityId' style="display:none;"></div>
 							</div>
 
-							<div class="form-group attributeRequired">
+							<div class="attributeRequired form-group">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" {formname key=ATTRIBUTE_IS_REQUIRED}
 										id='editAttributeRequired' />
@@ -208,47 +227,58 @@
 								</div>
 							</div>
 
-							<div class="form-group attributeAdminOnly">
+							{* AdminOnly field - conditionally visible based on category *}
+							<div class="attributeAdminOnly form-group">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox"
 										{formname key=ATTRIBUTE_IS_ADMIN_ONLY} id="editAttributeAdminOnly" />
 									<label class="form-check-label"
 										for="editAttributeAdminOnly">{translate key=AdminOnly}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=AdminOnlyHelp}"></i>
 								</div>
 							</div>
 
-							<div class="form-group attributeIsPrivate">
+							{* Private field - conditionally visible based on category *}
+							<div class="attributeIsPrivate form-group">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" {formname key=ATTRIBUTE_IS_PRIVATE}
 										id='editAttributePrivate' />
 									<label class="form-check-label"
 										for="editAttributePrivate">{translate key=Private}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=PrivateHelp}"></i>
 								</div>
 							</div>
 
-							<div class="form-group secondaryEntities d-none">
+							{* Secondary entities - conditionally visible based on category *}
+							<div class="secondaryEntities form-group">
 								<div class="form-check">
 									<input type="checkbox" class="limitScope form-check-input"
 										{formname key=ATTRIBUTE_LIMIT_SCOPE} id="editAttributeLimitScope" />
 									<label class="form-check-label"
 										for="editAttributeLimitScope">{translate key=LimitAttributeScope}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=LimitAttributeScopeHelp}"></i>
 								</div>
 							</div>
 
-							<div class="form-group attributeSecondary d-none">
+							{* Secondary category selection - show when limitScope is checked *}
+							<div class="attributeSecondary form-group scope-conditional"
+								data-depends-on="editAttributeLimitScope" style="display:none;">
 								<label for="editAttributeSecondaryCategory"
 									class="visually-hidden">{translate key=Category}</label>
 								<select class="secondaryAttributeCategory form-select"
 									{formname key=ATTRIBUTE_SECONDARY_CATEGORY} id="editAttributeSecondaryCategory">
 									<option value="{CustomAttributeCategory::USER}">{translate key=User}</option>
-									<option value="{CustomAttributeCategory::RESOURCE}">{translate key=Resource}
-									</option>
-									<option value="{CustomAttributeCategory::RESOURCE_TYPE}">
-										{translate key=ResourceType}</option>
+									<option value="{CustomAttributeCategory::RESOURCE}">{translate key=Resource}</option>
+									<option value="{CustomAttributeCategory::RESOURCE_TYPE}">{translate key=ResourceType}</option>
 								</select>
 							</div>
 
-							<div class="form-group attributeSecondary d-none">
+							{* Secondary entity selection - show when limitScope is checked *}
+							<div class="attributeSecondary form-group scope-conditional"
+								data-depends-on="editAttributeLimitScope" style="display:none;">
 								<label for="editAttributeSecondaryEntityDescription">{translate key=CollectFor}</label>
 								<a href="#" class="secondaryPrompt link-primary"
 									id="editAttributeSecondaryEntityDescription">{translate key=All}</a>
@@ -326,11 +356,40 @@
 				},
 				resourcesUrl: 'manage_resources.php?{QueryStringKeys::DATA_REQUEST}=all',
 				usersUrl: 'manage_users.php?{QueryStringKeys::DATA_REQUEST}=all',
-				resourceTypesUrl: 'manage_resource_types.php?{QueryStringKeys::DATA_REQUEST}=all'
+				resourceTypesUrl: 'manage_resource_types.php?{QueryStringKeys::DATA_REQUEST}=all',
+				visibilityRules: {
+					appliesTo: {
+						{CustomAttributeCategory::USER}: true,
+						{CustomAttributeCategory::RESOURCE_TYPE}: true,
+						{CustomAttributeCategory::RESERVATION}: false,
+						{CustomAttributeCategory::RESOURCE}: false
+					},
+					adminOnly: {
+						{CustomAttributeCategory::USER}: true,
+						{CustomAttributeCategory::RESOURCE_TYPE}: true,
+						{CustomAttributeCategory::RESERVATION}: true,
+						{CustomAttributeCategory::RESOURCE}: true
+					},
+					isPrivate: {
+						{CustomAttributeCategory::USER}: false,
+						{CustomAttributeCategory::RESOURCE_TYPE}: false,
+						{CustomAttributeCategory::RESERVATION}: true,
+						{CustomAttributeCategory::RESOURCE}: false
+					},
+					secondaryEntities: {
+						{CustomAttributeCategory::USER}: false,
+						{CustomAttributeCategory::RESOURCE_TYPE}: false,
+						{CustomAttributeCategory::RESERVATION}: true,
+						{CustomAttributeCategory::RESOURCE}: true
+					}
+				}
 			};
 
 			var attributeManagement = new AttributeManagement(attributeOptions);
 			attributeManagement.init();
+
+			// Initialize Bootstrap tooltips
+			$('[data-bs-toggle="tooltip"]').tooltip();
 		});
 	</script>
 </div>

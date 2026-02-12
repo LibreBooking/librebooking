@@ -29,7 +29,7 @@ function AttributeManagement(opts) {
         limitScope: $('.limitScope'),
         attributeSecondary: $('.attributeSecondary'),
         secondaryPrompt: $('.secondaryPrompt'),
-        secondaryAttributeCategory: $('.secondaryAttributeCategory ')
+        secondaryAttributeCategory: $('.secondaryAttributeCategory')
     };
 
     function RefreshAttributeList() {
@@ -52,7 +52,51 @@ function AttributeManagement(opts) {
     var updateEntityCallback = function () {
     };
 
+    // Store template options for secondary categories
+    var secondaryCategoryOptions = {};
+
+    var updateSecondaryCategories = function() {
+        var primaryCategory = elements.attributeCategory.val();
+
+        // Update all secondary category selects
+        $('.secondaryAttributeCategory').each(function() {
+            var secondarySelect = $(this);
+
+            // Clear and rebuild options based on primary category
+            secondarySelect.empty();
+
+            if (primaryCategory == options.categories.reservation) {
+                // Add user, resource, and resource_type options
+                secondarySelect.append(secondaryCategoryOptions.user);
+                secondarySelect.append(secondaryCategoryOptions.resource);
+                secondarySelect.append(secondaryCategoryOptions.resourceType);
+            } else if (primaryCategory == options.categories.resource) {
+                // Add resource and resource_type options
+                secondarySelect.append(secondaryCategoryOptions.resource);
+                secondarySelect.append(secondaryCategoryOptions.resourceType);
+            }
+        });
+    };
+
     AttributeManagement.prototype.init = function () {
+        // Initialize visibility rules
+        initializeVisibilityRules();
+
+        // Initialize secondary category options from template
+        var templateSelect = $('#attributeSecondaryCategory');
+        if (templateSelect.length > 0) {
+            templateSelect.find('option').each(function() {
+                var optionValue = $(this).val();
+                var optionText = $(this).text();
+                if (optionValue == options.categories.user) {
+                    secondaryCategoryOptions.user = '<option value="' + optionValue + '">' + optionText + '</option>';
+                } else if (optionValue == options.categories.resource) {
+                    secondaryCategoryOptions.resource = '<option value="' + optionValue + '">' + optionText + '</option>';
+                } else if (optionValue == options.categories.resource_type) {
+                    secondaryCategoryOptions.resourceType = '<option value="' + optionValue + '">' + optionText + '</option>';
+                }
+            });
+        }
 
         $(".save").click(function () {
             $(this).closest('form').submit();
@@ -63,12 +107,30 @@ function AttributeManagement(opts) {
         });
 
         RefreshAttributeList();
+        updateSecondaryCategories();
 
         elements.attributeCategory.change(function () {
             RefreshAttributeList();
+            updateSecondaryCategories();
+            // Reset form state when category changes
+            elements.limitScope.prop('checked', false);
+            elements.attributeSecondary.addClass('d-none');
+            showRelevantCategoryOptions();
         });
 
-        elements.attributeList.on( 'click', 'a.update', function (e) {
+        // Bind field visibility events
+        elements.attributeCategory.on('change', updateFieldVisibility);
+        $('.limitScope').on('change', updateScopeVisibility);
+
+        // Initialize visibility on load
+        updateFieldVisibility();
+        updateScopeVisibility();
+
+        $(".cancel").click(function () {
+            $(this).closest('.dialog').dialog("close");
+        });
+
+        elements.attributeList.on('click', 'a.update', function (e) {
             e.preventDefault();
             e.stopPropagation();
         });
@@ -130,7 +192,11 @@ function AttributeManagement(opts) {
             e.preventDefault();
             activeAppliesTo = $(this);
 
-            showEntities($(this), $(this).closest('.textBoxOptions').find('.secondaryAttributeCategory').val(), currentAttributeEntities.secondaryEntityIds, 'ATTRIBUTE_SECONDARY_ENTITY_IDS');
+            // Determine which dialog we're in and get the appropriate secondary category value
+            var dialog = $(this).closest('.modal-content');
+            var secondaryCategory = dialog.find('.secondaryAttributeCategory').val();
+
+            showEntities($(this), secondaryCategory, currentAttributeEntities.secondaryEntityIds, 'ATTRIBUTE_SECONDARY_ENTITY_IDS');
 
             updateEntityCallback = function (selectedIds) {
                 currentAttributeEntities.secondaryEntityIds = selectedIds;
@@ -155,10 +221,21 @@ function AttributeManagement(opts) {
             handleEntitiesSelected(activeAppliesTo);
         });
 
+        // Handle scope limiting checkbox - show/hide secondary options
         elements.limitScope.change(function () {
-            elements.attributeSecondary.addClass('d-none');
-            if (elements.limitScope.is(':checked')) {
-                elements.attributeSecondary.removeClass('d-none');
+            if ($(this).is(':checked')) {
+                elements.attributeSecondary.removeClass('d-none').show();
+                updateSecondaryCategories();
+            } else {
+                elements.attributeSecondary.addClass('d-none').hide();
+                // Reset secondary selections when unchecked
+                currentAttributeEntities.secondaryEntityIds = [];
+                elements.secondaryPrompt.text(opts.allText);
+            }
+
+            // Call template's scope visibility function if it exists
+            if (typeof updateScopeVisibility === 'function') {
+                updateScopeVisibility();
             }
         });
 
@@ -224,12 +301,18 @@ function AttributeManagement(opts) {
         elements.addForm.resetForm();
         elements.addDialog.modal('hide');
         RefreshAttributeList();
+
+        // Reset visibility after add
+        resetFormVisibility();
     };
 
     var editAttributeHandler = function () {
         elements.form.resetForm();
         elements.editDialog.modal('hide');
         RefreshAttributeList();
+
+        // Reset visibility after edit
+        resetFormVisibility();
     };
 
     var deleteAttributeHandler = function () {
@@ -237,9 +320,71 @@ function AttributeManagement(opts) {
         RefreshAttributeList();
     };
 
+    // Visibility rules for different attribute categories
+    var visibilityRules = {
+        appliesTo: {},
+        adminOnly: {},
+        isPrivate: {},
+        secondaryEntities: {}
+    };
+
+    // Initialize visibility rules from options
+    var initializeVisibilityRules = function() {
+        if (options.visibilityRules) {
+            visibilityRules = options.visibilityRules;
+        }
+    };
+
+    // Update field visibility based on selected category
+    var updateFieldVisibility = function() {
+        var selectedCategory = elements.attributeCategory.val();
+
+        // Show/hide fields based on rules
+        $('.attributeUnique').toggle(visibilityRules.appliesTo[selectedCategory] === true);
+        $('.attributeAdminOnly').toggle(visibilityRules.adminOnly[selectedCategory] === true);
+        $('.attributeIsPrivate').toggle(visibilityRules.isPrivate[selectedCategory] === true);
+        $('.secondaryEntities').toggle(visibilityRules.secondaryEntities[selectedCategory] === true);
+
+        if (!visibilityRules.secondaryEntities[selectedCategory]) {
+            $('.limitScope').prop('checked', false);
+            $('.attributeSecondary').hide();
+        }
+    };
+
+    // Update scope visibility based on checkbox states
+    var updateScopeVisibility = function() {
+        $('.scope-conditional').each(function() {
+            var dependsOn = $(this).data('depends-on');
+            if (dependsOn) {
+                var checkbox = $('#' + dependsOn);
+                if (checkbox.is(':checked')) {
+                    $(this).removeClass('d-none').show();
+                } else {
+                    $(this).addClass('d-none').hide();
+                }
+            }
+        });
+    };
+
+    // Reset form visibility state after operations
+    var resetFormVisibility = function() {
+        updateFieldVisibility();
+        updateScopeVisibility();
+
+        // Reset secondary selections
+        $('.limitScope').prop('checked', false);
+        $('.attributeSecondary').addClass('d-none').hide();
+        elements.secondaryPrompt.text(options.allText);
+    };
+
+    // Make functions available globally for template compatibility
+    window.updateFieldVisibility = updateFieldVisibility;
+    window.updateScopeVisibility = updateScopeVisibility;
+
     var showEditDialog = function (selectedAttribute) {
         showRelevantAttributeOptions(selectedAttribute.type, elements.editDialog);
         showRelevantCategoryOptions();
+        updateSecondaryCategories(); // Ensure secondary categories are updated for the edit dialog
 
         $('.editAttributeType', elements.editDialog).hide();
         $('#editType' + selectedAttribute.type).show();
@@ -282,6 +427,7 @@ function AttributeManagement(opts) {
 
         var limitScope = $('#editAttributeLimitScope');
         limitScope.prop('checked', false);
+        $('.attributeSecondary').addClass('d-none').hide(); // Reset secondary visibility
 
         $('#editAttributeSecondaryEntityId').val('');
         elements.secondaryPrompt.text(options.allText);
@@ -296,6 +442,10 @@ function AttributeManagement(opts) {
         $('#editAttributePrivate').prop('checked', selectedAttribute.isPrivate);
 
         setActiveId(selectedAttribute.id);
+
+        // Update field and scope visibility for the edit dialog
+        updateFieldVisibility();
+        updateScopeVisibility();
 
         elements.editDialog.modal('show');
     };
@@ -317,20 +467,10 @@ function AttributeManagement(opts) {
         return elements.activeId.val();
     }
 
+    // Field visibility is now controlled by PHP/template - just handle secondary entities
     var showRelevantCategoryOptions = function () {
-        if (elements.attributeCategory.val() == options.categories.reservation) {
-            $('.attributeUnique').hide();
-            $('.attributeAdminOnly').show();
-            $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-            $('.secondaryEntities').removeClass('d-none');
-            $('.attributeIsPrivate').show();
-        }
-        else {
-            $('.attributeUnique').show();
-            //$('.attributeAdminOnly').hide();
-            $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-            $('.attributeIsPrivate').hide();
-        }
+        // Use the local field visibility function
+        updateFieldVisibility();
     };
 
     var showEntities = function (element, categoryId, selectedIds, formName) {

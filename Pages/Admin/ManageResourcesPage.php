@@ -1323,7 +1323,7 @@ class ResourceFilterValues
 
                 $idEquals = new SqlFilterEquals($attributeId, $id);
                 $f->AppendSql('LEFT JOIN `' . TableNames::CUSTOM_ATTRIBUTE_VALUES . '` `a' . $id . '` ON `a0`.`entity_id` = `a' . $id . '`.`entity_id` ');
-                if ($attribute->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX || $attribute->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX) {
+                if ((int)$attribute->Type() === CustomAttributeTypes::MULTI_LINE_TEXTBOX || (int)$attribute->Type() === CustomAttributeTypes::SINGLE_LINE_TEXTBOX) {
                     $attributeFragment->_And($idEquals->_And(new SqlFilterLike($attributeValue, $value)));
                 } else {
                     $attributeFragment->_And($idEquals->_And(new SqlFilterEquals($attributeValue, $value)));

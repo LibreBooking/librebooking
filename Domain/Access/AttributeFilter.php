@@ -27,9 +27,9 @@ class AttributeFilter
 
             $idEquals = new SqlFilterEquals($attributeId, $attribute->Id());
             $f->AppendSql('LEFT JOIN `' . TableNames::CUSTOM_ATTRIBUTE_VALUES . '` `a' . $id . '` ON `a0`.`entity_id` = `a' . $id . '`.`entity_id` ');
-            if ($attribute->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX || $attribute->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX) {
+            if ((int)$attribute->Type() === CustomAttributeTypes::MULTI_LINE_TEXTBOX || (int)$attribute->Type() === CustomAttributeTypes::SINGLE_LINE_TEXTBOX) {
                 $attributeFragment->_And($idEquals->_And(new SqlFilterLike($attributeValue, $attribute->Value())));
-            } elseif ($attribute->Type() == CustomAttributeTypes::CHECKBOX && $attribute->Value() == '0') {
+            } elseif ((int)$attribute->Type() === CustomAttributeTypes::CHECKBOX && $attribute->Value() == '0') {
                 $attributeFragment->_And(new SqlFilterFreeForm('NOT EXISTS (SELECT 1 FROM `' . TableNames::CUSTOM_ATTRIBUTE_VALUES . '` `b` WHERE `b`.`entity_id` = `a0`.`entity_id` AND `b`.`custom_attribute_id` = ' . $id . ')'));
             } else {
                 $attributeFragment->_And($idEquals->_And(new SqlFilterEquals($attributeValue, $attribute->Value())));

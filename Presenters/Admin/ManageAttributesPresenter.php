@@ -36,6 +36,8 @@ class ManageAttributesPresenter extends ActionPresenter
 
     public function PageLoad()
     {
+        // Set category visibility flags for template conditional rendering
+        $this->page->SetCategoryVisibilityRules();
     }
 
     public function AddAttribute()

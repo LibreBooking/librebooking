@@ -97,24 +97,6 @@ parameters:
 			path: lib/Application/Schedule/ReservationService.php
 
 		-
-			message: '#^Call to an undefined method Attribute\:\:Id\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: lib/Application/Schedule/ScheduleResourceFilter.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Type\(\)\.$#'
-			identifier: method.notFound
-			count: 2
-			path: lib/Application/Schedule/ScheduleResourceFilter.php
-
-		-
-			message: '#^Call to an undefined method Attribute\:\:Value\(\)\.$#'
-			identifier: method.notFound
-			count: 4
-			path: lib/Application/Schedule/ScheduleResourceFilter.php
-
-		-
 			message: '#^PHPDoc tag @return with type Server is not subtype of native type IRestServer\|null\.$#'
 			identifier: return.phpDocType
 			count: 1
