@@ -110,23 +110,21 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      # TODO: Enable this after resolving issues
-      # - name: Cache coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .phpcs-cache
-      #     key: phpcs-cache
-
       - name: Lint PHP files
         run: ./ci/ci-phplint
 
-      # TODO: Enable this after resolving issues
-      # - name: Check coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   run: composer phpcsfixer:lint
+      - name: Cache php-cs-fixer
+        if: matrix.php-version == '8.2'
+        uses: actions/cache@v4
+        with:
+          path: var/cache/.php-cs-fixer.cache
+          key: php-cs-fixer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.lock', '.php-cs-fixer.dist.php') }}
+          restore-keys: |
+            php-cs-fixer-${{ runner.os }}-${{ matrix.php-version }}-
+
+      - name: Check coding-standard (php-cs-fixer)
+        if: matrix.php-version == '8.2'
+        run: composer phpcsfixer:lint
 
   analyse-php:
     runs-on: ubuntu-latest
