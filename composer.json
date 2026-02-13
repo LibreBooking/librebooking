@@ -4,6 +4,7 @@
     "license": "GPL-3.0-only",
     "autoload": {},
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.89",
         "squizlabs/php_codesniffer": "^3.7.1",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "phpunit/phpunit": "^11.3",
@@ -35,14 +36,14 @@
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
-        "fix": "./tools/php-cs-fixer fix -v",
-        "lint": "./tools/php-cs-fixer fix -vv --dry-run",
+        "phpcsfixer:fix": "./vendor/bin/php-cs-fixer fix -v",
+        "phpcsfixer:lint": "./vendor/bin/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
         "phpstan": "./vendor/bin/phpstan analyse",
         "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
         "test": [
             "@phpunit",
-            "@lint"
+            "@phpcsfixer:lint"
         ],
         "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
         "preflight": "php lib/preflight.php"

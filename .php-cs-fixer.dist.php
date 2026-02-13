@@ -20,9 +20,9 @@ $config = new PhpCsFixer\Config();
 // rules: https://cs.symfony.com/doc/rules/index.html
 return $config
     ->setCacheFile(PHP_CS_FIXER_CACHE_FILE)
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setRules([
-        '@Symfony' => true,
+        // '@Symfony' => true,
         '@PSR12' => true, // https://www.php-fig.org/psr/psr-12/
         'array_syntax' => ['syntax' => 'short'],
         'array_indentation' => true,

@@ -68,8 +68,11 @@ Tools
 | For phive to work properly you also need to install
   `gnupgp <https://www.gnupg.org/download/index.html#binary>`__
 
-Simply run ``composer install-tools`` in the root of the project and all
-tools will be available inside the ``/tools`` directory.
+Run ``composer install-tools`` in the root of the project to install
+Phive-managed tools into the ``/tools`` directory.
+
+Run ``composer install`` to install Composer-managed tools into
+``/vendor/bin`` (for example ``php-cs-fixer``).
 
 `Phing <https://www.phing.info/#docs>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,7 +98,7 @@ will be generated in ``/.phpdoc/build``.
 `PHP-CS-Fixer <https://github.com/FriendsOfPhp/PHP-CS-Fixer#usage>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| ``composer lint`` and ``composer fix``
+| ``composer phpcsfixer:lint`` and ``composer phpcsfixer:fix``
 | lints (just warnings) and fixes (changes files) code formating to
   [PSR-12]
 

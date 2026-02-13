@@ -135,7 +135,7 @@ jobs:
       # - name: Check coding-standard
       #   # Allow the previous check to fail but not abort
       #   if: always()
-      #   run: composer phpcs
+      #   run: composer phpcsfixer:lint
 
   analyse-php:
     runs-on: ubuntu-latest
