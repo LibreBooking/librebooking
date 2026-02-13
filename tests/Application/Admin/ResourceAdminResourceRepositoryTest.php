@@ -30,8 +30,7 @@ class ResourceAdminResourceRepositoryTest extends TestBase
 
         $user->expects($this->exactly(2))
                     ->method('IsResourceAdminFor')
-                    ->willReturnCallback(function ($resource) use ($ra)
-                    {
+                    ->willReturnCallback(function ($resource) use ($ra) {
                         return $this
                             ->equalTo($ra->_Resources[1])
                             ->evaluate($resource, '', true);
@@ -96,7 +95,7 @@ class ResourceAdminResourceRepositoryTest extends TestBase
         } catch (Exception $ex) {
             $actualEx = $ex;
         }
-        $this->assertNotEmpty($actualEx, "should have thrown an exception");
+        $this->assertNotEmpty($actualEx, 'should have thrown an exception');
     }
 
     public function testGetsScheduleResourcesUserHasAdminRightsTo()
@@ -113,8 +112,7 @@ class ResourceAdminResourceRepositoryTest extends TestBase
 
         $user->expects($this->exactly(2))
                     ->method('IsResourceAdminFor')
-                    ->willReturnCallback(function ($resource) use ($ra)
-                    {
+                    ->willReturnCallback(function ($resource) use ($ra) {
                         return $this
                             ->equalTo($ra->_Resources[1])
                             ->evaluate($resource, '', true);

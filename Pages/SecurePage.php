@@ -18,7 +18,7 @@ abstract class SecurePage extends Page
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl()));
     }
 }
 
@@ -56,7 +56,7 @@ class SecureActionPageDecorator extends ActionPage
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
     }
 
     public function TakingAction()
@@ -203,6 +203,6 @@ class SecurePageDecorator extends Page implements IPage
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
     }
 }

@@ -27,7 +27,7 @@ class FakeReminder extends Reminder
         $this->resid = 'resid';
         $this->start_time = 480;
         $this->end_time = 960;
-        $this->start_date = mktime(0, 0, 0, $mon, $day-1, $year);
+        $this->start_date = mktime(0, 0, 0, $mon, $day - 1, $year);
         $this->end_date = mktime(0, 0, 0, $mon, $day, $year);
         $this->resource_name = 'resource name';
         $this->location = 'location';

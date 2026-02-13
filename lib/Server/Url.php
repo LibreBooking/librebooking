@@ -49,7 +49,7 @@ class Url
         }
 
         $this->hasQuestionMark = true;
-        $this->url .= sprintf("$char%s=%s", $name, urlencode($value ?? ""));
+        $this->url .= sprintf("$char%s=%s", $name, urlencode($value ?? ''));
 
         return $this;
     }

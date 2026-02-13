@@ -365,9 +365,9 @@ class RegistrationTest extends TestBase
 
         $user = new AuthenticatedUser($username, $email, $fname, $lname, 'password', $langCode, $timezone, $phone, $inst, $title);
 
-        $this->assertNull($user->FirstName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->LastName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->Phone(), "needs to be null to make sure we do not clear values in the database");
+        $this->assertNull($user->FirstName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->LastName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->Phone(), 'needs to be null to make sure we do not clear values in the database');
         $this->assertEquals($email, $user->Email());
     }
 

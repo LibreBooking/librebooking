@@ -537,8 +537,8 @@ class ReservationRepositoryTest extends TestBase
     public function testChangingOnlySharedInformationForFullSeriesJustUpdatesSeriesTable()
     {
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $builder = new ExistingReservationSeriesBuilder();
@@ -576,8 +576,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -605,8 +605,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -633,8 +633,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -661,8 +661,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -689,8 +689,8 @@ class ReservationRepositoryTest extends TestBase
         $seriesId = 10909;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $expectedRepeat = new RepeatNone();
         $referenceNumber = 'ref number current';
         $allowParticipation = true;
@@ -738,8 +738,8 @@ class ReservationRepositoryTest extends TestBase
         $newInstanceId2 = 2828;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $dateRange = DateRange::Create('2010-01-10 05:30:00', '2010-01-10 08:30:00', 'UTC');
@@ -877,8 +877,8 @@ class ReservationRepositoryTest extends TestBase
     public function testDeleteInstances()
     {
         $seriesId = 981;
-        $instance1 = new TestReservation("ref1");
-        $instance2 = new TestReservation("ref2");
+        $instance1 = new TestReservation('ref1');
+        $instance2 = new TestReservation('ref2');
 
         $builder = new ExistingReservationSeriesBuilder();
         $builder->WithEvent(new InstanceRemovedEvent($instance1, $builder->series));
@@ -1084,7 +1084,7 @@ class ReservationRepositoryTest extends TestBase
         $deleteAccessories = $this->db->GetCommandsOfType('RemoveReservationAccessoryCommand');
 
         $this->assertTrue($this->db->ContainsCommand(new AddReservationUserCommand($instance->ReservationId(), $newUserId, ReservationUserLevel::OWNER)));
-        $this->assertEquals(count($series->AdditionalResources()), count($addResources), "dont want to double add");
+        $this->assertEquals(count($series->AdditionalResources()), count($addResources), 'dont want to double add');
         $this->assertEquals(count($series->Accessories()), count($addAccessories));
         $this->assertEquals(1, count($deleteResources));
         $this->assertEquals(0, count($deleteAccessories));

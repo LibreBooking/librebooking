@@ -515,12 +515,12 @@ class ro_ro extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervări în așteptare de aprobare';
         $strings['LaterThisMonth'] = 'Mai târziu în acest lună';
         $strings['LaterThisYear'] = 'Mai târziu în acest an';
-        $strings['Remaining'] = 'Rămase';        
+        $strings['Remaining'] = 'Rămase';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nu există rezervări de ieșire lipsă';
-        $strings['MissingCheckOutReservations'] = 'Rezervări de ieșire lipsă';        
+        $strings['MissingCheckOutReservations'] = 'Rezervări de ieșire lipsă';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

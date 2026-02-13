@@ -67,10 +67,10 @@ class CAS_AuthenticationException extends RuntimeException implements CAS_Except
         $failure,
         $cas_url,
         $no_response,
-        $bad_response=false,
-        $cas_response='',
-        $err_code=-1,
-        $err_msg=''
+        $bad_response = false,
+        $cas_response = '',
+        $err_code = -1,
+        $err_msg = ''
     ) {
         $messages = [];
         phpCAS::traceBegin();
@@ -90,17 +90,17 @@ class CAS_AuthenticationException extends RuntimeException implements CAS_Except
                 phpCAS::trace($messages[] = 'Reason: bad response from the CAS server');
             } else {
                 switch ($client->getServerVersion()) {
-                case CAS_VERSION_1_0:
-                    phpCAS::trace($messages[] = 'Reason: CAS error');
-                    break;
-                case CAS_VERSION_2_0:
-                case CAS_VERSION_3_0:
-                    if ($err_code === -1) {
-                        phpCAS::trace($messages[] = 'Reason: no CAS error');
-                    } else {
-                        phpCAS::trace($messages[] = 'Reason: ['.$err_code.'] CAS error: '.$err_msg);
-                    }
-                    break;
+                    case CAS_VERSION_1_0:
+                        phpCAS::trace($messages[] = 'Reason: CAS error');
+                        break;
+                    case CAS_VERSION_2_0:
+                    case CAS_VERSION_3_0:
+                        if ($err_code === -1) {
+                            phpCAS::trace($messages[] = 'Reason: no CAS error');
+                        } else {
+                            phpCAS::trace($messages[] = 'Reason: ['.$err_code.'] CAS error: '.$err_msg);
+                        }
+                        break;
                 }
             }
             phpCAS::trace($messages[] = 'CAS response: '.$cas_response);

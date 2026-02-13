@@ -1028,12 +1028,12 @@ class pt_br extends en_gb
         $strings['PendingApprovalReservations'] = 'Reservas aguardando aprovação';
         $strings['LaterThisMonth'] = 'Mais tarde neste mês';
         $strings['LaterThisYear'] = 'Mais tarde neste ano';
-        $strings['Remaining'] = 'Restante';        
+        $strings['Remaining'] = 'Restante';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Não há reservas de check-out em falta';
-        $strings['MissingCheckOutReservations'] = 'Reservas de Check Out em Falta';        
+        $strings['MissingCheckOutReservations'] = 'Reservas de Check Out em Falta';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

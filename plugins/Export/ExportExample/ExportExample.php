@@ -12,11 +12,13 @@ class ExportExample implements IExportFactory
         $this->factoryToDecorate = $factoryToDecorate;
     }
 
-    public function GetIcalendarClassification(IReservedItemView $item) {
+    public function GetIcalendarClassification(IReservedItemView $item)
+    {
         return 'PRIVATE';
     }
 
-    public function GetIcalendarExtraLines(IReservedItemView $item) {
+    public function GetIcalendarExtraLines(IReservedItemView $item)
+    {
         return "TRANSP:TRANSPARENT\n";
     }
 }

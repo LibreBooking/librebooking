@@ -29,28 +29,39 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetResourceIdList(): array
     {
-         throw new Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
-    public function GetUserResourceList() {
+    public function GetUserResourceList()
+    {
         return null;
     }
 
-    public function GetUserResourceIdList(): array { 
+    public function GetUserResourceIdList(): array
+    {
         return [];
     }
 
-    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null) {
+    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
+    {
         return null;
     }
 
-    public function GetUserResourcePermissions($userId, $resourceIds = []) { }
+    public function GetUserResourcePermissions($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetUserGroupResourcePermissions($userId, $resourceIds = []) { }
+    public function GetUserGroupResourcePermissions($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetResourceAdminResourceIds($userId, $resourceIds = []) { }
+    public function GetResourceAdminResourceIds($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetScheduleAdminResourceIds($userId, $resourceIds = []) { }
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = [])
+    {
+    }
 
     public function GetScheduleResources($scheduleId)
     {

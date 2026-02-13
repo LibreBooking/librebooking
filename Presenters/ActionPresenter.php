@@ -64,14 +64,14 @@ abstract class ActionPresenter
                 $this->LoadValidators($action);
 
                 if ($this->actionPage->IsValid()) {
-                    Log::Debug("Processing page action. Action %s", $action);
+                    Log::Debug('Processing page action. Action %s', $action);
                     $this->$method();
                 }
             } catch (Exception $ex) {
-                Log::Error("ProcessAction Error. Action %s, Error %s", $action, $ex);
+                Log::Error('ProcessAction Error. Action %s, Error %s', $action, $ex);
             }
         } else {
-            Log::Error("Unknown action %s", $action);
+            Log::Error('Unknown action %s', $action);
         }
     }
 }

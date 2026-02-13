@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4
@@ -84,7 +85,7 @@ class adLDAP
     *
     * @var string
     */
-    protected $accountSuffix = "@mydomain.local";
+    protected $accountSuffix = '@mydomain.local';
 
     /**
     * The base dn for your domain
@@ -93,7 +94,7 @@ class adLDAP
     *
     * @var string
     */
-    protected $baseDn = "DC=mydomain,DC=local";
+    protected $baseDn = 'DC=mydomain,DC=local';
 
     /**
     * Port used to talk to the domain controllers.
@@ -108,7 +109,7 @@ class adLDAP
     *
     * @var array
     */
-    protected $domainControllers = ["dc01.mydomain.local"];
+    protected $domainControllers = ['dc01.mydomain.local'];
 
     /**
     * Optional account with higher privileges for searching
@@ -584,41 +585,41 @@ class adLDAP
     {
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
-            if (array_key_exists("account_suffix", $options)) {
-                $this->accountSuffix = $options["account_suffix"];
+            if (array_key_exists('account_suffix', $options)) {
+                $this->accountSuffix = $options['account_suffix'];
             }
-            if (array_key_exists("base_dn", $options)) {
-                $this->baseDn = $options["base_dn"];
+            if (array_key_exists('base_dn', $options)) {
+                $this->baseDn = $options['base_dn'];
             }
-            if (array_key_exists("domain_controllers", $options)) {
-                if (!is_array($options["domain_controllers"])) {
+            if (array_key_exists('domain_controllers', $options)) {
+                if (!is_array($options['domain_controllers'])) {
                     throw new adLDAPException('[domain_controllers] option must be an array');
                 }
-                $this->domainControllers = $options["domain_controllers"];
+                $this->domainControllers = $options['domain_controllers'];
             }
-            if (array_key_exists("admin_username", $options)) {
-                $this->adminUsername = $options["admin_username"];
+            if (array_key_exists('admin_username', $options)) {
+                $this->adminUsername = $options['admin_username'];
             }
-            if (array_key_exists("admin_password", $options)) {
-                $this->adminPassword = $options["admin_password"];
+            if (array_key_exists('admin_password', $options)) {
+                $this->adminPassword = $options['admin_password'];
             }
-            if (array_key_exists("real_primarygroup", $options)) {
-                $this->realPrimaryGroup = $options["real_primarygroup"];
+            if (array_key_exists('real_primarygroup', $options)) {
+                $this->realPrimaryGroup = $options['real_primarygroup'];
             }
-            if (array_key_exists("use_ssl", $options)) {
-                $this->setUseSSL($options["use_ssl"]);
+            if (array_key_exists('use_ssl', $options)) {
+                $this->setUseSSL($options['use_ssl']);
             }
-            if (array_key_exists("use_tls", $options)) {
-                $this->useTLS = $options["use_tls"];
+            if (array_key_exists('use_tls', $options)) {
+                $this->useTLS = $options['use_tls'];
             }
-            if (array_key_exists("recursive_groups", $options)) {
-                $this->recursiveGroups = $options["recursive_groups"];
+            if (array_key_exists('recursive_groups', $options)) {
+                $this->recursiveGroups = $options['recursive_groups'];
             }
-            if (array_key_exists("ad_port", $options)) {
-                $this->setPort($options["ad_port"]);
+            if (array_key_exists('ad_port', $options)) {
+                $this->setPort($options['ad_port']);
             }
-            if (array_key_exists("sso", $options)) {
-                $this->setUseSSO($options["sso"]);
+            if (array_key_exists('sso', $options)) {
+                $this->setUseSSO($options['sso']);
                 if (!$this->ldapSaslSupported()) {
                     $this->setUseSSO(false);
                 }
@@ -654,9 +655,9 @@ class adLDAP
         // Connect to the AD/LDAP server as the username/password
         $domainController = $this->randomController();
         if ($this->useSSL) {
-            $this->ldapConnection = ldap_connect("ldaps://" . $domainController . ":" . $this->adPort);
+            $this->ldapConnection = ldap_connect('ldaps://' . $domainController . ':' . $this->adPort);
         } else {
-            $this->ldapConnection = ldap_connect("ldap://" . $domainController . ":" . $this->adPort);
+            $this->ldapConnection = ldap_connect('ldap://' . $domainController . ':' . $this->adPort);
         }
 
         // Set some ldap options for talking to AD
@@ -680,8 +681,8 @@ class adLDAP
             }
         }
         if ($this->useSSO && $_SERVER['REMOTE_USER'] && $this->adminUsername === null && $_SERVER['KRB5CCNAME']) {
-            putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
-            $this->ldapBind = @ldap_sasl_bind($this->ldapConnection, null, null, "GSSAPI");
+            putenv('KRB5CCNAME=' . $_SERVER['KRB5CCNAME']);
+            $this->ldapBind = @ldap_sasl_bind($this->ldapConnection, null, null, 'GSSAPI');
             if (!$this->ldapBind) {
                 throw new adLDAPException('Rebind to Active Directory failed. AD said: ' . $this->getLastError());
             } else {
@@ -729,8 +730,8 @@ class adLDAP
 
         // Allow binding over SSO for Kerberos
         if ($this->useSSO && $_SERVER['REMOTE_USER'] && $_SERVER['REMOTE_USER'] == $username && $this->adminUsername === null && $_SERVER['KRB5CCNAME']) {
-            putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
-            $this->ldapBind = @ldap_sasl_bind($this->ldapConnection, null, null, "GSSAPI");
+            putenv('KRB5CCNAME=' . $_SERVER['KRB5CCNAME']);
+            $this->ldapBind = @ldap_sasl_bind($this->ldapConnection, null, null, 'GSSAPI');
             if (!$this->ldapBind) {
                 throw new adLDAPException('Rebind to Active Directory failed. AD said: ' . $this->getLastError());
             } else {
@@ -774,7 +775,7 @@ class adLDAP
     * @param array $attributes The attributes you wish to query e.g. defaultnamingcontext
     * @return array
     */
-    public function getRootDse($attributes = ["*", "+"])
+    public function getRootDse($attributes = ['*', '+'])
     {
         if (!$this->ldapBind) {
             return (false);
@@ -837,155 +838,155 @@ class adLDAP
         // LDAP doesn't like NULL attributes, only set them if they have values
         // If you wish to remove an attribute you should set it to a space
         // TO DO: Adapt user_modify to use ldap_mod_delete to remove a NULL attribute
-        $mod=[];
+        $mod = [];
 
         // Check every attribute to see if it contains 8bit characters and then UTF8 encode them
         array_walk($attributes, [$this, 'encode8bit']);
 
-        if ($attributes["address_city"]) {
-            $mod["l"][0]=$attributes["address_city"];
+        if ($attributes['address_city']) {
+            $mod['l'][0] = $attributes['address_city'];
         }
-        if ($attributes["address_code"]) {
-            $mod["postalCode"][0]=$attributes["address_code"];
+        if ($attributes['address_code']) {
+            $mod['postalCode'][0] = $attributes['address_code'];
         }
         //if ($attributes["address_country"]){ $mod["countryCode"][0]=$attributes["address_country"]; } // use country codes?
-        if ($attributes["address_country"]) {
-            $mod["c"][0]=$attributes["address_country"];
+        if ($attributes['address_country']) {
+            $mod['c'][0] = $attributes['address_country'];
         }
-        if ($attributes["address_pobox"]) {
-            $mod["postOfficeBox"][0]=$attributes["address_pobox"];
+        if ($attributes['address_pobox']) {
+            $mod['postOfficeBox'][0] = $attributes['address_pobox'];
         }
-        if ($attributes["address_state"]) {
-            $mod["st"][0]=$attributes["address_state"];
+        if ($attributes['address_state']) {
+            $mod['st'][0] = $attributes['address_state'];
         }
-        if ($attributes["address_street"]) {
-            $mod["streetAddress"][0]=$attributes["address_street"];
+        if ($attributes['address_street']) {
+            $mod['streetAddress'][0] = $attributes['address_street'];
         }
-        if ($attributes["company"]) {
-            $mod["company"][0]=$attributes["company"];
+        if ($attributes['company']) {
+            $mod['company'][0] = $attributes['company'];
         }
-        if ($attributes["change_password"]) {
-            $mod["pwdLastSet"][0]=0;
+        if ($attributes['change_password']) {
+            $mod['pwdLastSet'][0] = 0;
         }
-        if ($attributes["department"]) {
-            $mod["department"][0]=$attributes["department"];
+        if ($attributes['department']) {
+            $mod['department'][0] = $attributes['department'];
         }
-        if ($attributes["description"]) {
-            $mod["description"][0]=$attributes["description"];
+        if ($attributes['description']) {
+            $mod['description'][0] = $attributes['description'];
         }
-        if ($attributes["display_name"]) {
-            $mod["displayName"][0]=$attributes["display_name"];
+        if ($attributes['display_name']) {
+            $mod['displayName'][0] = $attributes['display_name'];
         }
-        if ($attributes["email"]) {
-            $mod["mail"][0]=$attributes["email"];
+        if ($attributes['email']) {
+            $mod['mail'][0] = $attributes['email'];
         }
-        if ($attributes["expires"]) {
-            $mod["accountExpires"][0]=$attributes["expires"];
+        if ($attributes['expires']) {
+            $mod['accountExpires'][0] = $attributes['expires'];
         } //unix epoch format?
-        if ($attributes["firstname"]) {
-            $mod["givenName"][0]=$attributes["firstname"];
+        if ($attributes['firstname']) {
+            $mod['givenName'][0] = $attributes['firstname'];
         }
-        if ($attributes["home_directory"]) {
-            $mod["homeDirectory"][0]=$attributes["home_directory"];
+        if ($attributes['home_directory']) {
+            $mod['homeDirectory'][0] = $attributes['home_directory'];
         }
-        if ($attributes["home_drive"]) {
-            $mod["homeDrive"][0]=$attributes["home_drive"];
+        if ($attributes['home_drive']) {
+            $mod['homeDrive'][0] = $attributes['home_drive'];
         }
-        if ($attributes["initials"]) {
-            $mod["initials"][0]=$attributes["initials"];
+        if ($attributes['initials']) {
+            $mod['initials'][0] = $attributes['initials'];
         }
-        if ($attributes["logon_name"]) {
-            $mod["userPrincipalName"][0]=$attributes["logon_name"];
+        if ($attributes['logon_name']) {
+            $mod['userPrincipalName'][0] = $attributes['logon_name'];
         }
-        if ($attributes["manager"]) {
-            $mod["manager"][0]=$attributes["manager"];
+        if ($attributes['manager']) {
+            $mod['manager'][0] = $attributes['manager'];
         }  //UNTESTED ***Use DistinguishedName***
-        if ($attributes["office"]) {
-            $mod["physicalDeliveryOfficeName"][0]=$attributes["office"];
+        if ($attributes['office']) {
+            $mod['physicalDeliveryOfficeName'][0] = $attributes['office'];
         }
-        if ($attributes["password"]) {
-            $mod["unicodePwd"][0]=$this->user()->encodePassword($attributes["password"]);
+        if ($attributes['password']) {
+            $mod['unicodePwd'][0] = $this->user()->encodePassword($attributes['password']);
         }
-        if ($attributes["profile_path"]) {
-            $mod["profilepath"][0]=$attributes["profile_path"];
+        if ($attributes['profile_path']) {
+            $mod['profilepath'][0] = $attributes['profile_path'];
         }
-        if ($attributes["script_path"]) {
-            $mod["scriptPath"][0]=$attributes["script_path"];
+        if ($attributes['script_path']) {
+            $mod['scriptPath'][0] = $attributes['script_path'];
         }
-        if ($attributes["surname"]) {
-            $mod["sn"][0]=$attributes["surname"];
+        if ($attributes['surname']) {
+            $mod['sn'][0] = $attributes['surname'];
         }
-        if ($attributes["title"]) {
-            $mod["title"][0]=$attributes["title"];
+        if ($attributes['title']) {
+            $mod['title'][0] = $attributes['title'];
         }
-        if ($attributes["telephone"]) {
-            $mod["telephoneNumber"][0]=$attributes["telephone"];
+        if ($attributes['telephone']) {
+            $mod['telephoneNumber'][0] = $attributes['telephone'];
         }
-        if ($attributes["mobile"]) {
-            $mod["mobile"][0]=$attributes["mobile"];
+        if ($attributes['mobile']) {
+            $mod['mobile'][0] = $attributes['mobile'];
         }
-        if ($attributes["pager"]) {
-            $mod["pager"][0]=$attributes["pager"];
+        if ($attributes['pager']) {
+            $mod['pager'][0] = $attributes['pager'];
         }
-        if ($attributes["ipphone"]) {
-            $mod["ipphone"][0]=$attributes["ipphone"];
+        if ($attributes['ipphone']) {
+            $mod['ipphone'][0] = $attributes['ipphone'];
         }
-        if ($attributes["web_page"]) {
-            $mod["wWWHomePage"][0]=$attributes["web_page"];
+        if ($attributes['web_page']) {
+            $mod['wWWHomePage'][0] = $attributes['web_page'];
         }
-        if ($attributes["fax"]) {
-            $mod["facsimileTelephoneNumber"][0]=$attributes["fax"];
+        if ($attributes['fax']) {
+            $mod['facsimileTelephoneNumber'][0] = $attributes['fax'];
         }
-        if ($attributes["enabled"]) {
-            $mod["userAccountControl"][0]=$attributes["enabled"];
+        if ($attributes['enabled']) {
+            $mod['userAccountControl'][0] = $attributes['enabled'];
         }
-        if ($attributes["homephone"]) {
-            $mod["homephone"][0]=$attributes["homephone"];
+        if ($attributes['homephone']) {
+            $mod['homephone'][0] = $attributes['homephone'];
         }
 
         // Distribution List specific schema
-        if ($attributes["group_sendpermission"]) {
-            $mod["dlMemSubmitPerms"][0]=$attributes["group_sendpermission"];
+        if ($attributes['group_sendpermission']) {
+            $mod['dlMemSubmitPerms'][0] = $attributes['group_sendpermission'];
         }
-        if ($attributes["group_rejectpermission"]) {
-            $mod["dlMemRejectPerms"][0]=$attributes["group_rejectpermission"];
+        if ($attributes['group_rejectpermission']) {
+            $mod['dlMemRejectPerms'][0] = $attributes['group_rejectpermission'];
         }
 
         // Exchange Schema
-        if ($attributes["exchange_homemdb"]) {
-            $mod["homeMDB"][0]=$attributes["exchange_homemdb"];
+        if ($attributes['exchange_homemdb']) {
+            $mod['homeMDB'][0] = $attributes['exchange_homemdb'];
         }
-        if ($attributes["exchange_mailnickname"]) {
-            $mod["mailNickname"][0]=$attributes["exchange_mailnickname"];
+        if ($attributes['exchange_mailnickname']) {
+            $mod['mailNickname'][0] = $attributes['exchange_mailnickname'];
         }
-        if ($attributes["exchange_proxyaddress"]) {
-            $mod["proxyAddresses"][0]=$attributes["exchange_proxyaddress"];
+        if ($attributes['exchange_proxyaddress']) {
+            $mod['proxyAddresses'][0] = $attributes['exchange_proxyaddress'];
         }
-        if ($attributes["exchange_usedefaults"]) {
-            $mod["mDBUseDefaults"][0]=$attributes["exchange_usedefaults"];
+        if ($attributes['exchange_usedefaults']) {
+            $mod['mDBUseDefaults'][0] = $attributes['exchange_usedefaults'];
         }
-        if ($attributes["exchange_policyexclude"]) {
-            $mod["msExchPoliciesExcluded"][0]=$attributes["exchange_policyexclude"];
+        if ($attributes['exchange_policyexclude']) {
+            $mod['msExchPoliciesExcluded'][0] = $attributes['exchange_policyexclude'];
         }
-        if ($attributes["exchange_policyinclude"]) {
-            $mod["msExchPoliciesIncluded"][0]=$attributes["exchange_policyinclude"];
+        if ($attributes['exchange_policyinclude']) {
+            $mod['msExchPoliciesIncluded'][0] = $attributes['exchange_policyinclude'];
         }
-        if ($attributes["exchange_addressbook"]) {
-            $mod["showInAddressBook"][0]=$attributes["exchange_addressbook"];
+        if ($attributes['exchange_addressbook']) {
+            $mod['showInAddressBook'][0] = $attributes['exchange_addressbook'];
         }
-        if ($attributes["exchange_altrecipient"]) {
-            $mod["altRecipient"][0]=$attributes["exchange_altrecipient"];
+        if ($attributes['exchange_altrecipient']) {
+            $mod['altRecipient'][0] = $attributes['exchange_altrecipient'];
         }
-        if ($attributes["exchange_deliverandredirect"]) {
-            $mod["deliverAndRedirect"][0]=$attributes["exchange_deliverandredirect"];
+        if ($attributes['exchange_deliverandredirect']) {
+            $mod['deliverAndRedirect'][0] = $attributes['exchange_deliverandredirect'];
         }
 
         // This schema is designed for contacts
-        if ($attributes["exchange_hidefromlists"]) {
-            $mod["msExchHideFromAddressLists"][0]=$attributes["exchange_hidefromlists"];
+        if ($attributes['exchange_hidefromlists']) {
+            $mod['msExchHideFromAddressLists'][0] = $attributes['exchange_hidefromlists'];
         }
-        if ($attributes["contact_email"]) {
-            $mod["targetAddress"][0]=$attributes["contact_email"];
+        if ($attributes['contact_email']) {
+            $mod['targetAddress'][0] = $attributes['contact_email'];
         }
 
         //echo ("<pre>"); print_r($mod);
@@ -998,7 +999,7 @@ class adLDAP
         }
         */
 
-        if (count($mod)==0) {
+        if (count($mod) == 0) {
             return (false);
         }
         return ($mod);
@@ -1011,7 +1012,7 @@ class adLDAP
     {
         $encode = false;
         if (is_string($item)) {
-            for ($i=0; $i<strlen($item); $i++) {
+            for ($i = 0; $i < strlen($item); $i++) {
                 if (ord($item[$i]) >> 7) {
                     $encode = true;
                 }

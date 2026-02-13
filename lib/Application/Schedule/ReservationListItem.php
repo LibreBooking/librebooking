@@ -248,7 +248,7 @@ class ReservationListItem
             $pre->Id = $this->Id() . 'buffer-pre';
             $pre->ReferenceNumber = $this->ReferenceNumber();
             $pre->ResourceId = $this->ResourceId();
-            $pre->Label = "";
+            $pre->Label = '';
 
             $post = new ReservationListItemDto();
             $post->StartDate = $this->EndDate()->Timestamp();
@@ -261,7 +261,7 @@ class ReservationListItem
             $post->Id = $this->Id() . 'buffer-post';
             $post->ReferenceNumber = $this->ReferenceNumber();
             $post->ResourceId = $this->ResourceId();
-            $post->Label = "";
+            $post->Label = '';
 
             return [$pre, $dto, $post];
         }

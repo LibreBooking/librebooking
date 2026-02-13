@@ -76,9 +76,9 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfAnotherUser->WithSecondaryEntities(CustomAttributeCategory::USER, 1212);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser,
-                $attributeWithSecondaryEntityOfAnotherUser,
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser,
+            $attributeWithSecondaryEntityOfAnotherUser,
         ];
 
         $this->authorizationService->_CanReserveFor = true;
@@ -106,8 +106,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfRequestedUser->WithSecondaryEntities(CustomAttributeCategory::USER, $requestedUserId);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser
         ];
 
         $this->authorizationService->_CanReserveFor = false;
@@ -130,8 +130,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $requestedRefNum = '8882';
 
         $attributes = [
-                new FakeCustomAttribute(1),
-                new FakeCustomAttribute(2),
+            new FakeCustomAttribute(1),
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -173,8 +173,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -197,8 +197,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())

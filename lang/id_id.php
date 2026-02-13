@@ -604,7 +604,7 @@ class id_id extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Tidak ada reservasi check out yang hilang';
-        $strings['MissingCheckOutReservations'] = 'Reservasi Check Out yang Hilang';        
+        $strings['MissingCheckOutReservations'] = 'Reservasi Check Out yang Hilang';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

@@ -85,19 +85,19 @@ class ResourceAvailabilityControlPresenterTest extends TestBase
     private function PopulateResources()
     {
         $this->resourceService->_AllResources = [
-                $this->unavailableResource,
-                $this->availableResource,
-                $this->unavailableAllDayResource,
+            $this->unavailableResource,
+            $this->availableResource,
+            $this->unavailableAllDayResource,
         ];
     }
 
     private function PopulateReservations()
     {
         $this->reservationRepo->_Reservations = [
-                new TestReservationItemView(1, Date::Now()->AddHours(-1), Date::Now()->AddHours(1), $this->unavailableResource->GetId()),
-                new TestReservationItemView(2, Date::Now()->AddHours(1), Date::Now()->AddHours(2), $this->unavailableResource->GetId()),
-                new TestReservationItemView(3, Date::Now()->AddDays(-1), Date::Now()->AddDays(1), $this->unavailableAllDayResource->GetId()),
-                new TestReservationItemView(4, Date::Now()->AddDays(1), Date::Now()->AddDays(2), $this->availableResource->GetId()),
+            new TestReservationItemView(1, Date::Now()->AddHours(-1), Date::Now()->AddHours(1), $this->unavailableResource->GetId()),
+            new TestReservationItemView(2, Date::Now()->AddHours(1), Date::Now()->AddHours(2), $this->unavailableResource->GetId()),
+            new TestReservationItemView(3, Date::Now()->AddDays(-1), Date::Now()->AddDays(1), $this->unavailableAllDayResource->GetId()),
+            new TestReservationItemView(4, Date::Now()->AddDays(1), Date::Now()->AddDays(2), $this->availableResource->GetId()),
         ];
     }
 

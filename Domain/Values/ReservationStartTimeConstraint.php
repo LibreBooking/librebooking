@@ -14,7 +14,7 @@ class ReservationStartTimeConstraint
      */
     public static function IsCurrent(string|null $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::CURRENT;
+        return strtolower($startTimeConstraint ?? '') == self::CURRENT;
     }
 
     /**
@@ -24,7 +24,7 @@ class ReservationStartTimeConstraint
      */
     public static function IsNone(string|null $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::NONE;
+        return strtolower($startTimeConstraint ?? '') == self::NONE;
     }
 
     /**
@@ -34,6 +34,6 @@ class ReservationStartTimeConstraint
      */
     public static function IsFuture(string|null $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::FUTURE;
+        return strtolower($startTimeConstraint ?? '') == self::FUTURE;
     }
 }

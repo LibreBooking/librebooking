@@ -36,7 +36,8 @@ class FakeConfig extends Configuration implements IConfiguration
     }
 
     public function EnableSubscription()
-    { }
+    {
+    }
 
     /**
      * @param string $configId
@@ -87,7 +88,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function GetSectionKey($section, $keyName, $converter = null)
     {
-        return $this->GetKey( $keyName, $converter);
+        return $this->GetKey($keyName, $converter);
     }
 
     private function GetDefaultConverter(array $config): ?IConvert

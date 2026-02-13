@@ -95,7 +95,7 @@ EOT;
             echo "<a href='#{$category->Name()}-post' class='d-block small text-muted'>POST Services</a>";
             echo "<a href='#{$category->Name()}-get' class='d-block small text-muted'>GET Services</a>";
             echo "<a href='#{$category->Name()}-delete' class='d-block small text-muted'>DELETE Services</a>";
-            echo "</div></li>";
+            echo '</div></li>';
         }
 
         echo <<<EOT
@@ -123,22 +123,22 @@ EOT;
                     echo "<div class='accordion-item'>";
                     echo "<h2 class='accordion-header' id='heading-$collapseId'>";
                     echo "<button class='accordion-button collapsed bg-success text-white' type='button' data-bs-toggle='collapse' data-bs-target='#$collapseId'>{$md->Name()}</button>";
-                    echo "</h2>";
+                    echo '</h2>';
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
                     $request = $md->Request();
                     self::EchoCommon($md, $service, $app);
-                    echo "<h5>Request</h5>";
+                    echo '<h5>Request</h5>';
                     if (is_object($request)) {
-                        echo "<div class='code'><pre>" . json_encode($request, JSON_PRETTY_PRINT) . "</pre></div>";
+                        echo "<div class='code'><pre>" . json_encode($request, JSON_PRETTY_PRINT) . '</pre></div>';
                     } elseif (is_null($request)) {
-                        echo "<p><em>None</em></p>";
+                        echo '<p><em>None</em></p>';
                     } else {
                         echo "<p>Unstructured request of type <i>$request</i></p>";
                     }
-                    echo "</div></div></div>";
+                    echo '</div></div></div>';
                 }
-                echo "</div>";
+                echo '</div>';
             }
 
             // GET
@@ -155,13 +155,13 @@ EOT;
                     echo "<div class='accordion-item'>";
                     echo "<h2 class='accordion-header' id='heading-$collapseId'>";
                     echo "<button class='accordion-button collapsed bg-primary text-white' type='button' data-bs-toggle='collapse' data-bs-target='#$collapseId'>{$md->Name()}</button>";
-                    echo "</h2>";
+                    echo '</h2>';
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
                     self::EchoCommon($md, $service, $app);
-                    echo "</div></div></div>";
+                    echo '</div></div></div>';
                 }
-                echo "</div>";
+                echo '</div>';
             }
 
             // DELETE
@@ -178,13 +178,13 @@ EOT;
                     echo "<div class='accordion-item'>";
                     echo "<h2 class='accordion-header' id='heading-$collapseId'>";
                     echo "<button class='accordion-button collapsed bg-danger text-white' type='button' data-bs-toggle='collapse' data-bs-target='#$collapseId'>{$md->Name()}</button>";
-                    echo "</h2>";
+                    echo '</h2>';
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
                     self::EchoCommon($md, $service, $app);
-                    echo "</div></div></div>";
+                    echo '</div></div></div>';
                 }
-                echo "</div>";
+                echo '</div>';
             }
         }
 
@@ -201,8 +201,8 @@ EOT;
     {
         $response = $md->Response();
         echo "<h5>Name</h5><p>{$md->Name()}</p>";
-        echo "<h5>Description</h5><p>" . nl2br($md->Description()) . "</p>";
-        echo "<h5>Route</h5><p><code>" . $app->urlFor($endpoint->RouteName()) . "</code></p>";
+        echo '<h5>Description</h5><p>' . nl2br($md->Description()) . '</p>';
+        echo '<h5>Route</h5><p><code>' . $app->urlFor($endpoint->RouteName()) . '</code></p>';
 
         if ($endpoint->IsSecure()) {
             echo "<p class='secure'>🔒 This service is secure and requires authentication</p>";
@@ -211,11 +211,11 @@ EOT;
             echo "<p class='admin'>⚠️ This service is only available to application administrators</p>";
         }
 
-        echo "<h5>Response</h5>";
+        echo '<h5>Response</h5>';
         if (is_object($response)) {
-            echo "<div class='code'><pre>" . json_encode($response, JSON_PRETTY_PRINT) . "</pre></div>";
+            echo "<div class='code'><pre>" . json_encode($response, JSON_PRETTY_PRINT) . '</pre></div>';
         } elseif (is_null($response)) {
-            echo "<p><em>None</em></p>";
+            echo '<p><em>None</em></p>';
         } else {
             echo "<p>Unstructured response of type <i>$response</i></p>";
         }

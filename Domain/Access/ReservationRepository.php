@@ -219,7 +219,7 @@ class ReservationRepository implements IReservationRepository
     {
         $database = ServiceLocator::GetDatabase();
 
-//        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
+        //        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
         //		$creditAdjustment = $existingReservationSeries->GetCreditsRequired() - $existingReservationSeries->GetOriginalCreditsConsumed();
         $creditAdjustment = 0 - $existingReservationSeries->GetUnusedCreditBalance();
         if ($creditAdjustment != 0) {
@@ -758,13 +758,13 @@ class InstanceAddedEventCommand extends EventCommand
         );
 
         $reservationId = $database->ExecuteInsert($insertReservation);
-//
-//        if ($reservationId <= 0)
-//        {
-//            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
-//            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
-//            throw new Exception("Could not insert reservation - conflicting times");
-//        }
+        //
+        //        if ($reservationId <= 0)
+        //        {
+        //            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
+        //            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
+        //            throw new Exception("Could not insert reservation - conflicting times");
+        //        }
         $insertReservationUser = new AddReservationUserCommand($reservationId, $this->series->UserId(), ReservationUserLevel::OWNER);
 
         $database->Execute($insertReservationUser);

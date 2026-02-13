@@ -71,7 +71,7 @@ class ReservationConflictIdentifier implements IReservationConflictIdentifier
         /** @var Reservation $reservation */
         foreach ($reservations as $reservation) {
             $instanceConflicts = [];
-            Log::Debug("Checking for reservation conflicts, reference number %s on %s", $reservation->ReferenceNumber(), $reservation->StartDate());
+            Log::Debug('Checking for reservation conflicts, reference number %s on %s', $reservation->ReferenceNumber(), $reservation->StartDate());
 
             $startDate = $reservation->StartDate();
             $endDate = $reservation->EndDate();
@@ -86,15 +86,15 @@ class ReservationConflictIdentifier implements IReservationConflictIdentifier
             /** @var IReservedItemView $existingItem */
             foreach ($existingItems as $existingItem) {
                 if (
-                        ($bufferTime == null || $reservationSeries->BookedBy()->IsAdmin) &&
-                        ($existingItem->GetStartDate()->Equals($reservation->EndDate()) || $existingItem->GetEndDate()->Equals($reservation->StartDate()))
+                    ($bufferTime == null || $reservationSeries->BookedBy()->IsAdmin) &&
+                    ($existingItem->GetStartDate()->Equals($reservation->EndDate()) || $existingItem->GetEndDate()->Equals($reservation->StartDate()))
                 ) {
                     continue;
                 }
 
                 if ($this->IsInConflict($reservation, $reservationSeries, $existingItem, $keyedResources)) {
                     Log::Debug(
-                        "Reference number %s conflicts with existing %s with id %s, referenceNumber %s on %s",
+                        'Reference number %s conflicts with existing %s with id %s, referenceNumber %s on %s',
                         $reservation->ReferenceNumber(),
                         get_class($existingItem),
                         $existingItem->GetId(),
@@ -104,7 +104,7 @@ class ReservationConflictIdentifier implements IReservationConflictIdentifier
 
                     $instanceConflicts[] = new IdentifiedConflict($reservation, $existingItem);
                 }
-                $anyConflictsAreBlackouts = $anyConflictsAreBlackouts || $existingItem->GetReferenceNumber() == "";
+                $anyConflictsAreBlackouts = $anyConflictsAreBlackouts || $existingItem->GetReferenceNumber() == '';
             }
 
             $totalConflicts = $this->GetMaxConcurrentConflicts($instanceConflicts);
@@ -245,6 +245,6 @@ class ReservationConflictResult
      */
     public function AllowReservation($numberOfConflictsSkipped = 0)
     {
-        return !$this->areAnyConflictsBlackouts && (($this->maxConcurrentConflicts-$numberOfConflictsSkipped) < $this->maxConcurrentReservations);
+        return !$this->areAnyConflictsBlackouts && (($this->maxConcurrentConflicts - $numberOfConflictsSkipped) < $this->maxConcurrentReservations);
     }
 }

@@ -28,7 +28,7 @@ class ja_jp extends en_gb
         $dates['dashboard'] = 'Y-m-d (l) G:i';
         $dates['period_time'] = 'G:i';
         $dates['mobile_reservation_date'] = 'M/d G:i';
-        $dates['general_date_js'] = "yy-mm-dd";
+        $dates['general_date_js'] = 'yy-mm-dd';
         $dates['general_time_js'] = 'h:mm tt';
         $dates['momentjs_datetime'] = 'YY-m-d h:mm A';
         $dates['calendar_time'] = 'h:mmt';

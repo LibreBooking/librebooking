@@ -326,13 +326,14 @@ class ReservationComponentTest extends TestBase
 
         $layout->expects($this->exactly(2))
                ->method('GetLayout')
-               ->willReturnCallback(function(Date $date, $hideBlockedPeriods) use ($startDate, $endDate, $startPeriods, $endPeriods)
-               {
-                    if ($date->Equals($startDate) && $hideBlockedPeriods)
-                        return $startPeriods;
-                    if ($date->Equals($endDate) && $hideBlockedPeriods)
-                        return $endPeriods;
-                    throw new Exception("Unexpected arguments");
+               ->willReturnCallback(function (Date $date, $hideBlockedPeriods) use ($startDate, $endDate, $startPeriods, $endPeriods) {
+                   if ($date->Equals($startDate) && $hideBlockedPeriods) {
+                       return $startPeriods;
+                   }
+                   if ($date->Equals($endDate) && $hideBlockedPeriods) {
+                       return $endPeriods;
+                   }
+                   throw new Exception('Unexpected arguments');
                });
 
         $this->initializer->expects($this->once())
@@ -408,13 +409,14 @@ class ReservationComponentTest extends TestBase
 
         $layout->expects($this->exactly(2))
                ->method('GetLayout')
-               ->willReturnCallback(function(Date $date) use ($startDate, $endDate, $startPeriods, $endPeriods)
-               {
-                    if($date->Equals($startDate))
-                        return $startPeriods;
-                    if($date->Equals($endDate))
-                        return $endPeriods;
-                    throw new Exception("Unexpeced argument");
+               ->willReturnCallback(function (Date $date) use ($startDate, $endDate, $startPeriods, $endPeriods) {
+                   if ($date->Equals($startDate)) {
+                       return $startPeriods;
+                   }
+                   if ($date->Equals($endDate)) {
+                       return $endPeriods;
+                   }
+                   throw new Exception('Unexpeced argument');
                });
 
         $this->initializer->expects($this->once())
@@ -472,21 +474,21 @@ class ReservationComponentTest extends TestBase
                           ->willReturn($scheduleId);
 
         $periods = [
-                new SchedulePeriod(
-                    Date::Parse('2012-01-22 22:00', $timezone),
-                    Date::Parse('2012-01-22 10:00', $timezone)
-                ),
-                new SchedulePeriod(
-                    Date::Parse('2012-01-22 10:00', $timezone),
-                    Date::Parse('2012-01-23 22:00', $timezone)
-                ),
+            new SchedulePeriod(
+                Date::Parse('2012-01-22 22:00', $timezone),
+                Date::Parse('2012-01-22 10:00', $timezone)
+            ),
+            new SchedulePeriod(
+                Date::Parse('2012-01-22 10:00', $timezone),
+                Date::Parse('2012-01-23 22:00', $timezone)
+            ),
         ];
         $startPeriods = [$periods[1], $periods[0]];
         $endPeriods = [$periods[1], $periods[0]];
         $layout = $this->createMock('IScheduleLayout');
 
         $this->scheduleRepository->_Layout = $layout;
-        $this->scheduleRepository->_Schedule =new FakeSchedule();
+        $this->scheduleRepository->_Schedule = new FakeSchedule();
 
         $layout->expects($this->any())
                ->method('GetLayout')
@@ -531,21 +533,21 @@ class ReservationComponentTest extends TestBase
         $ownerId = 987;
         $additionalResourceIds = [10, 20, 30];
         $participants = [
-                new ReservationUserView(10, 'p1', 'l', null, ReservationUserLevel::PARTICIPANT),
-                new ReservationUserView(11, 'p2', 'l', null, ReservationUserLevel::PARTICIPANT)
+            new ReservationUserView(10, 'p1', 'l', null, ReservationUserLevel::PARTICIPANT),
+            new ReservationUserView(11, 'p2', 'l', null, ReservationUserLevel::PARTICIPANT)
         ];
         $invitees = [
-                new ReservationUserView($this->fakeUser->UserId, 'i1', 'l', null, ReservationUserLevel::INVITEE),
-                new ReservationUserView(110, 'i2', 'l', null, ReservationUserLevel::INVITEE)
+            new ReservationUserView($this->fakeUser->UserId, 'i1', 'l', null, ReservationUserLevel::INVITEE),
+            new ReservationUserView(110, 'i2', 'l', null, ReservationUserLevel::INVITEE)
         ];
         $participatingGuests = ['p1@email.com', 'p2@email.com'];
         $invitedGuests = ['i1@email.com', 'i2@email.com'];
         $accessories = [
-                new ReservationAccessory(1, 2)
+            new ReservationAccessory(1, 2)
         ];
 
         $attachments = [
-                new ReservationAttachmentView(1, 2, 'filename')
+            new ReservationAttachmentView(1, 2, 'filename')
         ];
 
         $expectedStartDate = Date::Parse($startDateUtc, 'UTC');
@@ -720,8 +722,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, 20, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, 20, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = new NullDate();
 
@@ -753,8 +755,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, 20, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, 20, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = Date::Now();
 
@@ -780,8 +782,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = new NullDate();
 
@@ -807,8 +809,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = new NullDate();
 
@@ -834,8 +836,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
         ];
 
         $this->reservationView->CheckinDate = Date::Now();
@@ -867,8 +869,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, false, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, false, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = Date::Now();
 
@@ -894,8 +896,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckoutDate = Date::Now();
 
@@ -921,8 +923,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = new NullDate();
         $this->reservationView->CheckoutDate = new NullDate();
@@ -949,8 +951,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, null, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, null, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckoutDate = new NullDate();
 
@@ -976,8 +978,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, 20, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, 10, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, 20, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, 10, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = new NullDate();
 
@@ -1007,8 +1009,8 @@ class ReservationComponentTest extends TestBase
         $this->reservationView->EndDate = Date::Now()->AddMinutes(45);
 
         $this->reservationView->Resources = [
-                new ReservationResourceView(1, 'r1', null, null, null, true, 20, ResourceStatus::AVAILABLE),
-                new ReservationResourceView(2, 'r2', null, null, null, true, 10, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(1, 'r1', null, null, null, true, 20, ResourceStatus::AVAILABLE),
+            new ReservationResourceView(2, 'r2', null, null, null, true, 10, ResourceStatus::AVAILABLE),
         ];
         $this->reservationView->CheckinDate = Date::Now();
 

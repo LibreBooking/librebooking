@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4
@@ -122,7 +123,7 @@ class adLDAPFolders
         // This requires us to not have an OU= part, just the base_dn
         $searchOu = $this->adldap->getBaseDn();
         if (is_array($folderName)) {
-            $ou = $dnType . "=" . implode("," . $dnType . "=", $folderName);
+            $ou = $dnType . '=' . implode(',' . $dnType . '=', $folderName);
             $filter .= '(!(distinguishedname=' . $ou . ',' . $this->adldap->getBaseDn() . ')))';
             $searchOu = $ou . ',' . $this->adldap->getBaseDn();
         } else {
@@ -155,30 +156,30 @@ class adLDAPFolders
     public function create($attributes)
     {
         if (!is_array($attributes)) {
-            return "Attributes must be an array";
+            return 'Attributes must be an array';
         }
-        if (!is_array($attributes["container"])) {
-            return "Container attribute must be an array.";
+        if (!is_array($attributes['container'])) {
+            return 'Container attribute must be an array.';
         }
-        if (!array_key_exists("ou_name", $attributes)) {
-            return "Missing compulsory field [ou_name]";
+        if (!array_key_exists('ou_name', $attributes)) {
+            return 'Missing compulsory field [ou_name]';
         }
-        if (!array_key_exists("container", $attributes)) {
-            return "Missing compulsory field [container]";
+        if (!array_key_exists('container', $attributes)) {
+            return 'Missing compulsory field [container]';
         }
 
-        $attributes["container"] = array_reverse($attributes["container"]);
+        $attributes['container'] = array_reverse($attributes['container']);
 
-        $add=[];
-        $add["objectClass"] = "organizationalUnit";
-        $add["OU"] = $attributes['ou_name'];
-        $containers = "";
+        $add = [];
+        $add['objectClass'] = 'organizationalUnit';
+        $add['OU'] = $attributes['ou_name'];
+        $containers = '';
         if (count($attributes['container']) > 0) {
-            $containers = "OU=" . implode(",OU=", $attributes["container"]) . ",";
+            $containers = 'OU=' . implode(',OU=', $attributes['container']) . ',';
         }
 
-        $containers = "OU=" . implode(",OU=", $attributes["container"]);
-        $result = ldap_add($this->adldap->getLdapConnection(), "OU=" . $add["OU"] . ", " . $containers . $this->adldap->getBaseDn(), $add);
+        $containers = 'OU=' . implode(',OU=', $attributes['container']);
+        $result = ldap_add($this->adldap->getLdapConnection(), 'OU=' . $add['OU'] . ', ' . $containers . $this->adldap->getBaseDn(), $add);
         if ($result != true) {
             return false;
         }

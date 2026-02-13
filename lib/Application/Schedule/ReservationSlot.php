@@ -199,7 +199,7 @@ class ReservationSlot implements IReservationSlot
 
     public function __toString()
     {
-        return sprintf("Start: %s, End: %s, Span: %s", $this->Begin(), $this->End(), $this->PeriodSpan());
+        return sprintf('Start: %s, End: %s, Span: %s', $this->Begin(), $this->End(), $this->PeriodSpan());
     }
 
     public function BeginSlotId()

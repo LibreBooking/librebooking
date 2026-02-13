@@ -155,7 +155,7 @@ class ManageGroupsPresenter extends ActionPresenter
     public function ChangeRoles()
     {
         $groupId = $this->page->GetGroupId();
-        Log::Debug("Changing roles for groupId: %s", $groupId);
+        Log::Debug('Changing roles for groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $roles = [];
@@ -216,7 +216,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $userId = $this->page->GetUserId();
 
-        Log::Debug("Adding userId: %s to groupId: %s", $userId, $groupId);
+        Log::Debug('Adding userId: %s to groupId: %s', $userId, $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $group->AddUser($userId);
@@ -275,7 +275,7 @@ class ManageGroupsPresenter extends ActionPresenter
     {
         $groupId = $this->page->GetGroupId();
 
-        Log::Debug("Deleting groupId: %s", $groupId);
+        Log::Debug('Deleting groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $this->groupRepository->Remove($group);
@@ -286,7 +286,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $adminGroupId = $this->page->GetAdminGroupId();
 
-        Log::Debug("Changing admin for groupId: %s to %s", $groupId, $adminGroupId);
+        Log::Debug('Changing admin for groupId: %s to %s', $groupId, $adminGroupId);
 
         $group = $this->groupRepository->LoadById($groupId);
 

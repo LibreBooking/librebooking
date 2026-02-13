@@ -46,18 +46,18 @@ class ExistingReservationTest extends TestBase
 
         $instances = $series->Instances();
 
-        $this->assertEquals(1, count($instances), "should only be existing");
+        $this->assertEquals(1, count($instances), 'should only be existing');
 
         $events = $series->GetEvents();
 
         // remove all future events
         $seriesBranchedEvent = new SeriesBranchedEvent($series);
         $this->assertEquals(1, count($events));
-        $this->assertEquals($seriesBranchedEvent, $events[0], "should have been branched");
+        $this->assertEquals($seriesBranchedEvent, $events[0], 'should have been branched');
         $this->assertEquals(
             new RepeatNone(),
             $series->RepeatOptions(),
-            "repeat options should be cleared for new instance"
+            'repeat options should be cleared for new instance'
         );
     }
 
@@ -96,11 +96,11 @@ class ExistingReservationTest extends TestBase
 
         $instances = $series->Instances();
 
-        $this->assertEquals(11, count($instances), "1 existing, 10 repeated dates");
+        $this->assertEquals(11, count($instances), '1 existing, 10 repeated dates');
 
         $events = $series->GetEvents();
 
-        $this->assertEquals(13, count($events), "1 branched, 10 created, 2 removed");
+        $this->assertEquals(13, count($events), '1 branched, 10 created, 2 removed');
         // remove all future events
         $instanceRemovedEvent1 = new InstanceRemovedEvent($futureReservation1, $series);
         $instanceRemovedEvent2 = new InstanceRemovedEvent($futureReservation2, $series);
@@ -114,7 +114,7 @@ class ExistingReservationTest extends TestBase
             in_array($instanceRemovedEvent2, $events),
             "missing ref {$futureReservation2->ReferenceNumber()}"
         );
-        $this->assertTrue(in_array($seriesBranchedEvent, $events), "should have been branched");
+        $this->assertTrue(in_array($seriesBranchedEvent, $events), 'should have been branched');
 
         // recreate all future events
         foreach ($instances as $instance) {
@@ -159,14 +159,14 @@ class ExistingReservationTest extends TestBase
 
         $instances = $series->Instances();
 
-        $this->assertEquals(3, count($instances), "should only be existing and future instances");
+        $this->assertEquals(3, count($instances), 'should only be existing and future instances');
 
         $events = $series->GetEvents();
 
         // remove all future events
         $seriesBranchedEvent = new SeriesBranchedEvent($series);
         $this->assertEquals(1, count($events));
-        $this->assertEquals($seriesBranchedEvent, $events[0], "should have been branched");
+        $this->assertEquals($seriesBranchedEvent, $events[0], 'should have been branched');
     }
 
     public function testWhenApplyingRecurrenceUpdatesToFullSeries()
@@ -203,12 +203,12 @@ class ExistingReservationTest extends TestBase
 
         $instances = $series->Instances();
 
-        $this->assertEquals(11, count($instances), "1 old, 1 current, 10 repeated dates");
+        $this->assertEquals(11, count($instances), '1 old, 1 current, 10 repeated dates');
         $this->assertTrue(in_array($currentInstance, $instances));
 
         $events = $series->GetEvents();
 
-        $this->assertEquals(12, count($events), "2 removals, 10 adds");
+        $this->assertEquals(12, count($events), '2 removals, 10 adds');
         // remove all future events
         $instanceRemovedEvent1 = new InstanceRemovedEvent($afterTodayButBeforeCurrent, $series);
         $instanceRemovedEvent2 = new InstanceRemovedEvent($afterCurrent, $series);
@@ -249,12 +249,12 @@ class ExistingReservationTest extends TestBase
         $series->Repeats(new RepeatDaily(1, $currentSeriesDate->AddDays(20)->GetBegin()));
 
         $instances = $series->Instances();
-        $this->assertEquals(22, count($instances), "1 past, 1 current, 20 future (including existing instance)");
-        $this->assertTrue(in_array($currentInstance, $instances), "current should not have been altered");
-        $this->assertTrue(in_array($futureInstance, $instances), "existing future should not have been altered");
+        $this->assertEquals(22, count($instances), '1 past, 1 current, 20 future (including existing instance)');
+        $this->assertTrue(in_array($currentInstance, $instances), 'current should not have been altered');
+        $this->assertTrue(in_array($futureInstance, $instances), 'existing future should not have been altered');
 
         $events = $series->GetEvents();
-        $this->assertEquals(19, count($events), "should have nothing other than new instance created events");
+        $this->assertEquals(19, count($events), 'should have nothing other than new instance created events');
     }
 
     public function testWhenReducingEndDateOfRepeatOptionsOnFullSeries()
@@ -276,12 +276,12 @@ class ExistingReservationTest extends TestBase
         $series->Repeats(new RepeatDaily(1, $currentSeriesDate->AddDays(19)->GetBegin()));
 
         $instances = $series->Instances();
-        $this->assertEquals(21, count($instances), "1 past, 1 current, 19 future (including existing instance)");
-        $this->assertTrue(in_array($currentInstance, $instances), "current should not have been altered");
-        $this->assertFalse(in_array($futureInstance, $instances), "existing future should not have been altered");
+        $this->assertEquals(21, count($instances), '1 past, 1 current, 19 future (including existing instance)');
+        $this->assertTrue(in_array($currentInstance, $instances), 'current should not have been altered');
+        $this->assertFalse(in_array($futureInstance, $instances), 'existing future should not have been altered');
 
         $events = $series->GetEvents();
-        $this->assertEquals(20, count($events), "19 created, 1 deleted");
+        $this->assertEquals(20, count($events), '19 created, 1 deleted');
         $this->assertTrue(in_array(new InstanceRemovedEvent($futureInstance, $series), $events));
     }
 
@@ -876,7 +876,7 @@ class ExistingReservationTest extends TestBase
 
         $this->assertTrue(
             $removeAdditionalIndex < $addAdditionalIndex,
-            "should remove existing relationship before adding new one"
+            'should remove existing relationship before adding new one'
         );
     }
 
@@ -927,7 +927,7 @@ class ExistingReservationTest extends TestBase
         $removeIndex = array_search($remove1, $events);
         $addIndex = array_search($add1, $events);
 
-        $this->assertTrue($removeIndex < $addIndex, "need to remove before adding to avoid key conflicts");
+        $this->assertTrue($removeIndex < $addIndex, 'need to remove before adding to avoid key conflicts');
     }
 
     public function testChangeOwner()
@@ -1164,7 +1164,7 @@ class ExistingReservationTest extends TestBase
         sort($updatedReferenceNumbers);
         $this->assertEquals([1, 2, 3, 4], $updatedReferenceNumbers);
         $this->assertEquals($instances[1]->StartDate(), $date1->GetBegin()->AddDays(1));
-        $this->assertEquals($instances[1]->EndDate(), $date1->GetBegin()->AddDays(1)->SetTimeString("13:00"));
+        $this->assertEquals($instances[1]->EndDate(), $date1->GetBegin()->AddDays(1)->SetTimeString('13:00'));
     }
 
     public function testAddingDateToExistingCustomRepeat()
@@ -1261,7 +1261,7 @@ class ExistingReservationTest extends TestBase
             }
         }
 
-        $this->assertEquals(2, count($instances), "the original/current is in the past");
+        $this->assertEquals(2, count($instances), 'the original/current is in the past');
         $this->assertEquals(3, count($removedReferenceNumbers));
         $this->assertEquals(2, count($addedReferenceNumbers));
         sort($removedReferenceNumbers);

@@ -87,17 +87,17 @@ class ReportDefinitionTest extends TestBase
     {
         $timezone = 'America/Chicago';
         $date = '2012-02-14 08:12:31';
-        $oneHourThirtyMinutes = TimeInterval::Parse("1h30m");
+        $oneHourThirtyMinutes = TimeInterval::Parse('1h30m');
         $userId = 100;
 
         $rows = [[
-                ColumnNames::RESERVATION_START => $date,
-                ColumnNames::OWNER_FULL_NAME_ALIAS => 'un',
-                ColumnNames::OWNER_USER_ID => $userId,
-                ColumnNames::ACCESSORY_NAME => 'an',
-                'unknown' => 'unknown',
-                ColumnNames::TOTAL_TIME => $oneHourThirtyMinutes->TotalSeconds(),
-                ColumnNames::ACCESSORY_ID => 1,
+            ColumnNames::RESERVATION_START => $date,
+            ColumnNames::OWNER_FULL_NAME_ALIAS => 'un',
+            ColumnNames::OWNER_USER_ID => $userId,
+            ColumnNames::ACCESSORY_NAME => 'an',
+            'unknown' => 'unknown',
+            ColumnNames::TOTAL_TIME => $oneHourThirtyMinutes->TotalSeconds(),
+            ColumnNames::ACCESSORY_ID => 1,
         ]];
         $report = new CustomReport($rows, $this->attributeRepository);
 
@@ -146,9 +146,9 @@ class ReportDefinitionTest extends TestBase
     public function testGetsRowDataForCustomAttributes()
     {
         $rows = [[
-                    ColumnNames::ACCESSORY_NAME => 'an',
-                    ColumnNames::ACCESSORY_ID => 1,
-                    ColumnNames::ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
+            ColumnNames::ACCESSORY_NAME => 'an',
+            ColumnNames::ACCESSORY_ID => 1,
+            ColumnNames::ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
 
         $report = new CustomReport($rows, $this->attributeRepository);
 
@@ -166,9 +166,9 @@ class ReportDefinitionTest extends TestBase
     public function testGetsRowDataForUserCustomAttributes()
     {
         $rows = [[
-                    ColumnNames::ACCESSORY_NAME => 'an',
-                    ColumnNames::ACCESSORY_ID => 1,
-                    ColumnNames::USER_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
+            ColumnNames::ACCESSORY_NAME => 'an',
+            ColumnNames::ACCESSORY_ID => 1,
+            ColumnNames::USER_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
 
         $report = new CustomReport($rows, $this->attributeRepository);
 
@@ -186,9 +186,9 @@ class ReportDefinitionTest extends TestBase
     public function testGetsRowDataForResourceCustomAttributes()
     {
         $rows = [[
-                    ColumnNames::ACCESSORY_NAME => 'an',
-                    ColumnNames::ACCESSORY_ID => 1,
-                    ColumnNames::RESOURCE_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
+            ColumnNames::ACCESSORY_NAME => 'an',
+            ColumnNames::ACCESSORY_ID => 1,
+            ColumnNames::RESOURCE_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
 
         $report = new CustomReport($rows, $this->attributeRepository);
 
@@ -206,9 +206,9 @@ class ReportDefinitionTest extends TestBase
     public function testGetsRowDataForResourceTypeCustomAttributes()
     {
         $rows = [[
-                    ColumnNames::ACCESSORY_NAME => 'an',
-                    ColumnNames::ACCESSORY_ID => 1,
-                    ColumnNames::RESOURCE_TYPE_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
+            ColumnNames::ACCESSORY_NAME => 'an',
+            ColumnNames::ACCESSORY_ID => 1,
+            ColumnNames::RESOURCE_TYPE_ATTRIBUTE_LIST => '1=1!sep!2=!sep!3=3']];
 
         $report = new CustomReport($rows, $this->attributeRepository);
 

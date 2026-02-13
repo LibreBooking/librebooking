@@ -14,6 +14,6 @@ class PasswordEncryptionTest extends TestBase
 
         $expectedEncryptedPassword = sha1($password . $salt);
 
-        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, "Password was not encrypted correctly");
+        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, 'Password was not encrypted correctly');
     }
 }

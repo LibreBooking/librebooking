@@ -31,7 +31,7 @@ class AttributeSaveControllerTest extends TestBase
         $request->label = 'attributename';
         $request->type = CustomAttributeTypes::SELECT_LIST;
         $request->categoryId = CustomAttributeCategory::USER;
-        $request->regex= 'regex';
+        $request->regex = 'regex';
         $request->required = true;
         $request->possibleValues = '1,2,3';
         $request->sortOrder = 9;
@@ -73,7 +73,7 @@ class AttributeSaveControllerTest extends TestBase
         $request->label = 'attributename';
         $request->type = CustomAttributeTypes::SELECT_LIST;
         $request->categoryId = CustomAttributeCategory::USER;
-        $request->regex= 'regex';
+        $request->regex = 'regex';
         $request->required = true;
         $request->possibleValues = '1,2,3';
         $request->sortOrder = 9;

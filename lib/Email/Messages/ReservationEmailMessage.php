@@ -116,14 +116,14 @@ abstract class ReservationEmailMessage extends EmailMessage
         $this->Set('RepeatRanges', $repeatRanges);
         $this->Set('RequiresApproval', $this->reservationSeries->RequiresApproval());
 
-        $this->Set('ReservationUrl', sprintf("%s?%s=%s", Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
+        $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
 
-        $icalUrl = sprintf("export/%s?%s=%s", Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
+        $icalUrl = sprintf('export/%s?%s=%s', Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
         $this->Set('ICalUrl', $icalUrl);
 
         $googleDateFormat = Resources::GetInstance()->GetDateFormat('google');
         $googleCalendarUrl = sprintf(
-            "https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:",
+            'https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:',
             urlencode($this->reservationSeries->Title()),
             $currentInstance->StartDate()->ToUtc()->Format($googleDateFormat),
             $currentInstance->EndDate()->ToUtc()->Format($googleDateFormat),

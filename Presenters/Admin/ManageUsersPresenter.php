@@ -231,9 +231,9 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     {
         $defaultHomePageId = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_HOMEPAGE, new IntConverter());
         $extraAttributes = [
-                UserAttribute::Organization => $this->page->GetOrganization(),
-                UserAttribute::Phone => $this->page->GetPhone(),
-                UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Organization => $this->page->GetOrganization(),
+            UserAttribute::Phone => $this->page->GetPhone(),
+            UserAttribute::Position => $this->page->GetPosition()];
 
         $user = $this->manageUsersService->AddUser(
             $this->page->GetUserName(),
@@ -271,9 +271,9 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         Log::Debug('Updating user %s', $this->page->GetUserId());
 
         $extraAttributes = [
-                UserAttribute::Organization => $this->page->GetOrganization(),
-                UserAttribute::Phone => $this->page->GetPhone(),
-                UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Organization => $this->page->GetOrganization(),
+            UserAttribute::Phone => $this->page->GetPhone(),
+            UserAttribute::Position => $this->page->GetPosition()];
 
         $this->manageUsersService->UpdateUser(
             $this->page->GetUserId(),
@@ -617,7 +617,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                         $shouldUpdate = false;
                     } else {
                         $user->ChangeName($row->firstName, $row->lastName);
-                        if ($row->password !== "password") {
+                        if ($row->password !== 'password') {
                             $password = $this->passwordEncryption->EncryptPassword($row->password);
                             $user->ChangePassword($password->EncryptedPassword(), $password->Salt());
                         }

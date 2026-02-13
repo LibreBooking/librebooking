@@ -801,12 +801,12 @@ class tr_tr extends en_gb
         $strings['PendingApprovalReservations'] = 'Onay bekleyen rezervasyonlar';
         $strings['LaterThisMonth'] = 'Bu ayın ilerisinde';
         $strings['LaterThisYear'] = 'Bu yılın ilerisinde';
-        $strings['Remaining'] = 'Kalan';        
+        $strings['Remaining'] = 'Kalan';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Eksik check-out rezervasyonu yok';
-        $strings['MissingCheckOutReservations'] = 'Eksik Check Out Rezervasyonları';        
+        $strings['MissingCheckOutReservations'] = 'Eksik Check Out Rezervasyonları';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

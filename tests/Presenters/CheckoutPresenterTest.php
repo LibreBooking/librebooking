@@ -84,15 +84,15 @@ class CheckoutPresenterTest extends TestBase
 
         $this->userRepository->_User->WithCredits(10);
 
-        $paymentId = "12323";
-        $payerId = "23jksdlkf";
+        $paymentId = '12323';
+        $payerId = '23jksdlkf';
 
         $this->page->_PaymentId = $paymentId;
         $this->page->_PayerId = $payerId;
 
         $gateway = new FakePayPalGateway();
         $this->paymentRepository->_PayPal = $gateway;
-        $gateway->_Payment->status = "COMPLETED";
+        $gateway->_Payment->status = 'COMPLETED';
 
         $this->presenter->ExecutePayPalPayment();
 

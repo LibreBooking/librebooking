@@ -206,7 +206,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $resourceAdminGroupId = $this->page->GetAdminGroupId();
 
         Log::Debug(
-            "Adding new resource with name: %s, scheduleId: %s, autoAssign: %s, resourceAdminGroupId %s",
+            'Adding new resource with name: %s, scheduleId: %s, autoAssign: %s, resourceAdminGroupId %s',
             $name,
             $scheduleId,
             $autoAssign,
@@ -374,7 +374,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     private function ChangeResourceImage($resourceId)
     {
-        Log::Debug("Changing resource image for resource id %s", $resourceId);
+        Log::Debug('Changing resource image for resource id %s', $resourceId);
         $uploadedImage = $this->page->GetUploadedImage();
 
         if ($uploadedImage == null) {
@@ -383,7 +383,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         if ($uploadedImage->IsError()) {
             Log::Error('Error with uploaded image for resource id %s. %s', $resourceId, $uploadedImage->Error());
-            die("Image error: " . $uploadedImage->Error());
+            die('Image error: ' . $uploadedImage->Error());
         }
 
         $fileType = strtolower($uploadedImage->Extension());
@@ -404,7 +404,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         if ($needed > $limit) {
             echo 'Image too big. Resize to a smaller size or reduce the resolution and try again.';
-            Log::Error("Uploaded image for %s is too big. Needed %s limit %s", $resourceId, $needed, $limit);
+            Log::Error('Uploaded image for %s is too big. Needed %s limit %s', $resourceId, $needed, $limit);
             die();
         }
 
@@ -433,7 +433,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         @unlink($path);
 
-        Log::Debug("Deleting resource image %s for resource %s", $path, $resourceId);
+        Log::Debug('Deleting resource image %s for resource %s', $path, $resourceId);
 
         $resource = $this->resourceRepository->LoadById($resourceId);
         $resource->RemoveImage($imageName);
@@ -449,7 +449,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $resourceId = $this->page->GetResourceId();
         $imageName = $this->GetImageName($fileName);
 
-        Log::Debug("Changing default resource image %s for resource %s", $imageName, $resourceId);
+        Log::Debug('Changing default resource image %s for resource %s', $imageName, $resourceId);
 
         $resource = $this->resourceRepository->LoadById($resourceId);
         $resource->ChangeDefaultImage($imageName);
@@ -483,7 +483,7 @@ class ManageResourcesPresenter extends ActionPresenter
             $days = max(1, min($days, 365));
             $message = $this->page->GetStatusChangeMessage();
 
-            Log::Debug("Sending resource status changed email to users. Days: %s", $days);
+            Log::Debug('Sending resource status changed email to users. Days: %s', $days);
 
             $reservations = $this->reservationViewRepository->GetReservations(Date::Now(), Date::Now()->AddDays($days), null, null, null, $resourceId);
 
@@ -1125,88 +1125,88 @@ class ManageResourcesPresenter extends ActionPresenter
     {
         switch ($dataRequest) {
             case 'all': {
-                    $this->page->SetResourcesJson(array_map(['AdminResourceJson', 'FromBookable'], $this->resourceRepository->GetResourceList()));
-                    break;
-                }
+                $this->page->SetResourcesJson(array_map(['AdminResourceJson', 'FromBookable'], $this->resourceRepository->GetResourceList()));
+                break;
+            }
             case 'users': {
-                    $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
-                    $this->page->BindUserPermissions($users->Results());
-                    break;
-                }
+                $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
+                $this->page->BindUserPermissions($users->Results());
+                break;
+            }
             case 'usersAll': {
-                    $userRepository = new UserRepository();
-                    $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
-                    $users = $users->Results();
-                    $allUsers = $userRepository->GetList(null, 1000);
-                    $allUsers = $allUsers->Results();
+                $userRepository = new UserRepository();
+                $users = $this->resourceRepository->GetUsersWithPermission($this->page->GetResourceId());
+                $users = $users->Results();
+                $allUsers = $userRepository->GetList(null, 1000);
+                $allUsers = $allUsers->Results();
 
-                    $idsWithPermissions = [];
-                    foreach ($users as $permission) {
-                        $idsWithPermissions[$permission->Id] = true;
-                    }
-                    /** @var UserItemView $user */
-                    foreach ($allUsers as $user) {
-                        $found = array_key_exists($user->Id, $idsWithPermissions);
-
-                        if (!$found) {
-                            $u = new UserPermissionItemView();
-                            $u->Id = $user->Id;
-                            $u->First = $user->First;
-                            $u->Last = $user->Last;
-                            $users[] = $u;
-                        }
-                    }
-                    $this->page->BindUserPermissions($users);
-                    break;
+                $idsWithPermissions = [];
+                foreach ($users as $permission) {
+                    $idsWithPermissions[$permission->Id] = true;
                 }
+                /** @var UserItemView $user */
+                foreach ($allUsers as $user) {
+                    $found = array_key_exists($user->Id, $idsWithPermissions);
+
+                    if (!$found) {
+                        $u = new UserPermissionItemView();
+                        $u->Id = $user->Id;
+                        $u->First = $user->First;
+                        $u->Last = $user->Last;
+                        $users[] = $u;
+                    }
+                }
+                $this->page->BindUserPermissions($users);
+                break;
+            }
             case 'groups': {
-                    $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
-                    $this->page->BindGroupPermissions($groups->Results());
-                    break;
-                }
+                $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
+                $this->page->BindGroupPermissions($groups->Results());
+                break;
+            }
             case 'groupsAll': {
-                    $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
-                    /** @var GroupPermissionItemView[] $groups */
-                    $groups = $groups->Results();
-                    $allGroups = $this->groupRepository->GetList(null, 1000);
-                    $allGroups = $allGroups->Results();
+                $groups = $this->resourceRepository->GetGroupsWithPermission($this->page->GetResourceId());
+                /** @var GroupPermissionItemView[] $groups */
+                $groups = $groups->Results();
+                $allGroups = $this->groupRepository->GetList(null, 1000);
+                $allGroups = $allGroups->Results();
 
-                    $idsWithPermissions = [];
-                    foreach ($groups as $permission) {
-                        $idsWithPermissions[$permission->Id] = true;
-                    }
-
-                    /** @var GroupItemView $group */
-                    foreach ($allGroups as $group) {
-                        $found = array_key_exists($group->Id(), $idsWithPermissions);
-
-                        if (!$found) {
-                            $groups[] = new GroupPermissionItemView($group->Id(), $group->Name());
-                        }
-                    }
-                    $this->page->BindGroupPermissions($groups);
-                    break;
+                $idsWithPermissions = [];
+                foreach ($groups as $permission) {
+                    $idsWithPermissions[$permission->Id] = true;
                 }
+
+                /** @var GroupItemView $group */
+                foreach ($allGroups as $group) {
+                    $found = array_key_exists($group->Id(), $idsWithPermissions);
+
+                    if (!$found) {
+                        $groups[] = new GroupPermissionItemView($group->Id(), $group->Name());
+                    }
+                }
+                $this->page->BindGroupPermissions($groups);
+                break;
+            }
             case 'template': {
-                    $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
-                    $importAttributes = [];
-                    foreach ($attributes as $attribute) {
-                        if (!$attribute->UniquePerEntity()) {
-                            $importAttributes[] = $attribute;
-                        }
+                $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
+                $importAttributes = [];
+                foreach ($attributes as $attribute) {
+                    if (!$attribute->UniquePerEntity()) {
+                        $importAttributes[] = $attribute;
                     }
-                    $this->page->ShowTemplateCSV($importAttributes);
-                    break;
                 }
+                $this->page->ShowTemplateCSV($importAttributes);
+                break;
+            }
             case 'export': {
-                    $this->ExportResources();
-                }
+                $this->ExportResources();
+            }
         }
     }
 
     private function ChangingDropDown($value)
     {
-        return $value != "-1";
+        return $value != '-1';
     }
 
     private function ChangingValue($value)
@@ -1231,7 +1231,8 @@ class ManageResourcesPresenter extends ActionPresenter
                 $path = ROOT_DIR . $imageUploadDirectory;
             }
         }
-        return $path = "$path/$fileName";;
+        return $path = "$path/$fileName";
+        ;
     }
 }
 

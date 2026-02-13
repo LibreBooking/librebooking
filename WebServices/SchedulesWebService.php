@@ -270,7 +270,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetSelectedDate()
     {
-        return empty($this->startDate) ? null : $this->startDate->Format("Y-m-d");
+        return empty($this->startDate) ? null : $this->startDate->Format('Y-m-d');
     }
 
     public function GetSelectedDates()

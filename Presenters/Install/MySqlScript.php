@@ -46,7 +46,7 @@ class MySqlScript
      */
     public function GetFullSql()
     {
-        $f = fopen($this->path, "r");
+        $f = fopen($this->path, 'r');
         $sql = fread($f, filesize($this->path));
         fclose($f);
 

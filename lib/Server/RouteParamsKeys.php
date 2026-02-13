@@ -27,7 +27,7 @@ class RouteParamsKeys
         FormKeys::USER_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         QueryStringKeys::SCHEDULE_ID => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START_DATE => ParamsValidatorKeys::DATE,
-        "clearFilter" => ParamsValidatorKeys::NUMERICAL,
+        'clearFilter' => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START_DATES => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::SIMPLE_DATE],
         FormKeys::RESOURCE_TYPE_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         FormKeys::MAX_PARTICIPANTS => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],

@@ -24,7 +24,7 @@ class ResourceMaximumDurationRule implements IReservationValidationRule
 
                 $maxEnd = $start->ApplyDifference($maxDuration);
                 if ($end->GreaterThan($maxEnd)) {
-                    return new ReservationRuleResult(false, $r->GetString("MaxDurationError", $maxDuration));
+                    return new ReservationRuleResult(false, $r->GetString('MaxDurationError', $maxDuration));
                 }
             }
         }

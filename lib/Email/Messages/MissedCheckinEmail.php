@@ -39,7 +39,7 @@ class MissedCheckinEmail extends EmailMessage
         $this->Set('IsAutoRelease', $this->reservation->AutoReleaseMinutes != null);
         $this->Set('AutoReleaseTime', $this->reservation->StartDate->AddMinutes($this->reservation->AutoReleaseMinutes));
         $this->Set('ReservationUrl', sprintf(
-            "%s?%s=%s",
+            '%s?%s=%s',
             Pages::RESERVATION,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reservation->ReferenceNumber

@@ -11,7 +11,7 @@ class TestReservationItemView extends ReservationItemView
      * @param int $resourceId
      * @param string|null $referenceNumber
      */
-    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = "referencenumber")
+    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = 'referencenumber')
     {
         parent::__construct();
 

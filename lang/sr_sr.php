@@ -1,4 +1,5 @@
 <?php
+
 /**
 Serbian translation by velisa@velisa.net
  */
@@ -669,12 +670,12 @@ class sr_sr extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervacije koje čekaju odobrenje';
         $strings['LaterThisMonth'] = 'Kasnije ovog meseca';
         $strings['LaterThisYear'] = 'Kasnije ove godine';
-        $strings['Remaining'] = 'Preostalo';        
+        $strings['Remaining'] = 'Preostalo';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nema propuštenih rezervacija za odjavu';
-        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';        
+        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

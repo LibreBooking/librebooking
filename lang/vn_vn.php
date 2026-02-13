@@ -758,12 +758,12 @@ class vn_vn extends en_gb
         $strings['PendingApprovalReservations'] = 'Đặt phòng đang chờ duyệt';
         $strings['LaterThisMonth'] = 'Sau này trong tháng này';
         $strings['LaterThisYear'] = 'Sau này trong năm nay';
-        $strings['Remaining'] = 'Còn lại';        
+        $strings['Remaining'] = 'Còn lại';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Không có đặt phòng check out nào bị thiếu';
-        $strings['MissingCheckOutReservations'] = 'Đặt phòng Check Out bị thiếu';        
+        $strings['MissingCheckOutReservations'] = 'Đặt phòng Check Out bị thiếu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

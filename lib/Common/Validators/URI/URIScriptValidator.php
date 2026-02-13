@@ -1,9 +1,7 @@
 <?php
 
 class URIScriptValidator implements IURIScriptValidator
-
 {
-
     /**
      * Redirects if the URI is not safe.
      *
@@ -13,8 +11,8 @@ class URIScriptValidator implements IURIScriptValidator
     public static function validateOrRedirect(string $requestURI, string $redirectURL): void
     {
         if (!self::validate($requestURI)) {
-            Log::Debug(message: "Invalid URI detected. Redirecting to: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
-            header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            Log::Debug(message: 'Invalid URI detected. Redirecting to: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            header('Location: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
             exit;
         }
     }
@@ -35,11 +33,11 @@ class URIScriptValidator implements IURIScriptValidator
         $isQuerySafe = self::isSafeQuery($query);
 
         Log::Debug(
-            "Validating URI. Path: %s, Query: %s, PathSafe: %s, QuerySafe: %s",
+            'Validating URI. Path: %s, Query: %s, PathSafe: %s, QuerySafe: %s',
             $path,
             $query,
-            $isPathSafe ? "yes" : "no",
-            $isQuerySafe ? "yes" : "no"
+            $isPathSafe ? 'yes' : 'no',
+            $isQuerySafe ? 'yes' : 'no'
         );
 
         return $isPathSafe && $isQuerySafe;
@@ -60,7 +58,9 @@ class URIScriptValidator implements IURIScriptValidator
 
     private static function isSafeQuery(string $query): bool
     {
-        if (empty($query)) return true;
+        if (empty($query)) {
+            return true;
+        }
 
         // Decode and check for script-related payloads
         $decoded = urldecode($query);

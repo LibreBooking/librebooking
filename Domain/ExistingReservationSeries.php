@@ -196,7 +196,7 @@ class ExistingReservationSeries extends ReservationSeries
         $this->AddEvent(new InstanceRemovedEvent($toRemove, $this));
         $this->_deleteRequestIds[] = $toRemove->ReservationId();
         $this->RemoveEvent(new InstanceAddedEvent($toRemove, $this));
-//        }
+        //        }
         return true;
     }
 
@@ -344,7 +344,7 @@ class ExistingReservationSeries extends ReservationSeries
                 $this->unusedCreditBalance += $instance->GetCreditsConsumed();
             }
         } else {
-            Log::Debug("Removing series %s", $this->SeriesId());
+            Log::Debug('Removing series %s', $this->SeriesId());
 
             $this->_seriesBeingDeleted = true;
             $this->AddEvent(new SeriesDeletedEvent($this));
@@ -364,7 +364,7 @@ class ExistingReservationSeries extends ReservationSeries
 
         $this->statusId = ReservationStatus::Created;
 
-        Log::Debug("Approving series %s", $this->SeriesId());
+        Log::Debug('Approving series %s', $this->SeriesId());
 
         $this->AddEvent(new SeriesApprovedEvent($this));
     }

@@ -648,7 +648,7 @@ class hr_hr extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nema rezervacija za odjavu';
-        $strings['MissingCheckOutReservations'] = 'Nedostajuće rezervacije za odjavu';         
+        $strings['MissingCheckOutReservations'] = 'Nedostajuće rezervacije za odjavu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

@@ -69,7 +69,8 @@ class ResourceRepository implements IResourceRepository
     /**
      * Gets the resource IDs for all the resources
      */
-    public function GetResourceIdList(): array {
+    public function GetResourceIdList(): array
+    {
         $resourceIds = [];
         $reader = ServiceLocator::GetDatabase()->Query(new GetAllResourcesCommand());
         while ($row = $reader->GetRow()) {
@@ -93,14 +94,14 @@ class ResourceRepository implements IResourceRepository
         if (is_null($userSession)) {
             return [];
         }
-        if ($userSession->IsAdmin){
+        if ($userSession->IsAdmin) {
             return $this->GetResourceList();
         }
         $resourceIds = $this->GetUserResourceIdList();
         $resources = [];
-        foreach($resourceIds as $resourceId){
+        foreach ($resourceIds as $resourceId) {
             $resource = $this->LoadById($resourceId);
-            if($resource->GetStatusId() != ResourceStatus::HIDDEN){
+            if ($resource->GetStatusId() != ResourceStatus::HIDDEN) {
                 $resources[$resourceId] = $resource;
             }
         }
@@ -111,23 +112,24 @@ class ResourceRepository implements IResourceRepository
      * Gets the resource IDs that the logged in user has permissions (full access and view only permissions)
      * This is used to block a user from seeing a resource if they don't have permissions to it.
      */
-    public function GetUserResourceIdList() {
+    public function GetUserResourceIdList()
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return [];
         }
-        if ($userSession->IsAdmin){
+        if ($userSession->IsAdmin) {
             return $this->GetResourceIdList();
         }
         $resourceIds = $this->GetUserResourcePermissions(userId: $userSession->UserId);
         $resourceIds = $this->GetUserGroupResourcePermissions(userId: $userSession->UserId, resourceIds: $resourceIds);
 
 
-        if ($userSession->IsResourceAdmin){
+        if ($userSession->IsResourceAdmin) {
             $resourceIds = $this->GetResourceAdminResourceIds(userId: $userSession->UserId, resourceIds: $resourceIds);
         }
 
-        if ($userSession->IsScheduleAdmin){
+        if ($userSession->IsScheduleAdmin) {
             $resourceIds = $this->GetScheduleAdminResourceIds(userId: $userSession->UserId, resourceIds: $resourceIds);
         }
         return $resourceIds;
@@ -340,7 +342,7 @@ class ResourceRepository implements IResourceRepository
 
     public function Delete(BookableResource $resource)
     {
-        Log::Debug("Deleting resource %s (%s)", $resource->GetResourceId(), $resource->GetName());
+        Log::Debug('Deleting resource %s (%s)', $resource->GetResourceId(), $resource->GetName());
 
         $resourceId = $resource->GetResourceId();
 
@@ -449,7 +451,8 @@ class ResourceRepository implements IResourceRepository
     /**
      * Gets the resource ids that the user has permissions to
      */
-    public function GetUserResourcePermissions($userId, $resourceIds = []){
+    public function GetUserResourcePermissions($userId, $resourceIds = [])
+    {
         $command = new GetUserPermissionsCommand($userId);
         $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -469,7 +472,8 @@ class ResourceRepository implements IResourceRepository
     /**
      * Gets the resource ids that the user groups have permissions to
      */
-    public function GetUserGroupResourcePermissions($userId, $resourceIds = []){
+    public function GetUserGroupResourcePermissions($userId, $resourceIds = [])
+    {
         $command = new SelectUserGroupPermissions($userId);
         $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -488,12 +492,13 @@ class ResourceRepository implements IResourceRepository
     /**
      * Gets the resource ids that are under the responsability of the given resource user groups
      */
-    public function GetResourceAdminResourceIds($userId, $resourceIds = []){
+    public function GetResourceAdminResourceIds($userId, $resourceIds = [])
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return $resourceIds;
         }
-        if ($userSession->IsResourceAdmin){
+        if ($userSession->IsResourceAdmin) {
             $command = new GetResourceAdminResourcesCommand($userId);
             $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -512,12 +517,13 @@ class ResourceRepository implements IResourceRepository
     /**
      * Gets the resource ids that are under the responsability of the given schedule user groups
      */
-    public function GetScheduleAdminResourceIds($userId, $resourceIds = []){
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = [])
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return $resourceIds;
         }
-        if ($userSession->IsScheduleAdmin){
+        if ($userSession->IsScheduleAdmin) {
             $command = new GetScheduleAdminResourcesCommand($userId);
             $reader = ServiceLocator::GetDatabase()->Query($command);
 

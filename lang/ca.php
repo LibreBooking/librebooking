@@ -405,7 +405,7 @@ class ca extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'El vostre grup no té cap reserva futura';
         $strings['GroupUpcomingReservations'] = 'Properes reserves del meu(s) grup(s)';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'S\'ha produït un error en iniciar la sessió amb Facebook. Torneu-ho a provar.';
         //End Facebook Login SDK Error
@@ -420,7 +420,7 @@ class ca extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'No hi ha cap reserva de sortida que falti';
-        $strings['MissingCheckOutReservations'] = 'Reserves de sortida que falten';        
+        $strings['MissingCheckOutReservations'] = 'Reserves de sortida que falten';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

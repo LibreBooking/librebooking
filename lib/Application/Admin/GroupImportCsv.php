@@ -129,7 +129,7 @@ class GroupImportCsvRow
     {
         $value = $this->valueOrDefault($column);
 
-        return $value == "true";
+        return $value == 'true';
     }
 
     private function tryToGetEscapedValue($v)

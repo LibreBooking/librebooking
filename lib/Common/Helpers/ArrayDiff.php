@@ -46,24 +46,28 @@ class ArrayDiff
     /**
      * Eliminates duplicate objects from array
      */
-    public static function EliminateDuplicates($array, $keep_key_assoc = false){
-        $duplicate_keys = array();
-        $tmp = array();       
-    
-        foreach ($array as $key => $val){
+    public static function EliminateDuplicates($array, $keep_key_assoc = false)
+    {
+        $duplicate_keys = [];
+        $tmp = [];
+
+        foreach ($array as $key => $val) {
             // convert objects to arrays, in_array() does not support objects
-            if (is_object($val))
+            if (is_object($val)) {
                 $val = (array)$val;
-    
-            if (!in_array($val, $tmp))
+            }
+
+            if (!in_array($val, $tmp)) {
                 $tmp[] = $val;
-            else
+            } else {
                 $duplicate_keys[] = $key;
+            }
         }
-    
-        foreach ($duplicate_keys as $key)
+
+        foreach ($duplicate_keys as $key) {
             unset($array[$key]);
-    
+        }
+
         return $keep_key_assoc ? $array : array_values($array);
     }
 }

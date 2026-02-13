@@ -228,7 +228,7 @@ class ActiveDirectoryTest extends TestBase
         $this->assertEquals($base, $options['base_dn']);
         $this->assertEquals(false, $options['use_ssl']);
         $this->assertEquals($accountSuffix, $options['account_suffix']);
-        $this->assertEquals(intval($version), $options['ldap_version'], "version should be int");
+        $this->assertEquals(intval($version), $options['ldap_version'], 'version should be int');
     }
 
     public function testGetAllHosts()
@@ -241,7 +241,7 @@ class ActiveDirectoryTest extends TestBase
 
         $options = new ActiveDirectoryOptions();
 
-        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), "comma separated values should become array");
+        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), 'comma separated values should become array');
     }
 
     public function testConvertsEmailToUserName()
@@ -268,7 +268,7 @@ class ActiveDirectoryTest extends TestBase
 
     public function testCanGetAttributeMapping()
     {
-        $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
+        $attributeMapping = 'sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename';
 
         $configFile = new FakeConfigFile();
         $configFile->SetKey(ActiveDirectoryConfigKeys::ATTRIBUTE_MAPPING, $attributeMapping);

@@ -186,7 +186,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
         }
 
         if ($value->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX || $value->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX) {
-            return strripos($value->Value() ?? "", $attribute->Value) !== false;
+            return strripos($value->Value() ?? '', $attribute->Value) !== false;
         } elseif (is_numeric($value->Value())) {
             return floatval($value->Value()) == $attribute->Value;
         } else {

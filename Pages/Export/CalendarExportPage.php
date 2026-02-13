@@ -60,8 +60,8 @@ class CalendarExportPage extends Page implements ICalendarExportPage
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
 
-        header("Content-Type: text/Calendar");
-        header("Content-Disposition: inline; filename=calendar.ics");
+        header('Content-Type: text/Calendar');
+        header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
         echo $display->Render($this->reservations);

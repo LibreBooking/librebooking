@@ -111,19 +111,20 @@ class ReservationUpdatePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$this->page->resourceId, $resource],
-                                     [$additionalId1, $additional1],
-                                     [$additionalId2, $additional2]
-                                 ]);
+                                     [
+                                         [$this->page->resourceId, $resource],
+                                         [$additionalId1, $additional1],
+                                         [$additionalId2, $additional2]
+                                     ]
+                                 );
 
         $this->page->repeatType = RepeatType::Daily;
         $roFactory = new RepeatOptionsFactory();
         $repeatOptions = $roFactory->CreateFromComposite($this->page, $this->user->Timezone);
 
         $expectedDuration = DateRange::Create(
-            $this->page->GetStartDate() . " " . $this->page->GetStartTime(),
-            $this->page->GetEndDate() . " " . $this->page->GetEndTime(),
+            $this->page->GetStartDate() . ' ' . $this->page->GetStartTime(),
+            $this->page->GetEndDate() . ' ' . $this->page->GetEndTime(),
             $timezone
         );
 

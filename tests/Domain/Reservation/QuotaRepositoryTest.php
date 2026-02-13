@@ -155,16 +155,16 @@ class QuotaRepositoryTest extends TestBase
     private function GetRow($quotaId, $limit, $unit, $duration, $resourceId, $groupId, $scheduleId, $enforcedStartTime, $enforcedEndTime, $enforcedDays, $scope)
     {
         return [ColumnNames::QUOTA_ID => $quotaId,
-                ColumnNames::QUOTA_LIMIT => $limit,
-                ColumnNames::QUOTA_UNIT => $unit,
-                ColumnNames::QUOTA_DURATION => $duration,
-                ColumnNames::RESOURCE_ID => $resourceId,
-                ColumnNames::GROUP_ID => $groupId,
-                ColumnNames::SCHEDULE_ID => $scheduleId,
-                ColumnNames::ENFORCED_START_TIME => $enforcedStartTime,
-                ColumnNames::ENFORCED_END_TIME => $enforcedEndTime,
-                ColumnNames::ENFORCED_DAYS => $enforcedDays,
-                ColumnNames::QUOTA_SCOPE => $scope,
+            ColumnNames::QUOTA_LIMIT => $limit,
+            ColumnNames::QUOTA_UNIT => $unit,
+            ColumnNames::QUOTA_DURATION => $duration,
+            ColumnNames::RESOURCE_ID => $resourceId,
+            ColumnNames::GROUP_ID => $groupId,
+            ColumnNames::SCHEDULE_ID => $scheduleId,
+            ColumnNames::ENFORCED_START_TIME => $enforcedStartTime,
+            ColumnNames::ENFORCED_END_TIME => $enforcedEndTime,
+            ColumnNames::ENFORCED_DAYS => $enforcedDays,
+            ColumnNames::QUOTA_SCOPE => $scope,
         ];
     }
 }

@@ -154,6 +154,6 @@ class CheckoutPage extends ActionPage implements ICheckoutPage
 
     public function SetStripeResult($result)
     {
-        $this->SetJson(['result'=>$result]);
+        $this->SetJson(['result' => $result]);
     }
 }

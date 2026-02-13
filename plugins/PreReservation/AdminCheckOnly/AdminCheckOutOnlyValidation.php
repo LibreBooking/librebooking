@@ -39,8 +39,8 @@ class AdminCheckOutOnlyValidation implements IReservationValidationService
         $configFile = Configuration::Instance()->File('AdminCheckOnly'); // Gets config file
         $customAttributeId = $configFile->GetKey(AdminCheckOnlyConfigKeys::ATTRIBUTE_CHECKIN_ID); //Gets ID from AdminCheckInOnly
         $resources = $series->AllResources();
-        $adminChecks=0; //Number of resources with AdminCheckInOnly
-        $userChecks=0;	//Number of resources without AdminCheckInOnly
+        $adminChecks = 0; //Number of resources with AdminCheckInOnly
+        $userChecks = 0;	//Number of resources without AdminCheckInOnly
 
         foreach ($resources as $key => $resource) {//Gets AdminCheckInOnly from all attributes
 

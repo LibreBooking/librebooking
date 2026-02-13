@@ -98,7 +98,7 @@ class QuotaWhenModifyingTest extends TestBase
                 ->WithInstance($existing2);
         $series = $builder->BuildTestVersion();
 
-        $series->UpdateDuration(new DateRange($r1start, $r1End->SetTimeString("3:00")));
+        $series->UpdateDuration(new DateRange($r1start, $r1End->SetTimeString('3:00')));
 
         $this->SearchReturns([]);
 

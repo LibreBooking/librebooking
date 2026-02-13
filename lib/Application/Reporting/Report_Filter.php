@@ -81,7 +81,7 @@ class Report_Filter
         $this->accessoryIds = array_filter($accessoryIds, $removeEmpty);
         $this->participantId = $participantId;
         $this->includeDeleted = $includeDeleted;
-        $this->resourceTypeIds =array_filter($resourceTypeIds, $removeEmpty) ;
+        $this->resourceTypeIds = array_filter($resourceTypeIds, $removeEmpty) ;
     }
 
     public function Add(ReportCommandBuilder $builder)

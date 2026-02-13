@@ -102,11 +102,11 @@ class MySqlConnection implements IDbConnection
 
         if ($sqlCommand->IsMultiQuery()) {
             $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
-            do
-            {
-                if ($r = mysqli_store_result($this->_db))
+            do {
+                if ($r = mysqli_store_result($this->_db)) {
                     mysqli_free_result($r);
-            } while(mysqli_next_result($this->_db));
+                }
+            } while (mysqli_next_result($this->_db));
         } else {
             $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
         }
@@ -121,7 +121,7 @@ class MySqlConnection implements IDbConnection
     private function _handleError($result)
     {
         if (!$result) {
-            Log::Error("Error executing MySQL query %s", mysqli_error($this->_db));
+            Log::Error('Error executing MySQL query %s', mysqli_error($this->_db));
 
             throw new Exception('There was an error executing your query\n' .  mysqli_error($this->_db));
         }
@@ -152,7 +152,7 @@ class MySqlLimitCommand extends SqlCommand
 
     public function GetQuery()
     {
-        return $this->baseCommand->GetQuery() . sprintf(" LIMIT %s OFFSET %s", $this->limit, $this->offset);
+        return $this->baseCommand->GetQuery() . sprintf(' LIMIT %s OFFSET %s', $this->limit, $this->offset);
     }
 
     public function ContainsGroupConcat()

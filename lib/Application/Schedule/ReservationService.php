@@ -36,7 +36,7 @@ class ReservationService implements IReservationService
             ($filterResourcesInCode ? [] : $resourceIds)
         );
         Log::Debug(
-            "Found %s reservations for schedule %s between %s and %s",
+            'Found %s reservations for schedule %s between %s and %s',
             count($reservations),
             $scheduleId,
             $dateRangeUtc->GetBegin(),
@@ -52,7 +52,7 @@ class ReservationService implements IReservationService
         }
 
         $blackouts = $this->_repository->GetBlackoutsWithin($dateRangeUtc, $scheduleId);
-        Log::Debug("Found %s blackouts for schedule %s between %s and %s", count($blackouts), $scheduleId, $dateRangeUtc->GetBegin(), $dateRangeUtc->GetEnd());
+        Log::Debug('Found %s blackouts for schedule %s between %s and %s', count($blackouts), $scheduleId, $dateRangeUtc->GetBegin(), $dateRangeUtc->GetEnd());
 
         foreach ($blackouts as $blackout) {
             $reservationListing->AddBlackout($blackout);

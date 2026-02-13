@@ -64,6 +64,6 @@ class PasswordMigrationTest extends TestBase
 
         $password->Migrate($userid);
         $encrypted = $fakeEncryption->Encrypt($this->plaintext, $salt);
-        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), "did not migrate the password");
+        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), 'did not migrate the password');
     }
 }

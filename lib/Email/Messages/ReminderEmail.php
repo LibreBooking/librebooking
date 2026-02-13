@@ -36,13 +36,13 @@ abstract class ReminderEmail extends EmailMessage
         $this->Set('Title', $this->reminder->Title());
         $this->Set('Description', $this->reminder->Description());
         $this->Set('ReservationUrl', sprintf(
-            "%s?%s=%s",
+            '%s?%s=%s',
             Pages::RESERVATION,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reminder->ReferenceNumber()
         ));
         $this->Set('ICalUrl', sprintf(
-            "export/%s?%s=%s",
+            'export/%s?%s=%s',
             Pages::CALENDAR_EXPORT,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reminder->ReferenceNumber()

@@ -1,4 +1,5 @@
 <?php
+
 require_once(ROOT_DIR . 'lib/Config/PluginConfigKeys.php');
 
 class MellonConfigKeys extends PluginConfigKeys

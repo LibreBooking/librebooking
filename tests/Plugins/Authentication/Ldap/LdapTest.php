@@ -213,7 +213,7 @@ class LdapTest extends TestBase
         $this->assertEquals($password, $options['bindpw']);
         $this->assertEquals($base, $options['basedn']);
         $this->assertEquals(false, $options['starttls']);
-        $this->assertEquals(intval($version), $options['version'], "version should be int");
+        $this->assertEquals(intval($version), $options['version'], 'version should be int');
     }
 
     public function testGetAllHosts()
@@ -226,7 +226,7 @@ class LdapTest extends TestBase
 
         $options = new LdapOptions();
 
-        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), "comma separated values should become array");
+        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), 'comma separated values should become array');
     }
 
     public function testUserHandlesArraysAsAttribute()
@@ -262,7 +262,7 @@ class LdapTest extends TestBase
 
     public function testCanGetAttributeMapping()
     {
-        $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
+        $attributeMapping = 'sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename';
 
         $configFile = new FakeConfigFile();
         $configFile->SetKey(LdapConfigKeys::ATTRIBUTE_MAPPING, $attributeMapping);

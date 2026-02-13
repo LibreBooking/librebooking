@@ -29,9 +29,9 @@ class FakeReservationSavePage implements IReservationSavePage
     public $accessories = [];
     public $attributes = [];
     public $attachment;
-    public $startReminderValue = "15";
+    public $startReminderValue = '15';
     public $startReminderInterval = ReservationReminderInterval::Minutes;
-    public $endReminderValue = "1";
+    public $endReminderValue = '1';
     public $endReminderInterval = ReservationReminderInterval::Hours;
     public $hasEndReminder = true;
     public $allowParticipation;
@@ -50,7 +50,7 @@ class FakeReservationSavePage implements IReservationSavePage
         $this->endDate = $now->AddDays(6)->Format('Y-m-d');
         $this->repeatTerminationDate = $now->AddDays(60)->Format('Y-m-d');
         $this->accessories = [new FakeAccessoryFormElement(1, 2, 'accessoryname')];
-        $this->attributes = [new AttributeFormElement(1, "something")];
+        $this->attributes = [new AttributeFormElement(1, 'something')];
         $this->attachment = new FakeUploadedFile();
     }
 

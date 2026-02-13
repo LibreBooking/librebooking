@@ -43,11 +43,11 @@ class AvailableAccessoriesPresenterTest extends TestBase
         $this->accessoryRepo->_AllAccessories = [new Accessory(1, '', 10), new Accessory(2, '', 4), new Accessory(3, '', null)];
 
         $this->reservationRepo->_AccessoryReservations = [
-                new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
-                new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
-                new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
-                new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
-                new AccessoryReservation('r3', $duration->GetBegin(), $duration->GetEnd(), 3, 2),
+            new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
+            new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
+            new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
+            new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
+            new AccessoryReservation('r3', $duration->GetBegin(), $duration->GetEnd(), 3, 2),
         ];
 
         $this->presenter->PageLoad();
@@ -63,11 +63,11 @@ class AvailableAccessoriesPresenterTest extends TestBase
         $this->accessoryRepo->_AllAccessories = [new Accessory(1, '', 10), new Accessory(2, '', 4), new Accessory(3, '', null)];
 
         $this->reservationRepo->_AccessoryReservations = [
-                new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
-                new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
-                new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
-                new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
-                new AccessoryReservation('r3', $duration->GetBegin(), $duration->GetEnd(), 3, 2),
+            new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
+            new AccessoryReservation('r1', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
+            new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 1, 2),
+            new AccessoryReservation('r2', $duration->GetBegin(), $duration->GetEnd(), 2, 2),
+            new AccessoryReservation('r3', $duration->GetBegin(), $duration->GetEnd(), 3, 2),
         ];
 
         $this->page->_ReferenceNumber = 'r2';
@@ -87,8 +87,8 @@ class AvailableAccessoriesPresenterTest extends TestBase
         $this->accessoryRepo->_AllAccessories = [new Accessory(1, '', 10)];
 
         $this->reservationRepo->_AccessoryReservations = [
-                new AccessoryReservation('r1', Date::Parse('2016-11-23 12:00', 'UTC'), Date::Parse('2016-11-23 12:30', 'UTC'), 1, 5),
-                new AccessoryReservation('r2', Date::Parse('2016-11-24 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 5),
+            new AccessoryReservation('r1', Date::Parse('2016-11-23 12:00', 'UTC'), Date::Parse('2016-11-23 12:30', 'UTC'), 1, 5),
+            new AccessoryReservation('r2', Date::Parse('2016-11-24 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 5),
         ];
 
         $this->presenter->PageLoad();
@@ -107,8 +107,8 @@ class AvailableAccessoriesPresenterTest extends TestBase
         $this->accessoryRepo->_AllAccessories = [new Accessory(1, '', 10)];
 
         $this->reservationRepo->_AccessoryReservations = [
-                new AccessoryReservation('r1', Date::Parse('2016-11-23 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 5),
-                new AccessoryReservation('r2', Date::Parse('2016-11-24 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 4),
+            new AccessoryReservation('r1', Date::Parse('2016-11-23 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 5),
+            new AccessoryReservation('r2', Date::Parse('2016-11-24 12:00', 'UTC'), Date::Parse('2016-11-24 12:30', 'UTC'), 1, 4),
         ];
 
         $this->presenter->PageLoad();

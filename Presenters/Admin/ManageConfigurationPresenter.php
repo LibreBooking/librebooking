@@ -109,7 +109,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         $this->BringConfigFileUpToDate();
 
         $settings = $this->configSettings->GetSettings($this->configFilePath);
-        
+
         // Check if this is a plugin config file
         $isPluginConfig = $this->IsPluginConfigFile($this->configFilePath);
         $pluginId = $isPluginConfig ? $this->GetPluginIdFromPath($this->configFilePath) : null;
@@ -137,13 +137,13 @@ class ManageConfigurationPresenter extends ActionPresenter
         // For plugin configs, the key might not include the section prefix
         // Check both the full key and the section.key format
         $meta = call_user_func([$this->configKeyClass, 'findByKey'], $key);
-        
+
         // If not found and we have a section, try without section prefix
         if (!isset($meta) && $section) {
             $keyWithoutSection = str_replace("$section.", '', $key);
             $meta = call_user_func([$this->configKeyClass, 'findByKey'], $keyWithoutSection);
         }
-        
+
         if (!isset($meta) || $this->ShouldBeSkipped($key, $meta)) {
             return;
         }
@@ -153,7 +153,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         // Use the key without section prefix for display
         $displayKey = $section ? str_replace("$section.", '', $key) : $key;
-        
+
         $setting = new ConfigSetting(
             $displayKey,
             $section ?: null,
@@ -222,7 +222,7 @@ class ManageConfigurationPresenter extends ActionPresenter
             }
         }
 
-        Log::Debug("Saving %s settings", count($configSettings));
+        Log::Debug('Saving %s settings', count($configSettings));
 
         // WriteSettings will handle the proper nesting based on file type
         $this->configSettings->WriteSettings($this->configFilePath, $mergedSettings);
@@ -268,14 +268,14 @@ class ManageConfigurationPresenter extends ActionPresenter
         if ($h = opendir($pluginBaseDir)) {
             while (false !== ($entry = readdir($h))) {
                 $pluginDir = $pluginBaseDir . $entry;
-                if (is_dir($pluginDir) && $entry != "." && $entry != "..") {
+                if (is_dir($pluginDir) && $entry != '.' && $entry != '..') {
                     $plugins = scandir($pluginDir);
                     foreach ($plugins as $plugin) {
-                        if (is_dir("$pluginDir/$plugin") && $plugin != "." && $plugin != ".." && strpos($plugin, 'Example') === false) {
+                        if (is_dir("$pluginDir/$plugin") && $plugin != '.' && $plugin != '..' && strpos($plugin, 'Example') === false) {
                             $configFiles = array_merge(glob("$pluginDir/$plugin/*.config.php"), glob("$pluginDir/$plugin/*.config.dist.php"));
                             if (count($configFiles) > 0) {
-                                $configKeysFile = "/" . $plugin . "ConfigKeys.php";
-                                $configKeysClass = $plugin . "ConfigKeys";
+                                $configKeysFile = '/' . $plugin . 'ConfigKeys.php';
+                                $configKeysClass = $plugin . 'ConfigKeys';
                                 $files[] = new ConfigFileOption("$entry-$plugin", "$entry/$plugin", $configKeysClass, $configKeysFile);
                             }
                         }
@@ -319,7 +319,7 @@ class ManageConfigurationPresenter extends ActionPresenter
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));
                         Log::Debug("Created new config file from dist template: {$distFile[0]}");
                     } catch (Exception $e) {
-                        Log::Error("Failed to create config file: " . $e->getMessage());
+                        Log::Error('Failed to create config file: ' . $e->getMessage());
                         return;
                     }
                     $configFile = glob("$rootDir/*config.php");
@@ -381,15 +381,15 @@ class ManageConfigurationPresenter extends ActionPresenter
     private function GetPluginIdFromPath($filePath)
     {
         $basename = basename($filePath);
-        
+
         if ($basename === 'config.php') {
             return null;
         }
-        
+
         if (preg_match('/^([A-Z][a-z]+)\.config\.php$/', $basename, $matches)) {
             return strtolower($matches[1]);
         }
-        
+
         return null;
     }
 }
@@ -459,5 +459,3 @@ class ConfigSetting
         return str_replace('__', '.', $value);
     }
 }
-
-

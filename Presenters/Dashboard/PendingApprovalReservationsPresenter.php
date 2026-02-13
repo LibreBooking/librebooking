@@ -44,25 +44,23 @@ class PendingApprovalReservationsPresenter
         $now = Date::Now();
         $today = $now->ToTimezone($timezone)->GetDate();
         $dayOfWeek = $today->Weekday();
-        $endOfMonth = $today->AddDays(DateDiff::getMonthRemainingDays($timezone)+1);
-        $endOfYear = $today->AddDays(DateDiff::getYearRemainingDays($timezone)+1);
+        $endOfMonth = $today->AddDays(DateDiff::getMonthRemainingDays($timezone) + 1);
+        $endOfYear = $today->AddDays(DateDiff::getYearRemainingDays($timezone) + 1);
 
         $consolidated = [];
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsAdmin){
-            $consolidated = $this->repository->GetReservationsPendingApproval($now, $this->searchUserId, $this->searchUserLevel, null, null,true);
-        }
-
-        elseif (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsAdmin) {
+            $consolidated = $this->repository->GetReservationsPendingApproval($now, $this->searchUserId, $this->searchUserLevel, null, null, true);
+        } elseif (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $groupResourceIds = $this->GetUserAdminResources($user->UserId);
-            
-            if($groupResourceIds != null){
-                $consolidated = $this->repository->GetReservationsPendingApproval($now, $this->searchUserId, $this->searchUserLevel, null, $groupResourceIds,true);
+
+            if ($groupResourceIds != null) {
+                $consolidated = $this->repository->GetReservationsPendingApproval($now, $this->searchUserId, $this->searchUserLevel, null, $groupResourceIds, true);
             }
         }
 
         $tomorrow = $today->AddDays(1);
-        $startOfNextWeek = $today->AddDays(7-$dayOfWeek);
+        $startOfNextWeek = $today->AddDays(7 - $dayOfWeek);
         $endOfNextWeek = $startOfNextWeek->AddDays(7);
 
         $todays = [];
@@ -75,7 +73,7 @@ class PendingApprovalReservationsPresenter
 
         foreach ($consolidated as $reservation) {
             $start = $reservation->StartDate->ToTimezone($timezone);
-            
+
             if ($start->DateEquals($today)) {
                 $todays[] = $reservation;
             } elseif ($start->DateEquals($tomorrow)) {
@@ -84,9 +82,9 @@ class PendingApprovalReservationsPresenter
                 $thisWeeks[] = $reservation;
             } elseif ($start->LessThan($endOfNextWeek)) {
                 $nextWeeks[] = $reservation;
-            }elseif ($start->LessThan($endOfMonth)) {
+            } elseif ($start->LessThan($endOfMonth)) {
                 $thisMonths[] = $reservation;
-            } elseif ($start->LessThan($endOfYear)){
+            } elseif ($start->LessThan($endOfYear)) {
                 $thisYears[] = $reservation;
             } else {
                 $futures[] = $reservation;
@@ -118,22 +116,22 @@ class PendingApprovalReservationsPresenter
     /**
      * Gets the resource ids that are under the responsability of the given resource user groups
      */
-    private function GetUserAdminResources($userId){
+    private function GetUserAdminResources($userId)
+    {
         $resourceIds = [];
 
         $resourceRepo = new ResourceRepository();
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId);
         }
 
         //If a given reservation is pending approval a user who is only a schedule admin can't approve them, only a resource admin that manages the resource of that same reservation
         //However if this schedule admin is a resource admin (even if he does not manage the resource) and that resource is in the schedule he can approve (or reject)
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin && ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin && ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 
         return $resourceIds;
     }
 }
-

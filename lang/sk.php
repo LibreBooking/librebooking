@@ -1,4 +1,5 @@
 <?php
+
 /**
 Translation: 2014 Slovak Language: Branislav Ďorď <branislav.dord@eurogalaxy.sk>
  */
@@ -654,12 +655,12 @@ class sk extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervácie čakajúce na schválenie';
         $strings['LaterThisMonth'] = 'Neskôr tento mesiac';
         $strings['LaterThisYear'] = 'Neskôr tento rok';
-        $strings['Remaining'] = 'Zostáva';        
+        $strings['Remaining'] = 'Zostáva';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Žiadne chýbajúce rezervácie na odchod';
-        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';        
+        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

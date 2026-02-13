@@ -67,10 +67,11 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 1],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 1],
+                        [null, $request->userName, 1]
+                    ]
+                );
 
         $errors = $this->validator->ValidateCreateRequest($request);
         $this->assertTrue(count($errors) == 2);
@@ -128,10 +129,11 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 2],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 2],
+                        [null, $request->userName, 1]
+                    ]
+                );
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
         $this->assertTrue(count($errors) == 1);
@@ -148,7 +150,8 @@ class UserRequestValidatorTest extends TestBase
                     [
                         [$request->emailAddress, null, 1],
                         [null, $request->userName, 2]
-                    ]);
+                    ]
+                );
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
         $this->assertTrue(count($errors) == 1);

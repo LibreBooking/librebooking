@@ -420,7 +420,7 @@ class du_be extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Er zijn geen ontbrekende uitcheckreserveringen';
-        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';              
+        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

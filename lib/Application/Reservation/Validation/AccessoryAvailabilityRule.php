@@ -70,7 +70,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
 
                 $range = new DateRange($start, $end);
 
-                Log::Debug("Checking for accessory conflicts, reference number %s date %s", $reservation->ReferenceNumber(), $range);
+                Log::Debug('Checking for accessory conflicts, reference number %s date %s', $reservation->ReferenceNumber(), $range);
 
                 $accessoryReservations = $this->reservationRepository->GetAccessoriesWithin($range);
 
@@ -88,7 +88,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
 
                     if ($requested + $alreadyReserved > $accessory->QuantityAvailable()) {
                         Log::Debug(
-                            "Accessory over limit. Reference Number %s, Date %s, Quantity already reserved %s, Quantity requested: %s",
+                            'Accessory over limit. Reference Number %s, Date %s, Quantity already reserved %s, Quantity requested: %s',
                             $reservation->ReferenceNumber(),
                             $reservation->Duration(),
                             $alreadyReserved,

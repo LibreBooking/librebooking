@@ -181,7 +181,9 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_IsLoggedIn = false;
     public $_AreCredentialsKnown = false;
 
-    public function postLogout(UserSession $user) { }
+    public function postLogout(UserSession $user)
+    {
+    }
 
     public function Validate($username, $password)
     {

@@ -139,8 +139,8 @@ class LoginPresenterTest extends TestBase
         $this->auth->_ValidateResult = false;
         $this->presenter->Login();
 
-        $this->assertEquals("", $this->page->_LastRedirect, "Does not redirect if auth fails");
-        $this->assertTrue($this->page->_ShowLoginError, "Should show login error if auth fails");
+        $this->assertEquals('', $this->page->_LastRedirect, 'Does not redirect if auth fails');
+        $this->assertTrue($this->page->_ShowLoginError, 'Should show login error if auth fails');
         $this->assertNull($this->page->_LoginErrorMessage);
     }
 
@@ -199,14 +199,14 @@ class LoginPresenterTest extends TestBase
     public function testAutoLoginIfCookieIsSet()
     {
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
-        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, "part1|part2");
+        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, 'part1|part2');
         $this->fakeServer->SetCookie($cookie);
 
         $this->auth->_CookieValidateResult = true;
 
         $this->presenter->PageLoad();
 
-        $this->assertTrue($this->auth->_CookieLoginCalled, "should try to auto login if persist cookie is set");
+        $this->assertTrue($this->auth->_CookieLoginCalled, 'should try to auto login if persist cookie is set');
         $this->assertEquals($cookie->Value, $this->auth->_LastLoginCookie);
         $this->assertEquals($this->page->_ResumeUrl, $this->page->_LastRedirect);
     }
@@ -216,7 +216,7 @@ class LoginPresenterTest extends TestBase
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
         $this->presenter->PageLoad();
 
-        $this->assertFalse($this->auth->_CookieLoginCalled, "should not try to auto login without persist cookie");
+        $this->assertFalse($this->auth->_CookieLoginCalled, 'should not try to auto login without persist cookie');
     }
 
     public function testCanChangeToKnownLanguage()
@@ -264,7 +264,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_PageLoadWasCalled = false;
     public $_Languages = [];
     public $_UseLogonName = false;
-    public $_ResumeUrl = "";
+    public $_ResumeUrl = '';
     public $_ShowLoginError = false;
     public $_LoginErrorMessage = null;
     public $_requestedLanguage;

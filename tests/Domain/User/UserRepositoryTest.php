@@ -20,9 +20,9 @@ class UserRepositoryTest extends TestBase
         $creditCount = 100;
 
         $userRows = [
-                [ColumnNames::USER_ID => 1, ColumnNames::FIRST_NAME => "f1", ColumnNames::LAST_NAME => 'l1', ColumnNames::EMAIL => 'e1', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language],
-                [ColumnNames::USER_ID => 2, ColumnNames::FIRST_NAME => "f2", ColumnNames::LAST_NAME => 'l2', ColumnNames::EMAIL => 'e2', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language, ColumnNames::USER_PREFERENCES => $preferences, ColumnNames::CREDIT_COUNT => $creditCount],
-                [ColumnNames::USER_ID => 3, ColumnNames::FIRST_NAME => "f3", ColumnNames::LAST_NAME => 'l3', ColumnNames::EMAIL => 'e3', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language],
+            [ColumnNames::USER_ID => 1, ColumnNames::FIRST_NAME => 'f1', ColumnNames::LAST_NAME => 'l1', ColumnNames::EMAIL => 'e1', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language],
+            [ColumnNames::USER_ID => 2, ColumnNames::FIRST_NAME => 'f2', ColumnNames::LAST_NAME => 'l2', ColumnNames::EMAIL => 'e2', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language, ColumnNames::USER_PREFERENCES => $preferences, ColumnNames::CREDIT_COUNT => $creditCount],
+            [ColumnNames::USER_ID => 3, ColumnNames::FIRST_NAME => 'f3', ColumnNames::LAST_NAME => 'l3', ColumnNames::EMAIL => 'e3', ColumnNames::TIMEZONE_NAME => $timezone, ColumnNames::LANGUAGE_CODE => $language],
         ];
 
         $this->db->SetRows($userRows);
@@ -30,9 +30,9 @@ class UserRepositoryTest extends TestBase
         $userRepository = new UserRepository();
         $users = $userRepository->GetAll();
 
-        $user1 = new UserDto(1, "f1", "l1", "e1", $timezone, $language);
-        $user2 = new UserDto(2, "f2", "l2", "e2", $timezone, $language, $preferences, $creditCount);
-        $user3 = new UserDto(3, "f3", "l3", "e3", $timezone, $language);
+        $user1 = new UserDto(1, 'f1', 'l1', 'e1', $timezone, $language);
+        $user2 = new UserDto(2, 'f2', 'l2', 'e2', $timezone, $language, $preferences, $creditCount);
+        $user3 = new UserDto(3, 'f3', 'l3', 'e3', $timezone, $language);
 
         $getAllUsersCommand = new GetAllUsersByStatusCommand(AccountStatus::ACTIVE);
 
@@ -400,7 +400,7 @@ class UserRepositoryTest extends TestBase
         $addUpdated = new AddAttributeValueCommand($toChange->AttributeId, $toChange->Value, $userId, CustomAttributeCategory::USER);
 
         $this->assertEquals($removeOldCommand, $this->db->_Commands[1]);
-        $this->assertEquals($removeUpdated, $this->db->_Commands[2], "need to remove before adding to make sure changed values are not immediately deleted");
+        $this->assertEquals($removeUpdated, $this->db->_Commands[2], 'need to remove before adding to make sure changed values are not immediately deleted');
         $this->assertEquals($addUpdated, $this->db->_Commands[3]);
         $this->assertEquals($addNewCommand, $this->db->_Commands[4]);
     }
@@ -513,9 +513,9 @@ class UserRepositoryTest extends TestBase
 
         $command = new GetAllResourceAdminsCommand($resourceId);
         $userRows = [
-                $this->GetUserRow(1, 'admin', 'guy', 'email'),
-                $this->GetUserRow(),
-                $this->GetUserRow(),
+            $this->GetUserRow(1, 'admin', 'guy', 'email'),
+            $this->GetUserRow(),
+            $this->GetUserRow(),
         ];
 
         $this->db->SetRows($userRows);
@@ -537,9 +537,9 @@ class UserRepositoryTest extends TestBase
 
         $command = new GetAllApplicationAdminsCommand($this->fakeConfig->GetAllAdminEmails());
         $userRows = [
-                $this->GetUserRow(1, 'admin', 'guy', 'email'),
-                $this->GetUserRow(),
-                $this->GetUserRow(),
+            $this->GetUserRow(1, 'admin', 'guy', 'email'),
+            $this->GetUserRow(),
+            $this->GetUserRow(),
         ];
 
         $this->db->SetRows($userRows);
@@ -562,9 +562,9 @@ class UserRepositoryTest extends TestBase
 
         $command = new GetAllGroupAdminsCommand($userId);
         $userRows = [
-                $this->GetUserRow(1, 'admin', 'guy', 'email'),
-                $this->GetUserRow(),
-                $this->GetUserRow(),
+            $this->GetUserRow(1, 'admin', 'guy', 'email'),
+            $this->GetUserRow(),
+            $this->GetUserRow(),
         ];
 
         $this->db->SetRows($userRows);
@@ -681,27 +681,27 @@ class UserRepositoryTest extends TestBase
     ) {
         $row =
                 [
-                        ColumnNames::USER_ID => $userId,
-                        ColumnNames::USERNAME => $userName,
-                        ColumnNames::FIRST_NAME => $first,
-                        ColumnNames::LAST_NAME => $last,
-                        ColumnNames::EMAIL => $email,
-                        ColumnNames::LAST_LOGIN => $lastLogin,
-                        ColumnNames::LANGUAGE_CODE => 'en_us',
-                        ColumnNames::TIMEZONE_NAME => $timezone,
-                        ColumnNames::USER_STATUS_ID => $statusId,
-                        ColumnNames::PASSWORD => 'encryptedPassword',
-                        ColumnNames::SALT => 'passwordsalt',
-                        ColumnNames::HOMEPAGE_ID => 3,
-                        ColumnNames::PHONE_NUMBER => '123-456-7890',
-                        ColumnNames::POSITION => 'head honcho',
-                        ColumnNames::ORGANIZATION => 'earth',
-                        ColumnNames::USER_CREATED => '2011-01-04 12:12:12',
-                        ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => 1,
-                        ColumnNames::PUBLIC_ID => uniqid(),
-                        ColumnNames::DEFAULT_SCHEDULE_ID => $scheduleId,
-                        ColumnNames::USER_PREFERENCES => $preferences,
-                        ColumnNames::CREDIT_COUNT => $creditCount
+                    ColumnNames::USER_ID => $userId,
+                    ColumnNames::USERNAME => $userName,
+                    ColumnNames::FIRST_NAME => $first,
+                    ColumnNames::LAST_NAME => $last,
+                    ColumnNames::EMAIL => $email,
+                    ColumnNames::LAST_LOGIN => $lastLogin,
+                    ColumnNames::LANGUAGE_CODE => 'en_us',
+                    ColumnNames::TIMEZONE_NAME => $timezone,
+                    ColumnNames::USER_STATUS_ID => $statusId,
+                    ColumnNames::PASSWORD => 'encryptedPassword',
+                    ColumnNames::SALT => 'passwordsalt',
+                    ColumnNames::HOMEPAGE_ID => 3,
+                    ColumnNames::PHONE_NUMBER => '123-456-7890',
+                    ColumnNames::POSITION => 'head honcho',
+                    ColumnNames::ORGANIZATION => 'earth',
+                    ColumnNames::USER_CREATED => '2011-01-04 12:12:12',
+                    ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => 1,
+                    ColumnNames::PUBLIC_ID => uniqid(),
+                    ColumnNames::DEFAULT_SCHEDULE_ID => $scheduleId,
+                    ColumnNames::USER_PREFERENCES => $preferences,
+                    ColumnNames::CREDIT_COUNT => $creditCount
                 ];
 
         return $row;
@@ -710,8 +710,8 @@ class UserRepositoryTest extends TestBase
     private function GetEmailPrefRows()
     {
         $row = [
-                [ColumnNames::EVENT_CATEGORY => 'reservation', ColumnNames::EVENT_TYPE => ReservationEvent::Created],
-                [ColumnNames::EVENT_CATEGORY => 'reservation', ColumnNames::EVENT_TYPE => ReservationEvent::Updated],
+            [ColumnNames::EVENT_CATEGORY => 'reservation', ColumnNames::EVENT_TYPE => ReservationEvent::Created],
+            [ColumnNames::EVENT_CATEGORY => 'reservation', ColumnNames::EVENT_TYPE => ReservationEvent::Updated],
         ];
 
         return $row;
@@ -720,9 +720,9 @@ class UserRepositoryTest extends TestBase
     private function GetPermissionsRows()
     {
         return [
-                [ColumnNames::RESOURCE_ID => 1, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
-                [ColumnNames::RESOURCE_ID => 2, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
-                [ColumnNames::RESOURCE_ID => 3, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
+            [ColumnNames::RESOURCE_ID => 1, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
+            [ColumnNames::RESOURCE_ID => 2, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
+            [ColumnNames::RESOURCE_ID => 3, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
         ];
     }
 
@@ -731,25 +731,25 @@ class UserRepositoryTest extends TestBase
         $groupId1 = 98017;
         $groupId2 = 128736;
         return [
-                [ColumnNames::GROUP_ID => $groupId1, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => null, ColumnNames::ROLE_LEVEL => RoleLevel::GROUP_ADMIN],
-                [ColumnNames::GROUP_ID => $groupId1, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => null, ColumnNames::ROLE_LEVEL => RoleLevel::RESOURCE_ADMIN],
-                [ColumnNames::GROUP_ID => $groupId2, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => $groupId1, ColumnNames::ROLE_LEVEL => RoleLevel::NONE],
+            [ColumnNames::GROUP_ID => $groupId1, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => null, ColumnNames::ROLE_LEVEL => RoleLevel::GROUP_ADMIN],
+            [ColumnNames::GROUP_ID => $groupId1, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => null, ColumnNames::ROLE_LEVEL => RoleLevel::RESOURCE_ADMIN],
+            [ColumnNames::GROUP_ID => $groupId2, ColumnNames::GROUP_NAME => 'group1', ColumnNames::GROUP_ADMIN_GROUP_ID => $groupId1, ColumnNames::ROLE_LEVEL => RoleLevel::NONE],
         ];
     }
 
     private function GetOwnedGroupRows()
     {
         return [
-                [ColumnNames::GROUP_ID => 10000, ColumnNames::GROUP_NAME => 'G1'],
-                [ColumnNames::GROUP_ID => 20000, ColumnNames::GROUP_NAME => 'G2'],
+            [ColumnNames::GROUP_ID => 10000, ColumnNames::GROUP_NAME => 'G1'],
+            [ColumnNames::GROUP_ID => 20000, ColumnNames::GROUP_NAME => 'G2'],
         ];
     }
 
     private function GetPreferenceRows()
     {
         return [
-                [ColumnNames::USER_ID => 1, ColumnNames::PREFERENCE_NAME => 'n1', ColumnNames::PREFERENCE_VALUE => 'v1'],
-                [ColumnNames::USER_ID => 1, ColumnNames::PREFERENCE_NAME => 'n2', ColumnNames::PREFERENCE_VALUE => 'v2'],
+            [ColumnNames::USER_ID => 1, ColumnNames::PREFERENCE_NAME => 'n1', ColumnNames::PREFERENCE_VALUE => 'v1'],
+            [ColumnNames::USER_ID => 1, ColumnNames::PREFERENCE_NAME => 'n2', ColumnNames::PREFERENCE_VALUE => 'v2'],
         ];
     }
 

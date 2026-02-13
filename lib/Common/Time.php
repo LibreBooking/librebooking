@@ -7,7 +7,7 @@ class Time
     private $_second;
     private $_timezone;
 
-    public const FORMAT_HOUR_MINUTE = "H:i";
+    public const FORMAT_HOUR_MINUTE = 'H:i';
 
     public function __construct($hour, $minute, $second = null, $timezone = null)
     {
@@ -103,7 +103,7 @@ class Time
 
     public function ToString()
     {
-        return sprintf("%02d:%02d:%02d", $this->_hour, $this->_minute, $this->_second);
+        return sprintf('%02d:%02d:%02d', $this->_hour, $this->_minute, $this->_second);
     }
 
     public function __toString()

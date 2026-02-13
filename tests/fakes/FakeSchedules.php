@@ -48,27 +48,27 @@ class FakeScheduleRepository implements IScheduleRepository
 
     public static function Initialize()
     {
-        self::$Schedule1 = new Schedule(1, "schedule 1", true, '09:00', '20:00', 0, 1);
+        self::$Schedule1 = new Schedule(1, 'schedule 1', true, '09:00', '20:00', 0, 1);
     }
 
     public function GetRows()
     {
         return [
-                self::GetRow(
-                    $this->_DefaultScheduleId,
-                    'schedule 1',
-                    1,
-                    $this->_DefaultDayStart,
-                    $this->_DefaultDaysVisible,
-                    'America/Chicago',
-                    null,
-                    false,
-                    null,
-                    null,
-                    '2018-01-01',
-                    '2019-01-1'
-                ),
-                self::GetRow(2, 'schedule 2', 0, 0, 5, 'America/Chicago'),
+            self::GetRow(
+                $this->_DefaultScheduleId,
+                'schedule 1',
+                1,
+                $this->_DefaultDayStart,
+                $this->_DefaultDaysVisible,
+                'America/Chicago',
+                null,
+                false,
+                null,
+                null,
+                '2018-01-01',
+                '2019-01-1'
+            ),
+            self::GetRow(2, 'schedule 2', 0, 0, 5, 'America/Chicago'),
         ];
     }
 
@@ -129,22 +129,22 @@ class FakeScheduleRepository implements IScheduleRepository
         $maxResourcesPerReservation = 0
     ) {
         return [
-                ColumnNames::SCHEDULE_ID => $id,
-                ColumnNames::SCHEDULE_NAME => $name,
-                ColumnNames::SCHEDULE_DEFAULT => $isDefault,
-                ColumnNames::SCHEDULE_WEEKDAY_START => $weekdayStart,
-                ColumnNames::SCHEDULE_DAYS_VISIBLE => $daysVisible,
-                ColumnNames::TIMEZONE_NAME => $timezone,
-                ColumnNames::LAYOUT_ID => $layoutId,
-                ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => $allowCalendarSubscription,
-                ColumnNames::PUBLIC_ID => $publicId,
-                ColumnNames::SCHEDULE_ADMIN_GROUP_ID => $adminId,
-                ColumnNames::SCHEDULE_AVAILABLE_START_DATE => $availableStart,
-                ColumnNames::SCHEDULE_AVAILABLE_END_DATE => $availableEnd,
-                ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard,
-                ColumnNames::LAYOUT_TYPE => ScheduleLayout::Standard,
-                ColumnNames::TOTAL_CONCURRENT_RESERVATIONS => $totalConcurrentReservations,
-                ColumnNames::MAX_RESOURCES_PER_RESERVATION => $maxResourcesPerReservation,
+            ColumnNames::SCHEDULE_ID => $id,
+            ColumnNames::SCHEDULE_NAME => $name,
+            ColumnNames::SCHEDULE_DEFAULT => $isDefault,
+            ColumnNames::SCHEDULE_WEEKDAY_START => $weekdayStart,
+            ColumnNames::SCHEDULE_DAYS_VISIBLE => $daysVisible,
+            ColumnNames::TIMEZONE_NAME => $timezone,
+            ColumnNames::LAYOUT_ID => $layoutId,
+            ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => $allowCalendarSubscription,
+            ColumnNames::PUBLIC_ID => $publicId,
+            ColumnNames::SCHEDULE_ADMIN_GROUP_ID => $adminId,
+            ColumnNames::SCHEDULE_AVAILABLE_START_DATE => $availableStart,
+            ColumnNames::SCHEDULE_AVAILABLE_END_DATE => $availableEnd,
+            ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard,
+            ColumnNames::LAYOUT_TYPE => ScheduleLayout::Standard,
+            ColumnNames::TOTAL_CONCURRENT_RESERVATIONS => $totalConcurrentReservations,
+            ColumnNames::MAX_RESOURCES_PER_RESERVATION => $maxResourcesPerReservation,
         ];
     }
 

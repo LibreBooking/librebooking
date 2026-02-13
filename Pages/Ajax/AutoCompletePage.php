@@ -103,9 +103,9 @@ class AutoCompletePage extends Page
     {
         $users = $this->GetUsers($term);
 
-        $outUsers = [new XAutocompleteUser("", "")];
+        $outUsers = [new XAutocompleteUser('', '')];
         foreach ($users as $user) {
-            $value = $user->Name . " <" . $user->Email . ">";
+            $value = $user->Name . ' <' . $user->Email . '>';
             $outUsers[] = new XAutocompleteUser($value, $value);
         }
         return $outUsers;

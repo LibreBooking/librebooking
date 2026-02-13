@@ -68,7 +68,7 @@ class PluginConfigLoadingTest extends TestBase
     public function testAllPluginConfigsHaveProperStructure()
     {
         $plugins = $this->getAuthenticationPlugins();
-        $this->assertNotEmpty($plugins, "No authentication plugins found with config files");
+        $this->assertNotEmpty($plugins, 'No authentication plugins found with config files');
 
         foreach ($plugins as $plugin) {
             $config = require($plugin['configDistFile']);
@@ -385,7 +385,7 @@ class PluginConfigLoadingTest extends TestBase
             $this->addToAssertionCount(1); // Count this as a successful test
         } else {
             $this->markTestIncomplete(
-                "No actual plugin config files found to test. Skipped: " . implode(', ', $skippedPlugins)
+                'No actual plugin config files found to test. Skipped: ' . implode(', ', $skippedPlugins)
             );
         }
     }
@@ -438,7 +438,7 @@ class PluginConfigLoadingTest extends TestBase
             $extraKeys = array_diff($actualKeys, $expectedKeys);
             if (!empty($extraKeys)) {
                 $errors[] = sprintf(
-                    "%s: Extra keys in config file not defined in %s: %s",
+                    '%s: Extra keys in config file not defined in %s: %s',
                     $plugin['name'],
                     $configKeysClass,
                     implode(', ', $extraKeys)
@@ -463,7 +463,7 @@ class PluginConfigLoadingTest extends TestBase
 
                 if (!empty($criticalMissing)) {
                     $errors[] = sprintf(
-                        "%s: Missing required keys in config file (no default value): %s",
+                        '%s: Missing required keys in config file (no default value): %s',
                         $plugin['name'],
                         implode(', ', $criticalMissing)
                     );
@@ -475,7 +475,7 @@ class PluginConfigLoadingTest extends TestBase
         if (!empty($errors)) {
             fwrite(STDERR, "\n\n[CONFIG VALIDATION ERRORS]\n");
             foreach ($errors as $error) {
-                fwrite(STDERR, "  ✗ " . $error . "\n");
+                fwrite(STDERR, '  ✗ ' . $error . "\n");
             }
             fwrite(STDERR, "\n");
 
@@ -484,7 +484,7 @@ class PluginConfigLoadingTest extends TestBase
             );
         } else {
             fwrite(STDERR, "\n[CONFIG VALIDATION] All plugin configs match their ConfigKeys definitions ✓\n");
-            $this->assertTrue(true, "All config files match their ConfigKeys");
+            $this->assertTrue(true, 'All config files match their ConfigKeys');
         }
     }
 }

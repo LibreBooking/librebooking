@@ -657,12 +657,12 @@ class no_no extends en_gb
         $strings['PendingApprovalReservations'] = 'Reservasjoner venter på godkjenning';
         $strings['LaterThisMonth'] = 'Senere denne måneden';
         $strings['LaterThisYear'] = 'Senere i år';
-        $strings['Remaining'] = 'Gjenstående';        
+        $strings['Remaining'] = 'Gjenstående';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Det er ingen manglende utsjekkingsreservasjoner';
-        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';        
+        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

@@ -62,7 +62,7 @@ class AttributeList implements IEntityAttributeList
                 $this->entityDefinitions[$entityId][$attribute->Id()] = $attribute;
             }
             $this->entityAttributes[$attribute->Id()] = 1;
-        //			Log::Debug('Adding custom attribute definition for entityId=%s, label=%s', $attribute->EntityId(), $attribute->Label());
+            //			Log::Debug('Adding custom attribute definition for entityId=%s, label=%s', $attribute->EntityId(), $attribute->Label());
         } else {
             $this->definitions[$attribute->Id()] = $attribute;
             //			Log::Debug('Adding custom attribute definition label=%s', $attribute->Label());

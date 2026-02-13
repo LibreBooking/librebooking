@@ -291,8 +291,7 @@ class ReservationControllerResult
          */
         private $errors = [],
         private $requiresApproval = false
-    )
-    {
+    ) {
     }
 
     /**

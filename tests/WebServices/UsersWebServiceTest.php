@@ -78,7 +78,7 @@ class UsersWebServiceTest extends TestBase
                 ->with($this->equalTo(CustomAttributeCategory::USER))
                 ->willReturn($attributes);
 
-        $expectedResponse = new UsersResponse($this->server, $userList, [1=>'fakeCustomAttribute1', 2=>'fakeCustomAttribute2']);
+        $expectedResponse = new UsersResponse($this->server, $userList, [1 => 'fakeCustomAttribute1', 2 => 'fakeCustomAttribute2']);
 
         $this->service->GetUsers();
 
@@ -106,10 +106,11 @@ class UsersWebServiceTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('LoadById')
                 ->willReturnMap(
-                [
-                    [$userId, $user],
-                    [$sessionUserId, $me]
-                ]);
+                    [
+                        [$userId, $user],
+                        [$sessionUserId, $me]
+                    ]
+                );
 
         $this->attributeService->expects($this->once())
                 ->method('GetAttributes')
@@ -197,10 +198,11 @@ class UsersWebServiceTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('LoadById')
                 ->willReturnMap(
-                [
-                    [$userId, $user],
-                    [$sessionUserId, $me]
-                ]);
+                    [
+                        [$userId, $user],
+                        [$sessionUserId, $me]
+                    ]
+                );
 
         $this->attributeService->expects($this->once())
                 ->method('GetAttributes')

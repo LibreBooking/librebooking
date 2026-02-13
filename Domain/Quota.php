@@ -664,7 +664,7 @@ class QuotaDurationDay extends QuotaDuration
 
     public function GetDurationKey(Date $date, $firstWeekday)
     {
-        return sprintf("%s%s%s", $date->Year(), $date->Month(), $date->Day());
+        return sprintf('%s%s%s', $date->Year(), $date->Month(), $date->Day());
     }
 
     /**
@@ -693,7 +693,7 @@ class QuotaDurationWeek extends QuotaDuration
         $endDate = $dates[1]->ToTimezone($timezone);
         $daysFromWeekEnd = 7 - $endDate->Weekday() + $firstWeekday;
         if ($daysFromWeekEnd > 7) {
-            $daysFromWeekEnd = $daysFromWeekEnd -7;
+            $daysFromWeekEnd = $daysFromWeekEnd - 7;
         }
         $endDate = $endDate->AddDays($daysFromWeekEnd)->GetDate();
 
@@ -707,7 +707,7 @@ class QuotaDurationWeek extends QuotaDuration
             $daysFromWeekStart = $daysFromWeekStart + 7;
         }
         $firstDayOfWeek = $date->AddDays(-$daysFromWeekStart)->GetDate();
-        return sprintf("%s%s%s", $firstDayOfWeek->Year(), $firstDayOfWeek->Month(), $firstDayOfWeek->Day());
+        return sprintf('%s%s%s', $firstDayOfWeek->Year(), $firstDayOfWeek->Month(), $firstDayOfWeek->Day());
     }
 
     public function Split(DateRange $dateRange, $firstWeekday)
@@ -831,7 +831,7 @@ class QuotaDurationMonth extends QuotaDuration
 
     public function GetDurationKey(Date $date, $firstWeekday)
     {
-        return sprintf("%s%s", $date->Year(), $date->Month());
+        return sprintf('%s%s', $date->Year(), $date->Month());
     }
 
     /**
@@ -918,7 +918,7 @@ class QuotaDurationYear extends QuotaDuration
 
     public function GetDurationKey(Date $date, $firstWeekday)
     {
-        return sprintf("Y%s", $date->Year());
+        return sprintf('Y%s', $date->Year());
     }
 }
 

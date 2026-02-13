@@ -93,14 +93,14 @@ class QuotaRule implements IReservationValidationRule
         $config = $resources->GetString(
             'QuotaConfiguration',
             [
-                                                                    (empty($item->ScheduleName) ? $resources->GetString('AllSchedules') : $item->ScheduleName),
-                                                                    (empty($item->ResourceName) ? $resources->GetString('AllResources') : $item->ResourceName),
-                                                                    (empty($item->GroupName) ? $resources->GetString('AllGroups') : $item->GroupName),
-                                                                    $item->Limit,
-                                                                    $resources->GetString($item->Unit),
-                                                                    $resources->GetString($item->Duration),
-                                                                    ($item->Scope == QuotaScope::IncludeCompleted) ? $resources->GetString('IncludingCompletedReservations') : $resources->GetString('NotCountingCompletedReservations'),
-                                                                    $resources->GetString($item->Scope)]
+                (empty($item->ScheduleName) ? $resources->GetString('AllSchedules') : $item->ScheduleName),
+                (empty($item->ResourceName) ? $resources->GetString('AllResources') : $item->ResourceName),
+                (empty($item->GroupName) ? $resources->GetString('AllGroups') : $item->GroupName),
+                $item->Limit,
+                $resources->GetString($item->Unit),
+                $resources->GetString($item->Duration),
+                ($item->Scope == QuotaScope::IncludeCompleted) ? $resources->GetString('IncludingCompletedReservations') : $resources->GetString('NotCountingCompletedReservations'),
+                $resources->GetString($item->Scope)]
         );
 
 
@@ -115,13 +115,13 @@ class QuotaRule implements IReservationValidationRule
             $enforcementParams[] = $resources->GetString('Everyday');
         } else {
             $dayNames = [
-                    0 => 'DaySundayAbbr',
-                    1 => 'DayMondayAbbr',
-                    2 => 'DayTuesdayAbbr',
-                    3 => 'DayWednesdayAbbr',
-                    4 => 'DayThursdayAbbr',
-                    5 => 'DayFridayAbbr',
-                    6 => 'DaySaturdayAbbr',
+                0 => 'DaySundayAbbr',
+                1 => 'DayMondayAbbr',
+                2 => 'DayTuesdayAbbr',
+                3 => 'DayWednesdayAbbr',
+                4 => 'DayThursdayAbbr',
+                5 => 'DayFridayAbbr',
+                6 => 'DaySaturdayAbbr',
             ];
             $days = '';
             foreach ($item->EnforcedDays as $day) {

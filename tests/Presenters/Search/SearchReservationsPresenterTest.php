@@ -60,7 +60,7 @@ class SearchReservationsPresenterTest extends TestBase
         $range = 'today';
         $r1 = new ReservationItemView();
         $r1->ResourceId = 1;
-        $r2= new ReservationItemView();
+        $r2 = new ReservationItemView();
         $r2->ResourceId = 2;
         $reservations = [$r1];
 
@@ -82,7 +82,7 @@ class SearchReservationsPresenterTest extends TestBase
         $expectedFilter = ReservationsSearchFilter::GetFilter($today, $tomorrow, $userId, $resourceIds, $scheduleIds, $title, $description, $referenceNumber);
 
         $this->assertEquals($expectedFilter, $this->reservationRepository->_Filter);
-        $this->assertEquals([$r1], $this->page->_Reservations, "no permission to the other one");
+        $this->assertEquals([$r1], $this->page->_Reservations, 'no permission to the other one');
     }
 }
 

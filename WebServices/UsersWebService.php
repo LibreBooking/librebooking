@@ -57,8 +57,8 @@ class UsersWebService
 
         $usersResponse = new UsersResponse($this->server, $data->Results(), $attributeLabels);
 
-        unset($data);
-        unset($attributeLabels);
+        unset($data, $attributeLabels);
+
 
         $this->server->WriteResponse($usersResponse);
     }

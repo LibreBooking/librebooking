@@ -80,7 +80,7 @@ class PaymentRepository implements IPaymentRepository
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetPaymentConfigurationCommand());
         $res = [];
-        for ($i=0;$i<$reader->NumRows();$i++) {
+        for ($i = 0;$i < $reader->NumRows();$i++) {
             $row = $reader->GetRow();
             $res[] = new CreditCost($row[ColumnNames::CREDIT_COUNT], $row[ColumnNames::CREDIT_COST], $row[ColumnNames::CREDIT_CURRENCY]);
         }

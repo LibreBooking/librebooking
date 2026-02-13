@@ -75,7 +75,7 @@ class CombineDbFilesTask
         $versionInfo = "\r\n\r\n-- UPGRADE TO VERSION $versionNumber\r\n\r\n";
 
         // schema
-        $schemaHandle = fopen($this->schemaFile, "a");
+        $schemaHandle = fopen($this->schemaFile, 'a');
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeSchema";
 
@@ -83,7 +83,7 @@ class CombineDbFilesTask
         fclose($schemaHandle);
 
         // data
-        $dataHandle = fopen($this->dataFile, "a");
+        $dataHandle = fopen($this->dataFile, 'a');
         $upgradeData = $this->GetDataFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeData";
 
@@ -93,7 +93,7 @@ class CombineDbFilesTask
 
     private function CombineUpgradeFiles($upgradeDir, $versionNumber)
     {
-        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", "w+");
+        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", 'w+');
 
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $upgradeData = $this->GetDataFileContents($upgradeDir);
@@ -104,7 +104,7 @@ class CombineDbFilesTask
 
     private function GetFullSql($file)
     {
-        $f = fopen($file, "r");
+        $f = fopen($file, 'r');
         $sql = fread($f, filesize($file));
         fclose($f);
         return $sql;

@@ -52,7 +52,7 @@ class CAS_CookieJar
      */
     public function __construct(array &$storageArray)
     {
-        $this->_cookies =& $storageArray;
+        $this->_cookies = & $storageArray;
     }
 
     /**
@@ -205,36 +205,36 @@ class CAS_CookieJar
             }
 
             switch ($attributeNameLC) {
-            case 'expires':
-                $cookie['expires'] = strtotime($attributeValue);
-                break;
-            case 'max-age':
-                $cookie['max-age'] = (int)$attributeValue;
-                // Set an expiry time based on the max-age
-                if ($cookie['max-age']) {
-                    $cookie['expires'] = time() + $cookie['max-age'];
-                } else {
-                    // If max-age is zero, then the cookie should be removed
-                    // imediately so set an expiry before now.
-                    $cookie['expires'] = time() - 1;
-                }
-                break;
-            case 'secure':
-                $cookie['secure'] = true;
-                break;
-            case 'domain':
-            case 'path':
-            case 'port':
-            case 'version':
-            case 'comment':
-            case 'commenturl':
-            case 'discard':
-            case 'httponly':
-                $cookie[$attributeNameLC] = $attributeValue;
-                break;
-            default:
-                $cookie['name'] = $attributeName;
-                $cookie['value'] = $attributeValue;
+                case 'expires':
+                    $cookie['expires'] = strtotime($attributeValue);
+                    break;
+                case 'max-age':
+                    $cookie['max-age'] = (int)$attributeValue;
+                    // Set an expiry time based on the max-age
+                    if ($cookie['max-age']) {
+                        $cookie['expires'] = time() + $cookie['max-age'];
+                    } else {
+                        // If max-age is zero, then the cookie should be removed
+                        // imediately so set an expiry before now.
+                        $cookie['expires'] = time() - 1;
+                    }
+                    break;
+                case 'secure':
+                    $cookie['secure'] = true;
+                    break;
+                case 'domain':
+                case 'path':
+                case 'port':
+                case 'version':
+                case 'comment':
+                case 'commenturl':
+                case 'discard':
+                case 'httponly':
+                    $cookie[$attributeNameLC] = $attributeValue;
+                    break;
+                default:
+                    $cookie['name'] = $attributeName;
+                    $cookie['value'] = $attributeValue;
             }
         }
 

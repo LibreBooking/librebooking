@@ -1036,8 +1036,8 @@ class es extends en_gb
         //End View Resource
 
         //Datatables
-        $strings['Info'] = "Mostrando página _PAGE_ de _PAGES_ de _MAX_";
-        $strings['LengthMenu'] = "Mostrar _MENU_ registros";
+        $strings['Info'] = 'Mostrando página _PAGE_ de _PAGES_ de _MAX_';
+        $strings['LengthMenu'] = 'Mostrar _MENU_ registros';
         //End Datatables
 
         $this->Strings = $strings;

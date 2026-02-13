@@ -743,7 +743,7 @@ class he extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'אין לקבוצתך הזמנות עתידיות';
         $strings['GroupUpcomingReservations'] = 'הזמנות קבוצתי(ות) הבאות';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'אירעה שגיאה בעת ניסיון להתחבר עם Facebook. אנא נסה שוב.';
         //End Facebook Login SDK Error
@@ -758,7 +758,7 @@ class he extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'אין הזמנות ליציאה חסרות';
-        $strings['MissingCheckOutReservations'] = 'הזמנות ליציאה חסרות';        
+        $strings['MissingCheckOutReservations'] = 'הזמנות ליציאה חסרות';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

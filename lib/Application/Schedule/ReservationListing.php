@@ -68,7 +68,7 @@ class ReservationListing implements IMutableReservationListing
         $lastDate = $item->BufferedEndDate()->ToTimezone($this->timezone);
 
         if ($currentDate->GreaterThan($lastDate)) {
-            Log::Error("Reservation dates corrupted. ReferenceNumber=%s, Start=%s, End=%s", $item->ReferenceNumber(), $item->StartDate(), $item->EndDate());
+            Log::Error('Reservation dates corrupted. ReferenceNumber=%s, Start=%s, End=%s', $item->ReferenceNumber(), $item->StartDate(), $item->EndDate());
             return;
         }
 

@@ -41,8 +41,7 @@ class ScheduleAdminScheduleRepositoryTest extends TestBase
 
         $user->expects($this->exactly(2))
                 ->method('IsScheduleAdminFor')
-                ->willReturnCallback(function ($schedule) use ($ra)
-                {
+                ->willReturnCallback(function ($schedule) use ($ra) {
                     return $this
                         ->equalTo($ra->_AllRows[1])
                         ->evaluate($schedule, '', true);
@@ -76,6 +75,6 @@ class ScheduleAdminScheduleRepositoryTest extends TestBase
         } catch (Exception $ex) {
             $actualEx = $ex;
         }
-        $this->assertNotEmpty($actualEx, "should have thrown an exception");
+        $this->assertNotEmpty($actualEx, 'should have thrown an exception');
     }
 }

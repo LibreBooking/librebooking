@@ -109,11 +109,11 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function PageLoad()
     {
         $typeLookup = [
-                CustomAttributeTypes::SINGLE_LINE_TEXTBOX => 'SingleLineTextbox',
-                CustomAttributeTypes::MULTI_LINE_TEXTBOX => 'MultiLineTextbox',
-                CustomAttributeTypes::CHECKBOX => 'Checkbox',
-                CustomAttributeTypes::SELECT_LIST => 'SelectList',
-                CustomAttributeTypes::DATETIME => 'DateTime',
+            CustomAttributeTypes::SINGLE_LINE_TEXTBOX => 'SingleLineTextbox',
+            CustomAttributeTypes::MULTI_LINE_TEXTBOX => 'MultiLineTextbox',
+            CustomAttributeTypes::CHECKBOX => 'Checkbox',
+            CustomAttributeTypes::SELECT_LIST => 'SelectList',
+            CustomAttributeTypes::DATETIME => 'DateTime',
         ];
 
         $this->Set('Types', $typeLookup);

@@ -62,7 +62,7 @@ class PasswordPresenterTest extends TestBase
         $passwordEncryption = new PasswordEncryption();
         $salt = $passwordEncryption->Salt();
 
-        $current = "some password";
+        $current = 'some password';
         $user = new User();
 
         $encrypted = $passwordEncryption->Encrypt($current, $salt);

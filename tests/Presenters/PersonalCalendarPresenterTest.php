@@ -71,7 +71,7 @@ class PersonalCalendarPresenterTest extends TestBase
     {
         $userId = 10;
         $this->fakeUser->UserId = $userId;
-        $userTimezone = "America/New_York";
+        $userTimezone = 'America/New_York';
 
         $calendarType = CalendarTypes::Month;
 

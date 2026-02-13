@@ -37,7 +37,7 @@ class it_it extends en_us
         $dates['general_time_js'] = 'H:mm';
         $dates['momentjs_datetime'] = 'D/M/YY H:mm';
         $dates['calendar_time'] = 'H:mm';
-        $dates['calendar_dates'] = 'd ' . (preg_replace('/(.)(.)(.)/i', '\$1\$2\$3', date("M")));
+        $dates['calendar_dates'] = 'd ' . (preg_replace('/(.)(.)(.)/i', '\$1\$2\$3', date('M')));
         $dates['report_date'] = '%d/%m';
 
         $this->Dates = $dates;

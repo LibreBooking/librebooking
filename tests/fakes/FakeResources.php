@@ -3,9 +3,9 @@
 class FakeResources extends Resources
 {
     private $_dateFormats = [ResourceKeys::DATE_GENERAL => 'm/d/y',
-            ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
-            ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
-            ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
+        ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
+        ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
+        ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
 
     public $_SetCurrentLanguageResult = true;
 

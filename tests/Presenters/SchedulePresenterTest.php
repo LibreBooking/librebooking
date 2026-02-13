@@ -559,7 +559,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedule
                 ->expects($this->once())
@@ -752,7 +752,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedulePage
                 ->expects($this->once())
@@ -908,7 +908,9 @@ class FakeSchedulePage implements ISchedulePage
      */
     public $_ParticipantId;
 
-    public function BindViewableResourceReservations($resourceIds) { }
+    public function BindViewableResourceReservations($resourceIds)
+    {
+    }
 
     public function TakingAction()
     {

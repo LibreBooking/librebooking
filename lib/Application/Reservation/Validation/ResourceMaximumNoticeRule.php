@@ -32,7 +32,7 @@ class ResourceMaximumNoticeRule implements IReservationValidationRule
                 /* @var $instance Reservation */
                 foreach ($this->GetInstances($reservationSeries) as $instance) {
                     if ($instance->EndDate()->GreaterThan($maxEndDate)) {
-                        return new ReservationRuleResult(false, $r->GetString("MaxNoticeError", $maxEndDate->ToTimezone($this->userSession->Timezone)->Format($r->GeneralDateTimeFormat())));
+                        return new ReservationRuleResult(false, $r->GetString('MaxNoticeError', $maxEndDate->ToTimezone($this->userSession->Timezone)->Format($r->GeneralDateTimeFormat())));
                     }
                 }
             }

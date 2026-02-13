@@ -212,8 +212,8 @@ class DatabaseCommandTest extends TestBase
 
     public function testCountCommandReplacesSelectBlahFromWithSelectCountFrom()
     {
-        $baseSql = "SeLEcT F.*,    lbl,
-													abc.* fROM table WHERE blah = blah";
+        $baseSql = 'SeLEcT F.*,    lbl,
+													abc.* fROM table WHERE blah = blah';
         $baseCommand = new AdHocCommand($baseSql);
         $countCommand = new CountCommand($baseCommand);
 
@@ -222,11 +222,11 @@ class DatabaseCommandTest extends TestBase
 
     public function testFilterCommandWrapsAppendsToWhere()
     {
-        $baseCommand = new AdHocCommand("SeLEcT F.*,    lbl,
-											abc.* fROM table wHere blah = @blah and blah2 = @blah2 GROUP BY 1, 2 ORDER BY blah1");
+        $baseCommand = new AdHocCommand('SeLEcT F.*,    lbl,
+											abc.* fROM table wHere blah = @blah and blah2 = @blah2 GROUP BY 1, 2 ORDER BY blah1');
 
-        $filter = new SqlFilterLike("fname", 'firstname');
-        $filter->_And(new SqlFilterEquals("lname", 'last'));
+        $filter = new SqlFilterLike('fname', 'firstname');
+        $filter->_And(new SqlFilterEquals('lname', 'last'));
 
         $filterCommand = new FilterCommand($baseCommand, $filter);
 
@@ -234,7 +234,7 @@ class DatabaseCommandTest extends TestBase
         $this->assertEquals('%firstname%', $filterCommand->Parameters->Items(0)->Value);
         $this->assertEquals('last', $filterCommand->Parameters->Items(1)->Value);
 
-        $constraint = $this->stringContains("table WHERE ( blah = @blah and blah2 = @blah2 ) AND (`fname` LIKE @fname AND ( `lname` = @lname )) GROUP BY 1, 2 ORDER BY blah1");
+        $constraint = $this->stringContains('table WHERE ( blah = @blah and blah2 = @blah2 ) AND (`fname` LIKE @fname AND ( `lname` = @lname )) GROUP BY 1, 2 ORDER BY blah1');
         $query = $filterCommand->GetQuery();
         $this->assertThat($query, $constraint, $query);
     }
@@ -245,8 +245,8 @@ class DatabaseCommandTest extends TestBase
 						FROM users
 						WHERE (0 = '0' OR status_id = '0')");
 
-        $filter = new SqlFilterLike("fname", 'firstname');
-        $filter->_And(new SqlFilterEquals("lname", 'last'));
+        $filter = new SqlFilterLike('fname', 'firstname');
+        $filter->_And(new SqlFilterEquals('lname', 'last'));
 
         $filterCommand = new FilterCommand($baseCommand, $filter);
 
@@ -257,16 +257,16 @@ class DatabaseCommandTest extends TestBase
 
     public function testFiltersWithoutWhere()
     {
-        $baseCommand = new AdHocCommand("SELECT *
+        $baseCommand = new AdHocCommand('SELECT *
 						FROM users
-						GROUP BY 1, 2 ORDER BY 3, 4");
+						GROUP BY 1, 2 ORDER BY 3, 4');
 
-        $filter = new SqlFilterLike("fname", 'firstname');
-        $filter->_And(new SqlFilterEquals("lname", 'last'));
+        $filter = new SqlFilterLike('fname', 'firstname');
+        $filter->_And(new SqlFilterEquals('lname', 'last'));
 
         $filterCommand = new FilterCommand($baseCommand, $filter);
 
-        $constraint = $this->stringContains("WHERE `fname` LIKE @fname AND ( `lname` = @lname ) GROUP BY 1, 2 ORDER BY 3, 4");
+        $constraint = $this->stringContains('WHERE `fname` LIKE @fname AND ( `lname` = @lname ) GROUP BY 1, 2 ORDER BY 3, 4');
         $query = $filterCommand->GetQuery();
         $this->assertThat($query, $constraint, $query);
     }
@@ -275,7 +275,7 @@ class DatabaseCommandTest extends TestBase
     {
         $baseCommand = new AdHocCommand("SELECT * FROM users WHERE (0 = '0' OR status_id = '0')");
 
-        $filter = new SqlFilterIn("fname", ["n'k", '123']);
+        $filter = new SqlFilterIn('fname', ["n'k", '123']);
 
         $filterCommand = new FilterCommand($baseCommand, $filter);
 
@@ -290,8 +290,8 @@ class DatabaseCommandTest extends TestBase
         $filterCommand = new FilterCommand($command, new SqlFilterEquals(ColumnNames::ACCESSORY_NAME, 'something just to make sure filter does not break subquery'));
         $countCommand = new CountCommand($filterCommand);
 
-        $containsSubQuery = $this->stringContains("INNER JOIN (SELECT user_id FROM user_groups WHERE group_id IN (@groupid)) ss on ss.user_id = owner_id WHERE ", false);
-        $containsFilter = $this->stringContains("AND (`accessory_name` = @accessory_name)", false);
+        $containsSubQuery = $this->stringContains('INNER JOIN (SELECT user_id FROM user_groups WHERE group_id IN (@groupid)) ss on ss.user_id = owner_id WHERE ', false);
+        $containsFilter = $this->stringContains('AND (`accessory_name` = @accessory_name)', false);
 
         $query = $filterCommand->GetQuery();
         $countQuery = $countCommand->GetQuery();

@@ -1012,7 +1012,7 @@ class ar extends en_us
         //Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'ليس لديكم مجموعة قادمة للحجز';
         $strings['GroupUpcomingReservations'] = 'الحجوزات القادمة لمجموعتي';
-        //End Group Upcoming Reservations 
+        //End Group Upcoming Reservations
 
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'حدث خطأ أثناء تسجيل الدخول باستخدام فيسبوك. يرجى المحاولة مرة أخرى.';

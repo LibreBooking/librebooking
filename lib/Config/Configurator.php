@@ -66,7 +66,7 @@ class Configurator implements IConfigurationSettings
         if (!array_key_exists(Configuration::SETTINGS, $mergedSettings)) {
             $mergedSettings = [Configuration::SETTINGS => $mergedSettings];
         }
-        $comment = "// LibreBooking configuration file edited at " . date('c');
+        $comment = '// LibreBooking configuration file edited at ' . date('c');
         $body = $this->ExportArray($mergedSettings);
         $php = "<?php\n\n$comment\n\nreturn $body;\n";
 
@@ -84,7 +84,7 @@ class Configurator implements IConfigurationSettings
     {
         $indent = str_repeat('    ', $indentLevel);
         $nextIndent = str_repeat('    ', $indentLevel + 1);
-        $lines = ["["];
+        $lines = ['['];
 
         foreach ($array as $key => $value) {
             $exportedKey = var_export($key, true);
@@ -92,7 +92,7 @@ class Configurator implements IConfigurationSettings
             if (is_array($value)) {
                 $exportedValue = $this->ExportArray($value, $indentLevel + 1);
             } else {
-                $exportedValue = $this->ExportValue( $value);
+                $exportedValue = $this->ExportValue($value);
             }
 
             $lines[] = "$nextIndent$exportedKey => $exportedValue,";
@@ -109,7 +109,7 @@ class Configurator implements IConfigurationSettings
      * @param mixed $value  The default value
      * @return string       The key value pair as a string
      */
-    private function ExportValue( $value): string
+    private function ExportValue($value): string
     {
         if (is_bool($value)) {
             $default = $value ? 'true' : 'false';

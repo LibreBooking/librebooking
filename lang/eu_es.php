@@ -747,7 +747,7 @@ class eu_es extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Ez dago irteerako erreserbarik falta';
-        $strings['MissingCheckOutReservations'] = 'Irteerako erreserbak falta dira';        
+        $strings['MissingCheckOutReservations'] = 'Irteerako erreserbak falta dira';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

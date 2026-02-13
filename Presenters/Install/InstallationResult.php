@@ -20,13 +20,13 @@ class InstallationResult
     public function SetConnectionError()
     {
         $this->connectionError = true;
-        $this->sqlErrorText = "Error connecting to mysql database.  Check your configured host and entered username and password.";
+        $this->sqlErrorText = 'Error connecting to mysql database.  Check your configured host and entered username and password.';
     }
 
     public function SetAuthenticationError()
     {
         $this->authError = true;
-        $this->sqlErrorText = "Error selecting to mysql database.  Check entered username and password.";
+        $this->sqlErrorText = 'Error selecting to mysql database.  Check entered username and password.';
     }
 
     public function SetResult($sqlErrorCode, $sqlErrorText, $sqlStmt)

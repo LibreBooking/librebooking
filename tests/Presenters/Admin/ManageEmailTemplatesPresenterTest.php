@@ -38,10 +38,10 @@ class ManageEmailTemplatesPresenterTest extends TestBase
 
     public function testLoadsRequestedTemplate()
     {
-        $contents = "{* copyright
+        $contents = '{* copyright
         copyright
         *}
-        template contents here";
+        template contents here';
 
         $this->page->_TemplateName = 'file1.tpl';
         $this->page->_Language = 'en_us';

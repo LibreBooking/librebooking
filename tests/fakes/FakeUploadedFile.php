@@ -21,12 +21,12 @@ class FakeUploadedFile extends UploadedFile
     /**
      * @var string
      */
-    public $MimeType= 'mime';
+    public $MimeType = 'mime';
 
     /**
      * @var int
      */
-    public $Size= 100;
+    public $Size = 100;
 
     /**
      * @var string

@@ -2,7 +2,6 @@
 
 class ViewResourcesPresenter
 {
-
     /**
      * @var ResourceViewerViewResourcesPage
      */
@@ -197,7 +196,7 @@ class ViewResourcesPresenter
 
             if (!array_key_exists($resourceId, $resourcePermissionTypes)) {
                 $resourceId = $permissionType;
-            } else if (array_key_exists($resourceId, $resourcePermissionTypes) && $resourcePermissionTypes[$resourceId] == 1 &&  $permissionType == 0) {
+            } elseif (array_key_exists($resourceId, $resourcePermissionTypes) && $resourcePermissionTypes[$resourceId] == 1 &&  $permissionType == 0) {
                 $resourcePermissionTypes[$resourceId] = $permissionType;
             }
         }

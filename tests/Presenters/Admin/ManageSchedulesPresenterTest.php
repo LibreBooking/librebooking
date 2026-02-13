@@ -198,10 +198,8 @@ class ManageSchedulesPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->resourceRepo->expects($matcher)
                 ->method('Update')
-                ->willReturnCallback(function ($resource) use ($matcher, $resource1, $resource2)
-                {
-                    match ($matcher->numberOfInvocations())
-                    {
+                ->willReturnCallback(function ($resource) use ($matcher, $resource1, $resource2) {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($resource, $resource1),
                         2 => $this->assertEquals($resource, $resource2)
                     };

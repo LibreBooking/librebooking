@@ -19,14 +19,17 @@ interface IExportFactory
 
 class ExportFactory implements IExportFactory
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Returns the ICal Classification for an item (https://icalendar.org/iCalendar-RFC-5545/3-8-1-3-classification.html)
      * @param IReservedItemView $item
      * @return string
      */
-    public function GetIcalendarClassification(IReservedItemView $item) {
+    public function GetIcalendarClassification(IReservedItemView $item)
+    {
         return 'PUBLIC';
     }
 
@@ -35,7 +38,8 @@ class ExportFactory implements IExportFactory
      * @param IReservedItemView $item
      * @return null|string
      */
-    public function GetIcalendarExtraLines(IReservedItemView $item) {
+    public function GetIcalendarExtraLines(IReservedItemView $item)
+    {
         return null;
     }
 }

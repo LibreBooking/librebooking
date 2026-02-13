@@ -20,7 +20,9 @@ interface IStylingFactory
 
 class StylingFactory implements IStylingFactory
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Returns a file path (on the server) to an additional CSS file to use.

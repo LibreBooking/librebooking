@@ -121,7 +121,7 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->paymentRepository->_TransactionLogView = $this->GetTransactionLogView();
 
         $gateway = $this->paymentRepository->_PayPal;
-        $gateway->_Refund->state = "completed";
+        $gateway->_Refund->state = 'completed';
 
         $this->presenter->IssueRefund();
 

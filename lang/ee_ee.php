@@ -788,7 +788,7 @@ class ee_ee extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud puuduvad';
-        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';        
+        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

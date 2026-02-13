@@ -63,7 +63,7 @@ class UnavailableResourcesPresenter
 
         foreach ($resources as $resource) {
             if (!$existingSeries) {
-                $series = ReservationSeries::Create($this->userSession->UserId, $resource, "", "", $duration, new RepeatNone(), $this->userSession);
+                $series = ReservationSeries::Create($this->userSession->UserId, $resource, '', '', $duration, new RepeatNone(), $this->userSession);
             }
             $conflict = $this->reservationConflictIdentifier->GetConflicts($series);
 

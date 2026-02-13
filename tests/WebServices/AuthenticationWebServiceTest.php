@@ -34,7 +34,7 @@ class AuthenticationWebServiceTest extends TestBase
     {
         $username = 'un';
         $password = 'pw';
-    $session = new WebServiceUserSession(1);
+        $session = new WebServiceUserSession(1);
 
         $request = new AuthenticationRequest($username, $password);
         $this->server->SetRequest($request);
@@ -49,7 +49,7 @@ class AuthenticationWebServiceTest extends TestBase
                 ->with($this->equalTo($username))
                 ->willReturn($session);
 
-    $this->service->Authenticate();
+        $this->service->Authenticate();
 
         $expectedResponse = AuthenticationResponse::Success($this->server, $session, 0);
         $expectedResponseCode = RestResponse::OK_CODE;
@@ -70,7 +70,7 @@ class AuthenticationWebServiceTest extends TestBase
                 ->with($this->equalTo($username), $this->equalTo($password))
                 ->willReturn(false);
 
-    $this->service->Authenticate();
+        $this->service->Authenticate();
 
         $expectedResponse = AuthenticationResponse::Failed();
         $expectedResponseCode = RestResponse::UNAUTHORIZED_CODE;
@@ -90,6 +90,6 @@ class AuthenticationWebServiceTest extends TestBase
                 ->method('Logout')
                 ->with($this->equalTo($userId), $this->equalTo($sessionToken));
 
-    $this->service->SignOut();
+        $this->service->SignOut();
     }
 }

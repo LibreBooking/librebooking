@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 define('ROOT_DIR', '../');
 
@@ -7,7 +8,7 @@ require_once(ROOT_DIR . 'lib/Common/namespace.php');
 //Checks if the user was authenticated by facebook and redirects to external authentication page
 //Need to ask facebook token directly in the redirect_uri (?) -> Can't redirect to external auth page and then ask (???)
 if (isset($_GET['code'])) {
-    try{
+    try {
         $facebook_Client = new Facebook\Facebook([
             'app_id'                => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_ID),
             'app_secret'            => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_CLIENT_SECRET),
@@ -36,18 +37,17 @@ if (isset($_GET['code'])) {
         $accesstoken = $helper->getAccessToken($fullRedirectUrl);
         $_SESSION['facebook_access_token'] = serialize($accesstoken);
 
-        $code = filter_input(INPUT_GET,'code');
-        header("Location: ".ROOT_DIR."Web/external-auth.php?type=fb&code=".$code);
+        $code = filter_input(INPUT_GET, 'code');
+        header('Location: '.ROOT_DIR.'Web/external-auth.php?type=fb&code='.$code);
         exit;
     } catch (\Facebook\Exception\ResponseException | \Facebook\Exception\SDKException $e) {
-        Log::Debug("Exception during facebook login: %s", $e->getMessage());
+        Log::Debug('Exception during facebook login: %s', $e->getMessage());
         $_SESSION['facebook_error'] = true;
-        header("Location:".ROOT_DIR."Web");
+        header('Location:'.ROOT_DIR.'Web');
         exit();
     }
 
-} else{
-    header("Location:".ROOT_DIR."Web");
+} else {
+    header('Location:'.ROOT_DIR.'Web');
     exit();
 }
-?>

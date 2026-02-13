@@ -78,11 +78,11 @@ class CAS_ProxyChain implements CAS_ProxyChain_Interface
                 if (preg_match('/^\/.*\/[ixASUXu]*$/s', $search)) {
                     if (preg_match($search, $proxy_url)) {
                         phpCAS::trace(
-                            "Found regexp " .  $search . " matching " . $proxy_url
+                            'Found regexp ' .  $search . ' matching ' . $proxy_url
                         );
                     } else {
                         phpCAS::trace(
-                            "No regexp match " .  $search . " != " . $proxy_url
+                            'No regexp match ' .  $search . ' != ' . $proxy_url
                         );
                         $mismatch = true;
                         break;
@@ -90,11 +90,11 @@ class CAS_ProxyChain implements CAS_ProxyChain_Interface
                 } else {
                     if (strncasecmp($search, $proxy_url, strlen($search)) == 0) {
                         phpCAS::trace(
-                            "Found string " .  $search . " matching " . $proxy_url
+                            'Found string ' .  $search . ' matching ' . $proxy_url
                         );
                     } else {
                         phpCAS::trace(
-                            "No match " .  $search . " != " . $proxy_url
+                            'No match ' .  $search . ' != ' . $proxy_url
                         );
                         $mismatch = true;
                         break;
@@ -102,11 +102,11 @@ class CAS_ProxyChain implements CAS_ProxyChain_Interface
                 }
             }
             if (!$mismatch) {
-                phpCAS::trace("Proxy chain matches");
+                phpCAS::trace('Proxy chain matches');
                 return true;
             }
         } else {
-            phpCAS::trace("Proxy chain skipped: size mismatch");
+            phpCAS::trace('Proxy chain skipped: size mismatch');
         }
         return false;
     }

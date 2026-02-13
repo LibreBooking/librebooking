@@ -85,7 +85,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testSetsSelectedTimezoneToServerDefault()
     {
-        $expectedTimezone = "America/Chicago";
+        $expectedTimezone = 'America/Chicago';
 
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, $expectedTimezone);
         $this->page->_IsPostBack = false;
@@ -99,7 +99,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testSetsSelectedTimezoneToServerSubmitted()
     {
-        $expectedTimezone = "America/New_York";
+        $expectedTimezone = 'America/New_York';
         $this->page->SetTimezone($expectedTimezone);
         $this->page->_IsPostBack = true;
 
@@ -166,7 +166,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testSetsCaptchaUrl()
     {
-        $url = "http://blah/blah/blah";
+        $url = 'http://blah/blah/blah';
 
         $this->captcha->expects($this->once())
             ->method('GetImageUrl')

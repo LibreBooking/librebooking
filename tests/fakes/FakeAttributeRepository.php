@@ -47,8 +47,8 @@ class FakeAttributeRepository implements IAttributeRepository
             0
         );
         $this->_CustomAttributes = [
-                $this->_CustomAttribute,
-                new CustomAttribute(2, 'test attribute2', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, null, true, null, 0),
+            $this->_CustomAttribute,
+            new CustomAttribute(2, 'test attribute2', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, null, true, null, 0),
         ];
     }
 

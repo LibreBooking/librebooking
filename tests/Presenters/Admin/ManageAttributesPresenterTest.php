@@ -55,7 +55,7 @@ class ManageAttributesPresenterTest extends TestBase
         $required = true;
         $regex = '/$\d^/';
         $possibleValues = '1,2,3';
-        $sortOrder = "5";
+        $sortOrder = '5';
         $entityIds = [10];
         $adminOnly = true;
         $secondaryEntityIds = ['1029', '2028'];
@@ -91,7 +91,7 @@ class ManageAttributesPresenterTest extends TestBase
         $required = true;
         $regex = '/$\d^/';
         $possibleValues = '1,2,3';
-        $sortOrder = "5";
+        $sortOrder = '5';
         $entityIds = [1,2,3];
         $isPrivate = true;
         $adminOnly = true;

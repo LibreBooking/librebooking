@@ -275,7 +275,7 @@ class ReportUtilizationData
 
     private function AddTotal(Date $date, $resourceId, $total)
     {
-//        echo sprintf("%s reserved on %s for %s\n", $total / 60 / 60, $date->Format('Y-m-d'), $resourceId);
+        //        echo sprintf("%s reserved on %s for %s\n", $total / 60 / 60, $date->Format('Y-m-d'), $resourceId);
 
         $key = $resourceId . $date->GetDate()->Timestamp();
         if (!array_key_exists($key, $this->totals)) {

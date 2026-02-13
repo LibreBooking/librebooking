@@ -334,7 +334,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest === "reservations") {
+        if ($dataRequest === 'reservations') {
             $this->_presenter->LoadReservations();
         } else {
             $this->_presenter->GetLayout(ServiceLocator::GetServer()->GetUserSession());
@@ -423,9 +423,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function ShowInaccessibleResources()
     {
         return Configuration::Instance()->GetKey(
-                ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
-                new BooleanConverter()
-            );
+            ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
+            new BooleanConverter()
+        );
     }
 
     public function ShowFullWeekToggle($showShowFullWeekToggle)
@@ -469,7 +469,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
     {
         $this->ScheduleStyle = $style;
         $this->Set('CookieName', 'schedule-style-' . $this->GetVar('ScheduleId'));
-        $this->Set("ScheduleStyle", $style);
+        $this->Set('ScheduleStyle', $style);
     }
 
     /**

@@ -127,11 +127,12 @@ class ReservationSavePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$resourceId, $resource],
-                                     [$additionalResources[0], $additionalResource1],
-                                     [$additionalResources[1], $additionalResource2]
-                                 ]);
+                                     [
+                                         [$resourceId, $resource],
+                                         [$additionalResources[0], $additionalResource1],
+                                         [$additionalResources[1], $additionalResource2]
+                                     ]
+                                 );
 
         $fakeScheduleLayout = new FakeScheduleLayout();
         $fakeScheduleLayout->_SlotCount = new SlotCount(1, 2);

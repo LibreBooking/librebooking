@@ -13,7 +13,7 @@ class DatePickerSetupControl extends Control
     {
         $this->SetDefault('NumberOfMonths', 1);
         $this->SetDefault('ShowButtonPanel', 'false');
-        $controlId = $this->Get("ControlId");
+        $controlId = $this->Get('ControlId');
         $controlId = str_replace(']', '\\\\]', str_replace('[', '\\\\[', $controlId));
         $altId = $this->Get('AltId');
 

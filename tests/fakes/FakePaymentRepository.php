@@ -48,7 +48,9 @@ class FakePaymentRepository implements IPaymentRepository
         $this->_CreditCost = [new CreditCost()];
     }
 
-    public function DeleteCreditCost($creditCount) { }
+    public function DeleteCreditCost($creditCount)
+    {
+    }
 
     public function GetCreditCosts()
     {

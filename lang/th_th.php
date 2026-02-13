@@ -25,22 +25,22 @@ class th_th extends en_gb
         */
 
 
-        $dates['general_date'] = 'd/m/'.(date('Y')+543);
-        $dates['general_datetime'] = 'd/m/'.(date('Y')+543).' H:i:s';
-        $dates['short_datetime'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['schedule_daily'] = 'l, d/m/'.(date('Y')+543);
-        $dates['reservation_email'] = 'd/m/'.(date('Y')+543).' @ H:i (e)';
-        $dates['res_popup'] = 'd/m/'.(date('Y')+543).' H:i'; //
+        $dates['general_date'] = 'd/m/'.(date('Y') + 543);
+        $dates['general_datetime'] = 'd/m/'.(date('Y') + 543).' H:i:s';
+        $dates['short_datetime'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['schedule_daily'] = 'l, d/m/'.(date('Y') + 543);
+        $dates['reservation_email'] = 'd/m/'.(date('Y') + 543).' @ H:i (e)';
+        $dates['res_popup'] = 'd/m/'.(date('Y') + 543).' H:i'; //
         $dates['res_popup_time'] = 'H:i';
-        $dates['short_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['dashboard'] = 'd/m/'.(date('Y')+543).' H:i';
+        $dates['short_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['dashboard'] = 'd/m/'.(date('Y') + 543).' H:i';
         //$dates['dashboard'] = $this->_LoadDayThai(date('D')).', d/m/'.(date('Y')+543).' H:i'; // Test Display Thai Day in Dashboard
         $dates['period_time'] = 'H:i';
-        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['general_date_js'] = 'dd/mm/'.(date('Y')+543);
-        $dates['momentjs_datetime'] = 'D/M/'.(date('Y')+543).' h:mm A';
+        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['general_date_js'] = 'dd/mm/'.(date('Y') + 543);
+        $dates['momentjs_datetime'] = 'D/M/'.(date('Y') + 543).' h:mm A';
         $dates['calendar_time'] = 'h:mmt';
-        $dates['calendar_dates'] = 'd/M/'.(date('Y')+543);
+        $dates['calendar_dates'] = 'd/M/'.(date('Y') + 543);
 
         $this->Dates = $dates;
 
@@ -861,12 +861,12 @@ class th_th extends en_gb
         $strings['PendingApprovalReservations'] = 'การจองรอการอนุมัติ';
         $strings['LaterThisMonth'] = 'ในภายหลังเดือนนี้';
         $strings['LaterThisYear'] = 'ในภายหลังปีนี้';
-        $strings['Remaining'] = 'ที่เหลือ';        
+        $strings['Remaining'] = 'ที่เหลือ';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'ไม่มีการจองเช็คเอาท์ที่ขาดหายไป';
-        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';        
+        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

@@ -214,24 +214,24 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set(
             'RepeatOptions',
             [
-                                          'none' => ['key' => 'DoesNotRepeat', 'everyKey' => ''],
-                                          'daily' => ['key' => 'Daily', 'everyKey' => 'days'],
-                                          'weekly' => ['key' => 'Weekly', 'everyKey' => 'weeks'],
-                                          'monthly' => ['key' => 'Monthly', 'everyKey' => 'months'],
-                                          'yearly' => ['key' => 'Yearly', 'everyKey' => 'years'],
-                                  ]
+                'none' => ['key' => 'DoesNotRepeat', 'everyKey' => ''],
+                'daily' => ['key' => 'Daily', 'everyKey' => 'days'],
+                'weekly' => ['key' => 'Weekly', 'everyKey' => 'weeks'],
+                'monthly' => ['key' => 'Monthly', 'everyKey' => 'months'],
+                'yearly' => ['key' => 'Yearly', 'everyKey' => 'years'],
+            ]
         );
         $this->Set(
             'DayNames',
             [
-                                     0 => 'DaySundayAbbr',
-                                     1 => 'DayMondayAbbr',
-                                     2 => 'DayTuesdayAbbr',
-                                     3 => 'DayWednesdayAbbr',
-                                     4 => 'DayThursdayAbbr',
-                                     5 => 'DayFridayAbbr',
-                                     6 => 'DaySaturdayAbbr',
-                             ]
+                0 => 'DaySundayAbbr',
+                1 => 'DayMondayAbbr',
+                2 => 'DayTuesdayAbbr',
+                3 => 'DayWednesdayAbbr',
+                4 => 'DayThursdayAbbr',
+                5 => 'DayFridayAbbr',
+                6 => 'DaySaturdayAbbr',
+            ]
         );
 
         $this->Set('TitleRequired', $config->GetKey(ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter()));

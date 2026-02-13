@@ -87,7 +87,7 @@ class ReportingRepositoryTest extends TestBase
         $expectedReport1->WithId(1);
 
         $serialized1 = ReportSerializer::Serialize($expectedReport1);
-        $serialized2 = "corrupted";
+        $serialized2 = 'corrupted';
 
         $rows = new SavedReportRow();
         $rows->With($userId, $report1, $date->ToDatabase(), $serialized1, 1)

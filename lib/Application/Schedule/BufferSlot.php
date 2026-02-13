@@ -158,7 +158,7 @@ class BufferSlot implements IReservationSlot
 
     public function __toString()
     {
-        return sprintf("Buffer Start: %s, End: %s, Span: %s", $this->Begin(), $this->End(), $this->PeriodSpan());
+        return sprintf('Buffer Start: %s, End: %s, Span: %s', $this->Begin(), $this->End(), $this->PeriodSpan());
     }
 
     public function BeginSlotId()

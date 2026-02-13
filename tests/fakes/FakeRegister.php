@@ -62,7 +62,7 @@ class FakeRegistration implements IRegistration
         return $this->_UserExists;
     }
 
-    public function Synchronize(AuthenticatedUser $user, $insertOnly=false, $overwritePassword = true)
+    public function Synchronize(AuthenticatedUser $user, $insertOnly = false, $overwritePassword = true)
     {
         $this->_SynchronizeCalled = true;
         $this->_LastSynchronizedUser = $user;

@@ -75,7 +75,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
         $this->Set('Reservations', $reservations);
         $this->Set('Timezone', $timezone);
         $this->Set('Range', $Range);
-        $this->Set('Width', (1/7)*100 . '%');
+        $this->Set('Width', (1 / 7) * 100 . '%');
     }
 
     public function DisplayAgenda()

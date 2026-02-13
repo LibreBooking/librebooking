@@ -60,11 +60,11 @@ if ($auth) {
     <p>the user's login is <b><?php echo phpCAS::getUser(); ?></b>.</p>
     <p><a href="?logout=">Logout</a></p><?php
 } else {
-        ?>
+    ?>
     <h1>Guest mode</h1>
     <p><a href="?login=">Login</a></p><?php
-    }
-                                      ?>
+}
+?>
     <p>phpCAS version is <b><?php echo phpCAS::getVersion(); ?></b>.</p>
   </body>
 </html>

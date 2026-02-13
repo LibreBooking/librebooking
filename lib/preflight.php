@@ -248,7 +248,7 @@ class PreflightRunner
         return new CheckResult(
             status: CheckStatus::Fail,
             label: 'Configuration file: config/config.php not found',
-            message: "Copy config/config.dist.php to config/config.php and edit it with your settings.",
+            message: 'Copy config/config.dist.php to config/config.php and edit it with your settings.',
         );
     }
 
@@ -275,7 +275,7 @@ class PreflightRunner
                 status: CheckStatus::Fail,
                 label: 'Configuration file: failed to load config/config.php',
                 message: "Error while loading config/config.php: {$e->getMessage()}\n"
-                    . "Validate PHP syntax with: php -l config/config.php",
+                    . 'Validate PHP syntax with: php -l config/config.php',
             );
         } finally {
             restore_error_handler();
@@ -318,7 +318,7 @@ class PreflightRunner
             $missing = implode(separator: ', ', array: $missingDbKeys);
             return new CheckResult(
                 status: CheckStatus::Fail,
-                label: "Configuration file: database section missing keys",
+                label: 'Configuration file: database section missing keys',
                 message: "Missing database keys: {$missing}",
             );
         }
@@ -417,8 +417,8 @@ class PreflightRunner
             if ($conn === false) {
                 return new CheckResult(
                     status: CheckStatus::Fail,
-                    label: "Database connection: failed to initialize MySQL client",
-                    message: "Error: mysqli_init() failed. This typically indicates a system-level issue (such as insufficient memory) or a PHP environment problem, rather than a connectivity issue with the database server.",
+                    label: 'Database connection: failed to initialize MySQL client',
+                    message: 'Error: mysqli_init() failed. This typically indicates a system-level issue (such as insufficient memory) or a PHP environment problem, rather than a connectivity issue with the database server.',
                 );
             }
 
@@ -476,7 +476,7 @@ class PreflightRunner
                 status: CheckStatus::Warn,
                 label: "Database connection: connected to {$host}/{$dbName}, but schema not found",
                 message: "The database exists but has no LibreBooking tables.\n"
-                    . "Visit http://<your-server>/Web/install/ in a browser to set up the database schema.",
+                    . 'Visit http://<your-server>/Web/install/ in a browser to set up the database schema.',
             );
         }
 

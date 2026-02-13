@@ -57,18 +57,18 @@ class Mellon extends Authentication implements IAuthentication
         $registration = $this->GetRegistration();
         $registration->Synchronize(
             new AuthenticatedUser(
-                            $username,
-                            $username . '@' . $this->options->EmailDomain(),
-                            $_SERVER[$this->options->KeyGivenName()],
-                            $_SERVER[$this->options->KeySurname()],
-                            BookedStringHelper::Random(12),
-                            Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
-                            Configuration::Instance()->GetDefaultTimezone(),
-                            null,
-                            null,
-                            null,
-                            $this->GetGroups($loginContext)
-                        )
+                $username,
+                $username . '@' . $this->options->EmailDomain(),
+                $_SERVER[$this->options->KeyGivenName()],
+                $_SERVER[$this->options->KeySurname()],
+                BookedStringHelper::Random(12),
+                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
+                Configuration::Instance()->GetDefaultTimezone(),
+                null,
+                null,
+                null,
+                $this->GetGroups($loginContext)
+            )
         );
     }
 

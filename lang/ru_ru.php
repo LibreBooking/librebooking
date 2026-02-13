@@ -1,4 +1,5 @@
 <?php
+
 /**
 Translation: 2016 Neklyudov Dmitriy <neodim5@mail.ru>
  */
@@ -828,12 +829,12 @@ class ru_ru extends en_gb
         $strings['PendingApprovalReservations'] = 'Резервации ожидают утверждения';
         $strings['LaterThisMonth'] = 'Позже в этом месяце';
         $strings['LaterThisYear'] = 'Позже в этом году';
-        $strings['Remaining'] = 'Осталось';        
+        $strings['Remaining'] = 'Осталось';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Отсутствуют пропущенные резервации на выезд';
-        $strings['MissingCheckOutReservations'] = 'Пропущенные резервации на выезд';        
+        $strings['MissingCheckOutReservations'] = 'Пропущенные резервации на выезд';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

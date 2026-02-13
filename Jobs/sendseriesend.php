@@ -1,4 +1,5 @@
 <?php
+
 /**
 *  Cron Example:
 *  This script must be executed every day for to enable series ending email functionality

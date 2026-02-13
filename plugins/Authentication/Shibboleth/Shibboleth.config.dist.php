@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file Shibboleth.config.dist.php
  *

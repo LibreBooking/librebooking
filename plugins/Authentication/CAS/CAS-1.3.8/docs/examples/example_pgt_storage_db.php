@@ -69,6 +69,6 @@ if (phpCAS::serviceWeb($serviceUrl, $err_code, $output)) {
 }
 echo $output;
 echo '</div>';
-                                                             ?>
+?>
   </body>
 </html>

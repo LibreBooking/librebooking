@@ -62,8 +62,8 @@ class ExternalAuthLoginPresenter
         $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
         $client->setClientSecret(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET));
         $client->setRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI));
-        $client->addScope("email");
-        $client->addScope("profile");
+        $client->addScope('email');
+        $client->addScope('profile');
 
         if (isset($_GET['code'])) {
             //Token validations for the client
@@ -133,7 +133,8 @@ class ExternalAuthLoginPresenter
 
             // Handle the user data as needed
             $email     = $userData['mail'];
-            $firstName = $userData['givenName'];;
+            $firstName = $userData['givenName'];
+            ;
             $lastName  = $userData['surname'];
 
             //Process $userData as needed (e.g., create a user, log in, etc.)
@@ -300,7 +301,7 @@ class ExternalAuthLoginPresenter
         $requiredDomainValidator->Validate();
         $allowRegistration = Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter());
         if (!$requiredDomainValidator->IsValid()) {
-            $this->page->ShowError(array(Resources::GetInstance()->GetString('InvalidEmailDomain')));
+            $this->page->ShowError([Resources::GetInstance()->GetString('InvalidEmailDomain')]);
             return;
         }
         if ($this->registration->UserExists($username, $email)) {
@@ -327,7 +328,7 @@ class ExternalAuthLoginPresenter
                 $this->authentication->Login($email, new WebLoginContext(new LoginData()));
                 LoginRedirector::Redirect($this->page);
             } else {
-                $this->page->ShowError(array(Resources::GetInstance()->GetString('SelfRegistrationDisabled')));
+                $this->page->ShowError([Resources::GetInstance()->GetString('SelfRegistrationDisabled')]);
                 return;
             }
         }

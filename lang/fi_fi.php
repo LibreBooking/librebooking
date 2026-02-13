@@ -388,7 +388,7 @@ class fi_fi extends en_gb
         $strings['Choose'] = 'Valitse';
         $strings['All'] = 'kaikki';
         $strings['ViewAsChart'] = 'Katso Kaaviona';
-//
+        //
         $strings['ReservedResources'] = 'Varatut Resurssit';
         $strings['ReservedAccessories'] = 'Varatut Tarvikkeet';
         $strings['ResourceUsageTimeBooked'] = 'Resurssien käyttö - Varatut ajat';
@@ -729,7 +729,7 @@ class fi_fi extends en_gb
         $strings['MissedCheckout'] = 'Puuttuva Uloskirjaus';
 
         // TÄHÄN
-//
+        //
         // End Strings
 
         // Errors
@@ -925,7 +925,7 @@ class fi_fi extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'Ryhmällänne ei ole tulevia varauksia';
         $strings['GroupUpcomingReservations'] = 'Ryhmäni tulevat varaukset';
         //End Group Upcoming Reservations
-    
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Virhe kirjautuessa Facebookin kanssa. Yritä uudelleen.';
         //End Facebook Login SDK Error
@@ -940,7 +940,7 @@ class fi_fi extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Puuttuvia uloskirjautumisvarauksia ei ole';
-        $strings['MissingCheckOutReservations'] = 'Puuttuvat uloskirjautumisvaraukset';        
+        $strings['MissingCheckOutReservations'] = 'Puuttuvat uloskirjautumisvaraukset';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

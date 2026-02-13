@@ -225,9 +225,9 @@ class ManageUsersPresenterTest extends TestBase
         $this->page->_Attributes = $attributeFormElements;
 
         $extraAttributes = [
-                UserAttribute::Organization => $organization,
-                UserAttribute::Phone => $phone,
-                UserAttribute::Position => $position];
+            UserAttribute::Organization => $organization,
+            UserAttribute::Phone => $phone,
+            UserAttribute::Position => $position];
 
         $this->manageUsersService->expects($this->once())
                                  ->method('UpdateUser')
@@ -266,13 +266,11 @@ class ManageUsersPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->manageUsersService->expects($matcher)
                                  ->method('DeleteUser')
-                                 ->willReturnCallback(function ($userId) use ($matcher)
-                                 {
-                                    match ($matcher->numberOfInvocations())
-                                    {
-                                        1 => $this->assertEquals(809, $userId),
-                                        2 => $this->assertEquals(909, $userId)
-                                    };
+                                 ->willReturnCallback(function ($userId) use ($matcher) {
+                                     match ($matcher->numberOfInvocations()) {
+                                         1 => $this->assertEquals(809, $userId),
+                                         2 => $this->assertEquals(909, $userId)
+                                     };
                                  });
 
         $this->presenter->DeleteMultipleUsers();
@@ -323,9 +321,9 @@ class ManageUsersPresenterTest extends TestBase
                                      $this->equalTo($lang),
                                      $this->equalTo(Pages::DEFAULT_HOMEPAGE_ID),
                                      $this->equalTo([
-                                                               UserAttribute::Organization => null,
-                                                               UserAttribute::Phone => null,
-                                                               UserAttribute::Position => null]),
+                                         UserAttribute::Organization => null,
+                                         UserAttribute::Phone => null,
+                                         UserAttribute::Position => null]),
                                      $this->equalTo([new AttributeValue($attributeId, $attributeValue)])
                                  )
                                  ->willReturn($user);
@@ -364,17 +362,17 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("f1", $row1->firstName);
-        $this->assertEquals("l1", $row1->lastName);
-        $this->assertEquals("p1", $row1->password);
-        $this->assertEquals("ph1", $row1->phone);
-        $this->assertEquals("o1", $row1->organization);
-        $this->assertEquals("po1", $row1->position);
-        $this->assertEquals("t1", $row1->timezone);
-        $this->assertEquals("l1", $row1->language);
-        $this->assertEquals(["g1"], $row1->groups);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('f1', $row1->firstName);
+        $this->assertEquals('l1', $row1->lastName);
+        $this->assertEquals('p1', $row1->password);
+        $this->assertEquals('ph1', $row1->phone);
+        $this->assertEquals('o1', $row1->organization);
+        $this->assertEquals('po1', $row1->position);
+        $this->assertEquals('t1', $row1->timezone);
+        $this->assertEquals('l1', $row1->language);
+        $this->assertEquals(['g1'], $row1->groups);
     }
 
     public function testDefaultsMissingColumns()
@@ -387,16 +385,16 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("f1", $row1->firstName);
-        $this->assertEquals("l1", $row1->lastName);
-        $this->assertEquals("p1", $row1->password);
-        $this->assertEquals("", $row1->phone);
-        $this->assertEquals("", $row1->organization);
-        $this->assertEquals("", $row1->position);
-        $this->assertEquals("", $row1->timezone);
-        $this->assertEquals("", $row1->language);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('f1', $row1->firstName);
+        $this->assertEquals('l1', $row1->lastName);
+        $this->assertEquals('p1', $row1->password);
+        $this->assertEquals('', $row1->phone);
+        $this->assertEquals('', $row1->organization);
+        $this->assertEquals('', $row1->position);
+        $this->assertEquals('', $row1->timezone);
+        $this->assertEquals('', $row1->language);
         $this->assertEquals([], $row1->groups);
     }
 
@@ -410,16 +408,16 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("", $row1->firstName);
-        $this->assertEquals("", $row1->lastName);
-        $this->assertEquals("", $row1->password);
-        $this->assertEquals("", $row1->phone);
-        $this->assertEquals("", $row1->organization);
-        $this->assertEquals("", $row1->position);
-        $this->assertEquals("", $row1->timezone);
-        $this->assertEquals("", $row1->language);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('', $row1->firstName);
+        $this->assertEquals('', $row1->lastName);
+        $this->assertEquals('', $row1->password);
+        $this->assertEquals('', $row1->phone);
+        $this->assertEquals('', $row1->organization);
+        $this->assertEquals('', $row1->position);
+        $this->assertEquals('', $row1->timezone);
+        $this->assertEquals('', $row1->language);
         $this->assertEquals([], $row1->groups);
     }
 

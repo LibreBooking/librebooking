@@ -5,7 +5,6 @@ require_once(ROOT_DIR . 'tests/data/test_plugin_configclass.php');
 
 class ConfigTest extends TestBase
 {
-
     private const CONFIG_ID = 'test';
 
     public function setup(): void
@@ -56,16 +55,16 @@ class ConfigTest extends TestBase
             $config = Configuration::Instance()->File(self::CONFIG_ID);
 
             $appDebug = $config->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
-            $this->assertFalse($appDebug, "Invalid boolean should be replaced with default");
+            $this->assertFalse($appDebug, 'Invalid boolean should be replaced with default');
 
             $timeout = $config->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
-            $this->assertEquals(30, $timeout, "Invalid integer should be replaced with default");
+            $this->assertEquals(30, $timeout, 'Invalid integer should be replaced with default');
 
             $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
-            $this->assertEquals('error', $loggingLevel, "Invalid choice should be replaced with default");
+            $this->assertEquals('error', $loggingLevel, 'Invalid choice should be replaced with default');
 
             $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-            $this->assertEquals(6, $minimumLetters, "Type conversion should return integer");
+            $this->assertEquals(6, $minimumLetters, 'Type conversion should return integer');
         });
 
         $this->assertLogMessage($errorLogs, "Invalid type for 'app.debug'. Should be 'boolean'", 'app.debug type validation error');
@@ -79,7 +78,8 @@ class ConfigTest extends TestBase
     {
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
-        $config = Configuration::Instance()->File(self::CONFIG_ID);;
+        $config = Configuration::Instance()->File(self::CONFIG_ID);
+        ;
         $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
         $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());

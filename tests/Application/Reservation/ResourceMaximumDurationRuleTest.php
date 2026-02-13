@@ -20,11 +20,11 @@ class ResourceMaximumDurationRuleTest extends TestBase
         $resourceId1 = 1;
         $resourceId2 = 2;
 
-        $resource1 = new FakeBookableResource($resourceId1, "1");
+        $resource1 = new FakeBookableResource($resourceId1, '1');
         $resource1->SetMaxLength(null);
 
-        $resource2 = new FakeBookableResource($resourceId2, "2");
-        $resource2->SetMaxLength("23h00m");
+        $resource2 = new FakeBookableResource($resourceId2, '2');
+        $resource2->SetMaxLength('23h00m');
 
         $reservation = new TestReservationSeries();
 
@@ -41,8 +41,8 @@ class ResourceMaximumDurationRuleTest extends TestBase
 
     public function testOkIfReservationIsShorterThanTheMaximumDuration()
     {
-        $resource = new FakeBookableResource(1, "2");
-        $resource->SetMaxLength("25h00m");
+        $resource = new FakeBookableResource(1, '2');
+        $resource->SetMaxLength('25h00m');
 
         $reservation = new TestReservationSeries();
         $reservation->WithResource($resource);

@@ -37,9 +37,9 @@ class ParticipantEmailNotificationTest extends TestBase
         $userRepo->expects($this->exactly(3))
                  ->method('LoadById')
                  ->willReturnMap([
-                    [$ownerId, $owner],
-                    [$participantId1, $participant1],
-                    [$participantId2, $participant2]
+                     [$ownerId, $owner],
+                     [$participantId1, $participant1],
+                     [$participantId2, $participant2]
                  ]);
 
         $notification = new ParticipantAddedEmailNotification($userRepo, $attributeRepo);
@@ -74,9 +74,9 @@ class ParticipantEmailNotificationTest extends TestBase
         $userRepo->expects($this->exactly(3))
                  ->method('LoadById')
                  ->willReturnMap([
-                    [$ownerId, $owner],
-                    [$participantId1, $participant1],
-                    [$participantId2, $participant2]
+                     [$ownerId, $owner],
+                     [$participantId1, $participant1],
+                     [$participantId2, $participant2]
                  ]);
 
         $notification = new ParticipantDeletedEmailNotification($userRepo, $attributeRepo);

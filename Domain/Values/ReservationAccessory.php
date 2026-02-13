@@ -31,6 +31,6 @@ class ReservationAccessory
 
     public function __toString()
     {
-        return sprintf("ReservationAccessory id:%d quantity reserved:%d", $this->AccessoryId, $this->QuantityReserved);
+        return sprintf('ReservationAccessory id:%d quantity reserved:%d', $this->AccessoryId, $this->QuantityReserved);
     }
 }

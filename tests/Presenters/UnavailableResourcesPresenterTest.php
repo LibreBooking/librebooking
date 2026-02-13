@@ -61,7 +61,7 @@ class UnavailableResourcesPresenterTest extends TestBase
         $series = $builder->Build();
         $this->reservationRepository->_Series = $series;
 
-        $this->page->_ReferenceNumber = "123";
+        $this->page->_ReferenceNumber = '123';
         $this->presenter->PageLoad();
 
         $bound = $this->page->_BoundAvailability;
@@ -78,7 +78,7 @@ class UnavailableResourcesPresenterTest extends TestBase
         $this->reservationConflictIdentifier->_IndexedConflicts[] = new FakeReservationConflictResult();
         $this->reservationConflictIdentifier->_IndexedConflicts[] = new FakeReservationConflictResult(false);
 
-        $this->page->_ReferenceNumber = "";
+        $this->page->_ReferenceNumber = '';
         $this->presenter->PageLoad();
 
         $bound = $this->page->_BoundAvailability;

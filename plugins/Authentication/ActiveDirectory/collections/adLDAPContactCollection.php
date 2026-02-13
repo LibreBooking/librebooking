@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4

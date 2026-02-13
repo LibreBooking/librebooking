@@ -58,7 +58,7 @@ RegisterAccessories($server, $registry);
 RegisterAccounts($server, $registry);
 
 $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
-if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
+    if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
         $app->halt(RestResponse::SERVICE_UNAVAILABLE, 'LibreBooking API is disabled. Set ["api"]["enabled"] = true');
     }
 
@@ -104,12 +104,12 @@ function RegisterHelp(SlimWebServiceRegistry $registry, \Slim\Slim $app)
     $app->get('/', function () use ($registry, $app) {
         // Print API documentation
         ApiHelpPage::Render($registry, $app);
-    })->name("Default");
+    })->name('Default');
 
     $app->get('/Help', function () use ($registry, $app) {
         // Print API documentation
         ApiHelpPage::Render($registry, $app);
-    })->name("Help");
+    })->name('Help');
 }
 
 function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry)
@@ -272,7 +272,7 @@ function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
     $category->AddPost('/', [$webService, 'Create'], WebServices::CreateAccount);
     $category->AddSecurePost('/:userId', [$webService, 'Update'], WebServices::UpdateAccount);
     $category->AddSecurePost('/:userId/Password', [$webService, 'UpdatePassword'], WebServices::UpdateAccountPassword);
-    $category->AddSecureGet('/:userId',  [$webService, 'GetAccount'], WebServices::GetAccount);
+    $category->AddSecureGet('/:userId', [$webService, 'GetAccount'], WebServices::GetAccount);
 
     $registry->AddCategory($category);
 }

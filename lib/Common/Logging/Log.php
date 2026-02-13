@@ -1,14 +1,13 @@
 <?php
 
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-  require_once ROOT_DIR . 'vendor/autoload.php';
+    require_once ROOT_DIR . 'vendor/autoload.php';
 }
 
 use Monolog\Logger;
 use Monolog\Level;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\WebProcessor;
-
 
 class Log
 {
@@ -159,4 +158,3 @@ class Log
         return self::getLogLevel() != 'none';
     }
 }
-

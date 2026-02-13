@@ -117,7 +117,7 @@ class UpgradeDbTask // extends Task
 
     private function GetFullSql($file)
     {
-        $f = fopen($file, "r");
+        $f = fopen($file, 'r');
         $sql = fread($f, filesize($file));
         fclose($f);
         return $sql;

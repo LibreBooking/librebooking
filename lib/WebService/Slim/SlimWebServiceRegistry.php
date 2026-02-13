@@ -9,7 +9,8 @@ class ApiPermissions
         public bool $isWrite,
         public int|string|null $roGroupId,
         public int|string|null $rwGroupId
-    ) { }
+    ) {
+    }
 
     public function IsUserAllowedApiAccess(int|string $userId): bool
     {
@@ -31,7 +32,8 @@ class ApiPermissions
         return true;
     }
 
-    public function IsSet(): bool {
+    public function IsSet(): bool
+    {
         return (is_numeric($this->roGroupId) || is_numeric($this->rwGroupId));
     }
 
@@ -146,7 +148,8 @@ class SlimWebServiceRegistry
         return $this->apiPermissionRoutes[$routeName]->IsUserAllowedApiAccess(userId: $userId);
     }
 
-    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions) {
+    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions)
+    {
         if ($registration->IsSecure()) {
             $this->secureRoutes[$registration->RouteName()] = true;
         }

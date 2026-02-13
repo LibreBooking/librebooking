@@ -112,7 +112,7 @@ class TestBase extends TestCase
         if ($displayLogs && !empty($errorLogs)) {
             echo "\n=== Captured Error Logs ===\n";
             foreach ($errorLogs as $logEntry) {
-                echo "ERROR LOG: " . $logEntry . "\n";
+                echo 'ERROR LOG: ' . $logEntry . "\n";
             }
             echo "=== End Error Logs ===\n";
         }
@@ -122,7 +122,7 @@ class TestBase extends TestCase
 
     /**
      * Assert that a specific log message is found in captured error logs
-     * 
+     *
      * @param array $logs Array of captured error log messages
      * @param string $expectedPattern Expected log message pattern to find
      * @param string $description Description of what should be logged (for assertion message)
@@ -130,7 +130,7 @@ class TestBase extends TestCase
      */
     protected function assertLogMessage(array $logs, string $expectedPattern, string $description, string $logPrefix = '[CONFIG]')
     {
-        $filteredLogs = array_filter($logs, fn($log) => str_contains($log, $logPrefix));
+        $filteredLogs = array_filter($logs, fn ($log) => str_contains($log, $logPrefix));
         $found = false;
         foreach ($filteredLogs as $log) {
             if (str_contains($log, $expectedPattern)) {

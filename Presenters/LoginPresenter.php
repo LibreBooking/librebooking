@@ -297,9 +297,9 @@ class LoginPresenter
         $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
         $client->setClientSecret(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET));
         $client->setRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI));
-        $client->addScope("email");
-        $client->addScope("profile");
-        $client->setPrompt("select_account");
+        $client->addScope('email');
+        $client->addScope('profile');
+        $client->setPrompt('select_account');
         $GoogleUrl = $client->createAuthUrl();
 
         return $GoogleUrl;

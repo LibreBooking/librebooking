@@ -639,12 +639,12 @@ class zh_tw extends en_us
         $strings['PendingApprovalReservations'] = '等待審批的預訂';
         $strings['LaterThisMonth'] = '本月晚些時候';
         $strings['LaterThisYear'] = '本年晚些時候';
-        $strings['Remaining'] = '剩餘';        
+        $strings['Remaining'] = '剩餘';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = '沒有遺失的退房預訂';
-        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';        
+        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

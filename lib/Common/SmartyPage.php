@@ -585,7 +585,7 @@ class SmartyPage extends Smarty
             $make_email_clickable_cb,
             (string) $url
         );
-        $url = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", (string) $url);
+        $url = preg_replace('#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', '$1$3</a>', (string) $url);
         $url = trim((string) $url);
         return $url;
     }
@@ -930,16 +930,16 @@ class SmartyPage extends Smarty
         $indicator = '';
         if ($sortField == $currentField) {
             $sortDirection = $currentDirection == 'asc' ? 'desc' : 'asc';
-            $indicator = "<i class=\"bi bi-caret-down-fill\"></i>";
+            $indicator = '<i class="bi bi-caret-down-fill"></i>';
             if ($currentDirection == 'asc') {
-                $indicator = "<i class=\"bi bi-caret-up-fill\"></i>";
+                $indicator = '<i class="bi bi-caret-up-fill"></i>';
             }
         }
 
         if (BookedStringHelper::Contains($url, $sd)) {
             $url = preg_replace("/$sd=(asc|desc)&?/", "$sd=$sortDirection&", (string) $url);
         } else {
-            $url = $url . ($hasQueryString ? "&" : "?") . "$sd=$sortDirection";
+            $url = $url . ($hasQueryString ? '&' : '?') . "$sd=$sortDirection";
         }
 
         if (BookedStringHelper::Contains($url, $sf)) {

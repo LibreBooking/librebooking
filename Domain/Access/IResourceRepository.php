@@ -83,7 +83,7 @@ interface IResourceRepository
      * @param ISqlFilter $filter
      * @return PageableData|BookableResource[]
      */
-    public function GetUserList($resourceIds,$pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
+    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
      * @param null|string $sortField
@@ -115,13 +115,13 @@ interface IResourceRepository
      * @param int $userId
      * @param array $resourceIds
      */
-    public function GetResourceAdminResourceIds($userId,  $resourceIds = []);
+    public function GetResourceAdminResourceIds($userId, $resourceIds = []);
 
     /**
      * @param int $userId
      * @param array $resourceIds
      */
-    public function GetScheduleAdminResourceIds($userId,  $resourceIds = []);
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = []);
 
 
     /**

@@ -185,7 +185,7 @@ abstract class Page implements IPage
 
     public function GetLastPage($defaultPage = '')
     {
-        $referer = filter_var(getenv("HTTP_REFERER"), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $referer = filter_var(getenv('HTTP_REFERER'), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($referer)) {
             return empty($defaultPage) ? Pages::LOGIN : $defaultPage;
         }
@@ -392,13 +392,13 @@ abstract class Page implements IPage
 
     protected function DisplayCsv($templateName, $fileName)
     {
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: private", false);
-        header("Content-Type: application/octet-stream");
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);
+        header('Content-Type: application/octet-stream');
         header("Content-Disposition: attachment; filename=$fileName;");
-        header("Content-Transfer-Encoding: binary");
+        header('Content-Transfer-Encoding: binary');
         echo chr(239) . chr(187) . chr(191);
 
         $this->Display($templateName);

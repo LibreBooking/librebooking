@@ -189,7 +189,9 @@ class Registration implements IRegistration
         if ($userGroups != null) {
             $lowercaseGroups = array_map('strtolower', $userGroups);
             $altGroups = $userGroups;
-            $altGroups= array_map(function($dn) {return sscanf(explode(",", $dn)[0], "cn=%s,")[0];}, $altGroups);
+            $altGroups = array_map(function ($dn) {
+                return sscanf(explode(',', $dn)[0], 'cn=%s,')[0];
+            }, $altGroups);
 
             $groupsToSync = [];
             $groups = $this->groupRepository->GetList()->Results();
@@ -200,10 +202,10 @@ class Registration implements IRegistration
                     $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
                 } else {
                     if (in_array(strtolower($group->Name()), $altGroups)) {
-                      Log::Debug('Syncing group %s for user %s', $group->Name(), $user->Username());
-                      $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
+                        Log::Debug('Syncing group %s for user %s', $group->Name(), $user->Username());
+                        $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
                     } else {
-                      Log::Debug('User %s is not part of group %s, sync skipped', $user->Username(), $group->Name());
+                        Log::Debug('User %s is not part of group %s, sync skipped', $user->Username(), $group->Name());
                     }
                 }
             }

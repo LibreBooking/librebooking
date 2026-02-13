@@ -170,11 +170,11 @@ class ResourceDisplayPresenterTest extends TestBase
 
         $this->setupStandardExpectations(true, 5);
 
-        $next = new TestReservationItemView(2, $now->AddMinutes(5), $now->AddMinutes(90), 1, "refnum");
+        $next = new TestReservationItemView(2, $now->AddMinutes(5), $now->AddMinutes(90), 1, 'refnum');
         $next->_RequiresCheckin = true;
 
-        $r1 = new TestReservationItemView(1, $now->AddMinutes(-90), $now->AddMinutes(-30), 1, "refnum1");
-        $r2 = new TestReservationItemView(3, $now->AddMinutes(90), $now->AddMinutes(120), 1, "refnum2");
+        $r1 = new TestReservationItemView(1, $now->AddMinutes(-90), $now->AddMinutes(-30), 1, 'refnum1');
+        $r2 = new TestReservationItemView(3, $now->AddMinutes(90), $now->AddMinutes(120), 1, 'refnum2');
 
         $this->reservationService->_ReservationListing->_Reservations = [
             new ReservationListItem($r1),
@@ -185,7 +185,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->presenter->DisplayResource(1, null);
 
         $this->assertEquals(true, $this->page->_RequiresCheckIn);
-        $this->assertEquals("refnum", $this->page->_CheckinReferenceNumber);
+        $this->assertEquals('refnum', $this->page->_CheckinReferenceNumber);
     }
 
     public function testDisplaysAvailable()

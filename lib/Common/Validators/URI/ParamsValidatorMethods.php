@@ -4,7 +4,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 {
     public static function numericalValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=([0-9]+)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=([0-9]+)/';
         $possibleScripts = self::ValidatePossibleScripts(($requestURI));
 
         if (preg_match($pattern, $requestURI, $matches)) {
@@ -16,12 +16,12 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function existsInURLValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/(?:\?|&)" . preg_quote($param, '/') . "=([^&]*)/";
+        $pattern = "/(?:\?|&)" . preg_quote($param, '/') . '=([^&]*)/';
 
         $possibleScripts = self::ValidatePossibleScripts($requestURI);
 
         if (preg_match($pattern, $requestURI, $matches)) {
-            return $matches[1] === "" && !$possibleScripts;
+            return $matches[1] === '' && !$possibleScripts;
         }
 
         return false;
@@ -30,7 +30,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function dateValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=([^&]*)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=([^&]*)/';
         $possibleScripts = self::ValidatePossibleScripts(($requestURI));
 
         if (preg_match($pattern, $requestURI, $matches)) {
@@ -43,7 +43,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function simpleDateValidatorList(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=([^&]*)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=([^&]*)/';
         $possibleScripts = self::ValidatePossibleScripts(($requestURI));
 
         if (preg_match($pattern, $requestURI, $matches)) {
@@ -66,7 +66,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function simpleDateTimeValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=([^&]*)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=([^&]*)/';
         $possibleScripts = self::ValidatePossibleScripts(($requestURI));
 
         if (preg_match($pattern, $requestURI, $matches)) {
@@ -79,7 +79,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function complexDateTimedateValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=([^&]*)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=([^&]*)/';
         $possibleScripts = self::ValidatePossibleScripts(($requestURI));
 
         if (preg_match($pattern, $requestURI, $matches)) {
@@ -99,7 +99,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
             $redirectURL = urldecode($matches[1]);
 
             $segments = explode('?', $requestURI);
-            if (!isset($segments[1]) || $segments[1] === "") {
+            if (!isset($segments[1]) || $segments[1] === '') {
                 return false;
             }
 
@@ -119,7 +119,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function booleanValidator(string $param, string $requestURI): bool
     {
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=(true|false)(?:&|$)/i";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=(true|false)(?:&|$)/i';
         $possibleScripts = self::ValidatePossibleScripts($requestURI);
 
         return preg_match($pattern, $requestURI) === 1 && !$possibleScripts;
@@ -127,13 +127,13 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
     public static function matchValidator(string $param, string $expectedValue, string $requestURI): bool
     {
-        $paramPresentPattern = "/[?&]" . preg_quote($param, '/') . "=([^&]*)/";
+        $paramPresentPattern = '/[?&]' . preg_quote($param, '/') . '=([^&]*)/';
 
         if (!preg_match($paramPresentPattern, $requestURI)) {
             return true;
         }
 
-        $pattern = "/[?&]" . preg_quote($param, '/') . "=" . preg_quote($expectedValue, '/') . "(?:&|$)/";
+        $pattern = '/[?&]' . preg_quote($param, '/') . '=' . preg_quote($expectedValue, '/') . '(?:&|$)/';
         $possibleScripts = self::ValidatePossibleScripts($requestURI);
 
         return preg_match($pattern, $requestURI) === 1 && !$possibleScripts;

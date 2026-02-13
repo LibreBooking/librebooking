@@ -84,7 +84,7 @@ class ScheduleTotalConcurrentReservationsRule implements IReservationValidationR
             $formatted[] = $d->ToTimezone($this->timezone)->Format($format);
         }
 
-        $datesAsString = implode(",", $formatted);
+        $datesAsString = implode(',', $formatted);
 
         $errorString = new StringBuilder();
         $errorString->AppendLine(Resources::GetInstance()->GetString('ScheduleTotalReservationsError', [$totalConcurrentReservationLimit]));

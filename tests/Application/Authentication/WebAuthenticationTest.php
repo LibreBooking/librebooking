@@ -59,7 +59,7 @@ class WebAuthenticationTest extends TestBase
         $now = mktime(10, 11, 12, 1, 2, 2000);
         LoginTime::$Now = $now;
 
-        $hashedValue = sprintf("%s|%s", $id, $now);
+        $hashedValue = sprintf('%s|%s', $id, $now);
 
         $session = new UserSession($id);
         $session->LoginTime = $now;

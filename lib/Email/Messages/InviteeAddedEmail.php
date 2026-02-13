@@ -66,7 +66,7 @@ class InviteeAddedEmail extends ReservationEmailMessage
     protected function GetAcceptUrl(Reservation $currentInstance, $action): string
     {
         return sprintf(
-            "%s?%s=%s&%s=%s",
+            '%s?%s=%s&%s=%s',
             Pages::INVITATION_RESPONSES,
             QueryStringKeys::REFERENCE_NUMBER,
             $currentInstance->ReferenceNumber(),
