@@ -1,4 +1,4 @@
-w<?php
+<?php
 
 require_once(ROOT_DIR . 'Domain/ResourceGroup.php');
 
