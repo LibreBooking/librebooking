@@ -77,9 +77,6 @@ jobs:
         # Allow the previous check to fail but not abort
         if: always()
         uses: ramsey/composer-install@v3
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-req=ext-zip"
 
       - name: Create main config.php for unit tests
         run: cp config/config.dist.php config/config.php
@@ -109,12 +106,6 @@ jobs:
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-reqs"
-
-      - name: Update the composer.lock file
-        run: composer update
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict

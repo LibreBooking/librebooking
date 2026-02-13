@@ -54,6 +54,7 @@ sure your `main` branch is synced with the upstream project before creating
 your feature branch.
 * **Create a new branch** for your changes: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/issue-number-and-fix`.
 * **Make your changes** and **add tests** if applicable.
+* **Keep Composer files in sync:** If you change `composer.json`, regenerate and commit `composer.lock` in the same PR.
 * **Ensure your code lints**
 * **Commit your changes** with a clear and descriptive commit message.
 * **Push your branch** to your fork: `git push origin feature/your-feature-name`.

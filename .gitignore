@@ -1,5 +1,4 @@
 /vendor/*
-/composer.lock
 
 /build/*
 /tools/*
