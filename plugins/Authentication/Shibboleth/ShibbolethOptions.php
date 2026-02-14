@@ -55,12 +55,12 @@ class ShibbolethOptions
     protected function InitShibbolethOptions()
     {
         $this->_options = [];
-        $this->SetOption('shibboleth.username', $this->GetConfig(ShibbolethConfigKeys::USERNAME));
-        $this->SetOption('shibboleth.firstname', $this->GetConfig(ShibbolethConfigKeys::FIRSTNAME));
-        $this->SetOption('shibboleth.lastname', $this->GetConfig(ShibbolethConfigKeys::LASTNAME));
-        $this->SetOption('shibboleth.email', $this->GetConfig(ShibbolethConfigKeys::EMAIL));
-        $this->SetOption('shibboleth.phone', $this->GetConfig(ShibbolethConfigKeys::PHONE));
-        $this->SetOption('shibboleth.organization', $this->GetConfig(ShibbolethConfigKeys::ORGANIZATION));
+        $this->SetOption(ShibbolethConfigKeys::USERNAME['key'], $this->GetConfig(ShibbolethConfigKeys::USERNAME));
+        $this->SetOption(ShibbolethConfigKeys::FIRSTNAME['key'], $this->GetConfig(ShibbolethConfigKeys::FIRSTNAME));
+        $this->SetOption(ShibbolethConfigKeys::LASTNAME['key'], $this->GetConfig(ShibbolethConfigKeys::LASTNAME));
+        $this->SetOption(ShibbolethConfigKeys::EMAIL['key'], $this->GetConfig(ShibbolethConfigKeys::EMAIL));
+        $this->SetOption(ShibbolethConfigKeys::PHONE['key'], $this->GetConfig(ShibbolethConfigKeys::PHONE));
+        $this->SetOption(ShibbolethConfigKeys::ORGANIZATION['key'], $this->GetConfig(ShibbolethConfigKeys::ORGANIZATION));
     }
 
     /**
