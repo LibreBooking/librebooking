@@ -588,10 +588,12 @@ class StripeGateway implements IPaymentGateway
                 Log::Debug('Stripe charge response %s', json_encode($charge));
             }
 
+            $chargeData = $charge->toArray();
+
             $logger->LogPayment(
                 $cart->UserId,
                 $charge->status,
-                $charge->invoice,
+                $chargeData['invoice'] ?? null,
                 $charge->id,
                 $currency->FromStripe($charge->amount),
                 $currency->FromStripe($charge->balance_transaction->fee),
