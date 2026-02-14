@@ -307,7 +307,8 @@ Reservation Behavior
    ],
 
 **reservation.prevent.participation**
-  Disable the ability to add participants to reservations.
+  Disable reservation participation/invitations and hide participant/invitee
+  lists in the reservation UI.
 
 **reservation.prevent.recurrence**
   Disable recurring/repeating reservations.

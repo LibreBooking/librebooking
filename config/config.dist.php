@@ -296,7 +296,7 @@ return [
         ##########################################
 
         'reservation' => [
-            # Prevent participants from being added to reservations (true/false)
+            # Disable reservation participation/invitations and hide participant/invitee lists in the reservation UI (true/false)
             'prevent.participation' => false,
 
             # Disable recurring reservations (true/false)

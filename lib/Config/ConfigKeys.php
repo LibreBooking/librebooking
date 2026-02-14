@@ -691,8 +691,8 @@ class ConfigKeys
         'key' => 'reservation.prevent.participation',
         'type' => 'boolean',
         'default' => false,
-        'label' => 'Prevent Participation',
-        'description' => 'Prevent users from participating in reservations',
+        'label' => 'Disable Participation & Invitations',
+        'description' => 'Disable reservation participation/invitations and hide participant/invitee lists in the reservation UI',
         'section' => 'reservation'
     ];
     public const RESERVATION_PREVENT_RECURRENCE = [
