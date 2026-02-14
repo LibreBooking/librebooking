@@ -20,10 +20,7 @@ class ManageUsersPresenterTest extends TestBase
      */
     public $resourceRepo;
 
-    /**
-     * @var IManageUsersService|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $manageUsersService;
+    public IManageUsersService&\PHPUnit\Framework\MockObject\MockObject $manageUsersService;
 
     /**
      * @var ManageUsersPresenter
@@ -35,20 +32,11 @@ class ManageUsersPresenterTest extends TestBase
      */
     public $attributeService;
 
-    /**
-     * @var PasswordEncryption
-     */
-    public $encryption;
+    public PasswordEncryption&\PHPUnit\Framework\MockObject\MockObject $encryption;
 
-    /**
-     * @var IGroupRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $groupRepository;
+    public IGroupRepository&\PHPUnit\Framework\MockObject\MockObject $groupRepository;
 
-    /**
-     * @var IGroupViewRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $groupViewRepository;
+    public IGroupViewRepository&\PHPUnit\Framework\MockObject\MockObject $groupViewRepository;
 
     public function setUp(): void
     {

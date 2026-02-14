@@ -44,12 +44,12 @@ interface IResourceService
     public function GetResourceTypes();
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
     public function GetResourceAttributes();
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
     public function GetResourceTypeAttributes();
 
@@ -222,7 +222,7 @@ class ResourceService implements IResourceService
     }
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
     public function GetResourceAttributes()
     {
@@ -236,7 +236,7 @@ class ResourceService implements IResourceService
     }
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
     public function GetResourceTypeAttributes()
     {

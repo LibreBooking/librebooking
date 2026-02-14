@@ -4,13 +4,11 @@ require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttributesPresenter.p
 
 class ReservationAttributesPresenterTest extends TestBase
 {
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    // Intentionally concrete service in setUp(), not a PHPUnit mock.
+    private IAttributeService $attributeService;
 
     /**
-     * @var FakeReservationAuthorization
+     * @var FakeAuthorizationService
      */
     private $authorizationService;
 
@@ -34,10 +32,7 @@ class ReservationAttributesPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IAttributeRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeRepository;
+    private IAttributeRepository&\PHPUnit\Framework\MockObject\MockObject $attributeRepository;
 
     public function setUp(): void
     {
@@ -215,7 +210,7 @@ class ReservationAttributesPresenterTest extends TestBase
 class FakeReservationAttributesPage implements IReservationAttributesPage
 {
     /**
-     * @var Attribute[]
+     * @var LBAttribute[]
      */
     public $_Attributes;
 
@@ -238,7 +233,7 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetAttributes($attributes)
     {

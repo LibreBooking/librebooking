@@ -5,10 +5,7 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ResourceCrossDayRuleTest extends TestBase
 {
-    /**
-     * @var IScheduleRepository
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
     /**
      * @var Schedule

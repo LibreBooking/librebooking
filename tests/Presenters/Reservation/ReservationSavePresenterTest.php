@@ -17,7 +17,7 @@ class ReservationSavePresenterTest extends TestBase
     private $userId;
 
     /**
-     * @var IReservationSavePage|FakeReservationSavePage
+     * @var FakeReservationSavePage
      */
     private $page;
 
@@ -26,20 +26,11 @@ class ReservationSavePresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $persistenceService;
+    private IReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     /**
      * @var FakeScheduleRepository

@@ -13,20 +13,11 @@ class ReservationDeletePresenterTest extends TestBase
      */
     private $user;
 
-    /**
-     * @var IReservationDeletePage
-     */
-    private $page;
+    private IReservationDeletePage&\PHPUnit\Framework\MockObject\MockObject $page;
 
-    /**
-     * @var IDeleteReservationPersistenceService
-     */
-    private $persistenceService;
+    private IDeleteReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
     /**
      * @var ReservationDeletePresenter

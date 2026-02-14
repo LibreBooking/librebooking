@@ -9,10 +9,7 @@ class ReservationSaveControllerTest extends TestBase
      */
     private $controller;
 
-    /**
-     * @var IReservationPresenterFactory
-     */
-    private $presenterFactory;
+    private IReservationPresenterFactory&\PHPUnit\Framework\MockObject\MockObject $presenterFactory;
 
     public function setUp(): void
     {

@@ -4,20 +4,14 @@ require_once(ROOT_DIR . 'WebServices/Validators/UserRequestValidator.php');
 
 class UserRequestValidatorTest extends TestBase
 {
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
     /**
      * @var UserRequestValidator
      */
     private $validator;
 
-    /**
-     * @var IUserViewRepository
-     */
-    private $userRepository;
+    private IUserViewRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     public function setUp(): void
     {

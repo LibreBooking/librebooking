@@ -175,7 +175,7 @@ class AttributeServiceTest extends TestBase
 
         $this->attributeRepository->_CustomAttributes = [$unrestricted, $forUser, $notForUser, $forResource1, $resource2IsNotAllowed, $forOtherResource, $forResourceType1, $forOtherResourceType];
 
-        /** @var Attribute[] $attributes */
+        /** @var LBAttribute[] $attributes */
         $attributes = $this->attributeService->GetReservationAttributes($this->fakeUser, new ReservationView(), $requestedUserId, [$resourceId1, $resourceId2, $resourceId3]);
 
         $this->assertEquals(4, count($attributes));

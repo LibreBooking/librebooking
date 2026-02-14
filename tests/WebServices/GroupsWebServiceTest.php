@@ -14,15 +14,9 @@ class GroupsWebServiceTest extends TestBase
      */
     private $service;
 
-    /**
-     * @var IGroupRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $groupRepository;
+    private IGroupRepository&\PHPUnit\Framework\MockObject\MockObject $groupRepository;
 
-    /**
-     * @var IGroupViewRepository
-     */
-    private $groupViewRepository;
+    private IGroupViewRepository&\PHPUnit\Framework\MockObject\MockObject $groupViewRepository;
 
     public function setUp(): void
     {

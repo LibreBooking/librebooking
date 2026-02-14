@@ -16,15 +16,9 @@ class SchedulesWebServiceTest extends TestBase
      */
     private $server;
 
-    /**
-     * @var IScheduleRepository
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IPrivacyFilter
-     */
-    private $privacyFilter;
+    private IPrivacyFilter&\PHPUnit\Framework\MockObject\MockObject $privacyFilter;
 
     public function setUp(): void
     {

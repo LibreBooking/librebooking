@@ -121,7 +121,7 @@ class SlotLabelFactoryTest extends TestBase
 
         $label = $factory->Format($this->reservation);
 
-        $fullName = $this->reservation->GetUserName()->__toString();
+        $fullName = $this->reservation->GetUserName();
 
         $this->assertStringNotContainsString($fullName, $label);
     }
@@ -141,7 +141,7 @@ class SlotLabelFactoryTest extends TestBase
 
         $label = $factory->Format($this->reservation);
 
-        $fullName = $this->reservation->GetUserName()->__toString();
+        $fullName = $this->reservation->GetUserName();
 
         $this->assertStringContainsString($fullName, $label);
     }

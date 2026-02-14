@@ -4,35 +4,20 @@ require_once(ROOT_DIR . 'lib/Application/Schedule/ResourceService.php');
 
 class ResourceServiceTest extends TestBase
 {
-    /**
-     * @var IPermissionService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $permissionService;
+    private IPermissionService&\PHPUnit\Framework\MockObject\MockObject $permissionService;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     /**
      * @var ResourceService
      */
     private $resourceService;
 
-    /**
-     * @var IAccessoryRepository
-     */
-    private $accessoryRepository;
+    private IAccessoryRepository&\PHPUnit\Framework\MockObject\MockObject $accessoryRepository;
 
     public function setUp(): void
     {

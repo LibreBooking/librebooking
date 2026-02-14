@@ -14,10 +14,7 @@ class QuotaWhenModifyingTest extends TestBase
      */
     public $schedule;
 
-    /**
-     * @var IReservationViewRepository
-     */
-    public $reservationViewRepository;
+    public IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationViewRepository;
 
     /**
      * @var FakeUser

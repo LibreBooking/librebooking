@@ -18,25 +18,16 @@ class ReservationMovePresenterTest extends TestBase
      */
     private $page;
 
-    /**
-     * @var IUpdateReservationPersistenceService
-     */
-    private $persistenceService;
+    private IUpdateReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
     /**
      * @var ReservationMovePresenter
      */
     private $presenter;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     public function setUp(): void
     {

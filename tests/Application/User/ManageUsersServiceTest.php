@@ -9,25 +9,16 @@ class ManageUsersServiceTest extends TestBase
      */
     private $service;
 
-    /**
-     * @var IRegistration
-     */
-    private $registration;
+    private IRegistration&\PHPUnit\Framework\MockObject\MockObject $registration;
 
     /**
      * @var FakeUserRepository
      */
     private $userRepo;
 
-    /**
-     * @var IGroupRepository
-     */
-    private $groupRepo;
+    private IGroupRepository&\PHPUnit\Framework\MockObject\MockObject $groupRepo;
 
-    /**
-     * @var IUserViewRepository
-     */
-    private $userViewRepo;
+    private IUserViewRepository&\PHPUnit\Framework\MockObject\MockObject $userViewRepo;
 
     /**
      * @var FakePasswordEncryption

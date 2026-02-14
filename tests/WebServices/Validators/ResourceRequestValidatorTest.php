@@ -9,10 +9,7 @@ class ResourceRequestValidatorTest extends TestBase
      */
     private $validator;
 
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
     public function setUp(): void
     {

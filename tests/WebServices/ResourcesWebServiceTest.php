@@ -9,20 +9,11 @@ class ResourcesWebServiceTest extends TestBase
      */
     private $server;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $repository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    /**
-     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $reservationRepository;
+    private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationRepository;
 
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
     /**
      * @var ResourcesWebService
@@ -227,7 +218,7 @@ class ResourcesWebServiceTest extends TestBase
                                     )
                                     ->willReturn($reservations);
 
-        $this->service->GetAvailability($resourceId1);
+        $this->service->GetAvailability();
     }
 
     public function testGetsSingleResourceAvailabilityForARequestTime()
@@ -262,6 +253,6 @@ class ResourcesWebServiceTest extends TestBase
                                     )
                                     ->willReturn($reservations);
 
-        $this->service->GetAvailability($resourceId1);
+        $this->service->GetAvailability();
     }
 }

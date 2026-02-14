@@ -14,15 +14,9 @@ class ResourceSaveControllerTest extends TestBase
      */
     private $session;
 
-    /**
-     * @var IResourceRepository
-     */
-    private $repository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    /**
-     * @var IResourceRequestValidator
-     */
-    private $validator;
+    private IResourceRequestValidator&\PHPUnit\Framework\MockObject\MockObject $validator;
 
     public function setUp(): void
     {

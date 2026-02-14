@@ -20,11 +20,13 @@ class FakeMailer extends PHPMailer
     public function AddAddress($address, $name = '')
     {
         $this->addresses[] = $address;
+        return true;
     }
 
     public function Send()
     {
         $this->sendWasCalled = true;
+        return true;
     }
 
     public function IsHTML($bool = true)

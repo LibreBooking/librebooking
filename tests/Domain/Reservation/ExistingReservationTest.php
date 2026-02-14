@@ -1153,7 +1153,7 @@ class ExistingReservationTest extends TestBase
             }
 
             if (is_a($e, 'InstanceUpdatedEvent')) {
-                /** @var InstanceAddedEvent $e */
+                /** @var InstanceUpdatedEvent $e */
                 $updatedReferenceNumbers[] = $e->Instance()->ReferenceNumber();
             }
         }

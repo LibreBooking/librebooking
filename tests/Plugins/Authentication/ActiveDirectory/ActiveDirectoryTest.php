@@ -319,6 +319,7 @@ class TestAdLdapEntry
 {
     public $sn;
     public $givenname;
+    public $fooName;
     public $mail;
     public $telephonenumber;
     public $physicaldeliveryofficename;

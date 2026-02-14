@@ -97,6 +97,7 @@ class ScheduleRepositoryTest extends TestBase
                       ->method('CreateLayout')
                       ->willReturn($expectedLayout);
 
+        /** @var ScheduleLayout $layout */
         $layout = $this->scheduleRepository->GetLayout($scheduleId, $layoutFactory);
 
         $this->assertEquals(new GetLayoutCommand($scheduleId), $this->db->_Commands[0]);
@@ -223,6 +224,7 @@ class ScheduleRepositoryTest extends TestBase
         $this->db->SetRow(1, [$peakTimeRows]);
 
         $layout = $this->scheduleRepository->GetLayout($scheduleId, $layoutFactory);
+        $this->assertInstanceOf(ScheduleLayout::class, $layout);
 
         $peakTimes = $layout->GetPeakTimes();
 

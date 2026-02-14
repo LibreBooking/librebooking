@@ -9,15 +9,9 @@ class UpcomingReservationsPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IUpcomingReservationsControl
-     */
-    private $control;
+    private IUpcomingReservationsControl&\PHPUnit\Framework\MockObject\MockObject $control;
 
-    /**
-     * @var IReservationViewRepository
-     */
-    private $repository;
+    private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
     public function setUp(): void
     {

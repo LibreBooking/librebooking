@@ -5,45 +5,27 @@ require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
 
 class CalendarPresenterTest extends TestBase
 {
-    /**
-     * @var ICommonCalendarPage|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $page;
+    private ICommonCalendarPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
     /**
      * @var CalendarPresenter
      */
     private $presenter;
 
-    /**
-     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $repository;
+    private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    /**
-     * @var ICalendarFactory|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $calendarFactory;
+    private ICalendarFactory&\PHPUnit\Framework\MockObject\MockObject $calendarFactory;
 
-    /**
-     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
     /**
      * @var FakeUserRepository
      */
     private $userRepository;
 
-    /**
-     * @var IResourceService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceService;
+    private IResourceService&\PHPUnit\Framework\MockObject\MockObject $resourceService;
 
-    /**
-     * @var ICalendarSubscriptionService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $subscriptionService;
+    private ICalendarSubscriptionService&\PHPUnit\Framework\MockObject\MockObject $subscriptionService;
 
     /**
      * @var FakePrivacyFilter
@@ -151,7 +133,7 @@ class CalendarPresenterTest extends TestBase
         $calendarFilters = new CalendarFilters($schedules, $resources, $defaultScheduleId, null, new ResourceGroupTree());
         $this->page->expects($this->atLeastOnce())->method('BindFilters')->with($this->equalTo($calendarFilters));
 
-        $this->presenter->PageLoad($this->fakeUser, $userTimezone);
+        $this->presenter->PageLoad($this->fakeUser);
     }
 
     public function testSkipsReservationsForUnknownResources()

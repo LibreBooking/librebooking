@@ -18,20 +18,11 @@ class ReservationUpdatePresenterTest extends TestBase
      */
     private $page;
 
-    /**
-     * @var IUpdateReservationPersistenceService
-     */
-    private $persistenceService;
+    private IUpdateReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
-    /**
-     * @var IResourceRepository
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     /**
      * @var FakeScheduleRepository

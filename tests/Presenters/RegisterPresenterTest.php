@@ -27,20 +27,12 @@ class RegisterPresenterTest extends TestBase
      */
     private $fakeAuth;
 
-    /**
-     * @var ICaptchaService
-     */
-    private $captcha;
+    private ICaptchaService&\PHPUnit\Framework\MockObject\MockObject $captcha;
 
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var ITermsOfServiceRepository
-     */
-    private $termsOfServiceRepository;
+    // Intentionally concrete fake in setUp(), not a PHPUnit mock.
+    private ITermsOfServiceRepository $termsOfServiceRepository;
 
     private $login = 'testlogin';
     private $email = 'test@test.com';

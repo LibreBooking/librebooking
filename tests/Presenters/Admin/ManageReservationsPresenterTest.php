@@ -9,40 +9,19 @@ class ManageReservationsPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IManageReservationsPage|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $page;
+    private IManageReservationsPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
-    /**
-     * @var IManageReservationsService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $reservationsService;
+    private IManageReservationsService&\PHPUnit\Framework\MockObject\MockObject $reservationsService;
 
-    /**
-     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
-    /**
-     * @var ITermsOfServiceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $termsOfServiceRepository;
+    private ITermsOfServiceRepository&\PHPUnit\Framework\MockObject\MockObject $termsOfServiceRepository;
 
     public function setUp(): void
     {
@@ -87,7 +66,7 @@ class ManageReservationsPresenterTest extends TestBase
         $searchedResourceStatusReasonId = 4292;
         /** @var TestCustomAttribute[] $customAttributes */
         $customAttributes = [new TestCustomAttribute(1, 'something')];
-        /** @var Attribute[] $attributes */
+        /** @var LBAttribute[] $attributes */
         $attributes = [new LBAttribute($customAttributes[0], 'value')];
 
         $this->resourceRepository->expects($this->once())

@@ -309,7 +309,7 @@ class ScheduleReservationListTest extends TestBase
         $this->assertEquals($slot9, $slots[8]);
         $this->assertEquals($slot10, $slots[9]);
         $this->assertEquals($slot11, $slots[10]);
-        $this->assertEquals($slot12, $slots[11], $slot12 . ' ' . $slots[11]);
+        $this->assertEquals($slot12, $slots[11]);
     }
 
     public function testReservationStartingBeforeLayoutPeriodAndEndingAfterLayoutPeriodIsCreatedProperly()

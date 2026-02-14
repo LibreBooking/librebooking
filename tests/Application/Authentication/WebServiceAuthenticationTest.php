@@ -17,10 +17,7 @@ class WebServiceAuthenticationTest extends TestBase
     private $username = 'LoGInName';
     private $password = 'password';
 
-    /**
-     * @var IUserSessionRepository
-     */
-    private $userSessionRepository;
+    private IUserSessionRepository&\PHPUnit\Framework\MockObject\MockObject $userSessionRepository;
 
     public function setUp(): void
     {

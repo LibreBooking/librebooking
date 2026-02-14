@@ -13,23 +13,14 @@ class GuestReservationPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IReservationInitializerFactory
-     */
-    private $factory;
+    private IReservationInitializerFactory&\PHPUnit\Framework\MockObject\MockObject $factory;
 
-    /**
-     * @var INewReservationPreconditionService
-     */
-    private $preconditionService;
+    private INewReservationPreconditionService&\PHPUnit\Framework\MockObject\MockObject $preconditionService;
     /**
      * @var FakeRegistration
      */
     private $registration;
-    /**
-     * @var IReservationInitializer
-     */
-    private $initializer;
+    private IReservationInitializer&\PHPUnit\Framework\MockObject\MockObject $initializer;
     /**
      * @var FakeWebAuthentication
      */

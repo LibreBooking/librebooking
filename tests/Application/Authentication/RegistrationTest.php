@@ -14,10 +14,7 @@ class RegistrationTest extends TestBase
      */
     private $fakeEncryption;
 
-    /**
-     * @var IUserRepository
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     /**
      * @var FakeGroupViewRepository

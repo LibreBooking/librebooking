@@ -56,6 +56,7 @@ class PasswordMigrationTest extends TestBase
 
         $migration = new PasswordMigration();
         $password = $migration->Create($this->plaintext, $oldpassword, $newpassword);
+        $this->assertInstanceOf(Password::class, $password);
         $password->Encryption = $fakeEncryption;
 
         $isValid = $password->Validate('');
