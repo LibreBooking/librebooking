@@ -46,7 +46,7 @@ class ServiceLocator
     }
 
     /**
-     * @return Server
+     * @return IRestServer|null
      */
     public static function GetApiServer(): IRestServer|null
     {

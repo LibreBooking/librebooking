@@ -120,6 +120,8 @@ interface IReservedItemView
      * @return int
      */
     public function GetScheduleId();
+
+    public function IsUserParticipating(int $userId): bool;
 }
 
 class ReservationItemView implements IReservedItemView
@@ -785,7 +787,7 @@ class ReservationItemView implements IReservedItemView
      * @param $userId int
      * @return bool
      */
-    public function IsUserParticipating($userId)
+    public function IsUserParticipating(int $userId): bool
     {
         return in_array($userId, $this->ParticipantIds);
     }

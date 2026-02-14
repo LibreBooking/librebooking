@@ -1075,10 +1075,7 @@ class FakeSchedulePage implements ISchedulePage
     {
     }
 
-    /**
-     * @return int
-     */
-    public function GetGroupId()
+    public function GetGroupId(): int|null
     {
         return null;
     }

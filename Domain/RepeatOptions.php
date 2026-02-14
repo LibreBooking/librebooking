@@ -301,6 +301,10 @@ class RepeatWeekly extends RepeatOptionsAbstract
 
     public function HasSameConfigurationAs(IRepeatOptions $repeatOptions)
     {
+        if (!$repeatOptions instanceof self) {
+            return false;
+        }
+
         return parent::HasSameConfigurationAs($repeatOptions) && $this->_daysOfWeek == $repeatOptions->_daysOfWeek;
     }
 }

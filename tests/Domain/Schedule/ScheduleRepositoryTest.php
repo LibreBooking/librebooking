@@ -238,6 +238,37 @@ class ScheduleRepositoryTest extends TestBase
         $this->assertEquals(10, $peakTimes->GetEndDay());
     }
 
+    public function testGetLayoutReturnsEmptyLayoutWhenNoRows()
+    {
+        $timezone = 'America/New_York';
+        $scheduleId = 109;
+
+        $this->db->SetRow(0, []);
+        $this->db->SetRow(1, []);
+
+        $layoutFactory = $this->createMock('ILayoutFactory');
+        $expectedLayout = new ScheduleLayout($timezone);
+
+        $layoutFactory->expects($this->once())
+                      ->method('CreateLayout')
+                      ->willReturn($expectedLayout);
+
+        $layoutFactory->expects($this->never())
+                      ->method('CreateCustomLayout');
+
+        $layout = $this->scheduleRepository->GetLayout($scheduleId, $layoutFactory);
+
+        $this->assertSame($expectedLayout, $layout);
+        $this->assertEquals(new GetLayoutCommand($scheduleId), $this->db->_Commands[0]);
+        $this->assertEquals(new GetPeakTimesCommand($scheduleId), $this->db->_Commands[1]);
+        $this->assertTrue($this->db->GetReader(0)->_FreeCalled);
+        $this->assertTrue($this->db->GetReader(1)->_FreeCalled);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No periods defined for date');
+        $layout->GetLayout(Date::Parse('2010-01-01', $timezone));
+    }
+
     public function testCanGetScheduleById()
     {
         $id = 10;

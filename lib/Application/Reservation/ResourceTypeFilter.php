@@ -25,6 +25,10 @@ class ResourceTypeFilter implements IResourceFilter
      */
     public function ShouldInclude($assignment)
     {
+        if (!$assignment instanceof IBookableResource) {
+            return false;
+        }
+
         return in_array($assignment->GetResourceTypeId(), $this->resourcetypeids);
     }
 }

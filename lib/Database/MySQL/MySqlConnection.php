@@ -87,6 +87,12 @@ class MySqlConnection implements IDbConnection
 
     public function LimitQuery(ISqlCommand $command, $limit, $offset = 0)
     {
+        if (!$command instanceof SqlCommand) {
+            throw new InvalidArgumentException(
+                sprintf('MySqlConnection::LimitQuery requires %s, got %s', SqlCommand::class, get_debug_type($command))
+            );
+        }
+
         return $this->Query(new MySqlLimitCommand($command, $limit, $offset));
     }
 
@@ -132,21 +138,20 @@ class MySqlConnection implements IDbConnection
 class MySqlLimitCommand extends SqlCommand
 {
     /**
-     * @var \ISqlCommand
+     * @var SqlCommand
      */
     private $baseCommand;
 
     private $limit;
     private $offset;
 
-    public function __construct(ISqlCommand $baseCommand, $limit, $offset)
+    public function __construct(SqlCommand $baseCommand, $limit, $offset)
     {
         parent::__construct();
 
         $this->baseCommand = $baseCommand;
         $this->limit = $limit;
         $this->offset = $offset;
-
         $this->Parameters = $baseCommand->Parameters;
     }
 

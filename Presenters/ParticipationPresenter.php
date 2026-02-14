@@ -80,13 +80,15 @@ class ParticipationPresenter
 
         $series = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
 
+        /** @var IReservationValidationRule[] $rules */
+        $rules = [];
+
         if ($invitationAction == InvitationAction::Join || $invitationAction == InvitationAction::CancelInstance) {
             $rules = [new ReservationStartTimeRule(new ScheduleRepository()), new ResourceMinimumNoticeCurrentInstanceRuleUpdate($user), new ResourceMaximumNoticeCurrentInstanceRule($user)];
         } else {
             $rules = [new ReservationStartTimeRule(new ScheduleRepository()), new ResourceMinimumNoticeRuleAdd($user), new ResourceMaximumNoticeRule($user)];
         }
 
-        /** @var IReservationValidationRule $rule */
         foreach ($rules as $rule) {
             $ruleResult = $rule->Validate($series, null);
 

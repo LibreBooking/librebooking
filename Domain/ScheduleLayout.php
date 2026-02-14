@@ -979,9 +979,9 @@ class LayoutPeriod
     public $End;
 
     /**
-     * @var PeriodTypes
+     * @var int
      */
-    public $PeriodType;
+    public int $PeriodType;
 
     /**
      * @var string

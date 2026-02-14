@@ -20,7 +20,10 @@ class ReservationService implements IReservationService
 
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null)
     {
-        $filterResourcesInCode = $resourceIds != null && is_array($resourceIds) && count($resourceIds) > 100;
+        $filterResourcesInCode = false;
+        if (is_array($resourceIds)) {
+            $filterResourcesInCode = count($resourceIds) > 100;
+        }
         $resourceKeys = [];
         if ($filterResourcesInCode) {
             $resourceKeys = array_combine($resourceIds, $resourceIds);
@@ -44,9 +47,7 @@ class ReservationService implements IReservationService
         );
 
         foreach ($reservations as $reservation) {
-            if ($filterResourcesInCode && array_key_exists($reservation->ResourceId, $resourceKeys)) {
-                $reservationListing->Add($reservation);
-            } else {
+            if (!$filterResourcesInCode || array_key_exists($reservation->ResourceId, $resourceKeys)) {
                 $reservationListing->Add($reservation);
             }
         }
@@ -85,7 +86,7 @@ interface IReservationService
      * @param DateRange $dateRangeUtc range of dates to search against in UTC
      * @param int $scheduleId
      * @param string $targetTimezone timezone to convert the results to
-     * @param null|int $resourceIds
+     * @param null|int[] $resourceIds
      * @return IReservationListing
      */
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null);

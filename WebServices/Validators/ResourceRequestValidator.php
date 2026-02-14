@@ -56,6 +56,8 @@ class ResourceRequestValidator implements IResourceRequestValidator
         }
         $errors = [];
 
+        /** @var IValidator[] $validators */
+        $validators = [];
         $validators[] = new RequestRequiredValueValidator($request->name, 'name');
         $validators[] = new RequestRequiredValueValidator($request->scheduleId, 'scheduleId');
         $validators[] = new TimeIntervalValidator($request->minLength, 'minLength');
@@ -70,7 +72,6 @@ class ResourceRequestValidator implements IResourceRequestValidator
         $validators[] = new AttributeValidator($this->attributeService, CustomAttributeCategory::RESOURCE, $attributes);
 
 
-        /** @var IValidator $validator */
         foreach ($validators as $validator) {
             $validator->Validate();
             if (!$validator->IsValid()) {

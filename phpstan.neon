@@ -1,5 +1,3 @@
-includes:
-    - phpstan-baseline.neon
 parameters:
     level: 2
     errorFormat: prettyJson
@@ -18,7 +16,6 @@ parameters:
         - phing-tasks
         # Keep `plugins` in paths so PHPStan can scan symbols used via dynamic plugin loading.
         - plugins
-        - tests
     excludePaths:
         analyse:
             - Web/css/

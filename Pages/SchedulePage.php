@@ -120,6 +120,8 @@ interface ISchedulePage extends IActionPage
      */
     public function GetParticipantId();
 
+    public function GetGroupId(): int|null;
+
     /**
      * @return string
      */
@@ -659,6 +661,16 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function GetParticipantId()
     {
         $id = $this->GetQuerystring(FormKeys::PARTICIPANT_ID);
+        if (empty($id)) {
+            return null;
+        }
+
+        return intval($id);
+    }
+
+    public function GetGroupId(): int|null
+    {
+        $id = $this->GetQuerystring(QueryStringKeys::GROUP_ID);
         if (empty($id)) {
             return null;
         }

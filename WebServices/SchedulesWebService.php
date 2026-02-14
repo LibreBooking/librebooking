@@ -317,7 +317,7 @@ class ScheduleWebServiceView implements ISchedulePage
         // no op
     }
 
-    public function GetGroupId()
+    public function GetGroupId(): int|null
     {
         return null;
     }

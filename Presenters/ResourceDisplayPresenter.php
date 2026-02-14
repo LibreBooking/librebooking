@@ -197,7 +197,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
         $reservationList = $reservations->OnDateForResource($reservationDate, $resource->GetId());
 
-        /** @var ReservationListItem $next */
+        /** @var ReservationListItem|null $next */
         $next = null;
 
         /** @var ReservationListItem[] $upcoming */

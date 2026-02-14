@@ -12,6 +12,11 @@ class ReservationListItem
         $this->item = $reservedItem;
     }
 
+    public function ReservedItem(): IReservedItemView
+    {
+        return $this->item;
+    }
+
     /**
      * @return Date
      */
@@ -311,6 +316,8 @@ class BufferItem extends ReservationListItem
      */
     private $location;
 
+    private ReservationListItem $reservationItem;
+
     /**
      * @var Date
      */
@@ -323,22 +330,22 @@ class BufferItem extends ReservationListItem
 
     public function __construct(ReservationListItem $item, $location)
     {
-        parent::__construct($item->item);
-        $this->item = $item;
+        parent::__construct($item->ReservedItem());
+        $this->reservationItem = $item;
         $this->location = $location;
 
         if ($this->IsBefore()) {
-            $this->startDate = $this->item->StartDate()->SubtractInterval($this->item->BufferTime());
-            $this->endDate = $this->item->StartDate();
+            $this->startDate = $this->reservationItem->StartDate()->SubtractInterval($this->reservationItem->BufferTime());
+            $this->endDate = $this->reservationItem->StartDate();
         } else {
-            $this->startDate = $this->item->EndDate();
-            $this->endDate = $this->item->EndDate()->AddInterval($this->item->BufferTime());
+            $this->startDate = $this->reservationItem->EndDate();
+            $this->endDate = $this->reservationItem->EndDate()->AddInterval($this->reservationItem->BufferTime());
         }
     }
 
     public function BuildSlot(SchedulePeriod $start, SchedulePeriod $end, Date $displayDate, $span)
     {
-        return new BufferSlot($start, $end, $displayDate, $span, $this->item->item);
+        return new BufferSlot($start, $end, $displayDate, $span, $this->reservationItem->ReservedItem());
     }
 
     /**
@@ -364,7 +371,7 @@ class BufferItem extends ReservationListItem
 
     public function OccursOn(Date $date)
     {
-        return $this->item->OccursOn($date);
+        return $this->reservationItem->OccursOn($date);
     }
 
     public function Id()
