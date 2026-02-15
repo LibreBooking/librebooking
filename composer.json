@@ -9,7 +9,8 @@
         "phpcompatibility/php-compatibility": "^9.3.5",
         "phpunit/phpunit": "^11.3",
         "phpstan/phpstan": "^2.1",
-        "phpstan/phpstan-phpunit": "^2.0"
+        "phpstan/phpstan-phpunit": "^2.0",
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require": {
         "php": ">=8.2",
@@ -48,7 +49,8 @@
             "@phpcsfixer:lint"
         ],
         "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
-        "preflight": "php lib/preflight.php"
+        "preflight": "php lib/preflight.php",
+        "test:integration": "./vendor/bin/phpunit --testsuite integration --testdox"
     },
     "config": {
         "allow-plugins": {
