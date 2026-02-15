@@ -8,7 +8,7 @@ require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
 class PastReservations extends DashboardItem implements IPastReservationsControl
 {
     /**
-     * @var PastReservationsPresenter
+     * @var PastReservationsPresenter|MissingCheckInOutReservationsPresenter
      */
     protected $presenter;
 
@@ -106,8 +106,8 @@ class AllPastReservations extends PastReservations
 class MissingCheckInOutReservations extends PastReservations implements IRemainingPastReservationsControl
 {
     /**
-         * @var MissingCheckInOutReservationsPresenter
-         */
+     * @var MissingCheckInOutReservationsPresenter
+     */
     protected $presenter;
 
     public function __construct(SmartyPage $smarty)

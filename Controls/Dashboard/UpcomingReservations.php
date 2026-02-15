@@ -9,7 +9,7 @@ require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
 class UpcomingReservations extends DashboardItem implements IUpcomingReservationsControl
 {
     /**
-     * @var UpcomingReservationsPresenter
+     * @var UpcomingReservationsPresenter|GroupUpcomingReservationsPresenter|PendingApprovalReservationsPresenter
      */
     protected $presenter;
 
