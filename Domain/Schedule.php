@@ -47,7 +47,7 @@ interface ISchedule
     /**
      * @return int
      */
-    public function GetDefaultStyle();
+    public function GetDefaultStyle(): int;
 }
 
 class Schedule implements ISchedule
@@ -64,7 +64,7 @@ class Schedule implements ISchedule
     protected $_adminGroupId;
     protected $_availabilityBegin;
     protected $_availabilityEnd;
-    protected $_defaultStyle;
+    protected ScheduleStyle $_defaultStyle;
     protected $_layoutType;
     protected $_totalConcurrentReservations = 0;
     protected $_maxResourcesPerReservation = 0;
@@ -272,20 +272,20 @@ class Schedule implements ISchedule
         return $this->GetAvailabilityBegin()->ToString() != '' && $this->GetAvailabilityEnd()->ToString() != '';
     }
 
-    /**
-     * @return int|ScheduleStyle
-     */
-    public function GetDefaultStyle()
+    public function GetDefaultStyle(): int
     {
-        return $this->_defaultStyle;
+        return $this->_defaultStyle->value;
     }
 
-    /**
-     * @param $defaultDisplay int|ScheduleStyle
-     */
-    public function SetDefaultStyle($defaultDisplay)
+    public function SetDefaultStyle(int|ScheduleStyle $defaultDisplay): void
     {
-        $this->_defaultStyle = $defaultDisplay;
+        if ($defaultDisplay instanceof ScheduleStyle) {
+            $this->_defaultStyle = $defaultDisplay;
+            return;
+        }
+
+        $styleValue = is_numeric($defaultDisplay) ? intval($defaultDisplay) : ScheduleStyle::Standard->value;
+        $this->_defaultStyle = ScheduleStyle::tryFrom($styleValue) ?? ScheduleStyle::Standard;
     }
 
     /**
@@ -434,10 +434,10 @@ class NullSchedule extends Schedule
 }
 
 
-class ScheduleStyle
+enum ScheduleStyle: int
 {
-    public const Standard = 0;
-    public const Wide = 1;
-    public const Tall = 2;
-    public const CondensedWeek = 3;
+    case Standard = 0;
+    case Wide = 1;
+    case Tall = 2;
+    case CondensedWeek = 3;
 }

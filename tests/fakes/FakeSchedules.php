@@ -141,7 +141,7 @@ class FakeScheduleRepository implements IScheduleRepository
             ColumnNames::SCHEDULE_ADMIN_GROUP_ID => $adminId,
             ColumnNames::SCHEDULE_AVAILABLE_START_DATE => $availableStart,
             ColumnNames::SCHEDULE_AVAILABLE_END_DATE => $availableEnd,
-            ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard,
+            ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard->value,
             ColumnNames::LAYOUT_TYPE => ScheduleLayout::Standard,
             ColumnNames::TOTAL_CONCURRENT_RESERVATIONS => $totalConcurrentReservations,
             ColumnNames::MAX_RESOURCES_PER_RESERVATION => $maxResourcesPerReservation,

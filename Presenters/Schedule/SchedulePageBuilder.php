@@ -103,7 +103,8 @@ class SchedulePageBuilder implements ISchedulePageBuilder
         $page->SetScheduleName($currentSchedule->GetName());
         $page->SetFirstWeekday($currentSchedule->GetWeekdayStart());
         $style = $page->GetScheduleStyle($scheduleId);
-        $page->SetScheduleStyle($style == '' ? $currentSchedule->GetDefaultStyle() : $style);
+        $defaultStyle = ScheduleStyle::tryFrom(intval($currentSchedule->GetDefaultStyle())) ?? ScheduleStyle::Standard;
+        $page->SetScheduleStyle($style ?? $defaultStyle);
         if ($currentSchedule->GetIsCalendarSubscriptionAllowed()) {
             $page->SetSubscriptionUrl(new CalendarSubscriptionUrl(null, $currentSchedule->GetPublicId(), null));
         }

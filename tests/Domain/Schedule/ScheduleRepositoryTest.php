@@ -342,7 +342,7 @@ class ScheduleRepositoryTest extends TestBase
         $begin = Date::Now();
         $end = Date::Now()->AddDays(1);
         $allowConcurrent = true;
-        $style = ScheduleStyle::CondensedWeek;
+        $style = ScheduleStyle::CondensedWeek->value;
         $maxConcurrent = 10;
         $maxResources = 50;
 

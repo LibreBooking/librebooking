@@ -1061,17 +1061,17 @@ class FakeSchedulePage implements ISchedulePage
 
     /**
      * @param int $scheduleId
-     * @return string|ScheduleStyle
+     * @return ScheduleStyle|null
      */
-    public function GetScheduleStyle($scheduleId)
+    public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle
     {
-        return '';
+        return null;
     }
 
     /**
-     * @param string|ScheduleStyle $direction
+     * @param ScheduleStyle $direction
      */
-    public function SetScheduleStyle($direction)
+    public function SetScheduleStyle(ScheduleStyle $direction): void
     {
     }
 
