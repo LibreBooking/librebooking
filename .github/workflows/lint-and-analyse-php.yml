@@ -144,7 +144,10 @@ jobs:
         uses: ramsey/composer-install@v3
 
       - name: Analyse files with PHPStan
-        run: composer phpstan -- --memory-limit 2G
+        run: composer phpstan -- --error-format=github --no-progress --memory-limit 2G
+
+      - name: Analyse files with PHPStan (next level)
+        run: composer phpstan_next -- --error-format=github --no-progress --memory-limit 2G
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
