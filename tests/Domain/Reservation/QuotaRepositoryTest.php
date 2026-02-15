@@ -20,8 +20,6 @@ class QuotaRepositoryTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->repository = null;
     }
 
     public function testCanGetQuotas()

@@ -24,7 +24,7 @@ class PasswordMigrationTest extends TestBase
 
     public function teardown(): void
     {
-        $this->_db = null;
+        parent::teardown();
     }
 
     public function testPasswordValidatesWithNewValidationAndDoesNotMigrate()

@@ -144,11 +144,8 @@ class TestBase extends TestCase
 
     public function teardown(): void
     {
-        $this->db = null;
-        $this->fakeServer = null;
         Configuration::SetInstance(null);
         PluginManager::SetInstance(null);
-        $this->fakeResources = null;
         Date::_ResetNow();
     }
 

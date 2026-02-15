@@ -224,7 +224,7 @@ class ReservationViewRepositoryTest extends TestBase
         $expectedView->StartDate = $startDate;
         $expectedView->Title = $title;
         $expectedView->RepeatType = $repeatType;
-        $expectedView->RepeatInterval = '5';
+        $expectedView->RepeatInterval = 5;
         $expectedView->SeriesId = $seriesId;
         $expectedView->OwnerFirstName = $ownerFirst;
         $expectedView->OwnerLastName = $ownerLast;

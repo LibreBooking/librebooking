@@ -19,8 +19,6 @@ class ScheduleRepositoryTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->scheduleRepository = null;
     }
 
     public function testCanGetAllSchedules()

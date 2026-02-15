@@ -77,7 +77,7 @@ class AttributeSaveControllerTest extends TestBase
         $request->required = true;
         $request->possibleValues = '1,2,3';
         $request->sortOrder = 9;
-        $request->appliesToIds = 100;
+        $request->appliesToIds = [100];
 
         $result = $this->controller->Update($attributeId, $request, $this->session);
 

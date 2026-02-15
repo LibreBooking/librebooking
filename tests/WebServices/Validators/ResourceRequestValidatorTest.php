@@ -21,9 +21,13 @@ class ResourceRequestValidatorTest extends TestBase
     public function testBasicRequiredFields()
     {
         $request = ResourceRequest::Example();
-        $request->customAttributes = null;
-        $request->name = null;
-        $request->scheduleId = '   ';
+        $request->customAttributes = [];
+        /** @var mixed $missingName */
+        $missingName = null;
+        /** @var mixed $missingScheduleId */
+        $missingScheduleId = '   ';
+        $request->name = $missingName;
+        $request->scheduleId = $missingScheduleId;
 
         $createErrors = $this->validator->ValidateCreateRequest($request);
         $updateErrors = $this->validator->ValidateUpdateRequest(1, $request);
@@ -35,7 +39,7 @@ class ResourceRequestValidatorTest extends TestBase
     public function testTimesAreCheckedWhenProvided()
     {
         $request = ResourceRequest::Example();
-        $request->customAttributes = null;
+        $request->customAttributes = [];
         $request->maxNotice = 'xyz';
 
         $createErrors = $this->validator->ValidateCreateRequest($request);
@@ -68,7 +72,6 @@ class ResourceRequestValidatorTest extends TestBase
     public function testUpdateAndDeleteRequireResourceId()
     {
         $request = ResourceRequest::Example();
-        $request->customAttributes = null;
 
         $deleteErrors = $this->validator->ValidateDeleteRequest(null);
         $updateErrors = $this->validator->ValidateUpdateRequest('', $request);

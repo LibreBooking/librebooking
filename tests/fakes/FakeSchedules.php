@@ -23,7 +23,7 @@ class FakeScheduleRepository implements IScheduleRepository
     public $_Schedule;
 
     /**
-     * @var ScheduleLayout|null
+     * @var IScheduleLayout|null
      */
     public $_Layout;
 

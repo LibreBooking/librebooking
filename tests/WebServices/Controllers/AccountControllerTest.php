@@ -147,6 +147,7 @@ class AccountControllerTest extends TestBase
 
         $result = $this->controller->UpdatePassword($request, $this->session);
 
+        /** @var FakeUser $user */
         $user = $this->userRepository->_UpdatedUser;
 
         $this->assertTrue($result->WasSuccessful());

@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
+require_once(ROOT_DIR . 'lib/external/Slim/Route.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
 
 class TestSlimCall
@@ -18,22 +19,16 @@ class TestSlimCall
 
     public function name()
     {
-        return $this->response->name;
-    }
-}
-
-class TestSlimResponse
-{
-    public $name;
-
-    public function name($name)
-    {
-        $this->name = $name;
+        return $this->response->getName();
     }
 }
 
 class TestSlim extends Slim\Slim
 {
+    public function __construct()
+    {
+    }
+
     /**
      * @var array|TestSlimCall[]
      */
@@ -46,60 +41,35 @@ class TestSlim extends Slim\Slim
      * @var array|TestSlimCall[]
      */
     public $deletes = [];
-    /**
-     * @var TestSlimResponse
-     */
-    public $getResponse;
-
-    public function __construct()
-    {
-        $this->getResponse = new TestSlimResponse();
-    }
-
-    /**
-     * @param $route
-     * @param $callback
-     * @return TestSlimResponse
-     */
     public function get()
     {
         $args = func_get_args();
         $route = $args[0];
         $callback = $args[1];
 
-        $response = new TestSlimResponse();
+        $response = new Slim\Route($route, $callback);
         $this->gets[] = new TestSlimCall($route, $callback, $response);
         return $response;
     }
 
-    /**
-     * @param $route
-     * @param $callback
-     * @return TestSlimResponse
-     */
     public function post()
     {
         $args = func_get_args();
         $route = $args[0];
         $callback = $args[1];
 
-        $response = new TestSlimResponse();
+        $response = new Slim\Route($route, $callback);
         $this->posts[] = new TestSlimCall($route, $callback, $response);
         return $response;
     }
 
-    /**
-     * @param $route
-     * @param $callback
-     * @return TestSlimResponse
-     */
     public function delete()
     {
         $args = func_get_args();
         $route = $args[0];
         $callback = $args[1];
 
-        $response = new TestSlimResponse();
+        $response = new Slim\Route($route, $callback);
         $this->deletes[] = new TestSlimCall($route, $callback, $response);
         return $response;
     }

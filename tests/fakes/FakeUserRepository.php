@@ -3,15 +3,15 @@
 class FakeUserRepository implements IUserRepository
 {
     /**
-     * @var FakeUser
+     * @var User
      */
     public $_User;
     /**
-     * @var FakeUser
+     * @var User
      */
     public $_UpdatedUser;
     /**
-     * @var FakeUser
+     * @var User
      */
     public $_AddedUser;
 

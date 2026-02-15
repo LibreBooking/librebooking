@@ -21,8 +21,6 @@ class ReservationRepositoryTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->repository = null;
     }
 
     public function testAddReservationWithOneUserAndOneResource()

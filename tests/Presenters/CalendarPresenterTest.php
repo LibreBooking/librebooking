@@ -162,15 +162,15 @@ class CalendarPresenterTest extends TestBase
 
         $r1 = new TestReservationItemView(1, $start, $end, 1);
         $r1->SeriesId = 1;
-        $r1->ReferenceNumber = 1;
+        $r1->ReferenceNumber = '1';
 
         $r2 = new TestReservationItemView(2, $start, $end, 2);
         $r2->SeriesId = 1;
-        $r2->ReferenceNumber = 2;
+        $r2->ReferenceNumber = '2';
 
         $r3 = new TestReservationItemView(3, $start, $end, 1);
         $r3->SeriesId = 2;
-        $r3->ReferenceNumber = 2;
+        $r3->ReferenceNumber = '2';
 
         $reservations = [$r1, $r2, $r3];
         $blackouts = [];

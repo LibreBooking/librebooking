@@ -54,7 +54,6 @@ class RegistrationTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-        $this->registration = null;
     }
 
     public function testRegistersUserWhenNoManualActivationRequired()
@@ -371,7 +370,7 @@ class RegistrationTest extends TestBase
     public function testSyncsGroups()
     {
         $userRepository = new FakeUserRepository();
-        $userRepository->_Exists = false;
+        $userRepository->_Exists = null;
 
         $username = 'un';
         $email = 'e';

@@ -543,7 +543,7 @@ class ReservationComponentTest extends TestBase
         $participatingGuests = ['p1@email.com', 'p2@email.com'];
         $invitedGuests = ['i1@email.com', 'i2@email.com'];
         $accessories = [
-            new ReservationAccessory(1, 2)
+            new ReservationAccessoryView(1, 2, 'a1', 10)
         ];
 
         $attachments = [

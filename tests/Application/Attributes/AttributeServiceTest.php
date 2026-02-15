@@ -92,7 +92,7 @@ class AttributeServiceTest extends TestBase
         ];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, $entityId);
 
@@ -109,7 +109,7 @@ class AttributeServiceTest extends TestBase
         $values = [new AttributeValue(1, 'value1')];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, null, false, $isAdmin);
 
@@ -125,7 +125,7 @@ class AttributeServiceTest extends TestBase
         $values = [new AttributeValue(1, 'value1')];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, null, false, $isAdmin);
 

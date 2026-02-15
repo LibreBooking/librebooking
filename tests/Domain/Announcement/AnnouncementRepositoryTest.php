@@ -29,8 +29,6 @@ class AnnouncementRepositoryTest extends TestBase
         parent::teardown();
 
         Date::_ResetNow();
-
-        $this->repository = null;
     }
 
     public function testGetFutureCallDBCorrectly()
