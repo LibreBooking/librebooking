@@ -269,7 +269,7 @@ class Server
      */
     public function GetHeader($headerCode)
     {
-        return $_SERVER[$headerCode];
+        return $_SERVER[$headerCode] ?? '';
     }
 
     /**
