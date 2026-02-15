@@ -92,7 +92,7 @@ class FakeUserRepository implements IUserRepository
     public function Add(User $user)
     {
         $this->_AddedUser = $user;
-        return null;
+        return 1;
     }
 
     /**
@@ -151,8 +151,7 @@ class FakeUserRepository implements IUserRepository
      */
     public function GetResourceAdmins($resourceId)
     {
-        // TODO: Implement GetResourceAdmins() method.
-        return null;
+        return [];
     }
 
     /**
@@ -160,8 +159,7 @@ class FakeUserRepository implements IUserRepository
      */
     public function GetApplicationAdmins()
     {
-        // TODO: Implement GetApplicationAdmins() method.
-        return null;
+        return [];
     }
 
     /**
@@ -170,8 +168,7 @@ class FakeUserRepository implements IUserRepository
      */
     public function GetGroupAdmins($userId)
     {
-        // TODO: Implement GetGroupAdmins() method.
-        return null;
+        return [];
     }
 
     /**
@@ -181,8 +178,7 @@ class FakeUserRepository implements IUserRepository
      */
     public function LoadGroups($userId, $roleLevels = null)
     {
-        // TODO: Implement LoadGroups() method.
-        return null;
+        return [];
     }
 
     /**
@@ -200,7 +196,6 @@ class FakeUserRepository implements IUserRepository
      */
     public function GetCount()
     {
-        // TODO: Implement GetCount() method.
-        return null;
+        return 0;
     }
 }

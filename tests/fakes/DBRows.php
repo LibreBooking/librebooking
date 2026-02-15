@@ -4,7 +4,7 @@ class CustomAttributeValueRow
 {
     private $rows = [];
 
-    public function Rows()
+    public function Rows(): array
     {
         return $this->rows;
     }
@@ -303,7 +303,7 @@ class ReservationUserRow
      * @param array|int[] $participantIds
      * @return ReservationUserRow
      */
-    public function WithParticipants($instance, $participantIds)
+    public function WithParticipants(Reservation $instance, array $participantIds): ReservationUserRow
     {
         foreach ($participantIds as $id) {
             $this->AddRow($instance->ReferenceNumber(), $id, ReservationUserLevel::PARTICIPANT);
@@ -316,7 +316,7 @@ class ReservationUserRow
      * @param array|int[] $inviteeIds
      * @return ReservationUserRow
      */
-    public function WithInvitees($instance, $inviteeIds)
+    public function WithInvitees(Reservation $instance, array $inviteeIds): ReservationUserRow
     {
         foreach ($inviteeIds as $id) {
             $this->AddRow($instance->ReferenceNumber(), $id, ReservationUserLevel::INVITEE);
@@ -329,7 +329,7 @@ class ReservationGuestRow
 {
     private $rows = [];
 
-    public function Rows()
+    public function Rows(): array
     {
         return $this->rows;
     }
@@ -344,9 +344,9 @@ class ReservationGuestRow
     /**
      * @param Reservation $instance
      * @param array|string[] $participants
-     * @return ReservationUserRow
+     * @return ReservationGuestRow
      */
-    public function WithParticipants($instance, $participants)
+    public function WithParticipants(Reservation $instance, array $participants): ReservationGuestRow
     {
         foreach ($participants as $email) {
             $this->AddRow($instance->ReferenceNumber(), $email, ReservationUserLevel::PARTICIPANT);
@@ -356,13 +356,13 @@ class ReservationGuestRow
 
     /**
      * @param Reservation $instance
-     * @param array|int[] $invitees
-     * @return ReservationUserRow
+     * @param array|string[] $invitees
+     * @return ReservationGuestRow
      */
-    public function WithInvitees($instance, $invitees)
+    public function WithInvitees(Reservation $instance, array $invitees): ReservationGuestRow
     {
-        foreach ($invitees as $email) {
-            $this->AddRow($instance->ReferenceNumber(), $email, ReservationUserLevel::INVITEE);
+        foreach ($invitees as $inviteeEmail) {
+            $this->AddRow($instance->ReferenceNumber(), $inviteeEmail, ReservationUserLevel::INVITEE);
         }
         return $this;
     }

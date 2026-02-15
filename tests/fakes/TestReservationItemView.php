@@ -15,7 +15,7 @@ class TestReservationItemView extends ReservationItemView
     {
         parent::__construct();
 
-        $this->ReservationId = $id;
+        $this->ReservationId = (int)($id ?? 0);
         $this->StartDate = $startDate;
         $this->EndDate = $endDate;
         $this->ResourceId = $resourceId;

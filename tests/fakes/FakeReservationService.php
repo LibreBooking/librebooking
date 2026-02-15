@@ -34,7 +34,7 @@ class FakeReservationService implements IReservationService
      */
     public $_Reservation;
     /**
-     * @var ReservationListItem
+     * @var array|ReservationListItem[]
      */
     public $_ReservationsAndBlackouts = [];
 

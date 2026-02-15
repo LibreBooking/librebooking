@@ -46,7 +46,7 @@ class FakeAttributeService implements IAttributeService
      */
     public function GetByCategory($category)
     {
-        return $this->_ByCategory[$category];
+        return $this->_ByCategory[$category] ?? [];
     }
 
     /**
@@ -55,8 +55,7 @@ class FakeAttributeService implements IAttributeService
      */
     public function GetById($attributeId)
     {
-        // TODO: Implement GetById() method.
-        return null;
+        throw new LogicException('GetById() not implemented in FakeAttributeService');
     }
 
     /**

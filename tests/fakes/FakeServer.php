@@ -37,7 +37,7 @@ class FakeServer extends Server
 
     /**
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function GetCookie($name)
     {

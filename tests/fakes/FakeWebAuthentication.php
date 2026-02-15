@@ -39,8 +39,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AreCredentialsKnown()
     {
-        // TODO: Implement AreCredentialsKnown() method.
-        return null;
+        return false;
     }
 
     /**
@@ -57,8 +56,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowUsernamePrompt()
     {
-        // TODO: Implement ShowUsernamePrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -66,8 +64,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowPasswordPrompt()
     {
-        // TODO: Implement ShowPasswordPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -75,8 +72,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowPersistLoginPrompt()
     {
-        // TODO: Implement ShowPersistLoginPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -84,8 +80,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowForgotPasswordPrompt()
     {
-        // TODO: Implement ShowForgotPasswordPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -93,8 +88,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowUsernameChange()
     {
-        // TODO: Implement AllowUsernameChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -102,8 +96,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowEmailAddressChange()
     {
-        // TODO: Implement AllowEmailAddressChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -111,8 +104,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPasswordChange()
     {
-        // TODO: Implement AllowPasswordChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -120,8 +112,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowNameChange()
     {
-        // TODO: Implement AllowNameChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -129,8 +120,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPhoneChange()
     {
-        // TODO: Implement AllowPhoneChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -138,8 +128,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowOrganizationChange()
     {
-        // TODO: Implement AllowOrganizationChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -147,8 +136,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPositionChange()
     {
-        // TODO: Implement AllowPositionChange() method.
-        return null;
+        return false;
     }
 }
 

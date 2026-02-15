@@ -67,7 +67,7 @@ class FakeAnnouncementRepository implements IAnnouncementRepository
 
     public function GetAll($sortField = null, $sortDirection = null)
     {
-        return null;
+        return [];
     }
 
     /**
@@ -97,6 +97,6 @@ class FakeAnnouncementRepository implements IAnnouncementRepository
      */
     public function LoadById($announcementId)
     {
-        return null;
+        throw new LogicException('LoadById() not implemented in FakeAnnouncementRepository');
     }
 }

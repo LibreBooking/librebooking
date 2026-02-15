@@ -53,7 +53,7 @@ class FakeRestServer implements IRestServer
         if (isset($this->_ServiceUrls[$serviceName])) {
             return $this->_ServiceUrls[$serviceName];
         }
-        return null;
+        return '';
     }
 
     public function SetRequest($request)
@@ -68,8 +68,7 @@ class FakeRestServer implements IRestServer
 
     public function GetFullServiceUrl($serviceName, $params = [])
     {
-        // TODO: Implement GetFullServiceUrl() method.
-        return null;
+        return $this->GetServiceUrl($serviceName, $params);
     }
 
     public function GetHeader($headerName): ?string

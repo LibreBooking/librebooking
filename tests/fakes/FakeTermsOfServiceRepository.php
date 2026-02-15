@@ -16,8 +16,7 @@ class FakeTermsOfServiceRepository implements ITermsOfServiceRepository
 
     public function Add(TermsOfService $terms)
     {
-        // TODO: Implement Add() method.
-        return null;
+        return 1;
     }
 
     public function Load()

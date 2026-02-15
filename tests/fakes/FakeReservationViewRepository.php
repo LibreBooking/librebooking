@@ -53,12 +53,12 @@ class FakeReservationViewRepository implements IReservationViewRepository
 
     public function GetReservationsPendingApproval(Date $startDate, $userIds = ReservationViewRepository::ALL_USERS, $userLevel = ReservationUserLevel::OWNER, $scheduleIds = ReservationViewRepository::ALL_SCHEDULES, $resourceIds = ReservationViewRepository::ALL_RESOURCES, $consolidateByReferenceNumber = false, $participantIds = ReservationViewRepository::ALL_USERS)
     {
-        return null;
+        return [];
     }
 
     public function GetReservationsMissingCheckInCheckOut(?Date $startDate, Date $endDate, $userIds = ReservationViewRepository::ALL_USERS, $userLevel = ReservationUserLevel::OWNER, $scheduleIds = ReservationViewRepository::ALL_SCHEDULES, $resourceIds = ReservationViewRepository::ALL_RESOURCES, $consolidateByReferenceNumber = false, $participantIds = ReservationViewRepository::ALL_USERS)
     {
-        return null;
+        return [];
     }
 
     public function GetReservationForEditing($referenceNumber)
@@ -81,7 +81,8 @@ class FakeReservationViewRepository implements IReservationViewRepository
         $this->_LastRange = new DateRange($startDate, $endDate);
 
         if (!empty($this->_ReservationsIteration)) {
-            return $this->_ReservationsIteration[$this->_Iteration++];
+            $nextReservations = $this->_ReservationsIteration[$this->_Iteration++] ?? [];
+            return is_array($nextReservations) ? $nextReservations : [$nextReservations];
         }
 
         return $this->_Reservations;

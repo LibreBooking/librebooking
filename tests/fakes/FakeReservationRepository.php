@@ -206,8 +206,7 @@ class FakeReservationRepository implements IReservationRepository
      */
     public function LoadReservationAttachment($attachmentFileId)
     {
-        // TODO: Implement LoadReservationAttachment() method.
-        return null;
+        throw new LogicException('LoadReservationAttachment() not implemented in FakeReservationRepository');
     }
 
     /**
@@ -216,8 +215,7 @@ class FakeReservationRepository implements IReservationRepository
      */
     public function AddReservationAttachment(ReservationAttachment $attachmentFile)
     {
-        // TODO: Implement AddReservationAttachment() method.
-        return null;
+        return 1;
     }
 
     /**
@@ -225,8 +223,7 @@ class FakeReservationRepository implements IReservationRepository
      */
     public function GetReservationColorRules()
     {
-        // TODO: Implement GetReservationColorRules() method.
-        return null;
+        return [];
     }
 
     /**
@@ -235,8 +232,7 @@ class FakeReservationRepository implements IReservationRepository
      */
     public function GetReservationColorRule($ruleId)
     {
-        // TODO: Implement GetReservationColorRule() method.
-        return null;
+        throw new LogicException('GetReservationColorRule() not implemented in FakeReservationRepository');
     }
 
     /**
@@ -245,8 +241,7 @@ class FakeReservationRepository implements IReservationRepository
      */
     public function AddReservationColorRule(ReservationColorRule $colorRule)
     {
-        // TODO: Implement AddReservationColorRule() method.
-        return null;
+        return 1;
     }
 
     /**

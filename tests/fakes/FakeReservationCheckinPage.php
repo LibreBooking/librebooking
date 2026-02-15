@@ -6,6 +6,7 @@ class FakeReservationCheckinPage implements IReservationCheckinPage
 {
     public $_ReferenceNumber;
     public $_Action;
+    public $_RetryParameters = [];
 
     /**
      * @param bool $succeeded
@@ -52,7 +53,7 @@ class FakeReservationCheckinPage implements IReservationCheckinPage
      */
     public function SetRetryParameters($retryParameters)
     {
-        // TODO: Implement SetRetryParameters() method.
+        $this->_RetryParameters = $retryParameters;
     }
 
     /**
@@ -60,8 +61,7 @@ class FakeReservationCheckinPage implements IReservationCheckinPage
      */
     public function GetRetryParameters()
     {
-        // TODO: Implement GetRetryParameters() method.
-        return null;
+        return $this->_RetryParameters;
     }
 
     /**

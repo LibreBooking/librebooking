@@ -39,12 +39,11 @@ class FakeResourceService implements IResourceService
     }
 
     /**
-     * @return array|AccessoryDto[]
+     * @return array|Accessory[]
      */
-    public function GetAccessories()
+    public function GetAccessories(): array
     {
-        // TODO: Implement GetAccessories() method.
-        return null;
+        return [];
     }
 
     /**
@@ -54,35 +53,31 @@ class FakeResourceService implements IResourceService
      */
     public function GetResourceGroups($scheduleId, UserSession $user)
     {
-        // TODO: Implement GetResourceGroups() method.
-        return null;
+        throw new LogicException('GetResourceGroups() not implemented in FakeResourceService');
     }
 
     /**
      * @return ResourceType[]
      */
-    public function GetResourceTypes()
+    public function GetResourceTypes(): array
     {
-        // TODO: Implement GetResourceTypes() method.
-        return null;
+        return [];
     }
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
-    public function GetResourceAttributes()
+    public function GetResourceAttributes(): array
     {
-        // TODO: Implement GetResourceAttributes() method.
-        return null;
+        return [];
     }
 
     /**
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
-    public function GetResourceTypeAttributes()
+    public function GetResourceTypeAttributes(): array
     {
-        // TODO: Implement GetResourceTypeAttributes() method.
-        return null;
+        return [];
     }
 
     /**
@@ -91,7 +86,6 @@ class FakeResourceService implements IResourceService
      */
     public function GetResource($resourceId)
     {
-        // TODO: Implement GetResource() method.
-        return null;
+        throw new LogicException('GetResource() not implemented in FakeResourceService');
     }
 }

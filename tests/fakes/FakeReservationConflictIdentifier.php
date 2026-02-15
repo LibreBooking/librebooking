@@ -8,7 +8,7 @@ class FakeReservationConflictIdentifier implements IReservationConflictIdentifie
     public $_Conflicts = null;
 
     /**
-     * @var ReservationConflictResult
+     * @var array|ReservationConflictResult[]
      */
     public $_IndexedConflicts = [];
 

@@ -50,8 +50,7 @@ class FakeGroupViewRepository implements IGroupViewRepository
         $filter = null,
         $accountStatus = AccountStatus::ALL
     ) {
-        // TODO: Implement GetUsersInGroup() method.
-        return null;
+        return [];
     }
 
     /**
@@ -60,13 +59,11 @@ class FakeGroupViewRepository implements IGroupViewRepository
      */
     public function GetGroupsByRole($roleLevel)
     {
-        // TODO: Implement GetGroupsByRole() method.
-        return null;
+        return [];
     }
 
     public function GetPermissionList()
     {
-        // TODO: Implement GetPermissionList() method.
-        return null;
+        return [];
     }
 }

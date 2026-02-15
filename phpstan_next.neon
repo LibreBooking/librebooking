@@ -40,7 +40,6 @@ parameters:
             - Presenters/
             - WebServices/
             - lib/
-            - tests/fakes/
             - tests/Presenters/
     bootstrapFiles:
         - vendor/autoload.php

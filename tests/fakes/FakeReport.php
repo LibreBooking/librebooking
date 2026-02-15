@@ -58,9 +58,9 @@ class FakeReportColumns implements IReportColumns
     }
 
     /**
-     * @return string[]
+     * @return AttributeReportColumn[]
      */
-    public function GetCustomAttributes()
+    public function GetCustomAttributes(): array
     {
         return [];
     }

@@ -189,8 +189,7 @@ class FakeScheduleRepository implements IScheduleRepository
      */
     public function Add(Schedule $schedule, $copyLayoutFromScheduleId)
     {
-        // TODO: Implement Add() method.
-        return null;
+        return 1;
     }
 
     /**
@@ -213,8 +212,7 @@ class FakeScheduleRepository implements IScheduleRepository
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
-        // TODO: Implement GetList() method.
-        return null;
+        return [];
     }
 
     /**
@@ -248,8 +246,7 @@ class FakeScheduleRepository implements IScheduleRepository
      */
     public function GetCustomLayoutPeriodsInRange(Date $start, Date $end, $scheduleId)
     {
-        // TODO: Implement GetCustomLayoutPeriodsInRange() method.
-        return null;
+        return [];
     }
 
     /**

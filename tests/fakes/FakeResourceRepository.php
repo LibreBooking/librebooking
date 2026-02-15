@@ -34,7 +34,7 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetUserResourceList()
     {
-        return null;
+        return [];
     }
 
     public function GetUserResourceIdList(): array
@@ -44,7 +44,7 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
-        return null;
+        return [];
     }
 
     public function GetUserResourcePermissions($userId, $resourceIds = [])
@@ -88,8 +88,8 @@ class FakeResourceRepository implements IResourceRepository
 
     public function Add(BookableResource $resource)
     {
-        // TODO: Implement Add() method.
-        return null;
+        $this->_ResourceList[] = $resource;
+        return count($this->_ResourceList);
     }
 
     public function Update(BookableResource $resource)
@@ -109,20 +109,17 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
-        // TODO: Implement GetList() method.
-        return null;
+        return [];
     }
 
     public function GetAccessoryList($sortField = null, $sortDirection = null)
     {
-        // TODO: Implement GetAccessoryList() method.
-        return null;
+        return [];
     }
 
     public function GetResourceGroups($scheduleId = null, $resourceFilter = null)
     {
-        // TODO: Implement GetResourceGroups() method.
-        return null;
+        throw new LogicException('GetResourceGroups() not implemented in FakeResourceRepository');
     }
 
     public function AddResourceToGroup($resourceId, $groupId)
@@ -137,20 +134,17 @@ class FakeResourceRepository implements IResourceRepository
 
     public function AddResourceGroup(ResourceGroup $group)
     {
-        // TODO: Implement AddResourceGroup() method.
-        return null;
+        throw new LogicException('AddResourceGroup() not implemented in FakeResourceRepository');
     }
 
     public function LoadResourceGroup($groupId)
     {
-        // TODO: Implement LoadResourceGroup() method.
-        return null;
+        throw new LogicException('LoadResourceGroup() not implemented in FakeResourceRepository');
     }
 
     public function LoadResourceGroupByPublicId($publicResourceGroupId)
     {
-        // TODO: Implement LoadResourceGroupByPublicId() method.
-        return null;
+        throw new LogicException('LoadResourceGroupByPublicId() not implemented in FakeResourceRepository');
     }
 
     public function UpdateResourceGroup(ResourceGroup $group)
@@ -165,20 +159,17 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetResourceTypes()
     {
-        // TODO: Implement GetResourceTypes() method.
-        return null;
+        return [];
     }
 
     public function LoadResourceType($resourceTypeId)
     {
-        // TODO: Implement LoadResourceType() method.
-        return null;
+        throw new LogicException('LoadResourceType() not implemented in FakeResourceRepository');
     }
 
     public function AddResourceType(ResourceType $type)
     {
-        // TODO: Implement AddResourceType() method.
-        return null;
+        return 1;
     }
 
     public function UpdateResourceType(ResourceType $type)
@@ -193,14 +184,12 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetStatusReasons()
     {
-        // TODO: Implement GetStatusReasons() method.
-        return null;
+        return [];
     }
 
     public function AddStatusReason($statusId, $reasonDescription)
     {
-        // TODO: Implement AddStatusReason() method.
-        return null;
+        return 1;
     }
 
     public function UpdateStatusReason($reasonId, $reasonDescription)
@@ -220,20 +209,17 @@ class FakeResourceRepository implements IResourceRepository
         $filter = null,
         $accountStatus = AccountStatus::ACTIVE
     ) {
-        // TODO: Implement GetUsersWithPermission() method.
-        return null;
+        return [];
     }
 
     public function GetGroupsWithPermission($resourceId, $pageNumber = null, $pageSize = null, $filter = null)
     {
-        // TODO: Implement GetGroupsWithPermission() method.
-        return null;
+        return [];
     }
 
     public function GetUsersWithPermissionsIncludingGroups($resourceId, $pageNumber = null, $pageSize = null, $filter = null, $accountStatus = AccountStatus::ACTIVE)
     {
-        // TODO: Implement GetUsersWithPermissionsIncludingGroups() method.
-        return null;
+        return [];
     }
 
     public function ChangeResourceGroupPermission($resourceId, $groupId, $type)

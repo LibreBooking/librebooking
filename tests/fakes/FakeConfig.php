@@ -12,7 +12,7 @@ class FakeConfig extends Configuration implements IConfiguration
 
     public function __construct()
     {
-        $this->_configs[self::DEFAULT_CONFIG_ID] = new FakeConfigFile();
+        $this->SetFile(self::DEFAULT_CONFIG_ID, new FakeConfigFile());
     }
 
     public function SetFile($configId, $file)
@@ -22,7 +22,9 @@ class FakeConfig extends Configuration implements IConfiguration
 
     public function SetKey($configDef, $value)
     {
-        $this->File(self::DEFAULT_CONFIG_ID)->SetKey($configDef, $value);
+        /** @var FakeConfigFile $file */
+        $file = $this->_configs[self::DEFAULT_CONFIG_ID];
+        $file->SetKey($configDef, $value);
     }
 
     public function SetTimezone($timezone)
@@ -39,15 +41,6 @@ class FakeConfig extends Configuration implements IConfiguration
     {
     }
 
-    /**
-     * @param string $configId
-     * @return FakeConfigFile
-     */
-
-    public function File($configId)
-    {
-        return $this->_configs[$configId];
-    }
 }
 
 class FakeConfigFile extends ConfigurationFile implements IConfigurationFile

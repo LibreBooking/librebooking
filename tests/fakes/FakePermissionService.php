@@ -5,7 +5,7 @@ require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
 class FakePermissionService implements IPermissionService
 {
     /**
-     * @var array|IResource[]
+     * @var array|IPermissibleResource[]
      */
     public $Resources;
 

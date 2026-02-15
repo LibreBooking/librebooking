@@ -7,7 +7,7 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastCost;
     /**
-     * @var CreditCost
+     * @var array|CreditCost[]
      */
     public $_CreditCost;
     /**
@@ -32,7 +32,7 @@ class FakePaymentRepository implements IPaymentRepository
     public $_LastSavedPayPalResult;
 
     /**
-     * @var PageablePage
+     * @var PageableData|null
      */
     public $_TransactionLogs;
     public $_LastPage;
@@ -98,7 +98,7 @@ class FakePaymentRepository implements IPaymentRepository
         $this->_LastPageSize = $pageSize;
         $this->_LastUserId = $userId;
 
-        return $this->_TransactionLogs;
+        return $this->_TransactionLogs ?? new PageableData();
     }
 
     public function GetTransactionLogView($transactionLogId)
