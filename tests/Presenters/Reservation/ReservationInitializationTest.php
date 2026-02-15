@@ -29,7 +29,7 @@ class ReservationInitializationTest extends TestBase
     private $page;
 
     /**
-     * @var NewReservationInitializer|PHPUnit\Framework\MockObject\MockObject
+     * @var NewReservationInitializer
      */
     private $initializer;
 

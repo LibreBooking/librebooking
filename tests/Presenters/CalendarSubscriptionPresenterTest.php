@@ -222,8 +222,7 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
 
     public function GetAccessoryIds()
     {
-        // TODO: Implement GetAccessoryIds() method.
-        return null;
+        return 0;
     }
 
     public function GetPastNumberOfDays()

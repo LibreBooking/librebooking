@@ -10,7 +10,7 @@ interface IReservationAttributesPage
     public function GetRequestedUserId();
 
     /**
-     * @return int
+     * @return string
      */
     public function GetRequestedReferenceNumber();
 

@@ -69,10 +69,6 @@ class RegisterPresenterTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->page = null;
-        $this->fakeReg = null;
-        $this->fakeAuth = null;
     }
 
     public function testSetsSelectedTimezoneToServerDefault()

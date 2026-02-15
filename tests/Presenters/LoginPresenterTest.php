@@ -47,15 +47,13 @@ class LoginPresenterTest extends TestBase
 
         $this->fakeServer->SetSession(SessionKeys::USER_SESSION, new UserSession(1));
 
-        $this->presenter = new LoginPresenter($this->page, $this->auth, $this->captchaService, $this->announcementRepository);
+        $loginPage = $this->page;
+        $this->presenter = new LoginPresenter($loginPage, $this->auth, $this->captchaService, $this->announcementRepository);
     }
 
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->auth = null;
-        $this->page = null;
     }
 
     public function testLoginCallsAuthValidate()
@@ -423,8 +421,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function GetCaptcha()
     {
-        // TODO: Implement GetCaptcha() method.
-        return null;
+        return '';
     }
 
     public function SetAnnouncements($announcements)

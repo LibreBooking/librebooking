@@ -974,7 +974,7 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetScheduleId()
     {
-        return null;
+        return 0;
     }
 
     /**
@@ -1020,7 +1020,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetSelectedDate()
     {
-        return null;
+        return '';
     }
 
     /**
@@ -1041,7 +1041,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetShowFullWeek()
     {
-        return null;
+        return false;
     }
 
     /**
@@ -1056,7 +1056,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetLayoutDate()
     {
-        return null;
+        return '';
     }
 
     /**
@@ -1065,7 +1065,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetScheduleStyle($scheduleId)
     {
-        return null;
+        return '';
     }
 
     /**
@@ -1170,12 +1170,12 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetDisplayTimezone(UserSession $user, Schedule $schedule)
     {
-        return null;
+        return '';
     }
 
     public function GetResourceId()
     {
-        return null;
+        return 0;
     }
 
     public function GetSelectedDates()
@@ -1197,7 +1197,7 @@ class FakeSchedulePage implements ISchedulePage
 
     public function FilterCleared()
     {
-        return null;
+        return false;
     }
 
     public function BindScheduleAvailability($availability, $tooEarly)
@@ -1234,13 +1234,11 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetOwnerText()
     {
-        // TODO: Implement GetOwnerText() method.
-        return null;
+        return '';
     }
 
     public function GetParticipantText()
     {
-        // TODO: Implement GetParticipantText() method.
-        return null;
+        return '';
     }
 }

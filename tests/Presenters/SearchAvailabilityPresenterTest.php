@@ -116,7 +116,7 @@ class SearchAvailabilityPresenterTest extends TestBase
 
         $tz = $this->fakeUser->Timezone;
 
-        $resource = new FakeBookableResource($resourceId);
+        $resource = new TestResourceDto($resourceId);
         $this->resourceService->_AllResources = [$resource];
 
         Date::_SetNow(Date::Parse('2016-07-09 12:00'));
@@ -524,7 +524,7 @@ class FakeSearchAvailabilityPage extends SearchAvailabilityPage
 
     public function GetRepeatInterval()
     {
-        return $this->_RepeatInterval;
+        return $this->_RepeatInterval === null ? null : (string)$this->_RepeatInterval;
     }
 
     public function GetRepeatWeekdays()

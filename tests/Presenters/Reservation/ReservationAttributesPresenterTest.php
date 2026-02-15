@@ -220,7 +220,7 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     public $_RequestedUserId;
 
     /**
-     * @var int
+     * @var string
      */
     public $_RequestedReferenceNumber;
 
@@ -233,15 +233,16 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     }
 
     /**
-     * @param LBAttribute[] $attributes
+     * @param Attribute[] $attributes
      */
     public function SetAttributes($attributes)
     {
+        /** @var LBAttribute[] $attributes */
         $this->_Attributes = $attributes;
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function GetRequestedReferenceNumber()
     {
@@ -253,7 +254,6 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
      */
     public function GetRequestedResourceIds()
     {
-        // TODO: Implement GetRequestedResourceIds() method.
-        return null;
+        return [];
     }
 }

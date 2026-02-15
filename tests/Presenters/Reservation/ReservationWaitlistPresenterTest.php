@@ -139,8 +139,7 @@ class FakeReservationWaitlistPage implements IReservationWaitlistPage
      */
     public function GetRetryParameters()
     {
-        // TODO: Implement GetRetryParameters() method.
-        return null;
+        return [];
     }
 
     /**
@@ -156,8 +155,7 @@ class FakeReservationWaitlistPage implements IReservationWaitlistPage
      */
     public function GetReferenceNumber()
     {
-        // TODO: Implement GetReferenceNumber() method.
-        return null;
+        return '';
     }
 
     /**
@@ -165,8 +163,7 @@ class FakeReservationWaitlistPage implements IReservationWaitlistPage
      */
     public function GetAction()
     {
-        // TODO: Implement GetAction() method.
-        return null;
+        return '';
     }
 
     /**

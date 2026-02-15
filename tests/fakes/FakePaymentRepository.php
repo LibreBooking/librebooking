@@ -7,7 +7,7 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastCost;
     /**
-     * @var array|CreditCost[]
+     * @var CreditCost[]
      */
     public $_CreditCost;
     /**
@@ -19,7 +19,7 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastStripe;
     /**
-     * @var FakePayPalGateway
+     * @var PayPalGateway
      */
     public $_PayPal;
     /**

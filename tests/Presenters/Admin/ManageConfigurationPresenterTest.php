@@ -263,8 +263,7 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
      */
     public function GetConfigFileToEdit()
     {
-        // TODO: Implement GetConfigFileToEdit() method.
-        return null;
+        return '';
     }
 
     /**
@@ -362,7 +361,6 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
      */
     public function GetHomePageId()
     {
-        // TODO: Implement GetHomePageId() method.
-        return null;
+        return 0;
     }
 }

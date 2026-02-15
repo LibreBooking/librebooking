@@ -146,20 +146,17 @@ class FakeGuestReservationPage implements IGuestReservationPage
 
     public function GetReservationDate()
     {
-        // TODO: Implement GetReservationDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function GetStartDate()
     {
-        // TODO: Implement GetStartDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function GetEndDate()
     {
-        // TODO: Implement GetEndDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function BindPeriods($startPeriods, $endPeriods, $lockPeriods)
@@ -281,8 +278,7 @@ class FakeGuestReservationPage implements IGuestReservationPage
 
     public function IsUnavailable()
     {
-        // TODO: Implement IsUnavailable() method.
-        return null;
+        return false;
     }
 
     public function SetTermsAccepted($accepted)

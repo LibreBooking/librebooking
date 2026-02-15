@@ -136,7 +136,7 @@ class FakeSavedReportsPage extends SavedReportsPage
      */
     public $_BoundReport;
     /**
-     * @var ReportDefinition
+     * @var IReportDefinition
      */
     public $_BoundDefinition;
     /**

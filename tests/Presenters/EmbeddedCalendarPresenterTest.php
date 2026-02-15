@@ -196,8 +196,7 @@ class FakeEmbeddedCalendarPage extends FakePageBase implements IEmbeddedCalendar
      */
     public function GetTitleFormat()
     {
-        // TODO: Implement GetTitleFormat() method.
-        return null;
+        return '';
     }
 
     /**

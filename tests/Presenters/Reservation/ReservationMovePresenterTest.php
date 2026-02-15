@@ -229,8 +229,7 @@ class FakeReservationMovePage implements IReservationMovePage
      */
     public function GetRetryParameters()
     {
-        // TODO: Implement GetRetryParameters() method.
-        return null;
+        return [];
     }
 
     /**

@@ -39,7 +39,7 @@ class FakeReservationViewRepository implements IReservationViewRepository
     public $_LastResourceIds;
 
     /**
-     * @var ReservationItemView[]
+     * @var array<int, ReservationItemView|array<ReservationItemView>>
      */
     public $_ReservationsIteration = [];
 

@@ -12,7 +12,7 @@ class FakeAttributeService implements IAttributeService
      */
     public $_ValidationResult;
     /**
-     * @var CustomAttribute[]
+     * @var array<int, array<CustomAttribute>>
      */
     public $_ByCategory = [];
     public $_EntityAttributeList;
