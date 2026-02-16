@@ -76,7 +76,7 @@
 														<div>
 															{translate key=DefaultStyle}
 															<span
-																class="fw-bold">{$StyleNames[$schedule->GetDefaultStyle()]}</span>
+																class="fw-bold">{$StyleNames[$schedule->GetDefaultStyle()->value]}</span>
 														</div>
 
 														{if $CreditsEnabled}

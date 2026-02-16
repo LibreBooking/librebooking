@@ -240,7 +240,7 @@ class ScheduleRepository implements IScheduleRepository
             $schedule->GetAdminGroupId(),
             $schedule->GetAvailabilityBegin(),
             $schedule->GetAvailabilityEnd(),
-            $schedule->GetDefaultStyle(),
+            $schedule->GetDefaultStyleInt(),
             $schedule->GetTotalConcurrentReservations(),
             $schedule->GetMaxResourcesPerReservation()
         ));

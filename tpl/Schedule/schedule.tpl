@@ -90,18 +90,18 @@
                                 <a href="#" id="make_default" class="link-primary me-2" style="display:none;"><i
                                         class="bi bi-star-fill"></i></a>
                                 <a href="#" class="schedule-style me-1" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard}">
+                                    schedule-display="{ScheduleStyle::Standard->value}">
                                     <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style me-1" id="schedule_tall" schedule-display="{ScheduleStyle::Tall}">
+                                <a href="#" class="schedule-style me-1" id="schedule_tall" schedule-display="{ScheduleStyle::Tall->value}">
                                     <img src="img/table-tall.png" alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style d-none d-md-block me-1" id="schedule_wide"
-                                    schedule-display="{ScheduleStyle::Wide}">
+                                    schedule-display="{ScheduleStyle::Wide->value}">
                                     <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek}">
+                                    schedule-display="{ScheduleStyle::CondensedWeek->value}">
                                     <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
                             </div>

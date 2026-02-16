@@ -132,7 +132,7 @@
 																class="propertyValue defaultScheduleStyle inlineUpdate fw-bold text-decoration-underline"
 																data-type="select" data-pk="{$id}"
 																data-name="{FormKeys::SCHEDULE_DEFAULT_STYLE}"
-																data-value="{$schedule->GetDefaultStyle()}">{$StyleNames[$schedule->GetDefaultStyle()]}</span>
+																data-value="{$schedule->GetDefaultStyle()->value}">{$StyleNames[$schedule->GetDefaultStyle()->value]}</span>
 														</div>
 
 														{if $CreditsEnabled}

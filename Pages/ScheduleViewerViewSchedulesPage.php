@@ -37,10 +37,10 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
         $this->Set('Today', Resources::GetInstance()->GetString('Today'));
         $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
         $this->Set('StyleNames', [
-            ScheduleStyle::Standard => $resources->GetString('Standard'),
-            ScheduleStyle::Wide => $resources->GetString('Wide'),
-            ScheduleStyle::Tall => $resources->GetString('Tall'),
-            ScheduleStyle::CondensedWeek => $resources->GetString('Week'),
+            ScheduleStyle::Standard->value => $resources->GetString('Standard'),
+            ScheduleStyle::Wide->value => $resources->GetString('Wide'),
+            ScheduleStyle::Tall->value => $resources->GetString('Tall'),
+            ScheduleStyle::CondensedWeek->value => $resources->GetString('Week'),
         ]);
 
         $this->Display(ROOT_DIR.'tpl/Admin/Schedules/view_schedules.tpl');

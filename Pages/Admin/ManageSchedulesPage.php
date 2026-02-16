@@ -288,10 +288,10 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
         $this->Set('DayList', range(1, 31));
         $this->Set('StyleNames', [
-            ScheduleStyle::Standard => $resources->GetString('Standard'),
-            ScheduleStyle::Wide => $resources->GetString('Wide'),
-            ScheduleStyle::Tall => $resources->GetString('Tall'),
-            ScheduleStyle::CondensedWeek => $resources->GetString('Week'),
+            ScheduleStyle::Standard->value => $resources->GetString('Standard'),
+            ScheduleStyle::Wide->value => $resources->GetString('Wide'),
+            ScheduleStyle::Tall->value => $resources->GetString('Tall'),
+            ScheduleStyle::CondensedWeek->value => $resources->GetString('Week'),
         ]);
         $this->Display('Admin/Schedules/manage_schedules.tpl');
     }
