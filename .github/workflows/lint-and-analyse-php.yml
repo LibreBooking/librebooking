@@ -143,6 +143,14 @@ jobs:
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
 
+      - name: Cache PHPStan result cache
+        uses: actions/cache@v5
+        with:
+          path: var/cache/phpstan
+          key: phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.lock', 'phpstan.neon', 'phpstan_next.neon') }}
+          restore-keys: |
+            phpstan-${{ runner.os }}-${{ matrix.php-version }}-
+
       - name: Analyse files with PHPStan
         run: composer phpstan -- --error-format=github --no-progress --memory-limit 2G
 

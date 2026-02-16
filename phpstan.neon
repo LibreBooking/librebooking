@@ -4,6 +4,7 @@ includes:
 parameters:
     level: 2
     errorFormat: prettyJson
+    tmpDir: var/cache/phpstan/base
     treatPhpDocTypesAsCertain: false
     paths:
         - Controls
