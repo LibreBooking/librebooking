@@ -324,7 +324,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetResourceId()
     {
-        return null;
+        return empty($this->resourceId) ? 0 : intval($this->resourceId);
     }
 
     /**
@@ -366,12 +366,12 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetResourceTypeId()
     {
-        return null;
+        return 0;
     }
 
     public function GetMaxParticipants()
     {
-        return null;
+        return 0;
     }
 
     public function GetResourceAttributes()
@@ -530,8 +530,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetReservationRequest()
     {
-        // no-op
-        return null;
+        throw new LogicException('ScheduleWebServiceView::GetReservationRequest() is not implemented for web service slot loading.');
     }
 
     public function BindReservations($items)
@@ -551,11 +550,11 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetOwnerText()
     {
-        return null;
+        return '';
     }
 
     public function GetParticipantText()
     {
-        return null;
+        return '';
     }
 }

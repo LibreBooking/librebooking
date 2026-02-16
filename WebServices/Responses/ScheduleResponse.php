@@ -15,7 +15,7 @@ class ScheduleResponse extends RestResponse
     public $totalConcurrentReservationsAllowed;
 
     /**
-     * @var array|SchedulePeriodResponse[]
+     * @var array<int, SchedulePeriodResponse[]>
      */
     public $periods = [0 => [], 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => []];
 

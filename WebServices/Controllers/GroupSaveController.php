@@ -527,6 +527,9 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
         return $this->id;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetAllowedResourceIds(): array
     {
         $ids = [];

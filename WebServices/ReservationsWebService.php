@@ -152,12 +152,12 @@ class ReservationsWebService
      */
     private function GetUserId()
     {
-        $userIdQueryString = $this->server->GetQueryString(WebServiceQueryStringKeys::USER_ID);
-        if (empty($userIdQueryString)) {
+        $userIdValue = $this->server->GetQueryString(WebServiceQueryStringKeys::USER_ID);
+        if (empty($userIdValue)) {
             return null;
         }
 
-        return $userIdQueryString;
+        return intval($userIdValue);
     }
 
     /**
@@ -165,7 +165,8 @@ class ReservationsWebService
      */
     private function GetResourceId()
     {
-        return $this->server->GetQueryString(WebServiceQueryStringKeys::RESOURCE_ID);
+        $resourceIdValue = $this->server->GetQueryString(WebServiceQueryStringKeys::RESOURCE_ID);
+        return empty($resourceIdValue) ? null : intval($resourceIdValue);
     }
 
     /**
@@ -173,6 +174,7 @@ class ReservationsWebService
      */
     private function GetScheduleId()
     {
-        return $this->server->GetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID);
+        $scheduleIdValue = $this->server->GetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID);
+        return empty($scheduleIdValue) ? null : intval($scheduleIdValue);
     }
 }

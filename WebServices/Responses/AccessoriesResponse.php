@@ -3,9 +3,9 @@
 class AccessoriesResponse extends RestResponse
 {
     /**
-     * @var AccessoryItemResponse
+     * @var AccessoryItemResponse[]
      */
-    public $accessories;
+    public $accessories = [];
 
     /**
      * @param IRestServer $server

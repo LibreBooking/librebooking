@@ -31,7 +31,7 @@ class CustomAttributeDefinitionResponse extends RestResponse
     public $required;
 
     /**
-     * @var string
+     * @var string[]
      */
     public $possibleValues;
 
@@ -98,21 +98,12 @@ class ExampleCustomAttributeDefinitionResponse extends CustomAttributeDefinition
     public function __construct()
     {
         $this->id = 1;
-        $this->type = sprintf(
-            'Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line)',
-            CustomAttributeTypes::CHECKBOX,
-            CustomAttributeTypes::MULTI_LINE_TEXTBOX,
-            CustomAttributeTypes::SELECT_LIST,
-            CustomAttributeTypes::SINGLE_LINE_TEXTBOX
-        );
-
-        $this->categoryId = sprintf(
-            'Allowed values for category: %s (reservation), %s (resource), %s (resource type), %s (user)',
-            CustomAttributeCategory::RESERVATION,
-            CustomAttributeCategory::RESOURCE,
-            CustomAttributeCategory::RESOURCE_TYPE,
-            CustomAttributeCategory::USER
-        );
+        // Allowed values: CustomAttributeTypes::CHECKBOX, CustomAttributeTypes::MULTI_LINE_TEXTBOX,
+        // CustomAttributeTypes::SELECT_LIST, CustomAttributeTypes::SINGLE_LINE_TEXTBOX.
+        $this->type = CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+        // Allowed values: CustomAttributeCategory::RESERVATION, CustomAttributeCategory::RESOURCE,
+        // CustomAttributeCategory::RESOURCE_TYPE, CustomAttributeCategory::USER.
+        $this->categoryId = CustomAttributeCategory::RESERVATION;
         $this->label = 'display label';
         $this->possibleValues = ['possible', 'values'];
         $this->regex = 'validation regex';

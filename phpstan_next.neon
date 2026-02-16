@@ -38,7 +38,6 @@ parameters:
             - Domain/
             - Pages/
             - Presenters/
-            - WebServices/
             - lib/
     bootstrapFiles:
         - vendor/autoload.php

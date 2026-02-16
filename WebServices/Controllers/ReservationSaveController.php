@@ -435,7 +435,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
     public function GetRepeatInterval()
     {
         if (!empty($this->recurrenceRule->interval)) {
-            return intval($this->recurrenceRule->interval);
+            return (string)intval($this->recurrenceRule->interval);
         }
         return null;
     }
@@ -500,7 +500,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->resourceId)) {
             return intval($this->request->resourceId);
         }
-        return null;
+        return 0;
     }
 
     public function GetTitle()
