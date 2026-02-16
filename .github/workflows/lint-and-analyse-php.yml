@@ -129,8 +129,20 @@ jobs:
   analyse-php:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php-version: ["8.4"]
+        include:
+          - php-version: "8.4"
+            stan-label: "base"
+            composer-script: "phpstan"
+            stan-cache-dir: "base"
+            stan-config-file: "phpstan.neon"
+          - php-version: "8.4"
+            stan-label: "next"
+            composer-script: "phpstan_next"
+            stan-cache-dir: "next"
+            stan-config-file: "phpstan_next.neon"
+    name: analyse-php (${{ matrix.stan-label }})
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -146,16 +158,13 @@ jobs:
       - name: Cache PHPStan result cache
         uses: actions/cache@v5
         with:
-          path: var/cache/phpstan
-          key: phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.lock', 'phpstan.neon', 'phpstan_next.neon') }}
+          path: var/cache/phpstan/${{ matrix.stan-cache-dir }}
+          key: phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.stan-cache-dir }}-${{ hashFiles('composer.lock', matrix.stan-config-file) }}
           restore-keys: |
-            phpstan-${{ runner.os }}-${{ matrix.php-version }}-
+            phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.stan-cache-dir }}-
 
       - name: Analyse files with PHPStan
-        run: composer phpstan -- --error-format=github --no-progress --memory-limit 2G
-
-      - name: Analyse files with PHPStan (next level)
-        run: composer phpstan_next -- --error-format=github --no-progress --memory-limit 2G
+        run: composer ${{ matrix.composer-script }} -- --error-format=github --no-progress --memory-limit 2G
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
