@@ -24,8 +24,11 @@ function GenerateReports(reportOptions) {
 
         wireUpAutocompleteFilters();
 
-        $('.dateinput').click(function () {
-            $('#range_within').attr('checked', 'checked');
+        document.addEventListener('click', function (e) {
+            if (e.target.matches('.dateinput')) {
+                const radio = document.getElementById('range_within');
+                radio.checked = true;
+            }
         });
 
         $('#btnCustomReport').click(function (e) {
@@ -43,26 +46,7 @@ function GenerateReports(reportOptions) {
 
             ajaxPost(elements.customReportForm, opts.customReportUrl, before, after);
         });
-/*
-        $('#showHideCustom').click(function (e) {
-            e.preventDefault();
-            $('#customReportInput-container').toggle();
-        });
 
-        $(document).on('click', '#btnPrint', function (e) {
-            e.preventDefault();
-
-            var url = opts.printUrl + elements.customReportForm.serialize();
-            window.open(url);
-        });
-
-        $(document).on('click', '#btnCsv', function (e) {
-            e.preventDefault();
-
-            var url = opts.csvUrl + elements.customReportForm.serialize();
-            window.open(url);
-        });
-*/
         elements.saveDialog.on('shown.bs.modal', function () {
             $('#saveReportName').focus();
         });

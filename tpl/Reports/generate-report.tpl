@@ -120,14 +120,12 @@
 												class="bi bi-calendar3-range me-1"></i>{translate key=Between}</label>
 
 										<label for="startDate" class="visually-hidden">{translate key=StartDate}</label>
-										<input type="date" class="form-control form-control-sm dateinput inline"
-											id="startDate" autocomplete="off" />
-										-
-										<input type="hidden" id="formattedBeginDate" {formname key=REPORT_START} />
+										<input type="text" class="form-control form-control-sm dateinput w-auto"
+											id="startDate" {formname key=REPORT_START} />
+										<div class='mx-1'>-</div>
 										<label for="endDate" class="visually-hidden">{translate key=EndDate}</label>
-										<input type="date" class="form-control form-control-sm dateinput inline"
-											id="endDate" autocomplete="off" />
-										<input type="hidden" id="formattedEndDate" {formname key=REPORT_END} />
+										<input type="text" class="form-control form-control-sm dateinput w-auto"
+											id="endDate" {formname key=REPORT_END} />
 									</div>
 								</div>
 							</div>
@@ -317,14 +315,11 @@
 		});
 	});
 
-	//$('#report-filter-panel').showHidePanel();
-
-
 	//$('#user-filter, #participant-filter').clearable();
 </script>
 
-{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedBeginDate"}
-{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
+{control type="DatePickerSetupControl" ControlId="startDate"}
+{control type="DatePickerSetupControl" ControlId="endDate"}
 
 </div>
 {include file='globalfooter.tpl'}
