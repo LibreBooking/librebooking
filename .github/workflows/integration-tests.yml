@@ -35,10 +35,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up PHP 8.4
+      - name: Set up PHP 8.5
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: mysqli, pdo_mysql
 
       - name: Install Composer dependencies

@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php-version: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -101,12 +101,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: "8.4"
+          - php-version: "8.5"
             stan-label: "base"
             composer-script: "phpstan"
             stan-cache-dir: "base"
             stan-config-file: "phpstan.neon"
-          - php-version: "8.4"
+          - php-version: "8.5"
             stan-label: "next"
             composer-script: "phpstan_next"
             stan-cache-dir: "next"
