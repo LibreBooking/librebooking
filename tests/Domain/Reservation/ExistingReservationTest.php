@@ -232,7 +232,9 @@ class ExistingReservationTest extends TestBase
 
     public function testWhenExtendingEndDateOfRepeatOptionsOnFullSeries()
     {
-        $start = TestBase::GetTestDate();
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
+        $now = Date::Now();
+        $start = $now->AddDays(1);
         $currentSeriesDate = new DateRange($start, $start);
         $currentInstance = new TestReservation('current', $currentSeriesDate);
         $futureInstance = new TestReservation('future', $currentSeriesDate->AddDays(11));
@@ -260,7 +262,9 @@ class ExistingReservationTest extends TestBase
 
     public function testWhenReducingEndDateOfRepeatOptionsOnFullSeries()
     {
-        $start = TestBase::GetTestDate();
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
+        $now = Date::Now();
+        $start = $now->AddDays(1);
         $currentSeriesDate = new DateRange($start, $start);
         $currentInstance = new TestReservation('current', $currentSeriesDate);
         $futureInstance = new TestReservation('future', $currentSeriesDate->AddDays(20));
