@@ -649,7 +649,11 @@ function printUsage(): void
 $scriptFilename = $_SERVER['SCRIPT_FILENAME'] ?? '';
 $isDirectExecution = $scriptFilename !== '' && realpath($scriptFilename) === __FILE__;
 
-if (($isDirectExecution) && (php_sapi_name() === 'cli' || php_sapi_name() === 'cli-server')) {
+if (
+    $isDirectExecution
+    && (php_sapi_name() === 'cli' || php_sapi_name() === 'cli-server')
+    && isset($argv)
+) {
     $args = array_slice($argv, 1);
 
     if (in_array(needle: '--help', haystack: $args, strict: true)) {
