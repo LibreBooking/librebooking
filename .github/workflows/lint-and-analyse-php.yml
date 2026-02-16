@@ -133,7 +133,13 @@ jobs:
             phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.stan-cache-dir }}-
 
       - name: Analyse files with PHPStan
-        run: composer ${{ matrix.composer-script }} -- --error-format=github --no-progress --memory-limit 2G
+        run: |
+          if ! composer ${{ matrix.composer-script }} -- --error-format=github --no-progress --memory-limit 2G; then
+            echo "Primary PHPStan run failed. Running debug fallback..."
+            composer ${{ matrix.composer-script }} -- --debug -vvv --error-format=table --memory-limit 2G || true
+            exit 1
+          fi
+
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
