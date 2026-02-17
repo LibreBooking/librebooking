@@ -108,7 +108,7 @@ class CommonReportsPage extends ActionPage implements ICommonReportsPage
      */
     public function GetReportId()
     {
-        return $this->GetQuerystring(QueryStringKeys::REPORT_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::REPORT_ID));
     }
 
     /**

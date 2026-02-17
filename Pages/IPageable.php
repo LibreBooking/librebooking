@@ -41,7 +41,7 @@ class PageablePage extends Page implements IPageable
      */
     public function GetPageNumber()
     {
-        return $this->page->GetQuerystring(QueryStringKeys::PAGE);
+        return intval($this->page->GetQuerystring(QueryStringKeys::PAGE));
     }
 
     /**
@@ -51,9 +51,9 @@ class PageablePage extends Page implements IPageable
     {
         $size = $this->page->GetQuerystring(QueryStringKeys::PAGE_SIZE);
         if (empty($size)) {
-            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE);
+            return intval(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE));
         }
-        return $size;
+        return intval($size);
     }
 
     /**

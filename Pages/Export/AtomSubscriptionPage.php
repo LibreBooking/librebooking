@@ -116,11 +116,11 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 
     public function GetPastNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST));
     }
 
     public function GetFutureNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE));
     }
 }

@@ -110,7 +110,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
 
     public function GetDaysToShow()
     {
-        return $this->GetQuerystring(QueryStringKeys::DAY);
+        return intval($this->GetQuerystring(QueryStringKeys::DAY));
     }
 
     public function GetDisplayType()

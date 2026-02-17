@@ -125,14 +125,14 @@ class FakeUserCreditsPage extends UserCreditsPage
         $this->_CreditCost = $cost;
     }
 
-    public function GetPageNumber()
+    public function GetPageNumber(): int
     {
-        return $this->_CurrentPage;
+        return intval($this->_CurrentPage);
     }
 
-    public function GetPageSize()
+    public function GetPageSize(): int
     {
-        return $this->_PageSize;
+        return intval($this->_PageSize);
     }
 
     public function BindCreditLog($creditLog)

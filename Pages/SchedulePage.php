@@ -345,7 +345,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function GetScheduleId()
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::SCHEDULE_ID));
     }
 
     public function SetScheduleId($scheduleId)
@@ -479,7 +479,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
      */
     public function GetResourceId()
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::RESOURCE_ID));
     }
 
     /**
@@ -528,7 +528,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function GetResourceTypeId()
     {
-        return $this->GetQuerystring(FormKeys::RESOURCE_TYPE_ID);
+        return intval($this->GetQuerystring(FormKeys::RESOURCE_TYPE_ID));
     }
 
     public function GetMaxParticipants()

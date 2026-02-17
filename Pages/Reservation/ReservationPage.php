@@ -165,7 +165,7 @@ abstract class ReservationPage extends Page implements IReservationPage
     protected $available = true;
 
     /**
-     * @var PermissionServiceFactory
+     * @var IPermissionServiceFactory
      */
     protected $permissionServiceFactory;
 

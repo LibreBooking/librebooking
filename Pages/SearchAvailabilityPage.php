@@ -189,17 +189,21 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
             return [];
         }
 
-        return $resources;
+        if (!is_array($resources)) {
+            return [intval($resources)];
+        }
+
+        return array_map('intval', $resources);
     }
 
     public function GetResourceType()
     {
-        return $this->GetForm(FormKeys::RESOURCE_TYPE_ID);
+        return intval($this->GetForm(FormKeys::RESOURCE_TYPE_ID));
     }
 
     public function GetMaxParticipants()
     {
-        return $this->GetForm(FormKeys::MAX_PARTICIPANTS);
+        return intval($this->GetForm(FormKeys::MAX_PARTICIPANTS));
     }
 
     public function GetResourceAttributeValues()

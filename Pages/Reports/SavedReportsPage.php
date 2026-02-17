@@ -140,7 +140,7 @@ class SavedReportsPage extends ActionPage implements ISavedReportsPage
 
     public function GetReportId()
     {
-        return $this->GetQuerystring(QueryStringKeys::REPORT_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::REPORT_ID));
     }
 
     public function SetEmailAddress($emailAddress)
