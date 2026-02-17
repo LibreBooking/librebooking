@@ -30,7 +30,7 @@ class fi_fi extends en_gb
         $strings['LastNameRequired'] = 'Sukunimi vaaditaan.';
         $strings['PwMustMatch'] = 'Salasanan varmistuksen täytyy vastata salasanaan.';
         $strings['PwComplexity'] = 'Salasanan täytyy olla ainakin 6 merkkiä pitkä.';
-        $strings['ValidEmailRequired'] = 'Voimassa oleva email osoite vaaditaan.';
+        $strings['ValidEmailRequired'] = 'Vaaditaan voimassa oleva sähköpostiosoite.';
         $strings['UniqueEmailRequired'] = 'Kyseisellä sähköpostiosoitteella on jo rekisteröidytty.';
         $strings['UniqueUsernameRequired'] = 'Käyttäjänimi on jo käytössä.';
         $strings['UserNameRequired'] = 'Käyttäjänimi vaaditaan.';
@@ -156,7 +156,7 @@ class fi_fi extends en_gb
         $strings['Users'] = 'Käyttäjät';
         $strings['AllUsers'] = 'Kaikki käyttäjät';
         $strings['AllGroups'] = 'Kaikki ryhmät';
-        $strings['AllSchedules'] = 'Kaikki waulut';
+        $strings['AllSchedules'] = 'Kaikki kalenterit';
         $strings['UsernameOrEmail'] = 'Käyttäjänimi tai sähköpostiosoite';
         $strings['Members'] = 'Jäsenet';
         $strings['QuickSlotCreation'] = 'Luo kohta jokaiselle %s minuutille välillä %s - %s'; // TODO
@@ -216,14 +216,14 @@ class fi_fi extends en_gb
         $strings['FindGroup'] = 'Etsi ryhmä';
         $strings['Manage'] = 'Hallitse';
         $strings['None'] = 'Ei mitään';
-        $strings['AddToOutlook'] = 'Lisää Outlookiin';
+        $strings['AddToOutlook'] = 'Lisää kalenteriisi';
         $strings['Done'] = 'Valmis';
         $strings['RememberMe'] = 'Muista minut';
         $strings['FirstTimeUser?'] = 'Uusi käyttäjä?';
         $strings['CreateAnAccount'] = 'Luo tili';
         $strings['ViewSchedule'] = 'Näytä aikataulu';
         $strings['ForgotMyPassword'] = 'Olen unohtanut salasanani';
-        $strings['YouWillBeEmailedANewPassword'] = 'Sinulle lähetetään sähköpostilla uusi satunnainen salasana';
+        $strings['YouWillBeEmailedANewPassword'] = 'Sinulle lähetetään sähköpostissa uusi satunnainen salasana';
         $strings['Close'] = 'Sulje';
         $strings['ExportToCSV'] = 'Vie CSV-muodossa';
         $strings['OK'] = 'OK';
@@ -357,10 +357,10 @@ class fi_fi extends en_gb
         $strings['False'] = 'False';
         $strings['ForgotPasswordEmailSent'] = 'Annettuun osoitteeseen on lähetetty sähköposti, jossa on ohjeet salasanan resetoimiseksi ';
         $strings['ActivationEmailSent'] = 'Saat pian aktivointisähköpostin.';
-        $strings['AccountActivationError'] = 'Sorry, emme voineet aktivoida tiliäsi.';
+        $strings['AccountActivationError'] = 'Pahoittelut, emme voineet aktivoida tiliäsi.';
         $strings['Attachments'] = 'Liitteet';
         $strings['AttachFile'] = 'Liitä Tiedosto';
-        $strings['Maximum'] = 'max';
+        $strings['Maximum'] = 'maks.';
         $strings['NoScheduleAdministratorLabel'] = 'Ei Kalenterin Ylläpitäjä';
         $strings['ScheduleAdministrator'] = 'Kalenterin Ylläpitäjä';
         $strings['Total'] = 'Yhteensä';
@@ -410,7 +410,7 @@ class fi_fi extends en_gb
         $strings['ReminderRefNumber'] = 'Varausnumero';
         $strings['ReminderSendtimeDate'] = 'Muistutuksen Päiväys';
         $strings['ReminderSendtimeTime'] = 'Muistutuksen aika (HH:MM)';
-        $strings['ReminderSendtimeAMPM'] = 'AM / PM';
+        $strings['ReminderSendtimeAMPM'] = 'AP / IP';
         $strings['AddReminder'] = 'Lisää Muistutus';
         $strings['DeleteReminderWarning'] = 'Haluatko varmasti  poistaa tämä?';
         $strings['NoReminders'] = 'Sinulla ei ole tulevia muistutuksia.';
@@ -422,7 +422,7 @@ class fi_fi extends en_gb
         $strings['ReminderBeforeStart'] = 'ennen alkuaikaa';
         $strings['ReminderBeforeEnd'] = 'enne loppuaikaa';
         $strings['Logo'] = 'Logo';
-        $strings['CssFile'] = 'CSS File';
+        $strings['CssFile'] = 'CSS tiedosto';
         $strings['ThemeUploadSuccess'] = 'Muutoksesi on tallennettu. Lataa sivu uudelleen saadaksesi ne näkyviin';
         $strings['MakeDefaultSchedule'] = 'Tee tästä oletuskalenterini';
         $strings['DefaultScheduleSet'] = 'Tämä on nyt oletuskalenterisi';
@@ -464,7 +464,7 @@ class fi_fi extends en_gb
         $strings['AdminOnly'] = 'On Vain Ylläpitäjille';
         $strings['AdvancedFilter'] = 'Lisäsuodatin';
         $strings['MinimumQuantity'] = 'Minimimäärä';
-        $strings['MaximumQuantity'] = 'Maximimäärä';
+        $strings['MaximumQuantity'] = 'Maksimimäärä';
         $strings['ChangeLanguage'] = 'Vaihda Kieli';
         $strings['AddRule'] = 'Lisää Sääntö';
         $strings['Attribute'] = 'Kenttä';
@@ -502,7 +502,7 @@ class fi_fi extends en_gb
         $strings['IncludingCompletedReservations'] = 'Sisältäen Loppuuntehdyt Varaukset';
         $strings['NotCountingCompletedReservations'] = 'Sisältämättä Loppuuntehtyjä Varauksia';
         $strings['RetrySkipConflicts'] = 'Ohita päällekkäiset varaukset';
-        $strings['Retry'] = 'Yritö Uudelleen';
+        $strings['Retry'] = 'Yritä Uudelleen';
         $strings['RemoveExistingPermissions'] = 'Poistetaanko olemassa olvat Oikeudet?';
         $strings['Continue'] = 'Jatka';
         $strings['WeNeedYourEmailAddress'] = 'Tarvitsemme sähköpostiosoitteesi, jotta voi tehdä varauksen';
@@ -556,7 +556,7 @@ class fi_fi extends en_gb
         $strings['OnlyIcs'] = 'Vain *.ics tiedostoja voi ladata.';
         $strings['IcsLocationsAsResources'] = 'Paikat ladataan tiloina.';
         $strings['IcsMissingOrganizer'] = 'Jos tapahtumalla ei ole järjestäjää, nykyinen käyttäjä asetetaan järjetäjäksi';
-        $strings['IcsWarning'] = 'Varakssääntöjä ei käytetä - päällekkäisyydet, kopiot, jne ovat mahdollisia.';
+        $strings['IcsWarning'] = 'Varaussääntöjä ei käytetä - päällekkäisyydet, kopiot, jne ovat mahdollisia.';
         $strings['BlackoutAroundConflicts'] = 'Suljettuja aikoja päällekkäisten varausten ympärillä';
         $strings['DuplicateReservation'] = 'Kopio';
         $strings['UnavailableNow'] = 'Ei Vapaana Nyt';
@@ -588,11 +588,11 @@ class fi_fi extends en_gb
         $strings['ResourceMaxNoticeCsv'] = 'Reservation Maximum End';
 
         $strings['Export'] = 'Vie';
-        $strings['DeleteMultipleUserWarning'] = 'Näiden käyttäjien poistaminen poistaa myös heidä´n nykyiset, tulevat ja menneet varauksensa. Sähköposteja ei lähetetä.';
+        $strings['DeleteMultipleUserWarning'] = 'Näiden käyttäjien poistaminen poistaa myös heidän nykyiset, tulevat ja menneet varauksensa. Sähköposteja ei lähetetä.';
         $strings['DeleteMultipleReservationsWarning'] = 'Sähköposteja ei lähetetä.';
         $strings['ErrorMovingReservation'] = 'Virhe Varauksen Siirrossa';
         $strings['SelectUser'] = 'Valitse Käyttäjä';
-        $strings['InviteUsers'] = '´Kutus Käyttäjiä';
+        $strings['InviteUsers'] = 'Kutsu Käyttäjiä';
         $strings['InviteUsersLabel'] = 'Anna kutsuttavien ihmisten sähköpostiosoitteet';
         $strings['ApplyToCurrentUsers'] = 'Koskee nykyisiä käyttäjiä';
         $strings['ReasonText'] = 'Syy teksi';
@@ -603,7 +603,7 @@ class fi_fi extends en_gb
         $strings['UpdateResourcesOnImport'] = 'Päivitä resurssi jos nimi on jo olemassa';
         $strings['Reject'] = 'Hylkää';
         $strings['CheckingAvailability'] = 'Tarkistetaan saatavuus';
-        $strings['CreditPurchaseNotEnabled'] = 'Et ole ottanut käyttöön krediittien ostaamista';
+        $strings['CreditPurchaseNotEnabled'] = 'Et ole ottanut käyttöön krediittien ostamista';
         $strings['CreditsCost'] = 'Jokainen krediitti maksaa';
         $strings['Currency'] = 'Valuutta';
         $strings['PayPalClientId'] = 'Client ID';
@@ -665,7 +665,7 @@ class fi_fi extends en_gb
         $strings['AutomaticallyAddToGroup'] = 'Lisää käyttäjä automaattisesti tähän ryhmään';
         $strings['GroupAutomaticallyAdd'] = 'Lisää Automaattisesti';
         $strings['TermsOfService'] = 'Palveluehdot';
-        $strings['EnterTermsManually'] = 'Anna Ehdot Käsi';
+        $strings['EnterTermsManually'] = 'Anna Ehdot Käsin';
         $strings['LinkToTerms'] = 'Linkki Ehtoihin';
         $strings['UploadTerms'] = 'Lataa Ehdot';
         $strings['RequireTermsOfServiceAcknowledgement'] = 'Vaadi Palveluehtojen Hyväksyminen';
@@ -691,7 +691,7 @@ class fi_fi extends en_gb
         $strings['BlackoutsWillBeDeleted'] = 'suljetut ajat poistetaan';
         $strings['ReservationsWillBePurged'] = 'varaukset poistetaan';
         $strings['ReservationsWillBeDeleted'] = 'varaukset poistetaan';
-        $strings['PermanentlyDeleteUsers'] = 'Poista pysyvästi käuttäjät, jotka eivät ole kirjautuneet myöhemmin kuin';
+        $strings['PermanentlyDeleteUsers'] = 'Poista pysyvästi käyttäjät, jotka eivät ole kirjautuneet myöhemmin kuin';
         $strings['DeleteBlackoutsBefore'] = 'Poista suljetut ajat ennen';
         $strings['DeletedReservations'] = 'Poistetut varaukset';
         $strings['DeleteReservationsBefore'] = 'Poista varaukset ennen';
@@ -741,22 +741,22 @@ class fi_fi extends en_gb
         $strings['MaxNoticeError'] = 'Tätä varausta ei voi tehdä näin kauas tulevaisuuteen.  Viimeisin ajankohta joka voidaan varata on %s.';
         $strings['MinDurationError'] = 'Tämän varauksen tulee olla vähintään %s.';
         $strings['MaxDurationError'] = 'Tämä varaus ei voi kestää pitempään kuin %s.';
-        $strings['ConflictingAccessoryDates'] = 'Seuraavia tarjoiltavia ei ole tarpeeksi: ';
+        $strings['ConflictingAccessoryDates'] = 'Seuraavia tarvikkeita ei ole tarpeeksi: ';
         $strings['NoResourcePermission'] = 'Sinulla ei ole käyttöoikeutta yhteen tai useampaan tilaan';
         $strings['ConflictingReservationDates'] = 'Seuraavina päivinä on ristiriidan aiheuttavia toisia varauksia: ';
         $strings['StartDateBeforeEndDateRule'] = 'Aloituspäivän tulee olla ennen varauksen loppumispäivää';
         $strings['StartIsInPast'] = 'Aloituspäivä ei voi olla menneisyydessä';
         $strings['EmailDisabled'] = 'Moderaattori on estänyt automaattiset sähköposti-ilmoitukset';
         $strings['ValidLayoutRequired'] = 'Varaa kaikki 24 tuntia alkaen ja päättyen klo 00:00.';
-        $strings['CustomAttributeErrors'] = 'Antamissasi liskentissä on ongelmia:';
+        $strings['CustomAttributeErrors'] = 'Antamissasi lisäkentissä on ongelmia:';
         $strings['CustomAttributeRequired'] = '%s on pakollinen kenttä.';
         $strings['CustomAttributeInvalid'] = 'Annettu arvo %s ei kelpaa.';
-        $strings['AttachmentLoadingError'] = 'Sorry, pyydetyn tiedoston lataamisessa oli ongelma.';
+        $strings['AttachmentLoadingError'] = 'Pahoittelut, pyydetyn tiedoston lataamisessa oli ongelma.';
         $strings['InvalidAttachmentExtension'] = 'Voit ladata vain tyyppiä %s olevia tiedostoja.';
         $strings['InvalidStartSlot'] = 'Aloituspäivä ja -aika eivät ole oikein.';
         $strings['InvalidEndSlot'] = 'Loppupäivä ja -aika eivät ole oikein.';
         $strings['MaxParticipantsError'] = '%s : korkeintaan %s osallistujaa.';
-        $strings['ReservationCriticalError'] = 'Kriittinen Virhe tallennettaessa varaustasi. Jos tämä toistuu, ota yhteyttä järjsetlmän ylläpitäjään.';
+        $strings['ReservationCriticalError'] = 'Kriittinen virhe tallennettaessa varaustasi. Jos tämä toistuu, ota yhteyttä järjestelmän ylläpitäjään.';
         $strings['InvalidStartReminderTime'] = 'Muistutuksen alkuaika ei ole oikein.';
         $strings['InvalidEndReminderTime'] = 'Muistutuksen loppuaika ei ole oikein.';
         $strings['QuotaExceeded'] = 'Kiintiön limiitti ylitetty.';
@@ -899,10 +899,10 @@ class fi_fi extends en_gb
         $strings['ReservationCreatedSubjectWithResource'] = 'Varaus on luotu %s :lle';
         $strings['ReservationUpdatedSubjectWithResource'] = 'Varaus on päivitetty %s :lle';
         $strings['ReservationDeletedSubjectWithResource'] = 'Varaus on poistettu %s :lta';
-        $strings['ReservationCreatedAdminSubjectWithResource'] = 'Notification: Varaus on luotu %s :lle';
-        $strings['ReservationUpdatedAdminSubjectWithResource'] = 'Notification: Varaus on päivitetty %s :lle';
-        $strings['ReservationDeleteAdminSubjectWithResource'] = 'Notification: Varaus on poistettu %s :lta';
-        $strings['ReservationApprovalAdminSubjectWithResource'] = 'Notification: Varaus %s :lle tarvitsee hyväksyntäsi';
+        $strings['ReservationCreatedAdminSubjectWithResource'] = 'Ilmoitus: Varaus on luotu %s :lle';
+        $strings['ReservationUpdatedAdminSubjectWithResource'] = 'Ilmoitus: Varaus on päivitetty %s :lle';
+        $strings['ReservationDeleteAdminSubjectWithResource'] = 'Ilmoitus: Varaus on poistettu %s :lta';
+        $strings['ReservationApprovalAdminSubjectWithResource'] = 'Ilmoitus: Varaus %s :lle tarvitsee hyväksyntäsi';
         $strings['ParticipantAddedSubjectWithResource'] = '%s Lisäsi Sinut Varaukseen %s :lle';
         $strings['ParticipantDeletedSubjectWithResource'] = '%s Poisti Varauksen %s :lta';
         $strings['InviteeAddedSubjectWithResource'] = '%s Kutsui Sinut Varaukseen for %s :lle';
@@ -910,12 +910,11 @@ class fi_fi extends en_gb
         $strings['ReservationShareSubject'] = '%s Jakoi Varauksen %s :lle';
         //End Email Subjects
 
-        //NEEDS CHECKING
         //Past Reservations
-        $strings['NoPastReservations'] = 'Sinulla ei ole aikaisempia varauksia';
-        $strings['PastReservations'] = 'Aikaisemmat varaukset';
-        $strings['AllNoPastReservations'] = 'Viimeisen %s päivän aikana ei ole aikaisempia varauksia';
-        $strings['AllPastReservations'] = 'Kaikki aikaisemmat varaukset';
+        $strings['NoPastReservations'] = 'Sinulla ei ole aiempia varauksia';
+        $strings['PastReservations'] = 'Aiemmat varaukset';
+        $strings['AllNoPastReservations'] = 'Viimeisen %s päivän aikana ei ole aiempia varauksia';
+        $strings['AllPastReservations'] = 'Kaikki aiemmat varaukset';
         $strings['Yesterday'] = 'Eilen';
         $strings['EarlierThisWeek'] = 'Aiemmin tällä viikolla';
         $strings['PreviousWeek'] = 'Edellinen viikko';
@@ -932,8 +931,8 @@ class fi_fi extends en_gb
 
         //Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Sinulla ei ole odottavia hyväksyttäviä varauksia';
-        $strings['PendingApprovalReservations'] = 'Odottaa hyväksyntää olevat varaukset';
-        $strings['LaterThisMonth'] = 'Myöhemmin tänä kuukautena';
+        $strings['PendingApprovalReservations'] = 'Hyväksyntää odottavat varaukset';
+        $strings['LaterThisMonth'] = 'Myöhemmin tässä kuussa';
         $strings['LaterThisYear'] = 'Myöhemmin tänä vuonna';
         $strings['Remaining'] = 'Jäljellä oleva';
         //End Pending Approval Reservations in Dashboard
@@ -946,7 +945,6 @@ class fi_fi extends en_gb
         //Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Et voi nähdä varauksen tietoja, koska sinulla ei ole oikeuksia mihinkään tämän varauksen resursseista';
         //End Schedule Resource Permissions
-        //END NEEDS CHECKING
 
         $this->Strings = $strings;
 
