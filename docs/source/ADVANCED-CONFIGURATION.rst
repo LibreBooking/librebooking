@@ -320,7 +320,7 @@ Reservation Behavior
   Enable waitlist when resources are fully booked.
 
 **reservation.start.time.constraint**
-  When reservations can be made: 'future', 'any', 'same_day'.
+  Restrictions on when reservations can be made: 'none', 'current', 'future'.
 
 **reservation.updates.require.approval**
   Require approval when editing existing approved reservations.
