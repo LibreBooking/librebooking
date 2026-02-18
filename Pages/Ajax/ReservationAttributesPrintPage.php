@@ -67,7 +67,7 @@ class ReservationAttributesPrintPage extends Page implements IReservationAttribu
      */
     public function GetRequestedUserId()
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return (int)$this->GetQuerystring(QueryStringKeys::USER_ID);
     }
 
     /**

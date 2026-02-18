@@ -61,7 +61,7 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
 
     public function GetResourceId()
     {
-        return ServiceLocator::GetServer()->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return (int)ServiceLocator::GetServer()->GetQuerystring(QueryStringKeys::RESOURCE_ID);
     }
 
     /**
@@ -102,7 +102,7 @@ interface IResourceDetailsPage
 class ResourceDetailsPresenter
 {
     /**
-     * @var ResourceRepository
+     * @var IResourceRepository
      */
     private $resourceRepository;
 

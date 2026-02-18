@@ -76,6 +76,6 @@ class UnavailableResourcesPage extends Page implements IAvailableResourcesPage
 
     public function GetScheduleId()
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return (int)$this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
     }
 }

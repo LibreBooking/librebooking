@@ -37,7 +37,6 @@ parameters:
             # area is fixed for the current target level.
             - Domain/
             - Pages/Admin/
-            - Pages/Ajax/
             - Presenters/
             - lib/
     bootstrapFiles:
