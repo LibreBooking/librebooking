@@ -308,7 +308,7 @@ return [
             # Enable a waitlist for fully booked reservations (true/false)
             'allow.wait.list' => false,
 
-            # Restrict start times (e.g., 'future', 'none', 'same_day')
+            # Restrict start times (e.g., 'future', 'none', 'current')
             'start.time.constraint' => 'future',
 
             # Require approval when an existing reservation is updated (true/false)

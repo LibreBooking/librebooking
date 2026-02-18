@@ -727,10 +727,10 @@ class ConfigKeys
         'choices' => [
             'none' => 'Any time',
             'future' => 'Future',
-            'same_day' => 'Same day'
+            'current' => 'Current'
         ],
         'label' => 'Start Time Constraint',
-        'description' => 'Restrict start times. Options: future, any, same_day',
+        'description' => 'Restrict start times. Options: future, none, current',
         'section' => 'reservation'
     ];
     public const RESERVATION_UPDATES_REQUIRE_APPROVAL = [
