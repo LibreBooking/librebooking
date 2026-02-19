@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class ScheduleUserRepositoryTest extends TestBase
 {
     public function setUp(): void
