@@ -5,12 +5,10 @@ function ReservationSearch(options) {
 		resources: $('#resources'),
 		schedules: $('#schedules'),
 		userFilter: $('#userFilter'),
-		userId: $('#userId'), // today: $('#today'),
-		// tomorrow: $('#tomorrow'),
-		// thisweek: $('#thisweek'),
+		userId: $('#userId'),
 		daterange: $('input[name="AVAILABILITY_RANGE"]'),
-		beginDate: $('#beginDate'),
-		endDate: $('#endDate'),
+		beginDate: document.getElementById('beginDate'),
+		endDate: document.getElementById('endDate'),
 	};
 
 	var init = function () {
@@ -20,33 +18,39 @@ function ReservationSearch(options) {
 
 		elements.userFilter.userAutoComplete(options.autocompleteUrl, selectUser);
 
-		elements.userFilter.change(function () {
+		elements.userFilter.on('change', function () {
 			if ($(this).val() == '') {
 				elements.userId.val('');
 			}
 		});
 
-		elements.daterange.change(function (e) {
+		elements.daterange.on('change', function (e) {
 			if ($(e.target).val() == 'daterange') {
-				elements.beginDate.removeAttr('disabled');
-				elements.endDate.removeAttr('disabled');
+				setFlatpickrDisabled(elements.beginDate, false);
+				setFlatpickrDisabled(elements.endDate, false);
 			}
 			else {
-				elements.beginDate.val('').attr('disabled', 'disabled');
-				elements.endDate.val('').attr('disabled', 'disabled');
+				setFlatpickrDisabled(elements.beginDate, true);
+				setFlatpickrDisabled(elements.endDate, true);
 			}
 		});
 
-		$('input[name="AVAILABILITY_RANGE"]').change(function (e) {
-			if ($(e.target).val() == 'daterange') {
-				elements.beginDate.removeAttr('disabled');
-				elements.endDate.removeAttr('disabled');
+		function setFlatpickrDisabled(input, disabled) {
+
+			if (!input) return;
+
+			const fp = input._flatpickr;
+			input.disabled = disabled;
+
+			if (fp) {
+				if (fp.altInput) {
+					fp.altInput.disabled = disabled;
+				}
+
+				if (disabled) fp.close();
 			}
-			else {
-				elements.beginDate.val('').attr('disabled', 'disabled');
-				elements.endDate.val('').attr('disabled', 'disabled');
-			}
-		});
+		}
+
 	};
 
 	function selectUser(ui, textbox) {
@@ -61,12 +65,6 @@ function ReservationSearch(options) {
 			var seriesId = $(this).attr('data-seriesId');
 			var refNum = $(this).attr('data-refnum');
 			$(this).attachReservationPopup(refNum, options.popupUrl);
-			/* Replaced by Bootstrap 5
-			$(this).hover(function (e) {
-				$(this).find('td').addClass('highlight');
-			}, function (e) {
-				$(this).find('td').removeClass('highlight');
-			});*/
 		});
 	};
 

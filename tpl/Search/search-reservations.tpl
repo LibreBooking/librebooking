@@ -87,17 +87,13 @@
                     <div class="d-flex ms-5">
                         <div class="form-group px-2">
                             <label for="beginDate" class="visually-hidden">{translate key=BeginDate}</label>
-                            <input type="date" id="beginDate" class="form-control form-control-sm dateinput"
-                                placeholder="{translate key=BeginDate}" />
-                            <input type="hidden" id="formattedBeginDate" {formname key=BEGIN_DATE}
-                                value="{formatdate date=$BeginDate key=system}" />
+                            <input type="text" id="beginDate" class="form-control form-control-sm w-auto"
+                                placeholder="{translate key=BeginDate}" {formname key=BEGIN_DATE} />
                         </div>
                         <div class="form-group">
-                            <label for=" endDate" class="visually-hidden">{translate key=EndDate}</label>
-                            <input type="date" id="endDate" class="form-control form-control-sm dateinput"
-                                placeholder="{translate key=EndDate}" />
-                            <input type="hidden" id="formattedEndDate" {formname key=END_DATE}
-                                value="{formatdate date=$EndDate key=system}" />
+                            <label for="endDate" class="visually-hidden">{translate key=EndDate}</label>
+                            <input type="text" id="endDate" class="form-control form-control-sm w-auto"
+                                placeholder="{translate key=EndDate}" {formname key=END_DATE} />
                         </div>
                     </div>
                 </div>
@@ -116,17 +112,16 @@
 
     {csrf_token}
 
-    {include file="javascript-includes.tpl" Select2=true Qtip=2 Clear=true DataTable=true}
+    {include file="javascript-includes.tpl" Select2=true Clear=true DataTable=true}
     {jsfile src="js/jquery.cookie.js"}
     {jsfile src="ajax-helpers.js"}
-    {jsfile src="resourcePopup.js"}
     {jsfile src="autocomplete.js"}
     {jsfile src="reservationPopup.js"}
     {jsfile src="reservation-search.js"}
     {jsfile src="search-clear.js"}
 
-    {control type="DatePickerSetupControl" ControlId="beginDate" AltId="formattedBeginDate" DefaultDate=$BeginDate}
-    {control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate" DefaultDate=$EndDate}
+    {control type="DatePickerSetupControl" ControlId="beginDate" DefaultDate=$BeginDate}
+    {control type="DatePickerSetupControl" ControlId="endDate" DefaultDate=$EndDate}
 
     <script type="text/javascript">
         $(document).ready(function() {
