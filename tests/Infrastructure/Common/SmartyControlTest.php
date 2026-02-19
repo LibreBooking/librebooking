@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
 class SmartyControlTest extends TestBase
