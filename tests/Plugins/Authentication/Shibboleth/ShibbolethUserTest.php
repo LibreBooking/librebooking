@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'plugins/Authentication/Shibboleth/namespace.php');
 
 class ShibbolethUserTest extends TestBase

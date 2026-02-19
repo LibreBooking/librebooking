@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/namespace.php');
 
 class ActiveDirectoryTest extends TestBase
