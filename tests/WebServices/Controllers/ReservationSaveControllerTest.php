@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Controllers/ReservationSaveController.php');
 
 class ReservationSaveControllerTest extends TestBase

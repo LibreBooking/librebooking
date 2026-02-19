@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/AuthenticationWebService.php');
 require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceUserSession.php');
 

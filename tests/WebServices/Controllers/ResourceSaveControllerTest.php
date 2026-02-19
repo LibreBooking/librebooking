@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Controllers/ResourceSaveController.php');
 
 class ResourceSaveControllerTest extends TestBase

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Controllers/UserSaveController.php');
 
 class UserSaveControllerTest extends TestBase

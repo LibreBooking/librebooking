@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Validators/AccountRequestValidator.php');
 
 class AccountRequestValidatorTest extends TestBase

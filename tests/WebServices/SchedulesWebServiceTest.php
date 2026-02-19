@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function PHPUnit\Framework\matches;
 
 require_once(ROOT_DIR . 'WebServices/SchedulesWebService.php');
