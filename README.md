@@ -69,7 +69,7 @@ significantly and diverged from the original project.
 
 A live demo instance of LibreBooking is available for testing:
 
-[Try the demo](https://librebooking-demo.fly.dev/)
+[Try the demo](https://librebooking-demo.fly.dev/Web/)
 
 | Role  | Username | Password    |
 | ----- | -------- | ----------- |
