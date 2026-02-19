@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/User/ManageUsersService.php');
 
 class ManageUsersServiceTest extends TestBase

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 
 class AttributeServiceTest extends TestBase

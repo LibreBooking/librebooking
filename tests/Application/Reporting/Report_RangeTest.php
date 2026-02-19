@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Report_RangeTest extends TestBase
 {
     /**
