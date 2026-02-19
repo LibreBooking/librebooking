@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
