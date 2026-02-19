@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeResources extends Resources
 {
     private $_dateFormats = [ResourceKeys::DATE_GENERAL => 'm/d/y',

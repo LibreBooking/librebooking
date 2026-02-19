@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAuthentication implements IAuthentication
 {
     public $_ValidateResult = false;

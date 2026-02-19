@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAccessoryRepository implements IAccessoryRepository
 {
     public $_AllAccessories = [];

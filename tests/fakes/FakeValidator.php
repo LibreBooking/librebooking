@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeValidator extends ValidatorBase implements IValidator
 {
     public $_WasValidated = false;

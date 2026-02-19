@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Server/UploadedFile.php');
 
 class FakeUploadedFile extends UploadedFile

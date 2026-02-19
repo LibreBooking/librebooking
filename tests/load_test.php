@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 define('ROOT_DIR', dirname(__FILE__) . '/../');
 
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');

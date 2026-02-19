@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeBookableResource extends BookableResource
 {
     public function __construct($id, $name = null)

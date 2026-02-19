@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeGroup extends Group
 {
     public function __construct($id = 123, $name = 'group name')

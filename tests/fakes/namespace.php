@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'tests/fakes/DBFakes.php');
 require_once(ROOT_DIR . 'tests/fakes/DBRows.php');
 require_once(ROOT_DIR . 'tests/fakes/FakeAuth.php');

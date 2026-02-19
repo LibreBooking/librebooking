@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class TestReservationItemView extends ReservationItemView
 {
     public $_RequiresCheckin = false;

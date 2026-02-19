@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require_once ROOT_DIR . 'vendor/autoload.php';
 }

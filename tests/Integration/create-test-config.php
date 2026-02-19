@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate a config/config.php suitable for integration testing.
  *

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/RegistrationPage.php');
 
 class FakeRegistrationPage extends FakePageBase implements IRegistrationPage

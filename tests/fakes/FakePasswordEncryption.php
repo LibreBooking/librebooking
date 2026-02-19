@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakePasswordEncryption extends PasswordEncryption
 {
     public $_Salt = '123';

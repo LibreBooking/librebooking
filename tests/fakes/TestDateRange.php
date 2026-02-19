@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class TestDateRange extends DateRange
 {
     public function __construct()

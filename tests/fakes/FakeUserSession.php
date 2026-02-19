@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeUserSession extends UserSession
 {
     public function __construct($isAdmin = false, $timezone = 'America/New_York', $userId = 1)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 @define('BASE_DIR', dirname(__FILE__) . '/../..');
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 

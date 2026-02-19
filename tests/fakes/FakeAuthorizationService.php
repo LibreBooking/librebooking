@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAuthorizationService implements IAuthorizationService
 {
     public $_IsApplicationAdministrator = false;

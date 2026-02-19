@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeScheduleService implements IScheduleService
 {
     public $_DailyLayout;

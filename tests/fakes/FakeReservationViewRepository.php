@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeReservationViewRepository implements IReservationViewRepository
 {
     public $_ReservationView;
