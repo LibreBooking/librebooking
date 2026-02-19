@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/CalendarPage.php');
 require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
 

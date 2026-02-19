@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/GuestReservationPresenter.php');
 
 class GuestReservationPresenterTest extends TestBase

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/RegistrationPresenter.php');
 require_once(ROOT_DIR . 'Pages/RegistrationPage.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');

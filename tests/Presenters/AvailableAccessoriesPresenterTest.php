@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/Ajax/AvailableAccessoriesPage.php');
 require_once(ROOT_DIR . 'Presenters/AvailableAccessoriesPresenter.php');
 

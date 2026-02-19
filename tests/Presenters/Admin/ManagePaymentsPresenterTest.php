@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/ManagePaymentsPresenter.php');
 
 class ManagePaymentsPresenterTest extends TestBase

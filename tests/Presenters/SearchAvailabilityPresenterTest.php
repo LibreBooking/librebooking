@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/SearchAvailabilityPresenter.php');
 
 class SearchAvailabilityPresenterTest extends TestBase
@@ -480,7 +482,7 @@ class FakeSearchAvailabilityPage extends SearchAvailabilityPage
     public $_RepeatMonthlyType = RepeatMonthlyType::DayOfMonth;
 
     /**
-     * @var Date[]
+     * @var string[]
      */
     public $_RepeatCustomDates = [];
 

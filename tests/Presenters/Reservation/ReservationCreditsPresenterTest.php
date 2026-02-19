@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationCreditsPresenter.php');
 
 class ReservationCreditsPresenterTest extends TestBase
@@ -181,7 +183,7 @@ class FakeReservationCreditsPage implements IReservationCreditsPage
     public $_CreditCost;
 
     /**
-     * @var Date[]
+     * @var string[]
      */
     public $_RepeatCustomDates = [];
 
