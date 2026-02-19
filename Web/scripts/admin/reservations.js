@@ -3,8 +3,8 @@ function ReservationManagement(opts, approval) {
 
     var elements = {
         userFilter: $("#userFilter"),
-        startDate: $("#formattedStartDate"),
-        endDate: $("#formattedEndDate"),
+        startDate: document.getElementById('startDate'),
+        endDate: document.getElementById('endDate'),
         userId: $("#userId"),
         scheduleId: $("#scheduleId"),
         resourceId: $("#resourceId"),
@@ -366,7 +366,7 @@ function ReservationManagement(opts, approval) {
             return boolVal ? 1 : 0;
         };
 
-        var filterQuery = 'sd=' + elements.startDate.val() + '&ed=' + elements.endDate.val() + '&sid=' + elements.scheduleId.val() + '&rid=' + elements.resourceId.val() + '&uid=' + elements.userId.val() + '&un=' + elements.userFilter.val() + '&rn=' + elements.referenceNumber.val() + '&rsid=' + elements.statusId.val() + '&rrsid=' + elements.resourceStatusIdFilter.val() + '&rrsrid=' + reasonId + '&rtitle=' + elements.title.val() + '&rdesc=' + elements.description.val() + '&in=' + toInt(elements.missedCheckin.is(':checked')) + '&out=' + toInt(elements.missedCheckout.is(':checked'));
+        var filterQuery = 'sd=' + elements.startDate.value + '&ed=' + elements.endDate.value + '&sid=' + elements.scheduleId.val() + '&rid=' + elements.resourceId.val() + '&uid=' + elements.userId.val() + '&un=' + elements.userFilter.val() + '&rn=' + elements.referenceNumber.val() + '&rsid=' + elements.statusId.val() + '&rrsid=' + elements.resourceStatusIdFilter.val() + '&rrsrid=' + reasonId + '&rtitle=' + elements.title.val() + '&rdesc=' + elements.description.val() + '&in=' + toInt(elements.missedCheckin.is(':checked')) + '&out=' + toInt(elements.missedCheckout.is(':checked'));
 
         window.location = document.location.pathname + '?' + encodeURI(filterQuery) + attributeString;
     }

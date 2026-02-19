@@ -62,17 +62,11 @@
 							class="form-group filter-dates {$groupClass} d-flex justify-content-between align-items-center">
 							<div>
 								<label for="startDate" class="fw-bold">{translate key='BeginDate'}</label>
-								<input id="startDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$StartDate format='Y-m-d'}" />
-								<input id="formattedStartDate" type="hidden"
-									value="{formatdate date=$StartDate key=system}" />
+								<input id="startDate" type="text" class="form-control form-control-sm" />
 							</div>
 							<div>
 								<label for="endDate" class="fw-bold">{translate key='EndDate'}</label>
-								<input id="endDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$EndDate format='Y-m-d'}" />
-								<input id="formattedEndDate" type="hidden"
-									value="{formatdate date=$EndDate key=system}" />
+								<input id="endDate" type="text" class="form-control form-control-sm" />
 							</div>
 						</div>
 						<div class="form-group filter-user {$groupClass}">
@@ -580,7 +574,7 @@
 	{datatable tableId=$tableId}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/reservations.js"}
-
+	{jsfile src="search-clear.js"}
 	{jsfile src="autocomplete.js"}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="approval.js"}
@@ -678,8 +672,8 @@
 		});
 	</script>
 
-	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}
-	{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
+	{control type="DatePickerSetupControl" ControlId="startDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="endDate" DefaultDate=$EndDate}
 
 	{csrf_token}
 
@@ -689,5 +683,4 @@
 	</div>
 
 </div>
-{jsfile src="search-clear.js"}
 {include file='globalfooter.tpl'}
