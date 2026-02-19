@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
 require_once(ROOT_DIR . 'lib/external/Slim/Route.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
