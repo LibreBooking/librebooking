@@ -5,14 +5,9 @@ RewriteEngine On
 #RewriteCond %{HTTPS} off
 #RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# If the request is already under Web/ (with or without trailing slash/subpath), do nothing.
-# Uses the .htaccess-relative URI so this works correctly whether the app is at the
-# root or mounted under a subpath/alias.
-RewriteRule ^Web(/.*)?$ - [L]
-# Otherwise redirect to the Web/ subdirectory. The substitution is intentionally
-# relative (no leading /) so Apache resolves it against the .htaccess location,
-# keeping the correct base path for both root and subpath deployments.
-RewriteRule ^(.*)$ Web/$1 [R=301,L]
+# Redirect requests that are not already under /Web to /Web.
+RewriteCond %{REQUEST_URI} !^/Web(/|$)
+RewriteRule ^(.*)$ /Web/$1 [R=301,L]
 
 #Header Set Access-Control-Allow-Origin "*"
 #Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
