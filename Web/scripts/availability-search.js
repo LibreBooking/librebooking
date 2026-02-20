@@ -4,12 +4,9 @@ function AvailabilitySearch(options) {
         availabilityResults: $('#availability-results'),
         anyResource: $('#anyResource'),
         resourceGroups: $('#resourceGroups'),
-        // today: $('#today'),
-        // tomorrow: $('#tomorrow'),
-        // thisweek: $('#thisweek'),
         daterange: $('input[name="AVAILABILITY_RANGE"]'),
-        beginDate: $('#beginDate'),
-        endDate: $('#endDate'),
+        beginDate: $('#BeginDate'),
+        endDate: $('#EndDate'),
         specificTime: $('#specificTime'),
         hours: $('#hours'),
         minutes: $('#minutes'),
@@ -42,12 +39,12 @@ function AvailabilitySearch(options) {
 
         elements.daterange.change(function (e) {
             if ($(e.target).val() == 'daterange') {
-                elements.beginDate.removeAttr('disabled');
-                elements.endDate.removeAttr('disabled');
+                setFlatpickrDisabled(elements.beginDate, false);
+                setFlatpickrDisabled(elements.endDate, false);
             }
             else {
-                elements.beginDate.val('').attr('disabled', 'disabled');
-                elements.endDate.val('').attr('disabled', 'disabled');
+                setFlatpickrDisabled(elements.beginDate, true);
+                setFlatpickrDisabled(elements.endDate, true);
             }
         });
 
@@ -69,6 +66,22 @@ function AvailabilitySearch(options) {
             }
         });
     };
+
+    function setFlatpickrDisabled(input, disabled) {
+        var fp = input[0]?._flatpickr;
+
+        input.prop('disabled', disabled);
+
+        if (fp) {
+            if (fp.altInput) {
+                fp.altInput.disabled = disabled;
+            }
+
+            if (disabled) {
+                fp.close();
+            }
+        }
+    }
 
     var showSearchResults = function (data) {
         elements.availabilityResults.empty().html(data);

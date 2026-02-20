@@ -118,7 +118,7 @@ function AnnouncementManagement(opts) {
 			elements.editResourceGroups.trigger('change');
 		}
 
-		new bootstrap.Modal(editDialog).show();
+		new bootstrap.Modal(elements.editDialog).show();
 
 		elements.editDialog.addEventListener('shown.bs.modal', () => {
 			if (elements.editBegin[0]?._flatpickr && announcement.start) {

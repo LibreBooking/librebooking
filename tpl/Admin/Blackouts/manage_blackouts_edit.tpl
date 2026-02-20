@@ -2,10 +2,8 @@
 	<div id="updateBlackout" class="row gy-1 p-4">
 		<div class="form-group col-12 col-md-6 d-flex align-items-center gap-1">
 			<label class="fw-bold" for="updateStartDate">{translate key=BeginDate}</label>
-			<input type="date" id="updateStartDate" class="form-control form-control-sm dateinput"
-				value="{formatdate date=$BlackoutStartDate format='Y-m-d'}" />
-			<input {formname key=BEGIN_DATE} id="formattedUpdateStartDate" type="hidden"
-				value="{formatdate date=$BlackoutStartDate key=system}" />
+			<input {formname key=BEGIN_DATE} type="text" id="updateStartDate"
+				class="form-control form-control-sm w-auto" />
 			<select {formname key=BEGIN_TIME} id="updateStartTime" class="form-select form-select-sm w-auto timepicker"
 				data-format="{$TimeFormat}" data-step="30" data-default="{$BlackoutStartDate->format('H:i')}"
 				title="{translate key=StartTime}"></select>
@@ -13,10 +11,7 @@
 
 		<div class="form-group col-12 col-md-6 d-flex align-items-center gap-1">
 			<label class="fw-bold" for="updateEndDate">{translate key=EndDate}</label>
-			<input type="date" id="updateEndDate" class="form-control form-control-sm dateinput" size="10"
-				value="{formatdate date=$BlackoutEndDate format='Y-m-d'}" />
-			<input {formname key=END_DATE} type="hidden" id="formattedUpdateEndDate"
-				value="{formatdate date=$BlackoutEndDate key=system}" />
+			<input {formname key=END_DATE} type="text" id="updateEndDate" class="form-control form-control-sm w-auto" />
 			<select {formname key=END_TIME} id="updateEndTime" class="form-select form-select-sm w-auto timepicker"
 				data-format="{$TimeFormat}" data-step="30" data-default="{$BlackoutEndDate->format('H:i')}"
 				title="{translate key=EndTime}"></select>
@@ -111,12 +106,13 @@
 		var recurrence = new Recurrence(recurOpts, {}, 'edit');
 		recurrence.init();
 		{foreach from=$CustomRepeatDates item=date}
-			recurrence.addCustomDate('{format_date date=$date key=system timezone=$Timezone}', '{format_date date=$date timezone=$Timezone}');
+			recurrence.addCustomDate('{format_date date=$date timezone=$Timezone key=system}',
+			'{format_date date=$date timezone=$Timezone key=schedule_daily}');
 		{/foreach}
 	});
 </script>
 
-{control type="DatePickerSetupControl" ControlId="updateStartDate" AltId="formattedUpdateStartDate"}
-{control type="DatePickerSetupControl" ControlId="updateEndDate" AltId="formattedUpdateEndDate"}
-{control type="DatePickerSetupControl" ControlId="editEndRepeat" AltId="editformattedEndRepeat"}
-{control type="DatePickerSetupControl" ControlId="editRepeatDate" AltId="editformattedRepeatDate"}
+{control type="DatePickerSetupControl" ControlId="updateStartDate" DefaultDate=$BlackoutStartDate}
+{control type="DatePickerSetupControl" ControlId="updateEndDate" DefaultDate=$BlackoutEndDate}
+{control type="DatePickerSetupControl" ControlId="editEndRepeat" DefaultDate=$RepeatTerminationDate}
+{control type="DatePickerSetupControl" ControlId="editRepeatDate" Multiple=false}

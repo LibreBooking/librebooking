@@ -328,8 +328,8 @@
 				announcementManagement.addAnnouncement(
 					'{$announcement->Id()}',
 					DOMPurify.sanitize('{$announcement->Text()|escape:"quotes"|regex_replace:"/[\n]/":"\\n"}'),
-					'{$announcement->Start()->ToTimezone($timezone)->Format('Y-m-d')}',
-					'{$announcement->End()->ToTimezone($timezone)->Format('Y-m-d')}',
+					'{$announcement->Start()->ToTimezone($timezone)->Format("Y-m-d")}',
+					'{$announcement->End()->ToTimezone($timezone)->Format("Y-m-d")}',
 					'{$announcement->Priority()}',
 					[{foreach from=$announcement->GroupIds() item=id}{$id},{/foreach}],
 					[{foreach from=$announcement->ResourceIds() item=id}{$id},{/foreach}],

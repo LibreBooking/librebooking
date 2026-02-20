@@ -125,11 +125,9 @@
                     <div class="d-flex flex-wrap">
                         <div class="form-group d-flex align-items-center me-2">
                             <label for="BeginDate" class="reservationDate fw-bold">{translate key='BeginDate'}</label>
-                            <input type="date" id="BeginDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
-                                value="{formatdate date=$StartDate key=system}" />
-                            <input type="hidden" id="formattedBeginDate" {formname key=BEGIN_DATE}
-                                value="{formatdate date=$StartDate key=system}" />
+                            <input type="text" id="BeginDate"
+                                class="form-control form-control-sm d-inline-block w-auto{if $LockPeriods} no-show{/if}"
+                                {formname key=BEGIN_DATE} />
                             <select id="BeginPeriod" {formname key=BEGIN_PERIOD}
                                 class="form-select form-select-sm w-auto timeinput{if $LockPeriods} no-show{/if}"
                                 title="Begin time">
@@ -150,11 +148,9 @@
                         <div class="form-group d-flex align-items-center">
                             <label for="EndDate"
                                 class="reservationDate fw-bold text-md-end pe-md-1">{translate key='EndDate'}</label>
-                            <input type="date" id="EndDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
-                                value="{formatdate date=$EndDate key=system}" />
-                            <input type="hidden" id="formattedEndDate" {formname key=END_DATE}
-                                value="{formatdate date=$EndDate key=system}" />
+                            <input type="text" id="EndDate"
+                                class="form-control form-control-sm d-inline-block w-auto{if $LockPeriods} no-show{/if}"
+                                {formname key=END_DATE} />
                             <select id="EndPeriod" {formname key=END_PERIOD}
                                 class="form-select form-select-sm w-auto timeinput{if $LockPeriods} no-show{/if}"
                                 title="End time">
@@ -525,12 +521,12 @@
 
 {block name=extras}{/block}
 
-{include file="javascript-includes.tpl" Qtip=false}
+{include file="javascript-includes.tpl"}
 
-{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone)}
+{control type="DatePickerSetupControl" ControlId="BeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="EndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="RepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone) Multiple=false}
 
 {jsfile src="js/moment.min.js"}
 {jsfile src="resourcePopup.js"}
@@ -628,7 +624,8 @@
         recurrence.onChange(reservation.repeatOptionsChanged);
 
         {foreach from=$CustomRepeatDates item=date}
-        recurrence.addCustomDate('{format_date date=$date key=system timezone=$Timezone}', '{format_date date=$date timezone=$Timezone}');
+        recurrence.addCustomDate('{format_date date=$date key=system timezone=$Timezone}',
+        '{format_date date=$date key=schedule_daily timezone=$Timezone}');
         {/foreach}
 
         var ajaxOptions = {

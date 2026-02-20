@@ -2,8 +2,8 @@ function BlackoutManagement(opts) {
 	var options = opts;
 
 	var elements = {
-		startDate: $("#formattedStartDate"),
-		endDate: $("#formattedEndDate"),
+		startDate: $("#startDate"),
+		endDate: $("#endDate"),
 		scheduleId: $("#scheduleId"),
 		resourceId: $("#resourceId"),
 		blackoutTable: $("#blackoutTable"),

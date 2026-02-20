@@ -16,10 +16,8 @@
 						<div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
 							<div class="d-flex align-items-center flex-wrap gap-1 me-sm-4">
 								<label class="fw-bold" for="addStartDate">{translate key=BeginDate}</label>
-								<input type="date" id="addStartDate" class="form-control form-control-sm me-1 dateinput"
-									value="{formatdate date=$AddStartDate format='Y-m-d'}" />
-								<input {formname key=BEGIN_DATE} id="formattedAddStartDate" type="hidden"
-									value="{formatdate date=$AddStartDate key=system}" />
+								<input type="text" id="addStartDate" {formname key=BEGIN_DATE}
+									class="form-control form-control-sm w-auto" />
 								<select {formname key=BEGIN_TIME} id="addStartTime"
 									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
 									data-step="30" data-default="{format_date format='H:00' date=now}">
@@ -28,10 +26,8 @@
 							</div>
 							<div class="d-flex align-items-center flex-wrap gap-1">
 								<label class="fw-bold" for="addEndDate">{translate key=EndDate}</label>
-								<input type="date" id="addEndDate" class="form-control form-control-sm me-1 dateinput"
-									size="10" value="{formatdate date=$AddEndDate format='Y-m-d'}" />
-								<input {formname key=END_DATE} type="hidden" id="formattedAddEndDate"
-									value="{formatdate date=$AddEndDate key=system}" />
+								<input type="text" id="addEndDate" {formname key=END_DATE}
+									class="form-control form-control-sm w-auto" />
 								<select {formname key=END_TIME} id="addEndTime"
 									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
 									data-step="30"
@@ -71,7 +67,7 @@
 								class="form-control form-control-sm w-auto required has-feedback" />
 						</div>
 						<div class="form-group mb-2">
-							{control type="RecurrenceControl" RepeatTerminationDate=$RepeatTerminationDate}
+							{control type="RecurrenceControl"}
 						</div>
 						<div class="form-group">
 							<div class="form-check form-check-inline">
@@ -118,21 +114,15 @@
 					<div class="accordion-body row gy-2">
 						<div class="form-group col-12 col-sm-4">
 							<div class="d-flex align-items-center justify-content-between flex-wrap">
-								<div>
+								<div class="d-flex flex-column">
 									<label for="startDate" class="fw-bold">{translate key=BeginDate}</label>
-									<input id="startDate" type="date" class="form-control form-control-sm dateinput"
-										value="{formatdate date=$StartDate format='Y-m-d'}" title="Between start date"
+									<input id="startDate" type="text" class="form-control form-control-sm w-auto"
 										placeholder="{translate key=BeginDate}" />
-									<input id="formattedStartDate" type="hidden"
-										value="{formatdate date=$StartDate key=system}" />
 								</div>
-								<div class="ms-1">
+								<div class="d-flex flex-column">
 									<label for="endDate" class="fw-bold">{translate key=EndDate}</label>
-									<input id="endDate" type="date" class="form-control form-control-sm dateinput"
-										value="{formatdate date=$EndDate format='Y-m-d'}"
+									<input id="endDate" type="text" class="form-control form-control-sm w-auto"
 										placeholder="{translate key=EndDate}" />
-									<input id="formattedEndDate" type="hidden"
-										value="{formatdate date=$EndDate key=system}" />
 								</div>
 							</div>
 						</div>
@@ -350,8 +340,8 @@
 			};
 
 			var recurElements = {
-				beginDate: $('#formattedAddStartDate'),
-				endDate: $('#formattedAddEndDate'),
+				beginDate: $('#addStartDate'),
+				endDate: $('#addEndDate'),
 				beginTime: $('#addStartTime'),
 				endTime: $('#addEndTime')
 			};
@@ -365,12 +355,12 @@
 		});
 	</script>
 
-	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}
-	{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
-	{control type="DatePickerSetupControl" ControlId="addStartDate" AltId="formattedAddStartDate"}
-	{control type="DatePickerSetupControl" ControlId="addEndDate" AltId="formattedAddEndDate"}
-	{control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat"}
-	{control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate"}
+	{control type="DatePickerSetupControl" ControlId="startDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="endDate" DefaultDate=$EndDate}
+	{control type="DatePickerSetupControl" ControlId="addStartDate" DefaultDate=$AddStartDate}
+	{control type="DatePickerSetupControl" ControlId="addEndDate" DefaultDate=$AddEndDate}
+	{control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$AddEndDate}
+	{control type="DatePickerSetupControl" ControlId="RepeatDate" Multiple=false}
 
 
 	<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"

@@ -2,10 +2,8 @@ function Reservation(opts) {
     var options = opts;
 
     var elements = {
-        beginDate: $('#formattedBeginDate'),
-        endDate: $('#formattedEndDate'),
-        beginDateTextbox: $('#BeginDate'),
-        endDateTextbox: $('#EndDate'),
+        beginDate: $('#BeginDate'),
+        endDate: $('#EndDate'),
 
         beginTime: $('#BeginPeriod'),
         endTime: $('#EndPeriod'),
@@ -602,8 +600,7 @@ function Reservation(opts) {
         var currentEndDate = new Date(elements.endDate.val() + 'T' + elements.endTime.val());
         currentEndDate.setDate(currentEndDate.getDate() + diffDays);
 
-        elements.endDateTextbox.datepicker("setDate", currentEndDate);
-        elements.endDate.trigger('change');
+        elements.endDate[0]._flatpickr.setDate(currentEndDate, true);
     };
 
     var SelectRepeatWeekday = function () {
@@ -755,7 +752,7 @@ function Reservation(opts) {
         elements.beginTime.data['beginTimePreviousVal'] = elements.beginTime.val();
 
         function BeginDateChanged() {
-            PopulatePeriodDropDown(elements.beginDate, elements.beginTime, elements.beginDateTextbox, 'begin');
+            PopulatePeriodDropDown(elements.beginDate, elements.beginTime, 'begin');
             AdjustEndDate();
             DisplayDuration();
             SelectRepeatWeekday();
@@ -764,7 +761,7 @@ function Reservation(opts) {
         }
 
         function EndDateChanged() {
-            PopulatePeriodDropDown(elements.endDate, elements.endTime, elements.endDateTextbox, 'end');
+            PopulatePeriodDropDown(elements.endDate, elements.endTime, 'end');
             DisplayDuration();
             CalculateCredits();
             elements.endDate.data['endPreviousVal'] = elements.endDate.val();
@@ -793,13 +790,6 @@ function Reservation(opts) {
         elements.endTime.change(function () {
             DisplayDuration();
             CalculateCredits();
-        });
-
-        elements.beginDateTextbox.change(function (e) {
-            BeginDateChanged();
-        });
-        elements.endDateTextbox.change(function (e) {
-            EndDateChanged();
         });
 
         var previousDateEndsAtMidnight = function (scheduleId, date) {
@@ -836,11 +826,12 @@ function Reservation(opts) {
             return layoutCache[weekday];
         };
 
-        var PopulatePeriodDropDown = function (dateElement, periodElement, dateTextbox, type) {
+        var PopulatePeriodDropDown = function (dateElement, periodElement, type) {
 
-            var prevDate = new Date(dateElement.data['previousVal']);
+            var prevDate = new Date(dateElement.data('previousVal'));
             var currDate = new Date(dateElement.val());
-            if (prevDate.getTime() == currDate.getTime()) {
+
+            if (prevDate.getTime() === currDate.getTime()) {
                 return;
             }
 
@@ -865,23 +856,23 @@ function Reservation(opts) {
             periodElement.empty();
             $.map(layoutItems, function (item) {
                 if (item.isReservable) {
-                    if (type == 'begin') {
+                    if (type === 'begin') {
                         items.push('<option value="' + item.begin + '">' + item.label + '</option>');
                     } else {
                         items.push('<option value="' + item.end + '">' + item.labelEnd + '</option>');
-
                     }
                 } else {
-                    if (type == 'end' && item.begin == '00:00:00' && previousDateEndsAtMidnight(scheduleId, dateElement.val())) {
+                    if (type === 'end' && item.begin === '00:00:00' && previousDateEndsAtMidnight(scheduleId, dateElement.val())) {
                         selectedPeriod = null;
                         items.push('<option value="' + item.begin + '" selected="selected">' + item.label + '</option>');
                     }
                 }
             });
 
-            if (items.length == 0) {
-                var nextDate = moment(dateElement.val()).add(1, 'days').toDate();
-                dateTextbox.datepicker("setDate", nextDate);
+            if (items.length === 0) {
+                var nextDate = new Date(dateElement.val());
+                nextDate.setDate(nextDate.getDate() + 1);
+                dateElement[0]._flatpickr.setDate(nextDate, true);
                 dateElement.trigger('change');
             } else {
                 var html = items.join('');

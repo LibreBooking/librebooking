@@ -4,17 +4,15 @@ function Recurrence(recurOptions, recurElements, prefix) {
         repeatOptions: $('#' + prefix + 'repeatOptions'),
         repeatDiv: $('#' + prefix + 'repeatDiv'),
         repeatInterval: $('#' + prefix + 'repeatInterval'),
-        repeatTermination: $('#' + prefix + 'formattedEndRepeat'),
-        repeatTerminationTextbox: $('#' + prefix + 'EndRepeat'),
-        beginDate: $('#' + prefix + 'formattedBeginDate'),
-        endDate: $('#' + prefix + 'formattedEndDate'),
+        repeatTermination: $('#' + prefix + 'EndRepeat'),
+        beginDate: $('#' + prefix + 'BeginDate'),
+        endDate: $('#' + prefix + 'EndDate'),
         beginTime: $('#' + prefix + 'BeginPeriod'),
         endTime: $('#' + prefix + 'EndPeriod'),
         repeatOnWeeklyDiv: $('#' + prefix + 'repeatOnWeeklyDiv'),
         repeatOnMonthlyDiv: $('#' + prefix + 'repeatOnMonthlyDiv'),
         addDateBtn: $('#' + prefix + 'AddDate'),
-        repeatDateFormatted: $('#' + prefix + 'formattedRepeatDate'),
-        repeatDate: $('#' + prefix + 'RepeatDate'),
+        repeatDate: document.getElementById(prefix + 'RepeatDate'),
         customDatesDiv: $('#' + prefix + 'customDatesDiv')
     };
 
@@ -113,41 +111,41 @@ function Recurrence(recurOptions, recurElements, prefix) {
     };
 
     function InitializeDateElements() {
-        elements.beginDate.change(function () {
+        elements.beginDate.on('change', function () {
             ToggleRepeatOptions();
         });
 
-        elements.endDate.change(function () {
+        elements.endDate.on('change', function () {
             ToggleRepeatOptions();
         });
 
-        elements.beginTime.change(function () {
+        elements.beginTime.on('change', function () {
             ToggleRepeatOptions();
         });
 
-        elements.endTime.change(function () {
+        elements.endTime.on('change', function () {
             ToggleRepeatOptions();
         });
     }
 
     function InitializeRepeatElements() {
-        elements.repeatOptions.change(function () {
+        elements.repeatOptions.on('change', function () {
             ChangeRepeatOptions();
             AdjustTerminationDate();
             NotifyChange();
         });
 
-        elements.repeatInterval.change(function () {
+        elements.repeatInterval.on('change', function () {
             AdjustTerminationDate();
             NotifyChange();
         });
 
-        elements.beginDate.change(function () {
+        elements.beginDate.on('change', function () {
             AdjustTerminationDate();
             NotifyChange();
         });
 
-        elements.repeatTermination.change(function () {
+        elements.repeatTermination.on('change', function () {
             terminationDateSetManually = true;
             NotifyChange();
         });
@@ -167,11 +165,11 @@ function Recurrence(recurOptions, recurElements, prefix) {
             $("#" + prefix + "repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").prop('checked', true);
         }
 
-        elements.repeatOnWeeklyDiv.find('input[type="checkbox"]').off('change').on('change', function() {
+        elements.repeatOnWeeklyDiv.find('input[type="checkbox"]').off('change').on('change', function () {
             NotifyChange();
         });
 
-        elements.repeatOnMonthlyDiv.find('input[type="radio"]').off('change').on('change', function() {
+        elements.repeatOnMonthlyDiv.find('input[type="radio"]').off('change').on('change', function () {
             NotifyChange();
         });
     }
@@ -181,10 +179,10 @@ function Recurrence(recurOptions, recurElements, prefix) {
             elements.repeatOptions.val(value);
             elements.repeatOptions.trigger('change');
             if (disabled) {
-                $('select, input', elements.repeatDiv).prop("disabled", 'disabled');
+                $('select, input', elements.repeatDiv).prop("disabled", true);
             }
             else {
-                $('select, input', elements.repeatDiv).removeAttr("disabled");
+                $('select, input', elements.repeatDiv).prop("disabled", false);
             }
         };
 
@@ -195,7 +193,7 @@ function Recurrence(recurOptions, recurElements, prefix) {
                 elements.repeatOptions.val('none');
                 elements.repeatOptions.trigger('change');
             }
-            elements.repeatOptions.find("option[value='daily']").prop("disabled", "disabled");
+            elements.repeatOptions.find("option[value='daily']").prop("disabled", true);
             elements.repeatOnWeeklyDiv.addClass('d-none');
         }
         else {
@@ -203,7 +201,7 @@ function Recurrence(recurOptions, recurElements, prefix) {
                 SetValue(elements.repeatOptions.data["current"], false);
                 repeatToggled = false;
             }
-            elements.repeatOptions.find("option[value='daily']").removeAttr("disabled");
+            elements.repeatOptions.find("option[value='daily']").prop("disabled", false);
 
         }
     };
@@ -228,18 +226,19 @@ function Recurrence(recurOptions, recurElements, prefix) {
         else if (repeatOption == 'monthly') {
             newEndDate.setMonth(newEndDate.getMonth() + interval);
         }
-        else if (repeatOption = 'yearly') {
+        else if (repeatOption == 'yearly') {
             newEndDate.setFullYear(newEndDate.getFullYear() + interval);
         }
         else {
             newEndDate = currentEnd;
         }
 
-        elements.repeatTerminationTextbox.datepicker("setDate", newEndDate);
+        elements.repeatTermination[0]._flatpickr.setDate(newEndDate, false);
+
     };
 
     var OnRepeatDateAdded = function () {
-        AddRepeatDate(elements.repeatDateFormatted.val(), elements.repeatDate.val());
+        AddRepeatDate(elements.repeatDate.value, elements.repeatDate._flatpickr.altInput.value);
     };
 
     var AddRepeatDate = function (systemFormattedDate, userFormattedDate) {

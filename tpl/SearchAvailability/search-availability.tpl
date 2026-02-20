@@ -91,15 +91,13 @@
                     <div class="d-flex flex-wrap">
                         <div class="form-group px-2">
                             <label for="beginDate" class="visually-hidden">{translate key=BeginDate}</label>
-                            <input type="date" id="beginDate" class="form-control form-control-sm dateinput"
-                                placeholder="{translate key=BeginDate}" disabled="disabled" />
-                            <input type="hidden" id="formattedBeginDate" {formname key=BEGIN_DATE} />
+                            <input type="text" id="BeginDate" class="form-control form-control-sm"
+                                placeholder="{translate key=BeginDate}" disabled="disabled" {formname key=BEGIN_DATE} />
                         </div>
                         <div class="form-group">
                             <label for="endDate" class="visually-hidden">{translate key=EndDate}</label>
-                            <input type="date" id="endDate" class="form-control form-control-sm dateinput"
-                                placeholder="{translate key=EndDate}" disabled="disabled" />
-                            <input type="hidden" id="formattedEndDate" {formname key=END_DATE} />
+                            <input type="text" id="EndDate" class="form-control form-control-sm"
+                                placeholder="{translate key=EndDate}" disabled="disabled" {formname key=END_DATE} />
                         </div>
                     </div>
                 </div>
@@ -165,10 +163,10 @@
     {jsfile src="date-helper.js"}
     {jsfile src="recurrence.js"}
 
-    {control type="DatePickerSetupControl" ControlId="beginDate" AltId="formattedBeginDate" DefaultDate=$StartDate}
-    {control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate" DefaultDate=$StartDate}
-    {control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat" DefaultDate=$StartDate}
-    {control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate"}
+    {control type="DatePickerSetupControl" ControlId="BeginDate" DefaultDate=$Today MinDate=$Today}
+    {control type="DatePickerSetupControl" ControlId="EndDate" DefaultDate=$Tomorrow MinDate=$Today}
+    {control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$Tomorrow}
+    {control type="DatePickerSetupControl" ControlId="RepeatDate" Multiple=false}
 
     <script type="text/javascript">
         $(document).ready(function() {
