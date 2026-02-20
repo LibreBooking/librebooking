@@ -16,7 +16,7 @@ This file contains essential information for AI coding agents working on the Lib
 
 ## Repository Structure
 
-```
+```text
 /config                  Application configuration files
 /Controls                Reusable page control objects
 /database_schema         SQL scripts for database setup and upgrades
@@ -57,19 +57,23 @@ This file contains essential information for AI coding agents working on the Lib
 ### Initial Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/LibreBooking/librebooking.git
    cd librebooking
    ```
 
 2. **Install dependencies**:
+
    ```bash
    composer install
    ```
-   
+
    **⚠️ Known Issue - Composer Authentication Error**:
-   If you encounter `Could not authenticate against github.com` during `composer install`, this is a known issue in certain CI/sandboxed environments. 
-   
+   If you encounter `Could not authenticate against github.com` during
+   `composer install`, this is a known issue in certain CI/sandboxed
+   environments.
+
    **Workarounds**:
    - The error typically occurs when Composer tries to download packages from GitHub without proper authentication
    - If in a CI environment, ensure GitHub tokens are properly configured
@@ -77,6 +81,7 @@ This file contains essential information for AI coding agents working on the Lib
    - If the error persists and blocks progress, note this limitation and proceed with tasks that don't require vendor dependencies
 
 3. **Configure the application**:
+
    ```bash
    cp config/config.dist.php config/config.php
    # Edit config.php with your database settings
@@ -89,6 +94,7 @@ This file contains essential information for AI coding agents working on the Lib
 ### Preflight Check
 
 Run the preflight checker to validate your environment:
+
 ```bash
 composer preflight
 # Or: php lib/preflight.php
@@ -101,12 +107,15 @@ This script checks PHP version, required extensions, permissions, and optional d
 ### Linting
 
 **PHP Syntax Check**:
+
 ```bash
 ./ci/ci-phplint
 ```
+
 This uses parallel processing to lint all PHP files (excluding vendor, tmp, node_modules).
 
 **PHP-CS-Fixer** (PSR-12 compliance):
+
 ```bash
 # Check code style (dry-run, no changes)
 composer phpcsfixer:lint
@@ -116,6 +125,7 @@ composer phpcsfixer:fix
 ```
 
 Configuration: `.php-cs-fixer.dist.php`
+
 - Follows PSR-12 standards
 - Uses short array syntax
 - Enforces single quotes
@@ -124,6 +134,7 @@ Configuration: `.php-cs-fixer.dist.php`
 ### Static Analysis
 
 **PHPStan** (level 2):
+
 ```bash
 # Run base analysis
 composer phpstan
@@ -133,6 +144,7 @@ composer phpstan_next
 ```
 
 Configuration files:
+
 - `phpstan.neon` - Base configuration (level 2)
 - `phpstan_next.neon` - Stricter analysis for progressive improvements
 
@@ -142,6 +154,7 @@ Cache directory: `var/cache/phpstan/`
 ### Testing
 
 **PHPUnit** (version 11.5+):
+
 ```bash
 # Run all tests (excludes integration tests)
 composer phpunit
@@ -158,6 +171,7 @@ composer test:integration
 Configuration: `phpunit.xml.dist`
 
 Test suites available:
+
 - `all` - All tests except integration (default)
 - `application` - Application layer tests
 - `domain` - Domain layer tests
@@ -171,6 +185,7 @@ Test suites available:
 ### Combined Testing
 
 Run both tests and linting:
+
 ```bash
 composer test
 ```
@@ -178,6 +193,7 @@ composer test
 ### Documentation
 
 Generate API documentation with PHPDocumentor:
+
 ```bash
 # Install phive tools first
 composer install-tools
@@ -191,6 +207,7 @@ Configuration: `phpdoc.dist.xml`
 ### Building Releases
 
 Build a distributable release package:
+
 ```bash
 composer build
 # Uses Phing, output: build/librebooking.zip
@@ -215,11 +232,13 @@ Configuration: `build.xml`
 ### Design Patterns
 
 **Model-View-Presenter (MVP)**:
+
 - **Pages** (`/Pages/*.php`) - Thin abstraction to template engine, minimal logic
 - **Presenters** (`/Presenters/*.php`) - Orchestrate interactions, fetch/transform data
 - **Domain** (`/Domain/`) - Business logic, entities, repositories
 
 **File Organization**:
+
 - Each page should have a corresponding template in `/tpl`
 - Each page should have a class in `/Pages`
 - Each page class should have a presenter in `/Presenters`
@@ -255,7 +274,7 @@ Configuration: `build.xml`
 
 Follow conventional commits format:
 
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -264,6 +283,7 @@ Follow conventional commits format:
 ```
 
 **Types**:
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `docs` - Documentation changes
@@ -276,17 +296,20 @@ Follow conventional commits format:
 - `chore` - Other changes
 
 **Scopes** (optional but recommended):
+
 - `API` - API changes
 - Or describe the affected module/area
 
 **Rules**:
+
 - Header max 72 characters
 - Use imperative, present tense ("change" not "changed")
 - Reference GitHub issues in footer (e.g., `Closes: #123`)
 - Breaking changes: Start footer with `BREAKING CHANGE:`
 
 **Example**:
-```
+
+```text
 feat(API): Add new schedules endpoint
 
 Add a new schedules endpoint which allows getting the resources of a schedule.
@@ -357,6 +380,7 @@ composer preflight
 ### Adding a New Feature
 
 1. Create feature branch from `develop`:
+
    ```bash
    git checkout develop
    git pull
@@ -364,6 +388,7 @@ composer preflight
    ```
 
 2. Implement following MVP pattern:
+
    - Create/update page in `/Web/`
    - Create page class in `/Pages/`
    - Create presenter in `/Presenters/`
@@ -375,6 +400,7 @@ composer preflight
 4. Update documentation if needed
 
 5. Validate locally:
+
    ```bash
    composer phpcsfixer:fix  # Fix style issues
    composer phpstan         # Check static analysis
@@ -388,6 +414,7 @@ composer preflight
 ### Adding a Plugin
 
 Plugins are located in `/plugins/` with subdirectories by type:
+
 - `Authentication/` - Authentication providers
 - `Authorization/` - Authorization handlers
 - `PreReservation/` - Pre-reservation logic
@@ -398,6 +425,7 @@ Each plugin typically has a `*.config.dist.php` file for configuration.
 ### Working with Templates
 
 Templates use Smarty syntax:
+
 - Variables: `{$variableName}`
 - Conditionals: `{if $condition}...{/if}`
 - Loops: `{foreach $items as $item}...{/foreach}`
@@ -424,13 +452,16 @@ Templates are cached in `/tpl_c/` - this directory is auto-generated.
 ### 1. Composer Authentication Error in CI/Sandboxed Environments
 
 **Issue**: When running `composer install`, you may encounter:
-```
+
+```text
 Could not authenticate against github.com
 ```
 
-**Cause**: Composer tries to download packages from GitHub without proper authentication tokens in certain environments.
+**Cause**: Composer tries to download packages from GitHub without proper
+authentication tokens in certain environments.
 
 **Workarounds**:
+
 - Ensure `COMPOSER_AUTH` or GitHub tokens are configured in CI
 - Try `composer install --prefer-dist` to use cached packages
 - Check if `composer.lock` is up to date and committed
@@ -444,6 +475,7 @@ Could not authenticate against github.com
 **Issue**: Template changes not appearing.
 
 **Workaround**: Clear template cache:
+
 ```bash
 rm -rf tpl_c/*
 ```
@@ -455,6 +487,7 @@ rm -rf tpl_c/*
 **Issue**: PHPStan may run out of memory on large codebases.
 
 **Workaround**: Increase memory limit:
+
 ```bash
 composer phpstan -- --memory-limit=2G
 ```
@@ -466,12 +499,14 @@ The CI workflow already uses `--memory-limit 2G` and has debug fallback.
 **Issue**: Application errors related to file permissions.
 
 **Required Permissions**:
+
 - `/tpl_c/` - Must be writable by web server
 - `/tpl/` - Must be writable by web server
 - `/uploads/` - Must be writable by web server
 - Configured log directory - Must be writable
 
 **Fix**:
+
 ```bash
 chmod 755 tpl_c tpl uploads
 # Ensure web server user owns these directories
@@ -506,6 +541,7 @@ chmod 755 tpl_c tpl uploads
 ### Test Database Setup
 
 For integration tests:
+
 1. Copy config template: `cp config/config.dist.php config/config.php`
 2. Configure test database credentials in config.php
 3. Run database setup scripts or use Phing
@@ -513,6 +549,7 @@ For integration tests:
 ### Coverage
 
 Generate coverage reports:
+
 ```bash
 ./vendor/bin/phpunit --coverage-html ./var/
 ```
@@ -535,6 +572,7 @@ Output goes to `./var/` directory.
 Documentation uses Sphinx and is hosted on ReadTheDocs.
 
 Build locally:
+
 ```bash
 pip install -r requirements-docs.txt
 cd docs
@@ -542,6 +580,7 @@ sphinx-build -n -W --keep-going -b html source build/html
 ```
 
 Or use tox:
+
 ```bash
 pip install tox
 tox -e docs
@@ -573,6 +612,7 @@ Output: `docs/build/html/`
 ## API Development
 
 The REST API is in `/WebServices/`:
+
 - RESTful design principles
 - Authentication via API keys or tokens
 - Version-aware endpoints
@@ -582,6 +622,7 @@ The REST API is in `/WebServices/`:
 ## Plugin Development
 
 Plugins extend LibreBooking functionality:
+
 1. Create plugin directory in `/plugins/{PluginType}/`
 2. Implement required interface for plugin type
 3. Add configuration file: `{PluginName}.config.dist.php`
@@ -590,12 +631,12 @@ Plugins extend LibreBooking functionality:
 
 ## Additional Resources
 
-- **Main Repository**: https://github.com/LibreBooking/librebooking
-- **Live Demo**: https://librebooking-demo.fly.dev/
-- **Discord Community**: https://discord.gg/4TGThPtmX8
-- **Wiki**: https://github.com/LibreBooking/librebooking/wiki
-- **Docker Image**: https://github.com/LibreBooking/docker
-- **Issue Tracker**: https://github.com/LibreBooking/librebooking/issues
+- **Main Repository**: <https://github.com/LibreBooking/librebooking>
+- **Live Demo**: <https://librebooking-demo.fly.dev/>
+- **Discord Community**: <https://discord.gg/4TGThPtmX8>
+- **Wiki**: <https://github.com/LibreBooking/librebooking/wiki>
+- **Docker Image**: <https://github.com/LibreBooking/docker>
+- **Issue Tracker**: <https://github.com/LibreBooking/librebooking/issues>
 
 ## Quick Reference Commands
 
