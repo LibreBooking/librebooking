@@ -657,6 +657,16 @@ input.mid-number {
     color: var(--text-color-btn) !important;
 }
 
+.flatpickr-monthDropdown-months {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+.flatpickr-monthDropdown-months option {
+    background-color: #ffffff;
+    color: #000000;
+}
+
 .flatpickr-weekdays {
     background: var(--primary) !important;
 }
@@ -687,6 +697,10 @@ span.flatpickr-weekday {
     background: var(--primary) !important;
     color: var(--text-color-btn) !important;
     border-color: var(--primary) !important;
+}
+
+.flatpickr-wrapper:has(.customAttribute) {
+    width: 100%;
 }
 
 .flatpickr-day.today {

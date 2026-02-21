@@ -36,6 +36,7 @@
         {cssfile src="scripts/css/smoothness/jquery-ui.1.12.1.custom.min.css"}
         {cssfile src="css/bootstrap-icons/css/bootstrap-icons.min.css" rel="stylesheet"}
         {cssfile src="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"}
+        {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
         {if isset($Qtip) && $Qtip}
             {cssfile src="css/jquery.qtip.min.css" rel="stylesheet"}
         {/if}
@@ -50,15 +51,15 @@
             {cssfile src="scripts/css/datatable/cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet"}
             {cssfile src="scripts/css/datatable/cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet"}
         {/if}
-        {if isset($DatePicker) && $DatePicker}
-            {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
-        {/if}
     {else}
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
+            integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt"
+            crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" type="text/css" />
         {if isset($Validator) && $Validator}
             <link rel="stylesheet"
@@ -74,9 +75,6 @@
             <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
             <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"
                 type="text/css">
-        {/if}
-        {if isset($DatePicker) && $DatePicker}
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
         {/if}
     {/if}
     {if isset($InlineEdit) && $InlineEdit}
