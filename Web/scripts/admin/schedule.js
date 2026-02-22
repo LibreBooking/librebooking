@@ -42,12 +42,10 @@ function ScheduleManagement(opts) {
 		deletePeakTimesButton: $('#deletePeakBtn'),
 		deletePeakTimes: $('#deletePeakTimes'),
 
-		availabilityDialog: $('#availabilityDialog'),
-		availableStartDateTextbox: $('#availabilityStartDate'),
-		availableStartDate: $('#formattedBeginDate'),
-		availableEndDateTextbox: $('#availabilityEndDate'),
-		availableEndDate: $('#formattedEndDate'),
-		availableAllYear: $('#availableAllYear'),
+		availabilityDialog: document.getElementById('availabilityDialog'),
+		availableStartDate: document.getElementById('availabilityStartDate'),
+		availableEndDate: document.getElementById('availabilityEndDate'),
+		availableAllYear: document.getElementById('availableAllYear'),
 		availabilityForm: $('#availabilityForm'),
 
 		concurrentForm: $('#concurrentForm'),
@@ -200,14 +198,24 @@ function ScheduleManagement(opts) {
 			elements.deletePeakTimes.val('1');
 		});
 
-		elements.availableAllYear.on('click', function (e) {
-			if ($(e.target).is(':checked')) {
-				elements.availableStartDateTextbox.prop('disabled', true);
-				elements.availableEndDateTextbox.prop('disabled', true);
-			}
-			else {
-				elements.availableStartDateTextbox.prop('disabled', false);
-				elements.availableEndDateTextbox.prop('disabled', false);
+		elements.availableAllYear.addEventListener('change', function (e) {
+			var fpStart = elements.availableStartDate?._flatpickr;
+			var fpEnd = elements.availableEndDate?._flatpickr;
+
+			if (e.target.checked) {
+				if (fpStart) {
+					fpStart.altInput.disabled = true;
+				}
+				if (fpEnd) {
+					fpEnd.altInput.disabled = true;
+				}
+			} else {
+				if (fpStart) {
+					fpStart.altInput.disabled = false;
+				}
+				if (fpEnd) {
+					fpEnd.altInput.disabled = false;
+				}
 			}
 		});
 
@@ -571,26 +579,43 @@ function ScheduleManagement(opts) {
 	};
 
 	var showAvailabilityDialog = function (scheduleId) {
-		var placeholder = $('[data-schedule-id=' + scheduleId + ']').find('.availabilityPlaceHolder');
-		var dates = placeholder.find('.availableDates');
-		var startDate = dates.attr('data-start-date');
-		var endDate = dates.attr('data-end-date');
-		var hasAvailability = dates.data('has-availability') == '1';
 
-		//elements.availableAllYear.prop('checked', !hasAvailability);
-		elements.availableStartDateTextbox.val(startDate).trigger('change');
-		elements.availableEndDateTextbox.val(endDate).trigger('change');
+		var placeholder = document.querySelector('[data-schedule-id="' + scheduleId + '"] .availabilityPlaceHolder');
+		var dates = placeholder.querySelector('.availableDates');
+		var startDate = dates.getAttribute('data-start-date');
+		var endDate = dates.getAttribute('data-end-date');
+		var hasAvailability = dates.getAttribute('data-has-availability') == '1';
 
-		if (!hasAvailability) {
-			elements.availableAllYear.trigger('click');
-		}
+		elements.availableAllYear.checked = !hasAvailability;
 
-		elements.availabilityDialog.modal('show');
+		elements.availabilityDialog.addEventListener('shown.bs.modal', function () {
+
+			var fpStart = elements.availableStartDate?._flatpickr;
+			var fpEnd = elements.availableEndDate?._flatpickr;
+
+			if (fpStart) fpStart.setDate(startDate || null, false);
+			else elements.availableStartDate.value = startDate || '';
+
+			if (fpEnd) fpEnd.setDate(endDate || null, false);
+			else elements.availableEndDate.value = endDate || '';
+
+			elements.availableAllYear.dispatchEvent(
+				new Event('change', { bubbles: true })
+			);
+
+		}, { once: true });
+
+		var modal = bootstrap.Modal.getOrCreateInstance(elements.availabilityDialog);
+		modal.show();
 	};
 
 	var refreshAvailability = function (resultHtml) {
-		$('[data-schedule-id=' + getActiveScheduleId() + ']').find('.availabilityContent').html(resultHtml);
-		elements.availabilityDialog.modal('hide');
+		var scheduleEl = document.querySelector('[data-schedule-id="' + getActiveScheduleId() + '"]');
+		scheduleEl.querySelector('.availabilityContent').innerHTML = resultHtml;
+		var modalInstance = bootstrap.Modal.getInstance(elements.availabilityDialog);
+		if (modalInstance) {
+			modalInstance.hide();
+		}
 	};
 
 	var toggleConcurrentReservations = function (scheduleId, toggle, container) {

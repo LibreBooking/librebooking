@@ -685,13 +685,11 @@
 							<div id="availableDates" class="d-flex align-items-center gap-1">
 								<label for="availabilityStartDate">{translate key=AvailableBetween}</label>
 								<label for="availabilityEndDate" class="visually-hidden">Available End Date</label>
-								<input type="date" id="availabilityStartDate"
-									class="form-control form-control-sm inline-block dateinput" />
-								<input type="hidden" id="formattedBeginDate" {formname key=AVAILABLE_BEGIN_DATE} />
-								-
-								<input type="date" id="availabilityEndDate"
-									class="form-control form-control-sm inline-block dateinput" />
-								<input type="hidden" id="formattedEndDate" {formname key=AVAILABLE_END_DATE} />
+								<input type="text" id="availabilityStartDate" {formname key=AVAILABLE_BEGIN_DATE}
+									class="form-control form-control-sm w-auto" required />
+								<div class='mx-1'>-</div>
+								<input type="text" id="availabilityEndDate" {formname key=AVAILABLE_END_DATE}
+									class="form-control form-control-sm w-auto" />
 							</div>
 						</div>
 					</div>
@@ -841,8 +839,8 @@
 		</form>
 	</div>
 
-	{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" DefaultDate=$StartDate}
-	{control type="DatePickerSetupControl" ControlId="availabilityEndDate" AltId="formattedEndDate" DefaultDate=$EndDate}
+	{control type="DatePickerSetupControl" ControlId="availabilityStartDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="availabilityEndDate" DefaultDate=$EndDate}
 
 	{csrf_token}
 	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true DataTable=true}
