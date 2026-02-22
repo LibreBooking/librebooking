@@ -48,7 +48,6 @@ function ReservationManagement(opts, approval) {
         deleteMultiplePrompt: $('#delete-selected'),
         deleteMultipleDialog: $('#deleteMultipleDialog'),
         deleteMultipleForm: $('#deleteMultipleForm'),
-        deleteMultipleCheckboxes: $('.delete-multiple'),
         deleteMultipleSelectAll: $('#delete-all'),
         deleteMultipleCount: $('#deleteMultipleCount'),
         deleteMultiplePlaceHolder: $('#deleteMultiplePlaceHolder'),
@@ -201,14 +200,15 @@ function ReservationManagement(opts, approval) {
         elements.deleteMultipleSelectAll.click(function (e) {
             e.stopPropagation();
             var isChecked = elements.deleteMultipleSelectAll.is(":checked");
-            elements.deleteMultipleCheckboxes.prop('checked', isChecked);
+            elements.reservationTable.find('.delete-multiple').prop('checked', isChecked);
             elements.deleteMultiplePrompt.toggleClass('d-none', !isChecked);
         });
 
-        elements.deleteMultipleCheckboxes.click(function (e) {
+        elements.reservationTable.on('click', '.delete-multiple', function (e) {
             e.stopPropagation();
-            var numberChecked = elements.reservationTable.find('.delete-multiple:checked').length;
-            var allSelected = numberChecked == elements.reservationTable.find('.delete-multiple').length;
+            var allCheckboxes = elements.reservationTable.find('.delete-multiple');
+            var numberChecked = allCheckboxes.filter(':checked').length;
+            var allSelected = numberChecked == allCheckboxes.length;
             elements.deleteMultipleSelectAll.prop('checked', allSelected);
             elements.deleteMultiplePrompt.toggleClass('d-none', numberChecked == 0);
         });
