@@ -21,19 +21,17 @@
 								<label class="fw-bold" for="addAnnouncement">{translate key='Announcement'}<i
 										class="bi bi-asterisk text-danger align-top form-control-feedback"
 										style="font-size: 0.5rem;"></i></label>
-								<textarea class="form-control  has-feedback required" rows="1" style="width:100%"
-									{formname key=ANNOUNCEMENT_TEXT} id="addAnnouncement"></textarea>
+								<textarea class="form-control has-feedback required" {formname key=ANNOUNCEMENT_TEXT}
+									id="addAnnouncement"></textarea>
 							</div>
-							<div class="form-group col-sm-2 col-6">
+							<div class="form-group col-sm-2 col-6 d-flex flex-column">
 								<label class="fw-bold" for="BeginDate">{translate key='BeginDate'}</label>
-								<input type="date" id="BeginDate" class="form-control"
+								<input type="text" id="BeginDate" class="form-control"
 									{formname key=ANNOUNCEMENT_START} />
-								<input type="hidden" id="formattedBeginDate" {formname key=ANNOUNCEMENT_START} />
 							</div>
-							<div class="form-group col-sm-2 col-6">
+							<div class="form-group col-sm-2 col-6 d-flex flex-column">
 								<label class="fw-bold" for="EndDate">{translate key='EndDate'}</label>
-								<input type="date" id="EndDate" class="form-control" {formname key=ANNOUNCEMENT_END} />
-								<input type="hidden" id="formattedEndDate" {formname key=ANNOUNCEMENT_END} />
+								<input type="text" id="EndDate" class="form-control" {formname key=ANNOUNCEMENT_END} />
 							</div>
 							<div class="form-group col-sm-2 col-6">
 								<label class="fw-bold" for="addPriority">{translate key='Priority'}</label>
@@ -194,15 +192,13 @@
 							<textarea id="editText" class="form-control has-feedback required" rows="5"
 								{formname key='ANNOUNCEMENT_TEXT'}></textarea>
 						</div>
-						<div class="form-group col-md-6 mb-2">
+						<div class="form-group col-md-6 mb-2 d-flex flex-column">
 							<label class="fw-bold" for="editBegin">{translate key='BeginDate'}</label>
-							<input type="date" id="editBegin" class="form-control" />
-							<input type="hidden" id="formattedEditBegin" {formname key=ANNOUNCEMENT_START} />
+							<input type="text" id="editBegin" class="form-control" {formname key=ANNOUNCEMENT_START} />
 						</div>
-						<div class="form-group col-md-6 mb-2">
+						<div class="form-group col-md-6 mb-2 d-flex flex-column">
 							<label class="fw-bold" for="editEnd">{translate key='EndDate'}</label>
-							<input type="date" id="editEnd" class="form-control" />
-							<input type="hidden" id="formattedEditEnd" {formname key=ANNOUNCEMENT_END} />
+							<input type="text" id="editEnd" class="form-control" {formname key=ANNOUNCEMENT_END} />
 						</div>
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="editPriority">{translate key='Priority'}</label>
@@ -264,10 +260,10 @@
 
 	{include file="javascript-includes.tpl" Select2=true DataTable=true Trumbowyg=true Resizimg=true}
 	{datatable tableId={$tableId}}
-	{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate"}
-	{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate"}
-	{control type="DatePickerSetupControl" ControlId="editBegin" AltId="formattedEditBegin"}
-	{control type="DatePickerSetupControl" ControlId="editEnd" AltId="formattedEditEnd"}
+	{control type="DatePickerSetupControl" ControlId="BeginDate"}
+	{control type="DatePickerSetupControl" ControlId="EndDate"}
+	{control type="DatePickerSetupControl" ControlId="editBegin"}
+	{control type="DatePickerSetupControl" ControlId="editEnd"}
 
 	{csrf_token}
 
@@ -332,8 +328,8 @@
 				announcementManagement.addAnnouncement(
 					'{$announcement->Id()}',
 					DOMPurify.sanitize('{$announcement->Text()|escape:"quotes"|regex_replace:"/[\n]/":"\\n"}'),
-					'{formatdate date=$announcement->Start()->ToTimezone($timezone)}',
-					'{formatdate date=$announcement->End()->ToTimezone($timezone)}',
+					'{$announcement->Start()->ToTimezone($timezone)->Format('Y-m-d')}',
+					'{$announcement->End()->ToTimezone($timezone)->Format('Y-m-d')}',
 					'{$announcement->Priority()}',
 					[{foreach from=$announcement->GroupIds() item=id}{$id},{/foreach}],
 					[{foreach from=$announcement->ResourceIds() item=id}{$id},{/foreach}],

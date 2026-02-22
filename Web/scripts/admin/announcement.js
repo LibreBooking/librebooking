@@ -5,7 +5,7 @@ function AnnouncementManagement(opts) {
 		activeId: $('#activeId'),
 		announcementList: $('#announcementList'),
 
-		editDialog: $('#editDialog'),
+		editDialog: document.getElementById('editDialog'),
 		deleteDialog: $('#deleteDialog'),
 		emailDialog: $('#emailDialog'),
 
@@ -100,37 +100,35 @@ function AnnouncementManagement(opts) {
 
 	var editAnnouncement = function () {
 		var announcement = getActiveAnnouncement();
-		// date formatting, temporary?
-		var startDateFormatted = moment(announcement.start, 'DD/MM/YYYY').format('YYYY-MM-DD');
-		var endDateFormatted = moment(announcement.end, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
 		elements.editText.val(HtmlDecode(announcement.text));
-		elements.editBegin.val(startDateFormatted);
-		elements.editBegin.trigger('change');
-		elements.editEnd.val(endDateFormatted);
-		elements.editEnd.trigger('change');
 		elements.editPriority.val(announcement.priority);
 
 		if (announcement.displayPage == 5) {
 			elements.editUserGroupsDiv.hide();
 			elements.editResourceGroupsDiv.hide();
-		}
-		else {
+		} else {
 			elements.editUserGroupsDiv.show();
 			elements.editResourceGroupsDiv.show();
 
-			elements.editUserGroups.val($.map(announcement.groupIds, function (i) {
-				return i + "";
-			}));
+			elements.editUserGroups.val($.map(announcement.groupIds, i => i + ""));
 			elements.editUserGroups.trigger('change');
 
-			elements.editResourceGroups.val($.map(announcement.resourceIds, function (i) {
-				return i + "";
-			}));
+			elements.editResourceGroups.val($.map(announcement.resourceIds, i => i + ""));
 			elements.editResourceGroups.trigger('change');
 		}
 
-		elements.editDialog.modal('show');
+		new bootstrap.Modal(editDialog).show();
+
+		elements.editDialog.addEventListener('shown.bs.modal', () => {
+			if (elements.editBegin[0]?._flatpickr && announcement.start) {
+				elements.editBegin[0]._flatpickr.setDate(announcement.start, true);
+			}
+
+			if (elements.editEnd[0]?._flatpickr && announcement.end) {
+				elements.editEnd[0]._flatpickr.setDate(announcement.end, true);
+			}
+		}, { once: true });
 	};
 
 	var emailAnnouncement = function () {
