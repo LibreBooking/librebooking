@@ -25,7 +25,6 @@ function BlackoutManagement(opts) {
 		deleteMultiplePrompt: $('#delete-selected'),
 		deleteMultipleDialog: $('#deleteMultipleDialog'),
 		deleteMultipleForm: $('#deleteMultipleForm'),
-		deleteMultipleCheckboxes: $('.delete-multiple'),
 		deleteMultipleSelectAll: $('#delete-all'),
 		deleteMultipleCount: $('#deleteMultipleCount'),
 		deleteMultiplePlaceHolder: $('#deleteMultiplePlaceHolder')
@@ -134,14 +133,15 @@ function BlackoutManagement(opts) {
 		elements.deleteMultipleSelectAll.click(function (e) {
 			e.stopPropagation();
 			var isChecked = elements.deleteMultipleSelectAll.is(":checked");
-			elements.deleteMultipleCheckboxes.prop('checked', isChecked);
+			elements.blackoutTable.find('.delete-multiple').prop('checked', isChecked);
 			elements.deleteMultiplePrompt.toggleClass('d-none', !isChecked);
 		});
 
-		elements.deleteMultipleCheckboxes.click(function (e) {
+		elements.blackoutTable.on('click', '.delete-multiple', function (e) {
 			e.stopPropagation();
-			var numberChecked = elements.reservationTable.find('.delete-multiple:checked').length;
-			var allSelected = numberChecked == elements.reservationTable.find('.delete-multiple').length;
+			var allCheckboxes = elements.blackoutTable.find('.delete-multiple');
+			var numberChecked = allCheckboxes.filter(':checked').length;
+			var allSelected = numberChecked == allCheckboxes.length;
 			elements.deleteMultipleSelectAll.prop('checked', allSelected);
 			elements.deleteMultiplePrompt.toggleClass('d-none', numberChecked == 0);
 		});

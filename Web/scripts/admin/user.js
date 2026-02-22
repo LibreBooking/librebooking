@@ -52,7 +52,6 @@ function UserManagement(opts) {
 		deleteMultiplePrompt: $('#delete-selected'),
 		deleteMultipleDialog: $('#deleteMultipleDialog'),
 		deleteMultipleUserForm: $('#deleteMultipleUserForm'),
-		deleteMultipleCheckboxes: $('.delete-multiple'),
 		deleteMultipleSelectAll: $('#delete-all'),
 		deleteMultipleCount: $('#deleteMultipleCount'),
 		deleteMultiplePlaceHolder: $('#deleteMultiplePlaceHolder')
