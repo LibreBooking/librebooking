@@ -346,10 +346,10 @@ return [
             # Enable reminder notifications for upcoming reservations (true/false)
             'reminders.enabled' => false,
 
-            # Default reminder time before reservation start (in minutes)
+            # Default reminder time before reservation start (e.g., '15 minutes', '1 hours', '1 days')
             'default.start.reminder' => '',
 
-            # Default reminder time before reservation end (in minutes)
+            # Default reminder time before reservation end (e.g., '15 minutes', '1 hours', '1 days')
             'default.end.reminder' => '',
         ],
 

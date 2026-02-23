@@ -808,8 +808,8 @@ class ConfigKeys
         'key' => 'reservation.default.start.reminder',
         'type' => 'string',
         'default' => '',
-        'label' => 'Default Start Reminder (minutes)',
-        'description' => 'Default start reservation reminder. format is ## interval. for example, 10 minutes, 2 hours, 6 days.',
+        'label' => 'Default reminder time before reservation start (e.g., \'15 minutes\', \'1 hours\', \'1 days\')',
+        'description' => 'Default start reservation reminder. Format is an interval using only minutes, hours, or days',
         'section' => 'reservation'
     ];
     # previously RESERVATION_DEFAULT_END_REMINDER
@@ -817,8 +817,8 @@ class ConfigKeys
         'key' => 'reservation.default.end.reminder',
         'type' => 'string',
         'default' => '',
-        'label' => 'Default End Reminder (minutes)',
-        'description' => 'Default end reservation reminder. format is ## interval. for example, 10 minutes, 2 hours, 6 days.',
+        'label' => 'Default reminder time before reservation end (e.g., \'15 minutes\', \'1 hours\', \'1 days\')',
+        'description' => 'Default end reservation reminder. Format is an interval using only minutes, hours, or days (e.g., 1 days)',
         'section' => 'reservation'
     ];
 

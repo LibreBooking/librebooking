@@ -349,7 +349,7 @@ Reservation Behavior
   Enable email reminders before reservations start/end.
 
 **reservation.default.start.reminder**
-  Default reminder time before start (e.g., '15 minutes', '1 hour').
+  Default reminder time before start (e.g., '15 minutes', '1 hours', '1 days').
 
 **reservation.default.end.reminder**
   Default reminder time before end.
