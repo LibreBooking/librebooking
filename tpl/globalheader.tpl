@@ -16,14 +16,14 @@
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {jsfile src="js/jquery-3.3.1.min.js"}
         {jsfile src="js/jquery-migrate-3.0.1.min.js"}
-        {jsfile src="js/jquery-ui.1.12.1.custom.min.js"}
+        {jsfile src="js/jquery-ui.1.14.2.custom.min.js"}
         {jsfile src="bootstrap/js/bootstrap.bundle.min.js"}
     {else}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-migrate-3.0.1.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"
+            integrity="sha256-mblSWfbYzaq/f+4akyMhE6XELCou4jbkgPv+JQPER2M=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
@@ -33,7 +33,6 @@
 
     <!-- CSS -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {cssfile src="scripts/css/smoothness/jquery-ui.1.12.1.custom.min.css"}
         {cssfile src="css/bootstrap-icons/css/bootstrap-icons.min.css" rel="stylesheet"}
         {cssfile src="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"}
         {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
