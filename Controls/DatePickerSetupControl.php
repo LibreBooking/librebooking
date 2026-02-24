@@ -82,6 +82,13 @@ class DatePickerSetupControl extends Control
             $this->Set('DefaultDate', $defaultDate->Format('Y-m-d'));
         }
 
+        $encodedDefaultDate = 'null';
+        $defaultDateForJs = $this->Get('DefaultDate');
+        if (!empty($defaultDateForJs)) {
+            $encodedDefaultDate = $this->JsonEncodeForInlineScript($defaultDateForJs);
+        }
+        $this->Set('DefaultDateJson', $encodedDefaultDate);
+
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 
@@ -90,6 +97,20 @@ class DatePickerSetupControl extends Control
         } else {
             $this->Display('Controls/DateSetup.tpl');
         }
+    }
+
+    /**
+     * Encodes values as JSON for safe embedding inside inline <script> blocks.
+     * Uses JSON_HEX_* flags to neutralize characters that can break out of JS
+     * strings or terminate script tags (for example </script>), reducing XSS risk.
+     */
+    private function JsonEncodeForInlineScript(mixed $value): string
+    {
+        $json = json_encode(
+            $value,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        );
+        return $json === false ? 'null' : $json;
     }
 
     private function SetDefault($key, $value)

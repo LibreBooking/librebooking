@@ -28,16 +28,7 @@
                 altInput: {if $AltInput|default:true}true{else}false{/if},
                 altFormat: "{$AltFormat}",
                 dateFormat: "{$DateFormat}",
-                defaultDate:
-                    {if $DefaultDate}
-                        {if $Multiple}
-                            {$DefaultDate|json_encode}
-                        {else}
-                            "{$DefaultDate}"
-                        {/if}
-                    {else}
-                        null
-                {/if},
+                defaultDate: {$DefaultDateJson nofilter},
                 minDate: {if $MinDate}"{$MinDate}"{else}null{/if},
                 maxDate: {if $MaxDate}"{$MaxDate}"{else}null{/if},
                 enableTime: {$HasTimepicker ? 'true' : 'false'},
