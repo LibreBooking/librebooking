@@ -138,6 +138,9 @@ return [
             # Options: tls, ssl
             'smtp.secure' => '',
 
+            # SMTP Auto TLS, if an unencrypted SMTP connection should attempt to use STARTTLS
+            'smtp.autotls' => true,
+
             # Enable SMTP authentication (true/false)
             'smtp.auth' => true,
 

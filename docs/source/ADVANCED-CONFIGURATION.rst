@@ -159,6 +159,7 @@ Advanced PHPMailer Settings
    'phpmailer' => [
        'sendmail.path' => '/usr/sbin/sendmail',
        'smtp.debug' => false,
+       'smtp.autotls' => true,
    ],
 
 **phpmailer.sendmail.path**
@@ -166,6 +167,10 @@ Advanced PHPMailer Settings
 
 **phpmailer.smtp.debug**
   Enable SMTP debug output (true/false).
+
+**phpmailer.smtp.autotls**
+  Set PHPMailer's SMTPAutoTLS setting (true/false). Determines if an
+  unencrypted SMTP connection should attempt to use STARTTLS.
 
 Logging Configuration
 ---------------------

@@ -312,6 +312,15 @@ class ConfigKeys
         'section' => 'phpmailer'
     ];
 
+    public const PHPMAILER_SMTP_AUTOTLS = [
+        'key' => 'phpmailer.smtp.autotls',
+        'type' => 'boolean',
+        'default' => true,
+        'label' => 'SMTP AutoTLS',
+        'description' => 'If an unencrypted SMTP connection should attempt to use STARTTLS',
+        'section' => 'phpmailer'
+    ];
+
     public const PHPMAILER_SMTP_AUTH = [
         'key' => 'phpmailer.smtp.auth',
         'type' => 'boolean',

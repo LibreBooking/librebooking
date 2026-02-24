@@ -31,6 +31,7 @@ class EmailService implements IEmailService
             $phpMailer->Host = $this->Config(ConfigKeys::PHPMAILER_SMTP_HOST);
             $phpMailer->Port = $this->Config(ConfigKeys::PHPMAILER_SMTP_PORT, new IntConverter());
             $phpMailer->SMTPSecure = $this->Config(ConfigKeys::PHPMAILER_SMTP_SECURE);
+            $phpMailer->SMTPAutoTLS = $this->Config(ConfigKeys::PHPMAILER_SMTP_AUTOTLS, new BooleanConverter());
             $phpMailer->SMTPAuth = $this->Config(ConfigKeys::PHPMAILER_SMTP_AUTH, new BooleanConverter());
             $phpMailer->Username = $this->Config(ConfigKeys::PHPMAILER_SMTP_USERNAME);
             $phpMailer->Password = $this->Config(ConfigKeys::PHPMAILER_SMTP_PASSWORD);
