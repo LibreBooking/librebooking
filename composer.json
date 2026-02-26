@@ -15,7 +15,7 @@
     "require": {
         "php": ">=8.2",
         "smarty/smarty": "^5.8",
-        "stripe/stripe-php": "^19.3",
+        "stripe/stripe-php": "^19.4",
         "monolog/monolog": "^3.10",
         "google/recaptcha": "1.3.*",
         "gregwar/captcha": "^1.3",
