@@ -19,6 +19,11 @@ config)
 Getting Started With the API
 ----------------------------
 
+.. important::
+
+    Use the URL as specified in the documentation in regards to having or not
+    having a trailing ``/`` character.
+
 Authenticating to LibreBooking
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -577,6 +582,11 @@ Authenticate
 Authenticates an existing LibreBooking user
 
 **Route:** ``/Web/Services/index.php/Authentication/Authenticate``
+
+.. note::
+
+   It is required for the route to not have a trailing ``/`` character, or it
+   will fail.
 
 **Response:**
 
