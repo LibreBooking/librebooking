@@ -323,6 +323,22 @@ Basic Privacy Settings
 **privacy.allow.guest.reservations**
   Allow guests to make reservations.
 
+Scheduled Jobs (Cron)
+---------------------
+
+Set up host cron entries to execute the job scripts directly with PHP.
+Example crontab (adjust PHP binary path and LibreBooking path):
+
+.. code-block:: text
+
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/autorelease.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendreminders.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendmissedcheckin.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendwaitlist.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendseriesend.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sessioncleanup.php
+   0 1 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/deleteolddata.php
+
 Next Steps
 ----------
 
@@ -368,7 +384,7 @@ Quick Start with Docker Compose
             - MYSQL_ROOT_PASSWORD=your_secure_root_password
 
         app:
-          image: librebooking/librebooking:develop
+          image: librebooking/librebooking:develop # or use tagged version
           restart: always
           depends_on:
             - db
@@ -440,9 +456,6 @@ Docker Environment Variables
 ``LB_LOGGING_SQL``
   Enable SQL logging: ``false`` (default), ``true``
 
-``LB_CRON_ENABLED``
-  Enable background cron jobs: ``false`` (default), ``true``
-
 ``LB_PATH``
   URL path prefix (for reverse proxy setups)
 
@@ -478,7 +491,7 @@ Example with persistent uploads:
 .. code-block:: yaml
 
    app:
-     image: librebooking/librebooking:develop
+     image: librebooking/librebooking:develop # or use tagged version
      volumes:
        - app_config:/config
        - ./uploads/images:/var/www/html/Web/uploads/images
@@ -487,17 +500,32 @@ Example with persistent uploads:
 Background Jobs (Cron)
 ----------------------
 
-LibreBooking requires background jobs for features like reminder emails. Enable them with:
+LibreBooking requires background jobs for features like reminder emails.
+
+**Docker/Container deployments**
+
+The recommended approach is to run cron in a dedicated container instance.
+Run the main app container as non-root ``www-data``, and run a second
+container from the same image with ``root`` and
+``/usr/local/bin/cron.sh`` as the entrypoint.
 
 .. code-block:: yaml
 
-   environment:
-     - LB_CRON_ENABLED=true
+   services:
+     app:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'www-data'
 
-Or run them manually from the host:
+     cron:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'root'
+       entrypoint: /usr/local/bin/cron.sh
+
+Or run them manually:
 
 .. code-block:: bash
 
+   # For example run the sendreminders.php job
    docker exec <container_name> php -f /var/www/html/Jobs/sendreminders.php
 
 Docker Troubleshooting
