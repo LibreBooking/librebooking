@@ -79,6 +79,8 @@ EOT;
         );
         echo $security;
 
+        echo "<div class='alert alert-warning mb-0'>⚠️ Use the Route URL as specified in regards to having or not having an ending <code>/</code> (forward slash) character.</div>";
+
         echo <<<EOT
                 </div>
             </div>
