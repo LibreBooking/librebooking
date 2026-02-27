@@ -121,6 +121,18 @@ class WebAuthenticationTest extends TestBase
         $this->assertEquals(1, count($this->db->_Commands));
         $this->assertFalse($this->fakeAuth->_LoginCalled);
         $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
+        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
+    }
+
+    public function testDoesNotAutoLoginIfCookieValueIsMalformed()
+    {
+        $valid = $this->webAuth->CookieLogin('malformed-cookie-value', $this->loginContext);
+
+        $this->assertFalse($valid, 'should not be valid if cookie cannot be parsed');
+        $this->assertEquals(0, count($this->db->_Commands));
+        $this->assertFalse($this->fakeAuth->_LoginCalled);
+        $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
+        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
     }
 
     public function testLogsUserOut()

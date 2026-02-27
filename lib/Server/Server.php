@@ -219,18 +219,16 @@ class Server
     {
         $userSession = $this->GetSession(SessionKeys::USER_SESSION);
 
-        if (!empty($userSession)) {
-            // return (UserSession) $userSession;
-            $class = 'UserSession';
-            return unserialize(
-                preg_replace(
-                    '/^O:\d+:"[^"]++"/',
-                    'O:'.strlen($class).':"'.$class.'"',
-                    serialize($userSession)
-                )
-            );
+        if (empty($userSession)) {
+            return new NullUserSession();
         }
 
+        if ($userSession instanceof UserSession) {
+            return $userSession;
+        }
+
+        // Fail closed for unexpected session payloads instead of coercing them
+        // into authenticated UserSession instances.
         return new NullUserSession();
     }
 
