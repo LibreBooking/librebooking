@@ -173,7 +173,16 @@ class ExistingReservationTest extends TestBase
 
     public function testWhenApplyingRecurrenceUpdatesToFullSeries()
     {
-        $today = new DateRange(Date::Now(), Date::Now());
+        // Freeze "now" to a midday time so this recurrence test stays deterministic.
+        // The series start and repeat end are converted into the booked-by timezone
+        // (America/New_York) during recurrence generation. If this test uses a live
+        // Date::Now() near midnight UTC, the 10-day recurrence window can cross a DST
+        // boundary and shift the local calendar date of the termination edge, causing
+        // off-by-one instance counts. Using a fixed midday time keeps the range away
+        // from midnight and DST edge behavior while preserving the relative date math.
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
+        $start = TestBase::GetTestDate();
+        $today = new DateRange($start, $start);
 
         $oldDates = $today->AddDays(-1);
         $oldReservation = new TestReservation('old', $oldDates);
