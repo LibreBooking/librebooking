@@ -13,6 +13,8 @@ use Detection\MobileDetect;
 
 abstract class Page implements IPage
 {
+    private static ?string $displayVersion = null;
+
     /**
      * @var SmartyPage
      */
@@ -58,6 +60,7 @@ abstract class Page implements IPage
 
         $this->smarty->assign('LoggedIn', $userSession->IsLoggedIn());
         $this->smarty->assign('Version', Configuration::VERSION);
+        $this->smarty->assign('DisplayVersion', $this->GetDisplayVersion());
         $this->smarty->assign('Path', $this->path);
         $this->smarty->assign('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->smarty->assign('UserName', !is_null($userSession) ? $userSession->FirstName : '');
@@ -483,5 +486,16 @@ abstract class Page implements IPage
         // TODO Actually check for new versions on git / save install date to DB.
         // The old Method doesn't work when deleting cookies and confuses the users.
         return false;
+    }
+
+    private function GetDisplayVersion(): string
+    {
+        if (self::$displayVersion !== null) {
+            return self::$displayVersion;
+        }
+
+        $resolver = new VersionDisplayResolver();
+        self::$displayVersion = $resolver->GetDisplayVersion(Configuration::VERSION);
+        return self::$displayVersion;
     }
 }

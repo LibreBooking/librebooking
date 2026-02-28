@@ -4,8 +4,10 @@ Advanced Configuration
 This guide covers all advanced configuration options available in LibreBooking.
 For basic setup, see :doc:`BASIC-CONFIGURATION` first.
 
-All settings are configured in the ``/config/config.php`` file. The
-configuration uses a mix of flat dot notation and nested arrays.
+All settings are configured in the ``<INSTALL_DIR>/config/config.php`` file,
+where ``<INSTALL_DIR>`` is the root directory of your LibreBooking
+installation. The configuration uses a mix of flat dot notation and nested
+arrays.
 
 Environment Variable Override
 -----------------------------
@@ -57,6 +59,40 @@ sensitive data separate from configuration files.
 **Complete Example**
   See ``develop/app/.env.example`` for a comprehensive list of all available
   environment variables with their default values and descriptions.
+
+Version Suffix
+--------------
+
+LibreBooking can optionally append a suffix to the version shown in the page
+footer.
+
+Create ``<INSTALL_DIR>/config/version-suffix.txt`` with a value such as
+``abc123``. This file is intended for local or deployment-time metadata and
+should not be committed to source control. If the file is present and contains
+a non-empty value, the footer version will be displayed as ``v4.1.0-abc123``.
+If the file is missing or empty, LibreBooking displays the base version only.
+
+This is intended for deployment metadata such as a Docker image build
+identifier or short Git commit SHA. Only the footer display is affected. The
+application base version and asset cache-busting remain unchanged.
+
+The file must contain a single line only. A trailing newline is allowed, but
+additional lines are ignored. After trimming, the suffix must be 40 characters
+or fewer.
+
+Valid characters are letters, numbers, ``.``, ``_``, and ``-``. If the file
+contains multiple lines, exceeds 40 characters, or includes invalid characters,
+LibreBooking ignores the suffix and logs an error.
+
+**Example**
+
+  .. code-block:: bash
+
+     git rev-parse --short HEAD > config/version-suffix.txt
+
+This writes the current short Git commit SHA into
+``<INSTALL_DIR>/config/version-suffix.txt`` so the footer displays a version
+such as ``v4.1.0-a1b2c3d``.
 
 Application Advanced Settings
 -----------------------------

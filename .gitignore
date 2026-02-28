@@ -4,9 +4,10 @@
 /tools/*
 /var/*
 
-# Customized Confiuration Files
+# Customized Configuration Files
 /config/config.php
 /config/log4php.config.xml
+/config/version-suffix.txt
 **/*.config.php
 
 /lib/external/phpqrcode/cache/*
