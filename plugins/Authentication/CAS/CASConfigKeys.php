@@ -16,6 +16,7 @@ class CASConfigKeys extends PluginConfigKeys
         'choices' => [
             '1.0' => 'CAS_VERSION_1_0',
             '2.0' => 'CAS_VERSION_2_0',
+            '3.0' => 'CAS_VERSION_3_0',
             'S1' => 'SAML_VERSION_1_1'
         ]
     ];

@@ -3,7 +3,7 @@
 return [
     'settings' => [
         'cas' => [
-            // '1.0' = CAS_VERSION_1_0, '2.0' = CAS_VERSION_2_0, 'S1' = SAML_VERSION_1_1
+            // '1.0' = CAS_VERSION_1_0, '2.0' = CAS_VERSION_2_0, '3.0' = CAS_VERSION_3_0, 'S1' = SAML_VERSION_1_1
             'version' => 'S1',
 
             // the hostname of the CAS server
