@@ -28,23 +28,35 @@ The mapping of Oauth2 attributes to LibreBooking attributes is:
 LibreBooking Config
 -------------------
 
-To connect LibreBooking with your Oauth2 IdP you need to add the
-following vars to your ``config.php``, in this example with authentik as
-IdP with the url ``authentik.io``.
+To connect LibreBooking with your Oauth2 IdP, add the following settings to
+the ``authentication`` section of your ``config/config.php`` file. This example
+uses authentik as the IdP with the URL ``authentik.io``.
 
-.. code:: php
+.. code-block:: php
 
-   $conf['settings']['authentication']['allow.oauth2.login'] = 'true';  // Enable Oauth2
-   $conf['settings']['authentication']['oauth2.name'] = 'authentik'; // Display name of Oauth2 IdP
-   $conf['settings']['authentication']['oauth2.url.authorize'] = 'https://authentik.io/application/o/authorize/'; // Oauth2 Authorization Endpoint
-   $conf['settings']['authentication']['oauth2.url.token'] = 'https://authentik.io/application/o/token/'; // Oauth2 Token Endpoint
-   $conf['settings']['authentication']['oauth2.url.userinfo'] = 'https://authentik.io/application/o/userinfo/'; // Oauth2 Userinfo Endpoint
-   $conf['settings']['authentication']['oauth2.client.id'] = 'c3zzBXq9Qw3K9KErd9ta6tQgvVhr6wT3rkQaInz8';
-   $conf['settings']['authentication']['oauth2.client.secret'] = '13246zgtfd4t456zhg8rdgf98g789df7gFG56z5zhb';
+   return [
+       'settings' => [
+           'authentication' => [
+               'oauth2.login.enabled' => true,
+               'oauth2.name' => 'authentik',
+               'oauth2.url.authorize' => 'https://authentik.io/application/o/authorize/',
+               'oauth2.url.token' => 'https://authentik.io/application/o/token/',
+               'oauth2.url.userinfo' => 'https://authentik.io/application/o/userinfo/',
+               'oauth2.client.id' => 'c3zzBXq9Qw3K9KErd9ta6tQgvVhr6wT3rkQaInz8',
+               'oauth2.client.secret' => '13246zgtfd4t456zhg8rdgf98g789df7gFG56z5zhb',
+               'oauth2.client.uri' => '/Web/oauth2-auth.php',
+           ],
+       ],
+   ];
 
-To hide the internal LibreBooking Login you can additional add the
-following variable.
+To hide the internal LibreBooking login prompt, also set:
 
-.. code:: php
+.. code-block:: php
 
-   $conf['settings']['authentication']['hide.booked.login.prompt'] = 'true';
+   return [
+       'settings' => [
+           'authentication' => [
+               'hide.login.prompt' => true,
+           ],
+       ],
+   ];
