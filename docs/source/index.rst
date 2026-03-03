@@ -17,6 +17,7 @@ LibreBooking documentation
    CONFIGURATION
    BASIC-CONFIGURATION
    ADVANCED-CONFIGURATION
+   FAQ
    DEVELOPER-README
    API
    LDAP-Authentication
