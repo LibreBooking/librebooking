@@ -60,6 +60,12 @@ Management > Configuration**. Key settings include:
 - **sync.groups**: Enable group membership synchronization
 - **database.auth.when.ldap.user.not.found**: Fallback to database authentication
 
+.. important::
+
+   The ``host`` value must include the LDAP scheme, for example
+   ``ldap://ldap.example.com`` or ``ldaps://ldap.example.com``.
+   A bare hostname such as ``ldap.example.com`` is not enough.
+
 Alternatively, configure the plugin through the web admin interface at
 **Application Configuration** (``/Web/admin/manage_configuration.php``) and
 select **Authentification-Ldap**.
