@@ -14,19 +14,26 @@
 </p>
 
 <p>
-{if $ResourceNames|default:array()|count > 1}
-    <strong>Resources ({$ResourceNames|default:array()|count}):</strong> <br />
-    {foreach from=$ResourceNames item=resourceName}
-        {$resourceName}<br/>
-    {/foreach}
-{else}
-    <strong>Resource:</strong> {$ResourceName}<br/>
-{/if}
-</p>
+    <strong>Resources ({$Resources|default:array()|count}):</strong> <br />
+    {foreach from=$Resources item=resource name=resourceLoop}
+        <strong>{$resource.name|escape}</strong><br/>
+        {if $resource.location}<strong>Location:</strong> {$resource.location|escape}<br/>{/if}
+        {if $resource.contact}<strong>Contact:</strong> {$resource.contact|escape}<br/>{/if}
 
-{if $ResourceImage}
-    <div class="resource-image"><img alt="{$ResourceName|escape}" src="{$ScriptUrl}/{$ResourceImage}"/></div>
-{/if}
+        {if $resource.attributes|default:array()|count > 0}
+            <strong>Resource Details:</strong><br/>
+            {foreach from=$resource.attributes item=attribute}
+                <div>{control type="AttributeControl" attribute=$attribute readonly=true}</div>
+            {/foreach}
+        {/if}
+
+        {if $resource.image}
+            <div class="resource-image"><img alt="{$resource.name|escape}" src="{$ScriptUrl}/{$resource.image|escape}"/></div>
+        {/if}
+
+        {if !$smarty.foreach.resourceLoop.last}<br/>{/if}
+    {/foreach}
+</p>
 
 {if $RequiresApproval}
 	<p>* At least one of the resources reserved requires approval before usage. This reservation will be pending until it is approved. *</p>
@@ -124,4 +131,3 @@
 	|
 {/if}
 <a href="{$ScriptUrl}">Log in to {$AppTitle}</a>
-
