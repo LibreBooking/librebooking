@@ -1,7 +1,16 @@
 <?php
 
+require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once(ROOT_DIR . 'Domain/Values/RoleLevel.php');
+
 class ReservationEmailTemplateContext
 {
+    /** @var array<int, Schedule>|null */
+    private ?array $schedulesById = null;
+
+    /** @var array<int, GroupItemView>|null */
+    private ?array $resourceAdminGroupsById = null;
+
     public static function BuildResourceImageUrl(?string $image): ?string
     {
         if (empty($image)) {
@@ -15,8 +24,12 @@ class ReservationEmailTemplateContext
         private ReservationSeries $reservationSeries,
         private User $reservationOwner,
         private BookableResource $primaryResource,
-        private IAttributeRepository $attributeRepository
+        private IAttributeRepository $attributeRepository,
+        private ?IScheduleRepository $scheduleRepository = null,
+        private ?IGroupViewRepository $groupRepository = null
     ) {
+        $this->scheduleRepository ??= new ScheduleRepository();
+        $this->groupRepository ??= new GroupRepository();
     }
 
     /**
@@ -32,8 +45,8 @@ class ReservationEmailTemplateContext
 
         if ($this->reservationSeries->IsRecurring()) {
             foreach ($this->reservationSeries->Instances() as $repeated) {
-                $repeatDates[] = $repeated->StartDate()->ToTimezone($timezone);
-                $repeatRanges[] = $repeated->Duration()->ToTimezone($timezone);
+                $repeatDates[] = $repeated->StartDate()->ToTimezone(timezone: $timezone);
+                $repeatRanges[] = $repeated->Duration()->ToTimezone(timezone: $timezone);
             }
         }
 
@@ -66,11 +79,14 @@ class ReservationEmailTemplateContext
                 continue;
             }
 
-            if (!in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
+            if (!in_array(needle: $this->reservationSeries->ResourceId(), haystack: $attribute->SecondaryEntityIds())) {
                 continue;
             }
 
-            $attributeValues[] = new LBAttribute($attribute, $this->reservationSeries->GetAttributeValue($attribute->Id()));
+            $attributeValues[] = new LBAttribute(
+                attributeDefinition: $attribute,
+                value: $this->reservationSeries->GetAttributeValue($attribute->Id())
+            );
         }
 
         return $attributeValues;
@@ -90,12 +106,15 @@ class ReservationEmailTemplateContext
      * @return list<array{
      *   id: int,
      *   name: string,
+     *   scheduleName: string,
      *   location: string|null,
      *   contact: string|null,
      *   notes: string|null,
      *   description: string|null,
+     *   resourceAdministrator: string,
      *   image: string|null,
-     *   attributes: list<LBAttribute>
+     *   attributes: list<LBAttribute>,
+     *   attributeRows: list<array{label: string, displayValue: string}>
      * }>
      */
     public function Resources(bool $includeAdminOnly = false): array
@@ -104,7 +123,11 @@ class ReservationEmailTemplateContext
         $resources = [];
 
         foreach ($this->reservationSeries->AllResources() as $resource) {
-            $resources[] = $this->BuildResourceData($resource, $resourceAttributes, $includeAdminOnly);
+            $resources[] = $this->BuildResourceData(
+                resource: $resource,
+                resourceAttributeDefinitions: $resourceAttributes,
+                includeAdminOnly: $includeAdminOnly
+            );
         }
 
         return $resources;
@@ -115,17 +138,20 @@ class ReservationEmailTemplateContext
      * @return array{
      *   id: int,
      *   name: string,
+     *   scheduleName: string,
      *   location: string|null,
      *   contact: string|null,
      *   notes: string|null,
      *   description: string|null,
+     *   resourceAdministrator: string,
      *   image: string|null,
-     *   attributes: list<LBAttribute>
+     *   attributes: list<LBAttribute>,
+     *   attributeRows: list<array{label: string, displayValue: string}>
      * }
      */
     private function BuildResourceData(BookableResource $resource, array $resourceAttributeDefinitions, bool $includeAdminOnly): array
     {
-        $resourceImage = self::BuildResourceImageUrl($resource->GetImage());
+        $resourceImage = self::BuildResourceImageUrl(image: $resource->GetImage());
 
         $resourceAttributeValues = [];
         foreach ($resourceAttributeDefinitions as $attribute) {
@@ -134,19 +160,133 @@ class ReservationEmailTemplateContext
             }
 
             if ($attribute->AppliesToEntity($resource->GetId())) {
-                $resourceAttributeValues[] = new LBAttribute($attribute, $resource->GetAttributeValue($attribute->Id()));
+                $resourceAttributeValues[] = new LBAttribute(
+                    attributeDefinition: $attribute,
+                    value: $resource->GetAttributeValue($attribute->Id())
+                );
             }
         }
+
+        usort(
+            $resourceAttributeValues,
+            static fn (LBAttribute $left, LBAttribute $right): int => strcasecmp($left->Label(), $right->Label())
+        );
 
         return [
             'id' => $resource->GetId(),
             'name' => $resource->GetName(),
+            'scheduleName' => $this->ScheduleName(resource: $resource),
             'location' => $resource->GetLocation(),
             'contact' => $resource->GetContact(),
             'notes' => $resource->GetNotes(),
             'description' => $resource->GetDescription(),
+            'resourceAdministrator' => $this->ResourceAdministrator(resource: $resource),
             'image' => $resourceImage,
             'attributes' => $resourceAttributeValues,
+            'attributeRows' => $this->AttributeRows(attributes: $resourceAttributeValues),
         ];
+    }
+
+    /**
+     * @param list<LBAttribute> $attributes
+     * @return list<array{label: string, displayValue: string}>
+     */
+    private function AttributeRows(array $attributes): array
+    {
+        $rows = [];
+        $resources = Resources::GetInstance();
+        $dateFormat = $resources->GetDateFormat('general_datetime');
+
+        foreach ($attributes as $attribute) {
+            $rows[] = [
+                'label' => $attribute->Label(),
+                'displayValue' => $this->AttributeDisplayValue(
+                    attribute: $attribute,
+                    resources: $resources,
+                    dateFormat: $dateFormat
+                ),
+            ];
+        }
+
+        return $rows;
+    }
+
+    private function AttributeDisplayValue(LBAttribute $attribute, Resources $resources, string $dateFormat): string
+    {
+        $value = $attribute->Value();
+
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        if ($attribute->Type() == CustomAttributeTypes::CHECKBOX) {
+            return $value == '1'
+                ? $resources->GetString('True')
+                : $resources->GetString('False');
+        }
+
+        if ($attribute->Type() == CustomAttributeTypes::DATETIME) {
+            if ($value instanceof Date) {
+                return $value->Format($dateFormat);
+            }
+
+            if (is_string($value)) {
+                try {
+                    return Date::Parse($value)->Format($dateFormat);
+                } catch (Exception $e) {
+                    return $value;
+                }
+            }
+        }
+
+        return strval($value);
+    }
+
+    private function ScheduleName(BookableResource $resource): string
+    {
+        $schedules = $this->SchedulesById();
+        $scheduleId = $resource->GetScheduleId();
+
+        return isset($schedules[$scheduleId]) ? $schedules[$scheduleId]->GetName() : '';
+    }
+
+    private function ResourceAdministrator(BookableResource $resource): string
+    {
+        $groups = $this->ResourceAdminGroupsById();
+        $groupId = $resource->GetAdminGroupId();
+
+        return isset($groups[$groupId]) ? $groups[$groupId]->Name : '';
+    }
+
+    /**
+     * @return array<int, Schedule>
+     */
+    private function SchedulesById(): array
+    {
+        if ($this->schedulesById === null) {
+            $this->schedulesById = [];
+
+            foreach ($this->scheduleRepository->GetAll() as $schedule) {
+                $this->schedulesById[$schedule->GetId()] = $schedule;
+            }
+        }
+
+        return $this->schedulesById;
+    }
+
+    /**
+     * @return array<int, GroupItemView>
+     */
+    private function ResourceAdminGroupsById(): array
+    {
+        if ($this->resourceAdminGroupsById === null) {
+            $this->resourceAdminGroupsById = [];
+
+            foreach ($this->groupRepository->GetGroupsByRole(RoleLevel::RESOURCE_ADMIN) as $group) {
+                $this->resourceAdminGroupsById[$group->Id] = $group;
+            }
+        }
+
+        return $this->resourceAdminGroupsById;
     }
 }

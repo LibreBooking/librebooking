@@ -24,14 +24,24 @@
 	<br/>
     {foreach from=$Resources item=resource name=resourceLoop}
         <strong>{$resource.name|escape}</strong><br/>
+        {if $resource.scheduleName}<strong>Schedule:</strong> {$resource.scheduleName|escape}<br/>{/if}
+        <strong>Resource ID:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>Location:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>Contact:</strong> {$resource.contact|escape}<br/>{/if}
+        {if $resource.description}<strong>Description:</strong> {$resource.description|escape|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Notes:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.resourceAdministrator}<strong>Resource Administrator:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
-        {if $resource.attributes|default:array()|count > 0}
+        {if $resource.attributeRows|default:array()|count > 0}
             <strong>Resource Details:</strong><br/>
-            {foreach from=$resource.attributes item=attribute}
-                <div>{control type="AttributeControl" attribute=$attribute readonly=true}</div>
-            {/foreach}
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {foreach from=$resource.attributeRows item=row}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{$row.label|escape}</strong></th>
+                        <td valign="top">{$row.displayValue|escape|nl2br}</td>
+                    </tr>
+                {/foreach}
+            </table>
         {/if}
 
         {if $resource.image}
