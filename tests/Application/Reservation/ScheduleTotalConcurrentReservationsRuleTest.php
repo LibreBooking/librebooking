@@ -146,6 +146,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testChecksEachInstanceOfASeries()
     {
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
         $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
@@ -161,6 +162,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testIncludesBufferTime()
     {
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
         $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(90);
         $resourceId = 1;
