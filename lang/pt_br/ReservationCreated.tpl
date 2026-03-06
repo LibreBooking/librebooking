@@ -19,22 +19,41 @@
 </p>
 
 <p>
-    {if $ResourceNames|default:array()|count > 1}
-        <strong>Recursos ({$ResourceNames|default:array()|count}):</strong>
-        {foreach from=$ResourceNames item=resourceName}
-            <br />
-            {$resourceName}
-        {/foreach}
-    {else}
-        <strong>Recurso:</strong> {$ResourceName}
-    {/if}
-</p>
 
-{if $ResourceImage}
-    <div class="resource-image">
-        <img alt="{$ResourceName|escape}" src="{$ScriptUrl}/{$ResourceImage}" />
-    </div>
-{/if}
+    {if $Resources|default:array()|count > 1}
+        <strong>Recursos ({$Resources|default:array()|count}):</strong> <br />
+    {else}
+        <strong>Recurso:</strong><br/>
+    {/if}
+    {foreach from=$Resources item=resource name=resourceLoop}
+        <strong>{$resource.name|escape}</strong><br/>
+        {if $resource.scheduleName}<strong>Agenda:</strong> {$resource.scheduleName|escape}<br/>{/if}
+        <strong>ID do recurso:</strong> {$resource.id}<br/>
+        {if $resource.location}<strong>Localização:</strong> {$resource.location|escape}<br/>{/if}
+        {if $resource.contact}<strong>Contato:</strong> {$resource.contact|escape}<br/>{/if}
+        {if $resource.description}<strong>Descrição:</strong> {$resource.description|escape|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Notas:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.resourceAdministrator}<strong>Administrador do recurso:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
+
+        {if $resource.attributeRows|default:array()|count > 0}
+            <strong>Detalhes do recurso:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {foreach from=$resource.attributeRows item=row}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{$row.label|escape}</strong></th>
+                        <td valign="top">{$row.displayValue|escape|nl2br}</td>
+                    </tr>
+                {/foreach}
+            </table>
+        {/if}
+
+        {if $resource.image}
+            <div class="resource-image"><img alt="{$resource.name|escape}" src="{$ScriptUrl}/{$resource.image|escape}"/></div>
+        {/if}
+
+        {if !$smarty.foreach.resourceLoop.last}<br/>{/if}
+    {/foreach}
+</p>
 
 {if $RequiresApproval}
     <p>
