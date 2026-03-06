@@ -30,10 +30,11 @@ class AdminEmailNotificationTest extends TestBase
         $reservation = new TestReservationSeries();
         $reservation->WithOwnerId($ownerId);
         $reservation->WithResource($resource);
+        $reservation->WithCurrentInstance(new TestReservation());
         $reservation->SetStatusId(ReservationStatus::Pending);
 
         $owner = new FakeUser($ownerId);
-        $admin1 = new UserDto(1, 'f', 'l', 'e');
+        $admin1 = new UserDto(1, 'f', 'l', 'e', null, 'de_de');
         $admin2 = new UserDto(2, 'f', 'l', 'e');
         $admin3 = new UserDto(3, 'f', 'l', 'e');
         $admin4 = new UserDto(4, 'f', 'l', 'e');
@@ -45,6 +46,7 @@ class AdminEmailNotificationTest extends TestBase
         $groupAdmins = [$admin5, $admin6, $admin2];
 
         $attributeRepo = $this->createMock('IAttributeRepository');
+        $attributeRepo->method('GetByCategory')->willReturn([]);
         $userRepo = $this->createMock('IUserRepository');
         $userRepo->expects($this->once())
                  ->method('LoadById')
@@ -79,6 +81,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
         $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $body = $this->fakeEmailService->_Messages[0]->Body();
+        $this->assertStringContainsString('Ressourcen-ID:', $body);
     }
 
     public function testSendsReservationUpdatedEmailIfAdminWantsIt()

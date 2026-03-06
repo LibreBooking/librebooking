@@ -4,18 +4,40 @@
 
 	Начало: {formatdate date=$StartDate key=reservation_email}<br/>
 	Край: {formatdate date=$EndDate key=reservation_email}<br/>
-	{if $ResourceNames|default:array()|count > 1}
-		Ресурси:<br/>
-		{foreach from=$ResourceNames item=resourceName}
-			{$resourceName}<br/>
-		{/foreach}
-		{else}
-		ресурс: {$ResourceName}<br/>
-	{/if}
 
-	{if $ResourceImage}
-		<div class="resource-image"><img src="{$ScriptUrl}/{$ResourceImage}"/></div>
+	{if $Resources|default:array()|count > 1}
+		<strong>Ресурси ({$Resources|default:array()|count}):</strong> <br />
+	{else}
+		<strong>Ресурс:</strong><br/>
 	{/if}
+	{foreach from=$Resources item=resource name=resourceLoop}
+		<strong>{$resource.name|escape}</strong><br/>
+		{if $resource.scheduleName}<strong>График:</strong> {$resource.scheduleName|escape}<br/>{/if}
+		<strong>Идентификатор на ресурс:</strong> {$resource.id}<br/>
+		{if $resource.location}<strong>Местоположение:</strong> {$resource.location|escape}<br/>{/if}
+		{if $resource.contact}<strong>Контакт:</strong> {$resource.contact|escape}<br/>{/if}
+		{if $resource.description}<strong>Описание:</strong> {$resource.description|escape|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Бележки:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.resourceAdministrator}<strong>Администратор на ресурса:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
+
+		{if $resource.attributeRows|default:array()|count > 0}
+			<strong>Детайли за ресурса:</strong><br/>
+			<table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+				{foreach from=$resource.attributeRows item=row}
+					<tr>
+						<th scope="row" valign="top" style="text-align: left;"><strong>{$row.label|escape}</strong></th>
+						<td valign="top">{$row.displayValue|escape|nl2br}</td>
+					</tr>
+				{/foreach}
+			</table>
+		{/if}
+
+		{if $resource.image}
+			<div class="resource-image"><img alt="{$resource.name|escape}" src="{$ScriptUrl}/{$resource.image|escape}"/></div>
+		{/if}
+
+		{if !$smarty.foreach.resourceLoop.last}<br/>{/if}
+	{/foreach}
 
 	Заглавие: {$Title}<br/>
 	Описание: {$Description|nl2br}<br/>

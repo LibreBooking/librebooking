@@ -14,7 +14,11 @@
 </p>
 
 <p>
-    <strong>Resources ({$Resources|default:array()|count}):</strong> <br />
+    {if $Resources|default:array()|count > 1}
+        <strong>Resources ({$Resources|default:array()|count}):</strong> <br />
+    {else}
+        <strong>Resource:</strong><br/>
+    {/if}
     {foreach from=$Resources item=resource name=resourceLoop}
         <strong>{$resource.name|escape}</strong><br/>
         {if $resource.scheduleName}<strong>Schedule:</strong> {$resource.scheduleName|escape}<br/>{/if}

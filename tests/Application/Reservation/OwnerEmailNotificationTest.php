@@ -36,6 +36,7 @@ class OwnerEmailNotificationTest extends TestBase
         $attributeRepo = new FakeAttributeRepository();
 
         $user = $this->LoadsUser($userRepo, $ownerId);
+        $user->SetLanguage('de_de');
 
         $notification = new OwnerEmailCreatedNotification($userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -45,6 +46,7 @@ class OwnerEmailNotificationTest extends TestBase
         $lastMessage = $this->fakeEmailService->_LastMessage;
         $body = $lastMessage->Body();
         $this->assertInstanceOf('ReservationCreatedEmail', $lastMessage);
+        $this->assertStringContainsString('Ressourcen-ID:', $body);
         $this->assertNotEmpty($lastMessage->AttachmentContents());
         //		$this->assertEquals($expectedMessage, $lastMessage);
     }
