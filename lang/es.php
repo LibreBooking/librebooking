@@ -475,7 +475,7 @@ class es extends en_gb
         $strings['More'] = 'Más';
         $strings['ResourceAvailability'] = 'Disponibilidad del recurso';
         $strings['UnavailableAllDay'] = 'No disponible en todo el día';
-        $strings['AvailableUntil'] = 'Disponible hasta las';
+        $strings['AvailableUntil'] = 'Disponible hasta el';
         $strings['AvailableBeginningAt'] = 'Disponible desde las';
         $strings['AvailableAt'] = 'Disponible en';
         $strings['AllResourceTypes'] = 'Todos los tipos de recursos';
@@ -552,7 +552,7 @@ class es extends en_gb
         $strings['IcsLocationsAsResources'] = 'Las ubicaciones serán importadas como recursos.';
         $strings['IcsMissingOrganizer'] = 'Si un evento no tiene organizador, el propietario será el usuario actual.';
         $strings['IcsWarning'] = 'Las reglas de reservas no se aplicarán - conflictos, duplicados, etc son posibles.';
-        $strings['BlackoutAroundConflicts'] = 'Blackout around conflicting reservations';
+        $strings['BlackoutAroundConflicts'] = 'Las reservas tienen prioridad';
         $strings['DuplicateReservation'] = 'Duplicar';
         $strings['UnavailableNow'] = 'No disponible en este momento';
         $strings['ReserveLater'] = 'Reservar más tarde';
@@ -609,8 +609,8 @@ class es extends en_gb
         $strings['Live'] = 'Live';
         $strings['StripePublishableKey'] = 'Clave pública';
         $strings['StripeSecretKey'] = 'Clave secreta';
-        $strings['CreditsUpdated'] = 'Credit cost has been updated';
-        $strings['GatewaysUpdated'] = 'Payment gateways have been updated';
+        $strings['CreditsUpdated'] = 'El costo de crédito ha sido actualizado';
+        $strings['GatewaysUpdated'] = 'Los gateways de pago han sido actualizados';
         $strings['PurchaseSummary'] = 'Resumen de Compra';
         $strings['EachCreditCosts'] = 'Cada crédito cuesta';
         $strings['Checkout'] = 'Finalizar compra';
@@ -630,7 +630,7 @@ class es extends en_gb
         $strings['BuyMoreCredits'] = 'Comprar Más Créditos';
         $strings['Transactions'] = 'Transacciones';
         $strings['Cost'] = 'Coste';
-        $strings['PaymentGateways'] = 'Payment Gateways';
+        $strings['PaymentGateways'] = 'Gateways de pago';
         $strings['CreditHistory'] = 'Historial de Crédito';
         $strings['TransactionHistory'] = 'Historial de Transacciones';
         $strings['Date'] = 'Fecha';
@@ -641,7 +641,7 @@ class es extends en_gb
         $strings['InvoiceNumber'] = 'Número de Factura';
         $strings['TransactionId'] = 'ID de Transacción';
         $strings['Gateway'] = 'Gateway';
-        $strings['GatewayTransactionDate'] = 'Gateway Transaction Date';
+        $strings['GatewayTransactionDate'] = 'Fecha de transacción de Gateway';
         $strings['Refund'] = 'Reembolso';
         $strings['IssueRefund'] = 'Reembolsar';
         $strings['RefundIssued'] = 'Reembolso emitido con éxito';
@@ -719,7 +719,7 @@ class es extends en_gb
         $strings['List'] = 'Lista';
         $strings['NoReservationsFound'] = 'No se han Encontrado Reservas';
         $strings['EmailReservation'] = 'Dirección de correo electrónico de la reserva';
-        $strings['AdHocMeeting'] = 'Ad hoc Meeting';
+        $strings['AdHocMeeting'] = 'Reunión Ad Hoc';
         $strings['NextReservation'] = 'Próxima Reserva';
         $strings['CurrentReservation'] = 'Reserva actual';
         $strings['MissedCheckin'] = 'Registro perdido';
@@ -852,7 +852,7 @@ class es extends en_gb
         $strings['ReservationCannotBeCheckedInTo'] = 'No se puede hacer «check in» en esta reserva.';
         $strings['ReservationCannotBeCheckedOutFrom'] = 'No se puede hacer «check out» en esta reserva.';
         $strings['InvalidEmailDomain'] = 'Esa dirección de correo electrónico no es de un dominio permitido';
-        $strings['TermsOfServiceError'] = 'Debe aceptar los Términos de Servcio';
+        $strings['TermsOfServiceError'] = 'Debe aceptar los Términos de Servicio';
         $strings['UserNotFound'] = 'No se pudo encontrar al usuario';
         $strings['ScheduleAvailabilityError'] = 'Este calendario está disponible entre %s y %s';
         $strings['ReservationNotFoundError'] = 'Reserva no encontrada';
@@ -864,6 +864,7 @@ class es extends en_gb
         $strings['RegisteredAccountRequired'] = 'Sólo los usuarios registrados pueden realizar reservas';
         $strings['InvalidNumberOfResourcesError'] = 'El número máximo de recursos que se pueden reservar en una sola reserva es %s';
         $strings['ScheduleTotalReservationsError'] = 'Este calendario solo permite reservar %s recursos simultáneamente. Esta reserva violaría ese límite en las siguientes fechas:';
+        $strings['SelfRegistrationDisabled'] = 'El registro de usuarios no registrados está deshabilitado. Por favor, contacte a un administrador para crear su cuenta.';
         // End Errors
 
         // Page Titles
@@ -960,7 +961,7 @@ class es extends en_gb
         $strings['ParticipantAddedSubject'] = 'Notificación de participación en reserva';
         $strings['ParticipantDeletedSubject'] = 'Eliminación de participación en reserva';
         $strings['InviteeAddedSubject'] = 'Invitación a reserva';
-        $strings['ResetPassword'] = 'Petición de reinicio de contraseña';
+        $strings['ResetPasswordRequest'] = 'Petición de reinicio de contraseña';
         $strings['ActivateYourAccount'] = 'Por favor, activa tu cuenta';
         $strings['ReportSubject'] = 'El informe solicitado (%s)';
         $strings['ReservationStartingSoonSubject'] = 'La reserva de %s comienza pronto';
@@ -972,19 +973,20 @@ class es extends en_gb
         $strings['InviteUserSubject'] = '%s le ha invitado a unirse %s';
 
         $strings['ReservationApprovedSubjectWithResource'] = 'La reserva ha sido aprobada por %s';
-        $strings['ReservationCreatedSubjectWithResource'] = 'Reserva Creada por %s';
-        $strings['ReservationUpdatedSubjectWithResource'] = 'Reserva Actualizada por %s';
-        $strings['ReservationDeletedSubjectWithResource'] = 'Reserva Borrada por %s';
-        $strings['ReservationCreatedAdminSubjectWithResource'] = 'Notificación: Reserva Creada por %s';
-        $strings['ReservationUpdatedAdminSubjectWithResource'] = 'Notificación: Reserva Actualizada por %s';
-        $strings['ReservationDeleteAdminSubjectWithResource'] = 'Notificación: Reserva Borrada por %s';
-        $strings['ReservationApprovalAdminSubjectWithResource'] = 'Notificación: Reserva para %s Requiere su aprovación';
+        $strings['ReservationCreatedSubjectWithResource'] = 'Reserva Creada para %s';
+        $strings['ReservationUpdatedSubjectWithResource'] = 'Reserva Actualizada para %s';
+        $strings['ReservationDeletedSubjectWithResource'] = 'Reserva Borrada para %s';
+        $strings['ReservationCreatedAdminSubjectWithResource'] = 'Notificación: Reserva Creada para %s';
+        $strings['ReservationUpdatedAdminSubjectWithResource'] = 'Notificación: Reserva Actualizada para %s';
+        $strings['ReservationDeleteAdminSubjectWithResource'] = 'Notificación: Reserva Borrada para %s';
+        $strings['ReservationApprovalAdminSubjectWithResource'] = 'Notificación: Reserva para %s Requiere su aprobación';
         $strings['ParticipantAddedSubjectWithResource'] = '%s le ha añadido a una Reserva para %s';
+        $strings['ParticipantUpdatedSubjectWithResource'] = '%s ha actualizado una Reserva para %s';
         $strings['ParticipantDeletedSubjectWithResource'] = '%s ha eliminado una Reserva para %s';
         $strings['InviteeAddedSubjectWithResource'] = '%s le ha invitado a una Reserva para %s';
-        $strings['MissedCheckinEmailSubject'] = 'Missed checkin for %s';
+        $strings['MissedCheckinEmailSubject'] = 'Registro de entrada perdido para %s';
         $strings['ReservationShareSubject'] = '%s ha compartido una Reserva para %s';
-        $strings['ReservationSeriesEndingSubject'] = 'Reservation Series for %s is Ending on %s';
+        $strings['ReservationSeriesEndingSubject'] = 'La serie de reservas para %s finaliza el %s';
         $strings['ReservationParticipantAccept'] = '%s ha Aceptado su Invitación a la Reserva para %s el %s';
         $strings['ReservationParticipantDecline'] = '%s ha Rechazado su Invitación a la Reserva para %s el %s';
         $strings['ReservationParticipantJoin'] = '%s se ha Unido a su Reserva para %s el %s';
