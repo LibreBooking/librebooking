@@ -1,0 +1,8 @@
+{
+  "name": "jszip",
+  "version": "3.10.1",
+  "description": "Create, read and edit .zip files with Javascript.",
+  "homepage": "https://stuk.github.io/jszip/",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js",
+  "license": "MIT"
+}

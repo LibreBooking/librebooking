@@ -14,10 +14,10 @@
     <link rel="icon" href="{$Path}{$FaviconUrl}" />
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {jsfile src="js/jquery-3.3.1.min.js"}
-        {jsfile src="js/jquery-migrate-3.0.1.min.js"}
-        {jsfile src="js/jquery-ui.1.12.1.custom.min.js"}
-        {jsfile src="bootstrap/js/bootstrap.bundle.min.js"}
+        {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
+        {vendor_js src="jquery/3.0.1/jquery-migrate-3.0.1.min.js"}
+        {vendor_js src="jquery-ui/1.12.1/js/jquery-ui.1.12.1.custom.min.js"}
+        {vendor_js src="bootstrap/5.3.3/js/bootstrap.bundle.min.js"}
     {else}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -33,23 +33,23 @@
 
     <!-- CSS -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {cssfile src="scripts/css/smoothness/jquery-ui.1.12.1.custom.min.css"}
-        {cssfile src="css/bootstrap-icons/css/bootstrap-icons.min.css" rel="stylesheet"}
-        {cssfile src="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"}
-        {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
+        {vendor_css src="jquery-ui/1.12.1/css/jquery-ui.1.12.1.custom.min.css"}
+        {vendor_css src="bootstrap-icons/1.11.3/css/bootstrap-icons.min.css"}
+        {vendor_css src="bootstrap/5.3.3/css/bootstrap.css"}
+        {vendor_css src="flatpickr/4.6.13/css/flatpickr.min.css"}
         {if isset($Qtip) && $Qtip}
-            {cssfile src="css/jquery.qtip.min.css" rel="stylesheet"}
+            {vendor_css src="qtip/3.0.3/css/jquery.qtip.min.css"}
         {/if}
         {if isset($Validator) && $Validator}
             {cssfile src="css/bootstrapValidator.min.css" rel="stylesheet"}
         {/if}
         {if isset($Trumbowyg) && $Trumbowyg}
-            {cssfile src="css/trumbowyg.min.css" rel="stylesheet"}
+            {vendor_css src="trumbowyg/2.27.3/css/trumbowyg.min.css"}
         {/if}
         {if isset($DataTable) && $DataTable}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet"}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet"}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet"}
+            {vendor_css src="datatables/1.13.7/css/dataTables.bootstrap5.min.css"}
+            {vendor_css src="datatables-responsive/2.5.0/css/responsive.bootstrap5.min.css"}
+            {vendor_css src="datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css"}
         {/if}
     {else}
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" />
@@ -78,15 +78,15 @@
         {/if}
     {/if}
     {if isset($InlineEdit) && $InlineEdit}
-        {cssfile src="scripts/js/x-editable/css/bootstrap-editable.css" rel="stylesheet"}
-        {cssfile src="scripts/js/wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet"}
+        {vendor_css src="x-editable/1.5.1/css/bootstrap-editable.css"}
+        {vendor_css src="wysihtml5/0.3.0/css/bootstrap3-wysihtml5.min.css"}
     {/if}
     {if isset($Select2) && $Select2}
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     {/if}
     {if isset($Fullcalendar) && $Fullcalendar}
-        {cssfile src="scripts/css/fullcalendar.min.css"}
-        <link rel='stylesheet' type='text/css' href='{$Path}scripts/css/fullcalendar.print.css' media='print' />
+        {vendor_css src="fullcalendar/3.4.0/css/fullcalendar.min.css"}
+        <link rel='stylesheet' type='text/css' href='{$Path}assets/vendor/fullcalendar/3.4.0/css/fullcalendar.print.css' media='print' />
     {/if}
 
     {cssfile src="librebooking.css"}

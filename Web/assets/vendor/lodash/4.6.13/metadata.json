@@ -1,0 +1,8 @@
+{
+  "name": "lodash",
+  "version": "4.6.13",
+  "description": "A modern JavaScript utility library delivering modularity, performance & extras.",
+  "homepage": "https://lodash.com/",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.13/lodash.min.js",
+  "license": "MIT"
+}

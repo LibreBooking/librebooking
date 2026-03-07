@@ -1,0 +1,8 @@
+{
+  "name": "jquery-migrate",
+  "version": "3.0.1",
+  "description": "Migrate older jQuery code to modern jQuery.",
+  "homepage": "https://github.com/jquery/jquery-migrate",
+  "source": "https://code.jquery.com/jquery-migrate-3.0.1.min.js",
+  "license": "MIT"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "qtip",
+  "version": "3.0.3",
+  "description": "qTip2 - Pretty powerful tooltips.",
+  "homepage": "http://qtip2.com/",
+  "source": "https://github.com/qTip2/qTip2/releases/tag/v3.0.3",
+  "license": "MIT"
+}

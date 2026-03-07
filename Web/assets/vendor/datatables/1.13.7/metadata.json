@@ -1,0 +1,8 @@
+{
+  "name": "datatables",
+  "version": "1.13.7",
+  "description": "DataTables is a plug-in for the jQuery Javascript library.",
+  "homepage": "https://datatables.net/",
+  "source": "https://cdn.datatables.net/1.13.7/",
+  "license": "MIT"
+}

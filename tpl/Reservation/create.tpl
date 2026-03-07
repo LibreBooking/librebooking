@@ -528,7 +528,7 @@
 {control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
 {control type="DatePickerSetupControl" ControlId="RepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone) Multiple=false}
 
-{jsfile src="js/moment.min.js"}
+{vendor_js src="moment/2.13.0/js/moment.min.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="userPopup.js"}
 {jsfile src="date-helper.js"}
@@ -538,7 +538,7 @@
 {jsfile src="force-numeric.js"}
 {jsfile src="reservation-reminder.js"}
 {jsfile src="ajax-helpers.js"}
-{jsfile src="js/tree.jquery.js"}
+{vendor_js src="jqtree/1.6.2/js/tree.jquery.js"}
 
 {include file="Reservation/pdf_libraries.tpl"}
 <script type="text/javascript">

@@ -1,32 +1,32 @@
 {if isset($UseLocalJquery) && $UseLocalJquery}
-    {jsfile src="js/lodash.4.6.13.min.js"}
-    {jsfile src="js/moment.min.js"}
-    {jsfile src="js/jquery.form-3.09.min.js"}
-    {jsfile src="js/flatpickr/cdn.jsdelivr.net/4.6.13/dist/flatpickr.min.js"}
+    {vendor_js src="lodash/4.6.13/js/lodash.4.6.13.min.js"}
+    {vendor_js src="moment/2.13.0/js/moment.min.js"}
+    {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
+    {vendor_js src="flatpickr/4.6.13/js/flatpickr.min.js"}
     {if isset($Qtip) && $Qtip}
-        {jsfile src="js/jquery.qtip.min.js"}
+        {vendor_js src="qtip/3.0.3/js/jquery.qtip.min.js"}
     {/if}
     {if isset($Validator) && $Validator}
-        {jsfile src="js/bootstrapvalidator/bootstrapValidator.min.js"}
+        {vendor_js src="bootstrap-validator/0.6.0/js/bootstrapValidator.min.js"}
     {/if}
     {if isset($Trumbowyg) && $Trumbowyg}
-        {jsfile src="js/rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"}
-        {jsfile src="js/purify.min.js"}
-        {jsfile src="js/trumbowyg/cdnjs.cloudflare.com/2.27.3/trumbowyg.min.js"}
-        {jsfile src="js/trumbowyg/cdnjs.cloudflare.com/2.27.3/plugins/resizimg/trumbowyg.resizimg.min.js"}
+        {vendor_js src="jquery-resizable/0.35/js/jquery-resizable.min.js"}
+        {vendor_js src="dompurify/2.4.0/js/purify.min.js"}
+        {vendor_js src="trumbowyg/2.27.3/js/trumbowyg.min.js"}
+        {vendor_js src="trumbowyg/2.27.3/js/plugins/resizimg/trumbowyg.resizimg.min.js"}
     {/if}
     {if isset($DataTable) && $DataTable}
-        {jsfile src="js/datatable/cdn.datatables.net/1.13.7/js/jquery.dataTables.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"}
-        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"}
-        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"}
-        {jsfile src="js/datatable/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"}
-        {jsfile src="js/datatable/cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"}
+        {vendor_js src="datatables/1.13.7/js/jquery.dataTables.js"}
+        {vendor_js src="datatables-responsive/2.5.0/js/dataTables.responsive.min.js"}
+        {vendor_js src="datatables/1.13.7/js/dataTables.bootstrap5.min.js"}
+        {vendor_js src="datatables-buttons/2.4.2/js/dataTables.buttons.min.js"}
+        {vendor_js src="jszip/3.10.1/js/jszip.min.js"}
+        {vendor_js src="pdfmake/0.1.53/js/pdfmake.min.js"}
+        {vendor_js src="pdfmake/0.1.53/js/vfs_fonts.js"}
+        {vendor_js src="datatables-buttons/2.4.2/js/buttons.print.min.js"}
+        {vendor_js src="datatables-buttons/2.4.2/js/buttons.bootstrap5.min.js"}
+        {vendor_js src="datatables-buttons/2.4.2/js/buttons.html5.min.js"}
+        {vendor_js src="datatables-buttons/2.4.2/js/buttons.colVis.min.js"}
     {/if}
 {else}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.16.3/lodash.min.js"></script>
@@ -66,18 +66,18 @@
 {/if}
 {if isset($InlineEdit) && $InlineEdit}
     {*The version of X-editable that supports Bootstrap 5 does not have a CDN link*}
-    {jsfile src="js/x-editable/js/bootstrap-editable.js"}
+    {vendor_js src="x-editable/1.5.1/js/bootstrap-editable.js"}
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/inputs-ext/wysihtml5/wysihtml5.js"></script>
-    {jsfile src="js/wysihtml5/bootstrap3-wysihtml5.all.min.js"}
+    {vendor_js src="wysihtml5/0.3.0/js/bootstrap3-wysihtml5.all.min.js"}
 {/if}
 {if isset($Select2) && $Select2}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {/if}
 {if isset($Fullcalendar) && $Fullcalendar}
-    {jsfile src="js/fullcalendar.js"}
+    {vendor_js src="fullcalendar/3.4.0/js/fullcalendar.js"}
     {if $HtmlLang != 'en'}
-        {jsfile src="js/fullcalendarLang/$HtmlLang.js"}
+        {vendor_js src="fullcalendar/3.4.0/js/lang/$HtmlLang.js"}
     {/if}
 {/if}
 

@@ -1,0 +1,8 @@
+{
+  "name": "jspdf-autotable",
+  "version": "3.5.14",
+  "description": "jsPDF plugin for generating PDF tables with either HTML or JS data.",
+  "homepage": "https://github.com/simonbengtsson/jsPDF-AutoTable",
+  "source": "https://github.com/simonbengtsson/jsPDF-AutoTable/releases/tag/v3.5.14",
+  "license": "MIT"
+}

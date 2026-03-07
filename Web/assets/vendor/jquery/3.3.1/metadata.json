@@ -1,0 +1,8 @@
+{
+  "name": "jquery",
+  "version": "3.3.1",
+  "description": "The world's most popular JavaScript library.",
+  "homepage": "https://jquery.com/",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js",
+  "license": "MIT"
+}

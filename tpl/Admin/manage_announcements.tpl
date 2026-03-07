@@ -269,7 +269,7 @@
 
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/announcement.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		$(document).ready(function() {

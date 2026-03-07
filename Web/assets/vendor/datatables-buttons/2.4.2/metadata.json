@@ -1,0 +1,8 @@
+{
+  "name": "datatables-buttons",
+  "version": "2.4.2",
+  "description": "Buttons extension for DataTables.",
+  "homepage": "https://datatables.net/extensions/buttons/",
+  "source": "https://cdn.datatables.net/buttons/2.4.2/",
+  "license": "MIT"
+}

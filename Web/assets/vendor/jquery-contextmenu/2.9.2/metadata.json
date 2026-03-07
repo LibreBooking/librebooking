@@ -1,0 +1,8 @@
+{
+  "name": "jquery-contextmenu",
+  "version": "2.9.2",
+  "description": "Management facility for context menus.",
+  "homepage": "http://swisnl.github.io/jQuery-contextMenu/",
+  "source": "https://github.com/swisnl/jQuery-contextMenu/releases/tag/2.9.2",
+  "license": "MIT"
+}

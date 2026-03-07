@@ -1,0 +1,8 @@
+{
+  "name": "jquery-form",
+  "version": "3.09",
+  "description": "The jQuery Form Plugin allows you to easily and unobtrusively upgrade HTML forms to use AJAX.",
+  "homepage": "http://malsup.com/jquery/form/",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.09/jquery.form.min.js",
+  "license": "MIT"
+}

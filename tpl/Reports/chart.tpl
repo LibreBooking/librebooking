@@ -6,11 +6,11 @@
 
 <div id="chartdiv" class="card shadow w-100 my-2" style="display:none;height:400px"></div>
 
-<!--[if lt IE 9]>{jsfile src="js/jqplot/excanvas.js"}<![endif]-->
-{jsfile src="js/jqplot/jquery.jqplot.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.barRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.pointLabels.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"}
+<!--[if lt IE 9]>{vendor_js src="jqplot/1.0.9/excanvas.js"}<![endif]-->
+{vendor_js src="jqplot/1.0.9/jquery.jqplot.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.barRenderer.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.canvasAxisTickRenderer.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.canvasTextRenderer.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.pointLabels.min.js"}
+{vendor_js src="jqplot/1.0.9/plugins/jqplot.dateAxisRenderer.min.js"}

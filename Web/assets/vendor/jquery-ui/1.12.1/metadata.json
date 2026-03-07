@@ -1,0 +1,8 @@
+{
+  "name": "jquery-ui",
+  "version": "1.12.1",
+  "description": "Curated set of user interface interactions, effects, widgets, and themes.",
+  "homepage": "https://jqueryui.com/",
+  "source": "https://jqueryui.com/download/all/",
+  "license": "MIT"
+}

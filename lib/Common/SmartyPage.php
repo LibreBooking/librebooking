@@ -217,6 +217,8 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'flush', $this->Flush(...));
         $this->registerPlugin('function', 'jsfile', $this->IncludeJavascriptFile(...));
         $this->registerPlugin('function', 'cssfile', $this->IncludeCssFile(...));
+        $this->registerPlugin('function', 'vendor_js', $this->IncludeVendorJavascriptFile(...));
+        $this->registerPlugin('function', 'vendor_css', $this->IncludeVendorCssFile(...));
         $this->registerPlugin('function', 'indicator', $this->DisplayIndicator(...));
         $this->registerPlugin('function', 'read_only_attribute', $this->ReadOnlyAttribute(...));
         $this->registerPlugin('function', 'csrf_token', $this->CSRFToken(...));
@@ -798,6 +800,20 @@ class SmartyPage extends Smarty
             $src = "css/{$src}";
         }
         echo "<link rel='stylesheet' type='text/css' href='{$this->RootPath}{$src}?v=$versionNumber'/>";
+    }
+
+    public function IncludeVendorJavascriptFile(array $params, $smarty): void
+    {
+        $versionNumber = Configuration::VERSION;
+        $async = isset($params['async']) ? ' async' : '';
+        echo "<script type=\"text/javascript\" src=\"{$this->RootPath}assets/vendor/{$params['src']}?v=$versionNumber\"{$async}></script>";
+    }
+
+    public function IncludeVendorCssFile(array $params, $smarty): void
+    {
+        $versionNumber = Configuration::VERSION;
+        $src = $params['src'];
+        echo "<link rel='stylesheet' type='text/css' href='{$this->RootPath}assets/vendor/{$src}?v=$versionNumber'/>";
     }
 
     public function DisplayIndicator($params, $smarty)

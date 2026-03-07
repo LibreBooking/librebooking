@@ -578,7 +578,7 @@
 	{jsfile src="autocomplete.js"}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="approval.js"}
-	{jsfile src="dropzone.js"}
+	{vendor_js src="dropzone/1.0.0/js/dropzone.js"}
 
 	<script type="text/javascript">
 		/*function hidePopoversWhenClickAway() {

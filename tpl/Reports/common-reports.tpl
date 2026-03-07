@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles="scripts/js/jqplot/jquery.jqplot.min.css" DataTable=true}
+{include file='globalheader.tpl' cssFiles="assets/vendor/jqplot/1.0.9/jquery.jqplot.min.css" DataTable=true}
 
 <div id="page-common-reports" class="accordion">
     <div>
