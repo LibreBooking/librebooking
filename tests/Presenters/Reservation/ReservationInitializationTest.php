@@ -108,6 +108,8 @@ class ReservationInitializationTest extends TestBase
 
     public function testBindsToClosestPeriod()
     {
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/New_York'));
+
         $page = $this->createMock('INewReservationPage');
         $binder = $this->createMock('IReservationComponentBinder');
 
