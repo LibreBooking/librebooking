@@ -173,19 +173,13 @@
                             </div>
                         {/if}
 
+                        {foreach from=$Attributes item=attribute}
                         <div class="col-12 col-sm-6">
-                            {if $Attributes|default:array()|count > 0}
-                                {control type="AttributeControl" attribute=$Attributes[0]}
-                            {/if}
+                            {control type="AttributeControl" attribute=$attribute}
                         </div>
+                        {/foreach}
 
                     </div>
-
-                    {if $Attributes|default:array()|count > 1}
-                        <div class="col-12 col-sm-6">
-                            {control type="AttributeControl" attribute=$Attributes[$i]}
-                        </div>
-                    {/if}
 
                     {if $EnableCaptcha}
                         <div class="">
