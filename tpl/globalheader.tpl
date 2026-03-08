@@ -41,9 +41,6 @@
         {if isset($Qtip) && $Qtip}
             {vendor_css src="qtip/3.0.3/css/jquery.qtip.min.css"}
         {/if}
-        {if isset($Validator) && $Validator}
-            {cssfile src="css/bootstrapValidator.min.css" rel="stylesheet"}
-        {/if}
         {if isset($Trumbowyg) && $Trumbowyg}
             {vendor_css src="trumbowyg/2.27.3/css/trumbowyg.min.css"}
         {/if}
@@ -60,11 +57,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
             integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" type="text/css" />
-        {if isset($Validator) && $Validator}
-            <link rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
-                type="text/css" />
-        {/if}
         {if isset($Trumbowyg) && $Trumbowyg}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
                 type="text/css" />
