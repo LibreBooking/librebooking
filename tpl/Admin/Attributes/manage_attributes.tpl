@@ -278,7 +278,8 @@
 					</div>
 					<div class="modal-body">
 						<div class="alert alert-danger">
-							{translate key=DeleteWarning}
+							{translate key=DeleteWarning}<br>
+							<strong>{translate key=DisplayLabel}: <span id="deleteAttributeLabel"></span></strong>
 						</div>
 					</div>
 					<div class="modal-footer">

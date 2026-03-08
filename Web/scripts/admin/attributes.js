@@ -21,6 +21,7 @@ function AttributeManagement(opts) {
         addDialog: $('#addAttributeDialog'),
         editDialog: $('#editAttributeDialog'),
         deleteDialog: $('#deleteDialog'),
+        deleteAttributeLabel: $('#deleteAttributeLabel'),
 
         addForm: $('#addAttributeForm'),
         form: $('#editAttributeForm'),
@@ -301,6 +302,11 @@ function AttributeManagement(opts) {
     };
 
     var showDeleteDialog = function (selectedAttributeId) {
+        var dataList = elements.attributeList.data('list');
+        var selectedAttribute = dataList[selectedAttributeId];
+
+        elements.deleteAttributeLabel.text(HtmlDecode(selectedAttribute?.label ?? ''));
+
         setActiveId(selectedAttributeId);
         elements.deleteDialog.modal('show');
     };
