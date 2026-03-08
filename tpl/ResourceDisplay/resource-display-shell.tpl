@@ -6,17 +6,15 @@
                 <div class="date form-group w-50">
                         <label class="fw-bold text-uppercase fs-6 text-secondary"
                                 for="availabilityStartDate">{translate key='Date'}</label>
-                        <input type="date" id="availabilityStartDate" class="form-control w-auto hasDatepicker"
-                                {formname key=ANNOUNCEMENT_START} />
-                        <input type="hidden" id="formattedBeginDate" {formname key=ANNOUNCEMENT_START} />
+                        <input type="text" id="availabilityStartDate" class="form-control w-auto" />
                 </div>
         </div>
 
         <div id="placeholder"></div>
 </div>
 
-<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
-        aria-hidden="true">
+<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+        data-bs-backdrop="static" aria-hidden="true">
         {include file="wait-box.tpl" translateKey='Working'}
 </div>
 
@@ -25,7 +23,7 @@
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
 
-{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" MaxDate=$MaxFutureDate MinDate=$MinDate DefaultDate=$MinDate}
+{control type="DatePickerSetupControl" ControlId="availabilityStartDate" MaxDate=$MaxFutureDate MinDate=$MinDate DefaultDate=$MinDate}
 
 <script type="text/javascript">
         function getResourceId() {
@@ -37,8 +35,6 @@
                         url: '{$smarty.server.SCRIPT_NAME}?dr=resource&rid={$PublicResourceId}&dr=display',
                         userAutocompleteUrl: "ajax/autocomplete.php?type={AutoCompleteType::User}&as=1",
                         allowAutocomplete: {if $AllowAutocomplete}true{else}false{/if},
-                        initialDate: '{$InitialDate}',
-                        MaxDate: '{$MaxFutureDate}'
                 });
         });
 </script>

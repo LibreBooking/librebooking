@@ -12,8 +12,7 @@ function ResourceDisplay(opts) {
         placeholder: $('#placeholder'),
         reservationPopup: $('#reservation-box-wrapper'),
         reservationForm: $('#formReserve'),
-        rawStartDate: $('#availabilityStartDate'),
-        startDate: $('#formattedBeginDate')
+        startDate: $('#availabilityStartDate'),
     };
 
     var _refreshEnabled = true;
@@ -58,10 +57,6 @@ function ResourceDisplay(opts) {
     ResourceDisplay.prototype.initDisplay = function (opts) {
 
         var url = opts.url;
-
-        if (_.isEmpty(elements.startDate.val())) {
-            elements.rawStartDate.datepicker("setDate", new Date(opts.initialDate));
-        }
 
         refreshResource();
 
@@ -144,7 +139,7 @@ function ResourceDisplay(opts) {
             $(this).removeClass('hilite');
         });
 
-        elements.rawStartDate.on('change', function () {
+        elements.startDate.on('change', function () {
             showWait();
             refreshResource(hideWait);
         });
