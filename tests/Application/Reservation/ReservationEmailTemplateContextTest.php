@@ -6,7 +6,7 @@ require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailTemplateContext.php'
 
 class ReservationEmailTemplateContextTest extends TestBase
 {
-    public function testReservationAttributesMatchLegacySelectionRules(): void
+    public function testReservationAttributesIncludeGlobalAndAllSelectedResourceMatches(): void
     {
         $owner = new FakeUser(10);
         $primaryResource = new FakeBookableResource(100, 'Primary');
@@ -19,27 +19,36 @@ class ReservationEmailTemplateContextTest extends TestBase
         $series->WithAttributeValue(new AttributeValue(1, 'primary match'));
         $series->WithAttributeValue(new AttributeValue(2, 'no secondary entities'));
         $series->WithAttributeValue(new AttributeValue(3, 'additional resource only'));
+        $series->WithAttributeValue(new AttributeValue(4, 'unrelated resource'));
 
         $matchingPrimary = (new ReservationEmailTemplateTestAttribute(1))
             ->ForResourceIds([$primaryResource->GetResourceId()]);
         $noSecondaryEntities = new ReservationEmailTemplateTestAttribute(2);
         $matchingAdditionalOnly = (new ReservationEmailTemplateTestAttribute(3))
             ->ForResourceIds([$additionalResource->GetResourceId()]);
+        $unrelatedResource = (new ReservationEmailTemplateTestAttribute(4))
+            ->ForResourceIds([999]);
 
         $attributeRepository = new FakeAttributeRepository();
         $attributeRepository->_CustomAttributes = [
             $matchingPrimary,
             $noSecondaryEntities,
             $matchingAdditionalOnly,
+            $unrelatedResource,
         ];
 
         $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, $attributeRepository);
 
         $attributes = $context->ReservationAttributes();
 
-        $this->assertCount(1, $attributes);
+        $this->assertCount(3, $attributes);
         $this->assertEquals(1, $attributes[0]->Id());
         $this->assertEquals('primary match', $attributes[0]->Value());
+        $this->assertEquals(2, $attributes[1]->Id());
+        $this->assertEquals('no secondary entities', $attributes[1]->Value());
+        $this->assertEquals(3, $attributes[2]->Id());
+        $this->assertEquals('additional resource only', $attributes[2]->Value());
+        $this->assertNotContains(4, array_map(static fn (LBAttribute $attribute): int => $attribute->Id(), $attributes));
     }
 
     public function testResourcesReturnsMultiResourcePayloadAndHonorsAdminOnlyFilter(): void

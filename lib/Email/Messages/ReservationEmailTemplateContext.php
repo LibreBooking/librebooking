@@ -73,13 +73,13 @@ class ReservationEmailTemplateContext
     {
         $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
         $attributeValues = [];
+        $resourceIds = $this->reservationSeries->AllResourceIds();
 
         foreach ($attributes as $attribute) {
-            if (!$attribute->HasSecondaryEntities()) {
-                continue;
-            }
-
-            if (!in_array(needle: $this->reservationSeries->ResourceId(), haystack: $attribute->SecondaryEntityIds())) {
+            if (
+                $attribute->HasSecondaryEntities()
+                && count(array_intersect($resourceIds, $attribute->SecondaryEntityIds())) === 0
+            ) {
                 continue;
             }
 
