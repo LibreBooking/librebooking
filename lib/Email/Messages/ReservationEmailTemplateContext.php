@@ -74,13 +74,32 @@ class ReservationEmailTemplateContext
         $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
         $attributeValues = [];
         $resourceIds = $this->reservationSeries->AllResourceIds();
+        $resourceTypeIds = [];
+        // Precompute resource type IDs used by this reservation so RESOURCE_TYPE-scoped
+        // attributes can be matched without recomputing inside the loop.
+        foreach ($this->reservationSeries->AllResources() as $resource) {
+            $resourceTypeId = $resource->GetResourceTypeId();
+            if (!empty($resourceTypeId)) {
+                $resourceTypeIds[] = $resourceTypeId;
+            }
+        }
+        $ownerId = $this->reservationOwner->Id();
 
         foreach ($attributes as $attribute) {
-            if (
-                $attribute->HasSecondaryEntities()
-                && count(array_intersect($resourceIds, $attribute->SecondaryEntityIds())) === 0
-            ) {
-                continue;
+            if ($attribute->HasSecondaryEntities()) {
+                $secondaryEntityIds = $attribute->SecondaryEntityIds();
+                // Secondary entity IDs are category-specific, so we must branch by
+                // SecondaryCategory() to avoid matching across incompatible ID domains.
+                $applies = match ($attribute->SecondaryCategory()) {
+                    CustomAttributeCategory::RESOURCE => count(array_intersect($resourceIds, $secondaryEntityIds)) > 0,
+                    CustomAttributeCategory::RESOURCE_TYPE => count(array_intersect($resourceTypeIds, $secondaryEntityIds)) > 0,
+                    CustomAttributeCategory::USER => in_array($ownerId, $secondaryEntityIds),
+                    default => false,
+                };
+
+                if (!$applies) {
+                    continue;
+                }
             }
 
             $attributeValues[] = new LBAttribute(

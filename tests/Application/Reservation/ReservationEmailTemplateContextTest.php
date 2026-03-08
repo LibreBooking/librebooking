@@ -135,6 +135,45 @@ class ReservationEmailTemplateContextTest extends TestBase
         $this->assertEquals('secondary-admin', $withAdminOnly[1]['attributes'][1]->Value());
     }
 
+    public function testReservationAttributesRespectSecondaryCategoryWhenScoped(): void
+    {
+        $owner = new FakeUser(10);
+        $primaryResource = new FakeBookableResource(100, 'Primary');
+        $primaryResource->SetResourceTypeId(55);
+        $additionalResource = new FakeBookableResource(200, 'Additional');
+        $additionalResource->SetResourceTypeId(66);
+
+        $series = new TestReservationSeries();
+        $series->WithOwnerId($owner->Id());
+        $series->WithResource($primaryResource);
+        $series->AddResource($additionalResource);
+        $series->WithAttributeValue(new AttributeValue(11, 'resource type match'));
+        $series->WithAttributeValue(new AttributeValue(12, 'resource type id collides with resource id'));
+        $series->WithAttributeValue(new AttributeValue(13, 'user match'));
+        $series->WithAttributeValue(new AttributeValue(14, 'user id collides with resource id'));
+        $series->WithAttributeValue(new AttributeValue(15, 'resource match'));
+        $series->WithAttributeValue(new AttributeValue(16, 'resource no match'));
+        $series->WithAttributeValue(new AttributeValue(17, 'global'));
+
+        $attributeRepository = new FakeAttributeRepository();
+        $attributeRepository->_CustomAttributes = [
+            (new ReservationEmailTemplateTestAttribute(11))->ForResourceTypeIds([55]),
+            (new ReservationEmailTemplateTestAttribute(12))->ForResourceTypeIds([100]),
+            (new ReservationEmailTemplateTestAttribute(13))->ForUserIds([$owner->Id()]),
+            (new ReservationEmailTemplateTestAttribute(14))->ForUserIds([100]),
+            (new ReservationEmailTemplateTestAttribute(15))->ForResourceIds([$additionalResource->GetResourceId()]),
+            (new ReservationEmailTemplateTestAttribute(16))->ForResourceIds([999]),
+            new ReservationEmailTemplateTestAttribute(17),
+        ];
+
+        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, $attributeRepository);
+
+        $attributes = $context->ReservationAttributes();
+        $attributeIds = array_map(static fn (LBAttribute $attribute): int => $attribute->Id(), $attributes);
+
+        $this->assertSame([11, 13, 15, 17], $attributeIds);
+    }
+
     public function testResourcesBuildsAttributeRowsWithBlankCheckboxAndDatetimeValues(): void
     {
         $owner = new FakeUser(10);
@@ -305,6 +344,20 @@ class ReservationEmailTemplateTestAttribute extends FakeCustomAttribute
     public function ForResourceIds(array $entityIds): self
     {
         $this->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, $entityIds);
+
+        return $this;
+    }
+
+    public function ForResourceTypeIds(array $entityIds): self
+    {
+        $this->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, $entityIds);
+
+        return $this;
+    }
+
+    public function ForUserIds(array $entityIds): self
+    {
+        $this->WithSecondaryEntities(CustomAttributeCategory::USER, $entityIds);
 
         return $this;
     }
