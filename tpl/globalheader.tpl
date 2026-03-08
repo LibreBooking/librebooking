@@ -16,15 +16,15 @@
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
         {vendor_js src="jquery-migrate/3.6.0/jquery-migrate-3.6.0.min.js"}
-        {vendor_js src="jquery-ui/1.12.1/js/jquery-ui.1.12.1.custom.min.js"}
+        {vendor_js src="jquery-ui/1.14.2/js/jquery-ui.1.14.2.min.js"}
         {vendor_js src="bootstrap/5.3.3/js/bootstrap.bundle.min.js"}
     {else}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-migrate-3.6.0.min.js"
             integrity="sha256-LWwll4H5AAC/20gH21NFgk4rYMvZhvc1KD0c5iG7QvM=" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"
+            integrity="sha256-mblSWfbYzaq/f+4akyMhE6XELCou4jbkgPv+JQPER2M=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
@@ -34,7 +34,7 @@
 
     <!-- CSS -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {vendor_css src="jquery-ui/1.12.1/css/jquery-ui.1.12.1.custom.min.css"}
+        {vendor_css src="jquery-ui/1.14.2/css/jquery-ui.1.14.2.min.css"}
         {vendor_css src="bootstrap-icons/1.11.3/css/bootstrap-icons.min.css"}
         {vendor_css src="bootstrap/5.3.3/css/bootstrap.css"}
         {vendor_css src="flatpickr/4.6.13/css/flatpickr.min.css"}
@@ -53,14 +53,12 @@
             {vendor_css src="datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css"}
         {/if}
     {else}
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" />
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/smoothness/jquery-ui.css" type="text/css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-        <link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
-            integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt"
-            crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
+            integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" type="text/css" />
         {if isset($Validator) && $Validator}
             <link rel="stylesheet"
@@ -87,7 +85,8 @@
     {/if}
     {if isset($Fullcalendar) && $Fullcalendar}
         {vendor_css src="fullcalendar/3.4.0/css/fullcalendar.min.css"}
-        <link rel='stylesheet' type='text/css' href='{$Path}assets/vendor/fullcalendar/3.4.0/css/fullcalendar.print.css' media='print' />
+        <link rel='stylesheet' type='text/css' href='{$Path}assets/vendor/fullcalendar/3.4.0/css/fullcalendar.print.css'
+            media='print' />
     {/if}
 
     {cssfile src="librebooking.css"}
