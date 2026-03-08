@@ -15,7 +15,7 @@
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
-        {vendor_js src="jquery/3.0.1/jquery-migrate-3.0.1.min.js"}
+        {vendor_js src="jquery-migrate/3.0.1/jquery-migrate-3.0.1.min.js"}
         {vendor_js src="jquery-ui/1.12.1/js/jquery-ui.1.12.1.custom.min.js"}
         {vendor_js src="bootstrap/5.3.3/js/bootstrap.bundle.min.js"}
     {else}
