@@ -530,6 +530,8 @@ chmod 755 tpl_c tpl uploads
 - Mock dependencies using PHPUnit mocks
 - Keep tests fast and isolated
 - Test file location should mirror source file structure
+- Name test files and test classes after the class under test with a `Test` suffix (for example, `Pages/Admin/ManageUsersPage.php` -> `tests/Pages/Admin/ManageUsersPageTest.php`)
+- Prefer one primary test file per source class; add extra files only when a clear separation is needed
 
 ### Integration Tests
 

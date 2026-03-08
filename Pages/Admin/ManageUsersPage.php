@@ -311,7 +311,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
      */
     public function GetPassword()
     {
-        return $this->GetForm(FormKeys::PASSWORD);
+        $password = $this->GetRawForm(FormKeys::PASSWORD);
+
+        return is_string($password) ? $password : '';
     }
 
     /**

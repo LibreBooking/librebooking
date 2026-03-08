@@ -6,7 +6,7 @@ Naam: {$FullName}<br/>
 Telefoonnummer: {$Phone}<br/>
 Organisatie: {$Organization}<br/>
 Positie: {$Position}<br/>
-Wachtwoord: {$Password}</p>
+Wachtwoord: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Gemaakt door: {$CreatedBy}
 {/if}

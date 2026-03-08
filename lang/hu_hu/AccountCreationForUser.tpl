@@ -6,7 +6,7 @@ Név: {$FullName}<br/>
 Telefon: {$Phone}<br/>
 Szervezet: {$Organization}<br/>
 Pozíció: {$Position}</p>
-Jelszó: {$Password}</p>
+Jelszó: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Készítette: {$CreatedBy}
 {/if}

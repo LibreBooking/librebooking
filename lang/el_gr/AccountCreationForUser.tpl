@@ -6,7 +6,7 @@ Email: {$EmailAddress}<br/>
 Τηλέφωνο: {$Phone}<br/>
 Οργανισμός: {$Organization}<br/>
 Θέση: {$Position}<br/>
-Συνθηματικό: {$Password}</p>
+Συνθηματικό: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Δημιουργήθηκε από: {$CreatedBy}
 {/if}

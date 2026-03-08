@@ -3,7 +3,7 @@
     <br />
     E-mail: {$EmailAddress}
     <br />
-    Senha: {$Password}
+    Senha: {$Password|escape:'html'}
 </p>
 
 <p>

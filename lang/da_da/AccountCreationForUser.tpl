@@ -6,7 +6,7 @@ Navn: {$FullName}<br/>
 Telefon: {$Phone}<br/>
 Organisation: {$Organization}<br/>
 Adresse: {$Position}<br/>
-Adgangskode: {$Password}</p>
+Adgangskode: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Oprettet af: {$CreatedBy}
 {/if}

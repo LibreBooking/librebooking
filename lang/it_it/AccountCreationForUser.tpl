@@ -6,7 +6,7 @@
     <strong>Telefono:</strong> {$Phone}<br />
     <strong>Dipartimento:</strong> {$Organization}<br />
     <strong>Posizione:</strong> {$Position}<br />
-    <strong>Password:</strong> <em>{$Password}</em>
+    <strong>Password:</strong> <em>{$Password|escape:'html'}</em>
 </p>
 <p>
     {if !empty($CreatedBy)}

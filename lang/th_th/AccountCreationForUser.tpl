@@ -6,7 +6,7 @@ Email: {$EmailAddress}<br/>
 โทรศัพท์: {$Phone}<br/>
 หน่วยงาน: {$Organization}<br/>
 ตำแหน่ง: {$Position}<br/>
-รหัสผ่าน: {$Password}</p>
+รหัสผ่าน: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	สร้างโดย: {$CreatedBy}
 {/if}

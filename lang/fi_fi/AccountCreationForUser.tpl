@@ -6,7 +6,7 @@ Nimi: {$FullName}<br/>
 Puhelin: {$Phone}<br/>
 Organisaatio: {$Organization}<br/>
 Rooli: {$Position}<br/>
-Salasana: {$Password}</p>
+Salasana: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Luonut: {$CreatedBy}
 {/if}
