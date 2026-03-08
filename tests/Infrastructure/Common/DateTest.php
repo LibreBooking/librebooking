@@ -271,6 +271,26 @@ class DateTest extends TestBase
         $this->assertEquals(-1, $early2->Compare($late2, $date));
     }
 
+    public function testTimeParsingDoesNotShiftAroundDstGapTimes()
+    {
+        $central = Time::Parse('02:00', 'America/Chicago');
+        $eastern = Time::Parse('02:30', 'America/New_York');
+
+        $this->assertEquals('02:00:00', $central->ToString());
+        $this->assertEquals('02:00:00', $central->Format('H:i:s'));
+
+        $this->assertEquals('02:30:00', $eastern->ToString());
+        $this->assertEquals('02:30:00', $eastern->Format('H:i:s'));
+    }
+
+    public function testTimeParsingWithEmptyTimezoneFallsBackToServerTimezone()
+    {
+        $time = Time::Parse('10:11', '');
+
+        $this->assertEquals(date_default_timezone_get(), $time->Timezone());
+        $this->assertEquals('10:11:00', $time->ToString());
+    }
+
     public function testCanCompareDateOnlyEquality()
     {
         $date1 = Date::Parse('2008-01-01 11:00:00', 'America/Chicago');
