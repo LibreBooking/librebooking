@@ -15,13 +15,14 @@
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
-        {vendor_js src="jquery-migrate/3.0.1/jquery-migrate-3.0.1.min.js"}
+        {vendor_js src="jquery-migrate/3.6.0/jquery-migrate-3.6.0.min.js"}
         {vendor_js src="jquery-ui/1.12.1/js/jquery-ui.1.12.1.custom.min.js"}
         {vendor_js src="bootstrap/5.3.3/js/bootstrap.bundle.min.js"}
     {else}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-migrate-3.0.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-3.6.0.min.js"
+            integrity="sha256-LWwll4H5AAC/20gH21NFgk4rYMvZhvc1KD0c5iG7QvM=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
             integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
