@@ -365,7 +365,7 @@
 
 	<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
 		aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-body">
 					<div id="creatingNotification">
@@ -379,7 +379,7 @@
 
 	<div class="modal fade" id="update-box" tabindex="-1" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
 		aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-body">
 					{indicator id="update-spinner"}

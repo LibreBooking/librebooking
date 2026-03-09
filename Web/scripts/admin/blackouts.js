@@ -201,14 +201,13 @@ function BlackoutManagement(opts) {
 		$('#result').show();
 
 		$("#reservationTable").find('.editable').each(function () {
-			var refNum = $(this).find('.referenceNumber').text();
+			var refNum = $(this).attr('data-refnum');
 			$(this).attachReservationPopup(refNum, options.popupUrl);
 		});
 
 		$("#reservationTable").on('click', '.editable', function () {
 			$(this).addClass('clicked');
-			var td = $(this).find('.referenceNumber');
-			viewReservation(td.text());
+			viewReservation($(this).attr('data-refnum'));
 		});
 	}
 
