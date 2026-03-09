@@ -705,6 +705,7 @@ return [
             'oauth2.name' => 'OAuth2',
 
             # OAuth2 endpoint URLs and client credentials
+            'oauth2.trailing.slash' => false,
             'oauth2.url.authorize' => '',
             'oauth2.url.token' => '',
             'oauth2.url.userinfo' => '',
