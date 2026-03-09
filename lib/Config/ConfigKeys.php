@@ -1491,6 +1491,14 @@ class ConfigKeys
         'description' => 'Display name for OAuth2 login',
         'section' => 'authentication'
     ];
+    public const AUTHENTICATION_OAUTH2_TRAILING_SLASH = [
+        'key' => 'authentication.oauth2.trailing.slash',
+        'type' => 'boolean',
+        'default' => false,
+        'label' => 'Enable Trailing Slash',
+        'description' => 'Enable Trailing Slash for OAuth2 URL',
+        'section' => 'authentication'
+    ];
     public const AUTHENTICATION_OAUTH2_URL_AUTHORIZE = [
         'key' => 'authentication.oauth2.url.authorize',
         'type' => 'string',
