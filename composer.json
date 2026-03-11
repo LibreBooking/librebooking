@@ -30,10 +30,10 @@
         "phpmailer/phpmailer": "^7.0",
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "pear/net_ldap2": "^2.3"
     },
     "suggest": {
-        "pear/net_ldap2": "Required for the LDAP authentication plugin. Install with: composer require pear/net_ldap2"
     },
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
