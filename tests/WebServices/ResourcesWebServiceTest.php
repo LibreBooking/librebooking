@@ -107,6 +107,129 @@ class ResourcesWebServiceTest extends TestBase
         );
     }
 
+    public function testFiltersResourceListByScheduleId()
+    {
+        $scheduleId = 5;
+        $matchingResourceId = 123;
+        $otherResourceId = 456;
+
+        $matchingResource = new FakeBookableResource($matchingResourceId);
+        $matchingResource->SetScheduleId($scheduleId);
+
+        $otherResource = new FakeBookableResource($otherResourceId);
+        $otherResource->SetScheduleId(99);
+
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, $scheduleId);
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$matchingResource, $otherResource]);
+
+        $attributes = new AttributeList();
+        $this->attributeService->expects($this->once())
+                               ->method('GetAttributes')
+                               ->with(
+                                   $this->equalTo(CustomAttributeCategory::RESOURCE),
+                                   $this->equalTo([$matchingResourceId])
+                               )
+                               ->willReturn($attributes);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(
+            new ResourcesResponse($this->server, [$matchingResource], $attributes),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testFiltersResourceListByMultipleScheduleIds()
+    {
+        $scheduleId1 = 5;
+        $scheduleId2 = 7;
+        $resourceId1 = 123;
+        $resourceId2 = 456;
+        $otherResourceId = 789;
+
+        $resource1 = new FakeBookableResource($resourceId1);
+        $resource1->SetScheduleId($scheduleId1);
+
+        $resource2 = new FakeBookableResource($resourceId2);
+        $resource2->SetScheduleId($scheduleId2);
+
+        $otherResource = new FakeBookableResource($otherResourceId);
+        $otherResource->SetScheduleId(99);
+
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, "$scheduleId1,$scheduleId2");
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$resource1, $resource2, $otherResource]);
+
+        $attributes = new AttributeList();
+        $this->attributeService->expects($this->once())
+                               ->method('GetAttributes')
+                               ->with(
+                                   $this->equalTo(CustomAttributeCategory::RESOURCE),
+                                   $this->equalTo([$resourceId1, $resourceId2])
+                               )
+                               ->willReturn($attributes);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(
+            new ResourcesResponse($this->server, [$resource1, $resource2], $attributes),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns400ForNonIntegerScheduleId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '1,abc,2');
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(
+            RestResponse::BadRequest("Invalid scheduleId 'abc': must be a positive integer"),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns400ForZeroScheduleId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '1,0,2');
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(
+            RestResponse::BadRequest("Invalid scheduleId '0': must be a positive integer"),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns400ForZeroScheduleIdAlone()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '0');
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(
+            RestResponse::BadRequest("Invalid scheduleId '0': must be a positive integer"),
+            $this->server->_LastResponse
+        );
+    }
+
     public function testGetsStatuses()
     {
         $this->service->GetStatuses();

@@ -61,4 +61,11 @@ class RestResponse
         $response->message = 'You do not have access to the requested resource';
         return $response;
     }
+
+    public static function BadRequest(string $message)
+    {
+        $response = new RestResponse();
+        $response->message = $message;
+        return $response;
+    }
 }

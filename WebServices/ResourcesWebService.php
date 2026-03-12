@@ -51,12 +51,40 @@ class ResourcesWebService
     /**
      * @name GetAllResources
      * @description Loads all resources
+     * Optional query string parameter: scheduleId. One or more schedule IDs, comma-separated (e.g. scheduleId=1,2,3). If provided, only resources belonging to those schedules will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned.
      * @response ResourcesResponse
      * @return void
      */
     public function GetAll()
     {
+        $scheduleIds = null;
+        $scheduleIdParam = $this->server->GetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID);
+        if ($scheduleIdParam !== null && $scheduleIdParam !== '') {
+            $rawIds = explode(',', $scheduleIdParam);
+            foreach ($rawIds as $id) {
+                if (!ctype_digit($id) || (int)$id === 0) {
+                    $this->server->WriteResponse(
+                        RestResponse::BadRequest("Invalid scheduleId '$id': must be a positive integer"),
+                        RestResponse::BAD_REQUEST_CODE
+                    );
+                    return;
+                }
+            }
+            $scheduleIds = array_map('intval', $rawIds);
+        }
+
         $resources = $this->resourceRepository->GetUserResourceList();
+
+        if ($scheduleIds !== null) {
+            $filteredResources = [];
+            foreach ($resources as $resource) {
+                if (in_array($resource->GetScheduleId(), $scheduleIds)) {
+                    $filteredResources[] = $resource;
+                }
+            }
+            $resources = $filteredResources;
+        }
+
         $resourceIds = [];
         foreach ($resources as $resource) {
             $resourceIds[] = $resource->GetId();

@@ -42,6 +42,26 @@ For all of the secure service calls it is required to be
    2. ``X-Booked-UserId`` set to the value of ``userId`` returned by the
       `Authenticate <#authenticate>`__ API call.
 
+GET Requests / Query String Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some GET endpoints support optional query string parameters for
+filtering results. To pass a query string parameter, append ``?`` to
+the URL followed by ``key=value``. Multiple parameters can be combined
+using ``&``.
+
+For example, to filter resources by schedule::
+
+    /Web/Services/index.php/Resources/?scheduleId=1
+
+Some parameters accept comma-separated values to match multiple options::
+
+    /Web/Services/index.php/Resources/?scheduleId=1,2,3
+
+To combine multiple parameters::
+
+    /Web/Services/index.php/Reservations/?scheduleId=1&userId=5
+
 POST Requests
 ~~~~~~~~~~~~~
 
@@ -1671,6 +1691,12 @@ GetAllResources
 **Description:**
 
 Loads all resources
+
+Optional query string parameter: ``scheduleId``. One or more schedule IDs,
+comma-separated (e.g. ``scheduleId=1,2,3``). If provided, only resources
+belonging to those schedules will be returned. Each value must be a positive
+integer (greater than zero); if any value is non-integer or zero, a ``400 Bad
+Request`` is returned.
 
 **Route:** ``/Web/Services/index.php/Resources/``
 
