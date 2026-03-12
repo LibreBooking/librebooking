@@ -71,13 +71,17 @@ JSON
 Accessories
 -----------
 
-POST Services
-~~~~~~~~~~~~~
+.. _post-endpoints-accessories:
+
+POST Endpoints
+~~~~~~~~~~~~~~
 
 Not applicable.
 
-GET Services
-~~~~~~~~~~~~
+.. _get-endpoints-accessories:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllAccessories
 ^^^^^^^^^^^^^^^^^
@@ -149,10 +153,10 @@ service is secure and requires authentication*
 Accounts
 --------
 
-.. _post-services-1:
+.. _post-endpoints-accounts:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateAccount
 ^^^^^^^^^^^^^
@@ -254,10 +258,10 @@ Unstructured response of type *AccountUpdatedResponse*
        "newPassword": "plain.text.new.password"
    }
 
-.. _get-services-1:
+.. _get-endpoints-accounts:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAccount
 ^^^^^^^^^^
@@ -302,10 +306,10 @@ Gets the currently authenticated users’s account information
 Attributes
 ----------
 
-.. _post-services-2:
+.. _post-endpoints-attributes:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateCustomAttribute
 ^^^^^^^^^^^^^^^^^^^^^
@@ -448,10 +452,10 @@ UpdateCustomAttribute
        ]
    }
 
-.. _get-services-2:
+.. _get-endpoints-attributes:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetCategoryAttributes
 ^^^^^^^^^^^^^^^^^^^^^
@@ -567,10 +571,10 @@ Deletes an existing custom attribute
 Authentication
 --------------
 
-.. _post-services-3:
+.. _post-endpoints-authentication:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 SignOut
 ^^^^^^^
@@ -631,20 +635,20 @@ Authenticates an existing LibreBooking user
        "password":null
    }
 
-.. _get-services-3:
+.. _get-endpoints-authentication:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 na.
 
 Groups
 ------
 
-.. _post-services-4:
+.. _post-endpoints-groups:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateGroup
 ^^^^^^^^^^^
@@ -855,10 +859,10 @@ Updates the permissions for an existing group
 
 No request
 
-.. _get-services-4:
+.. _get-endpoints-groups:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllGroups
 ^^^^^^^^^^^^
@@ -951,10 +955,10 @@ Deletes an existing group
 Reservations
 ------------
 
-.. _post-services-5:
+.. _post-endpoints-reservations:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateReservation
 ^^^^^^^^^^^^^^^^^
@@ -1277,10 +1281,10 @@ Checks out of a reservation.
 
 No request
 
-.. _get-services-5:
+.. _get-endpoints-reservations:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetReservations
 ^^^^^^^^^^^^^^^
@@ -1498,10 +1502,10 @@ DeleteReservation
 Resources
 ---------
 
-.. _post-services-6:
+.. _post-endpoints-resources:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateResource
 ^^^^^^^^^^^^^^
@@ -1648,10 +1652,10 @@ Updates an existing resource
        "maxConcurrentReservations": 1
    }
 
-.. _get-services-6:
+.. _get-endpoints-resources:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetStatuses
 ^^^^^^^^^^^
@@ -2103,17 +2107,17 @@ Deletes an existing resource
 Schedules
 ---------
 
-.. _post-services-7:
+.. _post-endpoints-schedules:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 Not applicable.
 
-.. _get-services-7:
+.. _get-endpoints-schedules:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllSchedules
 ^^^^^^^^^^^^^^^
@@ -2350,10 +2354,10 @@ GetSlots
 Users
 -----
 
-.. _post-services-8:
+.. _post-endpoints-users:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateUser
 ^^^^^^^^^^
@@ -2520,10 +2524,10 @@ Updates the password for an existing user
        "password":"plaintext password"
    }
 
-.. _get-services-8:
+.. _get-endpoints-users:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllUsers
 ^^^^^^^^^^^

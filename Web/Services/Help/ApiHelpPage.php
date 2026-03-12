@@ -94,9 +94,9 @@ EOT;
             echo "<li class='list-group-item'>";
             echo "<a href='#{$category->Name()}' class='d-block small fw-semibold text-dark mb-1'>{$category->Name()}</a>";
             echo "<div class='ms-3'>";
-            echo "<a href='#{$category->Name()}-post' class='d-block small text-muted'>POST Services</a>";
-            echo "<a href='#{$category->Name()}-get' class='d-block small text-muted'>GET Services</a>";
-            echo "<a href='#{$category->Name()}-delete' class='d-block small text-muted'>DELETE Services</a>";
+            echo "<a href='#{$category->Name()}-post' class='d-block small text-muted'>POST Endpoints</a>";
+            echo "<a href='#{$category->Name()}-get' class='d-block small text-muted'>GET Endpoints</a>";
+            echo "<a href='#{$category->Name()}-delete' class='d-block small text-muted'>DELETE Endpoints</a>";
             echo '</div></li>';
         }
 
@@ -112,7 +112,7 @@ EOT;
             echo "<h2 id='{$category->Name()}' class='mt-5'>{$category->Name()}</h2>";
 
             // POST
-            echo "<h6 id='{$category->Name()}-post' class='mt-3 text-muted'>POST Services</h6>";
+            echo "<h6 id='{$category->Name()}-post' class='mt-3 text-muted'>POST Endpoints</h6>";
             if (count($category->Posts()) === 0) {
                 echo "<p class='ms-2'><em>None</em></p>";
             } else {
@@ -144,7 +144,7 @@ EOT;
             }
 
             // GET
-            echo "<h6 id='{$category->Name()}-get' class='mt-3 text-muted'>GET Services</h6>";
+            echo "<h6 id='{$category->Name()}-get' class='mt-3 text-muted'>GET Endpoints</h6>";
             if (count($category->Gets()) === 0) {
                 echo "<p class='ms-2'><em>None</em></p>";
             } else {
@@ -167,7 +167,7 @@ EOT;
             }
 
             // DELETE
-            echo "<h6 id='{$category->Name()}-delete' class='mt-3 text-muted'>DELETE Services</h6>";
+            echo "<h6 id='{$category->Name()}-delete' class='mt-3 text-muted'>DELETE Endpoints</h6>";
             if (count($category->Deletes()) === 0) {
                 echo "<p class='ms-2'><em>None</em></p>";
             } else {
