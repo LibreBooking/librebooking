@@ -69,7 +69,11 @@
     {vendor_js src="x-editable/1.5.1/js/bootstrap-editable.js"}
 {/if}
 {if isset($Select2) && $Select2}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {if isset($UseLocalJquery) && $UseLocalJquery}
+        {vendor_js src="select2/4.1.0-rc.0/js/select2.min.js"}
+    {else}
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {/if}
 {/if}
 {if isset($Fullcalendar) && $Fullcalendar}
     {vendor_js src="fullcalendar/3.4.0/js/fullcalendar.js"}

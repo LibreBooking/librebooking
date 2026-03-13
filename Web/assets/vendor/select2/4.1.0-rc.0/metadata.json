@@ -1,8 +1,8 @@
 {
   "name": "select2",
-  "version": "4.0.5",
+  "version": "4.1.0-rc.0",
   "description": "Select2 is a jQuery-based replacement for select boxes.",
   "homepage": "https://select2.org/",
-  "source": "https://github.com/select2/select2/releases/tag/4.0.5",
+  "source": "https://github.com/select2/select2/releases/tag/4.1.0-rc.0",
   "license": "MIT"
 }
