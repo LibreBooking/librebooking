@@ -150,6 +150,19 @@ class ReservationListingTest extends TestBase
         $this->assertEquals($expectedSlot, $actualSlot);
     }
 
+    public function testBufferItemIdUsesWrappedReservationId()
+    {
+        $view = new TestReservationItemView(42, Date::Parse('2011-11-22 04:34'), Date::Parse('2011-11-23 14:43'), 123);
+        $view->WithBufferTime(3600);
+        $item = new ReservationListItem($view);
+
+        $beforeBuffer = new BufferItem($item, BufferItem::LOCATION_BEFORE);
+        $afterBuffer = new BufferItem($item, BufferItem::LOCATION_AFTER);
+
+        $this->assertEquals('42buffer_begin', $beforeBuffer->Id());
+        $this->assertEquals('42buffer_end', $afterBuffer->Id());
+    }
+
     /**
      * @param $startDateString
      * @param $endDateString

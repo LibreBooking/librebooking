@@ -376,7 +376,7 @@ class BufferItem extends ReservationListItem
 
     public function Id()
     {
-        return $this->Id() . 'buffer_' . $this->location;
+        return $this->reservationItem->Id() . 'buffer_' . $this->location;
     }
 
     public function IsReservation()
