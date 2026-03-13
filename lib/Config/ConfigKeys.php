@@ -111,9 +111,9 @@ class ConfigKeys
         'key' => 'use.local.js.libs',
         'legacy' => 'use.local.js',
         'type' => 'boolean',
-        'default' => false,
-        'label' => 'Use Local JS Libraries',
-        'description' => 'Use local JavaScript libraries instead of CDN',
+        'default' => true,
+        'label' => 'Use Local Frontend Assets',
+        'description' => 'Use bundled/self-hosted frontend assets (JavaScript libraries, CSS, fonts) instead of CDN-hosted assets',
     ];
 
     public const INACTIVITY_TIMEOUT = [

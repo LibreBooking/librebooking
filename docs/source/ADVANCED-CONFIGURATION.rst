@@ -122,11 +122,12 @@ Frontend Advanced Settings
      'inactivity.timeout' => 30,
 
 **use.local.js.libs**
-  Use local JavaScript libraries instead of CDN.
+  Prefer bundled or self-hosted frontend assets instead of CDN-hosted ones,
+  including supported fonts and JavaScript libraries.
 
   .. code-block:: php
 
-     'use.local.js.libs' => false,
+     'use.local.js.libs' => true,
 
 **home.url**
   URL to redirect users after login.
@@ -831,7 +832,8 @@ Performance Tuning
 For high-traffic installations:
 
 - Set ``cache.templates`` to ``true``
-- Use ``use.local.js.libs`` = ``false`` (CDN is faster)
+- Use ``use.local.js.libs`` = ``true`` to avoid third-party asset requests, or
+  ``false`` to keep CDN-hosted assets.
 - Enable ``schedule.fast.reservation.load`` for busy schedules
 - Configure proper logging levels (avoid DEBUG in production)
 - Consider database optimization and caching

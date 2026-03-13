@@ -64,8 +64,8 @@ return [
         # Enable template caching. Recommended for production. (true/false)
         'cache.templates' => true,
 
-        # Enable use of local JavaScript libraries (true/false)
-        'use.local.js.libs' => false,
+        # Enable use of bundled/self-hosted frontend assets (JavaScript, CSS, fonts) (true/false)
+        'use.local.js.libs' => true,
 
         # Session inactivity timeout in minutes
         'inactivity.timeout' => 30,
