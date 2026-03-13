@@ -7,12 +7,15 @@ function ReportsCommon(opts) {
 
                 // Use a small delay to ensure the modal is displayed sooner
                 setTimeout(function () {
-                    var chart = new Chart(opts.chartOpts);
-                    chart.generate();
-
-                    $('#report-results').hide();
-                    $('#approveDiv').modal('hide');
-
+                    try {
+                        var chart = new Chart(opts.chartOpts);
+                        chart.generate();
+                        $('#report-results').hide();
+                    } catch (error) {
+                        console.error('Unable to generate report chart', error);
+                    } finally {
+                        $('#approveDiv').modal('hide');
+                    }
                 }, 500);
             });
             /*

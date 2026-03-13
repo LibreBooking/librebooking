@@ -38,7 +38,7 @@ function Chart(options) {
 			series = new DateSeries(options);
 		}
 
-		$('#report-results>tbody>tr').not(':first').each(function () {
+		$('#report-results>tbody>tr').each(function () {
 			series.Add($(this));
 		});
 
