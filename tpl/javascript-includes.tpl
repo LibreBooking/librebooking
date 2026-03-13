@@ -67,9 +67,6 @@
 {if isset($InlineEdit) && $InlineEdit}
     {*The version of X-editable that supports Bootstrap 5 does not have a CDN link*}
     {vendor_js src="x-editable/1.5.1/js/bootstrap-editable.js"}
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/inputs-ext/wysihtml5/wysihtml5.js"></script>
-    {vendor_js src="wysihtml5/0.3.0/js/bootstrap3-wysihtml5.all.min.js"}
 {/if}
 {if isset($Select2) && $Select2}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

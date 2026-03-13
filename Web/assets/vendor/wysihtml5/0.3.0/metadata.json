@@ -1,8 +1,0 @@
-{
-  "name": "wysihtml5",
-  "version": "0.3.0",
-  "description": "Open source rich text editor based on HTML5 technology.",
-  "homepage": "http://xing.github.io/wysihtml5/",
-  "source": "https://github.com/xing/wysihtml5/releases/tag/0.3.0",
-  "license": "MIT"
-}

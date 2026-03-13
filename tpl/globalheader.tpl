@@ -70,7 +70,6 @@
     {/if}
     {if isset($InlineEdit) && $InlineEdit}
         {vendor_css src="x-editable/1.5.1/css/bootstrap-editable.css"}
-        {vendor_css src="wysihtml5/0.3.0/css/bootstrap3-wysihtml5.min.css"}
     {/if}
     {if isset($Select2) && $Select2}
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
