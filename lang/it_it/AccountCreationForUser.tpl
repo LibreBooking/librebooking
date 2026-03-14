@@ -1,5 +1,5 @@
 <p>{$FullName},</p>
-<p>&egrave; stato creato un account per lei su LibreBooking con le seguenti informazioni:</p>
+<p>È stato creato un account per lei su LibreBooking con le seguenti informazioni:</p>
 <p>
     <strong>Email:</strong> {$EmailAddress}<br />
     <strong>Nome:</strong> {$FullName}<br />

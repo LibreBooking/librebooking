@@ -2,7 +2,7 @@
 {if $Deleted}
     <p>{$UserName} ha cancellato una prenotazione.</p>
 {else}
-    <p>{$UserName} l&apos;ha invitata ad una prenotazione.</p>
+    <p>{$UserName} l'ha invitata ad una prenotazione.</p>
 {/if}
 {if !empty($DeleteReason)}
     <p><strong>Motivazione:</strong> <em>{$DeleteReason|nl2br}</em></p>
@@ -37,7 +37,7 @@
     <div class="resource-image"><img alt="{$ResourceName|escape}" src="{$ScriptUrl}/{$ResourceImage}"/></div>
 {/if}
 {if $RequiresApproval && !$Deleted}
-    <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarr&agrave; in sospeso fino a quando non verr&agrave; approvata. *</p>
+    <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarrà in sospeso fino a quando non verrà approvata. *</p>
 {/if}
 {if count($RepeatRanges) gt 0}
     <p>
@@ -94,7 +94,7 @@
 {/if}
 {if !$Deleted && !$Updated}
 <p>
-    <strong>Accetta?</strong> <a href="{$ScriptUrl}/{$AcceptUrl}">S&igrave;</a> | <a href="{$ScriptUrl}/{$DeclineUrl}">No</a>
+    <strong>Accetta?</strong> <a href="{$ScriptUrl}/{$AcceptUrl}">Sì</a> | <a href="{$ScriptUrl}/{$DeclineUrl}">No</a>
 </p>
 {/if}
 <p>&nbsp;</p>

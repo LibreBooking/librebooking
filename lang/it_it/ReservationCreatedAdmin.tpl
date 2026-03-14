@@ -1,4 +1,4 @@
-<p>&Egrave; stata effettuata una nuova prenotazione.</p>
+<p>È stata effettuata una nuova prenotazione.</p>
 <p>Dettagli della prenotazione:</p>
 <p>
     <strong>Utente:</strong> {$UserName}<br />
@@ -60,7 +60,7 @@
     <p>
 		Almeno una delle risorse prenotate richiede il check-in e il check-out della prenotazione.
     {if $AutoReleaseMinutes != null}
-		    <br />Questa prenotazione verr&agrave; cancellata a meno che l&apos;utente non faccia il check-in entro {$AutoReleaseMinutes} minuti entro l&apos;inizio della prenotazione.
+		    <br />Questa prenotazione verrà cancellata a meno che l'utente non faccia il check-in entro {$AutoReleaseMinutes} minuti entro l'inizio della prenotazione.
     {/if}
 	  </p>
 {/if}

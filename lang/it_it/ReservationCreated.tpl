@@ -50,13 +50,13 @@
     {/foreach}
 </p>
 {if $RequiresApproval}
-	  <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarr&agrave; in sospeso fino a quando non verr&agrave; approvata. *</p>
+	  <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarrà in sospeso fino a quando non verrà approvata. *</p>
 {/if}
 {if $CheckInEnabled}
 	  <p>
         Almeno una delle risorse prenotate richiede il check-in e il check-out della prenotazione.
         {if $AutoReleaseMinutes != null}
-		        <br />Questa prenotazione verr&agrave; cancellata a meno che non sia fatto il check-in entro {$AutoReleaseMinutes} minuti entro l&apos;inizio della prenotazione.
+		        <br />Questa prenotazione verrà cancellata a meno che non sia fatto il check-in entro {$AutoReleaseMinutes} minuti entro l'inizio della prenotazione.
         {/if}
 	  </p>
 {/if}

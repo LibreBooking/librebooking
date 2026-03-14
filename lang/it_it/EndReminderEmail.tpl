@@ -1,4 +1,4 @@
-<p>Promemoria prima dell&apos;orario di fine della sua prenotazione</p>
+<p>Promemoria prima dell'orario di fine della sua prenotazione</p>
 <p>Dettagli della prenotazione:</p>
 <p>
     <strong>Inizio:</strong> {formatdate date=$StartDate key=reservation_email}<br />

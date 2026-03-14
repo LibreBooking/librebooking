@@ -8,7 +8,7 @@
     <strong>Description:</strong> {$Description|nl2br}
 </p>
 {if $IsAutoRelease}
-    <p>Se non effettua il check-in, questa prenotazione verr&agrave; cancellata il {formatdate date=$AutoReleaseTime key=reservation_email}</p>
+    <p>Se non effettua il check-in, questa prenotazione verrà cancellata il {formatdate date=$AutoReleaseTime key=reservation_email}</p>
 {/if}
 <p>&nbsp;</p>
 <p>

@@ -1,4 +1,4 @@
-<p>Si &egrave; registrato un nuovo utente con le seguenti informazioni:</p>
+<p>Si è registrato un nuovo utente con le seguenti informazioni:</p>
 <p>
     <strong>Email:</strong> {$EmailAddress}<br />
     <strong>Nome:</strong> {$FullName}<br />
