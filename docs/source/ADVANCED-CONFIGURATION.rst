@@ -60,8 +60,14 @@ sensitive data separate from configuration files.
   See ``develop/app/.env.example`` for a comprehensive list of all available
   environment variables with their default values and descriptions.
 
+Custom Footer Version Display
+-----------------------------
+
+LibreBooking can customize the version shown in the page footer using either a
+suffix or a custom version override.
+
 Version Suffix
---------------
+~~~~~~~~~~~~~~
 
 LibreBooking can optionally append a suffix to the version shown in the page
 footer.
@@ -93,6 +99,37 @@ LibreBooking ignores the suffix and logs an error.
 This writes the current short Git commit SHA into
 ``<INSTALL_DIR>/config/version-suffix.txt`` so the footer displays a version
 such as ``v4.1.0-a1b2c3d``.
+
+Custom Version
+~~~~~~~~~~~~~~
+
+LibreBooking can optionally replace the footer base version with a custom
+value.
+
+Create ``<INSTALL_DIR>/config/custom-version.txt`` with a value such as
+``v4.2.0-36-ge81f46586``. This file is intended for local or deployment-time
+metadata and should not be committed to source control. If the file is present
+and contains a valid non-empty value, the footer version will be displayed as
+``v4.2.0-36-ge81f46586 (custom)``.
+
+The usual value in this file would be the output of
+``git describe --tags --long``. If ``custom-version.txt`` contains a valid
+value, it takes precedence over ``version-suffix.txt`` and LibreBooking logs
+an error if ``version-suffix.txt`` also exists.
+
+The file must contain a single line only. A trailing newline is allowed, but
+if the file contains additional lines, LibreBooking ignores the custom
+version. After trimming, the custom version must be 40 characters or fewer.
+
+Valid characters are letters, numbers, ``.``, ``_``, and ``-``. If the file
+contains multiple lines, exceeds 40 characters, or includes invalid characters,
+LibreBooking ignores the custom version and logs an error.
+
+**Example**
+
+  .. code-block:: bash
+
+     git describe --tags --long > config/custom-version.txt
 
 Application Advanced Settings
 -----------------------------
