@@ -284,7 +284,7 @@ function Schedule(opts, resourceGroups) {
             reservationList.sort((r1, r2) => {
                 const resourceOrder = options.resourceOrder[r1.ResourceId] - options.resourceOrder[r2.ResourceId];
                 if (resourceOrder === 0) {
-                    return r1.StartDate - r2.startDate;
+                    return r1.StartDate - r2.StartDate;
                 }
 
                 return resourceOrder;
