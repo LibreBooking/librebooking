@@ -353,7 +353,7 @@ span.searchclear-label {
 
 #button-up:hover {
   transform: scale(1.2) !important;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgb(0 0 0 / 0.1);
 }
 
 #resourceGroupsContainer {

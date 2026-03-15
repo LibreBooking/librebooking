@@ -427,8 +427,8 @@ ul.jqtree-tree .jqtree-toggler {
 #loading-schedule {
   position: fixed;
   height: 30px;
-  background-color: rgba(76, 175, 80, 0.7);
-  border: solid 2px rgba(32, 65, 32, 0.7);
+  background-color: rgb(76 175 80 / 0.7);
+  border: solid 2px rgb(32 65 32 / 0.7);
   top: 300px;
   left: 50%;
   z-index: 101;

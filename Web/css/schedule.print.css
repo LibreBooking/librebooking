@@ -18,7 +18,7 @@
 }
 
 table.reservations {
-  page-break-after: always;
+  break-after: page;
 }
 
 table {
