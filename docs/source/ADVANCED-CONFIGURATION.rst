@@ -358,7 +358,9 @@ Schedule Display Settings
   Minutes to highlight recently updated reservations (0 = disabled).
 
 **schedule.fast.reservation.load**
-  Enable faster loading with reduced detail.
+  (EXPERIMENTAL): Use a faster client-side reservation rendering algorithm in
+  the standard desktop schedule view. This can improve performance on busy
+  schedules, but it may incorrectly render some layouts or slot configurations.
 
 **schedule.load.mobile.views**
   Use simplified views on mobile devices.
