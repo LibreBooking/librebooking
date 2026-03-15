@@ -4,7 +4,7 @@
   "private": true,
   "description": "Frontend linting tools for LibreBooking",
   "scripts": {
-    "lint:js": "eslint Web/scripts/",
+    "lint:js": "eslint --max-warnings 0 Web/scripts/",
     "lint:css": "stylelint 'Web/css/**/*.css'",
     "lint:format": "prettier --check 'Web/scripts/**/*.js' 'Web/css/**/*.css'",
     "lint:frontend": "npm run lint:js && npm run lint:css && npm run lint:format",

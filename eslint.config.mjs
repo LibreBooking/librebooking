@@ -107,13 +107,13 @@ export default [
     },
     rules: {
       // Bug-catching rules only — no style/formatting opinions
-      'no-undef': 'warn',
-      'no-unreachable': 'warn',
+      'no-undef': 'error',
+      'no-unreachable': 'error',
       'no-dupe-keys': 'error',
       'no-duplicate-case': 'error',
-      'no-constant-condition': 'warn',
+      'no-constant-condition': 'error',
       'no-debugger': 'error',
-      'no-extra-semi': 'warn',
+      'no-extra-semi': 'error',
       'use-isnan': 'error',
       'valid-typeof': 'error',
       'no-unsafe-negation': 'error',
