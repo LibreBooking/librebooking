@@ -172,3 +172,6 @@ jobs:
 
       - name: Lint CSS (Stylelint)
         run: npm run lint:css
+
+      - name: Check formatting (Prettier)
+        run: npm run lint:format

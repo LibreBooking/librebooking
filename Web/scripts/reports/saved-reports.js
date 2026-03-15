@@ -1,90 +1,93 @@
 function SavedReports(reportOptions) {
-	var opts = reportOptions;
+  var opts = reportOptions;
 
-	var elements = {
-		indicator: $('#indicator'),
-		resultsDiv: $('#resultsDiv'),
-		emailForm: $('#emailForm'),
-		deleteForm: $('#deleteForm'),
-		sendEmailButton: $('#btnSendEmail'),
-		emailIndicator: $('#sendEmailIndicator'),
-		deleteReportButton: $('#btnDeleteReport')
-	};
+  var elements = {
+    indicator: $('#indicator'),
+    resultsDiv: $('#resultsDiv'),
+    emailForm: $('#emailForm'),
+    deleteForm: $('#deleteForm'),
+    sendEmailButton: $('#btnSendEmail'),
+    emailIndicator: $('#sendEmailIndicator'),
+    deleteReportButton: $('#btnDeleteReport'),
+  };
 
-	var reportId = 0;
+  var reportId = 0;
 
-	this.init = function () {
+  this.init = function () {
+    ConfigureAsyncForm(
+      elements.emailForm,
+      function () {
+        return opts.emailUrl + reportId;
+      },
+      function (data) {
+        $('#emailSent').show().delay(3000).fadeOut(1000);
+        $('#emailDiv').modal('hide');
+      }
+    );
 
-		ConfigureAsyncForm(elements.emailForm,
-			function () { return opts.emailUrl + reportId; },
-			function (data) {
-				$('#emailSent').show().delay(3000).fadeOut(1000);
-				$('#emailDiv').modal('hide');
-			});
+    ConfigureAsyncForm(elements.deleteForm, function () {
+      return opts.deleteUrl + reportId;
+    });
 
-		ConfigureAsyncForm(elements.deleteForm, function () { return opts.deleteUrl + reportId; });
+    wireUpReportLinks();
 
-		wireUpReportLinks();
+    $(document).on('click', '#btnPrint', function (e) {
+      e.preventDefault();
 
-		$(document).on('click', '#btnPrint', function (e) {
-			e.preventDefault();
+      var url = opts.printUrl + reportId;
+      window.open(url);
+    });
 
-			var url = opts.printUrl + reportId;
-			window.open(url);
-		});
+    $(document).on('click', '#btnCsv', function (e) {
+      e.preventDefault();
 
-		$(document).on('click', '#btnCsv', function (e) {
-			e.preventDefault();
+      var url = opts.csvUrl + reportId;
+      window.open(url);
+    });
+    //
+    // $(document).on('click', '#btnChart', function(e) {
+    // 	e.preventDefault();
+    //
+    // 	var chart = new Chart();
+    // 	chart.generate();
+    // 	$('#report-results').hide();
+    // });
 
-			var url = opts.csvUrl + reportId;
-			window.open(url);
-		});
-		//
-		// $(document).on('click', '#btnChart', function(e) {
-		// 	e.preventDefault();
-		//
-		// 	var chart = new Chart();
-		// 	chart.generate();
-		// 	$('#report-results').hide();
-		// });
+    $('.save').on('click', function () {
+      $(this).closest('form').submit();
+    });
+  };
 
-		$('.save').on('click', function () {
-			$(this).closest('form').submit();
-		});
-	};
+  var wireUpReportLinks = function () {
+    $('#report-list a.report').click(function (e) {
+      e.preventDefault();
+      reportId = $(this).closest('tr').attr('reportId');
+    });
 
-	var wireUpReportLinks = function () {
-		$('#report-list a.report').click(function (e) {
-			e.preventDefault();
-			reportId = $(this).closest('tr').attr('reportId');
-		});
+    $('.runNow').click(function (e) {
+      var before = function () {
+        elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
+        elements.resultsDiv.html('');
+      };
 
-		$('.runNow').click(function (e) {
-			var before = function () {
-				elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
-				elements.resultsDiv.html('');
-			};
+      var after = function (data) {
+        elements.indicator.addClass('d-none');
+        elements.resultsDiv.html(data);
+      };
 
-			var after = function (data) {
-				elements.indicator.addClass('d-none');
-				elements.resultsDiv.html(data)
-			};
+      ajaxGet(opts.generateUrl + reportId, before, after);
+    });
 
-			ajaxGet(opts.generateUrl + reportId, before, after);
-		});
+    $('.emailNow').click(function (e) {
+      $('#emailDiv').modal('show');
+    });
 
-		$('.emailNow').click(function (e) {
-			$('#emailDiv').modal('show');
-		});
+    $('.delete').click(function (e) {
+      $('#deleteDiv').modal('show');
+    });
+  };
 
-		$('.delete').click(function (e) {
-			$('#deleteDiv').modal('show');
-		});
-
-	};
-
-
-	/**
+  /**
 
 	 // TODO: NK 2012-07-17 scheduled reports on hold for now
 	 function InitializeRepeatElements() {
@@ -152,4 +155,3 @@ function SavedReports(reportOptions) {
 
 	 */
 }
-

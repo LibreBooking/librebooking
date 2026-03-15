@@ -1,24 +1,24 @@
 function ReportsCommon(opts) {
-    return {
-        init: function () {
-            $(document).on('click', '#btnChart', function (e) {
-                e.preventDefault();
-                $('#approveDiv').modal('show');
+  return {
+    init: function () {
+      $(document).on('click', '#btnChart', function (e) {
+        e.preventDefault();
+        $('#approveDiv').modal('show');
 
-                // Use a small delay to ensure the modal is displayed sooner
-                setTimeout(function () {
-                    try {
-                        var chart = new Chart(opts.chartOpts);
-                        chart.generate();
-                        $('#report-results').hide();
-                    } catch (error) {
-                        console.error('Unable to generate report chart', error);
-                    } finally {
-                        $('#approveDiv').modal('hide');
-                    }
-                }, 500);
-            });
-            /*
+        // Use a small delay to ensure the modal is displayed sooner
+        setTimeout(function () {
+          try {
+            var chart = new Chart(opts.chartOpts);
+            chart.generate();
+            $('#report-results').hide();
+          } catch (error) {
+            console.error('Unable to generate report chart', error);
+          } finally {
+            $('#approveDiv').modal('hide');
+          }
+        }, 500);
+      });
+      /*
                         $('body').click(function (e) {
                             if (!$(e.target).closest('#customize-columns').length && !$(e.target).closest('#btnCustomizeColumns').length) {
                                 $('#customize-columns').hide();
@@ -112,6 +112,6 @@ function ReportsCommon(opts) {
                             $(this).closest('.dialog').dialog("close");
                         });
                         */
-        }
-    };
+    },
+  };
 }

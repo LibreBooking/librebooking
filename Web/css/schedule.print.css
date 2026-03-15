@@ -1,11 +1,16 @@
-#schedule-actions, #calendar_toggle, #reservations-left, .change-date, #restore-sidebar, .schedule-legend {
-	display:none;
+#schedule-actions,
+#calendar_toggle,
+#reservations-left,
+.change-date,
+#restore-sidebar,
+.schedule-legend {
+  display: none;
 }
 
 @media print {
-	a[href]:after {
-		content: "" !important;
-	}
+  a[href]:after {
+    content: '' !important;
+  }
 }
 
 .past {
@@ -13,30 +18,34 @@
 }
 
 table.reservations {
-	page-break-after: always;
+  page-break-after: always;
 }
 
 table {
-	table-layout: fixed;
+  table-layout: fixed;
 }
 
-table.reservations thead td {position: relative; top: 0; z-index: 1;}
+table.reservations thead td {
+  position: relative;
+  top: 0;
+  z-index: 1;
+}
 
 td.resourcename {
-	background-color: #EDEDED !important;
+  background-color: #ededed !important;
 }
 
 td.resdate {
-	background-color: #36648B !important;
-	color: #F0F0F0 !important;
+  background-color: #36648b !important;
+  color: #f0f0f0 !important;
 }
 
 .reserved {
-  background-color: #408AD2 !important;
+  background-color: #408ad2 !important;
   color: #fff !important;
 }
 
 .unreservable {
-  background-color: #CF9D9B !important;
+  background-color: #cf9d9b !important;
   color: #fff !important;
 }

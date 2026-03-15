@@ -1,4 +1,5 @@
 import globals from 'globals';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
   {
@@ -119,4 +120,5 @@ export default [
       'no-sparse-arrays': 'error',
     },
   },
+  eslintConfigPrettier,
 ];

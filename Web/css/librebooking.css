@@ -1,170 +1,169 @@
 :root {
-
-    --color-lines: #a6a6a6;
-    --reservable: #ffffff;
-    --unreservable: #CF9D9B;
-    --reserved: #408AD2;
-    --reservedMine: #6F9BAE;
-    --reservedParticipating: #875cae;
-    --reservedPending: #f2dfbf;
-    --pasttime: #bdbdbd;
-    --hiliteReservation: #79bf40;
-    --bs-body-color: #464d53;
+  --color-lines: #a6a6a6;
+  --reservable: #ffffff;
+  --unreservable: #cf9d9b;
+  --reserved: #408ad2;
+  --reservedMine: #6f9bae;
+  --reservedParticipating: #875cae;
+  --reservedPending: #f2dfbf;
+  --pasttime: #bdbdbd;
+  --hiliteReservation: #79bf40;
+  --bs-body-color: #464d53;
 }
 
-[data-bs-theme="default"] {
-    --primary: #669999;
-    --primary-hover: #527a7a;
-    --primary-disabled: #85adad;
-    --text-color-btn: #ffffff;
+[data-bs-theme='default'] {
+  --primary: #669999;
+  --primary-hover: #527a7a;
+  --primary-disabled: #85adad;
+  --text-color-btn: #ffffff;
 }
 
-[data-bs-theme="dimgray"] {
-    --primary: #696969;
-    --primary-hover: #595959;
-    --primary-disabled: #808080;
-    --text-color-btn: #ffffff;
+[data-bs-theme='dimgray'] {
+  --primary: #696969;
+  --primary-hover: #595959;
+  --primary-disabled: #808080;
+  --text-color-btn: #ffffff;
 }
 
-[data-bs-theme="dark_red"] {
-    --primary: #8b0000;
-    --primary-hover: #660000;
-    --primary-disabled: #b30000;
-    --text-color-btn: #ffffff;
+[data-bs-theme='dark_red'] {
+  --primary: #8b0000;
+  --primary-hover: #660000;
+  --primary-disabled: #b30000;
+  --text-color-btn: #ffffff;
 }
 
-[data-bs-theme="dark_green"] {
-    --primary: #006400;
-    --primary-hover: #003300;
-    --primary-disabled: #009900;
-    --text-color-btn: #ffffff;
+[data-bs-theme='dark_green'] {
+  --primary: #006400;
+  --primary-hover: #003300;
+  --primary-disabled: #009900;
+  --text-color-btn: #ffffff;
 }
 
-[data-bs-theme="french_blue"] {
-    --primary: #0072B5;
-    --primary-hover: #005180;
-    --primary-disabled: #0091e6;
-    --text-color-btn: #ffffff;
+[data-bs-theme='french_blue'] {
+  --primary: #0072b5;
+  --primary-hover: #005180;
+  --primary-disabled: #0091e6;
+  --text-color-btn: #ffffff;
 }
 
-[data-bs-theme="orange"] {
-    --primary: #be6e34;
-    --primary-hover: #a05c2c;
-    --primary-disabled: #e4b99b;
-    --text-color-btn: #ffffff;
+[data-bs-theme='orange'] {
+  --primary: #be6e34;
+  --primary-hover: #a05c2c;
+  --primary-disabled: #e4b99b;
+  --text-color-btn: #ffffff;
 }
 
 html,
 body {
-    height: 99%;
+  height: 99%;
 }
 
 body {
-    font-family: "Hind", "system-ui", "sans-serif";
-    font-weight: 400;
-    font-style: normal;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
+  font-family: 'Hind', 'system-ui', 'sans-serif';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
 }
 
 footer {
-    margin-top: auto;
+  margin-top: auto;
 }
 
 img.logo {
-    max-height: 50px;
+  max-height: 50px;
 }
 
 .nav-link:hover {
-    color: var(--primary-hover) !important;
+  color: var(--primary-hover) !important;
 }
 
 .dropdown-menu {
-    --bs-dropdown-link-active-bg: var(--primary);
-    font-size: 12px;
+  --bs-dropdown-link-active-bg: var(--primary);
+  font-size: 12px;
 }
 
 .page-link {
-    color: var(--primary);
-    border: var(--bs-pagination-border-width) solid var(--primary);
+  color: var(--primary);
+  border: var(--bs-pagination-border-width) solid var(--primary);
 }
 
-.active>.page-link,
+.active > .page-link,
 .page-link.active {
-    z-index: 3;
-    color: var(--bs-pagination-active-color);
-    background-color: var(--primary);
-    border-color: var(--primary);
+  z-index: 3;
+  color: var(--bs-pagination-active-color);
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .page-link:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary);
-    color: #ffffff;
+  background-color: var(--primary-hover);
+  border-color: var(--primary);
+  color: #ffffff;
 }
 
 .page-link:focus {
-    color: var(--primary) !important;
+  color: var(--primary) !important;
 }
 
-.disabled>.page-link {
-    border-color: var(--primary);
+.disabled > .page-link {
+  border-color: var(--primary);
 }
 
 .btn-primary {
-    --bs-btn-bg: var(--primary);
-    --bs-btn-border-color: var(--primary-hover);
-    --bs-btn-hover-bg: var(--primary-hover);
-    --bs-btn-hover-border-color: var(--primary);
-    --bs-btn-active-bg: var(--primary);
-    --bs-btn-active-border-color: var(--primary);
-    --bs-btn-focus-border-color: var(--primary);
+  --bs-btn-bg: var(--primary);
+  --bs-btn-border-color: var(--primary-hover);
+  --bs-btn-hover-bg: var(--primary-hover);
+  --bs-btn-hover-border-color: var(--primary);
+  --bs-btn-active-bg: var(--primary);
+  --bs-btn-active-border-color: var(--primary);
+  --bs-btn-focus-border-color: var(--primary);
 }
 
 .btn-outline-primary {
-    --bs-btn-border-color: var(--primary);
-    --bs-btn-color: var(--primary);
-    --bs-btn-hover-bg: var(--primary-hover);
-    --bs-btn-active-bg: var(--primary);
-    --bs-btn-hover-border-color: var(--primary);
-    --bs-btn-active-border-color: var(--primary);
+  --bs-btn-border-color: var(--primary);
+  --bs-btn-color: var(--primary);
+  --bs-btn-hover-bg: var(--primary-hover);
+  --bs-btn-active-bg: var(--primary);
+  --bs-btn-hover-border-color: var(--primary);
+  --bs-btn-active-border-color: var(--primary);
 }
 
 .btn.disabled,
 .btn:disabled,
 fieldset:disabled .btn {
-    background-color: var(--primary-disabled);
-    border-color: var(--primary-disabled);
+  background-color: var(--primary-disabled);
+  border-color: var(--primary-disabled);
 }
 
 .link-primary {
-    color: var(--primary) !important;
-    text-decoration: none;
+  color: var(--primary) !important;
+  text-decoration: none;
 }
 
 .link-primary:hover,
 .link-primary:focus {
-    color: var(--primary-hover) !important;
+  color: var(--primary-hover) !important;
 }
 
 .bg-primary {
-    background-color: var(--primary) !important;
+  background-color: var(--primary) !important;
 }
 
 .bg-primary-opacity {
-    background-color: var(--primary) !important;
-    --bs-bg-opacity: .5 !important;
+  background-color: var(--primary) !important;
+  --bs-bg-opacity: 0.5 !important;
 }
 
 .form-check-input:checked {
-    background-color: var(--primary);
-    border-color: var(--primary);
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .form-check-input.is-valid:checked,
 .was-validated .form-check-input:valid:checked {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 
 .has-error .checkbox,
@@ -177,431 +176,430 @@ fieldset:disabled .btn {
 .has-error.checkbox-inline label,
 .has-error.radio label,
 .has-error.radio-inline label {
-    color: var(--bs-danger);
+  color: var(--bs-danger);
 }
 
 .wait-box {
-    display: none;
-    text-align: center;
-    top: 15%;
-    position: relative;
-    padding: 20px;
-    border: 1px solid #585754;
+  display: none;
+  text-align: center;
+  top: 15%;
+  position: relative;
+  padding: 20px;
+  border: 1px solid #585754;
 }
 
 .inlineUpdate,
 .changeScheduleAdmin {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .accordion-button.collapsed {
-    background: #ffffff;
-    color: var(--primary) !important;
+  background: #ffffff;
+  color: var(--primary) !important;
 }
 
 .accordion-button:not(.collapsed) {
-    background: var(--bs-secondary-bg);
-    color: var(--primary) !important;
+  background: var(--bs-secondary-bg);
+  color: var(--primary) !important;
 }
 
 .accordion-button:hover {
-    background: var(--bs-secondary-bg);
-    color: var(--primary) !important;
+  background: var(--bs-secondary-bg);
+  color: var(--primary) !important;
 }
 
 .accordion-header {
-    background: var(--bs-secondary-bg);
-    color: var(--primary) !important;
+  background: var(--bs-secondary-bg);
+  color: var(--primary) !important;
 }
 
 .accordion-header:has(.accordion-icon-container.collapsed) {
-    background: #ffffff;
-    color: var(--primary) !important;
+  background: #ffffff;
+  color: var(--primary) !important;
 }
 
 .accordion-header:hover {
-    background: var(--bs-secondary-bg) !important;
-    color: var(--primary) !important;
+  background: var(--bs-secondary-bg) !important;
+  color: var(--primary) !important;
 }
 
 .accordion-footer button {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .noImage {
-    min-height: 100px;
-
+  min-height: 100px;
 }
 
 .timespan {
-    --bs-bg-opacity: .2;
+  --bs-bg-opacity: 0.2;
 }
 
 .upcomingReservationsDashboard .reservation.hover {
-    cursor: pointer;
-    background-color: #eaf2f2;
-    color: #222;
+  cursor: pointer;
+  background-color: #eaf2f2;
+  color: #222;
 }
 
 .upcomingReservationsDashboard .reservation.clicked {
-    cursor: pointer;
-    background-color: #F0F0F0;
+  cursor: pointer;
+  background-color: #f0f0f0;
 }
 
 .upcomingReservationsDashboard .reservation.pending {
-    background-color: var(--reservedPending);
+  background-color: var(--reservedPending);
 }
 
 .upcomingReservationsDashboard .reservation.pending.hover,
 .upcomingReservationsDashboard .reservation.pending.clicked {
-    background-color: #eac995;
+  background-color: #eac995;
 }
 
 .page-search-availability #repeatDiv label {
-    min-width: 80px;
+  min-width: 80px;
 }
 
 .select2-container--default .select2-selection--multiple {
-    border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-color);
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-    border: solid var(--bs-border-color) 1px;
+  border: solid var(--bs-border-color) 1px;
 }
 
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 
 .ui-widget {
-    font-family: inherit !important;
+  font-family: inherit !important;
 }
 
 .ui-autocomplete {
-    z-index: 5000;
+  z-index: 5000;
 }
 
 .enforce-days-inner {
-    min-width: 420px;
-    white-space: nowrap;
+  min-width: 420px;
+  white-space: nowrap;
 }
 
 .updateCustomAttribute,
 .reservation-list-dates div {
-    min-width: 240px;
+  min-width: 240px;
 }
 
 #reservationTable tr.editable td {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .form-control.dateinput {
-    width: 120px;
+  width: 120px;
 }
 
 .form-select.dateinput {
-    width: 90px;
+  width: 90px;
 }
 
 #add-blackout-panel label,
 #editRecurrenceModal label,
 #blackoutReasonLabel {
-    min-width: 90px;
+  min-width: 90px;
 }
 
 .carousel-indicators [data-bs-target] {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 
 span.searchclear,
 span.searchclear-label {
-    position: absolute;
-    right: 8px;
-    top: 55%;
-    transform: translateY(-50%);
-    color: #666;
-    font-size: 1.2em;
-    background: transparent;
-    padding-left: 3px;
-    cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 55%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1.2em;
+  background: transparent;
+  padding-left: 3px;
+  cursor: pointer;
 }
 
 #deleteCustomLayoutDialog,
 #confirmCreateSlotDialog {
-    display: none;
-    background-color: #F9F9F9;
-    border-color: #BCBCBC;
-    position: absolute;
-    z-index: 2;
-    padding: 12px;
+  display: none;
+  background-color: #f9f9f9;
+  border-color: #bcbcbc;
+  position: absolute;
+  z-index: 2;
+  padding: 12px;
 }
 
 #button-up {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    cursor: pointer;
-    transition: all 300ms ease;
-    transform: scale(0);
-    z-index: 1050;
-    opacity: 0.9;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  transition: all 300ms ease;
+  transform: scale(0);
+  z-index: 1050;
+  opacity: 0.9;
 }
 
 #button-up:hover {
-    transform: scale(1.2) !important;
-    border-color: rgba(0, 0, 0, 0.1);
+  transform: scale(1.2) !important;
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 #resourceGroupsContainer {
-    display: none;
-    width: 200px;
-    height: 300px;
-    z-index: 200;
-    position: absolute;
-    overflow: scroll;
+  display: none;
+  width: 200px;
+  height: 300px;
+  z-index: 200;
+  position: absolute;
+  overflow: scroll;
 }
 
 .dropzone {
-    position: relative;
-    height: 85px;
-    width: 100%;
+  position: relative;
+  height: 85px;
+  width: 100%;
 }
 
 .dropzone div {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.dropzone [type="file"] {
-    cursor: pointer;
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+.dropzone [type='file'] {
+  cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .dropzone img {
-    max-width: 95%;
-    max-height: 80px;
+  max-width: 95%;
+  max-height: 80px;
 }
 
 #dayDialog,
 #deleteCustomLayoutDialog,
 #confirmCreateSlotDialog {
-    background-color: #F9F9F9;
-    border-color: #BCBCBC;
-    position: absolute;
-    z-index: 2;
-    padding: 12px;
+  background-color: #f9f9f9;
+  border-color: #bcbcbc;
+  position: absolute;
+  z-index: 2;
+  padding: 12px;
 }
 
 #dayDialog a,
 #deleteCustomLayoutDialog a,
 #confirmCreateSlotDialog a {
-    padding: 0 5px;
+  padding: 0 5px;
 }
 
 #changeLayoutDialog textarea {
-    width: 300px;
-    height: 375px;
+  width: 300px;
+  height: 375px;
 }
 
 .slotWizard input {
-    width: 80px;
+  width: 80px;
 }
 
 #addedGroups a {
-    text-decoration: none;
-    color: var(--bs-danger);
+  text-decoration: none;
+  color: var(--bs-danger);
 }
 
 #addedGroups a::before {
-    content: "\F628";
-    font-family: "bootstrap-icons";
+  content: '\F628';
+  font-family: 'bootstrap-icons';
 }
 
 #removedGroups a {
-    text-decoration: none;
-    color: var(--bs-success);
+  text-decoration: none;
+  color: var(--bs-success);
 }
 
 #removedGroups a::before {
-    content: "\F4FC";
-    font-family: "bootstrap-icons";
+  content: '\F4FC';
+  font-family: 'bootstrap-icons';
 }
 
 .announcement a,
 .announcement a:visited {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .resource-draggable {
-    cursor: move;
-    border: solid 1px transparent;
-    padding: 3px;
+  cursor: move;
+  border: solid 1px transparent;
+  padding: 3px;
 }
 
 .resource-draggable:hover {
-    border: dotted 1px #666;
+  border: dotted 1px #666;
 }
 
 .drop-resource {
-    background-color: #fffcd3;
+  background-color: #fffcd3;
 }
 
 .jqtree-tree a,
 .jqtree-tree li a {
-    text-decoration: none;
-    cursor: pointer;
-    color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  color: #000;
 }
 
 .jqtree-tree,
 .jqtree-tree li {
-    list-style: none;
+  list-style: none;
 }
 
 .qtip {
-    max-width: none;
+  max-width: none;
 }
 
 ul.jqtree-tree .group-resource .jqtree-title {
-    color: #111111;
+  color: #111111;
 }
 
 #manage-resource-groups-container {
-    max-width: 700px;
+  max-width: 700px;
 }
 
 table.reservations td {
-    border: solid var(--color-lines) 1px !important;
+  border: solid var(--color-lines) 1px !important;
 }
 
 .availability-highlighter {
-    position: absolute;
-    background-color: rebeccapurple;
-    opacity: 0.25;
+  position: absolute;
+  background-color: rebeccapurple;
+  opacity: 0.25;
 }
 
 .opening {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #userDetailsDiv,
 #resourceDetailsDiv {
-    max-width: 50%;
-    display: none;
-    position: absolute;
-    z-index: 99999;
+  max-width: 50%;
+  display: none;
+  position: absolute;
+  z-index: 99999;
 }
 
 #reservation-box label,
 #purchase label {
-    min-width: 50px;
+  min-width: 50px;
 }
 
-input[type=text].user-search {
-    width: 250px;
+input[type='text'].user-search {
+  width: 250px;
 }
 
 input.mid-number {
-    width: 70px !important;
+  width: 70px !important;
 }
 
 #participantList,
 #inviteeList {
-    height: 100px;
-    overflow-y: auto;
+  height: 100px;
+  overflow-y: auto;
 }
 
 .blackouts-edit-resources {
-    max-height: 250px;
-    overflow-y: scroll;
+  max-height: 250px;
+  overflow-y: scroll;
 }
 
 .text-small {
-    font-size: 0.5rem;
+  font-size: 0.5rem;
 }
 
 #page-resource-display-resource table.reservations td {
-    font-size: 1.1em;
+  font-size: 1.1em;
 }
 
 #page-resource-display-resource .date-picker {
-    position: absolute;
-    top: 72px;
-    z-index: 500;
+  position: absolute;
+  top: 72px;
+  z-index: 500;
 }
 
 .social-login a {
-    min-width: 250px;
+  min-width: 250px;
 }
 
 #panelCustomReport label {
-    min-width: 130px;
+  min-width: 130px;
 }
 
 .respopup-tooltip .tooltip-inner {
-    font-size: 14px;
-    min-width: 450px;
-    text-align: left;
+  font-size: 14px;
+  min-width: 450px;
+  text-align: left;
 }
 
 .fc-past {
-    background-color: var(--pasttime) !important;
-    color: #333;
+  background-color: var(--pasttime) !important;
+  color: #333;
 }
 
 .fc-future.hover {
-    background-color: var(--hiliteReservation) !important;
-    color: #ffffff;
-    cursor: pointer;
+  background-color: var(--hiliteReservation) !important;
+  color: #ffffff;
+  cursor: pointer;
 }
 
 .resourceName {
-    background-color: var(--primary);
-    color: var(--text-color-btn);
+  background-color: var(--primary);
+  color: var(--text-color-btn);
 }
 
 .resourceName a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 .reserveButton .btn {
-    color: var(--text-color-btn);
+  color: var(--text-color-btn);
 }
 
 .repeat-date-list {
-    min-height: 40px;
+  min-height: 40px;
 }
 
 .no-show {
-    display: none !important;
+  display: none !important;
 }
 
 .trumbowyg-editor p,
 .notesValue p,
 .descriptionValue p {
-    margin: 0;
+  margin: 0;
 }
 
 .trumbowyg-modal-submit {
-    background-color: var(--primary) !important;
-    color: var(--text-color-btn) !important;
+  background-color: var(--primary) !important;
+  color: var(--text-color-btn) !important;
 }
 
 .descriptionValue a,
@@ -612,66 +610,66 @@ input.mid-number {
 .announcementText a,
 .announcementContent a,
 .trumbowyg-editor a {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .editable-container.editable-popup {
-    max-width: 50% !important;
+  max-width: 50% !important;
 }
 
 .editable-input {
-    max-width: 90%;
+  max-width: 90%;
 }
 
 #entityChoices,
 #editEntityChoices {
-    display: none;
-    min-width: 150px;
-    border: solid 1px #e2e2e2;
-    padding: 10px;
-    max-height: 400px;
-    overflow-x: auto;
-    overflow-y: visible;
-    position: absolute;
-    z-index: 10000;
-    background-color: #f5f5f5;
-    -moz-box-shadow: 0px 0px 3px 0px #ccc;
-    -webkit-box-shadow: 0px 0px 3px 0px #ccc;
-    box-shadow: 0px 0px 3px 0px #ccc;
+  display: none;
+  min-width: 150px;
+  border: solid 1px #e2e2e2;
+  padding: 10px;
+  max-height: 400px;
+  overflow-x: auto;
+  overflow-y: visible;
+  position: absolute;
+  z-index: 10000;
+  background-color: #f5f5f5;
+  -moz-box-shadow: 0px 0px 3px 0px #ccc;
+  -webkit-box-shadow: 0px 0px 3px 0px #ccc;
+  box-shadow: 0px 0px 3px 0px #ccc;
 }
 
 #entityChoices li,
 #editEntityChoices li {
-    list-style: none;
-    font-size: 10pt;
+  list-style: none;
+  font-size: 10pt;
 }
 
 .flatpickr-calendar {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .flatpickr-months .flatpickr-month {
-    background: var(--primary) !important;
-    color: var(--text-color-btn) !important;
+  background: var(--primary) !important;
+  color: var(--text-color-btn) !important;
 }
 
 .flatpickr-monthDropdown-months {
-    background-color: var(--primary);
-    color: #ffffff;
+  background-color: var(--primary);
+  color: #ffffff;
 }
 
 .flatpickr-monthDropdown-months option {
-    background-color: #ffffff;
-    color: #000000;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .flatpickr-weekdays {
-    background: var(--primary) !important;
+  background: var(--primary) !important;
 }
 
 span.flatpickr-weekday {
-    background: var(--primary) !important;
-    color: var(--text-color-btn) !important;
+  background: var(--primary) !important;
+  color: var(--text-color-btn) !important;
 }
 
 .flatpickr-day.selected,
@@ -692,20 +690,20 @@ span.flatpickr-weekday {
 .flatpickr-day.selected.nextMonthDay,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
-    background: var(--primary) !important;
-    color: var(--text-color-btn) !important;
-    border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: var(--text-color-btn) !important;
+  border-color: var(--primary) !important;
 }
 
 .flatpickr-wrapper:has(.customAttribute) {
-    width: 100%;
+  width: 100%;
 }
 
 .flatpickr-day.today {
-    border-color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-    fill: var(--text-color-btn) !important;
+  fill: var(--text-color-btn) !important;
 }

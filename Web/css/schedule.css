@@ -15,7 +15,7 @@ table.reservations thead td {
 }
 
 table.reservations td {
-  border: solid #36648B 1px;
+  border: solid #36648b 1px;
   height: 40px;
   display: table-cell;
   padding: 0;
@@ -23,7 +23,7 @@ table.reservations td {
 
 table.reservations td.resourcename {
   padding: 0 3px;
-  background-color: #EDEDED;
+  background-color: #ededed;
   color: #999999;
   width: 150px;
   height: 40px;
@@ -35,24 +35,24 @@ table.reservations td.resourcename {
 }
 
 table.reservations td.resourcename a {
-  color: #0772A1;
+  color: #0772a1;
   text-decoration: none;
 }
 
 table.reservations td.resourcename a:hover {
-  color: #3BA3D0;
+  color: #3ba3d0;
 }
 
 table.reservations td.resdate {
   width: 150px;
   padding: 0 3px;
-  background-color: #36648B;
-  color: #F0F0F0;
+  background-color: #36648b;
+  color: #f0f0f0;
 }
 
 table.reservations tr.today td.resdate,
 table.reservations td.today {
-  color: #FFFFFF;
+  color: #ffffff;
   background-color: #5199d1;
 }
 
@@ -62,7 +62,7 @@ table.reservations tr.today td.reslabel {
 
 table.reservations td.reslabel {
   padding-left: 2px;
-  background-color: #EDEDED;
+  background-color: #ededed;
   color: #333333;
 }
 
@@ -119,7 +119,7 @@ table.reservations.mobile div.reservable {
 }
 
 .reservations.condensed div.reservable:hover {
-  background-color: #E9E9E9;
+  background-color: #e9e9e9;
 }
 
 #reservations .mobile {
@@ -127,7 +127,7 @@ table.reservations.mobile div.reservable {
 }
 
 #reservations .mobile .resdate {
-  background-color: #4279A5;
+  background-color: #4279a5;
   width: auto;
 }
 
@@ -192,10 +192,9 @@ td.reserved {
 }
 
 @keyframes droppedpulse {
-
   0%,
   100% {
-    background-color: #6F9B;
+    background-color: #6f9b;
   }
 
   50% {
@@ -243,7 +242,7 @@ td.dropped {
 
 .reservable.hilite,
 #reservations .ui-selecting {
-  background-color: #23BF35;
+  background-color: #23bf35;
 }
 
 .hilite {
@@ -256,7 +255,7 @@ td.dropped {
 }
 
 .reserved.clicked {
-  background-color: #1979CF;
+  background-color: #1979cf;
 }
 
 .pasttime {
@@ -264,7 +263,9 @@ td.dropped {
 }
 
 .restricted {
-  background: repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px), linear-gradient(to bottom, #eee, #999);
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px),
+    linear-gradient(to bottom, #eee, #999);
   color: black;
 }
 
@@ -317,7 +318,7 @@ div.legend {
 }
 
 .reservations-left-header {
-  border-bottom: solid 1px #E9E9E9;
+  border-bottom: solid 1px #e9e9e9;
   font-weight: bold;
   font-size: 1.3em;
   text-align: center;
@@ -333,12 +334,12 @@ ul.jqtree-tree .group-resource .jqtree-title {
   color: #111111;
 }
 
-#reservations-left>h4 {
+#reservations-left > h4 {
   text-align: center;
 }
 
-ul.jqtree-tree li.jqtree-selected>.jqtree-element,
-ul.jqtree-tree li.jqtree-selected>.jqtree-element:hover {
+ul.jqtree-tree li.jqtree-selected > .jqtree-element,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
   background: none;
   font-weight: bold;
 }
@@ -379,7 +380,7 @@ ul.jqtree-tree .jqtree-toggler {
 #reservations-left hr {
   border: 0;
   height: 1px;
-  background-color: #BCBCBC;
+  background-color: #bcbcbc;
 }
 
 #reservations-left .btn {
@@ -404,8 +405,8 @@ ul.jqtree-tree .jqtree-toggler {
   margin-top: 3px;
 }
 
-#reservations-left ul.jqtree-tree li.jqtree-selected>.jqtree-element,
-#reservations-left ul.jqtree-tree li.jqtree-selected>.jqtree-element:hover {
+#reservations-left ul.jqtree-tree li.jqtree-selected > .jqtree-element,
+#reservations-left ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
   background-color: transparent;
   background: none;
 }
@@ -501,7 +502,7 @@ a.toggle-sidebar {
   border-radius: 2px;
   font-size: 0.9rem;
   text-transform: uppercase;
-  background-color: #88CC88;
+  background-color: #88cc88;
   padding: 2px;
   margin: 1px;
   color: #000;
@@ -510,7 +511,7 @@ a.toggle-sidebar {
 }
 
 .reservation-updated {
-  background-color: #D5DED9;
+  background-color: #d5ded9;
   color: #000;
 }
 

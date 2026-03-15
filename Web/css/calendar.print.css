@@ -1,9 +1,10 @@
 @media print {
-    a[href]:after {
-        content: "" !important;
-    }
+  a[href]:after {
+    content: '' !important;
+  }
 }
 
-#filter, #subscriptionContainer {
-    display:none;
+#filter,
+#subscriptionContainer {
+  display: none;
 }
