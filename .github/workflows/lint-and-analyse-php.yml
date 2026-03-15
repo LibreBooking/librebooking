@@ -151,3 +151,24 @@ jobs:
 #        # Allow the previous check to fail but not abort
 #        if: always()
 #        run: composer psalm -- --shepherd
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Lint JavaScript (ESLint)
+        run: npm run lint:js
+
+      - name: Lint CSS (Stylelint)
+        run: npm run lint:css

@@ -15,5 +15,8 @@ trim_trailing_whitespace = false
 [*.yml]
 indent_size = 2
 
+[*.js]
+indent_style = tab
+
 [*.{bat,reg,vbs}]
 end_of_line = crlf

@@ -1,0 +1,21 @@
+{
+  "name": "librebooking",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Frontend linting tools for LibreBooking",
+  "scripts": {
+    "lint:js": "eslint Web/scripts/",
+    "lint:css": "stylelint 'Web/css/**/*.css'",
+    "lint:frontend": "npm run lint:js && npm run lint:css",
+    "fix:js": "eslint --fix Web/scripts/",
+    "fix:css": "stylelint --fix 'Web/css/**/*.css'",
+    "fix:frontend": "npm run fix:js && npm run fix:css"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^16.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^37.0.0"
+  }
+}
