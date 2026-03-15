@@ -384,13 +384,6 @@ function UserManagement(opts) {
     elements.groupsDialog.modal('show');
   };
 
-  var changeGroup = function (action, groupId) {
-    var url = opts.groupManagementUrl + '?action=' + action + '&gid=' + groupId;
-
-    var data = { userId: getActiveUserId() };
-    $.post(url, data);
-  };
-
   var changePermissions = function () {
     var user = getActiveUser();
     var data = { dr: 'permissions', uid: user.id };
@@ -407,12 +400,6 @@ function UserManagement(opts) {
 
       elements.permissionsDialog.modal('show');
     });
-  };
-
-  var changeColor = function () {
-    var user = getActiveUser();
-    var data = { dr: 'color', uid: user.id };
-    $.get(opts.colorUrl, data, function (colorIds) {});
   };
 
   var changeUserInfo = function () {

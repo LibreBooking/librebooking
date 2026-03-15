@@ -310,6 +310,4 @@ function ResourceGroupManagement(opts) {
       return options.submitUrl + '?action=' + form.attr('ajaxAction') + '&nid=' + elements.activeId.val();
     };
   };
-
-  var handleAddError = function (result) {};
 }

@@ -1,9 +1,9 @@
+/* exported dpDateChanged */
 let scheduleSpecificDates = [];
 
 function Schedule(opts, resourceGroups) {
   let options = opts;
   let groupDiv = $('#resourceGroups');
-  let scheduleId = $('#scheduleId');
   let multidateselect = $('#multidateselect');
   let renderingEvents = false;
 
@@ -338,7 +338,7 @@ function Schedule(opts, resourceGroups) {
                 const tr_slots = $(this);
                 let resourceId = tr_slots.data('resourceid');
                 if (resourceIdMap.has(resourceId)) {
-                  for (reservation of resourceIdMap.get(resourceId)) {
+                  for (const reservation of resourceIdMap.get(resourceId)) {
                     if (isReservationInTable(reservation, t)) {
                       if (reservation.IsBuffer) {
                         // buffers are added dynamically in grid views
@@ -1233,7 +1233,7 @@ function RemoveResourceId(url) {
   if (!url) {
     url = window.location.href;
   }
-  return url.replace(/&*rid[]=\d+/i, '');
+  return url.replace(/&*rid\[\]=\d+/i, '');
 }
 
 function RemoveGroupId(url) {

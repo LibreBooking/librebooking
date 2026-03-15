@@ -1,6 +1,4 @@
 function Reminder(opts) {
-  var options = opts;
-
   var elements = {
     startDiv: $('#reminderOptionsStart'),
     endDiv: $('#reminderOptionsEnd'),

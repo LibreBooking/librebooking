@@ -57,7 +57,7 @@ function GroupManagement(opt) {
   };
 
   var bindEventListeners = function () {
-    const { groupList, groupUserList, browseUserDialog, addDialog, importGroupsDialog } = elements;
+    const { groupList, browseUserDialog, addDialog } = elements;
 
     groupList.on('click', 'a.update', (e) => {
       e.preventDefault();
@@ -158,21 +158,6 @@ function GroupManagement(opt) {
   };
 
   var configureAsyncForms = function () {
-    const {
-      addUserForm,
-      removeUserForm,
-      permissionsForm,
-      editGroupForm,
-      deleteGroupForm,
-      addForm,
-      rolesForm,
-      groupAdminForm,
-      changeAdminGroupsForm,
-      changeAdminResourcesForm,
-      changeAdminSchedulesForm,
-      importGroupsForm,
-    } = elements;
-
     var hidePermissionsDialog = function () {
       elements.permissionsDialog.modal('hide');
     };

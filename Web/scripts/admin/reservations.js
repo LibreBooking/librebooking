@@ -141,7 +141,6 @@ function ReservationManagement(opts, approval) {
     });
 
     elements.reservationTable.find('tr.editable').each(function () {
-      var seriesId = $(this).attr('data-seriesId');
       var refNum = $(this).attr('data-refnum');
       $(this).attachReservationPopup(refNum, options.popupUrl);
 
@@ -455,12 +454,6 @@ function ReservationManagement(opts, approval) {
       } else {
         $('#tos_reservation').click();
       }
-    });
-  }
-
-  function deleteTerms() {
-    ajaxGet(options.deleteTermsOfServiceUrl, null, function () {
-      elements.termsOfServiceDialog.modal('hide');
     });
   }
 }

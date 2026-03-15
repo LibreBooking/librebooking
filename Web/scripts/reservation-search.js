@@ -63,7 +63,6 @@ function ReservationSearch(options) {
     elements.reservationResults.empty().html(data);
 
     elements.reservationResults.find('tr.editable').each(function () {
-      var seriesId = $(this).attr('data-seriesId');
       var refNum = $(this).attr('data-refnum');
       $(this).attachReservationPopup(refNum, options.popupUrl);
     });

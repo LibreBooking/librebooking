@@ -112,10 +112,6 @@ function ResourceManagement(opts) {
   var resources = {};
   var reasons = [];
 
-  function initializeResourceUI(id, details) {
-    // no-op
-  }
-
   ResourceManagement.prototype.init = function () {
     this.bindEventListeners();
     this.configureAsyncForms();

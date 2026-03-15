@@ -1,3 +1,4 @@
+/* exported ajaxPost, ajaxGet, ajaxPagination */
 function ajaxPost(formElement, url, onBefore, onAfter) {
   BeforeSerialize(formElement);
 

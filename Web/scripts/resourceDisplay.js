@@ -1,6 +1,4 @@
 function ResourceDisplay(opts) {
-  var options = opts;
-
   var elements = {
     loginForm: $('#loginForm'),
     loginButton: $('#loginButton'),

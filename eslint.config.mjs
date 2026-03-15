@@ -86,7 +86,6 @@ export default [
         scheduleSpecificDates: 'readonly',
         resourceOrder: 'readonly',
         filterResources: 'readonly',
-        reservation: 'readonly',
 
         // Calendar globals (calendar.js)
         rebindSubscriptionData: 'readonly',
@@ -118,6 +117,7 @@ export default [
       'valid-typeof': 'error',
       'no-unsafe-negation': 'error',
       'no-sparse-arrays': 'error',
+      'no-unused-vars': ['error', { args: 'none', varsIgnorePattern: '^[A-Z]' }],
     },
   },
   eslintConfigPrettier,

@@ -1,3 +1,4 @@
+/* exported mopen, mclosetimer */
 // javascript for enabling drop down sub menus in main navigation
 
 var timeout = 500;

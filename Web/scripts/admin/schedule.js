@@ -630,8 +630,6 @@ function ScheduleManagement(opts) {
 
   var _fullCalendar = null;
   var showChangeCustomLayout = function (scheduleId) {
-    var customLayoutScheduleId = scheduleId;
-
     $('#customLayoutDialog').unbind();
 
     function updateEvent(event) {

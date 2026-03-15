@@ -68,19 +68,11 @@ function ReminderManagement(opts) {
   }
 
   var editReminder = function () {
-    var reminder = getActiveReminder();
-    //elements.editAddress.val(reminder.address);
-    //elements.editMessage.val(reminder.message);
-    //elements.editSendtime.val(reminder.sendtime);
     elements.editDialog.dialog('open');
   };
 
   var deleteReminder = function () {
     elements.deleteDialog.dialog('open');
-  };
-
-  var getActiveReminder = function () {
-    return reminders[getActiveId()];
   };
 
   ReminderManagement.prototype.addReminder = function (id, userid, address, message, sendtime, refnumber) {

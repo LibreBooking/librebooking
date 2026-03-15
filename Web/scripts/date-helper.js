@@ -1,3 +1,4 @@
+/* exported dateHelper */
 /**
  * dateHelper
  * -----------

@@ -11,9 +11,6 @@ function Payments(opts) {
     refundAmount: $('#refundAmount'),
   };
 
-  var lastPage = 0;
-  var lastPageSize = 0;
-
   Payments.prototype.init = function () {
     $('.save').click(function (e) {
       e.preventDefault();
@@ -106,9 +103,6 @@ function Payments(opts) {
   };
 
   function loadTransactionLog(page, pageSize) {
-    lastPage = page;
-    lastPageSize = pageSize;
-
     elements.transactionLogIndicator.removeClass('no-show');
 
     ajaxGet(opts.transactionLogUrl.replace('[page]', page).replace('[pageSize]', pageSize), null, function (data) {
