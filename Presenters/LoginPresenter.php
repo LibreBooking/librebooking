@@ -386,11 +386,9 @@ class LoginPresenter
     {
         // Retrieve Oauth2 configuration values
         $trailingSlash = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_TRAILING_SLASH);
-        if (!$trailingSlash){
-            $baseUrl = rtrim(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE), '/');
-        }
-        else {
-            $baseUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
+        $baseUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
+        if (!$trailingSlash) {
+            $baseUrl = rtrim($baseUrl, '/');
         }
         $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
         $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI));

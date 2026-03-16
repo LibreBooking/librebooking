@@ -705,6 +705,7 @@ return [
             'oauth2.name' => 'OAuth2',
 
             # OAuth2 endpoint URLs and client credentials
+            # If true, keep the configured authorize URL's trailing slash; if false, trim it with rtrim()
             'oauth2.trailing.slash' => false,
             'oauth2.url.authorize' => '',
             'oauth2.url.token' => '',

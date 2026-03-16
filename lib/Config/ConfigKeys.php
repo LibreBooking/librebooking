@@ -1495,8 +1495,8 @@ class ConfigKeys
         'key' => 'authentication.oauth2.trailing.slash',
         'type' => 'boolean',
         'default' => false,
-        'label' => 'Enable Trailing Slash',
-        'description' => 'Enable Trailing Slash for OAuth2 URL',
+        'label' => 'Preserve authorize URL trailing slash',
+        'description' => 'When enabled, preserves any trailing slash on the OAuth2 authorize URL; when disabled, removes a trailing slash if present. Does not affect token or userinfo URLs.',
         'section' => 'authentication'
     ];
     public const AUTHENTICATION_OAUTH2_URL_AUTHORIZE = [
