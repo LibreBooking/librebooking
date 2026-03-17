@@ -12,7 +12,7 @@ class GroupCreatedResponse extends RestResponse
 
     public static function Example()
     {
-        return new ExampleCustomAttributeCreatedResponse();
+        return new ExampleGroupCreatedResponse();
     }
 }
 
@@ -28,7 +28,7 @@ class GroupUpdatedResponse extends RestResponse
 
     public static function Example()
     {
-        return new ExampleGroupCreatedResponse();
+        return new ExampleGroupUpdatedResponse();
     }
 }
 
@@ -37,6 +37,19 @@ class ExampleGroupCreatedResponse extends GroupCreatedResponse
     public function __construct()
     {
         $this->groupId = 1;
+        $this->message = 'The group was created';
+        $this->AddLink('http://url/to/group', WebServices::GetGroup);
+        $this->AddLink('http://url/to/update/group', WebServices::UpdateGroup);
+        $this->AddLink('http://url/to/delete/group', WebServices::DeleteGroup);
+    }
+}
+
+class ExampleGroupUpdatedResponse extends GroupUpdatedResponse
+{
+    public function __construct()
+    {
+        $this->groupId = 1;
+        $this->message = 'The group was updated';
         $this->AddLink('http://url/to/group', WebServices::GetGroup);
         $this->AddLink('http://url/to/update/group', WebServices::UpdateGroup);
         $this->AddLink('http://url/to/delete/group', WebServices::DeleteGroup);

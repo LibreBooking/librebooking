@@ -204,10 +204,6 @@ CreateAccount
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-Unstructured response of type *AccountCreatedResponse*
-
 **Request:**
 
 .. code:: json
@@ -231,6 +227,10 @@ Unstructured response of type *AccountCreatedResponse*
            }
        ]
    }
+
+**Response:**
+
+Unstructured response of type *AccountCreatedResponse*
 
 **curl example:**
 
@@ -259,9 +259,6 @@ UpdateAccount
 
 *This service is secure and requires authentication*
 
-| **Response:**
-| Unstructured response of type *AccountUpdatedResponse*
-
 **Request:**
 
 .. code:: json
@@ -283,6 +280,9 @@ UpdateAccount
            }
        ]
    }
+
+| **Response:**
+| Unstructured response of type *AccountUpdatedResponse*
 
 **curl example:**
 
@@ -312,10 +312,6 @@ Updates the password for an existing user
 
 *This service is secure and requires authentication*
 
-**Response:**
-
-Unstructured response of type *AccountUpdatedResponse*
-
 **Request:**
 
 .. code:: json
@@ -324,6 +320,10 @@ Unstructured response of type *AccountUpdatedResponse*
        "currentPassword": "plain.text.current.password",
        "newPassword": "plain.text.new.password"
    }
+
+**Response:**
+
+Unstructured response of type *AccountUpdatedResponse*
 
 **curl example:**
 
@@ -422,25 +422,6 @@ CreateCustomAttribute
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-     "attributeId": 1,
-     "links": [
-       {
-         "href": "http://url/to/attribute",
-         "title": "get_custom_attribute"
-       },
-       {
-         "href": "http://url/to/update/attribute",
-         "title": "update_custom_attribute"
-       }
-     ],
-     "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -467,6 +448,25 @@ CreateCustomAttribute
            1,
            2
        ]
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+     "attributeId": 1,
+     "links": [
+       {
+         "href": "http://url/to/attribute",
+         "title": "get_custom_attribute"
+       },
+       {
+         "href": "http://url/to/update/attribute",
+         "title": "update_custom_attribute"
+       }
+     ],
+     "message": null
    }
 
 **curl example:**
@@ -506,25 +506,6 @@ UpdateCustomAttribute
 
 *This service is only available to application administrators*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "attributeId": 1,
-       "links": [
-           {
-               "href": "http://url/to/attribute",
-               "title": "get_custom_attribute"
-           },
-           {
-               "href": "http://url/to/update/attribute",
-               "title": "update_custom_attribute"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -551,6 +532,25 @@ UpdateCustomAttribute
            1,
            2
        ]
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "attributeId": 1,
+       "links": [
+           {
+               "href": "http://url/to/attribute",
+               "title": "get_custom_attribute"
+           },
+           {
+               "href": "http://url/to/update/attribute",
+               "title": "update_custom_attribute"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -722,13 +722,9 @@ SignOut
 
 **Description:**
 
-invalidate Authenication Token
+Invalidate Authentication Token
 
 **Route:** ``/Web/Services/index.php/Authentication/SignOut``
-
-**Response:**
-
-No response
 
 **Request:**
 
@@ -738,6 +734,10 @@ No response
        "userId": 123,
        "sessionToken": "your-session-token"
    }
+
+**Response:**
+
+No response
 
 **curl example:**
 
@@ -761,6 +761,15 @@ Authenticates an existing LibreBooking user
    It is required for the route to **NOT** have a trailing ``/`` character, or
    it will fail.
 
+**Request:**
+
+.. code:: json
+
+   {
+       "username": "your-username",
+       "password": "your-password"
+   }
+
 **Response:**
 
 .. code:: json
@@ -773,15 +782,6 @@ Authenticates an existing LibreBooking user
        "version": "1.0",
        "links": [],
        "message": null
-   }
-
-**Request:**
-
-.. code:: json
-
-   {
-       "username": "your-username",
-       "password": "your-password"
    }
 
 **curl example:**
@@ -825,30 +825,34 @@ Creates a new group
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "attributeId": 1,
-       "links": [
-           {
-               "href": "http://url/to/attribute",
-               "title": "get_custom_attribute"
-           },
-           {
-               "href": "http://url/to/update/attribute",
-               "title": "update_custom_attribute"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
 
    {"name":"group name","isDefault":true}
+
+**Response:**
+
+.. code:: json
+
+   {
+       "groupId": 1,
+       "links": [
+           {
+               "href": "http://url/to/group",
+               "title": "get_group"
+           },
+           {
+               "href": "http://url/to/update/group",
+               "title": "update_group"
+           },
+           {
+               "href": "http://url/to/delete/group",
+               "title": "delete_group"
+           }
+       ],
+       "message": "The group was created"
+   }
 
 **curl example:**
 
@@ -873,6 +877,15 @@ Updates and existing group
 
 *This service is only available to application administrators*
 
+**Request:**
+
+.. code:: json
+
+   {
+       "name": "group name",
+       "isDefault": true
+   }
+
 **Response:**
 
 .. code:: json
@@ -894,15 +907,6 @@ Updates and existing group
            }
        ],
        "message": null
-   }
-
-**Request:**
-
-.. code:: json
-
-   {
-       "name": "group name",
-       "isDefault": true
    }
 
 **curl example:**
@@ -930,6 +934,10 @@ ChangeGroupRoles
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -952,10 +960,6 @@ ChangeGroupRoles
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -979,6 +983,10 @@ service is secure and requires authentication*
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1001,10 +1009,6 @@ service is secure and requires authentication*
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -1029,6 +1033,10 @@ Updates the permissions for an existing group
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1051,10 +1059,6 @@ Updates the permissions for an existing group
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -1207,26 +1211,6 @@ Creates a new reservation
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "referenceNumber": "referenceNumber",
-       "isPendingApproval": true,
-       "links": [
-           {
-               "href": "http://url/to/reservation",
-               "title": "get_reservation"
-           },
-           {
-               "href": "http://url/to/update/reservation",
-               "title": "update_reservation"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1297,6 +1281,26 @@ Creates a new reservation
            }
        ],
        "termsAccepted": true
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
+       "links": [
+           {
+               "href": "http://url/to/reservation",
+               "title": "get_reservation"
+           },
+           {
+               "href": "http://url/to/update/reservation",
+               "title": "update_reservation"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -1329,26 +1333,6 @@ UpdateReservation
 
 *This service is secure and requires authentication*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "referenceNumber": "referenceNumber",
-       "isPendingApproval": true,
-       "links": [
-           {
-               "href": "http://url/to/reservation",
-               "title": "get_reservation"
-           },
-           {
-               "href": "http://url/to/update/reservation",
-               "title": "update_reservation"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1421,6 +1405,26 @@ UpdateReservation
        "termsAccepted": true
    }
 
+**Response:**
+
+.. code:: json
+
+   {
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
+       "links": [
+           {
+               "href": "http://url/to/reservation",
+               "title": "get_reservation"
+           },
+           {
+               "href": "http://url/to/update/reservation",
+               "title": "update_reservation"
+           }
+       ],
+       "message": null
+   }
+
 **curl example:**
 
 .. code:: bash
@@ -1449,6 +1453,10 @@ Approves a pending reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1468,10 +1476,6 @@ Approves a pending reservation.
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -1493,6 +1497,10 @@ Checks in to a reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1512,10 +1520,6 @@ Checks in to a reservation.
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -1537,6 +1541,10 @@ Checks out of a reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1556,10 +1564,6 @@ Checks out of a reservation.
        ],
        "message": null
    }
-
-**Request:**
-
-No request
 
 **curl example:**
 
@@ -1851,25 +1855,6 @@ Creates a new resource
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "resourceId": 1,
-       "links": [
-           {
-               "href": "http://url/to/resource",
-               "title": "get_resource"
-           },
-           {
-               "href": "http://url/to/update/resource",
-               "title": "update_resource"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1906,6 +1891,25 @@ Creates a new resource
        "creditApplicability": 1,
        "creditsChargedAllSlots": 1,
        "maxConcurrentReservations": 1
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "resourceId": 1,
+       "links": [
+           {
+               "href": "http://url/to/resource",
+               "title": "get_resource"
+           },
+           {
+               "href": "http://url/to/update/resource",
+               "title": "update_resource"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -1936,25 +1940,6 @@ Updates an existing resource
 
 *This service is only available to application administrators*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "resourceId": 1,
-       "links": [
-           {
-               "href": "http://url/to/resource",
-               "title": "get_resource"
-           },
-           {
-               "href": "http://url/to/update/resource",
-               "title": "update_resource"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1991,6 +1976,25 @@ Updates an existing resource
        "creditApplicability": 1,
        "creditsChargedAllSlots": 1,
        "maxConcurrentReservations": 1
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "resourceId": 1,
+       "links": [
+           {
+               "href": "http://url/to/resource",
+               "title": "get_resource"
+           },
+           {
+               "href": "http://url/to/update/resource",
+               "title": "update_resource"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -2854,25 +2858,6 @@ Creates a new user
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "userId": null,
-       "links": [
-           {
-               "href": "http://url/to/user",
-               "title": "get_user"
-           },
-           {
-               "href": "http://url/to/update/user",
-               "title": "update_user"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -2899,6 +2884,25 @@ Creates a new user
            2,
            4
        ]
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": null,
+       "links": [
+           {
+               "href": "http://url/to/user",
+               "title": "get_user"
+           },
+           {
+               "href": "http://url/to/update/user",
+               "title": "update_user"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -2933,25 +2937,6 @@ Updates an existing user
 
 *This service is only available to application administrators*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "userId": null,
-       "links": [
-           {
-               "href": "http://url/to/user",
-               "title": "get_user"
-           },
-           {
-               "href": "http://url/to/update/user",
-               "title": "update_user"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -2976,6 +2961,25 @@ Updates an existing user
            2,
            4
        ]
+   }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": null,
+       "links": [
+           {
+               "href": "http://url/to/user",
+               "title": "get_user"
+           },
+           {
+               "href": "http://url/to/update/user",
+               "title": "update_user"
+           }
+       ],
+       "message": null
    }
 
 **curl example:**
@@ -3010,6 +3014,14 @@ Updates the password for an existing user
 
 *This service is only available to application administrators*
 
+**Request:**
+
+.. code:: json
+
+   {
+       "password":"plaintext password"
+   }
+
 **Response:**
 
 .. code:: json
@@ -3027,14 +3039,6 @@ Updates the password for an existing user
            }
        ],
        "message": null
-   }
-
-**Request:**
-
-.. code:: json
-
-   {
-       "password":"plaintext password"
    }
 
 **curl example:**
