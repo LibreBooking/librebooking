@@ -217,6 +217,11 @@ For a fresh manual install, use this order:
 4. All scripts in ``database_schema/upgrades/`` in version order
 5. ``create-data.sql``
 6. ``sample-data-utf8.sql`` if you want demo data
+7. ``sample-data-large-utf8.sql`` if you want a larger demo dataset (must be
+   loaded after ``sample-data-utf8.sql``)
+
+Alternatively, the helper script ``database_schema/setup-database.sh`` automates
+these steps and optionally loads sample data.
 
 If your hosting control panel or DBA already created the database and database
 user, you can skip ``create-db.sql`` and ``create-user.sql`` and start with

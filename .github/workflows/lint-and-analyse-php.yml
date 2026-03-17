@@ -36,6 +36,16 @@ jobs:
         run: tox -e config-check
       - name: Run doc8
         run: tox -e doc8
+      - name: Install shellcheck and shfmt
+        run: sudo apt-get update && sudo apt-get install -y shellcheck shfmt
+      - name: Run shellcheck
+        run: |
+          find . -name '*.sh' -not -path './vendor/*' -not -path './node_modules/*' \
+            -exec shellcheck --severity style {} +
+      - name: Run shfmt (indent=4)
+        run: |
+          find . -name '*.sh' -not -path './vendor/*' -not -path './node_modules/*' \
+            -exec shfmt -d -i 4 -ci {} +
       - name: Ensure no merge-commits in the Pull Request (PR)
         if: github.event_name == 'pull_request'
         run: |

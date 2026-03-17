@@ -191,6 +191,8 @@ Manual Database Setup
 | - ``database_schema/upgrades/*/data.sql`` - Database data upgrades
 | - ``create-data.sql`` - Inserts initial application data
 | - ``sample-data-utf8.sql`` - Sample data for testing (optional)
+| - ``sample-data-large-utf8.sql`` - Larger sample dataset with 150 resources,
+|   20 users, 9 groups, etc. (optional, requires ``sample-data-utf8.sql`` first)
 |
 
 .. important::
@@ -202,6 +204,8 @@ Manual Database Setup
    2. All upgrade scripts in ``database_schema/upgrades/`` (in version order)
    3. ``create-data.sql`` - Initial data (depends on upgraded schema)
    4. ``sample-data-utf8.sql`` (optional) - Sample data for testing
+   5. ``sample-data-large-utf8.sql`` (optional) - Larger sample dataset;
+      must be loaded after ``sample-data-utf8.sql``
 
    **Warning:** Simply running create-schema.sql followed by create-data.sql will fail
    because create-data.sql expects the fully upgraded schema including all modifications
@@ -255,6 +259,16 @@ file.
 | Optionally - import ``/database_schema/sample-data-utf8.sql`` to add
   sample application data (this will create 2 test users: admin/password
   and user/password for testing your installation).
+| Optionally - import ``/database_schema/sample-data-large-utf8.sql`` to add
+  a larger sample dataset (150 resources, 20 users, 9 groups). This file
+  must be loaded after ``sample-data-utf8.sql``.
+
+A helper script ``database_schema/setup-database.sh`` is provided that
+automates all of the above steps and optionally loads sample data:
+
+.. code-block:: bash
+
+   ./database_schema/setup-database.sh
 
 Scheduled Jobs (Cron)
 ~~~~~~~~~~~~~~~~~~~~~
