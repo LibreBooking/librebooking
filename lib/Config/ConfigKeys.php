@@ -1491,6 +1491,14 @@ class ConfigKeys
         'description' => 'Display name for OAuth2 login',
         'section' => 'authentication'
     ];
+    public const AUTHENTICATION_OAUTH2_STRIP_TRAILING_SLASH = [
+        'key' => 'authentication.oauth2.strip.trailing.slash',
+        'type' => 'boolean',
+        'default' => true,
+        'label' => 'Removes authorize URL trailing slash',
+        'description' => 'When enabled, removes any trailing slash on the OAuth2 authorize URL; when disabled, preserves a trailing slash if present. Does not affect token or userinfo URLs.',
+        'section' => 'authentication'
+    ];
     public const AUTHENTICATION_OAUTH2_URL_AUTHORIZE = [
         'key' => 'authentication.oauth2.url.authorize',
         'type' => 'string',
