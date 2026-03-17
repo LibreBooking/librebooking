@@ -122,8 +122,8 @@ function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $regi
     );
 
     $category = new SlimWebServiceRegistryCategory('Authentication');
-    $category->AddPost('SignOut/', [$webService, 'SignOut'], WebServices::Logout);
-    $category->AddPost('Authenticate/', [$webService, 'Authenticate'], WebServices::Login);
+    $category->AddPost('SignOut', [$webService, 'SignOut'], WebServices::Logout);
+    $category->AddPost('Authenticate', [$webService, 'Authenticate'], WebServices::Login);
     $registry->AddCategory($category);
 }
 
