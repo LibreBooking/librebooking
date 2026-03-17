@@ -83,7 +83,7 @@ variables. Set them after authenticating (see `Authenticate <#authenticate>`__):
 
    # Obtained from the Authenticate response
    SESSION_TOKEN="your-session-token"
-   USER_ID="your-user-id"
+   USER_ID=123
 
 Accessories
 -----------
@@ -735,8 +735,8 @@ No response
 .. code:: json
 
    {
-       "userId": null,
-       "sessionToken": null
+       "userId": 123,
+       "sessionToken": "your-session-token"
    }
 
 **curl example:**
@@ -745,7 +745,7 @@ No response
 
    curl -s -X POST "${BASE_URL}/Web/Services/index.php/Authentication/SignOut" \
      -H "Content-Type: application/json" \
-     -d "{\"userId\": \"${USER_ID}\", \"sessionToken\": \"${SESSION_TOKEN}\"}"
+     -d "{\"userId\": ${USER_ID}, \"sessionToken\": \"${SESSION_TOKEN}\"}"
 
 Authenticate
 ^^^^^^^^^^^^
@@ -780,8 +780,8 @@ Authenticates an existing LibreBooking user
 .. code:: json
 
    {
-       "username":null,
-       "password":null
+       "username": "your-username",
+       "password": "your-password"
    }
 
 **curl example:**
@@ -790,7 +790,7 @@ Authenticates an existing LibreBooking user
 
    curl -s -X POST "${BASE_URL}/Web/Services/index.php/Authentication/Authenticate" \
      -H "Content-Type: application/json" \
-     -d '{"username": "admin", "password": "password"}'
+     -d '{"username": "your-username", "password": "your-password"}'
 
 .. _get-endpoints-authentication:
 
