@@ -45,7 +45,7 @@ class AccountWebService
      * @name CreateAccount
      * @description Creates a user account. This does not authenticate
      * @request CreateAccountRequest
-     * @response AccountCreatedResponse
+     * @response AccountActionResponse
      * @return void
      */
     public function Create()
@@ -86,7 +86,7 @@ class AccountWebService
      * @name UpdateAccount
      * @description Updates an existing user account
      * @request UpdateAccountRequest
-     * @response AccountUpdatedResponse
+     * @response AccountActionResponse
      * @return void
      */
     public function Update($userId)
@@ -119,7 +119,7 @@ class AccountWebService
      * @name UpdatePassword
      * @description Updates the password for an existing user
      * @request UpdateAccountPasswordRequest
-     * @response AccountUpdatedResponse
+     * @response AccountActionResponse
      * @return void
      */
     public function UpdatePassword($userId)

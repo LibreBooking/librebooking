@@ -20,6 +20,7 @@ class ExampleAccountActionResponse extends AccountActionResponse
 {
     public function __construct()
     {
+        $this->userId = 1;
         $this->AddLink('http://url/to/account', WebServices::GetAccount);
         $this->AddLink('http://url/to/update/account', WebServices::UpdateAccount);
     }

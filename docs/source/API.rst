@@ -230,7 +230,22 @@ CreateAccount
 
 **Response:**
 
-Unstructured response of type *AccountCreatedResponse*
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
 
 **curl example:**
 
@@ -281,8 +296,24 @@ UpdateAccount
        ]
    }
 
-| **Response:**
-| Unstructured response of type *AccountUpdatedResponse*
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
 
 **curl example:**
 
@@ -323,7 +354,22 @@ Updates the password for an existing user
 
 **Response:**
 
-Unstructured response of type *AccountUpdatedResponse*
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
 
 **curl example:**
 
