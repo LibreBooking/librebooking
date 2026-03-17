@@ -609,8 +609,8 @@ Authenticates an existing LibreBooking user
 
 .. note::
 
-   It is required for the route to not have a trailing ``/`` character, or it
-   will fail.
+   It is required for the route to **NOT** have a trailing ``/`` character, or
+   it will fail.
 
 **Response:**
 
