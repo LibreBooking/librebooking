@@ -19,13 +19,14 @@ class Installer
     }
 
     /**
-     * @param $should_create_db bool
-     * @param $should_create_user bool
-     * @param $should_create_sample_data bool
      * @return array|InstallationResult[]
      */
-    public function InstallFresh($should_create_db, $should_create_user, $should_create_sample_data)
-    {
+    public function InstallFresh(
+        bool $should_create_db,
+        bool $should_create_user,
+        bool $should_create_sample_data,
+        bool $should_create_large_sample_data = false,
+    ) {
         $results = [];
         $config = Configuration::Instance();
 
@@ -47,6 +48,9 @@ class Installer
         $populate_sample_data = new MySqlScript(ROOT_DIR . 'database_schema/sample-data-utf8.sql');
         $populate_sample_data->Replace('librebooking', $database_name);
 
+        $populate_large_sample_data = new MySqlScript(ROOT_DIR . 'database_schema/sample-data-large-utf8.sql');
+        $populate_large_sample_data->Replace('librebooking', $database_name);
+
         $create_schema = new MySqlScript(ROOT_DIR . 'database_schema/create-schema.sql');
         $populate_data = new MySqlScript(ROOT_DIR . 'database_schema/create-data.sql');
         $populate_data->Replace('America/New_York', $timezone);
@@ -65,11 +69,13 @@ class Installer
 
         $results[] = $this->ExecuteScript($hostname, $database_name, $this->user, $this->password, $populate_data);
 
-        /**
-         * Populate sample data given in /LibreBooking/database_schema/sample-data-utf8.sql
-         */
-        if ($should_create_sample_data) {
+        // Large sample data requires the small sample data to be installed first
+        if ($should_create_sample_data || $should_create_large_sample_data) {
             $results[] = $this->ExecuteScript($hostname, $database_name, $this->user, $this->password, $populate_sample_data);
+        }
+
+        if ($should_create_large_sample_data) {
+            $results[] = $this->ExecuteScript($hostname, $database_name, $this->user, $this->password, $populate_large_sample_data);
         }
 
         $results = array_merge($results, $upgradeResults);

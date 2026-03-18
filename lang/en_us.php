@@ -820,6 +820,7 @@ class en_us extends Language
         $strings['CreateDatabase'] = 'Create the database';
         $strings['CreateDatabaseUser'] = 'Create the database user';
         $strings['PopulateExampleData'] = 'Import sample data. Creates admin account: admin/password and user account: user/password';
+        $strings['PopulateLargeExampleData'] = 'Also import large sample data. Adds more users, resources, groups, and reservations for realistic testing';
         $strings['DataWipeWarning'] = 'Warning: This will delete any existing data';
         $strings['RunInstallation'] = 'Run Installation';
         $strings['UpgradeNotice'] = 'You are upgrading from version <b>%s</b> to version <b>%s</b>';

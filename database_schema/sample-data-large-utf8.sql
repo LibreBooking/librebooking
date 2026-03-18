@@ -53,7 +53,7 @@ VALUES
 
 -- =============================================================================
 -- 3. User-Group Assignments
---    Each user in 1-2 groups; existing admin (id=2) added to Management
+--    Each user in 1-2 groups, existing admin (id=2) added to Management
 -- =============================================================================
 
 INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
