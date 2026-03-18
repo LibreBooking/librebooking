@@ -37,7 +37,9 @@
                 {assign var="disabled" value=$setting->hasEnv ? 'disabled' : ''}
                 <div class="{$rowCss}">
                     <div class="form-group">
-                        <label for="{$name}" class="fw-bold" data-bs-toggle="tooltip" title="{$setting->Description}">{$setting->Label} <span class="fw-normal">({$setting->Key})</span></label>
+                        <label for="{$name}" class="fw-bold" data-bs-toggle="tooltip"
+                            title="{$setting->Description}">{$setting->Label} <span
+                                class="fw-normal">({$setting->Key})</span></label>
                         {if $setting->Key == $DefaultTimezoneKey}
                             <select id="{$name}" name="{$name}" {$disabled} class="form-select">
                                 {html_options values=$TimezoneValues output=$TimezoneOutput selected=$setting->Value}
@@ -51,23 +53,28 @@
                                 {html_options options=$setting->Choices  selected=$setting->Value}
                             </select> <a href="#" id="applyHomepage" class="link-primary">{translate key=ApplyToCurrentUsers}</a>
                         {elseif $setting->IsPrivate}
-                            <input id="{$name}" type="password" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
+                            <input id="{$name}" type="password" size="50" name="{$name}" {$disabled}
+                                value="{$setting->Value|escape}" class="form-control" />
                         {elseif is_array($setting->Choices)}
                             <select id="{$name}" name="{$name}" class="form-select">
                                 {html_options options=$setting->Choices  selected=$setting->Value}
                             </select>
                         {elseif $setting->Type == ConfigSettingType::String}
-                            <input id="{$name}" type="text" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
+                            <input id="{$name}" type="text" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}"
+                                class="form-control" />
                         {elseif $setting->Type == ConfigSettingType::Integer}
-                            <input id="{$name}" type="number" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}" class="form-control" />
+                            <input id="{$name}" type="number" size="50" name="{$name}" {$disabled} value="{$setting->Value|escape}"
+                                class="form-control" />
                         {else}
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" id="radio{$name}t" type="radio" value="true" name="{$name}" {$disabled} {if $setting->Value} checked="checked" {/if} />
+                                    <input class="form-check-input" id="radio{$name}t" type="radio" value="true" name="{$name}"
+                                        {$disabled} {if $setting->Value} checked="checked" {/if} />
                                     <label class="form-check-label" for="radio{$name}t">{translate key="True"}</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" id="radio{$name}f" type="radio" value="false" name="{$name}" {$disabled} {if !$setting->Value} checked="checked" {/if} />
+                                    <input class="form-check-input" id="radio{$name}f" type="radio" value="false" name="{$name}"
+                                        {$disabled} {if !$setting->Value} checked="checked" {/if} />
                                     <label class="form-check-label" for="radio{$name}f">{translate key="False"}</label>
                                 </div>
                             </div>
@@ -104,17 +111,21 @@
                         <input type="button" value="{translate key=Update}" class='btn btn-primary save' />
                     </div>
 
-                    <form id="frmConfigSettings" method="post" ajaxAction="{ConfigActions::Update}" action="{$smarty.server.SCRIPT_NAME}">
+                    <form id="frmConfigSettings" method="post" ajaxAction="{ConfigActions::Update}"
+                        action="{$smarty.server.SCRIPT_NAME}">
                         <div class="accordion my-3" id="accordionConfig">
                             {if !empty($Settings)}
                                 <div>
                                     <div class="accordion-item shadow mb-2">
                                         <h2 class="accordion-header text-capitalize">
-                                            <button class="accordion-button text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{translate key=GeneralConfigSettings}">
+                                            <button class="accordion-button text-capitalize" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#{translate key=GeneralConfigSettings}">
                                                 {translate key=GeneralConfigSettings}
                                             </button>
                                         </h2>
-                                        <div id="{translate key=GeneralConfigSettings}" class="accordion-collapse collapse show">
+                                        <div id="{translate key=GeneralConfigSettings}"
+                                            class="accordion-collapse collapse show">
                                             <div class="accordion-body">
                                                 <fieldset>
                                                     <div class="no-style config-settings">
@@ -131,7 +142,8 @@
                                 <div>
                                     <div class="accordion-item shadow mb-2">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#{$section}">
+                                            <button class="accordion-button collapsed text-capitalize" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#{$section}">
                                                 {$section}
                                             </button>
                                         </h2>
@@ -157,7 +169,8 @@
 
                 </div>
 
-                <form id="updateHomepageForm" method="post" ajaxAction="{ConfigActions::SetHomepage}" action="{$smarty.server.SCRIPT_NAME}">
+                <form id="updateHomepageForm" method="post" ajaxAction="{ConfigActions::SetHomepage}"
+                    action="{$smarty.server.SCRIPT_NAME}">
                     <input type="hidden" name="homepage_id" id="homepage_id" />
                 </form>
 
@@ -176,15 +189,15 @@
                 config.init();
             });
         </script>
-        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+            data-bs-backdrop="static" aria-hidden="true">
             {include file="wait-box.tpl" translateKey='Working'}
         </div>
     {/if}
 </div>
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    if (window.UiTooltips && typeof window.UiTooltips.initStaticTooltips === 'function') {
+        window.UiTooltips.initStaticTooltips('[data-bs-toggle="tooltip"]');
+    }
 </script>
 {include file='globalfooter.tpl'}

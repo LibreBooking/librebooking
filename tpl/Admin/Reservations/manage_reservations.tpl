@@ -220,8 +220,7 @@
 							{/if}
 							{assign var=reservationId value=$reservation->ReservationId}
 							<tr class="{$rowCss} {if $IsDesktop}editable{/if}" data-seriesId="{$reservation->SeriesId}"
-								data-refnum="{$reservation->ReferenceNumber}" data-bs-custom-class="respopup-tooltip"
-								data-bs-html="true">
+								data-refnum="{$reservation->ReferenceNumber}">
 								<td class="id d-none">{$reservationId}</td>
 								<td class="user">
 									{fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=true}
@@ -238,7 +237,9 @@
 										{*<span class="reservationResourceStatusReason">{$StatusReasons[$reservation->ResourceStatusReasonId]->Description()}</span>*}
 									{*{/if}*}
 								</td>
-								<td class="reservationTitle">{$reservation->Title|escape:'html'}</td>
+								<td><span
+										class="reservationTitle">{if $reservation->Title}{$reservation->Title|escape:'html'}{else}{translate key=NoTitleLabel}{/if}</span>
+								</td>
 								<td class="description">{$reservation->Description|escape:'html'}</td>
 								<td class="date">
 									{formatdate date=$reservation->StartDate timezone=$Timezone key=short_reservation_date}
@@ -581,22 +582,10 @@
 	{vendor_js src="dropzone/1.0.0/js/dropzone.js"}
 
 	<script type="text/javascript">
-		/*function hidePopoversWhenClickAway() {
-			$('body').on('click', function(e) {
-				$('[rel="popover"]').each(function() {
-					if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e
-							.target).length === 0) {
-						$(this).popover('hide');
-					}
-				});
-			});
-		}*/
-
 		function setUpPopovers() {
-			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-			var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl);
-			});
+			if (window.UiTooltips && typeof window.UiTooltips.initStaticTooltips === 'function') {
+				window.UiTooltips.initStaticTooltips('[data-bs-toggle="tooltip"]');
+			}
 		}
 
 		function setUpEditables() {

@@ -1,4 +1,3 @@
-/* exported eraseCookie, getQueryStringValue, init, validateEmail, cookies */
 // Cookie functions from http://www.quirksmode.org/js/cookies.html //
 
 function startsWith(haystack, needle) {
@@ -63,67 +62,7 @@ function getQueryStringValue(name) {
 }
 
 function init() {}
-/* Replaced by initializeAccordions function
-$.fn.showHidePanel = function () {
-    var panel = $(this);
 
-    function setIcon(panel, targetIcon) {
-        var iconSpan = panel.find('.show-hide');
-        iconSpan.removeClass('bi-chevron-up');
-        iconSpan.removeClass('bi-chevron-down');
-        iconSpan.addClass(targetIcon);
-    }
-
-    var visibility = readCookie(panel.attr('id'));
-    if (visibility && visibility == '0') {
-        panel.find('.card-body, .card-footer').hide();
-        setIcon(panel, 'bi-chevron-down');
-    } else {
-        setIcon(panel, 'bi-chevron-up');
-    }
-
-    panel.find('.show-hide').click(function (e) {
-        e.preventDefault();
-        var id = panel.attr('id');
-
-        var dashboard = panel.find('.card-body, .card-footer');
-        if (dashboard.css('display') == 'none') {
-            createCookie(id, '1', 30);
-            dashboard.show();
-            setIcon(panel, 'bi-chevron-up');
-        } else {
-            createCookie(id, '0', 30);
-            dashboard.hide();
-            setIcon(panel, 'bi-chevron-down');
-        }
-    });
-};
-*/
-
-/* Replaced by type="search"
-$.fn.clearable = function () {
-    var textbox = $(this);
-
-    textbox.closest('div').addClass('form-group has-feedback');
-    textbox.addClass('hasclear form-control');
-    if (textbox.next('.clearer').length === 0) {
-        $('<i/>', { class: 'clearer bi bi-remove-circle form-control-feedback' }).insertAfter(textbox);
-    }
-
-    textbox.keyup(function () {
-        var t = $(this);
-        t.next('.clearer').toggle(Boolean(t.val()));
-    });
-
-    var $clearer = $(".clearer");
-    $clearer.hide($(this).prev('input').val());
-
-    $clearer.on('click', function () {
-        $(this).siblings('input').val('').focus();
-        $(this).hide();
-    });
-};
-*/
 function validateEmail(email) {
   var re =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -220,3 +159,127 @@ $('.accordion-collapse').on('shown.bs.collapse', function () {
 document.addEventListener('DOMContentLoaded', function () {
   initializeAccordions();
 });
+
+(function () {
+  function toElements(target) {
+    if (!target) {
+      return [];
+    }
+
+    if (typeof target === 'string') {
+      return Array.prototype.slice.call(document.querySelectorAll(target));
+    }
+
+    if (target instanceof Element) {
+      return [target];
+    }
+
+    if (target.length != null) {
+      return Array.prototype.slice.call(target).filter(function (item) {
+        return item instanceof Element;
+      });
+    }
+
+    return [];
+  }
+
+  function getBootstrapTooltip() {
+    if (!window.bootstrap || !window.bootstrap.Tooltip) {
+      return null;
+    }
+
+    return window.bootstrap.Tooltip;
+  }
+
+  function getOrCreateInstance(element, options) {
+    var Tooltip = getBootstrapTooltip();
+    if (!Tooltip || !element) {
+      return null;
+    }
+
+    var config = Object.assign(
+      {
+        html: true,
+        trigger: 'manual',
+      },
+      options || {}
+    );
+
+    return Tooltip.getOrCreateInstance(element, config);
+  }
+
+  function show(element, content, options) {
+    if (!element) {
+      return null;
+    }
+
+    var opts = Object.assign(
+      {
+        html: true,
+        trigger: 'manual',
+      },
+      options || {}
+    );
+
+    element.setAttribute('data-bs-toggle', 'tooltip');
+    element.setAttribute('data-bs-html', opts.html ? 'true' : 'false');
+
+    if (opts.customClass) {
+      element.setAttribute('data-bs-custom-class', opts.customClass);
+    }
+
+    element.setAttribute('data-bs-title', content);
+
+    var tooltip = getOrCreateInstance(element, opts);
+    if (!tooltip) {
+      element.setAttribute('title', content);
+      return null;
+    }
+
+    if (typeof tooltip.setContent === 'function') {
+      tooltip.setContent({ '.tooltip-inner': content });
+    }
+
+    tooltip.show();
+    return tooltip;
+  }
+
+  function hide(element) {
+    var Tooltip = getBootstrapTooltip();
+    if (!Tooltip || !element) {
+      return;
+    }
+
+    var tooltip = Tooltip.getInstance(element);
+    if (tooltip) {
+      tooltip.hide();
+    }
+  }
+
+  function initStaticTooltips(target, options) {
+    var elements = toElements(target || '[data-bs-toggle="tooltip"]');
+    var opts = Object.assign(
+      {
+        html: false,
+        trigger: 'hover focus',
+      },
+      options || {}
+    );
+
+    elements.forEach(function (element) {
+      if (!element.getAttribute('data-bs-toggle')) {
+        element.setAttribute('data-bs-toggle', 'tooltip');
+      }
+      getOrCreateInstance(element, opts);
+    });
+  }
+
+  var tooltipsApi = {
+    getOrCreateInstance: getOrCreateInstance,
+    show: show,
+    hide: hide,
+    initStaticTooltips: initStaticTooltips,
+  };
+
+  window.UiTooltips = tooltipsApi;
+})();

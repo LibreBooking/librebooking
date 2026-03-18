@@ -82,10 +82,12 @@ function Reservation(opts) {
 
   var _ownerId;
   var _startDate;
+  var _endDate;
 
   Reservation.prototype.init = function (ownerId, startDateString, endDateString) {
     _ownerId = ownerId;
     _startDate = moment(startDateString, 'YYYY-MM-DD HH:mm');
+    _endDate = moment(endDateString, 'YYYY-MM-DD HH:mm');
     participation.addedUsers.push(ownerId);
 
     SetUpAdHocEmail();
@@ -464,6 +466,7 @@ function Reservation(opts) {
 
     var primaryResourceContainer = $('#primaryResourceContainer');
     var resourceIdHdn = primaryResourceContainer.find('.resourceId');
+    var resourceId = resourceIdHdn.val();
 
     var allCheckboxes = elements.resourceGroupsDialog.find('.additionalResourceCheckbox:checked');
 
@@ -572,6 +575,7 @@ function Reservation(opts) {
   var handleAdditionalResourceChecked = function (checkbox, event) {
     var isChecked = checkbox.is(':checked');
 
+    const resourceCheckboxes = elements.groupDiv.find('[resource-id]');
     if (opts.maximumResources && elements.groupDiv.find(':checked').length >= opts.maximumResources) {
       elements.groupDiv.find(':not(:checked)').attr('disabled', true);
     } else {
@@ -779,8 +783,8 @@ function Reservation(opts) {
     $('#primaryResourceContainer, #additionalResources')
       .find('.resourceDetails')
       .each(function () {
-        var resourceId = $(this).attr('data-resourceId');
-        $(this).bindResourceDetails(resourceId);
+        var resourceId = this.getAttribute('data-resourceId');
+        bindResourceDetails(this, resourceId);
       });
   }
 
@@ -1310,7 +1314,7 @@ function Reservation(opts) {
       '</div>';
 
     elements.inviteeList.append(item);
-    $('.bindableUser').bindUserDetails();
+    attachUserDetailsPopup(document.querySelectorAll('.bindableUser'));
     participation.addedUsers.push(userId);
     updateInviteeCount();
   };
@@ -1354,7 +1358,7 @@ function Reservation(opts) {
       '</div>';
 
     elements.participantList.append(item);
-    $('.bindableUser').bindUserDetails();
+    attachUserDetailsPopup(document.querySelectorAll('.bindableUser'));
     participation.addedUsers.push(userId);
     updateParticipantCount();
   };

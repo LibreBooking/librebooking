@@ -472,10 +472,6 @@ span.searchclear-label {
   list-style: none;
 }
 
-.qtip {
-  max-width: none;
-}
-
 ul.jqtree-tree .group-resource .jqtree-title {
   color: #111111;
 }
@@ -552,6 +548,7 @@ input.mid-number {
   min-width: 130px;
 }
 
+.userpopup-tooltip .tooltip-inner,
 .respopup-tooltip .tooltip-inner {
   font-size: 14px;
   min-width: 450px;

@@ -1,9 +1,9 @@
-/* exported dpDateChanged */
 let scheduleSpecificDates = [];
 
 function Schedule(opts, resourceGroups) {
   let options = opts;
   let groupDiv = $('#resourceGroups');
+  let scheduleId = $('#scheduleId');
   let multidateselect = $('#multidateselect');
   let renderingEvents = false;
 
@@ -100,44 +100,18 @@ function Schedule(opts, resourceGroups) {
         }
       );
 
-      var qTipElement = div;
+      window.attachReservationPopup(div.get(0), resid, options.summaryPopupUrl);
+    }
 
-      qTipElement.qtip({
-        position: {
-          my: 'bottom left',
-          at: 'top left',
-          effect: false,
-          viewport: $(window),
-        },
+    function hideReservationTooltip(div) {
+      var element = div && typeof div.get === 'function' ? div.get(0) : div;
 
-        content: {
-          text: function (event, api) {
-            $.ajax({ url: options.summaryPopupUrl, data: { id: resid } })
-              .done(function (html) {
-                api.set('content.text', html);
-              })
-              .fail(function (xhr, status, error) {
-                api.set('content.text', status + ': ' + error);
-              });
-
-            return 'Loading...';
-          },
-        },
-
-        show: {
-          delay: 700,
-          effect: false,
-        },
-
-        hide: {
-          fixed: true,
-          delay: 500,
-        },
-
-        style: {
-          classes: 'qtip-light qtip-bootstrap',
-        },
-      });
+      if (window.bootstrap && window.bootstrap.Tooltip && element) {
+        var tooltip = window.bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+          tooltip.hide();
+        }
+      }
     }
 
     function findClosestStart(tds, reservation, startAttribute) {
@@ -305,7 +279,7 @@ function Schedule(opts, resourceGroups) {
       reservationList.sort((r1, r2) => {
         const resourceOrder = options.resourceOrder[r1.ResourceId] - options.resourceOrder[r2.ResourceId];
         if (resourceOrder === 0) {
-          return r1.StartDate - r2.StartDate;
+          return r1.StartDate - r2.startDate;
         }
 
         return resourceOrder;
@@ -338,7 +312,7 @@ function Schedule(opts, resourceGroups) {
                 const tr_slots = $(this);
                 let resourceId = tr_slots.data('resourceid');
                 if (resourceIdMap.has(resourceId)) {
-                  for (const reservation of resourceIdMap.get(resourceId)) {
+                  for (reservation of resourceIdMap.get(resourceId)) {
                     if (isReservationInTable(reservation, t)) {
                       if (reservation.IsBuffer) {
                         // buffers are added dynamically in grid views
@@ -358,7 +332,7 @@ function Schedule(opts, resourceGroups) {
                           'dragstart',
                           { referenceNumber: reservation.ReferenceNumber, resourceId: reservation.ResourceId },
                           function (event) {
-                            div.qtip('hide');
+                            hideReservationTooltip(div);
                             $(event.target).removeClass('clicked');
                             const data = JSON.stringify({
                               referenceNumber: event.data.referenceNumber,
@@ -710,7 +684,7 @@ function Schedule(opts, resourceGroups) {
 
             if (isDraggable) {
               div.on('dragstart', function (event) {
-                div.qtip('hide');
+                hideReservationTooltip(div);
                 $(event.target).removeClass('clicked');
                 const data = JSON.stringify({
                   referenceNumber: res.ReferenceNumber,
@@ -734,8 +708,8 @@ function Schedule(opts, resourceGroups) {
   this.renderEvents = renderEvents;
 
   this.initResources = function () {
-    $('.resourceNameSelector').each(function () {
-      $(this).bindResourceDetails($(this).attr('resourceId'));
+    document.querySelectorAll('.resourceNameSelector').forEach(function (element) {
+      bindResourceDetails(element, element.getAttribute('resourceId'));
     });
   };
 
@@ -1233,7 +1207,7 @@ function RemoveResourceId(url) {
   if (!url) {
     url = window.location.href;
   }
-  return url.replace(/&*rid\[\]=\d+/i, '');
+  return url.replace(/&*rid[]=\d+/i, '');
 }
 
 function RemoveGroupId(url) {
