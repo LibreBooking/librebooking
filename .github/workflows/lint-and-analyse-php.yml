@@ -177,11 +177,11 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
+      - name: Check formatting (Prettier)
+        run: npm run lint:format
+
       - name: Lint JavaScript (ESLint)
         run: npm run lint:js
 
       - name: Lint CSS (Stylelint)
         run: npm run lint:css
-
-      - name: Check formatting (Prettier)
-        run: npm run lint:format
