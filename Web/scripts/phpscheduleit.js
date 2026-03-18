@@ -1,3 +1,4 @@
+/* exported eraseCookie, getQueryStringValue, init, validateEmail, cookies */
 // Cookie functions from http://www.quirksmode.org/js/cookies.html //
 
 function startsWith(haystack, needle) {
