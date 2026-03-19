@@ -34,7 +34,7 @@ interface IManageUsersPage extends IPageable, IActionPage
     public function SetJsonResponse($objectToSerialize);
 
     /**
-     * @return int[] resource ids the user has permission to
+     * @return string[]|null resource ids with permission type (e.g. "1_0" for full, "2_1" for view)
      */
     public function GetAllowedResourceIds();
 
@@ -299,7 +299,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     }
 
     /**
-     * @return int[] resource ids the user has permission to
+     * @return string[]|null resource ids with permission type (e.g. "1_0" for full, "2_1" for view)
      */
     public function GetAllowedResourceIds()
     {

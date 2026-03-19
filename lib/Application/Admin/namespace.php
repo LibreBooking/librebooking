@@ -11,3 +11,4 @@ require_once(ROOT_DIR . 'lib/Application/Admin/GroupAdminManageReservationsServi
 require_once(ROOT_DIR . 'lib/Application/Admin/GroupAdminGroupRepository.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/ImageUploadDirectory.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/TemplateCacheDirectory.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ResourcePermissionService.php');

@@ -117,13 +117,13 @@ class ManageUsersPresenterTest extends TestBase
     public function testGetsSelectedResourcesFromPageAndAssignsPermission()
     {
         $resourcesThatShouldRemainUnchanged = [5, 10];
-        $allowedResourceIds = [1, 2, 4, 20, 30];
-        $submittedResourceIds = [1, 4];
-        $currentResourceIds = [1, 20, 30];
+        $adminManageableIds = [1, 2, 4, 20, 30];
+        $submittedResourceIds = ['1_0', '4_0'];
+        $currentFullAccessIds = [1, 20, 30];
 
-        $expectedResourceIds = [1, 4, 5, 10];
+        $expectedFullAccessIds = [1, 4, 5, 10];
 
-        $allResourceIds = array_unique(array_merge($resourcesThatShouldRemainUnchanged, $allowedResourceIds, $submittedResourceIds, $currentResourceIds));
+        $allResourceIds = array_unique(array_merge($resourcesThatShouldRemainUnchanged, $adminManageableIds, [1, 4], $currentFullAccessIds));
 
         $resources = [];
         foreach ($allResourceIds as $rid) {
@@ -134,10 +134,10 @@ class ManageUsersPresenterTest extends TestBase
         $adminUserId = $this->fakeUser->UserId;
 
         $user = new FakeUser();
-        $user->WithAllowedPermissions(array_merge($resourcesThatShouldRemainUnchanged, $currentResourceIds));
+        $user->WithAllowedPermissions(array_merge($resourcesThatShouldRemainUnchanged, $currentFullAccessIds));
 
         $adminUser = new FakeUser();
-        $adminUser->_ResourceAdminResourceIds = $allowedResourceIds;
+        $adminUser->_ResourceAdminResourceIds = $adminManageableIds;
         $adminUser->_IsResourceAdmin = false;
 
         $this->page->_UserId = $userId;
@@ -150,8 +150,55 @@ class ManageUsersPresenterTest extends TestBase
 
         $this->presenter->ChangePermissions();
 
-        $actual = $user->GetAllowedResourceIds();
-        $this->assertEquals(sort($expectedResourceIds), sort($actual));
+        $actualFullAccess = $user->GetAllowedResourceIds();
+        sort($expectedFullAccessIds);
+        sort($actualFullAccess);
+        $this->assertEquals($expectedFullAccessIds, $actualFullAccess);
+        $this->assertEquals($this->userRepo->_UpdatedUser, $user);
+    }
+
+    public function testViewPermissionsPreservedSeparatelyFromFullPermissions()
+    {
+        // Admin can manage resources [1, 2, 3]
+        // User has full=[1, 5], view=[2, 6]
+        // Admin submits full=[1], view=[3]
+        // Expected: full=[1, 5], view=[3, 6]
+        $adminManageableIds = [1, 2, 3];
+        $submittedResourceIds = ['1_0', '3_1'];
+
+        $allResourceIds = [1, 2, 3, 5, 6];
+        $resources = [];
+        foreach ($allResourceIds as $rid) {
+            $resources[] = new FakeBookableResource($rid);
+        }
+
+        $userId = 9928;
+        $adminUserId = $this->fakeUser->UserId;
+
+        $user = new FakeUser();
+        $user->WithAllowedPermissions([1, 5]);
+        $user->WithViewablePermission([2, 6]);
+
+        $adminUser = new FakeUser();
+        $adminUser->_ResourceAdminResourceIds = $adminManageableIds;
+        $adminUser->_IsResourceAdmin = false;
+
+        $this->page->_UserId = $userId;
+        $this->page->_AllowedResourceIds = $submittedResourceIds;
+
+        $this->resourceRepo->_ResourceList = $resources;
+
+        $this->userRepo->_UserById[$adminUserId] = $adminUser;
+        $this->userRepo->_UserById[$userId] = $user;
+
+        $this->presenter->ChangePermissions();
+
+        $actualFull = $user->GetAllowedResourceIds();
+        $actualView = $user->GetAllowedViewResourceIds();
+        sort($actualFull);
+        sort($actualView);
+        $this->assertEquals([1, 5], $actualFull);
+        $this->assertEquals([3, 6], $actualView);
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
@@ -482,7 +529,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
      */
     public $_FilterStatusId;
     /**
-     * @var int[]
+     * @var string[]
      */
     public $_AllowedResourceIds;
     /**
@@ -579,6 +626,9 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
         $this->_JsonResponse = $objectToSerialize;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function GetAllowedResourceIds()
     {
         return $this->_AllowedResourceIds;

@@ -6,6 +6,7 @@ require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/User/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/UserImportCsv.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ResourcePermissionService.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/InviteUserEmail.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/AccountCreationForUserEmail.php');
 
@@ -76,6 +77,11 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     private $groupViewRepository;
 
     /**
+     * @var IResourcePermissionService
+     */
+    private $resourcePermissionService;
+
+    /**
      * @param IGroupRepository $groupRepository
      */
     public function SetGroupRepository($groupRepository)
@@ -132,6 +138,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
      * @param IAttributeService $attributeService
      * @param IGroupRepository $groupRepository
      * @param IGroupViewRepository $groupViewRepository
+     * @param IResourcePermissionService|null $resourcePermissionService
      */
     public function __construct(
         IManageUsersPage $page,
@@ -141,7 +148,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         IManageUsersService $manageUsersService,
         IAttributeService $attributeService,
         IGroupRepository $groupRepository,
-        IGroupViewRepository $groupViewRepository
+        IGroupViewRepository $groupViewRepository,
+        ?IResourcePermissionService $resourcePermissionService = null,
     ) {
         parent::__construct($page);
 
@@ -153,6 +161,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $this->attributeService = $attributeService;
         $this->groupRepository = $groupRepository;
         $this->groupViewRepository = $groupViewRepository;
+        $this->resourcePermissionService = $resourcePermissionService ?? new ResourcePermissionService($resourceRepository);
 
         $this->AddAction(ManageUsersActions::Activate, 'Activate');
         $this->AddAction(ManageUsersActions::AddUser, 'AddUser');
@@ -298,42 +307,30 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     public function ChangePermissions()
     {
         $currentUser = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
-        $resources = $this->GetResourcesThatCurrentUserCanAdminister($currentUser);
-
-        $acceptableResourceIds = [];
-
-        foreach ($resources as $resource) {
-            $acceptableResourceIds[] = $resource->GetId();
-        }
+        $managedResourceIds = $this->resourcePermissionService->GetResourceIdsThatUserCanAdminister($currentUser);
 
         $user = $this->userRepository->LoadById($this->page->GetUserId());
-        $allowedResources = [];
 
-        if (is_array($this->page->GetAllowedResourceIds())) {
-            $allowedResources = $this->page->GetAllowedResourceIds();
-        }
+        $permissionsByType = $this->resourcePermissionService->ParseSubmittedPermissions(
+            $this->page->GetAllowedResourceIds(),
+            $managedResourceIds,
+        );
 
-        $allowed = [];
-        $view = [];
-        foreach ($allowedResources as $resource) {
-            $split = explode('_', $resource);
-            $resourceId = $split[0];
-            $permissionType = $split[1];
+        $user->ChangeAllowedPermissions(
+            $this->resourcePermissionService->MergeWithPreservedPermissions(
+                existingIds: $user->GetAllowedResourceIds(),
+                managedResourceIds: $managedResourceIds,
+                submittedIds: $permissionsByType['full'],
+            )
+        );
+        $user->ChangeViewPermissions(
+            $this->resourcePermissionService->MergeWithPreservedPermissions(
+                existingIds: $user->GetAllowedViewResourceIds(),
+                managedResourceIds: $managedResourceIds,
+                submittedIds: $permissionsByType['view'],
+            )
+        );
 
-            if ($permissionType === ResourcePermissionType::Full . '') {
-                $allowed[] = $resourceId;
-            } else {
-                if ($permissionType === ResourcePermissionType::View . '') {
-                    $view[] = $resourceId;
-                }
-            }
-        }
-
-        $currentResources = $user->GetAllowedResourceIds();
-        $toRemainUnchanged = array_diff($currentResources, $acceptableResourceIds);
-
-        $user->ChangeAllowedPermissions(array_merge($toRemainUnchanged, $allowed));
-        $user->ChangeViewPermissions(array_merge($toRemainUnchanged, $view));
         $this->userRepository->Update($user);
     }
 
