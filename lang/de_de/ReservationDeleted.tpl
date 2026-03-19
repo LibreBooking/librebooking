@@ -1,3 +1,6 @@
+Hallo {$FirstName},<br/>
+die folgende Reservierung wurde gel&ouml;scht.<br/>
+<br/>
 Reservierungsdetails:
 <br/>
 <br/>
@@ -47,5 +50,4 @@ Beschreibung: {$Description|nl2br}<br/>
     {/foreach}
 {/if}
 <br/>
-<a href="{$ScriptUrl}">Anmelden bei LibreBooking</a>
-
+<a href="{$ScriptUrl}">{$AppTitle}-Login</a>
