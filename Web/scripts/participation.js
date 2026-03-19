@@ -30,7 +30,7 @@ function Participation(opts) {
 
     $('.reservation').each(function () {
       var refNum = $(this).attr('referenceNumber');
-      $(this).attachReservationPopup(refNum);
+      window.attachReservationPopup(this, refNum);
     });
   };
 

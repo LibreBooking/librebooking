@@ -1,102 +1,224 @@
-$.fn.bindResourceDetails = function (resourceId, options) {
-  var opts = $.extend({ preventClick: false, position: 'left bottom' }, options);
+(function () {
+  // WeakMap used to store metadata associated with DOM elements.
+  const elementData = new WeakMap();
 
-  var showEvent = $(this).data('show-event');
-  if (!showEvent) {
-    showEvent = 'mouseenter';
+  // Helper to read/write element-scoped data.
+  function getData(element, key, defaultValue) {
+    const data = elementData.get(element) || {};
+    return data[key] !== undefined ? data[key] : defaultValue;
   }
 
-  $(this).removeAttr('resource-details-bound');
-  bindResourceDetails($(this));
+  function setData(element, key, value) {
+    const data = elementData.get(element) || {};
+    data[key] = value;
+    elementData.set(element, data);
+  }
+
+  function getTooltipDelay() {
+    return window.getTooltipDelay();
+  }
+
+  // Helper to position the tooltip relative to the target element.
+  function positionElement(element, target, position) {
+    if (!element || !target) return;
+
+    const targetRect = target.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+
+    let top, left;
+    let verticalPosition = position.split(' ')[1] || 'bottom'; // Initial vertical position.
+
+    // Detect available viewport space and choose a vertical side automatically.
+    const spaceBelow = window.innerHeight - targetRect.bottom;
+    const spaceAbove = targetRect.top;
+    const elementHeight = elementRect.height;
+    const gapFromViewport = 10; // Minimum distance from the viewport edge.
+
+    // If there is not enough room below but enough above, place it on top.
+    if (spaceBelow < elementHeight + gapFromViewport && spaceAbove > elementHeight + gapFromViewport) {
+      verticalPosition = 'top';
+    } else {
+      // Otherwise, keep the requested vertical position.
+      verticalPosition = position.split(' ')[1] || 'bottom';
+    }
+
+    // Parse position tokens (default: 'left bottom').
+    const [my, at] = [position.split(' ')[0] || 'left', verticalPosition];
+
+    // Compute coordinates based on the target rectangle.
+    if (at === 'bottom') {
+      top = targetRect.bottom + window.scrollY;
+    } else if (at === 'top') {
+      top = targetRect.top + window.scrollY - elementRect.height;
+    } else {
+      top = targetRect.top + window.scrollY;
+    }
+
+    if (my === 'left') {
+      left = targetRect.left + window.scrollX;
+    } else if (my === 'right') {
+      left = targetRect.right + window.scrollX - elementRect.width;
+    } else {
+      left = targetRect.left + window.scrollX + targetRect.width / 2 - elementRect.width / 2;
+    }
+
+    element.style.position = 'absolute';
+    element.style.top = top + 'px';
+    element.style.left = left + 'px';
+  }
+
+  // Normalize supported inputs to an array of Element objects.
+  function toElements(target) {
+    if (window.UiTooltips && typeof window.UiTooltips.toElements === 'function') {
+      return window.UiTooltips.toElements(target);
+    }
+
+    if (!target) {
+      return [];
+    }
+    if (target instanceof Element) {
+      return [target];
+    }
+    if (Array.isArray(target)) {
+      return target.filter((item) => item instanceof Element);
+    }
+    if (target.length != null) {
+      return Array.prototype.slice.call(target).filter((item) => item instanceof Element);
+    }
+    return [];
+  }
+
+  // Public entry point: bind resource detail popup behavior.
+  function bindResourceDetails(target, resourceId, options) {
+    const opts = Object.assign({ preventClick: false, position: 'left bottom', rebind: false }, options || {});
+
+    const elements = toElements(target);
+
+    elements.forEach((element) => {
+      const alreadyBound = element.hasAttribute('resource-details-bound');
+      if (alreadyBound && !opts.rebind) {
+        return;
+      }
+      if (alreadyBound && opts.rebind) {
+        element.removeAttribute('resource-details-bound');
+      }
+      const showEvent = element.getAttribute('data-show-event') || 'mouseenter';
+      setupResourceDetails(element, resourceId, showEvent, opts);
+    });
+  }
 
   function getDiv() {
-    if ($('#resourceDetailsDiv').length <= 0) {
-      return $('<div id="resourceDetailsDiv"/>').appendTo('body');
-    } else {
-      return $('#resourceDetailsDiv');
+    let div = document.getElementById('resourceDetailsDiv');
+    if (!div) {
+      div = document.createElement('div');
+      div.id = 'resourceDetailsDiv';
+      div.style.display = 'none';
+      div.style.zIndex = '1000';
+      document.body.appendChild(div);
     }
+    return div;
   }
 
   function hideDiv() {
-    var tag = getDiv();
-    var timeoutId = setTimeout(function () {
-      tag.hide();
-    }, 500);
-    tag.data('timeoutId', timeoutId);
+    const tag = getDiv();
+    const timeoutId = setTimeout(() => {
+      tag.style.display = 'none';
+    }, getTooltipDelay());
+    setData(tag, 'timeoutId', timeoutId);
   }
 
-  function bindResourceDetails(resourceNameElement) {
-    if (resourceNameElement.attr('resource-details-bound') === '1') {
+  function setupResourceDetails(resourceNameElement, resourceId, showEvent, opts) {
+    if (resourceNameElement.getAttribute('resource-details-bound') === '1') {
       return;
     }
 
     if (opts.preventClick) {
-      resourceNameElement.click(function (e) {
+      resourceNameElement.addEventListener('click', (e) => {
         e.preventDefault();
       });
     }
 
-    var tag = getDiv();
+    const tag = getDiv();
 
-    tag
-      .mouseenter(function () {
-        clearTimeout(tag.data('timeoutId'));
-      })
-      .mouseleave(function () {
-        hideDiv();
-      });
+    tag.addEventListener('mouseenter', () => {
+      clearTimeout(getData(tag, 'timeoutId'));
+    });
 
-    var hoverTimer;
+    tag.addEventListener('mouseleave', () => {
+      hideDiv();
+    });
 
-    resourceNameElement
-      .on(showEvent, function () {
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          hoverTimer = null;
+    let hoverTimer;
+
+    resourceNameElement.addEventListener(showEvent, () => {
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+
+      hoverTimer = setTimeout(() => {
+        const tag = getDiv();
+        clearTimeout(getData(tag, 'timeoutId'));
+
+        const cachedData = getData(tag, 'resourcePopup' + resourceId);
+        if (cachedData != null) {
+          showData(cachedData);
+        } else {
+          // Show a loading state while fetching popup content.
+          tag.innerHTML = 'Loading...';
+          tag.style.display = 'block';
+          positionElement(tag, resourceNameElement, opts.position);
+
+          fetch('ajax/resource_details.php?rid=' + resourceId, {
+            method: 'GET',
+            cache: 'default',
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.text();
+            })
+            .then((data) => {
+              setData(tag, 'resourcePopup' + resourceId, data);
+              showData(data);
+            })
+            .catch((error) => {
+              tag.innerHTML = 'Error loading resource data!';
+              tag.style.display = 'block';
+              console.error('Error loading resource details:', error);
+            });
         }
 
-        hoverTimer = setTimeout(function () {
-          var tag = getDiv();
-          clearTimeout(tag.data('timeoutId'));
+        function showData(data) {
+          tag.innerHTML = data;
+          tag.style.display = 'block';
 
-          var data = tag.data('resourcePopup' + resourceId);
-          if (data != null) {
-            showData(data);
-          } else {
-            $.ajax({
-              url: 'ajax/resource_details.php?rid=' + resourceId,
-              type: 'GET',
-              cache: true,
-              beforeSend: function () {
-                tag.html('Loading...').show();
-                tag.position({ my: 'left top', at: opts.position, of: resourceNameElement });
-              },
-              error: tag.html('Error loading resource data!').show(),
-              success: function (data, textStatus, jqXHR) {
-                tag.data('resourcePopup' + resourceId, data);
-                showData(data);
-              },
-            });
-          }
-
-          function showData(data) {
-            tag.html(data).show();
-            tag.find('.hideResourceDetailsPopup').click(function (e) {
+          // Bind close buttons
+          const closeButtons = tag.querySelectorAll('.hideResourceDetailsPopup');
+          closeButtons.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
               e.preventDefault();
               hideDiv();
             });
-            tag.position({ my: 'left top', at: opts.position, of: resourceNameElement });
-          }
-        }, 500);
-      })
-      .mouseleave(function () {
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          hoverTimer = null;
-        }
-        hideDiv();
-      });
+          });
 
-    resourceNameElement.attr('resource-details-bound', '1');
+          positionElement(tag, resourceNameElement, opts.position);
+        }
+      }, getTooltipDelay());
+    });
+
+    resourceNameElement.addEventListener('mouseleave', () => {
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+      hideDiv();
+    });
+
+    resourceNameElement.setAttribute('resource-details-bound', '1');
   }
-};
+
+  // Expose the binding function globally.
+  window.bindResourceDetails = bindResourceDetails;
+})();

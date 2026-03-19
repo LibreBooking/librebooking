@@ -1,125 +1,172 @@
 function Dashboard(opts) {
   var options = opts;
 
+  var postForm = function (formElement, url, onAfter) {
+    if (typeof BeforeSerialize === 'function') {
+      BeforeSerialize(formElement);
+    }
+
+    var formData = new FormData(formElement);
+    var params = new URLSearchParams();
+    formData.forEach(function (value, key) {
+      params.append(key, value);
+    });
+
+    return fetch(url || formElement.getAttribute('action'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: params.toString(),
+      credentials: 'same-origin',
+    })
+      .then(function (response) {
+        return response.text();
+      })
+      .then(function (data) {
+        if (onAfter) {
+          onAfter(data);
+        }
+      });
+  };
+
+  var setLoadingIcon = function (button, removeClass) {
+    button.disabled = true;
+    var icon = button.querySelector('i');
+    if (icon) {
+      icon.classList.remove(removeClass);
+      icon.classList.add('spinner-border');
+      icon.style.width = '1rem';
+      icon.style.height = '1rem';
+    }
+  };
+
   var ShowReservationAjaxResponse = function () {
-    $('#creatingNotification').hide();
-    $('#result').show();
+    var creatingNotification = document.getElementById('creatingNotification');
+    var result = document.getElementById('result');
+    if (creatingNotification) {
+      creatingNotification.style.display = 'none';
+    }
+    if (result) {
+      result.style.display = '';
+    }
   };
 
   var CloseSaveDialog = function () {
-    $('#wait-box').modal('hide');
+    var waitBox = document.getElementById('wait-box');
+    if (!waitBox) {
+      return;
+    }
+    if (window.bootstrap && window.bootstrap.Modal) {
+      window.bootstrap.Modal.getOrCreateInstance(waitBox).hide();
+    }
   };
   Dashboard.prototype.init = function () {
-    $('.resourceNameSelector').each(function () {
-      $(this).bindResourceDetails($(this).attr('resource-id'));
+    document.querySelectorAll('.resourceNameSelector').forEach(function (element) {
+      bindResourceDetails(element, element.getAttribute('resource-id'));
     });
 
-    var reservations = $('.reservation');
+    var reservations = document.querySelectorAll('.reservation');
 
-    function attachReservationTooltip(reservations, options) {
-      reservations.on('mouseenter', function () {
-        var me = $(this);
-        var refNum = me.attr('id');
+    document.querySelectorAll('.reservation .reservationTitle').forEach(function (titleElement) {
+      var reservationElement = titleElement.closest('.reservation');
+      var refNum = reservationElement ? reservationElement.id : null;
+      window.attachReservationPopup(titleElement, refNum, options.summaryPopupUrl);
+    });
 
-        me.attr('data-bs-toggle', 'tooltip').tooltip('show');
-
-        $.ajax({
-          url: options.summaryPopupUrl,
-          data: { id: refNum },
-        })
-          .done(function (html) {
-            me.attr('data-bs-original-title', html).tooltip('show');
-          })
-          .fail(function (xhr, status, error) {
-            me.attr('data-bs-original-title', status + ': ' + error).tooltip('show');
-          });
+    reservations.forEach(function (reservationElement) {
+      reservationElement.addEventListener('mouseenter', function () {
+        reservationElement.classList.add('hover');
       });
 
-      reservations.on('mouseleave', function () {
-        $(this).tooltip('hide');
+      reservationElement.addEventListener('mouseleave', function () {
+        reservationElement.classList.remove('hover');
+      });
+
+      reservationElement.addEventListener('mousedown', function () {
+        reservationElement.classList.add('clicked');
+      });
+
+      reservationElement.addEventListener('mouseup', function () {
+        reservationElement.classList.remove('clicked');
+      });
+
+      reservationElement.addEventListener('click', function () {
+        var refNum = reservationElement.id;
+        window.location = options.reservationUrl + refNum;
+      });
+    });
+
+    document.querySelectorAll('.btnCheckin').forEach(function (button) {
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setLoadingIcon(button, 'bi-box-arrow-in-right');
+
+        var form = document.getElementById('form-checkin');
+        var refNum = button.getAttribute('data-referencenumber');
+        var referenceNumber = document.getElementById('referenceNumber');
+        var waitBox = document.getElementById('wait-box');
+        if (referenceNumber) {
+          referenceNumber.value = refNum;
+        }
+        if (waitBox && window.bootstrap && window.bootstrap.Modal) {
+          window.bootstrap.Modal.getOrCreateInstance(waitBox).show();
+        }
+        if (!form) {
+          return;
+        }
+
+        postForm(form, button.getAttribute('data-url'), function (data) {
+          document.querySelectorAll('button[data-referencenumber="' + refNum + '"]').forEach(function (buttonElement) {
+            buttonElement.classList.add('d-none');
+          });
+          var result = document.getElementById('result');
+          if (result) {
+            result.innerHTML = data;
+          }
+          ShowReservationAjaxResponse();
+        });
+      });
+    });
+
+    document.querySelectorAll('.btnCheckout').forEach(function (button) {
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setLoadingIcon(button, 'bi-box-arrow-in-left');
+
+        var form = document.getElementById('form-checkout');
+        var refNum = button.getAttribute('data-referencenumber');
+        var referenceNumber = document.getElementById('referenceNumber');
+        if (referenceNumber) {
+          referenceNumber.value = refNum;
+        }
+        if (!form) {
+          return;
+        }
+
+        postForm(form, null, function (data) {
+          document.querySelectorAll('button[data-referencenumber="' + refNum + '"]').forEach(function (buttonElement) {
+            buttonElement.classList.add('d-none');
+          });
+          var result = document.getElementById('result');
+          if (result) {
+            result.innerHTML = data;
+          }
+          ShowReservationAjaxResponse();
+        });
+      });
+    });
+
+    var waitBox = document.getElementById('wait-box');
+    if (waitBox) {
+      waitBox.addEventListener('click', function (e) {
+        var target = e.target;
+        if (target && (target.closest('#btnSaveSuccessful') || target.closest('#btnSaveFailed'))) {
+          CloseSaveDialog();
+        }
       });
     }
-
-    $(document).ready(function () {
-      var reservations = $('.reservation');
-      var options = {
-        summaryPopupUrl: 'ajax/respopup.php',
-      };
-
-      attachReservationTooltip(reservations, options);
-
-      $('[data-bs-toggle="tooltip"]').tooltip();
-    });
-
-    reservations.hover(
-      function () {
-        $(this).addClass('hover');
-      },
-      function () {
-        $(this).removeClass('hover');
-      }
-    );
-
-    reservations.mousedown(function () {
-      $(this).addClass('clicked');
-    });
-
-    reservations.mouseup(function () {
-      $(this).removeClass('clicked');
-    });
-
-    reservations.click(function () {
-      var refNum = $(this).attr('id');
-      window.location = options.reservationUrl + refNum;
-    });
-
-    $('.btnCheckin').click(function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var button = $(this);
-      button.attr('disabled', 'disabled');
-      button.find('i').removeClass('bi-box-arrow-in-right').addClass('spinner-border').css({
-        width: '1rem',
-        height: '1rem',
-      });
-
-      var form = $('#form-checkin');
-      var refNum = $(this).attr('data-referencenumber');
-      $('#referenceNumber').val(refNum);
-      $('#wait-box').modal('show');
-      ajaxPost(form, $(this).data('url'), null, function (data) {
-        $('button[data-referencenumber="' + refNum + '"]').addClass('d-none');
-        $('#result').html(data);
-        ShowReservationAjaxResponse();
-      });
-    });
-
-    $('.btnCheckout').click(function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var button = $(this);
-      button.attr('disabled', 'disabled');
-      button.find('i').removeClass('bi-box-arrow-in-left').addClass('spinner-border').css({
-        width: '1rem',
-        height: '1rem',
-      });
-
-      var form = $('#form-checkout');
-      var refNum = $(this).attr('data-referencenumber');
-      $('#referenceNumber').val(refNum);
-      ajaxPost(form, null, null, function (data) {
-        $('button[data-referencenumber="' + refNum + '"]').addClass('d-none');
-        $('#result').html(data);
-        ShowReservationAjaxResponse();
-      });
-    });
-
-    $('#wait-box').on('click', '#btnSaveSuccessful', function (e) {
-      CloseSaveDialog();
-    });
-
-    $('#wait-box').on('click', '#btnSaveFailed', function (e) {
-      CloseSaveDialog();
-    });
   };
 }

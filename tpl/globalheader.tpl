@@ -38,9 +38,6 @@
         {vendor_css src="bootstrap-icons/1.11.3/css/bootstrap-icons.min.css"}
         {vendor_css src="bootstrap/5.3.3/css/bootstrap.css"}
         {vendor_css src="flatpickr/4.6.13/css/flatpickr.min.css"}
-        {if isset($Qtip) && $Qtip}
-            {vendor_css src="qtip/3.0.3/css/jquery.qtip.min.css"}
-        {/if}
         {if isset($Trumbowyg) && $Trumbowyg}
             {vendor_css src="trumbowyg/2.27.3/css/trumbowyg.min.css"}
         {/if}
@@ -56,7 +53,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
             integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" type="text/css" />
         {if isset($Trumbowyg) && $Trumbowyg}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
                 type="text/css" />
@@ -89,8 +85,7 @@
     {else}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;700&display=swap" />
     {/if}
     {cssfile src="librebooking.css"}
     {if isset($cssFiles) && $cssFiles neq ''}

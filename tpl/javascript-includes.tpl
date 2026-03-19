@@ -3,9 +3,6 @@
     {vendor_js src="moment/2.13.0/js/moment.min.js"}
     {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
     {vendor_js src="flatpickr/4.6.13/js/flatpickr.min.js"}
-    {if isset($Qtip) && $Qtip}
-        {vendor_js src="qtip/3.0.3/js/jquery.qtip.min.js"}
-    {/if}
     {if isset($Validator) && $Validator}
         {vendor_js src="bootstrap-validator/0.6.0/js/bootstrapValidator.min.js"}
     {/if}
@@ -36,9 +33,6 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"
         integrity="sha384-5JqMv4L/Xa0hfvtF06qboNdhvuYXUku9ZrhZh3bSk8VXF0A/RuSLHpLsSV9Zqhl6"
         crossorigin="anonymous"></script>
-    {if isset($Qtip) && $Qtip}
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
-    {/if}
     {if isset($Validator) && $Validator}
         <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
