@@ -212,7 +212,7 @@ class ConfigKeys
         'type' => 'integer',
         'default' => 50,
         'label' => 'Default Page Size',
-        'description' => 'Default number of items per page in listings'
+        'description' => 'Default number of items per page in listings. Use a positive integer; -1 is not supported for performance reasons.'
     ];
 
     // Database

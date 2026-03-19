@@ -208,6 +208,7 @@ Page Control
 
 **default.page.size**
   Default number of items per page in listings.
+  Use a positive integer; ``-1`` is not supported for performance reasons.
 
   .. code-block:: php
 

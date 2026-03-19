@@ -592,6 +592,34 @@ class SmartyPage extends Smarty
         return $url;
     }
 
+    private function GetDefaultDataTablePageSize()
+    {
+        $defaultPageSize = intval(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE));
+
+        return $defaultPageSize > 0 ? $defaultPageSize : 50;
+    }
+
+    private function BuildDataTableLengthMenu($allText)
+    {
+        $defaultPageSize = $this->GetDefaultDataTablePageSize();
+
+        $pageSizes = [25, 50, 75, 100];
+        if (!in_array($defaultPageSize, $pageSizes, true)) {
+            $pageSizes[] = $defaultPageSize;
+            sort($pageSizes);
+        }
+
+        $lengthValues = array_merge($pageSizes, [-1]);
+        $lengthLabels = array_map('strval', $pageSizes);
+        $lengthLabels[] = $allText;
+
+        return sprintf(
+            '[%s, %s]',
+            json_encode($lengthValues),
+            json_encode($lengthLabels, JSON_UNESCAPED_UNICODE)
+        );
+    }
+
     public function CreateDataTable($params)
     {
         $tableId = $params['tableId'];
@@ -604,6 +632,8 @@ class SmartyPage extends Smarty
         $showHideText = $this->Resources->GetString('ShowHide');
         $infoText = $this->Resources->GetString('Info');
         $lengthMenuText = $this->Resources->GetString('LengthMenu');
+        $defaultPageSize = $this->GetDefaultDataTablePageSize();
+        $lengthMenu = $this->BuildDataTableLengthMenu($AllText);
 
         if ($tableId == 'report-results') {
             $pagination = '"paging": false,
@@ -612,7 +642,7 @@ class SmartyPage extends Smarty
                 "info": false,
                 "ordering": false,';
         } else {
-            $pagination = '"lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "' . $AllText . '"] ],';
+            $pagination = '"pageLength": ' . $defaultPageSize . ', "lengthMenu": ' . $lengthMenu . ',';
         }
 
         return sprintf(
@@ -677,12 +707,15 @@ class SmartyPage extends Smarty
         $NoResultsFoundText = $this->Resources->GetString('NoResultsFound');
         $infoText = $this->Resources->GetString('Info');
         $lengthMenuText = $this->Resources->GetString('LengthMenu');
+        $defaultPageSize = $this->GetDefaultDataTablePageSize();
+        $lengthMenu = $this->BuildDataTableLengthMenu($viewAllText);
 
         return sprintf(
             '<script>
            var table =  $("#' . $tableId . '").DataTable({
                 "dom": \'<"d-flex justify-content-between my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
-                "lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "' . $viewAllText . '"] ],
+                "pageLength": ' . $defaultPageSize . ',
+                "lengthMenu": ' . $lengthMenu . ',
                 language: {
                     search: "' . $searchText . '",
                     info: "' . $searchText . '",

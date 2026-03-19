@@ -80,6 +80,10 @@ return [
         # Options:  1 = Dashboard, 2 = Schedule, 3 = My Calendar, 4 = Resource Calendar
         'default.homepage' => 1,
 
+        # Default number of items per page in listings
+        # Use a positive integer. -1 is not supported for performance reasons
+        'default.page.size' => 50,
+
         # Optional path to a custom CSS file
         'css.extension.file' => '',
 
