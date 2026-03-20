@@ -2,18 +2,11 @@
 
 class WebServiceExpiration
 {
-    private static $SESSION_LENGTH_IN_MINUTES = 30;
-
-    public function __construct()
-    {
-        self::$SESSION_LENGTH_IN_MINUTES = Configuration::Instance()->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
-    }
-
     /**
      * @param string $expirationTime
      * @return bool
      */
-    public static function IsExpired($expirationTime)
+    public static function IsExpired(string $expirationTime): bool
     {
         return Date::Parse($expirationTime, 'UTC')->LessThan(Date::Now());
     }
@@ -21,8 +14,14 @@ class WebServiceExpiration
     /**
      * @return string
      */
-    public static function Create()
+    public static function Create(): string
     {
-        return Date::Now()->AddMinutes(self::$SESSION_LENGTH_IN_MINUTES)->ToUtc()->ToIso();
+        $minutes = Configuration::Instance()->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
+        if ($minutes <= 0) {
+            Log::Error('Invalid inactivity.timeout value: %d. Falling back to default: %d', $minutes, ConfigKeys::INACTIVITY_TIMEOUT['default']);
+            $minutes = ConfigKeys::INACTIVITY_TIMEOUT['default'];
+        }
+
+        return Date::Now()->AddMinutes($minutes)->ToUtc()->ToIso();
     }
 }
