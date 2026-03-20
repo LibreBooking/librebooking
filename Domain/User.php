@@ -397,7 +397,7 @@ class User
     /**
      * @return int[]
      */
-    public function GetAllowedResourceIds()
+    public function GetFullAccessResourceIds()
     {
         return $this->allowedResourceIds;
     }

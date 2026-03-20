@@ -150,7 +150,7 @@ class ManageUsersPresenterTest extends TestBase
 
         $this->presenter->ChangePermissions();
 
-        $actualFullAccess = $user->GetAllowedResourceIds();
+        $actualFullAccess = $user->GetFullAccessResourceIds();
         sort($expectedFullAccessIds);
         sort($actualFullAccess);
         $this->assertEquals($expectedFullAccessIds, $actualFullAccess);
@@ -193,7 +193,7 @@ class ManageUsersPresenterTest extends TestBase
 
         $this->presenter->ChangePermissions();
 
-        $actualFull = $user->GetAllowedResourceIds();
+        $actualFull = $user->GetFullAccessResourceIds();
         $actualView = $user->GetAllowedViewResourceIds();
         sort($actualFull);
         sort($actualView);

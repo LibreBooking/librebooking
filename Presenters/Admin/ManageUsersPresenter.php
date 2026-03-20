@@ -318,7 +318,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
         $user->ChangeAllowedPermissions(
             $this->resourcePermissionService->MergeWithPreservedPermissions(
-                existingIds: $user->GetAllowedResourceIds(),
+                existingIds: $user->GetFullAccessResourceIds(),
                 managedResourceIds: $managedResourceIds,
                 submittedIds: $permissionsByType['full'],
             )
@@ -379,7 +379,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     public function GetUserResourcePermissions()
     {
         $user = $this->userRepository->LoadById($this->page->GetUserId());
-        return ['full' => $user->GetAllowedResourceIds(), 'view' => $user->GetAllowedViewResourceIds()];
+        return ['full' => $user->GetFullAccessResourceIds(), 'view' => $user->GetAllowedViewResourceIds()];
     }
 
     /**

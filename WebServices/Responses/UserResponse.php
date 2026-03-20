@@ -57,7 +57,7 @@ class UserResponse extends RestResponse
             }
         }
 
-        foreach ($user->GetAllowedResourceIds() as $allowedResourceId) {
+        foreach ($user->GetFullAccessResourceIds() as $allowedResourceId) {
             $this->permissions[] = new ResourceItemResponse($server, $allowedResourceId, '');
         }
 

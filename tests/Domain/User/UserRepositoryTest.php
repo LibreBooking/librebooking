@@ -89,7 +89,7 @@ class UserRepositoryTest extends TestBase
 
         $this->assertEquals($row[ColumnNames::FIRST_NAME], $user->FirstName());
         $this->assertTrue($user->WantsEventEmail(new ReservationCreatedEvent()));
-        $this->assertContains($permissionsRows[1][ColumnNames::RESOURCE_ID], $user->GetAllowedResourceIds());
+        $this->assertContains($permissionsRows[1][ColumnNames::RESOURCE_ID], $user->GetFullAccessResourceIds());
         $this->assertEquals($row[ColumnNames::PHONE_NUMBER], $user->GetAttribute(UserAttribute::Phone));
 
         $row1 = $groupsRows[0];
