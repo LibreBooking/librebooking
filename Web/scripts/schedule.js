@@ -191,6 +191,9 @@ function Schedule(opts, resourceGroups) {
         'td[data-resourceid="' + res.ResourceId + '"][data-min="' + res[endAttribute] + '"]:first'
       );
       let calculatedAdjustment = 0;
+      // true when the exact end cell is missing (e.g. hidden blocked period)
+      // and findClosestEnd() picked the nearest earlier slot instead
+      let isEndApproximate = false;
 
       if (startTd.length === 0) {
         startTd = findClosestStart(table.find('td[data-resourceid="' + res.ResourceId + '"]'), res, startAttribute);
@@ -198,6 +201,7 @@ function Schedule(opts, resourceGroups) {
       if (endTd.length === 0) {
         endTd = findClosestEnd(table.find('td[data-resourceid="' + res.ResourceId + '"]'), res, endAttribute);
         calculatedAdjustment = endTd.outerWidth();
+        isEndApproximate = true;
       }
       if (startTd.length === 0 || endTd.length === 0) {
         // does not fit in this reservation table
@@ -212,6 +216,11 @@ function Schedule(opts, resourceGroups) {
       if (opts.scheduleStyle === ScheduleTall) {
         width = startTd.outerWidth() - cellAdjustment;
         height = endTd.position().top - startTd.position().top;
+        if (isEndApproximate && height > 0) {
+          // findClosestEnd was used: endTd is the last slot STARTING before resEnd,
+          // but height must extend through to the bottom of that slot row
+          height += endTd.outerHeight();
+        }
         top = startTd.position().top;
         left += cellAdjustment;
       }
@@ -666,8 +675,8 @@ function Schedule(opts, resourceGroups) {
                                     style="${style} ${color}"
                                     data-resid="${res.ReferenceNumber}"
                                     data-resourceid="${res.ResourceId}"
-                                    data-start="${startTd.data('min')}"
-                                    data-end="${endTd.data('min')}"
+                                    data-start="${res.StartDate}"
+                                    data-end="${res.EndDate}"
                                     ${draggableAttribute}>${isNew} ${isUpdated} ${res.Label}</div>`);
 
             if (res.IsReservation) {
@@ -702,8 +711,8 @@ function Schedule(opts, resourceGroups) {
 					                                    style="${style}"
 					                                    data-resid="${res.ReferenceNumber}"
 					                                    data-resourceid="${res.ResourceId}"
-					                                    data-start="${startTd.data('min')}"
-					                                    data-end="${endTd.data('min')}">&nbsp;</div>`);
+					                                    data-start="${res.BufferedStartDate}"
+					                                    data-end="${res.BufferedEndDate}">&nbsp;</div>`);
                 t.append(bufferDiv);
               }
             }
