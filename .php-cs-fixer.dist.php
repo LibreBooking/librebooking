@@ -11,7 +11,7 @@ try {
 // https://symfony.com/doc/current/components/finder.html
 $finder = new PhpCsFixer\Finder();
 
-$finder->exclude(['.git', 'tpl_c', 'build', '.phpdoc', 'var', 'tools', 'vendor'])
+$finder->exclude(['.git', '.phpdoc', 'build', 'node_modules', 'tools', 'tpl_c', 'var', 'vendor'])
     ->notPath(['lib/external'])
     ->in(__DIR__);
 
