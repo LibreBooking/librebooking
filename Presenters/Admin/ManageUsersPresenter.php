@@ -325,7 +325,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         );
         $user->ChangeViewPermissions(
             $this->resourcePermissionService->MergeWithPreservedPermissions(
-                existingIds: $user->GetAllowedViewResourceIds(),
+                existingIds: $user->GetViewAccessResourceIds(),
                 managedResourceIds: $managedResourceIds,
                 submittedIds: $permissionsByType['view'],
             )
@@ -374,12 +374,12 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     }
 
     /**
-     * @return int[] all resource ids the user has permission to
+     * @return array{full: int[], view: int[]}
      */
     public function GetUserResourcePermissions()
     {
         $user = $this->userRepository->LoadById($this->page->GetUserId());
-        return ['full' => $user->GetFullAccessResourceIds(), 'view' => $user->GetAllowedViewResourceIds()];
+        return ['full' => $user->GetFullAccessResourceIds(), 'view' => $user->GetViewAccessResourceIds()];
     }
 
     /**
