@@ -107,7 +107,19 @@ jobs:
 
       - name: Check coding-standard (php-cs-fixer)
         if: matrix.php-version == '8.2'
-        run: composer phpcsfixer:lint
+        run: |
+          if ! composer phpcsfixer:lint; then
+            echo ""
+            echo "=========================================="
+            echo "  php-cs-fixer found code style issues."
+            echo "  To fix them locally, run:"
+            echo ""
+            echo "    composer phpcsfixer:fix"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
 
   analyse-php:
     runs-on: ubuntu-latest
