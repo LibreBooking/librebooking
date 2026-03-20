@@ -87,21 +87,22 @@
                             <div class="d-flex align-items-center">
                                 <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}"><span
                                         class="bi bi-printer"></span></a>
-                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;"><i
+                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;" title="{translate key='MakeDefaultSchedule'}"><i
                                         class="bi bi-star-fill"></i></a>
                                 <a href="#" class="schedule-style me-1" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard->value}">
+                                    schedule-display="{ScheduleStyle::Standard->value}" title="{translate key='StandardScheduleDisplay'}">
                                     <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style me-1" id="schedule_tall" schedule-display="{ScheduleStyle::Tall->value}">
+                                <a href="#" class="schedule-style me-1" id="schedule_tall"
+                                    schedule-display="{ScheduleStyle::Tall->value}" title="{translate key='TallScheduleDisplay'}">
                                     <img src="img/table-tall.png" alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style d-none d-md-block me-1" id="schedule_wide"
-                                    schedule-display="{ScheduleStyle::Wide->value}">
+                                    schedule-display="{ScheduleStyle::Wide->value}" title="{translate key='WideScheduleDisplay'}">
                                     <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek->value}">
+                                    schedule-display="{ScheduleStyle::CondensedWeek->value}" title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
                             </div>
