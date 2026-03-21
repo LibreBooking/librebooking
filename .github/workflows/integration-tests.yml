@@ -42,7 +42,7 @@ jobs:
           extensions: mysqli, pdo_mysql
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: Load database schema
         run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-schema.sql

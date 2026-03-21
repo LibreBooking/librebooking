@@ -32,7 +32,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: Create main config.php for unit tests
         run: cp config/config.dist.php config/config.php

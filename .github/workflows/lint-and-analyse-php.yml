@@ -99,7 +99,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -159,7 +159,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           custom-cache-suffix: ${{ matrix.stan-label }}
 
