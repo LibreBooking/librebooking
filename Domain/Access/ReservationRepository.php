@@ -340,7 +340,7 @@ class ReservationRepository implements IReservationRepository
         // get all reservation resources
         $getResourcesCommand = new GetReservationResourcesCommand($series->SeriesId());
         $reader = ServiceLocator::GetDatabase()->Query($getResourcesCommand);
-        $resources = [];
+
         while ($row = $reader->GetRow()) {
             $resource = BookableResource::Create($row);
             if ($row[ColumnNames::RESOURCE_LEVEL_ID] == ResourceLevel::Primary) {
@@ -348,12 +348,6 @@ class ReservationRepository implements IReservationRepository
             } else {
                 $series->WithResource($resource);
             }
-            $resources[] = $resource;
-        }
-        $reader->Free();
-
-        // get all reservation resources attributes
-        foreach ($resources as $resource) {
             $attributeCommand = new GetAttributeValuesCommand(
                 $resource->GetId(),
                 CustomAttributeCategory::RESOURCE
@@ -367,6 +361,7 @@ class ReservationRepository implements IReservationRepository
             }
             $attributeReader->Free();
         }
+        $reader->Free();
     }
 
     private function PopulateParticipants(ExistingReservationSeries $series)
