@@ -351,7 +351,7 @@ class ReservationRepository implements IReservationRepository
             $resources[] = $resource;
         }
         $reader->Free();
-        
+
         // get all reservation resources attributes
         foreach ($resources as $resource) {
             $attributeCommand = new GetAttributeValuesCommand(
