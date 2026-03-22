@@ -407,7 +407,7 @@
 
 <div id="loading-schedule" class="d-none">Loading reservations...</div>
 
-{include file="javascript-includes.tpl" Qtip=true Select2=true Clear=true DatePicker=true}
+{include file="javascript-includes.tpl" Select2=true DatePicker=true}
 
 {block name="scripts-before"}
 
@@ -415,6 +415,7 @@
 
 {vendor_js src="html2canvas/1.4.1/js/html2canvas.min.js"}
 {jsfile src="schedule.js"}
+{jsfile src="reservationPopup.js"}
 {jsfile src="resourcePopup.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 {vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}

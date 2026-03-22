@@ -142,13 +142,8 @@ function ReservationManagement(opts, approval) {
 
     elements.reservationTable.find('tr.editable').each(function () {
       var refNum = $(this).attr('data-refnum');
-      $(this).attachReservationPopup(refNum, options.popupUrl);
-
-      /*$(this).hover(function (e) {
-                $(this).find('td').addClass('highlight');
-            }, function (e) {
-                $(this).find('td').removeClass('highlight');
-            });*/
+      var titleElement = $(this).find('.reservationTitle').get(0);
+      window.attachReservationPopup(titleElement, refNum, options.popupUrl);
     });
 
     elements.statusOptions.change(function (e) {

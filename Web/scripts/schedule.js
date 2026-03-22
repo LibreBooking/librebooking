@@ -100,44 +100,18 @@ function Schedule(opts, resourceGroups) {
         }
       );
 
-      var qTipElement = div;
+      window.attachReservationPopup(div.get(0), resid, options.summaryPopupUrl);
+    }
 
-      qTipElement.qtip({
-        position: {
-          my: 'bottom left',
-          at: 'top left',
-          effect: false,
-          viewport: $(window),
-        },
+    function hideReservationTooltip(div) {
+      var element = div && typeof div.get === 'function' ? div.get(0) : div;
 
-        content: {
-          text: function (event, api) {
-            $.ajax({ url: options.summaryPopupUrl, data: { id: resid } })
-              .done(function (html) {
-                api.set('content.text', html);
-              })
-              .fail(function (xhr, status, error) {
-                api.set('content.text', status + ': ' + error);
-              });
-
-            return 'Loading...';
-          },
-        },
-
-        show: {
-          delay: 700,
-          effect: false,
-        },
-
-        hide: {
-          fixed: true,
-          delay: 500,
-        },
-
-        style: {
-          classes: 'qtip-light qtip-bootstrap',
-        },
-      });
+      if (window.bootstrap && window.bootstrap.Tooltip && element) {
+        var tooltip = window.bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+          tooltip.hide();
+        }
+      }
     }
 
     function findClosestStart(tds, reservation, startAttribute) {
@@ -191,9 +165,6 @@ function Schedule(opts, resourceGroups) {
         'td[data-resourceid="' + res.ResourceId + '"][data-min="' + res[endAttribute] + '"]:first'
       );
       let calculatedAdjustment = 0;
-      // true when the exact end cell is missing (e.g. hidden blocked period)
-      // and findClosestEnd() picked the nearest earlier slot instead
-      let isEndApproximate = false;
 
       if (startTd.length === 0) {
         startTd = findClosestStart(table.find('td[data-resourceid="' + res.ResourceId + '"]'), res, startAttribute);
@@ -201,7 +172,6 @@ function Schedule(opts, resourceGroups) {
       if (endTd.length === 0) {
         endTd = findClosestEnd(table.find('td[data-resourceid="' + res.ResourceId + '"]'), res, endAttribute);
         calculatedAdjustment = endTd.outerWidth();
-        isEndApproximate = true;
       }
       if (startTd.length === 0 || endTd.length === 0) {
         // does not fit in this reservation table
@@ -216,11 +186,6 @@ function Schedule(opts, resourceGroups) {
       if (opts.scheduleStyle === ScheduleTall) {
         width = startTd.outerWidth() - cellAdjustment;
         height = endTd.position().top - startTd.position().top;
-        if (isEndApproximate && height > 0) {
-          // findClosestEnd was used: endTd is the last slot STARTING before resEnd,
-          // but height must extend through to the bottom of that slot row
-          height += endTd.outerHeight();
-        }
         top = startTd.position().top;
         left += cellAdjustment;
       }
@@ -367,7 +332,7 @@ function Schedule(opts, resourceGroups) {
                           'dragstart',
                           { referenceNumber: reservation.ReferenceNumber, resourceId: reservation.ResourceId },
                           function (event) {
-                            div.qtip('hide');
+                            hideReservationTooltip(div);
                             $(event.target).removeClass('clicked');
                             const data = JSON.stringify({
                               referenceNumber: event.data.referenceNumber,
@@ -676,8 +641,8 @@ function Schedule(opts, resourceGroups) {
                                     style="${style} ${color}"
                                     data-resid="${res.ReferenceNumber}"
                                     data-resourceid="${res.ResourceId}"
-                                    data-start="${res.StartDate}"
-                                    data-end="${res.EndDate}"
+                                    data-start="${startTd.data('min')}"
+                                    data-end="${endTd.data('min')}"
                                     ${draggableAttribute}>${isNew} ${isUpdated} ${res.Label}</div>`);
 
             if (res.IsReservation) {
@@ -712,15 +677,15 @@ function Schedule(opts, resourceGroups) {
 					                                    style="${style}"
 					                                    data-resid="${res.ReferenceNumber}"
 					                                    data-resourceid="${res.ResourceId}"
-					                                    data-start="${res.BufferedStartDate}"
-					                                    data-end="${res.BufferedEndDate}">&nbsp;</div>`);
+					                                    data-start="${startTd.data('min')}"
+					                                    data-end="${endTd.data('min')}">&nbsp;</div>`);
                 t.append(bufferDiv);
               }
             }
 
             if (isDraggable) {
               div.on('dragstart', function (event) {
-                div.qtip('hide');
+                hideReservationTooltip(div);
                 $(event.target).removeClass('clicked');
                 const data = JSON.stringify({
                   referenceNumber: res.ReferenceNumber,
@@ -744,8 +709,8 @@ function Schedule(opts, resourceGroups) {
   this.renderEvents = renderEvents;
 
   this.initResources = function () {
-    $('.resourceNameSelector').each(function () {
-      $(this).bindResourceDetails($(this).attr('resourceId'));
+    document.querySelectorAll('.resourceNameSelector').forEach(function (element) {
+      bindResourceDetails(element, element.getAttribute('resourceId'));
     });
   };
 

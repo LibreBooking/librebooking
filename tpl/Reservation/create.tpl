@@ -639,7 +639,7 @@
             return false;
         });
 
-        $('#userName').bindUserDetails();
+        attachUserDetailsPopup(document.getElementById('userName'));
 
         // jsPDF
         {include file="Reservation/pdf.tpl"}
@@ -651,9 +651,7 @@
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();
     });
-</script>
 
-<script>
     function translateTooltips() {
         var resourcesContainer = document.querySelector('#reservation-resources');
         var resources = [].slice.call(resourcesContainer.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -670,8 +668,14 @@
                     var tooltipText = text.replace('%s', resource.getAttribute('data-autorelease'));
                 }
                 resource.setAttribute('data-bs-title', tooltipText);
-                new bootstrap.Tooltip(resource);
             });
+
+            if (window.UiTooltips && typeof window.UiTooltips.initStaticTooltips === 'function') {
+                window.UiTooltips.initStaticTooltips(resources, {
+                    html: false,
+                    trigger: 'hover focus'
+                });
+            }
         }
     </script>
 

@@ -196,9 +196,8 @@
     {/if}
 </div>
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    if (window.UiTooltips && typeof window.UiTooltips.initStaticTooltips === 'function') {
+        window.UiTooltips.initStaticTooltips('[data-bs-toggle="tooltip"]');
+    }
 </script>
 {include file='globalfooter.tpl'}

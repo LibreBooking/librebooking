@@ -16,6 +16,10 @@ function Calendar(opts) {
   };
 
   Calendar.prototype.init = function () {
+    function bindReservationPopup(target, refNum, detailsUrl) {
+      window.attachReservationPopup(target, refNum, detailsUrl);
+    }
+
     function showLoadingIndicator() {
       elements.loadingIndicator.removeClass('d-none');
     }
@@ -49,7 +53,7 @@ function Calendar(opts) {
       ],
       eventRender: function (event, element, view) {
         if (!_.isEmpty(event.id)) {
-          element.attachReservationPopup(event.id);
+          bindReservationPopup(element.get(0), event.id);
           var moment = view.start;
           if (view.type == 'month') {
             moment = view.currentRange.start;
@@ -110,7 +114,7 @@ function Calendar(opts) {
 
     $('.reservation').each(function (index, value) {
       var refNum = $(this).attr('refNum');
-      value.attachReservationPopup(refNum);
+      bindReservationPopup(value, refNum);
     });
 
     $('#calendarFilter').on('change', function () {
