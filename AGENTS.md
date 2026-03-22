@@ -228,6 +228,7 @@ Configuration: `build.xml`
 7. **4-space indentation** for PHP, 2-space for YAML files
 8. **Single quotes** for strings (unless interpolation is needed)
 9. **Short array syntax** - Use `[]` not `array()`
+10. **No magic numbers** - Use named constants, enums, or class constants instead of raw numeric literals. For example, use `CustomAttributeTypes::CHECKBOX` instead of `4`. Code reviews should flag any unexplained numeric literals as magic numbers
 
 ### Design Patterns
 
