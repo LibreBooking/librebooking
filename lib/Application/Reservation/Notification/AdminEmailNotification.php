@@ -66,6 +66,7 @@ abstract class AdminEmailNotification implements IReservationNotification
 
         $adminIds = [];
         /** @var UserDto $admin */
+        $originalLanguage = Resources::GetInstance()->CurrentLanguage;
         foreach ($admins as $admin) {
             $id = $admin->Id();
             if (array_key_exists($id, $adminIds) || $id == $owner->Id()) {
@@ -73,10 +74,14 @@ abstract class AdminEmailNotification implements IReservationNotification
                 continue;
             }
             $adminIds[$id] = true;
-            $originalLanguage = Resources::GetInstance()->CurrentLanguage;
-            $message = $this->GetMessage($admin, $owner, $reservationSeries, $resource);
-            ServiceLocator::GetEmailService()->Send($message);
-            Resources::GetInstance()->SetLanguage($originalLanguage);
+
+            try {
+                $message = $this->GetMessage($admin, $owner, $reservationSeries, $resource);
+                ServiceLocator::GetEmailService()->Send($message);
+            } finally {
+                Resources::GetInstance()->SetLanguage($originalLanguage);
+            }
+
         }
     }
 
