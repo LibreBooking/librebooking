@@ -560,9 +560,18 @@ class ReservationRepositoryTest extends TestBase
         $resourceAttrValue = 'resource-attr-value';
 
         $reservationRow = new ReservationRow(
-            $reservationId, $begin, $end, 'title', 'desc',
-            RepeatType::None, '', $referenceNumber, $seriesId,
-            $ownerId, ReservationStatus::Created, true
+            $reservationId,
+            $begin,
+            $end,
+            'title',
+            'desc',
+            RepeatType::None,
+            '',
+            $referenceNumber,
+            $seriesId,
+            $ownerId,
+            ReservationStatus::Created,
+            true
         );
 
         $reservationInstanceRow = new ReservationInstanceRow($seriesId);
