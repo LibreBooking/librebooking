@@ -48,6 +48,51 @@ class ResourcesTest extends TestBase
         $this->assertEquals($langFile, $this->Resources->LanguageFile);
     }
 
+    public function testLanguageIsLoadedFromUserSessionWhenNoCookie()
+    {
+        $lang = 'de_de';
+        $langFile = 'de_de.php';
+
+        $userSession = new FakeUserSession();
+        $userSession->LanguageCode = $lang;
+        $this->fakeServer->SetUserSession($userSession);
+
+        $this->Resources = Resources::GetInstance();
+
+        $this->assertEquals($lang, $this->Resources->CurrentLanguage);
+        $this->assertEquals($langFile, $this->Resources->LanguageFile);
+    }
+
+    public function testCookieLanguageTakesPriorityOverUserSession()
+    {
+        $cookieLang = 'en_us';
+
+        $langCookie = new Cookie(CookieKeys::LANGUAGE, $cookieLang, time(), '/');
+        $this->fakeServer->SetCookie($langCookie);
+
+        $userSession = new FakeUserSession();
+        $userSession->LanguageCode = 'de_de';
+        $this->fakeServer->SetUserSession($userSession);
+
+        $this->Resources = Resources::GetInstance();
+
+        $this->assertEquals($cookieLang, $this->Resources->CurrentLanguage);
+    }
+
+    public function testUnsupportedSessionLanguageFallsBackToConfigDefault()
+    {
+        $defaultLang = 'en_us';
+        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_LANGUAGE, $defaultLang);
+
+        $userSession = new FakeUserSession();
+        $userSession->LanguageCode = 'xx_invalid';
+        $this->fakeServer->SetUserSession($userSession);
+
+        $this->Resources = Resources::GetInstance();
+
+        $this->assertEquals($defaultLang, $this->Resources->CurrentLanguage);
+    }
+
     public function testLanguageIsLoadedCorrectlyWhenSet()
     {
         $langFile = 'en_us.php';

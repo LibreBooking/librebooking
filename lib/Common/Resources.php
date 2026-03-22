@@ -257,9 +257,14 @@ class Resources implements IResourceLocalization
         $cookie = ServiceLocator::GetServer()->GetCookie(CookieKeys::LANGUAGE);
         if ($cookie != null) {
             return $cookie;
-        } else {
-            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
         }
+
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if ($this->IsLanguageSupported($userSession->LanguageCode)) {
+            return $userSession->LanguageCode;
+        }
+
+        return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
     }
 
     private function LoadAvailableLanguages()
