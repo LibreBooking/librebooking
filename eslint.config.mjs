@@ -100,6 +100,11 @@ export default [
         translateTooltips: 'readonly',
         reportId: 'readonly',
 
+        // Popup helpers (resourcePopup.js, userPopup.js, reservationPopup.js)
+        bindResourceDetails: 'readonly',
+        attachUserDetailsPopup: 'readonly',
+        attachReservationPopup: 'readonly',
+
         // Menu state variables (menubar.js)
         timeout: 'writable',
         closetimer: 'writable',
