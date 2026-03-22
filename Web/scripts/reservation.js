@@ -779,8 +779,8 @@ function Reservation(opts) {
     $('#primaryResourceContainer, #additionalResources')
       .find('.resourceDetails')
       .each(function () {
-        var resourceId = $(this).attr('data-resourceId');
-        $(this).bindResourceDetails(resourceId);
+        var resourceId = this.getAttribute('data-resourceId');
+        bindResourceDetails(this, resourceId);
       });
   }
 
@@ -1310,7 +1310,7 @@ function Reservation(opts) {
       '</div>';
 
     elements.inviteeList.append(item);
-    $('.bindableUser').bindUserDetails();
+    attachUserDetailsPopup(document.querySelectorAll('.bindableUser'));
     participation.addedUsers.push(userId);
     updateInviteeCount();
   };
@@ -1354,7 +1354,7 @@ function Reservation(opts) {
       '</div>';
 
     elements.participantList.append(item);
-    $('.bindableUser').bindUserDetails();
+    attachUserDetailsPopup(document.querySelectorAll('.bindableUser'));
     participation.addedUsers.push(userId);
     updateParticipantCount();
   };

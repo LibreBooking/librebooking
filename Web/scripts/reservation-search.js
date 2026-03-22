@@ -64,7 +64,11 @@ function ReservationSearch(options) {
 
     elements.reservationResults.find('tr.editable').each(function () {
       var refNum = $(this).attr('data-refnum');
-      $(this).attachReservationPopup(refNum, options.popupUrl);
+
+      var titleElement = $(this).find('.reservationTitle').get(0);
+      if (titleElement) {
+        window.attachReservationPopup(titleElement, refNum, options.popupUrl);
+      }
     });
   };
 
