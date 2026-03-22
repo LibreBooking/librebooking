@@ -99,8 +99,8 @@ interface IReservationPopupPage
     public function BindViewableResourceReservations($resourceIds);
 
     /**
-    * @param $amIParticipating
-    */
+     * @param $amIParticipating
+     */
     public function SetCurrentUserParticipating($amIParticipating);
 
     /**
@@ -192,7 +192,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
             ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
             new BooleanConverter()
         ) ||
-                parent::IsAuthenticated();
+            parent::IsAuthenticated();
     }
 
     public function PageLoad()
@@ -209,7 +209,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
         $this->Set('ReservationId', $this->GetReservationId());
 
-        $this->Display('Ajax/respopup.tpl');
+        $this->Display('Ajax/reservation_popup.tpl');
     }
 
     /**
@@ -310,7 +310,6 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
     {
         $this->Set('IAmInvited', $amIInvited);
     }
-
 }
 
 
