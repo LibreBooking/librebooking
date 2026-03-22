@@ -1,9 +1,15 @@
 <div class="form-group {if isset($class)}{$class}{/if}">
-	<label
-		class="customAttribute {if isset($readonly) && $readonly}readonly{elseif isset($searchmode) && $searchmode}search{else}standard{/if} fw-bold"
-		for="{$attributeId}">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
-			<i class="bi bi-asterisk text-danger align-top text-small"></i>
-		{/if}</label>
+	{if isset($readonly) && $readonly && isset($tooltip) && $tooltip}
+		<span class="customAttribute readonly fw-bold">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+				<i class="bi bi-asterisk text-danger align-top text-small"></i>
+			{/if}</span>
+	{else}
+		<label
+			class="customAttribute {if isset($readonly) && $readonly}readonly{elseif isset($searchmode) && $searchmode}search{else}standard{/if} fw-bold"
+			for="{$attributeId}">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+				<i class="bi bi-asterisk text-danger align-top text-small"></i>
+			{/if}</label>
+	{/if}
 	{if isset($readonly) && $readonly}
 		<span class="attributeValue {$class}">{$attribute->Value()}</span>
 	{else}

@@ -4,9 +4,9 @@
     {foreach from=$resources item=checkResourcePermission}
         {if in_array($checkResourcePermission->Id(), $CanViewResourceReservations)}
             {assign var=isResourcePermitted value=true}
-            {break};
+            {break}
         {/if}
-    {{/foreach}}
+    {/foreach}
     {*HOWEVER THE USER CAN SEE THE RESERVATION IF HE IS A OWNER, PARTICIPANT OR INVITEE*}
     {if $isResourcePermitted == false}
         {if $UserId == $OwnerId || $IAmParticipating || $IAmInvited}
@@ -107,7 +107,8 @@
         {capture "description"}
             {if !$hideDetails && $isResourcePermitted}
                 <div class="summary">
-                    {if $summary neq ''}{$summary|truncate:300:"..."|escape:'html'|nl2br}{else}{translate key=NoDescriptionLabel}{/if}</div>
+                    {if $summary neq ''}{$summary|truncate:300:"..."|escape:'html'|nl2br}{else}{translate key=NoDescriptionLabel}{/if}
+                </div>
             {/if}
         {/capture}
         {$formatter->Add('description', $smarty.capture.description)}
@@ -119,7 +120,7 @@
                     {foreach from=$attributes item=attribute}
                         {assign var=attr value="att`$attribute->Id()`"}
                         {capture name="attr"}
-                            <div>{control type="AttributeControl" attribute=$attribute readonly=true}</div>
+                            <div>{control type="AttributeControl" attribute=$attribute readonly=true tooltip=true}</div>
                         {/capture}
                         {$smarty.capture.attr}
                         {$formatter->Add($attr, $smarty.capture.attr)}

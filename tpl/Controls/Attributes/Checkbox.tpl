@@ -1,6 +1,6 @@
 <div class="form-group {$class}">
     {if $readonly}
-        <label class="customAttribute readonly" for="{$attributeId}">{$attribute->Label()}</label>
+        <span class="customAttribute readonly">{$attribute->Label()}</span>
         <span
             class="attributeValue {$class}">{if $attribute->Value() == "1"}{translate key='True'}{else}{translate key='False'}{/if}</span>
     {elseif $searchmode}
