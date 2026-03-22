@@ -73,9 +73,10 @@ abstract class AdminEmailNotification implements IReservationNotification
                 continue;
             }
             $adminIds[$id] = true;
-
+            $originalLanguage = Resources::GetInstance()->CurrentLanguage;
             $message = $this->GetMessage($admin, $owner, $reservationSeries, $resource);
             ServiceLocator::GetEmailService()->Send($message);
+            Resources::GetInstance()->SetLanguage($originalLanguage);
         }
     }
 

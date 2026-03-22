@@ -21,12 +21,13 @@ abstract class EmailMessage implements IEmailMessage
     {
         $this->enforceCustomTemplate = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENFORCE_CUSTOM_TEMPLATE, new BooleanConverter());
         $resources = Resources::GetInstance();
-        $this->email = new SmartyPage($resources);
         if (!empty($languageCode)) {
-            $resources->SetLanguage($languageCode);
-            $this->Set('CurrentLanguage', $languageCode);
+            $resources->SetLanguage($languageCode); // switch BEFORE SmartyPage is created
         }
-
+        $this->email = new SmartyPage($resources); // now picks up correct language directory
+        if (!empty($languageCode)) {
+            $this->Set('CurrentLanguage', $languageCode); // Set() only called AFTER $this->email exists
+        }
         $this->Set('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->Set('Charset', $resources->Charset);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
