@@ -67,14 +67,14 @@
                 {if $Attributes|default:array()|count > 0}
                     {foreach from=$Attributes item=attribute}
                         <div>
-                            {control type="AttributeControl" attribute=$attribute readonly=true}
+                            {control type="AttributeControl" attribute=$attribute readonly=true tooltip=true}
                         </div>
                     {/foreach}
                 {/if}
                 {if $ResourceTypeAttributes && $ResourceTypeAttributes|default:array()|count > 0}
                     {foreach from=$ResourceTypeAttributes item=attribute}
                         <div>
-                            {control type="AttributeControl" attribute=$attribute readonly=true}
+                            {control type="AttributeControl" attribute=$attribute readonly=true tooltip=true}
                         </div>
                     {/foreach}
                 {/if}
@@ -154,19 +154,19 @@
             <div class="description {$class}">
                 <span class="fw-bold mt-2">{translate key=Description}</span>
                 <div class="descriptionContent px-2">
-                {if $description neq ''}
-                    {$description|html_entity_decode|url2link|nl2br}
-                {else}
-                    {translate key=NoDescriptionLabel}
-                {/if}
+                    {if $description neq ''}
+                        {$description|html_entity_decode|url2link|nl2br}
+                    {else}
+                        {translate key=NoDescriptionLabel}
+                    {/if}
                 </div>
-                <span class="fw-bold mt-2">{translate key=Notes}</span>                
+                <span class="fw-bold mt-2">{translate key=Notes}</span>
                 <div class="noteContent px-2">
-                {if $notes neq ''}
-                    {$notes|html_entity_decode|url2link|nl2br}
-                {else}
-                    {translate key=NoNotesLabel}
-                {/if}
+                    {if $notes neq ''}
+                        {$notes|html_entity_decode|url2link|nl2br}
+                    {else}
+                        {translate key=NoNotesLabel}
+                    {/if}
                 </div>
             </div>
         </div>
