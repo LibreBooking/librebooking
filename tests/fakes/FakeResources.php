@@ -51,6 +51,9 @@ class FakeResources extends Resources
 
     public function SetLanguage($languageCode)
     {
+        if (!empty($languageCode)) {
+            $this->CurrentLanguage = strtolower($languageCode);
+        }
         return $this->_SetCurrentLanguageResult;
     }
 }
