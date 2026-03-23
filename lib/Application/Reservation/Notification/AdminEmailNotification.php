@@ -66,7 +66,7 @@ abstract class AdminEmailNotification implements IReservationNotification
 
         $adminIds = [];
         $resources = Resources::GetInstance();
-        $originalLanguage = Resources::GetInstance()->CurrentLanguage;
+        $originalLanguage = $resources->CurrentLanguage;
         /** @var UserDto $admin */
         foreach ($admins as $admin) {
             $id = $admin->Id();

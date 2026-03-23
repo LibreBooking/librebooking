@@ -26,7 +26,7 @@ abstract class EmailMessage implements IEmailMessage
         }
         $this->email = new SmartyPage($resources); // now picks up correct language directory
         if (!empty($languageCode)) {
-            $this->Set('CurrentLanguage', $languageCode); // Set() only called AFTER $this->email exists
+            $this->Set('CurrentLanguage', $resources->CurrentLanguage);
         }
         $this->Set('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->Set('Charset', $resources->Charset);
