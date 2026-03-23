@@ -46,6 +46,7 @@ abstract class Page implements IPage
         $this->smarty->assign('Timezone', $userSession->Timezone);
         $this->smarty->assign('Charset', $resources->Charset);
         $this->smarty->assign('CurrentLanguage', $resources->CurrentLanguage);
+        $this->smarty->assign('AvailableLanguages', $resources->AvailableLanguages);
         $this->smarty->assign('HtmlLang', $resources->HtmlLang);
         $this->smarty->assign('HtmlTextDirection', $resources->TextDirection);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
@@ -59,6 +60,7 @@ abstract class Page implements IPage
         $this->smarty->assign('CalendarJSFile', $resources->CalendarLanguageFile);
 
         $this->smarty->assign('LoggedIn', $userSession->IsLoggedIn());
+        $this->smarty->assign('CSRFToken', $userSession->CSRFToken);
         $this->smarty->assign('Version', Configuration::VERSION);
         $this->smarty->assign('DisplayVersion', $this->GetDisplayVersion());
         $this->smarty->assign('Path', $this->path);

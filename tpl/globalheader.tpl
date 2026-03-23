@@ -386,6 +386,25 @@
                                 </ul>
                             </li>
                         {/if}
+                        {if isset($LoggedIn) && $LoggedIn && count($AvailableLanguages) > 1}
+                            <li class="nav-item dropdown" id="navLanguageDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown" aria-label="{translate key=ChangeLanguage}" title="{translate key=ChangeLanguage}">
+                                    <span class="visually-hidden">{translate key=ChangeLanguage}</span>
+                                    <i class="bi bi-globe-americas" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" id="languageDropdownMenu" style="max-height: 70vh; overflow-y: auto; min-width: 14rem;">
+                                    {foreach from=$AvailableLanguages item=lang}
+                                        <li>
+                                            <a class="dropdown-item {if $CurrentLanguage == $lang->GetLanguageCode()}active{/if}"
+                                                href="#" data-lang-code="{$lang->GetLanguageCode()}">
+                                                {$lang->GetDisplayName()}
+                                            </a>
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            </li>
+                        {/if}
                         <li class="nav-item dropdown" id="navHelpDropdown">
                             <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown">{translate key="Help"}</a>

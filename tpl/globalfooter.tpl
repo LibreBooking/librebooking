@@ -10,6 +10,26 @@
 
 	<script type="text/javascript">
 		init();
+
+		{if isset($LoggedIn) && $LoggedIn && count($AvailableLanguages) > 1}
+			$('#languageDropdownMenu').on('click', 'a[data-lang-code]', function(e) {
+				e.preventDefault();
+				var langCode = $(this).data('lang-code');
+				var csrfToken = '{$CSRFToken|escape:'javascript'}';
+				$.post('{$Path|escape:'javascript'}ajax/change_language.php', {
+					'{FormKeys::LANGUAGE}': langCode,
+					'{FormKeys::CSRF_TOKEN}': csrfToken
+				}, 'json').done(function(data) {
+					if (data && data.success) {
+						window.location.reload();
+					} else {
+						console.error('Language change failed', data);
+					}
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					console.error('Language change request failed', textStatus, errorThrown);
+				});
+			});
+		{/if}
 	</script>
 
 	{if !empty($GoogleAnalyticsTrackingId)}

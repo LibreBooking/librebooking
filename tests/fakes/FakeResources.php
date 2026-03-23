@@ -56,4 +56,9 @@ class FakeResources extends Resources
         }
         return $this->_SetCurrentLanguageResult;
     }
+
+    public function IsLanguageSupported($languageCode)
+    {
+        return !empty($languageCode) && array_key_exists($languageCode, $this->AvailableLanguages);
+    }
 }

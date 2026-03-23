@@ -194,6 +194,40 @@ Frontend Advanced Settings
 
      'name.format' => '{first} {last}',
 
+Language Selector
+~~~~~~~~~~~~~~~~~
+
+When logged in, users see a globe icon in the navigation bar that lets them
+switch the UI language. The dropdown lists all languages defined in
+``lang/AvailableLanguages.php``.
+
+**Limiting available languages**
+  To offer only a subset of languages (for example, only Spanish and English),
+  edit ``lang/AvailableLanguages.php`` and comment out the languages you do not
+  need:
+
+  .. code-block:: php
+
+     return [
+         // 'de_de' => new AvailableLanguage('de_de', 'de_de.php', 'Deutsch'),
+         'en_us' => new AvailableLanguage('en_us', 'en_us.php', 'English US'),
+         'es' => new AvailableLanguage('es', 'es.php', 'Español'),
+         // 'fr_fr' => new AvailableLanguage('fr_fr', 'fr_fr.php', 'Français'),
+         // ...
+     ];
+
+.. important::
+
+   The ``default.language`` value in ``config/config.php`` must be one of the
+   languages listed in ``lang/AvailableLanguages.php``. If you comment out a
+   language from that file, make sure it is not set as the default language in
+   your configuration. Otherwise translated strings are likely to display as
+   ``?``.
+
+**Hiding the language selector entirely**
+  If only one language remains in the list, the language selector is
+  automatically hidden from the navigation bar.
+
 Page Control
 ~~~~~~~~~~~~
 
