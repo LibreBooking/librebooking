@@ -44,6 +44,7 @@ class PreflightRunner
         'curl',
         'fileinfo',
         'json',
+        'ldap',
         'mbstring',
         'mysqli',
         'openssl',
@@ -55,7 +56,6 @@ class PreflightRunner
 
     private const OPTIONAL_EXTENSIONS = [
         'gd' => 'image upload and processing',
-        'ldap' => 'LDAP authentication',
         'bcmath' => 'Active Directory authentication (password expiry)',
     ];
 

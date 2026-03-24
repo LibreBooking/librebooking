@@ -31,7 +31,8 @@
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0",
         "vlucas/phpdotenv": "^5.6",
-        "pear/net_ldap2": "^2.3"
+        "pear/net_ldap2": "^2.3",
+        "ext-ldap": "*"
     },
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
