@@ -39,6 +39,7 @@ uses authentik as the IdP with the URL ``authentik.io``.
            'authentication' => [
                'oauth2.login.enabled' => true,
                'oauth2.name' => 'authentik',
+               'oauth2.strip.trailing.slash' => false,
                'oauth2.url.authorize' => 'https://authentik.io/application/o/authorize/',
                'oauth2.url.token' => 'https://authentik.io/application/o/token/',
                'oauth2.url.userinfo' => 'https://authentik.io/application/o/userinfo/',
@@ -48,6 +49,20 @@ uses authentik as the IdP with the URL ``authentik.io``.
            ],
        ],
    ];
+
+Trailing Slash Handling
+^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, LibreBooking strips the trailing slash from the configured
+``oauth2.url.authorize`` URL. Some identity providers require the trailing slash
+to be preserved. To keep the trailing slash as configured, set:
+
+.. code-block:: php
+
+   'oauth2.strip.trailing.slash' => false,
+
+This setting only affects the authorize URL. The token and userinfo URLs are not
+modified.
 
 To hide the internal LibreBooking login prompt, also set:
 
