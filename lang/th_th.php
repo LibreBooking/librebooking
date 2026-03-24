@@ -15,7 +15,7 @@ class th_th extends en_gb
      */
     protected function _LoadDates()
     {
-        $dates = [];
+        $dates = parent::_LoadDates();
 
         /**
             * Additional code to support the Thai and Buddhist calendar year
@@ -67,7 +67,7 @@ class th_th extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'ชื่อ';
         $strings['LastName'] = 'นามสกุล';
@@ -885,7 +885,7 @@ class th_th extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -911,7 +911,7 @@ class th_th extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

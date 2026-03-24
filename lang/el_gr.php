@@ -15,7 +15,7 @@ class el_gr extends en_gb
      */
     protected function _LoadDates()
     {
-        $dates = [];
+        $dates = parent::_LoadDates();
 
         $dates['general_date'] = 'd/m/Y';
         $dates['general_datetime'] = 'd/m/Y g:i:s A';
@@ -48,7 +48,7 @@ class el_gr extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Όνομα';
         $strings['LastName'] = 'Επώνυμο';
@@ -1061,7 +1061,7 @@ class el_gr extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -1087,7 +1087,7 @@ class el_gr extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

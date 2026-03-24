@@ -19,7 +19,7 @@ class ru_ru extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Имя';
         $strings['LastName'] = 'Фамилия';
@@ -853,7 +853,7 @@ class ru_ru extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
         DAY NAMES
@@ -879,7 +879,7 @@ class ru_ru extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
         MONTH NAMES

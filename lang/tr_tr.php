@@ -14,7 +14,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'İsim';
         $strings['LastName'] = 'Soyisim';
@@ -825,7 +825,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -851,7 +851,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

@@ -14,7 +14,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Eesnimi';
         $strings['LastName'] = 'Perekonnanimi';
@@ -806,7 +806,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -832,7 +832,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES
