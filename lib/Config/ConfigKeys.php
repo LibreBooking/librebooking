@@ -86,6 +86,14 @@ class ConfigKeys
         'description' => 'Default language for the application'
     ];
 
+    public const ENABLED_LANGUAGES = [
+        'key' => 'enabled.languages',
+        'type' => 'string',
+        'default' => '',
+        'label' => 'Enabled Languages',
+        'description' => 'Comma-separated list of language codes to show in the language selector (e.g. "en_us,fr_fr,de_de"). Languages appear in the order listed. If empty, all supported languages are shown. Language codes must match those defined in lang/AvailableLanguages.php. If the value of default.language is not included in this list, the application will fall back to en_us and log an error.'
+    ];
+
     // Frontend
 
     # previously INSTALLATION_PASSWORD

@@ -130,6 +130,8 @@ class Resources implements IResourceLocalization
      */
     public function IsLanguageSupported($languageCode)
     {
+        $languageCode = strtolower(trim($languageCode ?? ''));
+
         return !empty($languageCode) &&
             (array_key_exists($languageCode, $this->AvailableLanguages) &&
                 file_exists($this->LanguageDirectory . $this->AvailableLanguages[$languageCode]->LanguageFile));
@@ -255,7 +257,7 @@ class Resources implements IResourceLocalization
     private function GetLanguageCode()
     {
         $cookie = ServiceLocator::GetServer()->GetCookie(CookieKeys::LANGUAGE);
-        if ($cookie != null) {
+        if ($cookie != null && $this->IsLanguageSupported($cookie)) {
             return $cookie;
         }
 
@@ -264,12 +266,66 @@ class Resources implements IResourceLocalization
             return $userSession->LanguageCode;
         }
 
-        return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
+        $configDefault = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
+        if ($this->IsLanguageSupported($configDefault)) {
+            return $configDefault;
+        }
+
+        // Fall back to hardcoded default (currently 'en_us')
+        return ConfigKeys::DEFAULT_LANGUAGE['default'];
     }
 
     private function LoadAvailableLanguages()
     {
-        $this->AvailableLanguages = AvailableLanguages::GetAvailableLanguages();
+        $allLanguages = AvailableLanguages::GetAvailableLanguages();
+        $enabledConfig = Configuration::Instance()->GetKey(ConfigKeys::ENABLED_LANGUAGES);
+
+        // If no enabled.languages configured, all supported languages are available
+        if (empty($enabledConfig)) {
+            $this->AvailableLanguages = $allLanguages;
+            return;
+        }
+
+        // Filter to only the languages specified in the config
+        $enabledCodes = array_map('trim', explode(',', $enabledConfig));
+        $filtered = [];
+
+        foreach ($enabledCodes as $code) {
+            $code = strtolower($code);
+            if ($code === '') {
+                continue;
+            }
+            if (array_key_exists($code, $allLanguages)) {
+                $filtered[$code] = $allLanguages[$code];
+            } else {
+                Log::Error('Unknown language code in enabled.languages config: %s', $code);
+            }
+        }
+
+        // If every code was invalid, fall back to all languages to avoid breaking the app
+        if (empty($filtered)) {
+            Log::Error('All language codes in enabled.languages are invalid, falling back to all languages');
+            $this->AvailableLanguages = $allLanguages;
+            return;
+        }
+
+        // Ensure default.language is in the enabled set. If not, force the
+        // hardcoded default (currently 'en_us') so the misconfiguration is
+        // visible to the admin — the app appearing in English is an obvious
+        // signal that something is wrong.
+        $defaultLanguage = strtolower(trim(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE)));
+        if (!array_key_exists($defaultLanguage, $filtered)) {
+            $defaultFallback = ConfigKeys::DEFAULT_LANGUAGE['default'];
+            Log::Error(
+                'default.language "%s" is not in enabled.languages list, falling back to "%s"',
+                $defaultLanguage,
+                $defaultFallback
+            );
+            $filtered[$defaultFallback] = $allLanguages[$defaultFallback];
+        }
+
+        // Use the order specified in the config so admins control display order
+        $this->AvailableLanguages = $filtered;
     }
 
     private function LoadOverrides()

@@ -47,6 +47,15 @@ return [
         # Options: Find your language in the lang directory
         'default.language' => 'en_us',
 
+        # Restrict which languages appear in the language selector.
+        # Comma-separated list of language codes (e.g. 'en_us,fr_fr,de_de').
+        # Languages appear in the selector in the order listed.
+        # Leave empty to show all supported languages.
+        # Language codes must match those defined in lang/AvailableLanguages.php.
+        # If the value of `default.language` is not included in this list, the
+        # application will fall back to 'en_us' and log an error.
+        'enabled.languages' => '',
+
 
         ##########################
         # Frontend

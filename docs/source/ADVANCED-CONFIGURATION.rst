@@ -202,27 +202,24 @@ switch the UI language. The dropdown lists all languages defined in
 ``lang/AvailableLanguages.php``.
 
 **Limiting available languages**
-  To offer only a subset of languages (for example, only Spanish and English),
-  edit ``lang/AvailableLanguages.php`` and comment out the languages you do not
-  need:
+  Use the ``enabled.languages`` setting in ``config/config.php`` to restrict
+  which languages appear in the selector. Provide a comma-separated list of
+  language codes. Languages appear in the selector in the order listed:
 
   .. code-block:: php
 
-     return [
-         // 'de_de' => new AvailableLanguage('de_de', 'de_de.php', 'Deutsch'),
-         'en_us' => new AvailableLanguage('en_us', 'en_us.php', 'English US'),
-         'es' => new AvailableLanguage('es', 'es.php', 'Español'),
-         // 'fr_fr' => new AvailableLanguage('fr_fr', 'fr_fr.php', 'Français'),
-         // ...
-     ];
+     # Show only English, Spanish, and French
+     'enabled.languages' => 'en_us,es,fr_fr',
+
+  Leave the value empty (the default) to show all supported languages.
+  Language codes must match those defined in ``lang/AvailableLanguages.php``.
+  Any unrecognized codes will be logged as errors and ignored.
 
 .. important::
 
-   The ``default.language`` value in ``config/config.php`` must be one of the
-   languages listed in ``lang/AvailableLanguages.php``. If you comment out a
-   language from that file, make sure it is not set as the default language in
-   your configuration. Otherwise translated strings are likely to display as
-   ``?``.
+   The ``default.language`` value in ``config/config.php`` must be included in
+   the ``enabled.languages`` list. If it is not, the application will fall back
+   to ``en_us`` and log an error.
 
 **Hiding the language selector entirely**
   If only one language remains in the list, the language selector is

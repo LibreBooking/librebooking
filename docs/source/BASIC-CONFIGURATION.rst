@@ -103,6 +103,22 @@ Time and Language
 
      'default.language' => 'en_us',
 
+**enabled.languages**
+  Comma-separated list of language codes to show in the language selector.
+  Languages appear in the order listed. Leave empty to show all supported
+  languages. Language codes must match those defined in
+  ``lang/AvailableLanguages.php``. If the value of ``default.language``
+  is not included in this list, the application will fall back to ``en_us`` and
+  log an error.
+
+  .. code-block:: php
+
+     # Show only English, French, and German
+     'enabled.languages' => 'en_us,fr_fr,de_de',
+
+     # Show all supported languages (default)
+     'enabled.languages' => '',
+
 Database Configuration
 ----------------------
 
