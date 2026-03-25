@@ -17,10 +17,17 @@ interface IConfigurationSettings
      *
      * @param array $currentSettings
      * @param array $newSettings
-     * @param bool $keepMissingKeys  If true, retains keys that exist only in current config.
+     * @param bool $keepMissingKeys   If true, retains keys that exist only in current config.
+     * @param bool $preserveExisting  If true, keeps existing values in $currentSettings for keys that are also present in $newSettings,
+     *                                adding only new keys from $newSettings without overwriting user-defined values.
      * @return array
      */
-    public function BuildConfig($currentSettings, $newSettings, $keepMissingKeys = false);
+    public function BuildConfig(
+        array $currentSettings,
+        array $newSettings,
+        bool $keepMissingKeys = false,
+        bool $preserveExisting = false
+    );
 
     /**
      * Writes the given configuration array to a PHP config file.
@@ -149,7 +156,12 @@ class Configurator implements IConfigurationSettings
     {
         $currentSettings = $this->GetSettings($configPhp);
         $newSettings = $this->GetSettings($distPhp);
-        $settings = $this->BuildConfig($currentSettings, $newSettings, true);
+        $settings = $this->BuildConfig(
+            currentSettings: $currentSettings,
+            newSettings: $newSettings,
+            keepMissingKeys: true,
+            preserveExisting: true
+        );
         return [Configuration::SETTINGS => $settings];
     }
 
@@ -195,33 +207,60 @@ class Configurator implements IConfigurationSettings
      * @param array $currentSettings Existing settings from config file.
      * @param array $newSettings New settings from form submission.
      * @param bool $keepMissingKeys Whether to preserve keys missing in new settings.
+     * @param bool $preserveExisting If true, keeps existing values without overwriting.
      * @return array Final merged config with preserved order and special handling.
      */
-    public function BuildConfig($currentSettings, $newSettings, $keepMissingKeys = false)
-    {
-        return $this->MergeArrays($currentSettings, $newSettings, $keepMissingKeys);
+    public function BuildConfig(
+        array $currentSettings,
+        array $newSettings,
+        bool $keepMissingKeys = false,
+        bool $preserveExisting = false
+    ) {
+        return $this->MergeArrays(
+            current: $currentSettings,
+            newSettings: $newSettings,
+            keepMissing: $keepMissingKeys,
+            keyPrefix: '',
+            preserveExisting: $preserveExisting
+        );
     }
 
     /**
      * Recursively merges two arrays, preserving order and applying special logic.
      */
-    private function MergeArrays($current, $new, $keepMissing = false, $keyPrefix = '')
-    {
+    private function MergeArrays(
+        array $current,
+        array $newSettings,
+        bool $keepMissing = false,
+        string $keyPrefix = '',
+        bool $preserveExisting = false
+    ) {
         $result = [];
 
         // Process all current keys first to preserve order
         foreach ($current as $key => $currentValue) {
             $fullKey = $keyPrefix ? "$keyPrefix.$key" : $key;
 
-            if (array_key_exists($key, $new)) {
-                $newValue = $new[$key];
+            if (array_key_exists($key, $newSettings)) {
+                $newValue = $newSettings[$key];
 
                 if (is_array($currentValue) && is_array($newValue)) {
                     // Recursively merge nested arrays
-                    $result[$key] = $this->MergeArrays($currentValue, $newValue, true, $fullKey);
+                    $result[$key] = $this->MergeArrays(
+                        current: $currentValue,
+                        newSettings: $newValue,
+                        keepMissing: true,
+                        keyPrefix: $fullKey,
+                        preserveExisting: $preserveExisting
+                    );
                 } else {
                     // Decide whether to use current or new value
-                    $result[$key] = $this->MergeValue($fullKey, $currentValue, $newValue);
+                    $result[$key] = $this->MergeValue(
+                        key: $fullKey,
+                        currentValue: $currentValue,
+                        newValue: $newValue,
+                        preserveExisting: $preserveExisting
+                    );
                 }
             } elseif ($keepMissing) {
                 // Keep existing keys that aren't in new settings
@@ -230,7 +269,7 @@ class Configurator implements IConfigurationSettings
         }
 
         // Add any completely new keys at the end
-        foreach ($new as $key => $newValue) {
+        foreach ($newSettings as $key => $newValue) {
             if (!array_key_exists($key, $current)) {
                 $result[$key] = $newValue;
             }
@@ -242,8 +281,11 @@ class Configurator implements IConfigurationSettings
     /**
      * Chooses between current and new value based on environment variables and private field rules.
      */
-    private function MergeValue($key, $currentValue, $newValue)
+    private function MergeValue(string $key, $currentValue, $newValue, bool $preserveExisting = false)
     {
+        if ($preserveExisting) {
+            return $currentValue;
+        }
         $meta = $this->GetKeyMetadata($key);
 
         if (!$meta) {
@@ -337,7 +379,7 @@ class Configurator implements IConfigurationSettings
         $currentSettings = $this->GetSettings($configPhp);
         $newSettings = $this->GetSettings($distPhp);
 
-        if ($this->AreKeysTheSame($currentSettings, $newSettings)) {
+        if ($this->AreKeysTheSame(currentSettings: $currentSettings, newSettings: $newSettings)) {
             Log::Debug('Config file is already up to date. Skipping config merge.');
             return false;
         }
@@ -349,15 +391,22 @@ class Configurator implements IConfigurationSettings
     /**
      * Recursively compares config keys between two arrays.
      *
-     * @param array $current The current config.
-     * @param array $new The new (template) config.
+     * @param array $currentSettings The current config.
+     * @param array $newSettings The new (template) config.
      * @return bool True if structure is identical.
      */
-    private function AreKeysTheSame($current, $new)
+    private function AreKeysTheSame($currentSettings, $newSettings)
     {
-        foreach ($new as $key => $val) {
-            if (!array_key_exists($key, $current) || (is_array($new[$key]) && is_array($current[$key]) && !$this->AreKeysTheSame($current[$key], $new[$key]))) {
+        foreach ($newSettings as $key => $val) {
+            if (!array_key_exists($key, $currentSettings)) {
                 Log::Debug('Could not find key in config file: %s', $key);
+                return false;
+            }
+
+            if (is_array($newSettings[$key]) && is_array($currentSettings[$key])
+                && !$this->AreKeysTheSame(currentSettings: $currentSettings[$key], newSettings: $newSettings[$key])
+            ) {
+                Log::Debug('Nested keys differ in config file at: %s', $key);
                 return false;
             }
         }
