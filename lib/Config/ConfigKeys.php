@@ -747,7 +747,7 @@ class ConfigKeys
             'current' => 'Current'
         ],
         'label' => 'Start Time Constraint',
-        'description' => 'Restrict start times. Options: future, none, current',
+        'description' => 'Restrict start times. Options: future, none, current. In the standard reservation create/update flow, application admins are always exempt. Group admins are exempt only when they administer the reservation user. Resource and schedule admins are exempt only when they administer all resources in the reservation.',
         'section' => 'reservation'
     ];
     public const RESERVATION_UPDATES_REQUIRE_APPROVAL = [

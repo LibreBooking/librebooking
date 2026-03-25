@@ -434,6 +434,10 @@ Reservation Behavior
 
 **reservation.start.time.constraint**
   Restrictions on when reservations can be made: 'none', 'current', 'future'.
+  Note: In the standard reservation create/update flow, application admins are
+  always exempt from this constraint. Group admins are exempt when they
+  administer the reservation owner (user), while resource and schedule admins
+  are exempt only when they administer all resources in the reservation.
 
 **reservation.updates.require.approval**
   Require approval when editing existing approved reservations.

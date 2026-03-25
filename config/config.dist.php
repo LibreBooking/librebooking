@@ -325,6 +325,10 @@ return [
             'allow.wait.list' => false,
 
             # Restrict start times (e.g., 'future', 'none', 'current')
+            # Note: In the standard reservation create/update flow, exemptions from this constraint apply only in specific cases:
+            #   - Application admins are always exempt.
+            #   - Group admins are exempt only when acting as admin for the reservation user.
+            #   - Resource and schedule admins are exempt only when they administer all resources in the reservation.
             'start.time.constraint' => 'future',
 
             # Require approval when an existing reservation is updated (true/false)
