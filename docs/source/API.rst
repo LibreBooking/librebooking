@@ -1241,6 +1241,8 @@ Reservations
 POST Endpoints
 ~~~~~~~~~~~~~~
 
+.. _CreateReservation:
+
 CreateReservation
 ^^^^^^^^^^^^^^^^^
 
@@ -1322,12 +1324,36 @@ Creates a new reservation
        "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name",
-               "value": "value"
+               "name": "skipconflicts",
+               "value": "true"
            }
        ],
        "termsAccepted": true
    }
+
+**retryParameters:**
+
+| The ``retryParameters`` field accepts an array of ``{"name": ..., "value": ...}`` objects
+  that modify how reservation conflicts are handled.
+| Currently supported parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Name
+     - Value
+     - Description
+   * - ``skipconflicts``
+     - ``"true"``
+     - When creating or updating a recurring reservation, any instances that
+       conflict with existing reservations or blackouts are silently skipped
+       instead of causing the entire request to fail. This mirrors the
+       "Skip conflicting reservations" option available in the web interface.
+       Non-conflicting instances are created normally.
+
+| **Tip:** You can include ``retryParameters`` in the initial request — there is
+  no need to submit a first request without it and then retry.
 
 **Response:**
 
@@ -1349,7 +1375,7 @@ Creates a new reservation
        "message": null
    }
 
-**curl example:**
+**curl examples:**
 
 .. code:: bash
 
@@ -1364,6 +1390,31 @@ Creates a new reservation
        "endDateTime": "2026-03-20T10:00:00+0000",
        "resourceId": 1,
        "userId": 1
+     }'
+
+Creating a recurring reservation that skips conflicts:
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "title": "Daily Standup",
+       "startDateTime": "2026-04-01T09:00:00+0000",
+       "endDateTime": "2026-04-01T09:30:00+0000",
+       "resourceId": 1,
+       "userId": 1,
+       "recurrenceRule": {
+         "type": "weekly",
+         "interval": 1,
+         "weekdays": [1, 2, 3, 4, 5],
+         "repeatTerminationDate": "2026-06-01T00:00:00+0000"
+       },
+       "retryParameters": [
+         {"name": "skipconflicts", "value": "true"}
+       ]
      }'
 
 UpdateReservation
@@ -1444,12 +1495,15 @@ UpdateReservation
        "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name",
-               "value": "value"
+               "name": "skipconflicts",
+               "value": "true"
            }
        ],
        "termsAccepted": true
    }
+
+| See the ``retryParameters`` documentation under CreateReservation_ for
+  supported parameters.
 
 **Response:**
 

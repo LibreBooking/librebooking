@@ -234,4 +234,43 @@ class ReservationSaveControllerTest extends TestBase
         $this->assertEquals($errors, $facade->Errors());
         $this->assertEquals(true, $facade->RequiresApproval());
     }
+
+    public function testFacadeReturnsRetryParametersFromRequest()
+    {
+        $session = new FakeWebServiceUserSession(123);
+
+        $request = new ReservationRequest();
+        $request->resourceId = 1;
+        $request->startDateTime = '2012-04-05 01:01:01';
+        $request->endDateTime = '2012-04-05 01:01:01';
+        $request->retryParameters = [
+            new ReservationRetryParameterRequestResponse('skipconflicts', 'true'),
+        ];
+
+        $facade = new ReservationRequestResponseFacade($request, $session);
+
+        $retryParams = $facade->GetRetryParameters();
+
+        $this->assertCount(1, $retryParams);
+        $this->assertInstanceOf(ReservationRetryParameter::class, $retryParams[0]);
+        $this->assertEquals('skipconflicts', $retryParams[0]->Name());
+        $this->assertEquals('true', $retryParams[0]->Value());
+    }
+
+    public function testFacadeReturnsEmptyRetryParametersWhenNoneProvided()
+    {
+        $session = new FakeWebServiceUserSession(123);
+
+        $request = new ReservationRequest();
+        $request->resourceId = 1;
+        $request->startDateTime = '2012-04-05 01:01:01';
+        $request->endDateTime = '2012-04-05 01:01:01';
+
+        $facade = new ReservationRequestResponseFacade($request, $session);
+
+        $retryParams = $facade->GetRetryParameters();
+
+        $this->assertIsArray($retryParams);
+        $this->assertEmpty($retryParams);
+    }
 }
