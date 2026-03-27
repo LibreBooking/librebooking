@@ -31,40 +31,18 @@ function SavedReports(reportOptions) {
 
     wireUpReportLinks();
 
-    $(document).on('click', '#btnPrint', function (e) {
-      e.preventDefault();
-
-      var url = opts.printUrl + reportId;
-      window.open(url);
-    });
-
-    $(document).on('click', '#btnCsv', function (e) {
-      e.preventDefault();
-
-      var url = opts.csvUrl + reportId;
-      window.open(url);
-    });
-    //
-    // $(document).on('click', '#btnChart', function(e) {
-    // 	e.preventDefault();
-    //
-    // 	var chart = new Chart();
-    // 	chart.generate();
-    // 	$('#report-results').hide();
-    // });
-
     $('.save').on('click', function () {
       $(this).closest('form').submit();
     });
   };
 
   var wireUpReportLinks = function () {
-    $('#report-list a.report').click(function (e) {
+    $('#report-list a.report').on('click', function (e) {
       e.preventDefault();
       reportId = $(this).closest('tr').attr('reportId');
     });
 
-    $('.runNow').click(function (e) {
+    $('.runNow').on('click', function (e) {
       var before = function () {
         elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
         elements.resultsDiv.html('');
@@ -78,11 +56,11 @@ function SavedReports(reportOptions) {
       ajaxGet(opts.generateUrl + reportId, before, after);
     });
 
-    $('.emailNow').click(function (e) {
+    $('.emailNow').on('click', function (e) {
       $('#emailDiv').modal('show');
     });
 
-    $('.delete').click(function (e) {
+    $('.delete').on('click', function (e) {
       $('#deleteDiv').modal('show');
     });
   };

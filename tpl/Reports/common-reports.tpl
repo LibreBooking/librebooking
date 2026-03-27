@@ -136,7 +136,6 @@
 {include file="Reports/chart.tpl"}
 
 {include file="javascript-includes.tpl" DataTable=true}
-{datatable tableId={$tableId}}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="reports/canned-reports.js"}
 {jsfile src="reports/chart.js"}

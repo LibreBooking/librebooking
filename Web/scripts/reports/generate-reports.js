@@ -10,7 +10,7 @@ function GenerateReports(reportOptions) {
   };
 
   GenerateReports.prototype.init = function () {
-    $('#selectDiv input').click(function () {
+    $('#selectDiv input').on('click', function () {
       $('div.select-toggle').hide();
 
       var selectedItem = $(this).attr('id');
@@ -30,7 +30,7 @@ function GenerateReports(reportOptions) {
       }
     });
 
-    $('#btnCustomReport').click(function (e) {
+    $('#btnCustomReport').on('click', function (e) {
       e.preventDefault();
 
       var before = function () {
@@ -47,7 +47,7 @@ function GenerateReports(reportOptions) {
     });
 
     elements.saveDialog.on('shown.bs.modal', function () {
-      $('#saveReportName').focus();
+      document.getElementById('saveReportName').focus();
     });
 
     $(document).on('click', '#btnSaveReportPrompt', function (e) {
@@ -61,11 +61,11 @@ function GenerateReports(reportOptions) {
       $(this).closest('form').submit();
     });
 
-    $('#saveReportForm').submit(function (e) {
+    $('#saveReportForm').on('submit', function (e) {
       handleSave(e);
     });
 
-    $('#btnSaveReport').click(function (e) {
+    $('#btnSaveReport').on('click', function (e) {
       handleSave(e);
     });
   };

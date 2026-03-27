@@ -43,9 +43,6 @@ function Chart(options) {
     var plot = $.jqplot('chartdiv', series.GetData(), {
       axesDefaults: {
         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-        // tickOptions:{
-        // 	fontSize:'10pt'
-        // }
       },
       seriesDefaults: {
         renderer: series.GetGraphRenderer(),
@@ -62,20 +59,15 @@ function Chart(options) {
             formatString: series.GetXAxisFormat(),
             formatter: series.GetXAxisFormatter(),
           },
-          // tickInterval:'1 day',
-          // min:series.GetXAxisMin()
         },
         yaxis: {
-          // pad:1.05,
           tickOptions: { formatString: series.GetYAxisFormatString(), formatter: series.GetTickFormatter() },
           min: 0,
         },
       },
       highlighter: {
-        // sizeAdjust: 10,
         tooltipLocation: 'n',
         tooltipAxes: 'y',
-        // tooltipFormatString: '%.2f',
         useAxesFormatters: false,
       },
       cursor: {

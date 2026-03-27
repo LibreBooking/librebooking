@@ -269,7 +269,6 @@
 </div>
 
 {include file="javascript-includes.tpl" Select2=true DataTable=true}
-{datatable tableId={$tableId}}
 {jsfile src="autocomplete.js"}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="reports/generate-reports.js"}
