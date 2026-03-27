@@ -99,6 +99,7 @@ class es extends en_gb
         $strings['LaterThisWeek'] = 'Más tarde esta semana';
         $strings['NextWeek'] = 'Siguiente semana';
         $strings['SignOut'] = 'Cerrar';
+        $strings['JavascriptRequired'] = 'Esta aplicación requiere JavaScript para funcionar correctamente. Por favor, habilite JavaScript en la configuración de su navegador.';
         $strings['LayoutDescription'] = 'Empieza en %s, mostrando %s días cada vez';
         $strings['AllResources'] = 'Todos los recursos';
         $strings['TakeOffline'] = 'Deshabilitar';

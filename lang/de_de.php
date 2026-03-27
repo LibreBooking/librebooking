@@ -97,6 +97,7 @@ class de_de extends en_gb
         $strings['LaterThisWeek'] = 'Später diese Woche';
         $strings['NextWeek'] = 'Nächste Woche';
         $strings['SignOut'] = 'Abmelden';
+        $strings['JavascriptRequired'] = 'Diese Anwendung benötigt JavaScript, um ordnungsgemäß zu funktionieren. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.';
         $strings['LayoutDescription'] = 'Beginnend %s, zeige %s Tage';
         $strings['AllResources'] = 'Alle Ressourcen';
         $strings['TakeOffline'] = 'Offline gehen';

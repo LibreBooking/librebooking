@@ -97,6 +97,7 @@ class it_it extends en_gb
         $strings['LaterThisWeek'] = 'Questo fine settimana';
         $strings['NextWeek'] = 'Prossima settimana';
         $strings['SignOut'] = 'Disconnetti';
+        $strings['JavascriptRequired'] = 'Questa applicazione richiede JavaScript per funzionare correttamente. Abilitare JavaScript nelle impostazioni del browser.';
         $strings['LayoutDescription'] = 'Inizia di %s, mostrando %s giorni alla volta';
         $strings['AllResources'] = 'Tutte le risorse';
         $strings['TakeOffline'] = 'Non in linea';

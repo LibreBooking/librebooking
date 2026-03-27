@@ -121,6 +121,12 @@
 
 <body data-bs-theme='{$cssTheme}'>
 
+    <noscript>
+        <div class="alert alert-warning text-center m-2" role="alert">
+            {translate key="JavascriptRequired"}
+        </div>
+    </noscript>
+
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">

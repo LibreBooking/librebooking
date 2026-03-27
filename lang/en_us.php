@@ -134,6 +134,7 @@ class en_us extends Language
         $strings['LaterThisWeek'] = 'Later This Week';
         $strings['NextWeek'] = 'Next Week';
         $strings['SignOut'] = 'Sign Out';
+        $strings['JavascriptRequired'] = 'This application requires JavaScript to function properly. Please enable JavaScript in your browser settings.';
         $strings['LayoutDescription'] = 'Starts on %s, showing %s days at a time';
         $strings['AllResources'] = 'All Resources';
         $strings['TakeOffline'] = 'Take Offline';

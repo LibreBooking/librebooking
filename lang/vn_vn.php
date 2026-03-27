@@ -99,6 +99,7 @@ class vn_vn extends en_gb
         $strings['LaterThisWeek'] = 'Later This Week';
         $strings['NextWeek'] = 'Tuần tới';
         $strings['SignOut'] = 'Đăng xuất';
+        $strings['JavascriptRequired'] = 'Ứng dụng này yêu cầu JavaScript để hoạt động bình thường. Vui lòng bật JavaScript trong cài đặt trình duyệt của bạn.';
         $strings['LayoutDescription'] = 'Starts on %s, showing %s days at a time';
         $strings['AllResources'] = 'Tất cả lịch họp';
         $strings['TakeOffline'] = 'Take Offline';

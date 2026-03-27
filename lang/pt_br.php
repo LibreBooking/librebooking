@@ -101,6 +101,7 @@ class pt_br extends en_gb
         $strings['LaterThisWeek'] = 'Ainda esta semana';
         $strings['NextWeek'] = 'Próxima Semana';
         $strings['SignOut'] = 'Sair';
+        $strings['JavascriptRequired'] = 'Este aplicativo requer JavaScript para funcionar corretamente. Por favor, ative o JavaScript nas configurações do seu navegador.';
         $strings['LayoutDescription'] = 'Inicia em %s, mostrando %s dias de cada vez';
         $strings['AllResources'] = 'Todos os Recursos';
         $strings['TakeOffline'] = 'Colocar Offline';

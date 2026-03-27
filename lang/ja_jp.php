@@ -135,6 +135,7 @@ class ja_jp extends en_gb
         $strings['LaterThisWeek'] = '今週(明後日以後)';
         $strings['NextWeek'] = '翌週';
         $strings['SignOut'] = 'サインアウト';
+        $strings['JavascriptRequired'] = 'このアプリケーションを正しく動作させるにはJavaScriptが必要です。ブラウザの設定でJavaScriptを有効にしてください。';
         $strings['LayoutDescription'] = '一度に %s から、 %s 日間を表示';
         $strings['AllResources'] = '全てのリソース';
         $strings['TakeOffline'] = 'オフラインにする';

@@ -104,6 +104,7 @@ class ru_ru extends en_gb
         $strings['LaterThisWeek'] = 'Позже на этой неделе';
         $strings['NextWeek'] = 'Следующая неделя';
         $strings['SignOut'] = 'Выйти';
+        $strings['JavascriptRequired'] = 'Для корректной работы этого приложения требуется JavaScript. Пожалуйста, включите JavaScript в настройках вашего браузера.';
         $strings['LayoutDescription'] = 'Запускает на %s, показывая %s дней';
         $strings['AllResources'] = 'Все ресурсы';
         $strings['TakeOffline'] = 'В автономный режим';

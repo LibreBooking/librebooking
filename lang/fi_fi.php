@@ -98,6 +98,7 @@ class fi_fi extends en_gb
         $strings['LaterThisWeek'] = 'Myöhemmin tällä viikolla';
         $strings['NextWeek'] = 'Seuraava viikko';
         $strings['SignOut'] = 'Kirjaudu ulos';
+        $strings['JavascriptRequired'] = 'Tämä sovellus vaatii JavaScriptin toimiakseen oikein. Ota JavaScript käyttöön selaimesi asetuksista.';
         $strings['LayoutDescription'] = 'Alkaa %s, näyttäen %s päivää kerralla';
         $strings['AllResources'] = 'Kaikki resurssit';
         $strings['TakeOffline'] = 'Sulje';

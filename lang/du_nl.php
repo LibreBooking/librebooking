@@ -98,6 +98,7 @@ class du_nl extends en_gb
         $strings['LaterThisWeek'] = 'Later deze week';
         $strings['NextWeek'] = 'Volgende week';
         $strings['SignOut'] = 'Uitloggen';
+        $strings['JavascriptRequired'] = 'Deze applicatie vereist JavaScript om correct te functioneren. Schakel JavaScript in via uw browserinstellingen.';
         $strings['LayoutDescription'] = 'Begint op %s, met %s zichtbare dagen';
         $strings['AllResources'] = 'Alle bronnen';
         $strings['TakeOffline'] = 'Breng offline';
