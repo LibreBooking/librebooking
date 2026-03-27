@@ -15,7 +15,7 @@ class ar extends en_us
      */
     protected function _LoadDates()
     {
-        $dates = [];
+        $dates = parent::_LoadDates();
 
         $dates['general_date'] = 'm/d/Y';
         $dates['general_datetime'] = 'm/d/Y g:i:s A';
@@ -48,7 +48,7 @@ class ar extends en_us
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'الاسم الأول ';
         $strings['LastName'] = 'الاسم الأخير';
@@ -1047,7 +1047,7 @@ class ar extends en_us
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -1073,7 +1073,7 @@ class ar extends en_us
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES
