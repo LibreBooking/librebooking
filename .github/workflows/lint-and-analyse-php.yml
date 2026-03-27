@@ -66,7 +66,12 @@ jobs:
           git fetch origin "${GITHUB_BASE_REF}"
           MERGE_COMMITS=$(git rev-list --merges origin/${GITHUB_BASE_REF}..${HEAD_SHA})
           if [[ -n "${MERGE_COMMITS}" ]]; then
+            echo ""
+            echo "=========================================="
             echo "ERROR: The Pull Request (PR) contains a 'merge commit' which is not allowed: ${MERGE_COMMITS}"
+            echo "Please 'rebase' to remove the 'merge commit'"
+            echo "=========================================="
+            echo ""
             exit 1
           fi
 
@@ -211,6 +216,14 @@ jobs:
             echo "    npm run fix:format"
             echo ""
             echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
             echo "=========================================="
             exit 1
           fi
@@ -226,6 +239,14 @@ jobs:
             echo "    npm run fix:js"
             echo ""
             echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
             echo "=========================================="
             exit 1
           fi
@@ -241,6 +262,14 @@ jobs:
             echo "    npm run fix:css"
             echo ""
             echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
             echo "=========================================="
             exit 1
           fi
