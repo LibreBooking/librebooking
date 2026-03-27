@@ -55,11 +55,13 @@ function Calendar(opts) {
             moment = view.currentRange.start;
           }
           var redirect =
-            _options.returnTo +
-            encodeURIComponent(
-              '?ct=' + view.name + '&start=' + moment.year() + '-' + (moment.month() + 1) + '-' + moment.date()
-            );
-          element.attr('href', event.url.replace('[redirect]', redirect));
+            _options.returnTo + encodeURIComponent('?ct=' + view.name + '&start=' + moment.format('YYYY-MM-DD'));
+          var finalUrl = event.url.replace('[redirect]', redirect);
+          if (_options.returnTo.indexOf('view-calendar.php') !== -1) {
+            finalUrl = finalUrl.replace('reservation.php', 'view-reservation.php');
+          }
+
+          element.attr('href', finalUrl);
         }
       },
       dayClick: dayClick,
@@ -196,7 +198,11 @@ function Calendar(opts) {
         resourceGroupsContainer.hide();
       } else {
         if (!resourceGroupsContainer.data('positionSet')) {
-          resourceGroupsContainer.position({ my: 'left top', at: 'right bottom', of: '#showResourceGroups' });
+          resourceGroupsContainer.position({
+            my: 'left top',
+            at: 'right bottom',
+            of: '#showResourceGroups',
+          });
         }
         resourceGroupsContainer.data('positionSet', true);
         resourceGroupsContainer.show();
@@ -364,9 +370,7 @@ function Calendar(opts) {
   var openNewReservation = function () {
     var view = _fullCalendar.fullCalendar('getView');
     var end = moment(dateVar).add(30, 'minutes');
-    var year = dateVar.year();
-    var month = dateVar.month() + 1;
-    var day = dateVar.date();
+    var start = moment(dateVar).format('YYYY-MM-DD');
 
     var url =
       _options.reservationUrl +
@@ -376,12 +380,11 @@ function Calendar(opts) {
       getUrlFormattedDate(end) +
       '&redirect=' +
       _options.returnTo +
-      encodeURIComponent('?ct=' + view.name + '&start=' + year + '-' + month + '-' + day);
+      encodeURIComponent('?ct=' + view.name + '&start=' + start);
     window.location = url;
   };
 
   var getUrlFormattedDate = function (d) {
-    var month = d.month() + 1;
-    return encodeURI(d.year() + '-' + month + '-' + d.date() + ' ' + d.hour() + ':' + d.minute());
+    return encodeURIComponent(d.format('YYYY-MM-DD HH:mm'));
   };
 }

@@ -21,7 +21,7 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
         $possibleScripts = self::ValidatePossibleScripts($requestURI);
 
         if (preg_match($pattern, $requestURI, $matches)) {
-            return $matches[1] === '' && !$possibleScripts;
+            return $matches[1] !== '' && !$possibleScripts;
         }
 
         return false;
@@ -71,7 +71,14 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
         if (preg_match($pattern, $requestURI, $matches)) {
             $value = htmlspecialchars(urldecode($matches[1]), ENT_QUOTES, 'UTF-8');
-            return preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) (\d|1\d|2[0-3]):(\d|[1-5]\d)$/', $value) === 1 && !$possibleScripts;
+            // Validates: YYYY-MM-DD HH:MM (no seconds)
+            return preg_match('/
+                ^\d{4}                   # year (YYYY)
+                -(0[1-9]|1[0-2])         # month (01-12)
+                -(0[1-9]|[12]\d|3[01])   # day (01-31)
+                \ ([01]\d|2[0-3])        # hour (00-23)
+                :([0-5]\d)               # minute (00-59)
+            $/x', $value) === 1 && !$possibleScripts;
         }
 
         return false;
@@ -84,7 +91,15 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
         if (preg_match($pattern, $requestURI, $matches)) {
             $value = htmlspecialchars(urldecode($matches[1]), ENT_QUOTES, 'UTF-8');
-            return preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) (\d|1\d|2[0-3]):([0-5]\d):([0-5]\d)$/', $value) === 1 && !$possibleScripts;
+            // Validates: YYYY-MM-DD HH:MM:SS (with seconds, unlike simpleDateTimeValidator)
+            return preg_match('/
+                ^\d{4}                   # year (YYYY)
+                -(0[1-9]|1[0-2])         # month (01-12)
+                -(0[1-9]|[12]\d|3[01])   # day (01-31)
+                \ ([01]\d|2[0-3])        # hour (00-23)
+                :([0-5]\d)               # minute (00-59)
+                :([0-5]\d)               # second (00-59)
+            $/x', $value) === 1 && !$possibleScripts;
         }
 
         return false;
