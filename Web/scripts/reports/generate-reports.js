@@ -1,5 +1,6 @@
 function GenerateReports(reportOptions) {
   var opts = reportOptions;
+  var selectedReportTitle = '';
 
   var elements = {
     indicator: $('#indicator'),
@@ -32,15 +33,18 @@ function GenerateReports(reportOptions) {
 
     $('#btnCustomReport').on('click', function (e) {
       e.preventDefault();
+      selectedReportTitle = getGeneratedReportTitle();
 
       var before = function () {
         elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
         elements.resultsDiv.html('');
       };
 
       var after = function (data) {
         elements.indicator.addClass('d-none');
         elements.resultsDiv.html(data);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
       };
 
       ajaxPost(elements.customReportForm, opts.customReportUrl, before, after);
@@ -84,6 +88,39 @@ function GenerateReports(reportOptions) {
     $('#participant-filter').userAutoComplete(opts.userAutocompleteUrl, function (ui) {
       selectFilterItem($('#participant-filter-div'), ui.item.value, ui.item.label);
     });
+  }
+
+  function checkedLabelText(containerSelector) {
+    var label = $(containerSelector + ' input:checked').next('label');
+    return reportsCleanText(label.text());
+  }
+
+  function getGeneratedReportTitle() {
+    var baseTitle = reportsCleanText($('#page-generate-report .accordion-header .accordion-button:first').text());
+    var resultTitle = checkedLabelText('#selectDiv');
+    var usageTitle = $('#listOfDiv').is(':visible') ? checkedLabelText('#listOfDiv') : '';
+    var groupTitle = $('#aggregateDiv').is(':visible') ? checkedLabelText('#aggregateDiv') : '';
+    var isGroupByNoneSelected = $('#groupby_none').is(':checked');
+    var rangeTitle = checkedLabelText('#rangeDiv');
+
+    var parts = [];
+    if (baseTitle.length) {
+      parts.push(baseTitle);
+    }
+    if (resultTitle.length) {
+      parts.push(resultTitle);
+    }
+    if (usageTitle.length) {
+      parts.push(usageTitle);
+    }
+    if (groupTitle.length && !isGroupByNoneSelected) {
+      parts.push(groupTitle);
+    }
+    if (rangeTitle.length) {
+      parts.push(rangeTitle);
+    }
+
+    return parts.join(' - ');
   }
 
   var handleSave = function (e) {

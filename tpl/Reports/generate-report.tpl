@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles="assets/vendor/jqplot/1.0.9/jquery.jqplot.min.css" Select2=true DataTable=true}
+{include file='globalheader.tpl' Select2=true DataTable=true}
 
 <div id="page-generate-report">
 	<div id="customReportInput-container" class="accordion">

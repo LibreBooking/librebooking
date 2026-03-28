@@ -72,6 +72,8 @@ export default [
         ResourceDisplay: 'readonly',
         UserCredits: 'readonly',
         MonitorDisplay: 'readonly',
+        ReportChart: 'readonly',
+        reportsCleanText: 'readonly',
 
         // Menu functions (menubar.js)
         mopen: 'readonly',

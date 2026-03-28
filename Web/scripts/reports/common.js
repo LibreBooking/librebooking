@@ -1,3 +1,7 @@
+window.reportsCleanText = function (value) {
+  return (value || '').replace(/\s+/g, ' ').trim();
+};
+
 function ReportsCommon(opts) {
   return {
     init: function () {
@@ -8,7 +12,7 @@ function ReportsCommon(opts) {
         // Use a small delay to ensure the modal is displayed sooner
         setTimeout(function () {
           try {
-            var chart = new Chart(opts.chartOpts);
+            var chart = new ReportChart(opts.chartOpts);
             chart.generate();
             $('#report-results').hide();
           } catch (error) {
