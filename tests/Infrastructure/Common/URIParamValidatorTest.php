@@ -67,6 +67,35 @@ class URIParamValidatorTest extends TestBase
         $this->assertFalse($result);
     }
 
+    /**
+     * @dataProvider numericalValidatorProvider
+     */
+    public function testNumericalValidator(string $uri, bool $expected)
+    {
+        $result = ParamsValidatorMethods::numericalValidator('uid', $uri);
+        $this->assertSame($expected, $result, "Failed for URI: $uri");
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function numericalValidatorProvider(): array
+    {
+        return [
+            'valid digits' => ['/Web/view-schedule.php?uid=123', true],
+            'zero is valid' => ['/Web/view-schedule.php?uid=0', true],
+            'trailing alpha rejected' => ['/Web/view-schedule.php?uid=123abc', false],
+            'leading alpha rejected' => ['/Web/view-schedule.php?uid=abc123', false],
+            'float rejected' => ['/Web/view-schedule.php?uid=1.5', false],
+            'scientific notation rejected' => ['/Web/view-schedule.php?uid=1e10', false],
+            'negative rejected' => ['/Web/view-schedule.php?uid=-1', false],
+            'empty value rejected' => ['/Web/view-schedule.php?uid=', false],
+            'missing param rejected' => ['/Web/view-schedule.php?other=123', false],
+            'array param rejected' => ['/Web/view-schedule.php?uid[]=123', false],
+            'repeated array param rejected' => ['/Web/view-schedule.php?uid[]=1&uid[]=2', false],
+        ];
+    }
+
     public function testExistsInURLValidatorPassesWhenParamHasValue()
     {
         $result = ParamsValidatorMethods::existsInURLValidator('sid', '/Web/reservation.php?sid=123&rid=456');
@@ -109,6 +138,7 @@ class URIParamValidatorTest extends TestBase
             'xss script tag rejected' => ['dr', 'reservations', '/Web/view-schedule.php?dr=reservations&x=%3Cscript%3E', false],
             'xss script tag rejected even when param absent' => ['dr', 'reservations', '/Web/view-schedule.php?x=%3Cscript%3E', false],
             'xss double quotes rejected' => ['dr', 'reservations', '/Web/view-schedule.php?dr=reservations&x=%22alert%22', false],
+            'array param treated as absent' => ['dr', 'reservations', '/Web/view-schedule.php?dr[]=reservations', true],
         ];
     }
 
@@ -142,6 +172,7 @@ class URIParamValidatorTest extends TestBase
             'missing param' => ['/Web/reservation.php?other=value', false],
             'empty param' => ['/Web/reservation.php?sd=', false],
             'with seconds rejected' => ['/Web/reservation.php?sd=' . urlencode('2026-03-23 08:00:00'), false],
+            'array param rejected' => ['/Web/reservation.php?sd[]=2026-03-23+08%3A00', false],
         ];
     }
 
@@ -176,6 +207,34 @@ class URIParamValidatorTest extends TestBase
             'missing param' => ['/Web/reservation.php?other=value', false],
             'empty param' => ['/Web/reservation.php?sd=', false],
             'without seconds rejected' => ['/Web/reservation.php?sd=' . urlencode('2026-03-23 08:00'), false],
+            'array param rejected' => ['/Web/reservation.php?sd[]=2026-03-23+08%3A00%3A00', false],
+        ];
+    }
+
+    /**
+     * @dataProvider arrayParamRejectedProvider
+     */
+    public function testArrayParamRejectedAcrossValidators(string $validator, string $param, string $uri)
+    {
+        $result = match ($validator) {
+            'existsInURL' => ParamsValidatorMethods::existsInURLValidator($param, $uri),
+            'boolean' => ParamsValidatorMethods::booleanValidator($param, $uri),
+            'date' => ParamsValidatorMethods::dateValidator($param, $uri),
+            'simpleDateList' => ParamsValidatorMethods::simpleDateValidatorList($param, $uri),
+        };
+        $this->assertFalse($result, "Array param should be rejected by $validator for URI: $uri");
+    }
+
+    /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function arrayParamRejectedProvider(): array
+    {
+        return [
+            'existsInURL rejects array' => ['existsInURL', 'sid', '/Web/reservation.php?sid[]=123'],
+            'boolean rejects array' => ['boolean', 'show', '/Web/view-schedule.php?show[]=true'],
+            'date rejects array' => ['date', 'sd', '/Web/reservation.php?sd[]=2026-03-23'],
+            'simpleDateList rejects array' => ['simpleDateList', 'sd', '/Web/reservation.php?sd[]=2026-03-23'],
         ];
     }
 }
