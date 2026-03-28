@@ -11,6 +11,32 @@ require_once(ROOT_DIR . 'Presenters/Calendar/CalendarCommon.php');
 
 class CalendarPresenter extends CommonCalendarPresenter
 {
+    private string $reservationPage;
+
+    public function __construct(
+        ICommonCalendarPage $page,
+        IReservationViewRepository $reservationRepository,
+        IScheduleRepository $scheduleRepository,
+        IUserRepository $userRepository,
+        IResourceService $resourceService,
+        ICalendarSubscriptionService $subscriptionService,
+        IPrivacyFilter $privacyFilter,
+        SlotLabelFactory $factory,
+        string $reservationPage = Pages::RESERVATION
+    ) {
+        parent::__construct(
+            page: $page,
+            reservationRepository: $reservationRepository,
+            scheduleRepository: $scheduleRepository,
+            userRepository: $userRepository,
+            resourceService: $resourceService,
+            subscriptionService: $subscriptionService,
+            privacyFilter: $privacyFilter,
+            factory: $factory,
+        );
+        $this->reservationPage = $reservationPage;
+    }
+
     /**
      * @param UserSession $userSession
      * @param int $selectedScheduleId
@@ -71,7 +97,8 @@ class CalendarPresenter extends CommonCalendarPresenter
             $resources,
             $userSession,
             $this->privacyFilter,
-            $this->slotLabelFactory
+            $this->slotLabelFactory,
+            reservationPage: $this->reservationPage
         ));
     }
 

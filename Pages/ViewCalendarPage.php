@@ -28,14 +28,15 @@ class ViewCalendarPage extends CalendarPage
         $factory = ($viewReservations || $allowGuestBookings) ? new SlotLabelFactory() : new NullSlotLabelFactory();
 
         $this->presenter = new CalendarPresenter(
-            $this,
-            new ReservationViewRepository(),
-            $scheduleRepository,
-            new UserRepository(),
-            $resourceService,
-            $subscriptionService,
-            $privacyFilter,
-            $factory
+            page: $this,
+            reservationRepository: new ReservationViewRepository(),
+            scheduleRepository: $scheduleRepository,
+            userRepository: new UserRepository(),
+            resourceService: $resourceService,
+            subscriptionService: $subscriptionService,
+            privacyFilter: $privacyFilter,
+            factory: $factory,
+            reservationPage: Pages::VIEW_RESERVATION,
         );
     }
 

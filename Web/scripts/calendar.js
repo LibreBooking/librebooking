@@ -57,10 +57,6 @@ function Calendar(opts) {
           var redirect =
             _options.returnTo + encodeURIComponent('?ct=' + view.name + '&start=' + moment.format('YYYY-MM-DD'));
           var finalUrl = event.url.replace('[redirect]', redirect);
-          if (_options.returnTo.indexOf('view-calendar.php') !== -1) {
-            finalUrl = finalUrl.replace('reservation.php', 'view-reservation.php');
-          }
-
           element.attr('href', finalUrl);
         }
       },
