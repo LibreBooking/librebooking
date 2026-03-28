@@ -1,8 +1,0 @@
-{
-  "name": "jqplot",
-  "version": "1.0.9",
-  "description": "Pure JavaScript plotting plugin for jQuery.",
-  "homepage": "http://www.jqplot.com/",
-  "source": "https://github.com/jqPlot/jqPlot/releases/tag/1.0.9",
-  "license": "MIT"
-}
