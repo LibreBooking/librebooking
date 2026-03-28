@@ -86,6 +86,33 @@ class URIParamValidatorTest extends TestBase
     }
 
     /**
+     * @dataProvider matchValidatorProvider
+     */
+    public function testMatchValidator(string $param, string $expectedValue, string $uri, bool $expected)
+    {
+        $result = ParamsValidatorMethods::matchValidator($param, $expectedValue, $uri);
+        $this->assertSame($expected, $result, "Failed for URI: $uri");
+    }
+
+    /**
+     * @return array<string, array{string, string, string, bool}>
+     */
+    public static function matchValidatorProvider(): array
+    {
+        return [
+            'param matches expected value' => ['dr', 'reservations', '/Web/view-schedule.php?dr=reservations', true],
+            'param does not match expected value' => ['dr', 'reservations', '/Web/view-schedule.php?dr=wrongvalue', false],
+            'param absent returns true' => ['dr', 'reservations', '/Web/view-schedule.php?other=value', true],
+            'param empty does not match' => ['dr', 'reservations', '/Web/view-schedule.php?dr=', false],
+            'param with multiple query params' => ['dr', 'reservations', '/Web/view-schedule.php?uid=123&dr=reservations&sd=2026-01-01', true],
+            'param wrong value with multiple query params' => ['dr', 'reservations', '/Web/view-schedule.php?uid=123&dr=wrong&sd=2026-01-01', false],
+            'xss script tag rejected' => ['dr', 'reservations', '/Web/view-schedule.php?dr=reservations&x=%3Cscript%3E', false],
+            'xss script tag rejected even when param absent' => ['dr', 'reservations', '/Web/view-schedule.php?x=%3Cscript%3E', false],
+            'xss double quotes rejected' => ['dr', 'reservations', '/Web/view-schedule.php?dr=reservations&x=%22alert%22', false],
+        ];
+    }
+
+    /**
      * @dataProvider simpleDateTimeProvider
      */
     public function testSimpleDateTimeValidator(string $uri, bool $expected)
