@@ -135,7 +135,7 @@
                         {translate key='AutoReleaseNotification' args=$autoReleaseMinutes}
                     </div>
                 {/if}
-                {if $isCheckInEnabled neq ''}
+                {if $isCheckInEnabled}
                     <div>
                         {translate key='RequiresCheckInNotification'}
                     </div>
