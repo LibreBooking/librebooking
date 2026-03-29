@@ -94,9 +94,10 @@
 
 		<div id="{if isset($prefix)}{$prefix}{/if}repeatUntilDiv" class="d-none recur-toggle d-flex align-items-center">
 			<label class="fw-bold"
-				for="{if isset($prefix)}{$prefix}{/if}EndRepeat">{translate key="RepeatUntilPrompt"}</label>
+				for="{if isset($prefix)}{$prefix}{/if}EndRepeat">{translate key="RepeatUntilPrompt"} <i
+					class="bi bi-asterisk text-danger align-top text-small required-asterisk d-none"></i></label>
 			<input type="text" id="{if isset($prefix)}{$prefix}{/if}EndRepeat" {formname key=end_repeat_date}
-				class="form-control form-control-sm" />
+				class="form-control form-control-sm repeat-termination" />
 		</div>
 
 		<div id="{if isset($prefix)}{$prefix}{/if}customDatesDiv" class="d-none specific-dates">

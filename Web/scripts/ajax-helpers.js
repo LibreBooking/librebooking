@@ -171,7 +171,12 @@ function BeforeFormSubmit(formData, jqForm, opts) {
     .each(function (index, ele) {
       if ($(ele).is(':visible') && $(ele).val() == '' && $(ele).attr('disabled') != 'disabled') {
         isValid = false;
-        $(ele).closest('.has-feedback').addClass('is-invalid');
+        var invalidTarget = $(ele).closest('.has-feedback');
+        if (invalidTarget.length == 0) {
+          // Some controls, such as flatpickr alt inputs, do not have a has-feedback wrapper.
+          invalidTarget = $(ele);
+        }
+        invalidTarget.addClass('is-invalid');
       }
     });
 

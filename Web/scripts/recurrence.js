@@ -80,9 +80,34 @@ function Recurrence(recurOptions, recurElements, prefix) {
     element.addClass('d-none'); //.removeClass('d-inline')
   };
 
+  var RequiresTerminationDate = function (repeatType) {
+    return ['daily', 'weekly', 'monthly', 'yearly'].includes(repeatType);
+  };
+
+  var UpdateTerminationDateValidation = function () {
+    var isRequired = RequiresTerminationDate(elements.repeatOptions.val());
+    var altInput = elements.repeatTermination[0]?._flatpickr?.altInput
+      ? $(elements.repeatTermination[0]._flatpickr.altInput)
+      : $();
+    var requiredAsterisk = $('#' + prefix + 'repeatUntilDiv').find('.required-asterisk');
+
+    // Ensure the hidden original flatpickr input is never marked as required.
+    // Apply native required validation only to the visible alt input.
+    elements.repeatTermination.prop('required', false);
+    elements.repeatTermination.removeClass('required');
+    altInput.prop('required', isRequired);
+    altInput.toggleClass('required', isRequired);
+    requiredAsterisk.toggleClass('d-none', !isRequired);
+
+    if (!isRequired) {
+      elements.repeatTermination.removeClass('is-invalid');
+      altInput.removeClass('is-invalid');
+    }
+  };
+
   var ChangeRepeatOptions = function () {
     var repeatDropDown = elements.repeatOptions;
-    if (repeatDropDown.val() != 'none' && repeatDropDown.val() != 'custom') {
+    if (RequiresTerminationDate(repeatDropDown.val())) {
       show($('#' + prefix + 'repeatUntilDiv'));
     } else {
       hide($('.recur-toggle', elements.repeatDiv));
@@ -114,6 +139,7 @@ function Recurrence(recurOptions, recurElements, prefix) {
       show($('.specific-dates', elements.repeatDiv));
     }
 
+    UpdateTerminationDateValidation();
     NotifyChange();
   };
 
