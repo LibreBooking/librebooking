@@ -268,7 +268,7 @@ var dateHelper = (function () {
         return false;
       }
 
-      let startValue = startEl.value;
+      const startValue = startEl.value;
       let endValue = endEl.value;
 
       // Special case: '00:00' is treated as the end of the day (24:00) for validation

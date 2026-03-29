@@ -107,7 +107,7 @@ export default [
       },
     },
     rules: {
-      // Bug-catching rules only — no style/formatting opinions
+      // Bug-catching rules
       'no-undef': 'error',
       'no-unreachable': 'error',
       'no-dupe-keys': 'error',
@@ -120,6 +120,9 @@ export default [
       'no-unsafe-negation': 'error',
       'no-sparse-arrays': 'error',
       'no-unused-vars': ['error', { args: 'none', varsIgnorePattern: '^[A-Z]' }],
+
+      // Code consistency rules
+      'prefer-const': 'error',
     },
   },
   eslintConfigPrettier,

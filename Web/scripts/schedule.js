@@ -1,10 +1,10 @@
 /* exported dpDateChanged */
-let scheduleSpecificDates = [];
+const scheduleSpecificDates = [];
 
 function Schedule(opts, resourceGroups) {
-  let options = opts;
-  let groupDiv = $('#resourceGroups');
-  let multidateselect = $('#multidateselect');
+  const options = opts;
+  const groupDiv = $('#resourceGroups');
+  const multidateselect = $('#multidateselect');
   let renderingEvents = false;
 
   const ScheduleStandard = '0';
@@ -36,7 +36,7 @@ function Schedule(opts, resourceGroups) {
     $(window).on(
       'resize',
       _.debounce(function () {
-        let isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
+        const isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
         if (!isMobile) {
           renderEvents(true);
         }
@@ -71,7 +71,7 @@ function Schedule(opts, resourceGroups) {
     let cellAdjustment = 0;
     if (opts.scheduleStyle === ScheduleStandard || opts.scheduleStyle === ScheduleTall) {
       // adjust for how different browsers calculate positions for elements with borders
-      let slots = $('#reservations').find('td.slot');
+      const slots = $('#reservations').find('td.slot');
       if (slots.length !== 0) {
         cellAdjustment = Math.min(1, slots.first().position().top % 40);
       }
@@ -145,9 +145,9 @@ function Schedule(opts, resourceGroups) {
 
       tds.each((i, v) => {
         const td = $(v);
-        let tdMin = Number.parseInt(td.data('min'));
-        let tdMax = Number.parseInt(td.data('max'));
-        let resStart = Number.parseInt(reservation[startAttribute]);
+        const tdMin = Number.parseInt(td.data('min'));
+        const tdMax = Number.parseInt(td.data('max'));
+        const resStart = Number.parseInt(reservation[startAttribute]);
 
         if (tdMin <= resStart && tdMax > resStart) {
           startTd = td;
@@ -168,8 +168,8 @@ function Schedule(opts, resourceGroups) {
 
       tds.each((i, v) => {
         const td = $(v);
-        let tdMin = Number.parseInt(td.data('min'));
-        let resEnd = Number.parseInt(reservation[endAttribute]);
+        const tdMin = Number.parseInt(td.data('min'));
+        const resEnd = Number.parseInt(reservation[endAttribute]);
 
         if (tdMin <= resEnd) {
           endTd = td;
@@ -266,10 +266,10 @@ function Schedule(opts, resourceGroups) {
         }
       });
 
-      let left = startSlot.position().left;
-      let height = 40;
-      let width = endSlot.position().left - startSlot.position().left + endSlot.outerWidth();
-      let top = startSlot.position().top;
+      const left = startSlot.position().left;
+      const height = 40;
+      const width = endSlot.position().left - startSlot.position().left + endSlot.outerWidth();
+      const top = startSlot.position().top;
       return {
         startSlot,
         endSlot,
@@ -281,8 +281,8 @@ function Schedule(opts, resourceGroups) {
     }
 
     function createDivForReservation(reservation, startSlot, endSlot, height, width, top, left) {
-      let divHeight = height;
-      let className = reservation.IsReservation ? 'reserved' : 'unreservable';
+      const divHeight = height;
+      const className = reservation.IsReservation ? 'reserved' : 'unreservable';
       const mine = reservation.IsOwner ? 'mine' : '';
       const past = reservation.IsPast ? 'past' : '';
       const participant = reservation.IsParticipant ? 'participating' : '';
@@ -294,7 +294,7 @@ function Schedule(opts, resourceGroups) {
         reservation.IsReservation && ((reservation.IsOwner && !reservation.IsPast) || reservation.IsAdmin);
       const draggableAttribute = isDraggable ? 'draggable="true"' : '';
 
-      let color =
+      const color =
         reservation.BackgroundColor !== ''
           ? `background-color:${reservation.BackgroundColor};color:${reservation.TextColor};`
           : '';
@@ -322,9 +322,9 @@ function Schedule(opts, resourceGroups) {
 
       if (opts.scheduleStyle === ScheduleStandard && opts.fastReservationLoad) {
         // convert our list of reservations to a mapping of arrays. keyed by the resourceId
-        let resourceIdMap = new Map();
+        const resourceIdMap = new Map();
         reservationList.forEach((item) => {
-          let resource_id = Number.parseInt(item.ResourceId);
+          const resource_id = Number.parseInt(item.ResourceId);
           if (!resourceIdMap.has(resource_id)) {
             resourceIdMap.set(resource_id, []);
           }
@@ -345,7 +345,7 @@ function Schedule(opts, resourceGroups) {
               .find('tr.slots')
               .each(function () {
                 const tr_slots = $(this);
-                let resourceId = tr_slots.data('resourceid');
+                const resourceId = tr_slots.data('resourceid');
                 if (resourceIdMap.has(resourceId)) {
                   for (const reservation of resourceIdMap.get(resourceId)) {
                     if (isReservationInTable(reservation, t)) {
@@ -355,7 +355,7 @@ function Schedule(opts, resourceGroups) {
                       }
                       const startEnd = findReservationStartAndEndSlots(reservation, tr_slots);
                       const { startSlot, endSlot, height, width, top, left } = startEnd;
-                      let div = createDivForReservation(reservation, startSlot, endSlot, height, width, top, left);
+                      const div = createDivForReservation(reservation, startSlot, endSlot, height, width, top, left);
                       if (reservation.IsReservation) {
                         attachReservationEvents(div, reservation);
                       }
@@ -427,7 +427,7 @@ function Schedule(opts, resourceGroups) {
                 slotWidth = startEnd.width;
               }
 
-              let $tempElement = $('<div>')
+              const $tempElement = $('<div>')
                 .css({
                   position: 'absolute',
                   left: -9999, // Move off-screen
@@ -486,7 +486,7 @@ function Schedule(opts, resourceGroups) {
               return;
             }
 
-            let className = res.IsReservation ? 'reserved' : 'unreservable';
+            const className = res.IsReservation ? 'reserved' : 'unreservable';
             const mine = res.IsOwner ? 'mine' : '';
             const participant = res.IsParticipant ? 'participating' : '';
             const past = res.IsPast ? 'past' : '';
@@ -513,8 +513,8 @@ function Schedule(opts, resourceGroups) {
 
               const startsBefore = res.StartDate < tableMin;
               const endsAfter = res.EndDate > tableMax;
-              let startTime = startsBefore ? opts.midnightLabel : res.StartTime;
-              let endTime = endsAfter ? opts.midnightLabel : res.EndTime;
+              const startTime = startsBefore ? opts.midnightLabel : res.StartTime;
+              const endTime = endsAfter ? opts.midnightLabel : res.EndTime;
               const div = $(`<div
                                     class="${className} ${mine} ${past} ${participant} ${isPending} ${additonalCSSClasses} condensed-event"
                                     style="${color}"
@@ -538,10 +538,11 @@ function Schedule(opts, resourceGroups) {
             if (!startEnd) {
               return;
             }
-            let { startTd, endTd, height, width, top, left } = startEnd;
+            const { startTd, endTd } = startEnd;
+            let { height, width, top, left } = startEnd;
 
             let numberOfConflicts = 0;
-            let conflictIds = [];
+            const conflictIds = [];
 
             const adjustOverlap = function () {
               const precision = 2;
@@ -583,7 +584,7 @@ function Schedule(opts, resourceGroups) {
 
             //----------CHANGE HEIGTH OF ROWS TO ALLOW FULL LABEL TEXT TO SHOW------------
             if (opts.scheduleStyle === ScheduleStandard) {
-              let current_TD = t.find('td[data-resourceid="' + res.ResourceId + '"]:first');
+              const current_TD = t.find('td[data-resourceid="' + res.ResourceId + '"]:first');
 
               var current_TR = current_TD.parent();
 
@@ -610,10 +611,10 @@ function Schedule(opts, resourceGroups) {
             if (opts.scheduleStyle === ScheduleTall) {
               const countConflicts = function () {
                 t.find(`div.event[data-resourceid="${res.ResourceId}"]`).each((i, div) => {
-                  let divMin = Number.parseInt($(div).data('start'));
-                  let divMax = Number.parseInt($(div).data('end'));
-                  let resStart = Number.parseInt(res.StartDate);
-                  let resEnd = Number.parseInt(res.EndDate);
+                  const divMin = Number.parseInt($(div).data('start'));
+                  const divMax = Number.parseInt($(div).data('end'));
+                  const resStart = Number.parseInt(res.StartDate);
+                  const resEnd = Number.parseInt(res.EndDate);
 
                   const overlaps = resStart <= divMin && resEnd >= divMax;
                   const conflictsStart = resStart >= divMin && resStart < divMax;
@@ -1024,7 +1025,7 @@ function Schedule(opts, resourceGroups) {
       });
 
       reservations.on('mouseenter', 'td.reservable', (e) => {
-        let td = $(e.target);
+        const td = $(e.target);
         td.addClass('hilite');
         td.siblings('.resourcename').toggleClass('hilite');
 
@@ -1040,7 +1041,7 @@ function Schedule(opts, resourceGroups) {
       });
 
       reservations.on('mouseleave', 'td.reservable', (e) => {
-        let td = $(e.target);
+        const td = $(e.target);
 
         td.siblings('.resourcename').removeClass('hilite');
         if (selectingTds && tds.find((i) => i.data('ref') === td.data('ref')) !== undefined) {
