@@ -822,6 +822,7 @@ class fr_fr extends en_gb
         $strings['ConflictingReservationDates'] = 'Il y a des réservations en conflit à la date suivante:';
         $strings['InstancesOverlapRule'] = 'Plusieurs instances de la réservation se chevauchent:';
         $strings['StartDateBeforeEndDateRule'] = 'La date de départ doit être avant la date de fin';
+        $strings['RecurringWithoutTerminationRule'] = 'Une date de fin est requise pour les blocages récurrents.';
         $strings['StartIsInPast'] = 'La date de départ ne peut être passée';
         $strings['EmailDisabled'] = 'L\'administrateur a désactivé les notifications par email.';
         $strings['ValidLayoutRequired'] = 'Les créneaux doivent couvrir 24 heures (de minuit à minuit).';

@@ -795,6 +795,7 @@ class fi_fi extends en_gb
         $strings['ConflictingReservationDates'] = 'Seuraavina päivinä on ristiriidan aiheuttavia toisia varauksia: ';
         $strings['InstancesOverlapRule'] = 'Jotkut varaussarjan esiintymät menevät päällekkäin:';
         $strings['StartDateBeforeEndDateRule'] = 'Aloituspäivän tulee olla ennen varauksen loppumispäivää';
+        $strings['RecurringWithoutTerminationRule'] = 'Toistuvalle estolle vaaditaan päättymispäivä.';
         $strings['StartIsInPast'] = 'Aloituspäivä ei voi olla menneisyydessä';
         $strings['EmailDisabled'] = 'Moderaattori on estänyt automaattiset sähköposti-ilmoitukset';
         $strings['ValidLayoutRequired'] = 'Varaa kaikki 24 tuntia alkaen ja päättyen klo 00:00.';

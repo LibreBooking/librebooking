@@ -827,6 +827,7 @@ class da_da extends en_gb
         $strings['ConflictingReservationDates'] = 'Der er konflikter mellem reservationer på følgende datoer.';
         $strings['InstancesOverlapRule'] = 'I nogle af reservationerne i serien er der overlap.';
         $strings['StartDateBeforeEndDateRule'] = 'Begyndelsestidspunktet skal være før sluttidspunktet.';
+        $strings['RecurringWithoutTerminationRule'] = 'En slutdato er påkrævet for gentagne blokeringer.';
         $strings['StartIsInPast'] = 'Begyndelsestidspunktet kan ikke være i fortiden';
         $strings['EmailDisabled'] = 'Din administrator har fjernet muligheden for at få besked via e-mail.';
         $strings['ValidLayoutRequired'] = 'Tidsintervallerne skal dække alle 24 timer i døgnet og begynde og slutte kl. 00:00.';

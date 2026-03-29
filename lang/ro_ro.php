@@ -409,6 +409,7 @@ class ro_ro extends en_gb
         $strings['NoResourcePermission'] = 'Nu aveți permisiunea de a avea acces la una sau mai multe; din resursele necesare';
         $strings['ConflictingReservationDates'] = 'Există rezervari contradictorii cu privire la următoarele date:';
         $strings['StartDateBeforeEndDateRule'] = 'Data de începere trebuie să fie anterioară datei de încheiere';
+        $strings['RecurringWithoutTerminationRule'] = 'O dată de încheiere este necesară pentru blocările recurente.';
         $strings['StartIsInPast'] = 'Data de inceput nu poate fi stabilita in trecut';
         $strings['EmailDisabled'] = 'Administratorul a restrictionat notificarea prin e-mail';
         $strings['ValidLayoutRequired'] = 'Gli Slots devono essere indicati per tutte le 24 ore del giorno partendo e finendo alle 12:00 AM.';

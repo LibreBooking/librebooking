@@ -650,6 +650,7 @@ class ru_ru extends en_gb
         $strings['NoResourcePermission'] = 'У вас нет разрешения на доступ к одному или нескольким из требуемых помещений.';
         $strings['ConflictingReservationDates'] = 'Существуют противоречивые Бронирования в следующих сроках:';
         $strings['StartDateBeforeEndDateRule'] = 'Дата и время начала должно быть до даты и времени окончания.';
+        $strings['RecurringWithoutTerminationRule'] = 'Для повторяющихся блокировок требуется дата окончания.';
         $strings['StartIsInPast'] = 'Дата и время начала не может быть в прошлом.';
         $strings['EmailDisabled'] = 'Администратор отключил уведомления по электронной почте.';
         $strings['ValidLayoutRequired'] = 'Слоты должны быть обеспечены для всех 24 часов дня начиная и заканчивая в 12:00 AM.';

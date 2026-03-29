@@ -319,6 +319,7 @@ class ca extends en_gb
         $strings['NoResourcePermission'] = 'No tens permisos per accedir a un o m&eacute;s dels recursos requerits';
         $strings['ConflictingReservationDates'] = 'Hi ha conflictes a les reserves de les seguents dates:';
         $strings['StartDateBeforeEndDateRule'] = 'La data d\'Inici ha de ser anterior que la data final';
+        $strings['RecurringWithoutTerminationRule'] = 'Cal una data de finalització per als bloquejos recurrents.';
         $strings['StartIsInPast'] = 'La data inicial no pot ser passada';
         $strings['EmailDisabled'] = 'L\'administrador ha desactivat les notificacions per email';
         $strings['ValidLayoutRequired'] = 'S\'han de proporcionar slots per les 24 hores del dia comen&ccedil;ant i acabant a les 12:00 AM.';

@@ -2,6 +2,13 @@
 
 class BlackoutDateTimeValidationResult implements IBlackoutValidationResult
 {
+    private string $messageKey;
+
+    public function __construct(string $messageKey = 'StartDateBeforeEndDateRule')
+    {
+        $this->messageKey = $messageKey;
+    }
+
     /**
      * @return bool
      */
@@ -15,7 +22,7 @@ class BlackoutDateTimeValidationResult implements IBlackoutValidationResult
      */
     public function Message()
     {
-        return Resources::GetInstance()->GetString('StartDateBeforeEndDateRule');
+        return Resources::GetInstance()->GetString($this->messageKey);
     }
 
     /**

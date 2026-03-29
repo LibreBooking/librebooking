@@ -816,6 +816,7 @@ class du_nl extends en_gb
         $strings['ConflictingReservationDates'] = 'Er zijn conflicterende reserveringen op volgende data:';
         $strings['InstancesOverlapRule'] = 'Sommige exemplaren van de reserveringsreeks overlappen elkaar:';
         $strings['StartDateBeforeEndDateRule'] = 'De startdatum moet voor de einddatum liggen';
+        $strings['RecurringWithoutTerminationRule'] = 'Een einddatum is vereist voor terugkerende blokkeringen.';
         $strings['StartIsInPast'] = 'Een startdatum in het verleden is ongeldig';
         $strings['EmailDisabled'] = 'De beheerder zette de optie email meldingen af';
         $strings['ValidLayoutRequired'] = 'Slots moeten voor de volledige 24 uren van de dag voorzien worden, beginnend en eindigend om 12:00 AM.';

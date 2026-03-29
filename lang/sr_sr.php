@@ -529,6 +529,7 @@ class sr_sr extends en_gb
         $strings['NoResourcePermission'] = 'Nemate prava za pristup resursima.';
         $strings['ConflictingReservationDates'] = 'Postoje rezervacije u konfliktu za sledeći datum:';
         $strings['StartDateBeforeEndDateRule'] = 'Datum i vreme početka mora biti pre datuma i vremena kraja.';
+        $strings['RecurringWithoutTerminationRule'] = 'Datum završetka je obavezan za ponavljajuće blokade.';
         $strings['StartIsInPast'] = 'Datum i vreme početka ne može biti u prošlosti.';
         $strings['EmailDisabled'] = 'Administrator je isključio e-mail obaveštenja.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';

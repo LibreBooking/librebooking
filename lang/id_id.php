@@ -465,6 +465,7 @@ class id_id extends en_gb
         $strings['NoResourcePermission'] = 'Anda tidak memiliki akses untuk resource yang diminta';
         $strings['ConflictingReservationDates'] = 'Terjadi bentrokan reservasi pada tanggal berikut:';
         $strings['StartDateBeforeEndDateRule'] = 'Tanggal dan waktu mulai harus sebelum tanggal dan waktu berakhir';
+        $strings['RecurringWithoutTerminationRule'] = 'Tanggal akhir diperlukan untuk pemblokiran berulang.';
         $strings['StartIsInPast'] = 'Tanggal dan waktu mulai tidak bisa dilakukan pada masa lampau';
         $strings['EmailDisabled'] = 'Administrator menonatifkan email pemberitahuan';
         $strings['ValidLayoutRequired'] = 'Slot harus tersedia pada semua 24 jam sehari dimulai dan diakhiri pada 12:00 AM.';

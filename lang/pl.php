@@ -851,6 +851,7 @@ class pl extends en_gb
         $strings['ConflictingReservationDates'] = 'Istnieją konflikty rezerwacji w podanych dniach:';
         $strings['InstancesOverlapRule'] = 'Rezerwacje nakładają się na siebie:';
         $strings['StartDateBeforeEndDateRule'] = 'Data rozpoczęcia musi być wcześniejsza niż data zakończenia';
+        $strings['RecurringWithoutTerminationRule'] = 'Data zakończenia jest wymagana dla powtarzających się blokad.';
         $strings['StartIsInPast'] = 'Data rozpoczęcia nie może być datą z przeszłości';
         $strings['EmailDisabled'] = 'Administrator wyłączył powiadomienia mailowe';
         $strings['ValidLayoutRequired'] = 'Wpisy muszą być uzupełnione dla wszystkich 24 godzin od rozpoczęcia dnia aż do północy.';

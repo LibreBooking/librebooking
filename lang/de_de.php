@@ -813,6 +813,7 @@ class de_de extends en_gb
         $strings['NoResourcePermission'] = 'Sie haben keine Berechtigung für eine oder mehrere der angefragten Ressourcen';
         $strings['ConflictingReservationDates'] = 'Es gibt in Konflikt stehende Reservierungen an folgenden Tagen:';
         $strings['StartDateBeforeEndDateRule'] = 'Der Startzeitpunkt muss vor dem Endzeitpunkt liegen';
+        $strings['RecurringWithoutTerminationRule'] = 'Ein Enddatum ist für wiederkehrende Blockierungen erforderlich.';
         $strings['StartIsInPast'] = 'Der Startzeitpunkt darf nicht in der Vergangenheit liegen';
         $strings['EmailDisabled'] = 'Em-Mail-Benachrichtigungen wurden vom Administrator deaktiviert';
         $strings['ValidLayoutRequired'] = 'Zeitfenster müssen für alle 24 Stunden eines Tages vorgegeben werden, von und bis 0 Uhr.';

@@ -859,6 +859,7 @@ class en_us extends Language
         $strings['ConflictingReservationDates'] = 'There are conflicting reservations on the following dates:';
         $strings['InstancesOverlapRule'] = 'Some instances of the reservation series overlap:';
         $strings['StartDateBeforeEndDateRule'] = 'The start date and time must be before the end date and time.';
+        $strings['RecurringWithoutTerminationRule'] = 'A termination date is required for recurring blackouts.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 00:00.';

@@ -823,6 +823,7 @@ class es extends en_gb
         $strings['ConflictingReservationDates'] = 'Hay conflictos en las reservas de las siguientes fechas:';
         $strings['InstancesOverlapRule'] = 'Algunas instancias de la serie de reservas se solapan:';
         $strings['StartDateBeforeEndDateRule'] = 'La fecha de inicio debe ser anterior a la fecha final';
+        $strings['RecurringWithoutTerminationRule'] = 'Se requiere una fecha de finalización para los bloqueos recurrentes.';
         $strings['StartIsInPast'] = 'La fecha inicial no puede ser pasada';
         $strings['EmailDisabled'] = 'El administrador ha desactivado las notificaciones por correo';
         $strings['ValidLayoutRequired'] = 'Se deben proporcionar intervalos de tiempo para las 24 horas del día comenzando y terminando a las 12:00 AM.';

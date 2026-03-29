@@ -511,6 +511,7 @@ class sk extends en_gb
         $strings['NoResourcePermission'] = 'Nemáte oprávnenie k jednemu alebo viac požadovaným prostriedkom';
         $strings['ConflictingReservationDates'] = 'Tu je výpis rezervácií, ktoré sú v konflikte s Vami vytvorenou:';
         $strings['StartDateBeforeEndDateRule'] = 'Začiatok rezervácie musí začínať skôr ako jej koniec.';
+        $strings['RecurringWithoutTerminationRule'] = 'Pre opakované blokovania je vyžadovaný dátum ukončenia.';
         $strings['StartIsInPast'] = 'Začiatok rezervácie nemôže být vytvorený v minulosti';
         $strings['EmailDisabled'] = 'Administrátor zakázal odosielanie e-mailových upozornení.';
         $strings['ValidLayoutRequired'] = 'Časový úsek musí byť vytvorený na celý deň - 24 hodín';

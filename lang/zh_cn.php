@@ -436,6 +436,7 @@ class zh_cn extends en_us
         $strings['NoResourcePermission'] = '您没有权限访问一个或一个以上的请求.';
         $strings['ConflictingReservationDates'] = '在接下来的日子里存在有冲突的预约:';
         $strings['StartDateBeforeEndDateRule'] = '开始时间和日期必须早于结束时间和日期';
+        $strings['RecurringWithoutTerminationRule'] = '重复黑名单需要设定终止日期。';
         $strings['StartIsInPast'] = '开始时间和日期必须比当前时间晚';
         $strings['EmailDisabled'] = '管理员已经禁止了邮件提醒';
         $strings['ValidLayoutRequired'] = '时间间隔必须提供全天24小时而且必须从上午12时开始并结束于上午12时.';

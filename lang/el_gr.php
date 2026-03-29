@@ -844,6 +844,7 @@ class el_gr extends en_gb
         $strings['ConflictingReservationDates'] = 'Υπάρχουν κρατήσεις σε σύγκρουση για τις ακόλουθες ημερομηνίες:';
         $strings['InstancesOverlapRule'] = 'Ορισμένα στιγμιότυπα της σειράς κρατήσεων αλληλοεπικαλύπτονται:';
         $strings['StartDateBeforeEndDateRule'] = 'Η ημερομηνία και ώρα έναρξης πρέπει να είναι πριν την ημερομηνία και ώρα λήξης.';
+        $strings['RecurringWithoutTerminationRule'] = 'Απαιτείται ημερομηνία λήξης για επαναλαμβανόμενες δεσμεύσεις.';
         $strings['StartIsInPast'] = 'Η ημερομηνία και ώρα έναρξης δεν μπορούν να είναι στο παρελθόν.';
         $strings['EmailDisabled'] = 'Ο διαχειριστής έχει απενεργοποιήσει τις ειδοποιήσεις με email.';
         $strings['ValidLayoutRequired'] = 'Τα κενά πρέπει να παρέχονται για όλες τις 24 ώρες της ημέρας με αρχή και λήξη στις 12:00 ΠΜ.';

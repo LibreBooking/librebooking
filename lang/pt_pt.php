@@ -818,6 +818,7 @@ class pt_pt extends en_gb
         $strings['Standard'] = 'Padrão';
         $strings['StandardScheduleDisplay'] = 'Utilize a exibição de agenda padrão';
         $strings['StartDateBeforeEndDateRule'] = 'A data de início deve ser anterior à data de término';
+        $strings['RecurringWithoutTerminationRule'] = 'É necessária uma data de término para bloqueios recorrentes.';
         $strings['StartIsInPast'] = 'A data de início não pode ser no passado';
         $strings['StartTime'] = 'Hora de início';
         $strings['StartsOn'] = 'Inicia em';

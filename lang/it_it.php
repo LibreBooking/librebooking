@@ -812,6 +812,7 @@ class it_it extends en_gb
         $strings['ConflictingReservationDates'] = 'Ci sono prenotazioni in conflitto nelle seguenti date:';
         $strings['InstancesOverlapRule'] = 'Qualche istanza della serie di prenotazioni si sovrappone:';
         $strings['StartDateBeforeEndDateRule'] = 'La data di inizio deve essere antecedente alla data di fine';
+        $strings['RecurringWithoutTerminationRule'] = 'È richiesta una data di termine per i blocchi ricorrenti.';
         $strings['StartIsInPast'] = 'La data di inizio non può essere nel passato';
         $strings['EmailDisabled'] = 'L\'amministratore ha disabilitato le notifiche via email';
         $strings['ValidLayoutRequired'] = 'L\'insieme delle fasce orarie deve coprire tutte le 24 ore del giorno iniziando e finendo alle 00:00.';

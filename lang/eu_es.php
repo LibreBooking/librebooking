@@ -586,6 +586,7 @@ class eu_es extends en_gb
         $strings['NoResourcePermission'] = 'Ez duzu baimenik eskatutako baliabideren baterako';
         $strings['ConflictingReservationDates'] = 'Data hauetako erreserben arteko gatazkak daude:';
         $strings['StartDateBeforeEndDateRule'] = 'Hasiera datak amaiera data baino lehenago izan behar duLa fecha de inicio debe ser anterior a la fecha final';
+        $strings['RecurringWithoutTerminationRule'] = 'Amaiera data beharrezkoa da blokeaketa errepikakorrentzat.';
         $strings['StartIsInPast'] = 'Hasiera data ezin da pasatutakoa izan';
         $strings['EmailDisabled'] = 'Kudeatzaileak posta bidezko jakinarazpenak desgaitu ditu';
         $strings['ValidLayoutRequired'] = 'Eguneko 24 orduetarako denbora tarteak eman behar dira 12:00 AM-n hasita eta bukatuta.';

@@ -624,6 +624,7 @@ class he extends en_gb
         $strings['NoResourcePermission'] = 'אין לך הרשאות לגשת לאחד או יותר מהמשאבים המבוקשים';
         $strings['ConflictingReservationDates'] = 'כבר קיימת הזמנה לחדר זה באותו מועד:';
         $strings['StartDateBeforeEndDateRule'] = 'תאריך/שעת התחלה חייב להיות לפני תאריך/שעת סיום';
+        $strings['RecurringWithoutTerminationRule'] = 'נדרש תאריך סיום עבור חסימות חוזרות.';
         $strings['StartIsInPast'] = 'תאריך/שעת התחלה לא יכול להיות בעבר';
         $strings['EmailDisabled'] = 'מנהל המערכת ביטל הודעות באמצעות דואר אלקטרוני';
         $strings['ValidLayoutRequired'] = 'יש לשבץ כל 24 שעות היממא, החל ומסיים בחצות הלילה.';

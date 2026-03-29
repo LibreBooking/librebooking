@@ -605,6 +605,7 @@ class vn_vn extends en_gb
         $strings['NoResourcePermission'] = 'You do not have permission to access one or more of the requested resources.';
         $strings['ConflictingReservationDates'] = 'There are conflicting reservations on the following dates:';
         $strings['StartDateBeforeEndDateRule'] = 'The start date and time must be before the end date and time.';
+        $strings['RecurringWithoutTerminationRule'] = 'Ngày kết thúc là bắt buộc đối với các lần chặn định kỳ.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';

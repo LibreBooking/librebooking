@@ -807,6 +807,7 @@ class hu_hu extends en_us
         $strings['NoResourcePermission'] = 'Nincs megfeleő joga hozzáférni egy vagy több elemhez.';
         $strings['ConflictingReservationDates'] = 'Ütköző fogalások vannak az alábbi dátumokon:';
         $strings['StartDateBeforeEndDateRule'] = 'A kezdés dátuma és időpontja a befejezés dátumának és időpontjának előtt kell, hogy legyen.';
+        $strings['RecurringWithoutTerminationRule'] = 'Az ismétlődő zárolásokhoz befejezési dátum szükséges.';
         $strings['StartIsInPast'] = 'A kezdés dátuma és időpontja nem lehet a múltban.';
         $strings['EmailDisabled'] = 'Az admin letiltotta az e-mail értesítőket.';
         $strings['ValidLayoutRequired'] = 'A rekeszeket egész napra be kell osztani.';

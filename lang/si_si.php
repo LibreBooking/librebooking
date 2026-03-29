@@ -523,6 +523,7 @@ class si_si extends en_gb
         $strings['NoResourcePermission'] = 'Nimate dovoljenja za dostop do enega ali več zahtevanih virov.';
         $strings['ConflictingReservationDates'] = 'Obstajajo konfliktne rezervacije za naslednje datume:';
         $strings['StartDateBeforeEndDateRule'] = 'Začetni datum in čas rezervacije mora biti pred končnim datumom in časom.';
+        $strings['RecurringWithoutTerminationRule'] = 'Za ponavljajoče blokade je potreben končni datum.';
         $strings['StartIsInPast'] = 'Začetni in končni datum rezervacije ne more biti v preteklosti.';
         $strings['EmailDisabled'] = 'Administrator je onemogočil obveščanje po elektronski pošti.';
         $strings['ValidLayoutRequired'] = 'Termini morajo biti postavljeni za vseh 24 ur v dnevu z začetkom in koncem ob 12:00.';

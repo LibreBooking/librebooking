@@ -633,6 +633,7 @@ class tr_tr extends en_gb
         $strings['NoResourcePermission'] = 'You do not have permission to access one or more of the requested resources.';
         $strings['ConflictingReservationDates'] = 'Şu zaman için çakışma mevcut:';
         $strings['StartDateBeforeEndDateRule'] = 'The start date and time must be before the end date and time.';
+        $strings['RecurringWithoutTerminationRule'] = 'Tekrarlayan karartmalar için bir bitiş tarihi gereklidir.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';

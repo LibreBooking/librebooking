@@ -396,6 +396,7 @@ class bg_bg extends en_gb
         $strings['NoResourcePermission'] = 'Вие нямате права за достъп до един или повече от поисканите ресурси';
         $strings['ConflictingReservationDates'] = 'Има противоречиви резервации на следните дати:';
         $strings['StartDateBeforeEndDateRule'] = 'Началната дата и час трябва да бъде преди крайната дата и час';
+        $strings['RecurringWithoutTerminationRule'] = 'Крайна дата е задължителна за повтарящи се блокирания.';
         $strings['StartIsInPast'] = 'Началната дата и час не могат да бъдат в миналото';
         $strings['EmailDisabled'] = 'Администраторът е забранил известия по имейл';
         $strings['ValidLayoutRequired'] = 'Времеви интервали трябва да бъдат осигурени за всички 24 часа на денонощието, започвайки и завършвайки в 12:00 ч.';

@@ -456,6 +456,7 @@ class sv_sv extends en_gb
         $strings['NoResourcePermission'] = 'Du har ingen behörighet att komma åt begärd(a) lokal(er)'; // // tjänst --> lokal
         $strings['ConflictingReservationDates'] = 'Det finns motstridiga reservationer på följande datum:';
         $strings['StartDateBeforeEndDateRule'] = 'Startdatum och tid måste vara före slutdatum och tid';
+        $strings['RecurringWithoutTerminationRule'] = 'Ett slutdatum krävs för återkommande blockeringar.';
         $strings['StartIsInPast'] = 'Startdatum och tid kan inte vara i det förflutna';
         $strings['EmailDisabled'] = 'Administratören har inaktiverat e-postmeddelanden';
         $strings['ValidLayoutRequired'] = 'Tidsintervall skall lämnas för alla 24 timmar på dagen med början och slut vid 12:00 .';
