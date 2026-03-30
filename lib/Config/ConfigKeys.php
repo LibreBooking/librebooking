@@ -1670,6 +1670,22 @@ class ConfigKeys extends AbstractConfigKeys
         'description' => 'Redirect URI for OAuth2 login',
         'section' => 'authentication'
     ];
+    public const AUTHENTICATION_OAUTH2_SCOPE = [
+        'key' => 'authentication.oauth2.scope',
+        'type' => 'string',
+        'default' => 'openid email profile',
+        'label' => 'OAuth2 Scopes',
+        'description' => 'Scopes requested for OAuth2 login (space separated list)',
+        'section' => 'authentication'
+    ];
+    public const AUTHENTICATION_OAUTH2_GROUPS_CLAIM = [
+        'key' => 'authentication.oauth2.groups.claim',
+        'type' => 'string',
+        'default' => '',
+        'label' => 'OAuth2 Groups Claim',
+        'description' => 'Name of the claim in the userinfo response that contains the user\'s groups (ideally an array of group names) (leave empty to disable group sync)',
+        'section' => 'authentication'
+    ];
 
     // Plugin Configuration
 

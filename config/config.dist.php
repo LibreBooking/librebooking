@@ -704,6 +704,13 @@ return [
 
             # Redirect URI for OAuth2 login
             'oauth2.client.uri' => '/Web/oauth2-auth.php',
+
+            # Scopes requested for OAuth2 login (space separated list)
+            'oauth2.scope' => 'openid email profile',
+
+            # Name of the claim in the userinfo response that contains the user's groups
+            # (ideally an array of group names) (leave empty to disable group sync)
+            'oauth2.groups.claim' => '',
         ],
 
         ######################

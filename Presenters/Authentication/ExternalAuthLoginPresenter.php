@@ -280,6 +280,19 @@ class ExternalAuthLoginPresenter
             return;
         }
 
+        // If configured, also fetch the groups to sync
+        $groups = null;
+        $groupsScope = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_GROUPS_CLAIM);
+        if (!empty($groupsScope)) {
+            $groupsClaim = $user[$groupsScope] ?? null;
+            if (is_array($groupsClaim)) {
+                // Ensure groups is an array of strings
+                $groups = array_map('strval', $groupsClaim);
+            } else {
+                $groups = null;
+            }
+        }
+
         $this->processUserData(
             $user['preferred_username'] ?? $email,
             $email,
@@ -287,7 +300,8 @@ class ExternalAuthLoginPresenter
             $user['family_name'] ?? '',
             $user['phone_number'] ?? '',
             $user['organization'] ?? '',
-            $user['title'] ?? ''
+            $user['title'] ?? '',
+            $groups
         );
     }
 
@@ -295,7 +309,7 @@ class ExternalAuthLoginPresenter
     /**
      * Processes user given data, creates a user in database if it doesn't exist and logs it in
      */
-    private function processUserData($username, $email, $firstName, $lastName, $phone = null, $organization = null, $title = null)
+    private function processUserData($username, $email, $firstName, $lastName, $phone = null, $organization = null, $title = null, $groups = null)
     {
         $requiredDomainValidator = new RequiredEmailDomainValidator($email);
         $requiredDomainValidator->Validate();
@@ -304,33 +318,29 @@ class ExternalAuthLoginPresenter
             $this->page->ShowError([Resources::GetInstance()->GetString('InvalidEmailDomain')]);
             return;
         }
-        if ($this->registration->UserExists($username, $email)) {
+        if ($allowRegistration || $this->registration->UserExists($username, $email)) {
+            $this->registration->Synchronize(
+                user: new AuthenticatedUser(
+                    $username,
+                    $email,
+                    $firstName,
+                    $lastName,
+                    Password::GenerateRandom(),
+                    Resources::GetInstance()->CurrentLanguage,
+                    Configuration::Instance()->GetDefaultTimezone(),
+                    $phone,
+                    $organization,
+                    $title,
+                    $groups
+                ),
+                insertOnly: false,
+                overwritePassword: false
+            );
             $this->authentication->Login($email, new WebLoginContext(new LoginData()));
             LoginRedirector::Redirect($this->page);
         } else {
-            if ($allowRegistration) {
-                $this->registration->Synchronize(
-                    user: new AuthenticatedUser(
-                        $username,
-                        $email,
-                        $firstName,
-                        $lastName,
-                        Password::GenerateRandom(),
-                        Resources::GetInstance()->CurrentLanguage,
-                        Configuration::Instance()->GetDefaultTimezone(),
-                        $phone,
-                        $organization,
-                        $title
-                    ),
-                    insertOnly: false,
-                    overwritePassword: false
-                );
-                $this->authentication->Login($email, new WebLoginContext(new LoginData()));
-                LoginRedirector::Redirect($this->page);
-            } else {
-                $this->page->ShowError([Resources::GetInstance()->GetString('SelfRegistrationDisabled')]);
-                return;
-            }
+            $this->page->ShowError([Resources::GetInstance()->GetString('SelfRegistrationDisabled')]);
+            return;
         }
     }
 }

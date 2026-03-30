@@ -396,7 +396,7 @@ class LoginPresenter
         $params = [
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
-            'scope' => 'openid email profile',
+            'scope' => Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_SCOPE),
             'response_type' => 'code'
         ];
 

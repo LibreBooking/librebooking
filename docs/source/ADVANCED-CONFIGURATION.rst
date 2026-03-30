@@ -746,6 +746,8 @@ Authentication Providers
        'oauth2.client.id' => '',
        'oauth2.client.secret' => '',
        'oauth2.client.uri' => '/Web/oauth2-auth.php',
+       'oauth2.scope' => 'openid email profile',
+       'oauth2.groups.claim' => '',
    ],
 
 **authentication.hide.login.prompt**
@@ -837,6 +839,13 @@ Authentication Providers
 
 **authentication.oauth2.client.uri**
   Redirect URI for OAuth2 login.
+
+**authentication.oauth2.scope**
+  Scopes requested for OAuth2 login (space separated list).
+
+**authentication.oauth2.groups.claim**
+  Name of the claim in the userinfo response that contains the user's groups
+  (ideally an array of group names) (leave empty to disable group sync)
 
 For OAuth2 and SAML setup details, see :doc:`Oauth2-Configuration` and :doc:`SAML-Configuration`.
 
