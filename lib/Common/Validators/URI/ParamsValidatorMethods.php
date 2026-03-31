@@ -46,6 +46,29 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
     }
 
     /**
+     * Validates that a query parameter is either empty or numeric.
+     *
+     * Used for optional filter fields (e.g., schedule filter) where the param
+     * may be present with an empty value when the user has not set a filter.
+     */
+    public static function optionalNumericValidator(string $param, string $requestURI): bool
+    {
+        if (self::validatePossibleScripts($requestURI)) {
+            return false; // Reject URLs containing potential XSS payloads
+        }
+
+        $value = self::getQueryParam($param, $requestURI);
+        if ($value === null) {
+            return false;
+        }
+        if ($value === '') {
+            return true; // empty is valid for optional filter fields
+        }
+
+        return ctype_digit($value);
+    }
+
+    /**
      * Validates that a query parameter is present and has a non-empty value.
      */
     public static function existsInURLValidator(string $param, string $requestURI): bool
@@ -58,7 +81,6 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
         return $value !== null && $value !== '';
     }
-
 
     /**
      * Validates that a query parameter is present and its value is a date in YYYY-MM-DD format.
@@ -104,6 +126,27 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
         }
 
         return true;
+    }
+
+    /**
+     * Validates that a query parameter is present and either empty or a comma-separated
+     * list of dates in YYYY-M-D format (leading zeros optional for month and day).
+     */
+    public static function optionalSimpleDateValidator(string $param, string $requestURI): bool
+    {
+        if (self::validatePossibleScripts($requestURI)) {
+            return false; // Reject URLs containing potential XSS payloads
+        }
+
+        $value = self::getQueryParam($param, $requestURI);
+        if ($value === null) {
+            return false;
+        }
+        if ($value === '') {
+            return true;
+        }
+
+        return self::simpleDateValidatorList($param, $requestURI);
     }
 
 

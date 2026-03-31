@@ -221,6 +221,8 @@ class URIParamValidatorTest extends TestBase
             'boolean' => ParamsValidatorMethods::booleanValidator($param, $uri),
             'date' => ParamsValidatorMethods::dateValidator($param, $uri),
             'simpleDateList' => ParamsValidatorMethods::simpleDateValidatorList($param, $uri),
+            'optionalSimpleDate' => ParamsValidatorMethods::optionalSimpleDateValidator($param, $uri),
+            'optionalNumeric' => ParamsValidatorMethods::optionalNumericValidator($param, $uri),
         };
         $this->assertFalse($result, "Array param should be rejected by $validator for URI: $uri");
     }
@@ -235,6 +237,105 @@ class URIParamValidatorTest extends TestBase
             'boolean rejects array' => ['boolean', 'show', '/Web/view-schedule.php?show[]=true'],
             'date rejects array' => ['date', 'sd', '/Web/reservation.php?sd[]=2026-03-23'],
             'simpleDateList rejects array' => ['simpleDateList', 'sd', '/Web/reservation.php?sd[]=2026-03-23'],
+            'optionalSimpleDate rejects array' => ['optionalSimpleDate', 'sd', '/Web/schedule.php?sd[]='],
+            'optionalNumeric rejects array' => ['optionalNumeric', 'uid', '/Web/view-schedule.php?uid[]=123'],
         ];
+    }
+
+    /**
+     * @dataProvider optionalSimpleDateProvider
+     */
+    public function testOptionalSimpleDateValidator(string $uri, bool $expected)
+    {
+        $result = ParamsValidatorMethods::optionalSimpleDateValidator('sds', $uri);
+        $this->assertSame($expected, $result, "Failed for URI: $uri");
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function optionalSimpleDateProvider(): array
+    {
+        return [
+            'empty string is valid' => ['/Web/schedule.php?sds=', true],
+            'single date is valid' => ['/Web/schedule.php?sds=2026-03-31', true],
+            'date list is valid' => ['/Web/schedule.php?sds=2026-03-31,2026-04-01', true],
+            'missing param rejected' => ['/Web/schedule.php?sd=2026-03-31', false],
+            'invalid date rejected' => ['/Web/schedule.php?sds=bad-date', false],
+            'array param rejected' => ['/Web/schedule.php?sds[]=', false],
+            'xss rejected' => ['/Web/schedule.php?sds=&x=%3Cscript%3E', false],
+        ];
+    }
+
+    /**
+     * @dataProvider optionalNumericProvider
+     */
+    public function testOptionalNumericValidator(string $uri, bool $expected)
+    {
+        $result = ParamsValidatorMethods::optionalNumericValidator('uid', $uri);
+        $this->assertSame($expected, $result, "Failed for URI: $uri");
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function optionalNumericProvider(): array
+    {
+        return [
+            'valid digits' => ['/Web/schedule.php?uid=123', true],
+            'zero is valid' => ['/Web/schedule.php?uid=0', true],
+            'empty string is valid' => ['/Web/schedule.php?uid=', true],
+            'trailing alpha rejected' => ['/Web/schedule.php?uid=123abc', false],
+            'leading alpha rejected' => ['/Web/schedule.php?uid=abc123', false],
+            'alpha rejected' => ['/Web/schedule.php?uid=abc', false],
+            'float rejected' => ['/Web/schedule.php?uid=1.5', false],
+            'negative rejected' => ['/Web/schedule.php?uid=-1', false],
+            'missing param rejected' => ['/Web/schedule.php?other=123', false],
+            'array param rejected' => ['/Web/schedule.php?uid[]=123', false],
+            'xss script tag rejected' => ['/Web/schedule.php?uid=123&x=%3Cscript%3E', false],
+            'xss double quotes rejected' => ['/Web/schedule.php?uid=123&x=%22alert%22', false],
+        ];
+    }
+
+    /**
+     * Regression test: schedule filter with empty optional params must not fail validation.
+     */
+    public function testScheduleFilterWithEmptyOptionalParamsPassesValidation()
+    {
+        $requestURI = '/Web/schedule.php?RESOURCE_TYPE_ID=&maxParticipants=&sid=1&sd=2026-03-31&sds=&SUBMIT=true&clearFilter=0';
+        $result = ParamsValidator::validate(
+            params: RouteParamsKeys::VIEW_SCHEDULE,
+            requestURI: $requestURI,
+            optional: true,
+        );
+        $this->assertTrue($result, 'Schedule filter with empty optional params should pass validation');
+    }
+
+    /**
+     * Schedule filter with valid numeric optional params must pass validation.
+     */
+    public function testScheduleFilterWithNumericOptionalParamsPassesValidation()
+    {
+        $requestURI = '/Web/schedule.php?RESOURCE_TYPE_ID=5&maxParticipants=10&sid=1&sd=2026-03-31&sds=2026-03-31&SUBMIT=true&clearFilter=0';
+        $result = ParamsValidator::validate(
+            params: RouteParamsKeys::VIEW_SCHEDULE,
+            requestURI: $requestURI,
+            optional: true,
+        );
+        $this->assertTrue($result, 'Schedule filter with numeric optional params should pass validation');
+    }
+
+    /**
+     * Schedule filter with non-numeric optional params must fail validation.
+     */
+    public function testScheduleFilterWithInvalidOptionalParamsFailsValidation()
+    {
+        $requestURI = '/Web/schedule.php?RESOURCE_TYPE_ID=abc&sid=1&sd=2026-03-31&sds=2026-03-31&SUBMIT=true&clearFilter=0';
+        $result = ParamsValidator::validate(
+            params: RouteParamsKeys::VIEW_SCHEDULE,
+            requestURI: $requestURI,
+            optional: true,
+        );
+        $this->assertFalse($result, 'Schedule filter with non-numeric RESOURCE_TYPE_ID should fail validation');
     }
 }

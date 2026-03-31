@@ -16,4 +16,6 @@ class ParamsValidatorKeys
     public const OPTIONAL = 'o';
     public const BOOLEAN = 'b';
     public const MATCH = 'm';
+    public const OPTIONAL_NUMERIC = 'optional_numeric';
+    public const OPTIONAL_SIMPLEDATE = 'optional_simpledate';
 }

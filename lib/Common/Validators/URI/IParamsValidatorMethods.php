@@ -44,6 +44,27 @@ interface IParamsValidatorMethods
     public static function simpleDateValidatorList(string $param, string $requestURI): bool;
 
     /**
+     * Checks whether the parameter is empty or a valid comma-separated list
+     * of dates in YYYY-MM-DD or YYYY-M-D format.
+     *
+     * @param string $param         Query parameter in the URI
+     * @param string $requestURI    Request URI to check
+     *
+     * @return bool True if the parameter is valid
+     */
+    public static function optionalSimpleDateValidator(string $param, string $requestURI): bool;
+
+    /**
+     * Checks whether the parameter is empty or a numerical value.
+     *
+     * @param string $param         Query parameter in the URI
+     * @param string $requestURI    Request URI to check
+     *
+     * @return bool True if the parameter is valid
+     */
+    public static function optionalNumericValidator(string $param, string $requestURI): bool;
+
+    /**
      * Check if params is a valid date (YYYY-MM-DD HH:MM), hours and minutes can have one or two digits
      *
      * @param string $param         - Query param in URI
@@ -82,7 +103,6 @@ interface IParamsValidatorMethods
      * @return bool Returns true if is valid
      */
     public static function booleanValidator(string $param, string $requestURI): bool;
-
 
     /**
      * Check if param match with expecter value

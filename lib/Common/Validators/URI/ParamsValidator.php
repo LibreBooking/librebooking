@@ -139,8 +139,14 @@ class ParamsValidator
             case ParamsValidatorKeys::EXISTS:
                 return ParamsValidatorMethods::existsInURLValidator($param, $requestURI);
 
+            case ParamsValidatorKeys::OPTIONAL_SIMPLEDATE:
+                return ParamsValidatorMethods::optionalSimpleDateValidator($param, $requestURI);
+
             case ParamsValidatorKeys::REDIRECT_GUEST_RESERVATION:
                 return ParamsValidatorMethods::redirectGuestReservationValidator($requestURI);
+
+            case ParamsValidatorKeys::OPTIONAL_NUMERIC:
+                return ParamsValidatorMethods::optionalNumericValidator($param, $requestURI);
 
             case ParamsValidatorKeys::BOOLEAN:
                 return ParamsValidatorMethods::booleanValidator($param, $requestURI);
