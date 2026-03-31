@@ -87,10 +87,11 @@
                             <div class="d-flex align-items-center">
                                 <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}"><span
                                         class="bi bi-printer"></span></a>
-                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;" title="{translate key='MakeDefaultSchedule'}"><i
-                                        class="bi bi-star-fill"></i></a>
+                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;"
+                                    title="{translate key='MakeDefaultSchedule'}"><i class="bi bi-star-fill"></i></a>
                                 <a href="#" class="schedule-style me-1" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard->value}" title="{translate key='StandardScheduleDisplay'}">
+                                    schedule-display="{ScheduleStyle::Standard->value}"
+                                    title="{translate key='StandardScheduleDisplay'}">
                                     <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style me-1" id="schedule_tall"
@@ -102,7 +103,8 @@
                                     <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek->value}" title="{translate key='CondensedWeekScheduleDisplay'}">
+                                    schedule-display="{ScheduleStyle::CondensedWeek->value}"
+                                    title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
                             </div>
@@ -318,19 +320,18 @@
 
                                     <div class="form-group mb-2">
                                         <label for="resourceType" class="fw-bold">{translate key=ResourceType}</label>
-                                        <select id="resourceType" {formname key=RESOURCE_TYPE_ID}
-                                            {formname key=RESOURCE_TYPE_ID} class="form-select form-control-sm">
+                                        <select id="resourceType" {formname key=RESOURCE_TYPE_ID} class="form-select form-select-sm">
                                             <option value="">- {translate key=All} -</option>
                                             {object_html_options options=$ResourceTypes label='Name' key='Id' selected=$ResourceTypeIdFilter}
                                         </select>
                                     </div>
 
                                     {foreach from=$ResourceAttributes item=attribute}
-                                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='r' inputClass="form-control-sm" class="customAttribute  mb-2"}
+                                        {control type="AttributeControl" attribute=$attribute searchmode=true namePrefix='r' class="customAttribute mb-2"}
                                     {/foreach}
 
                                     {foreach from=$ResourceTypeAttributes item=attribute}
-                                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='rt' inputClass="form-control-sm" class="customAttribute mb-2"}
+                                        {control type="AttributeControl" attribute=$attribute searchmode=true namePrefix='rt' class="customAttribute mb-2"}
                                     {/foreach}
 
                                     <div class="d-grid gap-2">

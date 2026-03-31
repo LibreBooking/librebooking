@@ -113,7 +113,8 @@
                         <div class="col-12 col-sm-6" id="default-page">
                             <div class="form-group">
                                 <label class="reg fw-bold" for="homepage">{translate key="DefaultPage"}</label>
-                                <select {formname key='DEFAULT_HOMEPAGE'} id="homepage" class="form-select">
+                                <select {formname key='DEFAULT_HOMEPAGE'} id="homepage"
+                                    class="form-select form-select-sm">
                                     {html_options values=$HomepageValues output=$HomepageOutput selected=$Homepage}
                                 </select>
                             </div>
@@ -125,7 +126,8 @@
                             <div class="input-group">
                                 <span class="input-group-text"><a href="#" id="detectTimezone" class="link-primary"
                                         title="{translate key=Detect}"><i class="bi bi-clock"></i></a></span>
-                                <select {formname key='TIMEZONE'} class="form-select" id="timezoneDropDown">
+                                <select {formname key='TIMEZONE'} class="form-select form-select-sm"
+                                    id="timezoneDropDown">
                                     {html_options values=$TimezoneValues output=$TimezoneOutput selected=$Timezone}
                                 </select>
                             </div>
@@ -137,9 +139,10 @@
                                     <label class="reg fw-bold" for="phone">{translate key="Phone"}{if $RequirePhone}<i
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{/if}</label>
-                                    <input type="text" id="phone" {formname key="PHONE"} class="form-control" size="20"
-                                        {if $RequirePhone}required="required" data-bv-notempty="true"
-                                        data-bv-notempty-message="{translate key=PhoneRequired}" {/if} />
+                                    <input type="text" id="phone" {formname key="PHONE"}
+                                        class="form-control form-control-sm" size="20" {if $RequirePhone}required="required"
+                                            data-bv-notempty="true" data-bv-notempty-message="{translate key=PhoneRequired}"
+                                        {/if} />
                                 </div>
                             </div>
                         {/if}
@@ -152,8 +155,8 @@
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{/if}</label>
                                     <input type="text" id="txtOrganization" {formname key="ORGANIZATION"}
-                                        class="form-control" size="20" {if $RequireOrganization}required="required"
-                                            data-bv-notempty="true"
+                                        class="form-control form-control-sm" size="20"
+                                        {if $RequireOrganization}required="required" data-bv-notempty="true"
                                         data-bv-notempty-message="{translate key=OrganizationRequired}" {/if} />
                                 </div>
                             </div>
@@ -166,24 +169,25 @@
                                         for="txtPosition">{translate key="Position"}{if $RequirePosition}<i
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{/if}</label>
-                                    <input type="text" id="txtPosition" {formname key="POSITION"} class="form-control"
-                                        size="20" {if $RequirePosition}required="required" data-bv-notempty="true"
+                                    <input type="text" id="txtPosition" {formname key="POSITION"}
+                                        class="form-control form-control-sm" size="20"
+                                        {if $RequirePosition}required="required" data-bv-notempty="true"
                                         data-bv-notempty-message="{translate key=PositionRequired}" {/if} />
                                 </div>
                             </div>
                         {/if}
 
                         {foreach from=$Attributes item=attribute}
-                        <div class="col-12 col-sm-6">
-                            {control type="AttributeControl" attribute=$attribute}
-                        </div>
+                            <div class="col-12 col-sm-6">
+                                {control type="AttributeControl" attribute=$attribute}
+                            </div>
                         {/foreach}
 
                     </div>
 
                     {if $EnableCaptcha}
                         <div class="">
-                            <div class="mb-2">
+                            <div class="my-2">
                                 <div class="form-group text-center">
                                     {control type="CaptchaControl"}
                                 </div>

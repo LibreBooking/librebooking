@@ -789,8 +789,8 @@
 						</div>
 						<div class="form-group">
 							<label class="fw-bold" for="maximumConcurrent">{translate key=Resources}</label>
-							<input type="number" class="form-control required" min="0" id="maximumConcurrent"
-								{formname key=MAXIMUM_CONCURRENT_RESERVATIONS} />
+							<input type="number" class="form-control form-control-sm required" min="0"
+								id="maximumConcurrent" {formname key=MAXIMUM_CONCURRENT_RESERVATIONS} />
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -824,7 +824,7 @@
 						<div class="form-group">
 							<label class="fw-bold"
 								for="resourcesPerReservationResources">{translate key=Resources}</label>
-							<input type="number" class="form-control required" min="0"
+							<input type="number" class="form-control form-control-sm required" min="0"
 								id="resourcesPerReservationResources"
 								{formname key=MAXIMUM_RESOURCES_PER_RESERVATION} />
 						</div>

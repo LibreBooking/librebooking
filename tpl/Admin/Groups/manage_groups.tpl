@@ -38,7 +38,7 @@
         <div class="card-body">
             <label for="groupSearch">{translate key='FindGroup'}</label>
             | {html_link href=$smarty.server.SCRIPT_NAME key=AllGroups}
-            <input type="text" id="groupSearch" class="form-control" size="40" />
+            <input type="text" id="groupSearch" class="form-control form-control-sm" size="40" />
         </div>
     </div>
 
@@ -141,7 +141,7 @@
                     <div class="form-group mb-2">
                         <label class="fw-bold" for="userSearch">{translate key=AddUser}: </label>
                         <a href="#" id="browseUsers" class="link-primary">{translate key=Browse}</a>
-                        <input type="text" id="userSearch" class="form-control" size="40" />
+                        <input type="text" id="userSearch" class="form-control form-control-sm" size="40" />
                     </div>
                     <h5><span id="totalUsers"></span> {translate key=UsersInGroup}</h5>
 

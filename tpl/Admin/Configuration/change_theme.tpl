@@ -85,7 +85,7 @@
                 </ul>
 
                 <div class="d-grid">
-                    <button type="button" class="btn btn-primary update" name="{Actions::SAVE}" id="saveButton">
+                    <button type="button" class="btn btn-primary btn-sm update" name="{Actions::SAVE}" id="saveButton">
                         {translate key='Update'}
                     </button>
                 </div>

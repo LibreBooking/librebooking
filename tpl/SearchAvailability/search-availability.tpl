@@ -131,11 +131,11 @@
                     </div>
 
                     {foreach from=$ResourceAttributes item=attribute}
-                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='r' class="col-sm-6 col-12" inputClass="input-sm"}
+                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='r' class="col-sm-6 col-12"}
                     {/foreach}
 
                     {foreach from=$ResourceTypeAttributes item=attribute}
-                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='rt' class="col-sm-6 col-12" inputClass="input-sm"}
+                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='rt' class="col-sm-6 col-12"}
                     {/foreach}
                 </div>
 

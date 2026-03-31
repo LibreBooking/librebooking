@@ -8,7 +8,7 @@
     {else}
         <div class="position-relative">
             <textarea id="{$attributeId}" name="{$attributeName}" rows="2"
-                class="customAttribute form-control w-100 {$inputClass}"
+                class="customAttribute form-control form-control-sm w-100"
                 {if $attribute->Required() && !$searchmode}required{/if}>{$attribute->Value()}</textarea>
             {if $searchmode}
                 <span class="searchclear searchclear-label bi bi-x-circle-fill" ref="{$attributeId}"></span>

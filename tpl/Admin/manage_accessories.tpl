@@ -22,7 +22,7 @@
 											class="bi bi-asterisk text-danger align-top form-control-feedback"
 											data-bv-icon-for="accessoryName" style="font-size: 0.5rem;"></i></label>
 									<input {formname key=ACCESSORY_NAME} type="text" autofocus id="accessoryName"
-										required class="form-control has-feedback required w-auto" />
+										required class="form-control form-control-sm has-feedback required w-auto" />
 
 								</div>
 							</div>
@@ -36,14 +36,14 @@
 									</div>
 
 									<label class="fw-bold" for="addQuantity">{translate key='QuantityAvailable'}</label>
-									<input type="number" id="addQuantity" class="form-control w-auto" min="0"
-										disabled="disabled" {formname key=ACCESSORY_QUANTITY_AVAILABLE} />
+									<input type="number" id="addQuantity" class="form-control form-control-sm w-auto"
+										min="0" disabled="disabled" {formname key=ACCESSORY_QUANTITY_AVAILABLE} />
 								</div>
 							</div>
 						</div>
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 						</div>
 					</div>
 				</div>
@@ -128,14 +128,15 @@
 							<label class="fw-bold" for="editName">{translate key=AccessoryName}<i
 									class="bi bi-asterisk text-danger align-top form-control-feedback"
 									data-bv-icon-for="editName" style="font-size: 0.5rem;"></i></label>
-							<input id="editName" type="text" class="form-control has-feedback required" autofocus
-								maxlength="85" {formname key=ACCESSORY_NAME} />
+							<input id="editName" type="text" class="form-control form-control-sm has-feedback required"
+								autofocus maxlength="85" {formname key=ACCESSORY_NAME} />
 						</div>
 						<div class="form-group">
 							<label class="fw-bold" for="editQuantity">{translate key='QuantityAvailable'}</label>
 							<div class="d-flex align-items-center flex-wrap gap-3">
-								<input id="editQuantity" type="number" min="0" class="form-control w-auto"
-									disabled="disabled" {formname key=ACCESSORY_QUANTITY_AVAILABLE} />
+								<input id="editQuantity" type="number" min="0"
+									class="form-control form-control-sm w-auto" disabled="disabled"
+									{formname key=ACCESSORY_QUANTITY_AVAILABLE} />
 
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="chkUnlimitedEdit"

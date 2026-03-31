@@ -8,7 +8,7 @@
 		<span class="attributeValue {$class}">{formatdate date=$attributeValue key=general_datetime}</span>
 	{else}
 		<input type="text" id="{$attributeId}" name="{$attributeName}"
-			class="customAttribute form-control {if !$searchmode && $attribute->Required()}has-feedback{/if} {$class}" />
+			class="customAttribute form-control form-control-sm {if !$searchmode && $attribute->Required()}has-feedback{/if} {$class}" />
 		{control type="DatePickerSetupControl" ControlId="{$attributeId}" DefaultDate=$attributeValue HasTimepicker=true}
 	{/if}
 </div>

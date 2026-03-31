@@ -8,13 +8,13 @@
             <form class="form-inline" role="form">
                 <div class="d-flex align-items-center">
                     <label class="fw-bold" for="attributeOption">{translate key=Attribute}</label>
-                    <select class="form-select w-auto mx-2" id="attributeOption">
+                    <select class="form-select form-select-sm w-auto mx-2" id="attributeOption">
                         {foreach from=$Attributes item=attribute}
                             <option value="{$attribute->Id()}">{$attribute->Label()}</option>
                         {/foreach}
                     </select>
 
-                    <button type="button" class="btn btn-primary" id="addRuleButton">
+                    <button type="button" class="btn btn-primary btn-sm" id="addRuleButton">
                         <i class="bi bi-plus-lg"></i> {translate key='AddRule'}
                     </button>
                 </div>

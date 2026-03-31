@@ -28,12 +28,12 @@
 								<label for="groupName" class="visually-hidden">{translate key=AddNewGroup}</label>
 								<div class="input-group mb-3">
 									<input type="text" name="{FormKeys::GROUP_NAME}"
-										class="form-control new-group inline" size="30" id="groupName"
+										class="form-control form-control-sm new-group inline" size="30" id="groupName"
 										placeholder="{translate key=AddNewGroup}" />
 									<input type="hidden" name="{FormKeys::PARENT_ID}" />
-									<a href="#" class="btn btn-primary" type="button" id="btnAddGroup">
+									<button type="button" class="btn btn-primary btn-sm" id="btnAddGroup">
 										<i class="bi bi-plus-circle-fill icon add inline"></i>
-										{translate key=Add}</a>
+										{translate key=Add}</button>
 								</div>
 							</div>
 						</div>

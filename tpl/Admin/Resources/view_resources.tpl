@@ -107,8 +107,8 @@
                         </div>
 
                         <div class="card-footer border-top pt-3">
-                            {filter_button id="filter" class="btn-sm"}
-                            {reset_button id="clearFilter" class="btn-sm"}
+                            {filter_button id="filter"}
+                            {reset_button id="clearFilter"}
                         </div>
                     </div>
                 </form>

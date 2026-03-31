@@ -94,8 +94,8 @@
 						</div>
 
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 						</div>
 					</div>
 				</div>
@@ -143,7 +143,7 @@
 							</select>
 						</div>
 						<div class="accordion-footer border-top pt-3">
-							{filter_button class="btn-sm" id="filter"}
+							{filter_button id="filter"}
 							<button id="showAll" class="btn btn-outline-secondary btn-sm"><i
 									class="bi bi-list-task me-1"></i>{translate key=ViewAll}</button>
 						</div>

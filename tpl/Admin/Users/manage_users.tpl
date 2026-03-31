@@ -44,7 +44,7 @@
                     <label class="fw-bold" for="userSearch"><i
                             class="bi bi-person-fill me-1"></i>{translate key=FindUser}
                         | {html_link href=$smarty.server.SCRIPT_NAME key=AllUsers}</label>
-                    <input type="text" id="userSearch" class="form-control" />
+                    <input type="text" id="userSearch" class="form-control form-control-sm" />
                 </div>
                 <div class="form-group col-sm-2">
                     <label class="fw-bold" for="filterStatusId">{translate key=Status}</label>
@@ -100,7 +100,8 @@
                         {foreach from=$users item=user}
                             {assign var=id value=$user->Id}
                             <tr data-userId="{$id}">
-                                <td>{fullname first=$user->First|unescape:'html' last=$user->Last|unescape:'html' ignorePrivacy="true"}</td>
+                                <td>{fullname first=$user->First|unescape:'html' last=$user->Last|unescape:'html' ignorePrivacy="true"}
+                                </td>
                                 <td>{$user->Username}</td>
                                 <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>
                                 <td>{$user->Phone}</td>

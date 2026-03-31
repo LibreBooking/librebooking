@@ -164,8 +164,8 @@
 
 
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 							{indicator}
 						</div>
 					</div>

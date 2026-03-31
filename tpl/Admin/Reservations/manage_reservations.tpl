@@ -162,8 +162,8 @@
 					</form>
 
 					<div class="accordion-footer border-top mt-3 pt-3">
-						{filter_button id="filter" class="btn-sm"}
-						{reset_button id="clearFilter" class="btn-sm"}
+						{filter_button id="filter"}
+						{reset_button id="clearFilter"}
 					</div>
 				</div>
 			</div>
@@ -472,7 +472,7 @@
 						<div class="">
 							<label for="reservationImportFile" class="visually-hidden">{translate key=File}</label>
 							<input type="file" {formname key=RESERVATION_IMPORT_FILE} id="reservationImportFile"
-								class="form-control" accept=".csv" />
+								class="form-control form-control-sm" accept=".csv" />
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -496,17 +496,17 @@
 					</div>
 					<div class="modal-body">
 						<div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="manual" id="tos_manual_radio"
 									checked="checked" data-ref="tos_manual_div" class="toggle form-check-input">
 								<label for="tos_manual_radio">{translate key=EnterTermsManually}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="url" id="tos_url_radio"
 									data-ref="tos_url_div" class="toggle form-check-input">
 								<label for="tos_url_radio">{translate key=LinkToTerms}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="upload" id="tos_upload_radio"
 									data-ref="tos_upload_div" class="toggle form-check-input">
 								<label for="tos_upload_radio">{translate key=UploadTerms}</label>
@@ -515,14 +515,14 @@
 						<div id="tos_manual_div" class="tos-div">
 							<div class="form-group">
 								<label for="tos-manual" class="fw-bold">{translate key=TermsOfService}</label>
-								<textarea id="tos-manual" class="form-control w-100" rows="10"
+								<textarea id="tos-manual" class="form-control form-control-sm w-100" rows="10"
 									{formname key=TOS_TEXT}></textarea>
 							</div>
 						</div>
 						<div id="tos_url_div" class="tos-div d-none">
 							<div class="form-group">
 								<label for="tos-url" class="fw-bold">{translate key=LinkToTerms}</label>
-								<input type="url" id="tos-url" class="form-control"
+								<input type="url" id="tos-url" class="form-control form-control-sm"
 									placeholder="http://www.example.com/tos.html" {formname key=TOS_URL}
 									maxlength="255" />
 							</div>
@@ -545,13 +545,13 @@
 						</div>
 						<div class="mt-3">
 							<div>{translate key=RequireTermsOfServiceAcknowledgement}</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_APPLICABILITY} class="form-check-input"
 									value="{TermsOfService::RESERVATION}" id="tos_reservation" checked="checked">
 								<label for="tos_reservation"
 									class="form-check-label">{translate key=UponReservation}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_APPLICABILITY} class="form-check-input"
 									value="{TermsOfService::REGISTRATION}" id="tos_registration">
 								<label for="tos_registration"

@@ -23,13 +23,13 @@
 							<label class="fw-bold" for="resourceTypeName">{translate key='Name'}<i
 									class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
 							<div class="form-group">
-								<input type="text" class="form-control required has-feedback" maxlength="85" required
-									{formname key=RESOURCE_TYPE_NAME} id="resourceTypeName" />
+								<input type="text" class="form-control form-control-sm required has-feedback"
+									maxlength="85" required {formname key=RESOURCE_TYPE_NAME} id="resourceTypeName" />
 							</div>
 							<label class="fw-bold ms-3" for="resourceTypeDesc">{translate key='Description'}</label>
 							<div class="form-group">
-								<textarea class="form-control" rows="1" {formname key=RESOURCE_TYPE_DESCRIPTION}
-									id="resourceTypeDesc"></textarea>
+								<textarea class="form-control form-control-sm" rows="1"
+									{formname key=RESOURCE_TYPE_DESCRIPTION} id="resourceTypeDesc"></textarea>
 							</div>
 						</div>
 						<div class="accordion-footer border-top pt-3">
@@ -101,13 +101,13 @@
 						<div class="form-group has-feedback">
 							<label for="editName" class="fw-bold">{translate key=Name}<i
 									class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
-							<input type="text" id="editName" class="form-control required" required="required"
-								maxlength="85" {formname key=RESOURCE_TYPE_NAME} />
+							<input type="text" id="editName" class="form-control form-control-sm required"
+								required="required" maxlength="85" {formname key=RESOURCE_TYPE_NAME} />
 						</div>
 						<div class="form-group">
 							<label for="editDescription" class="fw-bold">{translate key='Description'}</label>
-							<textarea class="form-control" rows="1" {formname key=RESOURCE_TYPE_DESCRIPTION}
-								id="editDescription"></textarea>
+							<textarea class="form-control form-control-sm" rows="2"
+								{formname key=RESOURCE_TYPE_DESCRIPTION} id="editDescription"></textarea>
 						</div>
 					</div>
 					<div class="modal-footer">

@@ -8,7 +8,7 @@
 		<span class="attributeValue {$class}">{$attribute->Value()}</span>
 	{else}
 		<div class="position-relative">
-			<input id="{$attributeId}" name="{$attributeName}" value="{$attribute->Value()}" class="customAttribute form-control {if isset($inputClass)}{$inputClass}{/if}
+			<input id="{$attributeId}" name="{$attributeName}" value="{$attribute->Value()}" class="customAttribute form-control form-control-sm
 		{if !$searchmode && $attribute->Required()}has-feedback{/if}"
 				{if $attribute->Required() && !$searchmode}required="required" {/if} />
 			{if $searchmode}
