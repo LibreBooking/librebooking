@@ -638,13 +638,13 @@ function ResourceManagement(opts) {
         var id = 'group_id' + node.id;
 
         var label = $(
-          '<div class="checkbox inline"><input group-id="' +
+          '<div class="form-check"><input group-id="' +
             node.id +
-            '" name="group_id[]" type="checkbox" id="' +
+            '" name="group_id[]" class="form-check-input" type="checkbox" id="' +
             id +
             '" value="' +
             node.id +
-            '"/><label for="' +
+            '"/><label class="form-check-label" for="' +
             id +
             '">' +
             itemName +

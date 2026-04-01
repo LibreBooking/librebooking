@@ -1178,9 +1178,9 @@ function Schedule(opts, resourceGroups) {
       onCreateLi: function (node, $li) {
         var span = $li.find('span');
         var itemName = span.text();
-        var label = $('<label><input type="checkbox" name="resourceId[]"/> ' + itemName + '</label>');
-
-        var checkbox = label.find('input');
+        var checkbox = $('<input type="checkbox" class="form-check-input" name="resourceId[]"/>');
+        var label = $('<label class="form-check-label"></label>');
+        label.append(checkbox).append(document.createTextNode(' ' + itemName));
 
         if (node.type == 'resource') {
           checkbox.attr('resource-id', node.resource_id);
