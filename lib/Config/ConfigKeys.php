@@ -477,7 +477,7 @@ class ConfigKeys
     # previously UPLOAD_ENABLE_RESERVATION_ATTACHMENTS
     public const UPLOAD_RESERVATION_ATTACHMENTS_ENABLED = [
         'key' => 'uploads.reservation.attachments.enabled',
-        'legacy' => 'upload.enable.reservation.attachments',
+        'legacy' => 'uploads.enable.reservation.attachments',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable Reservation Attachments',
@@ -1208,6 +1208,7 @@ class ConfigKeys
 
     public const SECURITY_HEADERS = [
         'key' => 'security.headers',
+        'legacy' => 'security.security.headers',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable Security Headers',
@@ -1216,6 +1217,7 @@ class ConfigKeys
     ];
     public const SECURITY_STRICT_TRANSPORT = [
         'key' => 'security.strict-transport',
+        'legacy' => 'security.security.strict-transport',
         'type' => 'string',
         'default' => 'max-age=31536000',
         'label' => 'Strict Transport Security',
@@ -1224,6 +1226,7 @@ class ConfigKeys
     ];
     public const SECURITY_X_FRAME = [
         'key' => 'security.x-frame',
+        'legacy' => 'security.security.x-frame',
         'type' => 'string',
         'default' => 'deny',
         'label' => 'X-Frame-Options',
@@ -1232,6 +1235,7 @@ class ConfigKeys
     ];
     public const SECURITY_X_XSS = [
         'key' => 'security.x-xss',
+        'legacy' => 'security.security.x-xss',
         'type' => 'string',
         'default' => '1; mode=block',
         'label' => 'X-XSS-Protection',
@@ -1240,6 +1244,7 @@ class ConfigKeys
     ];
     public const SECURITY_X_CONTENT_TYPE = [
         'key' => 'security.x-content-type',
+        'legacy' => 'security.security.x-content-type',
         'type' => 'string',
         'default' => 'nosniff',
         'label' => 'X-Content-Type-Options',
@@ -1248,6 +1253,7 @@ class ConfigKeys
     ];
     public const SECURITY_CONTENT_SECURITY_POLICY = [
         'key' => 'security.content-security-policy',
+        'legacy' => 'security.security.content-security-policy',
         'type' => 'string',
         'default' => '',
         'label' => 'Content Security Policy',
@@ -1585,7 +1591,7 @@ class ConfigKeys
     ];
     public const PLUGIN_AUTHORIZATION = [
         'key' => 'plugins.authorization',
-        'legacy' => 'plugin.Authorization',
+        'legacy' => 'plugins.Authorization',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1597,7 +1603,7 @@ class ConfigKeys
     ];
     public const PLUGIN_EXPORT = [
         'key' => 'plugins.export',
-        'legacy' => 'plugin.Export',
+        'legacy' => 'plugins.Export',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1609,7 +1615,7 @@ class ConfigKeys
     ];
     public const PLUGIN_PERMISSION = [
         'key' => 'plugins.permission',
-        'legacy' => 'plugin.Permission',
+        'legacy' => 'plugins.Permission',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1621,7 +1627,7 @@ class ConfigKeys
     ];
     public const PLUGIN_POSTREGISTRATION = [
         'key' => 'plugins.postregistration',
-        'legacy' => 'plugin.PostRegistration',
+        'legacy' => 'plugins.PostRegistration',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1633,7 +1639,7 @@ class ConfigKeys
     ];
     public const PLUGIN_PRERESERVATION = [
         'key' => 'plugins.prereservation',
-        'legacy' => 'plugin.PreReservation',
+        'legacy' => 'plugins.PreReservation',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1647,7 +1653,7 @@ class ConfigKeys
     ];
     public const PLUGIN_POSTRESERVATION = [
         'key' => 'plugins.postreservation',
-        'legacy' => 'plugin.PostReservation',
+        'legacy' => 'plugins.PostReservation',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1660,7 +1666,7 @@ class ConfigKeys
     ];
     public const PLUGIN_STYLING = [
         'key' => 'plugins.styling',
-        'legacy' => 'plugin.Styling',
+        'legacy' => 'plugins.Styling',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1692,6 +1698,7 @@ class ConfigKeys
     ];
     public const API_AUTHENTICATION_GROUP = [
         'key' => 'api.authentication.group',
+        'legacy' => 'api.Authentication.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Authentication Group',
@@ -1700,6 +1707,7 @@ class ConfigKeys
     ];
     public const API_ACCESSORIES_RO_GROUP = [
         'key' => 'api.accessories.ro.group',
+        'legacy' => 'api.Accessories.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accessories Read-Only Group',
@@ -1708,6 +1716,7 @@ class ConfigKeys
     ];
     public const API_ACCOUNTS_RO_GROUP = [
         'key' => 'api.accounts.ro.group',
+        'legacy' => 'api.Accounts.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accounts Read-Only Group',
@@ -1716,6 +1725,7 @@ class ConfigKeys
     ];
     public const API_ACCOUNTS_RW_GROUP = [
         'key' => 'api.accounts.rw.group',
+        'legacy' => 'api.Accounts.rw.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accounts Read-Write Group',
@@ -1724,6 +1734,7 @@ class ConfigKeys
     ];
     public const API_ATTRIBUTES_RO_GROUP = [
         'key' => 'api.attributes.ro.group',
+        'legacy' => 'api.Attributes.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Attributes Read-Only Group',
@@ -1732,6 +1743,7 @@ class ConfigKeys
     ];
     public const API_GROUPS_RO_GROUP = [
         'key' => 'api.groups.ro.group',
+        'legacy' => 'api.Groups.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Groups Read-Only Group',
@@ -1740,6 +1752,7 @@ class ConfigKeys
     ];
     public const API_RESERVATIONS_RO_GROUP = [
         'key' => 'api.reservations.ro.group',
+        'legacy' => 'api.Reservations.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Reservations Read-Only Group',
@@ -1748,6 +1761,7 @@ class ConfigKeys
     ];
     public const API_RESERVATIONS_RW_GROUP = [
         'key' => 'api.reservations.rw.group',
+        'legacy' => 'api.Reservations.rw.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Reservations Read-Write Group',
@@ -1756,6 +1770,7 @@ class ConfigKeys
     ];
     public const API_RESOURCES_RO_GROUP = [
         'key' => 'api.resources.ro.group',
+        'legacy' => 'api.Resources.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Resources Read-Only Group',
@@ -1764,6 +1779,7 @@ class ConfigKeys
     ];
     public const API_SCHEDULES_RO_GROUP = [
         'key' => 'api.schedules.ro.group',
+        'legacy' => 'api.Schedules.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Schedules Read-Only Group',
@@ -1772,6 +1788,7 @@ class ConfigKeys
     ];
     public const API_USERS_RO_GROUP = [
         'key' => 'api.users.ro.group',
+        'legacy' => 'api.Users.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Users Read-Only Group',
