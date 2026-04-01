@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Select2=true Fullcalendar=true cssFiles='assets/vendor/jqtree/1.6.2/css/jqtree.css,css/schedule.css' printCssFiles='css/calendar.print.css'}
+{include file='globalheader.tpl' Select2=true Fullcalendar=true cssFiles='assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' printCssFiles='css/calendar.print.css'}
 
 <div id="page-{$pageIdSuffix}">
     {include file='Calendar/calendar.filter.tpl'}
@@ -57,7 +57,7 @@
     {jsfile src="calendar.js"}
     {jsfile src="ajax-helpers.js"}
     {jsfile src="autocomplete.js"}
-    {vendor_js src="jqtree/1.6.2/js/tree.jquery.js"}
+    {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
     <script type="text/javascript">
         $(document).ready(function() {

@@ -538,7 +538,7 @@
 {jsfile src="force-numeric.js"}
 {jsfile src="reservation-reminder.js"}
 {jsfile src="ajax-helpers.js"}
-{vendor_js src="jqtree/1.6.2/js/tree.jquery.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
 {include file="Reservation/pdf_libraries.tpl"}
 <script type="text/javascript">

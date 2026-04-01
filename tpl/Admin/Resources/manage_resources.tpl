@@ -2068,7 +2068,7 @@
 {datatable tableId=$tableId}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
-{vendor_js src="jqtree/1.6.2/js/tree.jquery.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 {jsfile src="admin/resource.js"}
 {vendor_js src="dropzone/1.0.0/js/dropzone.js"}
 {jsfile src="search-clear.js"}

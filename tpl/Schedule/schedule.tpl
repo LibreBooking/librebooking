@@ -40,7 +40,7 @@
 {* End slot display formatting *}
 
 {block name="header"}
-    {include file='globalheader.tpl' Qtip=true Select2=true DatePicker=true cssFiles='assets/vendor/jqtree/1.6.2/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
+    {include file='globalheader.tpl' Qtip=true Select2=true DatePicker=true cssFiles='assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
 {/block}
 
 <div id="page-schedule">
@@ -416,7 +416,7 @@
 {vendor_js src="html2canvas/1.4.1/js/html2canvas.min.js"}
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}
-{vendor_js src="jqtree/1.6.2/js/tree.jquery.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 {vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
 {jsfile src="autocomplete.js"}
 {jsfile src="ajax-helpers.js"}
