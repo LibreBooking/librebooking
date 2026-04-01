@@ -181,7 +181,12 @@ Frontend Advanced Settings
      'logout.url' => '',
 
 **css.extension.file**
-  Path to a custom CSS file to extend the default styles.
+  Path of a custom CSS file to extend the default styles. If the value does not
+  contain a slash (``/``) anywhere in the name, it is treated as relative to
+  the ``Web/css/`` directory (for example, ``'css.extension.file' =>
+  'custom.css'``). If the value contains a slash, it is treated as a path
+  relative to the ``Web/`` root (for example, ``'css.extension.file' =>
+  'css/custom.css'``).
 
   .. code-block:: php
 
