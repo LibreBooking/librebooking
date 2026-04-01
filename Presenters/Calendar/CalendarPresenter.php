@@ -91,14 +91,14 @@ class CalendarPresenter extends CommonCalendarPresenter
         }
 
         $this->page->BindEvents(CalendarReservation::FromScheduleReservationList(
-            $reservations,
-            $blackouts,
-            $availableSlots,
-            $resources,
-            $userSession,
-            $this->privacyFilter,
-            $this->slotLabelFactory,
-            reservationPage: $this->reservationPage
+            reservations: $reservations,
+            blackouts: $blackouts,
+            availablePeriods: $availableSlots,
+            resources: $resources,
+            userSession: $userSession,
+            groupSeriesByResource: true,
+            factory: $this->slotLabelFactory,
+            reservationPage: $this->reservationPage,
         ));
     }
 
