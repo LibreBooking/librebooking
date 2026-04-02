@@ -205,7 +205,7 @@ function BlackoutManagement(opts) {
       .find('.editable')
       .each(function () {
         var refNum = $(this).attr('data-refnum');
-        $(this).attachReservationPopup(refNum, options.popupUrl);
+        $(this).find('.reservationTitle').attachReservationPopup(refNum, options.popupUrl);
       });
 
     $('#reservationTable').on('click', '.editable', function () {

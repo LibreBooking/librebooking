@@ -54,8 +54,10 @@
 					{foreach from=$Reservations item=reservation}
 						<tr class="editable" data-refnum="{$reservation->ReferenceNumber|escape:'html'}">
 							<td>{$reservation->FirstName|escape:'html'} {$reservation->LastName|escape:'html'}</td>
-							<td class="reservationTitle">
-								{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}
+							<td>
+								<span class="reservationTitle" data-bs-custom-class="respopup-tooltip" data-bs-html="true">
+									{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}
+								</span>
 							</td>
 							<td>{$reservation->ResourceName|escape:'html'}</td>
 							<td>{formatdate date=$reservation->StartDate timezone=$Timezone key=res_popup}</td>
