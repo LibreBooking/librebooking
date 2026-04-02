@@ -27,7 +27,9 @@
 					{foreach from=$Reservations item=reservation name=invitations}
 						{assign var=referenceNumber value=$reservation->ReferenceNumber}
 						<tr>
-							<td>{$reservation->Title|default:{translate key="NoTitleLabel"}}
+							<td><span class="reservationTitle" data-reference-number="{$referenceNumber|escape:'html'}"
+									data-bs-custom-class="respopup-tooltip"
+									data-bs-html="true">{$reservation->Title|escape:'html'|default:{translate key="NoTitleLabel"}}</span>
 							</td>
 							<td>
 								<a href="{Pages::RESERVATION}?{QueryStringKeys::REFERENCE_NUMBER}={$referenceNumber}"
