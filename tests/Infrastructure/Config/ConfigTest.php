@@ -76,6 +76,78 @@ class ConfigTest extends TestBase
         $this->assertEquals('mixed-case/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
     }
 
+    public function testLegacySectionRenamesDoNotProduceFlattenedMergedKeys(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['delete.old.data']['years.old.data'] = 7;
+$conf['settings']['delete.old.data']['delete.old.announcements'] = true;
+$conf['settings']['delete.old.data']['delete.old.blackouts'] = true;
+$conf['settings']['delete.old.data']['delete.old.reservations'] = true;
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('cleanup.years.old.data', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.announcements', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.blackouts', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.reservations', $values);
+
+        $this->assertSame(7, $values['cleanup']['years.old.data']);
+        $this->assertTrue($values['cleanup']['delete.old.announcements']);
+        $this->assertTrue($values['cleanup']['delete.old.blackouts']);
+        $this->assertTrue($values['cleanup']['delete.old.reservations']);
+    }
+
+    public function testLegacyImageUploadKeysRewriteToUploadsSection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['image.upload']['directory'] = '/custom/path';
+$conf['settings']['image.upload']['url'] = '/custom/url';
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('uploads.image.upload.directory', $values);
+        $this->assertArrayNotHasKey('uploads.image.upload.url', $values);
+
+        $this->assertSame('/custom/path', $values['uploads']['image.upload.directory']);
+        $this->assertSame('/custom/url', $values['uploads']['image.upload.url']);
+    }
+
+    public function testTopLevelLegacyKeyCanRewriteIntoCanonicalSection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['enable.email'] = true;
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('email.enabled', $values);
+        $this->assertTrue($values['email']['enabled']);
+    }
+
+    public function testLaterKeyWinsWhenLegacyAndCanonicalFormsAreBothPresent(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['delete.old.data']['years.old.data'] = 7;
+$conf['settings']['cleanup']['years.old.data'] = 3;
+PHP
+        );
+
+        $this->assertSame(3, $config->GetValues()['cleanup']['years.old.data']);
+    }
+
     public function testMainConfigValidation()
     {
         $errorLogs = $this->captureErrorLog(function () {
@@ -328,6 +400,39 @@ class ConfigTest extends TestBase
                         "String value mismatch for key '$key'"
                     );
                 }
+            }
+        }
+    }
+
+    private function createConfigurationFileFromContents(string $contents): ConfigurationFile
+    {
+        $path = tempnam(sys_get_temp_dir(), 'config-rewrite-test-');
+        if ($path === false) {
+            throw new RuntimeException('Failed to create temporary config file.');
+        }
+
+        try {
+            if (file_put_contents($path, $contents) === false) {
+                throw new RuntimeException('Failed to write temporary config file.');
+            }
+
+            $conf = [];
+            $loaded = require $path;
+
+            if (is_array($loaded) && isset($loaded['settings'])) {
+                return new ConfigurationFile($loaded);
+            }
+
+            if (isset($conf['settings'])) {
+                return new ConfigurationFile([
+                    Configuration::SETTINGS => $conf['settings'],
+                ]);
+            }
+
+            throw new RuntimeException("Invalid config file: 'settings' section missing");
+        } finally {
+            if (file_exists($path)) {
+                unlink($path);
             }
         }
     }

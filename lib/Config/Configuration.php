@@ -333,6 +333,16 @@ class ConfigurationFile implements IConfigurationFile
     }
 
     /**
+     * Returns the normalized configuration values after legacy-key rewriting and validation.
+     *
+     * @return array<string, mixed>
+     */
+    public function GetValues(): array
+    {
+        return $this->_values;
+    }
+
+    /**
      * Rewrites legacy configuration keys to their new equivalents based on the active
      * config schema class. This function preserves the original structure of the config
      * array, rewriting only keys that are marked as deprecated while leaving known new
@@ -363,8 +373,9 @@ class ConfigurationFile implements IConfigurationFile
                         $section = $entry['section'] ?? null;
                         $finalKey = $entry['key'];
 
-                        if ($section !== null && strcasecmp($section, $key) === 0) {
-                            // Keep under canonical section name, rewrite subkey only
+                        if ($section !== null) {
+                            // Always rewrite sectioned keys into the canonical section bucket,
+                            // e.g. legacy 'delete.old.data.years.old.data' -> canonical 'cleanup'.
                             $subKeyNew = str_starts_with($finalKey, $section . '.')
                                 ? substr($finalKey, strlen($section) + 1)
                                 : $finalKey;
