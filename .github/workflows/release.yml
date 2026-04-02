@@ -2,7 +2,9 @@ name: Release
 
 on:
   schedule:
-    - cron: "0 0 3 * *" # Monthly on day 3 (UTC)
+    # Use this command to see what the time is in your local time zone.
+    # `date -d '17:00 UTC'`
+    - cron: "0 17 3 * *" # Monthly on day 3 at 17:00 UTC (10AM PDT / 9AM PST)
   workflow_dispatch:
 
 # default: least privileged permissions across all jobs
