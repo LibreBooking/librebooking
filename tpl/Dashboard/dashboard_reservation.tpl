@@ -3,9 +3,10 @@
 {assign var=class value=""}
 {if $reservation->RequiresApproval}{assign var=class value="pending"}{/if}
 <div class="reservation row gx-0 {$class} border-bottom p-2 border-bottom align-items-center {if isset($orangePending)}bg-white{/if}"
-    id="{$reservation->ReferenceNumber}" data-bs-custom-class="respopup-tooltip" data-bs-html="true">
+    id="{$reservation->ReferenceNumber}">
     {*doesn't show pending approval reservations as orange in the Pending Approval Reservations displayer in the dashboard*}
-    <div class="col-sm-3 col-12">{$reservation->Title|escape:'html'|default:$DefaultTitle}</div>
+    <div class="col-sm-3 col-12"><span class="reservationTitle" data-bs-custom-class="respopup-tooltip"
+            data-bs-html="true">{$reservation->Title|escape:'html'|default:$DefaultTitle}</span></div>
     <div class="col-sm-3 col-12">
         {fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=$reservation->IsUserOwner($UserId)}
         {if !$reservation->IsUserOwner($UserId)}<i class="bi bi-people-fill"></i> {/if}</div>

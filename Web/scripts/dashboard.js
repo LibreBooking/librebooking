@@ -16,37 +16,13 @@ function Dashboard(opts) {
 
     var reservations = $('.reservation');
 
-    function attachReservationTooltip(reservations, options) {
-      reservations.on('mouseenter', function () {
-        var me = $(this);
-        var refNum = me.attr('id');
-
-        me.attr('data-bs-toggle', 'tooltip').tooltip('show');
-
-        $.ajax({
-          url: options.summaryPopupUrl,
-          data: { id: refNum },
-        })
-          .done(function (html) {
-            me.attr('data-bs-original-title', html).tooltip('show');
-          })
-          .fail(function (xhr, status, error) {
-            me.attr('data-bs-original-title', status + ': ' + error).tooltip('show');
-          });
-      });
-
-      reservations.on('mouseleave', function () {
-        $(this).tooltip('hide');
-      });
-    }
-
     $(document).ready(function () {
-      var reservations = $('.reservation');
-      var options = {
-        summaryPopupUrl: 'ajax/respopup.php',
-      };
+      var reservationTitles = $('.reservationTitle');
 
-      attachReservationTooltip(reservations, options);
+      reservationTitles.each(function () {
+        var refNum = $(this).closest('.reservation').attr('id');
+        $(this).attachReservationPopup(refNum, options.summaryPopupUrl);
+      });
 
       $('[data-bs-toggle="tooltip"]').tooltip();
     });
