@@ -1,6 +1,8 @@
 <?php
 
-class ConfigKeys
+require_once(ROOT_DIR . 'lib/Config/AbstractConfigKeys.php');
+
+class ConfigKeys extends AbstractConfigKeys
 {
     // Application configuration
 
@@ -1777,79 +1779,6 @@ class ConfigKeys
         'section' => 'api'
     ];
 
-    public static function all(): array
-    {
-        $constants = (new \ReflectionClass(static::class))->getConstants();
-
-        $all = [];
-        foreach ($constants as $name => $value) {
-            if (is_array($value) && isset($value['key'])) {
-                $all[] = $value;
-            }
-        }
-
-        return $all;
-    }
-
-    public static function mapByKey(): array
-    {
-        $map = [];
-        foreach (self::all() as $entry) {
-            $map[$entry['key']] = $entry;
-        }
-
-        return $map;
-    }
-
-    public static function findByKey(string $key): ?array
-    {
-        $normalizedKey = strtolower($key);
-
-        foreach (self::all() as $config) {
-            if (strtolower((string) ($config['key'] ?? '')) === $normalizedKey) {
-                return $config;
-            }
-        }
-
-        return null;
-    }
-
-    public static function findByLegacyKey(string $legacyKey): ?array
-    {
-        if (!is_string($legacyKey) || $legacyKey === '') {
-            return null;
-        }
-
-        $normalizedLegacyKey = strtolower($legacyKey);
-
-        foreach (self::all() as $config) {
-            if (strtolower((string) ($config['legacy'] ?? '')) === $normalizedLegacyKey) {
-                return $config;
-            }
-        }
-
-        return null;
-    }
-
-    public static function isPrivate($configDef): bool
-    {
-        if (empty($configDef)) {
-            return false;
-        }
-        return $configDef['is_private'] ?? false;
-    }
-
-    public static function hasEnv($configDef): bool
-    {
-        $key = $configDef['key'] ?? null;
-        if (!is_string($key) || $key === '') {
-            return false;
-        }
-
-        $loadedEnvVars = getenv();
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', (string)$key));
-        return array_key_exists($envKey, $loadedEnvVars) ?? false;
-    }
 }
 
 class ConfigSettingType

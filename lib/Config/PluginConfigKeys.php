@@ -1,96 +1,18 @@
 <?php
 
-abstract class PluginConfigKeys
+require_once(ROOT_DIR . 'lib/Config/AbstractConfigKeys.php');
+
+abstract class PluginConfigKeys extends AbstractConfigKeys
 {
-    /**
-     * Returns all configuration entries defined in the class.
-     * @return array
-     */
-    public static function all(): array
+    protected static function getCanonicalLookupKey(array $config): ?string
     {
-        $constants = (new \ReflectionClass(static::class))->getConstants();
+        $configKey = $config['key'] ?? null;
+        $section = $config['section'] ?? null;
 
-        $all = [];
-        foreach ($constants as $name => $value) {
-            if (is_array($value) && isset($value['key'])) {
-                $all[] = $value;
-            }
+        if (is_string($section) && $section !== '' && is_string($configKey) && $configKey !== '') {
+            return "{$section}.{$configKey}";
         }
 
-        return $all;
-    }
-
-    /**
-     * Finds a configuration entry by its key.
-     * @param string $key
-     * @return array|null
-     */
-    public static function findByKey(string $key): ?array
-    {
-        $normalizedKey = strtolower($key);
-
-        foreach (static::all() as $config) {
-            $configKey = $config['key'] ?? null;
-            $section = $config['section'] ?? null;
-
-            // If this config has a section, only match with the full key (section.key)
-            if ($section) {
-                $fullKey = "{$section}.{$configKey}";
-                if (strtolower($fullKey) === $normalizedKey) {
-                    return $config;
-                }
-            } else {
-                if (strtolower((string) $configKey) === $normalizedKey) {
-                    return $config;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds a configuration entry by its legacy key.
-     * @param string $legacyKey
-     * @return array|null
-     */
-    public static function findByLegacyKey(string $legacyKey): ?array
-    {
-        if (!is_string($legacyKey) || $legacyKey === '') {
-            return null;
-        }
-
-        $normalizedLegacyKey = strtolower($legacyKey);
-
-        foreach (static::all() as $config) {
-            if (strtolower((string) ($config['legacy'] ?? '')) === $normalizedLegacyKey) {
-                return $config;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Checks if a configuration entry is private (should not be displayed in UI).
-     * @param array $config
-     * @return bool
-     */
-    public static function isPrivate($config): bool
-    {
-        if (empty($config)) {
-            return false;
-        }
-        return $config['is_private'] ?? false;
-    }
-
-    public static function hasEnv($config): bool
-    {
-        if (empty($config)) {
-            return false;
-        }
-        $loadedEnvVars = getenv();
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $config['key']));
-        return array_key_exists($envKey, $loadedEnvVars) ?? false;
+        return is_string($configKey) && $configKey !== '' ? $configKey : null;
     }
 }
