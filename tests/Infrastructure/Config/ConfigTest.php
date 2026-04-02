@@ -148,6 +148,23 @@ PHP
         $this->assertSame(3, $config->GetValues()['cleanup']['years.old.data']);
     }
 
+    public function testNestedLegacyKeysDoNotCreateEmptyTopLevelBucket(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
+$conf['settings']['slack']['token'] = 'xoxb-test-token';
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('', $values);
+        $this->assertSame('G-TEST123', $values['google.analytics.tracking.id']);
+        $this->assertSame('xoxb-test-token', $values['slack.token']);
+    }
+
     public function testMainConfigValidation()
     {
         $errorLogs = $this->captureErrorLog(function () {

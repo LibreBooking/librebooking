@@ -373,7 +373,7 @@ class ConfigurationFile implements IConfigurationFile
                         $section = $entry['section'] ?? null;
                         $finalKey = $entry['key'];
 
-                        if ($section !== null) {
+                        if ($section !== null && $section !== '') {
                             // Always rewrite sectioned keys into the canonical section bucket,
                             // e.g. legacy 'delete.old.data.years.old.data' -> canonical 'cleanup'.
                             $subKeyNew = str_starts_with($finalKey, $section . '.')
@@ -405,7 +405,7 @@ class ConfigurationFile implements IConfigurationFile
                 $finalKey = $entry['key'];
                 $section = $entry['section'] ?? null;
 
-                if ($section && str_starts_with($finalKey, $section . '.')) {
+                if ($section !== null && $section !== '' && str_starts_with($finalKey, $section . '.')) {
                     $keyWithinSection = substr($finalKey, strlen($section) + 1);
                     $rewritten[$section][$keyWithinSection] = $value;
                 } else {
