@@ -46,6 +46,39 @@ class ConfigTest extends TestBase
         $this->assertLogMessage($errorLogs, "Deprecated config key 'image.upload.directory'", 'deprecated image.upload.directory key');
     }
 
+    public function testHistoricalLegacyConfigDevelParsesCorrectly(): void
+    {
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_legacy_config_devel.php',
+                '',
+                self::CONFIG_ID,
+                true
+            );
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+            $this->assertEquals('UTC', $config->GetDefaultTimezone());
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
+            $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter()));
+            $this->assertEquals('Web/uploads/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+            $this->assertEquals(3, $config->GetKey(ConfigKeys::CLEANUP_YEARS_OLD_DATA, new IntConverter()));
+            $this->assertEquals('slack_token', $config->GetKey(ConfigKeys::SLACK_TOKEN));
+            $this->assertEquals('tracking_id', $config->GetKey(ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
+            $this->assertArrayNotHasKey('', $config->GetValues());
+        });
+
+        $this->assertLogMessage($errorLogs, 'Legacy config format detected', 'legacy config.devel format detection');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'delete.old.data.years.old.data'", 'deprecated cleanup legacy key');
+
+        foreach ($errorLogs as $log) {
+            $this->assertFalse(
+                str_contains($log, 'Unknown config key:'),
+                'historical legacy config.devel should not produce unknown key logs'
+            );
+        }
+    }
+
     public function testMixedCaseSectionNamesResolveCorrectly()
     {
         Configuration::Instance()->Register(
