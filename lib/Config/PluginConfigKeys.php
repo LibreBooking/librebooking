@@ -27,6 +27,8 @@ abstract class PluginConfigKeys
      */
     public static function findByKey(string $key): ?array
     {
+        $normalizedKey = strtolower($key);
+
         foreach (static::all() as $config) {
             $configKey = $config['key'] ?? null;
             $section = $config['section'] ?? null;
@@ -34,11 +36,11 @@ abstract class PluginConfigKeys
             // If this config has a section, only match with the full key (section.key)
             if ($section) {
                 $fullKey = "{$section}.{$configKey}";
-                if ($fullKey === $key) {
+                if (strtolower($fullKey) === $normalizedKey) {
                     return $config;
                 }
             } else {
-                if ($configKey === $key) {
+                if (strtolower((string) $configKey) === $normalizedKey) {
                     return $config;
                 }
             }
@@ -54,8 +56,14 @@ abstract class PluginConfigKeys
      */
     public static function findByLegacyKey(string $legacyKey): ?array
     {
+        if (!is_string($legacyKey) || $legacyKey === '') {
+            return null;
+        }
+
+        $normalizedLegacyKey = strtolower($legacyKey);
+
         foreach (static::all() as $config) {
-            if (($config['legacy'] ?? null) === $legacyKey) {
+            if (strtolower((string) ($config['legacy'] ?? '')) === $normalizedLegacyKey) {
                 return $config;
             }
         }

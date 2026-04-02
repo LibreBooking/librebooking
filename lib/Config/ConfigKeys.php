@@ -1567,7 +1567,6 @@ class ConfigKeys
 
     public const PLUGIN_AUTHENTICATION = [
         'key' => 'plugins.authentication',
-        'legacy' => 'plugins.Authentication',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1591,7 +1590,6 @@ class ConfigKeys
     ];
     public const PLUGIN_AUTHORIZATION = [
         'key' => 'plugins.authorization',
-        'legacy' => 'plugins.Authorization',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1603,7 +1601,6 @@ class ConfigKeys
     ];
     public const PLUGIN_EXPORT = [
         'key' => 'plugins.export',
-        'legacy' => 'plugins.Export',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1615,7 +1612,6 @@ class ConfigKeys
     ];
     public const PLUGIN_PERMISSION = [
         'key' => 'plugins.permission',
-        'legacy' => 'plugins.Permission',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1627,7 +1623,6 @@ class ConfigKeys
     ];
     public const PLUGIN_POSTREGISTRATION = [
         'key' => 'plugins.postregistration',
-        'legacy' => 'plugins.PostRegistration',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1639,7 +1634,6 @@ class ConfigKeys
     ];
     public const PLUGIN_PRERESERVATION = [
         'key' => 'plugins.prereservation',
-        'legacy' => 'plugins.PreReservation',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1653,7 +1647,6 @@ class ConfigKeys
     ];
     public const PLUGIN_POSTRESERVATION = [
         'key' => 'plugins.postreservation',
-        'legacy' => 'plugins.PostReservation',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1666,7 +1659,6 @@ class ConfigKeys
     ];
     public const PLUGIN_STYLING = [
         'key' => 'plugins.styling',
-        'legacy' => 'plugins.Styling',
         'type' => 'string',
         'default' => '',
         'choices' => [
@@ -1698,7 +1690,6 @@ class ConfigKeys
     ];
     public const API_AUTHENTICATION_GROUP = [
         'key' => 'api.authentication.group',
-        'legacy' => 'api.Authentication.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Authentication Group',
@@ -1707,7 +1698,6 @@ class ConfigKeys
     ];
     public const API_ACCESSORIES_RO_GROUP = [
         'key' => 'api.accessories.ro.group',
-        'legacy' => 'api.Accessories.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accessories Read-Only Group',
@@ -1716,7 +1706,6 @@ class ConfigKeys
     ];
     public const API_ACCOUNTS_RO_GROUP = [
         'key' => 'api.accounts.ro.group',
-        'legacy' => 'api.Accounts.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accounts Read-Only Group',
@@ -1725,7 +1714,6 @@ class ConfigKeys
     ];
     public const API_ACCOUNTS_RW_GROUP = [
         'key' => 'api.accounts.rw.group',
-        'legacy' => 'api.Accounts.rw.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Accounts Read-Write Group',
@@ -1734,7 +1722,6 @@ class ConfigKeys
     ];
     public const API_ATTRIBUTES_RO_GROUP = [
         'key' => 'api.attributes.ro.group',
-        'legacy' => 'api.Attributes.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Attributes Read-Only Group',
@@ -1743,7 +1730,6 @@ class ConfigKeys
     ];
     public const API_GROUPS_RO_GROUP = [
         'key' => 'api.groups.ro.group',
-        'legacy' => 'api.Groups.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Groups Read-Only Group',
@@ -1752,7 +1738,6 @@ class ConfigKeys
     ];
     public const API_RESERVATIONS_RO_GROUP = [
         'key' => 'api.reservations.ro.group',
-        'legacy' => 'api.Reservations.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Reservations Read-Only Group',
@@ -1761,7 +1746,6 @@ class ConfigKeys
     ];
     public const API_RESERVATIONS_RW_GROUP = [
         'key' => 'api.reservations.rw.group',
-        'legacy' => 'api.Reservations.rw.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Reservations Read-Write Group',
@@ -1770,7 +1754,6 @@ class ConfigKeys
     ];
     public const API_RESOURCES_RO_GROUP = [
         'key' => 'api.resources.ro.group',
-        'legacy' => 'api.Resources.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Resources Read-Only Group',
@@ -1779,7 +1762,6 @@ class ConfigKeys
     ];
     public const API_SCHEDULES_RO_GROUP = [
         'key' => 'api.schedules.ro.group',
-        'legacy' => 'api.Schedules.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Schedules Read-Only Group',
@@ -1788,7 +1770,6 @@ class ConfigKeys
     ];
     public const API_USERS_RO_GROUP = [
         'key' => 'api.users.ro.group',
-        'legacy' => 'api.Users.ro.group',
         'type' => 'string',
         'default' => '',
         'label' => 'API Users Read-Only Group',
@@ -1822,8 +1803,10 @@ class ConfigKeys
 
     public static function findByKey(string $key): ?array
     {
+        $normalizedKey = strtolower($key);
+
         foreach (self::all() as $config) {
-            if (($config['key'] ?? null) === $key) {
+            if (strtolower((string) ($config['key'] ?? '')) === $normalizedKey) {
                 return $config;
             }
         }
@@ -1833,8 +1816,14 @@ class ConfigKeys
 
     public static function findByLegacyKey(string $legacyKey): ?array
     {
+        if (!is_string($legacyKey) || $legacyKey === '') {
+            return null;
+        }
+
+        $normalizedLegacyKey = strtolower($legacyKey);
+
         foreach (self::all() as $config) {
-            if (($config['legacy'] ?? null) === $legacyKey) {
+            if (strtolower((string) ($config['legacy'] ?? '')) === $normalizedLegacyKey) {
                 return $config;
             }
         }

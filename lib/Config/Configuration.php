@@ -363,13 +363,13 @@ class ConfigurationFile implements IConfigurationFile
                         $section = $entry['section'] ?? null;
                         $finalKey = $entry['key'];
 
-                        if ($section === $key) {
-                            // Keep under parent key, rewrite subkey only
+                        if ($section !== null && strcasecmp($section, $key) === 0) {
+                            // Keep under canonical section name, rewrite subkey only
                             $subKeyNew = str_starts_with($finalKey, $section . '.')
                                 ? substr($finalKey, strlen($section) + 1)
                                 : $finalKey;
 
-                            $rewritten[$key][$subKeyNew] = $subValue;
+                            $rewritten[$section][$subKeyNew] = $subValue;
                         } else {
                             $rewritten[$finalKey] = $subValue;
                         }

@@ -36,12 +36,43 @@ class ConfigTest extends TestBase
             $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
             $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
             $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+            $this->assertEquals('legacy/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
             $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
         });
 
         $this->assertLogMessage($errorLogs, 'Legacy config format detected', 'legacy config format detection');
         $this->assertLogMessage($errorLogs, "Deprecated config key 'allow.self.registration'", 'deprecated allow.self.registration key');
-        $this->assertLogMessage($errorLogs, "Deprecated config key 'plugins.Authentication'", 'deprecated plugins.Authentication key');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'image.upload.directory'", 'deprecated image.upload.directory key');
+    }
+
+    public function testMixedCaseSectionNamesResolveCorrectly()
+    {
+        Configuration::Instance()->Register(
+            ROOT_DIR . 'tests/data/test_mixed_case_sections_config.php',
+            '',
+            self::CONFIG_ID,
+            true
+        );
+        $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
+        $this->assertEquals('pgsql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+        $this->assertEquals('mixed-case/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+    }
+
+    public function testMixedCaseSectionNamesNewFormatResolveCorrectly()
+    {
+        Configuration::Instance()->Register(
+            ROOT_DIR . 'tests/data/test_mixed_case_new_format_config.php',
+            '',
+            self::CONFIG_ID,
+            true
+        );
+        $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
+        $this->assertEquals('pgsql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+        $this->assertEquals('mixed-case/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
     }
 
     public function testMainConfigValidation()
@@ -90,6 +121,22 @@ class ConfigTest extends TestBase
         $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
     }
 
+
+    public function testMixedCasePluginConfigResolveCorrectly()
+    {
+        Configuration::Instance()->Register(
+            ROOT_DIR . 'tests/data/test_mixed_case_plugin_config.php',
+            '',
+            TestPluginConfigKeys::CONFIG_ID,
+            false,
+            TestPluginConfigKeys::class
+        );
+        $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
+
+        $this->assertEquals('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+        $this->assertEquals('value2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+        $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+    }
 
     public function testPluginConfigValidation()
     {
