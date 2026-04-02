@@ -209,7 +209,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
         $this->Set('ReservationId', $this->GetReservationId());
 
-        $this->Display('Ajax/respopup.tpl');
+        $this->Display('Ajax/reservation_popup.tpl');
     }
 
     /**
