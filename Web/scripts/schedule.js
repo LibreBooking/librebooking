@@ -100,44 +100,7 @@ function Schedule(opts, resourceGroups) {
         }
       );
 
-      var qTipElement = div;
-
-      qTipElement.qtip({
-        position: {
-          my: 'bottom left',
-          at: 'top left',
-          effect: false,
-          viewport: $(window),
-        },
-
-        content: {
-          text: function (event, api) {
-            $.ajax({ url: options.summaryPopupUrl, data: { id: resid } })
-              .done(function (html) {
-                api.set('content.text', html);
-              })
-              .fail(function (xhr, status, error) {
-                api.set('content.text', status + ': ' + error);
-              });
-
-            return 'Loading...';
-          },
-        },
-
-        show: {
-          delay: 700,
-          effect: false,
-        },
-
-        hide: {
-          fixed: true,
-          delay: 500,
-        },
-
-        style: {
-          classes: 'qtip-light qtip-bootstrap',
-        },
-      });
+      div.attachReservationPopup(resid, options.summaryPopupUrl);
     }
 
     function findClosestStart(tds, reservation, startAttribute) {
@@ -367,7 +330,10 @@ function Schedule(opts, resourceGroups) {
                           'dragstart',
                           { referenceNumber: reservation.ReferenceNumber, resourceId: reservation.ResourceId },
                           function (event) {
-                            div.qtip('hide');
+                            const tooltipInstance = bootstrap.Tooltip.getInstance(div[0]);
+                            if (tooltipInstance) {
+                              tooltipInstance.hide();
+                            }
                             $(event.target).removeClass('clicked');
                             const data = JSON.stringify({
                               referenceNumber: event.data.referenceNumber,
@@ -720,7 +686,10 @@ function Schedule(opts, resourceGroups) {
 
             if (isDraggable) {
               div.on('dragstart', function (event) {
-                div.qtip('hide');
+                const tooltipInstance = bootstrap.Tooltip.getInstance(div[0]);
+                if (tooltipInstance) {
+                  tooltipInstance.hide();
+                }
                 $(event.target).removeClass('clicked');
                 const data = JSON.stringify({
                   referenceNumber: res.ReferenceNumber,

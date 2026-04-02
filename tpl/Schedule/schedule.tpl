@@ -320,7 +320,8 @@
 
                                     <div class="form-group mb-2">
                                         <label for="resourceType" class="fw-bold">{translate key=ResourceType}</label>
-                                        <select id="resourceType" {formname key=RESOURCE_TYPE_ID} class="form-select form-select-sm">
+                                        <select id="resourceType" {formname key=RESOURCE_TYPE_ID}
+                                            class="form-select form-select-sm">
                                             <option value="">- {translate key=All} -</option>
                                             {object_html_options options=$ResourceTypes label='Name' key='Id' selected=$ResourceTypeIdFilter}
                                         </select>
@@ -414,6 +415,7 @@
 {/block}
 
 {vendor_js src="html2canvas/1.4.1/js/html2canvas.min.js"}
+{jsfile src="reservationPopup.js"}
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
