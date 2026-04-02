@@ -29,7 +29,9 @@
 								{fullname first=$reservation->FirstName last=$reservation->LastName ignorePrivacy=($reservation->OwnerId==$UserId)}
 							</td>
 							<td class="resource">{$reservation->ResourceName}</td>
-							<td class="title">{$reservation->Title}</td>
+							<td class="title"><span class="reservationTitle" data-bs-custom-class="respopup-tooltip"
+									data-bs-html="true">{if $reservation->Title}{$reservation->Title|escape:'html'}{else}{translate key=NoTitleLabel}{/if}</span>
+							</td>
 							<td class="description">{$reservation->Description}</td>
 							<td class="date">
 								{formatdate date=$reservation->StartDate timezone=$Timezone key=short_reservation_date}</td>
