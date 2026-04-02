@@ -4,6 +4,8 @@ abstract class AbstractConfigKeys
 {
     /** @var array<class-string, array> */
     private static array $allCache = [];
+    /** @var array<class-string, array> */
+    private static array $allWithEntryIdsCache = [];
 
     /**
      * Returns all configuration entries defined in the class.
@@ -16,18 +18,45 @@ abstract class AbstractConfigKeys
             return self::$allCache[$class];
         }
 
+        $entries = [];
+        foreach (self::allWithEntryIds() as $value) {
+            unset($value['_entry_id']);
+            $entries[] = $value;
+        }
+
+        self::$allCache[$class] = $entries;
+
+        return $entries;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private static function allWithEntryIds(): array
+    {
+        $class = static::class;
+        if (isset(self::$allWithEntryIdsCache[$class])) {
+            return self::$allWithEntryIdsCache[$class];
+        }
+
         $constants = (new \ReflectionClass($class))->getConstants();
 
-        $all = [];
-        foreach ($constants as $value) {
+        $configsWithIds = [];
+        foreach ($constants as $name => $value) {
             if (is_array($value) && isset($value['key'])) {
-                $all[] = $value;
+                // Preserve the constant name so collision detection can distinguish
+                // between different schema entries that may share the same key text,
+                // e.g. SERVER1_KEY and SERVER1_KEY_DUPLICATE_SECTION_CASE both using
+                // 'key' => 'key'.
+                $value['_entry_id'] = $name;
+                $configsWithIds[] = $value;
             }
         }
 
-        self::$allCache[$class] = $all;
+        self::assertNoCaseInsensitiveLookupCollisions(configsWithIds: $configsWithIds);
+        self::$allWithEntryIdsCache[$class] = $configsWithIds;
 
-        return $all;
+        return $configsWithIds;
     }
 
     /**
@@ -106,5 +135,67 @@ abstract class AbstractConfigKeys
         $key = $config['key'] ?? null;
 
         return is_string($key) && $key !== '' ? $key : null;
+    }
+
+    private static function assertNoCaseInsensitiveLookupCollisions(array $configsWithIds): void
+    {
+        $seen = [];
+
+        foreach ($configsWithIds as $configWithId) {
+            // Validate both the canonical lookup key and any legacy alias because
+            // either one can collide once lookups become case-insensitive.
+            self::assertUniqueCaseInsensitiveKey(
+                seen: $seen,
+                rawKey: static::getCanonicalLookupKey(config: $configWithId),
+                configWithId: $configWithId,
+                source: 'key'
+            );
+            self::assertUniqueCaseInsensitiveKey(
+                seen: $seen,
+                rawKey: $configWithId['legacy'] ?? null,
+                configWithId: $configWithId,
+                source: 'legacy'
+            );
+        }
+    }
+
+    private static function assertUniqueCaseInsensitiveKey(array &$seen, ?string $rawKey, array $configWithId, string $source): void
+    {
+        if (!is_string($rawKey) || $rawKey === '') {
+            return;
+        }
+
+        $normalizedKey = strtolower($rawKey);
+        if (!isset($seen[$normalizedKey])) {
+            // Remember the first schema entry that claims this normalized lookup key.
+            $seen[$normalizedKey] = [
+                'rawKey' => $rawKey,
+                'entryId' => $configWithId['_entry_id'],
+                'key' => $configWithId['key'],
+                'source' => $source,
+            ];
+            return;
+        }
+
+        $existing = $seen[$normalizedKey];
+        // Allow the same schema entry to contribute both a canonical key and a
+        // legacy alias that normalize to the same lookup string.
+        if ($existing['entryId'] === $configWithId['_entry_id']) {
+            return;
+        }
+
+        throw new LogicException(sprintf(
+            'Case-insensitive config key collision detected in %s for "%s" between %s "%s" (entry "%s", constant "%s") and %s "%s" (entry "%s", constant "%s")',
+            static::class,
+            $normalizedKey,
+            $existing['source'],
+            $existing['rawKey'],
+            $existing['key'],
+            $existing['entryId'],
+            $source,
+            $rawKey,
+            $configWithId['key'],
+            $configWithId['_entry_id']
+        ));
     }
 }

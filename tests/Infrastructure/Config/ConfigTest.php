@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
 require_once(ROOT_DIR . 'tests/data/test_plugin_configclass.php');
+require_once(ROOT_DIR . 'tests/data/test_plugin_configclass_collision.php');
 
 class ConfigTest extends TestBase
 {
@@ -136,6 +137,70 @@ class ConfigTest extends TestBase
         $this->assertEquals('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
         $this->assertEquals('value2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
         $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveKeyCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollision::class
+            )
+        );
+
+        TestPluginConfigKeysCollision::findByKey('server1.key');
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveKeyCollisionsWhenEntriesShareTheSameKeyName()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionSameKey::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionSameKey::findByKey('server1.key');
+    }
+
+    public function testPluginConfigAllowsTheSameKeyNameInDifferentSections()
+    {
+        $this->assertSame(
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER1_KEY,
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server1.key')
+        );
+        $this->assertSame(
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER2_KEY,
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server2.key')
+        );
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveLegacyToCanonicalCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionLegacyVsCanonical::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionLegacyVsCanonical::findByKey('server1.key');
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveLegacyToLegacyCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionLegacyVsLegacy::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionLegacyVsLegacy::findByKey('server1.key1');
     }
 
     public function testPluginConfigValidation()
