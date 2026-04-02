@@ -165,6 +165,20 @@ PHP
         $this->assertSame('xoxb-test-token', $values['slack.token']);
     }
 
+    public function testGetKeyRetrievesUnsectionedKeysWithEmptySection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
+$conf['settings']['slack']['token'] = 'xoxb-test-token';
+PHP
+        );
+
+        $this->assertSame('G-TEST123', $config->GetKey(ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
+        $this->assertSame('xoxb-test-token', $config->GetKey(ConfigKeys::SLACK_TOKEN));
+    }
+
     public function testMainConfigValidation()
     {
         $errorLogs = $this->captureErrorLog(function () {

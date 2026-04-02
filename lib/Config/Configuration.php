@@ -514,7 +514,7 @@ class ConfigurationFile implements IConfigurationFile
 
         if (!empty($envValue)) {
             $value = $envValue;
-        } elseif ($section !== null) {
+        } elseif ($section !== null && $section !== '') {
             $sectionKey = str_starts_with($fullKey, $section . '.') ? substr($fullKey, strlen($section) + 1) : $fullKey;
             if (isset($this->_values[$section][$sectionKey])) {
                 $value = $this->_values[$section][$sectionKey];
