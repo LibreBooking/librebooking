@@ -1,6 +1,15 @@
 <div class="form-group {$class}">
     {if $readonly}
-        <label class="customAttribute fw-bold readonly" for="{$attributeId}">{$attribute->Label()}</label>
+        {if isset($tooltip) && $tooltip}
+            <span class="customAttribute readonly">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+                    <i class="bi bi-asterisk text-danger align-top text-small"></i>
+                {/if}:</span>
+        {else}
+            <label class="customAttribute fw-bold readonly"
+                for="{$attributeId}">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+                    <i class="bi bi-asterisk text-danger align-top text-small"></i>
+                {/if}</label>
+        {/if}
         <span
             class="attributeValue {$class}">{if $attribute->Value() == "1"}{translate key='True'}{else}{translate key='False'}{/if}</span>
     {elseif $searchmode}
