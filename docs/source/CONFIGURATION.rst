@@ -110,3 +110,33 @@ During migration you may see messages such as:
 
 After reviewing the generated file, replace ``config/config.php`` with the
 migrated file when you are satisfied with the result.
+
+Language String Overrides
+-------------------------
+
+LibreBooking supports installation-specific string overrides through
+``config/lang-overrides.php``. If this file exists, its string values are
+merged into the active language during resource initialization after the
+standard language file has been loaded.
+
+This is useful when you want to change a few labels or messages for one
+installation without modifying the files in ``lang/``.
+
+Example:
+
+.. code-block:: php
+
+   <?php
+
+   $langOverrides = [
+       'Login' => 'Sign in to Room Booking',
+       'Register' => 'Request an account',
+   ];
+
+Notes:
+
+- The file path must be ``config/lang-overrides.php``
+- The file must define a global ``$langOverrides`` array
+- Override keys must match the existing translation string keys used by the application
+- This only overrides string entries; it does not override date, day, or month definitions
+- Overrides are global for the installation and are not scoped per language
