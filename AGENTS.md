@@ -7,7 +7,7 @@ This file contains essential information for AI coding agents working on the Lib
 **LibreBooking** is an open-source resource scheduling and booking system written in PHP. It's a fork of Booked Scheduler that has evolved significantly since 2020.
 
 - **Primary Language**: PHP (>=8.2)
-- **Database**: MySQL (>=5.5)
+- **Database**: MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021)
 - **Architecture**: Model-View-Presenter (MVP) pattern
 - **Template Engine**: Smarty (version 5.8+)
 - **Frontend**: Bootstrap 5, jQuery
@@ -51,7 +51,7 @@ This file contains essential information for AI coding agents working on the Lib
 - PHP >= 8.2 with extensions: ctype, curl, fileinfo, json, ldap, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
 - Optional PHP extensions: bcmath, gd
 - Composer for dependency management
-- MySQL >= 5.5 for database
+- MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021) for database
 - Git for version control
 
 ### Initial Setup
