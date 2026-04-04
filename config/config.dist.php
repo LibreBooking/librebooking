@@ -198,8 +198,8 @@ return [
             # Write permission is required
             'folder' => '/var/log/librebooking/log',
 
-            # Logging level: none, DEBUG, INFO, WARNING, ERROR
-            'level' => 'none',
+            # Logging level: none, debug, error
+            'level' => 'error',
 
             # Enable SQL logging (true/false)
             'sql' => false,
@@ -547,7 +547,7 @@ return [
             # Allow guest users to make reservations (true/false)
             'allow.guest.reservations' => false,
 
-            # Set number of dys in the future for which reservations can be made by guest users
+            # Set number of days in the future for which reservations can be made by guest users
             'public.future.days' => 30,
         ],
 
