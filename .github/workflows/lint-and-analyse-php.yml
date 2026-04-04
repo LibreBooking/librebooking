@@ -32,8 +32,6 @@ jobs:
       - run: pip install --upgrade tox
       - name: Run commitizen (https://commitizen-tools.github.io/commitizen/)
         run: tox -e cz
-      - name: Run config-check
-        run: tox -e config-check
       - name: Run doc8
         run: tox -e doc8
       - name: Install shellcheck and shfmt
@@ -111,6 +109,22 @@ jobs:
 
       - name: Lint PHP files
         run: ./ci/ci-phplint
+
+      - name: Check config.dist.php is up-to-date
+        if: matrix.php-version == '8.2'
+        run: |
+          if ! composer config-dist:check; then
+            echo ""
+            echo "=========================================="
+            echo "  config/config.dist.php is out of date."
+            echo "  To regenerate it locally, run:"
+            echo ""
+            echo "    composer config-dist:generate"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
 
       - name: Cache php-cs-fixer
         if: matrix.php-version == '8.2'
