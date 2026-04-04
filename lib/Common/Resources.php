@@ -14,6 +14,8 @@ interface IResourceLocalization
 
     public function GetDateFormat($key);
 
+    public function HasDateFormat($key): bool;
+
     public function GetDays($key);
 
     public function GetMonths($key);
@@ -177,6 +179,17 @@ class Resources implements IResourceLocalization
         }
 
         return $dates[$key];
+    }
+
+    public function HasDateFormat($key): bool
+    {
+        if (array_key_exists($key, $this->systemDateKeys)) {
+            return true;
+        }
+
+        $dates = $this->_lang->Dates;
+
+        return isset($dates[$key]) && !empty($dates[$key]);
     }
 
     public function GeneralDateFormat()

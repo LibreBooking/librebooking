@@ -20,7 +20,7 @@
                 mode: {$Multiple ? '"multiple"' : '"single"'},
                 static: true,
                 altInput: {if $AltInput|default:true}true{else}false{/if},
-                altFormat: "{$AltFormat}",
+                altFormat: {$AltFormatJson nofilter},
                 dateFormat: "{$DateFormat}",
                 defaultDate: {$DefaultDateJson nofilter},
                 minDate: {if $MinDate}"{$MinDate}"{else}null{/if},
