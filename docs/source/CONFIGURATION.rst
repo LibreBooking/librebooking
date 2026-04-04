@@ -122,21 +122,49 @@ standard language file has been loaded.
 This is useful when you want to change a few labels or messages for one
 installation without modifying the files in ``lang/``.
 
-Example:
+Global Overrides
+^^^^^^^^^^^^^^^^
+
+The ``$langOverrides`` array applies to all languages:
 
 .. code-block:: php
 
    <?php
 
    $langOverrides = [
-       'Login' => 'Sign in to Room Booking',
+       'LogIn' => 'Sign in to Room Booking',
        'Register' => 'Request an account',
    ];
+
+Per-Language Overrides
+^^^^^^^^^^^^^^^^^^^^^^
+
+The ``$langOverridesByLanguage`` array allows overrides scoped to specific
+languages. Use the language code (e.g. ``en_us``, ``fr_fr``) as the key:
+
+.. code-block:: php
+
+   <?php
+
+   $langOverridesByLanguage = [
+       'fr_fr' => [
+           'LogIn' => 'Se connecter à la réservation',
+           'Register' => 'Demander un compte',
+       ],
+       'fi_fi' => [
+           'LogIn' => 'Kirjaudu huonevaraukseen',
+           'Register' => 'Pyydä tiliä',
+       ],
+       'de_de' => [
+           'LogIn' => 'Anmeldung zur Raumbuchung',
+       ],
+   ];
+
+Both arrays can be used in the same file. Per-language overrides are applied
+after global overrides, so they take precedence when both define the same key.
 
 Notes:
 
 - The file path must be ``config/lang-overrides.php``
-- The file must define a global ``$langOverrides`` array
 - Override keys must match the existing translation string keys used by the application
 - This only overrides string entries; it does not override date, day, or month definitions
-- Overrides are global for the installation and are not scoped per language

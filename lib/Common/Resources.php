@@ -333,8 +333,19 @@ class Resources implements IResourceLocalization
         $overrideFile = ROOT_DIR . 'config/lang-overrides.php';
         if (file_exists($overrideFile)) {
             global $langOverrides;
+            global $langOverridesByLanguage;
             include_once($overrideFile);
-            $this->_lang->Strings = array_merge($this->_lang->Strings, $langOverrides);
+
+            if (!empty($langOverrides)) {
+                $this->_lang->Strings = array_merge($this->_lang->Strings, $langOverrides);
+            }
+
+            if (!empty($langOverridesByLanguage[$this->CurrentLanguage])) {
+                $this->_lang->Strings = array_merge(
+                    $this->_lang->Strings,
+                    $langOverridesByLanguage[$this->CurrentLanguage]
+                );
+            }
         }
     }
 }
