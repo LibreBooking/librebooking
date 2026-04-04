@@ -17,7 +17,7 @@ class CalendarExportDisplay extends Page
     {
         $config = Configuration::Instance();
 
-        $this->Set('bookedVersion', $config->GetKey(ConfigKeys::VERSION));
+        $this->Set('bookedVersion', Configuration::VERSION);
         $this->Set('DateStamp', Date::Now());
 
         /**

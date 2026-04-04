@@ -61,15 +61,6 @@ class ConfigKeys extends AbstractConfigKeys
         'description' => 'Public URL to the Web directory of this instance'
     ];
 
-    public const VERSION = [
-        'key' => 'version',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Application Version',
-        'description' => 'The version of the application',
-        'is_hidden' => true
-    ];
-
     // Language and Timezone
     public const DEFAULT_TIMEZONE = [
         'key' => 'default.timezone',

@@ -147,4 +147,19 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
     }
+
+    public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
+    {
+        $this->fakeConfig->SetKey('version', '9.9.9-user-config');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+
+        $display = new CalendarExportDisplay();
+        $calendar = $display->Render([]);
+
+        $this->assertStringContainsString(
+            'PRODID:-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
+            $calendar
+        );
+        $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
+    }
 }
