@@ -224,7 +224,7 @@ return [
             'reservation.attachment.path' => 'uploads/reservation',
 
             # File extensions allowed for reservation attachments
-            'reservation.attachment.extensions' => 'txt,jpg,gif,png,doc,docx,pdf,xls,xlsx,ppt,pptx,csv',
+            'reservation.attachment.extensions' => 'csv,doc,docx,gif,jpeg,jpg,pdf,png,ppt,pptx,txt,xls,xlsx',
         ],
 
 
