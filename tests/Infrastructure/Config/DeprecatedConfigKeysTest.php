@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Config/DeprecatedConfigKeys.php');
 
 class DeprecatedConfigKeysTest extends TestBase
