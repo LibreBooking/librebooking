@@ -120,7 +120,7 @@
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
-                <img src="{$Path}img/{$LogoUrl}?{$Version}" alt="{$Title}" class="logo">
+                <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="logo">
             </a>
             <div class="border-start ps-2 d-flex flex-column">
                 {if $CompanyName neq ''}

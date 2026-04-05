@@ -26,10 +26,10 @@
 
                     <li class="list-group-item">
                         <div class="fs-4">{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</div>
-                        <img src="{$ScriptUrl}/img/{$LogoUrl}" class="d-block mx-auto mw-100"
+                        <img src="{$ScriptUrl}/{$LogoUrl}" class="d-block mx-auto mw-100"
                             alt="{translate key="Logo"}" />
                         <div class="d-flex align-items-center justify-content-center my-2">
-                            <a href="{$ScriptUrl}/img/{$LogoUrl}" download="{$ScriptUrl}/img/{$LogoUrl}"
+                            <a href="{$ScriptUrl}/{$LogoUrl}" download="{$LogoUrl}"
                                 class="link-primary"><i class="bi bi-download me-1"></i>{$LogoUrl}</a>
                             <div class="vr mx-1"></div>
                             <a href="#" id="removeLogo" class="link-danger text-decoration-none"><i
@@ -48,7 +48,7 @@
                         <div class="fs-4">Favicon (*.ico, *.png, *.gif, *.jpg - Recommended size 48px x 48px)</div>
                         <img src="{$ScriptUrl}/{$FaviconUrl}" class="d-block mx-auto" alt="Favicon" />
                         <div class="d-flex align-items-center justify-content-center my-2">
-                            <a href="{$ScriptUrl}/{$FaviconUrl}" download="{$ScriptUrl}/img/{$FaviconUrl}"
+                            <a href="{$ScriptUrl}/{$FaviconUrl}" download="{$FaviconUrl}"
                                 class="link-primary"><i class="bi bi-download me-1"></i>{$FaviconUrl}</a>
                             <div class="vr mx-1"></div>
                             <a href="#" id="removeFavicon" class="link-danger text-decoration-none"><i

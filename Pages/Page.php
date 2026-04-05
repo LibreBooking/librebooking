@@ -8,6 +8,7 @@ require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ImageUploadDirectory.php');
 
 use Detection\MobileDetect;
 
@@ -94,16 +95,21 @@ abstract class Page implements IPage
 
         $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
 
-        $this->smarty->assign('LogoUrl', 'librebooking.png');
-        if (file_exists($this->path . 'img/custom-logo.png')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.png');
-        }
-        if (file_exists($this->path . 'img/custom-logo.gif')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.gif');
-        }
-        if (file_exists($this->path . 'img/custom-logo.jpg')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.jpg');
-        }
+        $imageUploadDirectory = new ImageUploadDirectory();
+        $uploadUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
+        $customFileLocations = [
+            ['dir' => $imageUploadDirectory->GetDirectory(), 'url' => $uploadUrl],
+            ['dir' => ROOT_DIR . 'Web/img', 'url' => 'img'],
+        ];
+
+        $this->smarty->assign(
+            'LogoUrl',
+            self::findCustomFile(
+                baseName: 'custom-logo',
+                extensions: ['png', 'gif', 'jpg'],
+                locations: $customFileLocations,
+            ) ?? 'img/librebooking.png'
+        );
 
         $this->smarty->assign('CssUrl', 'null-style.css');
         if (file_exists($this->path . 'css/custom-style.css')) {
@@ -115,19 +121,18 @@ abstract class Page implements IPage
             $this->smarty->assign('CssStylingFile', 'styling-plugin.php');
         }
 
-        $this->smarty->assign('FaviconUrl', 'favicon.ico');
-        if (file_exists($this->path . 'custom-favicon.png')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.png');
-        }
-        if (file_exists($this->path . 'custom-favicon.gif')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.gif');
-        }
-        if (file_exists($this->path . 'custom-favicon.jpg')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.jpg');
-        }
-        if (file_exists($this->path . 'custom-favicon.ico')) {
-            $this->smarty->assign('FaviconUrl', 'custom-favicon.ico');
-        }
+        $faviconLocations = [
+            ['dir' => $imageUploadDirectory->GetDirectory(), 'url' => $uploadUrl],
+            ['dir' => ROOT_DIR . 'Web', 'url' => ''],
+        ];
+        $this->smarty->assign(
+            'FaviconUrl',
+            self::findCustomFile(
+                baseName: 'custom-favicon',
+                extensions: ['png', 'gif', 'jpg', 'ico'],
+                locations: $faviconLocations,
+            ) ?? 'favicon.ico'
+        );
 
         $logoUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);
         if (empty($logoUrl)) {
@@ -151,6 +156,36 @@ abstract class Page implements IPage
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
 
         $this->Set('AutoScrollToday', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_AUTO_SCROLL_TODAY, new BooleanConverter()) ?? true);
+    }
+
+    /**
+     * Search for a custom file across multiple locations, returning the URL-relative path if found.
+     *
+     * Locations are checked in order (first match wins). Within each location,
+     * later extensions overwrite earlier ones.
+     *
+     * @param string $baseName File name without extension (e.g. 'custom-logo')
+     * @param string[] $extensions File extensions to check (e.g. ['png', 'gif', 'jpg'])
+     * @param array<array{dir: string, url: string}> $locations Directories to search,
+     *        each with 'dir' (filesystem path) and 'url' (URL-relative prefix)
+     * @return string|null URL-relative path to the file, or null if not found
+     */
+    public static function findCustomFile(string $baseName, array $extensions, array $locations): ?string
+    {
+        foreach ($locations as $location) {
+            $result = null;
+            foreach ($extensions as $ext) {
+                if (file_exists($location['dir'] . '/' . $baseName . '.' . $ext)) {
+                    $prefix = $location['url'] !== '' ? rtrim($location['url'], '/') . '/' : '';
+                    $result = $prefix . $baseName . '.' . $ext;
+                }
+            }
+            if ($result !== null) {
+                return $result;
+            }
+        }
+
+        return null;
     }
 
     protected function SetTitle($title)

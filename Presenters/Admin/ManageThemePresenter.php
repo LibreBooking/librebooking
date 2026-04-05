@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ImageUploadDirectory.php');
 
 class ManageThemePresenter extends ActionPresenter
 {
@@ -30,7 +31,9 @@ class ManageThemePresenter extends ActionPresenter
 
             $this->RemoveLogo();
 
-            $target = ROOT_DIR . 'Web/img/custom-logo.' . $logoFile->Extension();
+            $imageUploadDirectory = new ImageUploadDirectory();
+            $uploadDir = $imageUploadDirectory->GetDirectory();
+            $target = $uploadDir . '/custom-logo.' . $logoFile->Extension();
             $copied = copy($logoFile->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -57,7 +60,9 @@ class ManageThemePresenter extends ActionPresenter
 
             $this->RemoveFavicon();
 
-            $target = ROOT_DIR . 'Web/custom-favicon.' . $favicon->Extension();
+            $imageUploadDirectory = new ImageUploadDirectory();
+            $uploadDir = $imageUploadDirectory->GetDirectory();
+            $target = $uploadDir . '/custom-favicon.' . $favicon->Extension();
             $copied = copy($favicon->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -72,11 +77,18 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveLogo()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/img/custom-logo.*');
-            foreach ($targets as $target) {
-                $removed = unlink($target);
-                if (!$removed) {
-                    Log::Error('Could not remove existing logo. Ensure %s is writable.', $target);
+            $imageUploadDirectory = new ImageUploadDirectory();
+            $dirs = [
+                $imageUploadDirectory->GetDirectory(),
+                ROOT_DIR . 'Web/img',
+            ];
+            foreach ($dirs as $dir) {
+                $targets = glob($dir . '/custom-logo.*');
+                foreach ($targets as $target) {
+                    $removed = unlink($target);
+                    if (!$removed) {
+                        Log::Error('Could not remove existing logo. Ensure %s is writable.', $target);
+                    }
                 }
             }
         } catch (Exception $ex) {
@@ -87,11 +99,18 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveFavicon()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/custom-favicon.*');
-            foreach ($targets as $target) {
-                $removed = unlink($target);
-                if (!$removed) {
-                    Log::Error('Could not remove existing favicon. Ensure %s is writable.', $target);
+            $imageUploadDirectory = new ImageUploadDirectory();
+            $dirs = [
+                $imageUploadDirectory->GetDirectory(),
+                ROOT_DIR . 'Web',
+            ];
+            foreach ($dirs as $dir) {
+                $targets = glob($dir . '/custom-favicon.*');
+                foreach ($targets as $target) {
+                    $removed = unlink($target);
+                    if (!$removed) {
+                        Log::Error('Could not remove existing favicon. Ensure %s is writable.', $target);
+                    }
                 }
             }
         } catch (Exception $ex) {

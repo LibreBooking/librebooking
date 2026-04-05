@@ -363,7 +363,7 @@ abstract class ReservationPage extends Page implements IReservationPage
             'showTermsAcceptance' => $this->SmartyVar('Terms') !== null && (bool)$this->SmartyVar('TermsAccepted', false),
             'acceptTermsLabel' => sprintf('%s %s', $this->Translate('IAccept'), $this->Translate('TheTermsOfService')),
 
-            'logoUrl' => sprintf('%s/img/%s', $this->SmartyVar('ScriptUrl', ''), $this->SmartyVar('LogoUrl', '')),
+            'logoUrl' => sprintf('%s/%s', $this->SmartyVar('ScriptUrl', ''), $this->SmartyVar('LogoUrl', '')),
         ];
 
         $this->Set('ReservationPdfConfigJson', json_encode(
