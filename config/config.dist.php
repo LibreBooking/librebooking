@@ -584,9 +584,6 @@ return [
             # X-Frame-Options header value (e.g., deny, sameorigin)
             'x-frame' => 'deny',
 
-            # X-XSS-Protection header value
-            'x-xss' => '1; mode=block',
-
             # X-Content-Type-Options header value
             'x-content-type' => 'nosniff',
 

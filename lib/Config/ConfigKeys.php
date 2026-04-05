@@ -1392,16 +1392,6 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => 'X-Frame-Options header value (e.g., deny, sameorigin)',
         'section' => 'security'
     ];
-    public const SECURITY_X_XSS = [
-        'key' => 'security.x-xss',
-        'legacy' => 'security.security.x-xss',
-        'type' => 'string',
-        'default' => '1; mode=block',
-        'label' => 'X-XSS-Protection',
-        'description' => 'Set the X-XSS-Protection header value',
-        'config_file_comment' => 'X-XSS-Protection header value',
-        'section' => 'security'
-    ];
     public const SECURITY_X_CONTENT_TYPE = [
         'key' => 'security.x-content-type',
         'legacy' => 'security.security.x-content-type',

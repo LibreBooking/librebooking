@@ -445,7 +445,6 @@ abstract class Page implements IPage
         if ($config->GetKey(ConfigKeys::SECURITY_HEADERS, new BooleanConverter())) {
             header('Strict-Transport-Security: ' . $config->GetKey(ConfigKeys::SECURITY_STRICT_TRANSPORT));
             header('X-Frame-Options: ' . $config->GetKey(ConfigKeys::SECURITY_X_FRAME));
-            header('X-XSS-Protection: ' . $config->GetKey(ConfigKeys::SECURITY_X_XSS));
             header('X-Content-Type-Options: ' . $config->GetKey(ConfigKeys::SECURITY_X_CONTENT_TYPE));
             header('Content-Security-Policy: ' . $config->GetKey(ConfigKeys::SECURITY_CONTENT_SECURITY_POLICY));
         }

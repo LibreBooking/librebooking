@@ -19,7 +19,8 @@ class DeprecatedConfigKeys
      *
      * @var array<string, string>
      */
-    private const DEPRECATED_KEYS = [
+    public const DEPRECATED_KEYS = [
+        'security.x-xss' => 'X-XSS-Protection header is obsolete and has been removed from all modern browsers',
     ];
 
     /**
@@ -34,7 +35,8 @@ class DeprecatedConfigKeys
      *
      * @var array<string, string>
      */
-    private const DEPRECATED_LEGACY_KEYS = [
+    public const DEPRECATED_LEGACY_KEYS = [
+        'security.security.x-xss' => 'X-XSS-Protection header is obsolete and has been removed from all modern browsers',
     ];
 
     /**

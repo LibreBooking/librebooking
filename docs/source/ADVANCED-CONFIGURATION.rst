@@ -643,7 +643,6 @@ Advanced Security Settings
        'headers' => false,
        'strict-transport' => 'max-age=31536000',
        'x-frame' => 'deny',
-       'x-xss' => '1, mode=block',
        'x-content-type' => 'nosniff',
        'content-security-policy' => '',
    ],
@@ -656,9 +655,6 @@ Advanced Security Settings
 
 **security.x-frame**
   X-Frame-Options header (prevents clickjacking).
-
-**security.x-xss**
-  X-XSS-Protection header.
 
 **security.x-content-type**
   X-Content-Type-Options header.
