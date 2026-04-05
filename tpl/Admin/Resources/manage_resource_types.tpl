@@ -75,7 +75,7 @@
 							{if $AttributeList|default:array()|count > 0}
 								<td>
 									{foreach from=$AttributeList item=attribute}
-										{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$type->GetAttributeValue($attribute->Id())}
+										{include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourceTypesActions::ChangeAttribute}" id=$id attribute=$attribute value=$type->GetAttributeValue($attribute->Id())}
 									{/foreach}
 								</td>
 							{/if}

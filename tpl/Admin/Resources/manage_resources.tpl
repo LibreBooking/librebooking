@@ -398,10 +398,9 @@
 																	class="inline fw-bold">{translate key='Contact'}</label>
 																{if $ResourceContactIsUser}
 																	<span class="propertyValue contactValue" data-type="select"
-																{else}
-																	<span class="propertyValue contactValue" data-type="text"
-																{/if}
-																	data-pk="{$id}" data-value="{$resource->GetContact()}"
+																	{else} <span class="propertyValue contactValue"
+																	data-type="text" {/if} data-pk="{$id}"
+																	data-value="{$resource->GetContact()}"
 																	data-name="{FormKeys::RESOURCE_CONTACT}">
 																	{if $resource->HasContact()}
 																		{$resource->GetContact()}
@@ -585,9 +584,11 @@
 																				class="bi bi-chevron-down"></i>
 																		</a>
 																		<div id="customAttributes{$id}" class="collapse show">
-																			<div class="row">
+																			<div>
 																			{/if}
-																			{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+																			{include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionChangeAttribute}"
+																			id=$id attribute=$attribute
+																			value=$resource->GetAttributeValue($attribute->Id())}
 																		{/if}
 																	{/foreach}
 																	{if $hasResults}

@@ -377,7 +377,7 @@
                                                 <div class="customAttributes">
                                                     {if $AttributeList|default:array()|count > 0}
                                                         {foreach from=$AttributeList item=attribute}
-                                                            {include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+                                                            {include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionChangeAttribute}" id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
                                                         {/foreach}
                                                     {/if}
                                                 </div>
