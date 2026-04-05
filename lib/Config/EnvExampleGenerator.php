@@ -3,79 +3,27 @@
 declare(strict_types=1);
 
 /**
- * Generates config/config.dist.php from ConfigKeys metadata.
+ * Generates .env.example from ConfigKeys metadata.
  *
- * Two layers:
- *  - generateSettingsArray(): canonical default settings structure
- *  - render(): full PHP file text with comments
+ * Produces a .env file with comments and default values,
+ * using the same metadata pipeline as ConfigDistGenerator.
  */
-class ConfigDistGenerator
+class EnvExampleGenerator
 {
-    private const FILE_HEADER = <<<'PHP'
-<?php
-
-/**
- * LibreBooking configuration file
- *
- * This file contains the default configuration for LibreBooking.
- * It is used to set up the application and can be overridden by environment variables.
- * The settings are grouped into sections for easier management.
- */
-
-PHP;
-
     /**
-     * Build the canonical settings array from ConfigKeys.
-     *
-     * Keys preserve ConfigKeys constant declaration order.
-     * Flat keys (no section) and sectioned keys are separated
-     * but maintain their relative declaration order within each group.
-     *
-     * @return array{flat: array<string, array>, sections: array<string, array<string, array>>}
-     */
-    public static function generateSettingsArray(): array
-    {
-        $flat = [];
-        $sections = [];
-
-        foreach (ConfigKeys::all() as $entry) {
-            $key = $entry['key'];
-            $section = $entry['section'] ?? null;
-
-            if ($section === null || $section === '') {
-                $flat[$key] = $entry;
-            } else {
-                $prefix = $section . '.';
-                if (str_starts_with(haystack: $key, needle: $prefix)) {
-                    $nestedKey = substr(string: $key, offset: strlen($prefix));
-                } else {
-                    $nestedKey = $key;
-                }
-                $sections[$section][$nestedKey] = $entry;
-            }
-        }
-
-        return ['flat' => $flat, 'sections' => $sections];
-    }
-
-    /**
-     * Render the full config.dist.php file content.
+     * Render the full .env.example file content.
      */
     public static function render(): string
     {
-        $settings = self::generateSettingsArray();
+        $settings = ConfigDistGenerator::generateSettingsArray();
         $lines = [];
-        $lines[] = self::FILE_HEADER;
-        $lines[] = 'return [';
-        $lines[] = "    'settings' => [";
-        $lines[] = '';
 
         foreach (ConfigKeysMeta::groupFlatEntries(flatEntries: $settings['flat']) as $groupTitle => $entries) {
-            self::appendSectionHeader(lines: $lines, title: $groupTitle, indent: 2);
+            self::appendSectionHeader(lines: $lines, title: $groupTitle);
             $lines[] = '';
 
-            foreach ($entries as $key => $entry) {
-                self::appendEntry(lines: $lines, key: $key, entry: $entry, indent: 2);
+            foreach ($entries as $entry) {
+                self::appendEntry(lines: $lines, entry: $entry);
             }
 
             self::trimTrailingBlankLine(lines: $lines);
@@ -85,27 +33,23 @@ PHP;
         foreach ($settings['sections'] as $sectionName => $entries) {
             $sectionTitle = ConfigKeysMeta::sectionTitle(section: $sectionName);
             $lines[] = '';
-            self::appendSectionHeader(lines: $lines, title: $sectionTitle, indent: 2);
+            self::appendSectionHeader(lines: $lines, title: $sectionTitle);
             $lines[] = '';
-            $lines[] = "        '{$sectionName}' => [";
 
-            foreach ($entries as $nestedKey => $entry) {
-                self::appendEntry(lines: $lines, key: $nestedKey, entry: $entry, indent: 3);
+            foreach ($entries as $entry) {
+                self::appendEntry(lines: $lines, entry: $entry);
             }
 
             self::trimTrailingBlankLine(lines: $lines);
-            $lines[] = '        ],';
         }
 
-        $lines[] = '    ],';
-        $lines[] = '];';
         $lines[] = '';
 
         return implode(separator: "\n", array: $lines);
     }
 
     /**
-     * Write the rendered config to a file path.
+     * Write the rendered .env.example to a file path.
      */
     public static function writeToFile(string $path): void
     {
@@ -152,7 +96,7 @@ PHP;
      */
     public static function main(array $argv): int
     {
-        $defaultPath = dirname(__DIR__, levels: 2) . '/config/config.dist.php';
+        $defaultPath = dirname(__DIR__, levels: 2) . '/.env.example';
         $mode = $argv[1] ?? '--write';
         $outputPath = $argv[2] ?? $defaultPath;
 
@@ -163,7 +107,7 @@ PHP;
                         fwrite(stream: STDOUT, data: "{$outputPath} is up-to-date.\n");
                         return 0;
                     }
-                    fwrite(stream: STDERR, data: "{$outputPath} is out of date. Run: composer config-dist:generate\n");
+                    fwrite(stream: STDERR, data: "{$outputPath} is out of date. Run: composer env-example:generate\n");
                     return 1;
 
                 case '--write':
@@ -172,7 +116,7 @@ PHP;
                     return 0;
 
                 default:
-                    fwrite(stream: STDERR, data: "Usage: generate-config-dist.php [--write|--check] [path]\n");
+                    fwrite(stream: STDERR, data: "Usage: generate-env-example.php [--write|--check] [path]\n");
                     return 2;
             }
         } catch (RuntimeException $e) {
@@ -181,39 +125,36 @@ PHP;
         }
     }
 
-    private static function appendSectionHeader(array &$lines, string $title, int $indent): void
+    private static function appendSectionHeader(array &$lines, string $title): void
     {
-        $pad = str_repeat(string: '    ', times: $indent);
         $border = str_repeat(string: '#', times: strlen($title) + 2);
-        $lines[] = "{$pad}{$border}";
-        $lines[] = "{$pad}# {$title}";
-        $lines[] = "{$pad}{$border}";
+        $lines[] = $border;
+        $lines[] = "# {$title}";
+        $lines[] = $border;
     }
 
-    private static function appendEntry(array &$lines, string $key, array $entry, int $indent): void
+    private static function appendEntry(array &$lines, array $entry): void
     {
-        $pad = str_repeat(string: '    ', times: $indent);
         $comment = ConfigKeysMeta::getComment(entry: $entry);
         $choices = $entry['choices'] ?? null;
         $type = $entry['type'] ?? 'string';
+        $envKey = ConfigKeysMeta::envKey(configKey: $entry['key']);
 
         if ($comment !== '') {
             $hasExplicitComment = isset($entry['config_file_comment']) && $entry['config_file_comment'] !== '';
             foreach (explode(separator: "\n", string: $comment) as $paragraph) {
                 if ($hasExplicitComment) {
-                    // config_file_comment is pre-formatted, don't re-wrap
-                    $lines[] = "{$pad}# {$paragraph}";
+                    $lines[] = "# {$paragraph}";
                 } else {
                     $wrapped = wordwrap(string: $paragraph, width: 76, break: "\n", cut_long_words: false);
                     foreach (explode(separator: "\n", string: $wrapped) as $commentLine) {
-                        $lines[] = "{$pad}# {$commentLine}";
+                        $lines[] = "# {$commentLine}";
                     }
                 }
             }
         }
 
         if ($type === 'boolean' && $comment !== '' && !str_contains(haystack: $comment, needle: 'true/false')) {
-            // Append (true/false) hint to the last comment line
             $lastIndex = count($lines) - 1;
             $lines[$lastIndex] .= ' (true/false)';
         }
@@ -222,12 +163,12 @@ PHP;
             $choiceKeys = array_keys($choices);
             $displayChoices = array_filter($choiceKeys, static fn ($c): bool => $c !== '' && $c !== 0);
             if ($displayChoices !== []) {
-                $lines[] = "{$pad}# Options: " . implode(separator: ', ', array: $displayChoices);
+                $lines[] = '# Options: ' . implode(separator: ', ', array: $displayChoices);
             }
         }
 
         $rendered = self::renderValue(value: $entry['default'], type: $type);
-        $lines[] = "{$pad}'{$key}' => {$rendered},";
+        $lines[] = "{$envKey}={$rendered}";
         $lines[] = '';
     }
 
@@ -236,8 +177,17 @@ PHP;
         return match ($type) {
             'boolean' => $value ? 'true' : 'false',
             'integer' => (string)(int)$value,
-            default => "'" . addcslashes(string: (string)$value, characters: "'\\") . "'",
+            default => self::renderStringValue(value: (string)$value),
         };
+    }
+
+    private static function renderStringValue(string $value): string
+    {
+        if ($value === '') {
+            return '';
+        }
+
+        return "'" . addcslashes(string: $value, characters: "'\\") . "'";
     }
 
     private static function trimTrailingBlankLine(array &$lines): void
@@ -246,5 +196,4 @@ PHP;
             array_pop($lines);
         }
     }
-
 }

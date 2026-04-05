@@ -126,6 +126,22 @@ jobs:
             exit 1
           fi
 
+      - name: Check .env.example is up-to-date
+        if: matrix.php-version == '8.2'
+        run: |
+          if ! composer env-example:check; then
+            echo ""
+            echo "=========================================="
+            echo "  .env.example is out of date."
+            echo "  To regenerate it locally, run:"
+            echo ""
+            echo "    composer env-example:generate"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
+
       - name: Cache php-cs-fixer
         if: matrix.php-version == '8.2'
         uses: actions/cache@v5

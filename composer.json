@@ -51,7 +51,9 @@
         "preflight": "php lib/preflight.php",
         "test:integration": "./vendor/bin/phpunit --testsuite integration --testdox",
         "config-dist:generate": "php scripts/generate-config-dist.php --write",
-        "config-dist:check": "php scripts/generate-config-dist.php --check"
+        "config-dist:check": "php scripts/generate-config-dist.php --check",
+        "env-example:generate": "php scripts/generate-env-example.php --write",
+        "env-example:check": "php scripts/generate-env-example.php --check"
     },
     "config": {
         "allow-plugins": {

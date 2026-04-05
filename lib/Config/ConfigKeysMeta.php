@@ -2,6 +2,82 @@
 
 class ConfigKeysMeta
 {
+    /**
+     * Get the comment text for a config entry.
+     *
+     * Prefers 'config_file_comment' field, falls back to 'description'.
+     */
+    public static function getComment(array $entry): string
+    {
+        $comment = $entry['config_file_comment'] ?? null;
+        if (is_string($comment) && $comment !== '') {
+            return $comment;
+        }
+
+        return $entry['description'] ?? '';
+    }
+
+    /**
+     * Get the human-readable title for a section.
+     */
+    public static function sectionTitle(string $section): string
+    {
+        return self::SECTION_TITLES[$section]
+            ?? ucwords(string: str_replace(search: ['.', '-'], replace: ' ', subject: $section));
+    }
+
+    /**
+     * Group flat config entries according to TOP_LEVEL_GROUPS ordering.
+     *
+     * @param array<string, array> $flatEntries
+     * @return array<string, array<string, array>>
+     *
+     * @throws \LogicException if a group references an unknown key, a key is in multiple groups,
+     *                         or flat keys are not covered by any group
+     */
+    public static function groupFlatEntries(array $flatEntries): array
+    {
+        $groups = [];
+        $assignedKeys = [];
+
+        foreach (self::TOP_LEVEL_GROUPS as $groupTitle => $groupKeys) {
+            $groupEntries = [];
+
+            foreach ($groupKeys as $key) {
+                if (!array_key_exists($key, $flatEntries)) {
+                    throw new \LogicException("Top-level group '{$groupTitle}' references unknown flat key '{$key}'");
+                }
+                if (isset($assignedKeys[$key])) {
+                    throw new \LogicException("Flat key '{$key}' is assigned to multiple top-level groups");
+                }
+
+                $groupEntries[$key] = $flatEntries[$key];
+                $assignedKeys[$key] = true;
+            }
+
+            $groups[$groupTitle] = $groupEntries;
+        }
+
+        $unassignedKeys = array_diff(array_keys($flatEntries), array_keys($assignedKeys));
+        if ($unassignedKeys !== []) {
+            throw new \LogicException(
+                'Top-level groups are missing flat keys: ' . implode(', ', $unassignedKeys)
+            );
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Derive the environment variable name for a config key.
+     *
+     * Matches the logic in AbstractConfigKeys::hasEnv().
+     */
+    public static function envKey(string $configKey): string
+    {
+        return strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $configKey));
+    }
+
     public const SECTION_TITLES = [
         'api' => 'API Configuration',
         'authentication' => 'Authentication Settings',
