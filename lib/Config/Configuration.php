@@ -389,8 +389,13 @@ class ConfigurationFile implements IConfigurationFile
                             error_log("[CONFIG] Deprecated config key '$fullKey' used. It maps to '$finalKey'. Support for legacy keys will be removed in a future release.");
                         }
                     } else {
-                        // Unknown subkey - preserve in original structure for validation
-                        $rewritten[$key][$subKey] = $subValue;
+                        $removedReason = DeprecatedConfigKeys::findReason($fullKey);
+                        if ($removedReason !== null) {
+                            error_log("[CONFIG] Config key '$fullKey' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                        } else {
+                            // Unknown subkey - preserve in original structure for validation
+                            $rewritten[$key][$subKey] = $subValue;
+                        }
                     }
                 }
 
@@ -418,8 +423,13 @@ class ConfigurationFile implements IConfigurationFile
 
                 continue;
             } else {
-                // Unknown key — pass through (validate will drop)
-                $rewritten[$key] = $value;
+                $removedReason = DeprecatedConfigKeys::findReason($key);
+                if ($removedReason !== null) {
+                    error_log("[CONFIG] Config key '$key' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                } else {
+                    // Unknown key — pass through (validate will log a warning but keep it)
+                    $rewritten[$key] = $value;
+                }
             }
         }
 
@@ -462,8 +472,14 @@ class ConfigurationFile implements IConfigurationFile
             $configDef = $configKeysClass::findByKey($fullKey);
 
             if (!$configDef) {
-                error_log("[CONFIG] Unknown config key: '$fullKey'. Skipping.");
-                $validated[$key] = $value; // Keep unknown keys as-is
+                $removedReason = DeprecatedConfigKeys::findReason($fullKey);
+                if ($removedReason !== null) {
+                    // Intentionally not added to $validated — no code reads this key anymore
+                    error_log("[CONFIG] Config key '$fullKey' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                } else {
+                    error_log("[CONFIG] Unknown config key: '$fullKey'. Skipping.");
+                    $validated[$key] = $value; // Keep unknown keys as-is
+                }
                 continue;
             }
 
