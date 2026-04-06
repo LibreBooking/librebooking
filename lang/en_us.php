@@ -1075,7 +1075,7 @@ class en_us extends Language
         //End View Resource
 
         //Datatables
-        $strings['Info'] = 'Showing page _PAGE_ of _PAGES_ of _MAX_';
+        $strings['Info'] = 'Showing page _PAGE_ of _PAGES_ (_MAX_ total records)';
         $strings['LengthMenu'] = 'Display _MENU_ records per page';
         //End Datatables
 
