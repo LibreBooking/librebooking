@@ -30,11 +30,21 @@ class Ldap2Wrapper
     {
         Log::Debug('Trying to connect to LDAP');
 
-        if (!class_exists('Net_LDAP2')) {
-            throw new RuntimeException('The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2');
-        }
+        // pear/net_ldap2 emits iterator return-type deprecations on newer PHP versions.
+        // The API runs under Slim, which promotes reported deprecations into exceptions,
+        // so suppress them only while loading/connecting this legacy dependency.
+        $previousErrorReporting = error_reporting();
+        error_reporting($previousErrorReporting & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
-        $this->ldap = Net_LDAP2::connect($this->options->Ldap2Config());
+        try {
+            if (!class_exists('Net_LDAP2')) {
+                throw new RuntimeException('The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2');
+            }
+
+            $this->ldap = Net_LDAP2::connect($this->options->Ldap2Config());
+        } finally {
+            error_reporting($previousErrorReporting);
+        }
         if (PEAR::isError($this->ldap)) {
             $message = 'Could not connect to LDAP server. Check your settings in Ldap.config.php : ' . $this->ldap->getMessage();
             Log::Error($message);
