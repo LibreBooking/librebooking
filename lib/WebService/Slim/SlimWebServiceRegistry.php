@@ -1,7 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\App;
 
 class ApiPermissions
 {
@@ -41,43 +42,43 @@ class ApiPermissions
 
 class SlimWebServiceRegistry
 {
-    /**
-     * @var Slim\Slim
-     */
-    private $slim;
+    private App $app;
+    private SlimServer $server;
 
     /**
      * @var array|SlimWebServiceRegistryCategory[]
      */
-    private $categories = [];
+    private array $categories = [];
 
     /**
      * @var array
      */
-    private $secureRoutes = [];
+    private array $secureRoutes = [];
 
     /**
      * @var array
      */
-    private $adminRoutes = [];
+    private array $adminRoutes = [];
 
     /**
      * @var array
      */
-    private $apiPermissionRoutes = [];
+    private array $apiPermissionRoutes = [];
 
-    public function __construct(Slim\Slim $slim)
+    public function __construct(App $app, SlimServer $server)
     {
-        $this->slim = $slim;
+        $this->app = $app;
+        $this->server = $server;
     }
 
     /**
      * @param SlimWebServiceRegistryCategory $category
      */
-    public function AddCategory(SlimWebServiceRegistryCategory $category)
+    public function AddCategory(SlimWebServiceRegistryCategory $category): void
     {
         foreach ($category->Gets() as $registration) {
-            $this->slim->get($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->app->get($registration->Route(), $this->wrapCallback($registration->Callback()))
+                ->setName($registration->RouteName());
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: false, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -85,7 +86,8 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Posts() as $registration) {
-            $this->slim->post($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->app->post($registration->Route(), $this->wrapCallback($registration->Callback()))
+                ->setName($registration->RouteName());
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -93,7 +95,8 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Deletes() as $registration) {
-            $this->slim->delete($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->app->delete($registration->Route(), $this->wrapCallback($registration->Callback()))
+                ->setName($registration->RouteName());
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -103,10 +106,21 @@ class SlimWebServiceRegistry
         $this->categories[] = $category;
     }
 
+    private function wrapCallback(mixed $callback): \Closure
+    {
+        $server = $this->server;
+        return function (ServerRequestInterface $request, ResponseInterface $response, array $args) use ($callback, $server): ResponseInterface {
+            $server->SetRequest($request);
+            $server->SetCurrentResponse($response);
+            call_user_func_array($callback, array_values($args));
+            return $server->GetCurrentResponse();
+        };
+    }
+
     /**
      * @return SlimWebServiceRegistryCategory[]
      */
-    public function Categories()
+    public function Categories(): array
     {
         $categories = $this->categories;
 
@@ -126,7 +140,7 @@ class SlimWebServiceRegistry
      * @param string $routeName
      * @return bool
      */
-    public function IsSecure($routeName)
+    public function IsSecure($routeName): bool
     {
         return array_key_exists($routeName, $this->secureRoutes);
     }
@@ -135,7 +149,7 @@ class SlimWebServiceRegistry
      * @param string $routeName
      * @return bool
      */
-    public function IsLimitedToAdmin($routeName)
+    public function IsLimitedToAdmin($routeName): bool
     {
         return array_key_exists($routeName, $this->adminRoutes);
     }
@@ -148,7 +162,7 @@ class SlimWebServiceRegistry
         return $this->apiPermissionRoutes[$routeName]->IsUserAllowedApiAccess(userId: $userId);
     }
 
-    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions)
+    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions): void
     {
         if ($registration->IsSecure()) {
             $this->secureRoutes[$registration->RouteName()] = true;

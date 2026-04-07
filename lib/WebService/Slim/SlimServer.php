@@ -1,74 +1,89 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
 require_once(ROOT_DIR . 'lib/WebService/IRestServer.php');
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Interfaces\RouteParserInterface;
 
 class SlimServer implements IRestServer
 {
-    /**
-     * @var Slim\Slim
-     */
-    private $slim;
+    private ?ServerRequestInterface $request = null;
+    private ?ResponseInterface $response = null;
+    private ?WebServiceUserSession $session = null;
+    private RouteParserInterface $routeParser;
 
-    /**
-     * @var WebServiceUserSession
-     */
-    private $session;
-
-    public function __construct(Slim\Slim $slim)
+    public function __construct(RouteParserInterface $routeParser)
     {
-        $this->slim = $slim;
+        $this->routeParser = $routeParser;
     }
 
-    public function GetRequest()
+    public function SetRequest(ServerRequestInterface $request): void
     {
-        return json_decode($this->slim->request()->getBody());
+        $this->request = $request;
     }
 
-    public function WriteResponse(RestResponse $restResponse, $statusCode = 200)
+    public function SetCurrentResponse(ResponseInterface $response): void
     {
-        $this->slim->response()->header('Content-Type', 'application/json');
-        $this->slim->response()->status($statusCode);
-        $this->slim->response()->write(json_encode($restResponse));
-        unset($restResponse);
+        $this->response = $response;
     }
 
-    public function GetServiceUrl($serviceName, $params = [])
+    public function GetCurrentResponse(): ResponseInterface
     {
-        return $this->slim->urlFor($serviceName, $params);
+        if ($this->response === null) {
+            throw new \LogicException('No response has been set. Call SetCurrentResponse() before GetCurrentResponse().');
+        }
+        return $this->response;
     }
 
-    public function GetUrl()
+    public function GetRequest(): mixed
     {
-        return $this->slim->environment()->offsetGet('slim.url_scheme') . '://' . $this->slim->environment()->offsetGet('HOST');
+        return json_decode((string) $this->request->getBody());
     }
 
-    public function GetFullServiceUrl($serviceName, $params = [])
+    public function WriteResponse(RestResponse $restResponse, $statusCode = 200): void
+    {
+        $this->response = $this->response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus($statusCode);
+        $this->response->getBody()->write(json_encode($restResponse));
+    }
+
+    public function GetServiceUrl($serviceName, $params = []): string
+    {
+        return $this->routeParser->urlFor($serviceName, $params);
+    }
+
+    public function GetUrl(): string
+    {
+        $uri = $this->request->getUri();
+        return $uri->getScheme() . '://' . $uri->getAuthority();
+    }
+
+    public function GetFullServiceUrl($serviceName, $params = []): string
     {
         return $this->GetUrl() . $this->GetServiceUrl($serviceName, $params);
     }
 
-    public function GetHeader($headerName)
+    public function GetHeader($headerName): ?string
     {
-        return $this->slim->request()->headers($headerName);
+        $value = $this->request->getHeaderLine($headerName);
+        return $value !== '' ? $value : null;
     }
 
-    public function SetSession(WebServiceUserSession $session)
+    public function SetSession(WebServiceUserSession $session): void
     {
         $this->session = $session;
     }
 
-    public function GetSession()
+    public function GetSession(): ?WebServiceUserSession
     {
         return $this->session;
     }
 
-    /**
-     * @param string $queryStringKey
-     * @return string|null
-     */
-    public function GetQueryString($queryStringKey)
+    public function GetQueryString($queryStringKey): ?string
     {
-        return $this->slim->request()->get($queryStringKey);
+        $params = $this->request->getQueryParams();
+        return $params[$queryStringKey] ?? null;
     }
 }

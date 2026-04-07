@@ -25,6 +25,12 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Factory\AppFactory;
+use Slim\Routing\RouteContext;
+
 set_exception_handler(function ($e) {
     Log::Error('Uncaught bootstrap exception: %s', $e);
     $accept    = $_SERVER['HTTP_ACCEPT'] ?? '';
@@ -38,15 +44,14 @@ set_exception_handler(function ($e) {
     exit;
 });
 
-\Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+$app = AppFactory::create();
+$routeParser = $app->getRouteCollector()->getRouteParser();
 
-$server = new SlimServer($app);
+$server = new SlimServer($routeParser);
 ServiceLocator::SetApiServer(apiServer: $server);
-$registry = new SlimWebServiceRegistry($app);
+$registry = new SlimWebServiceRegistry($app, $server);
 
-
-RegisterHelp($registry, $app);
+RegisterHelp($app, $registry);
 RegisterAuthentication($server, $registry);
 RegisterReservations($server, $registry);
 RegisterResources($server, $registry);
@@ -57,62 +62,96 @@ RegisterGroups($server, $registry);
 RegisterAccessories($server, $registry);
 RegisterAccounts($server, $registry);
 
-$app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
+$responseFactory = $app->getResponseFactory();
+
+// Auth middleware: runs after routing (so route name is available), before route handler
+$app->add(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($server, $registry, $responseFactory): ResponseInterface {
+    $server->SetRequest($request);
+
     if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
-        $app->halt(RestResponse::SERVICE_UNAVAILABLE, 'LibreBooking API is disabled. Set ["api"]["enabled"] = true');
+        $response = $responseFactory->createResponse(RestResponse::SERVICE_UNAVAILABLE);
+        $response->getBody()->write((string) json_encode(['message' => 'LibreBooking API is disabled. Set ["api"]["enabled"] = true']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    $routeName = $app->router()->getCurrentRoute()->getName();
-    if ($registry->IsSecure($routeName)) {
-        $security = new WebServiceSecurity(new UserSessionRepository());
-        $wasHandled = $security->HandleSecureRequest($server, $registry->IsLimitedToAdmin($routeName));
-        if (!$wasHandled) {
-            $app->halt(
-                RestResponse::UNAUTHORIZED_CODE,
-                'You must be authenticated in order to access this service.<br/>' . $server->GetFullServiceUrl(WebServices::Login)
-            );
-        }
+    $routeContext = RouteContext::fromRequest($request);
+    $route = $routeContext->getRoute();
 
-        $userSession = ServiceLocator::GetUserSession();
-        // Admin users can always use the API
-        if ($userSession->IsAdmin) {
-            return;
-        }
+    if ($route !== null) {
+        $routeName = $route->getName();
+        if ($registry->IsSecure($routeName)) {
+            $security = new WebServiceSecurity(new UserSessionRepository());
+            $wasHandled = $security->HandleSecureRequest($server, $registry->IsLimitedToAdmin($routeName));
+            if (!$wasHandled) {
+                $response = $responseFactory->createResponse(RestResponse::UNAUTHORIZED_CODE);
+                $response->getBody()->write((string) json_encode([
+                    'message' => 'You must be authenticated in order to access this service.',
+                    'links' => [['href' => $server->GetFullServiceUrl(WebServices::Login), 'title' => WebServices::Login]],
+                ]));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
 
-        // Check if the user is allowed API access to the route
-        if (!$registry->IsUserAllowedApiAccess(routeName: $routeName, userId: $userSession->UserId)) {
-            $app->halt(
-                RestResponse::FORBIDDEN_CODE,
-                'You are not authorized to access this service.<br/>'
-            );
+            $userSession = ServiceLocator::GetUserSession();
+            // Admin users can always use the API
+            if (!$userSession->IsAdmin && !$registry->IsUserAllowedApiAccess(routeName: $routeName, userId: $userSession->UserId)) {
+                $response = $responseFactory->createResponse(RestResponse::FORBIDDEN_CODE);
+                $response->getBody()->write((string) json_encode(['message' => 'You are not authorized to access this service.']));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
         }
     }
+
+    return $handler->handle($request);
 });
 
-$app->error(function (\Exception $e) use ($app) {
+// Routing middleware must be added after auth middleware so it runs before auth in the request pipeline
+$app->addRoutingMiddleware();
+
+// Error middleware must be added last so it is the outermost layer and catches all exceptions
+$errorMiddleware = $app->addErrorMiddleware(displayErrorDetails: false, logErrors: true, logErrorDetails: true);
+$errorMiddleware->setDefaultErrorHandler(function (
+    ServerRequestInterface $request,
+    \Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails
+) use ($responseFactory): ResponseInterface {
+    // Preserve HTTP status codes from Slim's own HTTP exceptions (404, 405, etc.)
+    // so that missing/wrong-method routes return the correct client error, not 500.
+    if ($exception instanceof \Slim\Exception\HttpException) {
+        $response = $responseFactory->createResponse($exception->getCode());
+        // RFC 7231 requires the Allow header on 405 responses.
+        if ($exception instanceof \Slim\Exception\HttpMethodNotAllowedException) {
+            $response = $response->withHeader('Allow', implode(', ', $exception->getAllowedMethods()));
+        }
+        $response->getBody()->write(json_encode(['message' => $exception->getMessage()], JSON_UNESCAPED_SLASHES));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
-    Log::Error('Slim Exception. %s', $e);
-    $app->response()->header('Content-Type', 'application/json');
-    $app->response()->status(RestResponse::SERVER_ERROR);
-    $app->response()->write('Exception was logged.');
+    Log::Error('Slim Exception. %s', $exception);
+    $response = $responseFactory->createResponse(RestResponse::SERVER_ERROR);
+    $response->getBody()->write('Exception was logged.');
+    return $response->withHeader('Content-Type', 'application/json');
 });
 
 $app->run();
 
-function RegisterHelp(SlimWebServiceRegistry $registry, \Slim\Slim $app)
+function RegisterHelp(\Slim\App $app, SlimWebServiceRegistry $registry): void
 {
-    $app->get('/', function () use ($registry, $app) {
-        // Print API documentation
-        ApiHelpPage::Render($registry, $app);
-    })->name('Default');
+    $renderHelp = function (ServerRequestInterface $request, ResponseInterface $response) use ($registry): ResponseInterface {
+        ob_start();
+        ApiHelpPage::Render($registry);
+        $content = ob_get_clean();
+        $response->getBody()->write($content);
+        return $response;
+    };
 
-    $app->get('/Help', function () use ($registry, $app) {
-        // Print API documentation
-        ApiHelpPage::Render($registry, $app);
-    })->name('Help');
+    $app->get('/', $renderHelp)->setName('Default');
+    $app->get('/Help', $renderHelp)->setName('Help');
 }
 
-function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $api_access_group_id = GetConfigGroup(ConfigKeys::API_AUTHENTICATION_GROUP);
     $webService = new AuthenticationWebService(
@@ -127,7 +166,7 @@ function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $regi
     $registry->AddCategory($category);
 }
 
-function RegisterReservations(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterReservations(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $readService = new ReservationsWebService($server, new ReservationViewRepository(), new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization())), new AttributeService(new AttributeRepository()));
     $writeService = new ReservationWriteWebService($server, new ReservationSaveController(new ReservationPresenterFactory()));
@@ -138,17 +177,17 @@ function RegisterReservations(SlimServer $server, SlimWebServiceRegistry $regist
 
     $category->AddSecurePost('/', [$writeService, 'Create'], WebServices::CreateReservation);
     $category->AddSecureGet('/', [$readService, 'GetReservations'], WebServices::AllReservations);
-    $category->AddSecureGet('/:referenceNumber', [$readService, 'GetReservation'], WebServices::GetReservation);
-    $category->AddSecurePost('/:referenceNumber', [$writeService, 'Update'], WebServices::UpdateReservation);
-    $category->AddSecurePost('/:referenceNumber/Approval', [$writeService, 'Approve'], WebServices::ApproveReservation);
-    $category->AddSecurePost('/:referenceNumber/CheckIn', [$writeService, 'Checkin'], WebServices::CheckinReservation);
-    $category->AddSecurePost('/:referenceNumber/CheckOut', [$writeService, 'Checkout'], WebServices::CheckoutReservation);
-    $category->AddSecureDelete('/:referenceNumber', [$writeService, 'Delete'], WebServices::DeleteReservation);
+    $category->AddSecureGet('/{referenceNumber}', [$readService, 'GetReservation'], WebServices::GetReservation);
+    $category->AddSecurePost('/{referenceNumber}', [$writeService, 'Update'], WebServices::UpdateReservation);
+    $category->AddSecurePost('/{referenceNumber}/Approval', [$writeService, 'Approve'], WebServices::ApproveReservation);
+    $category->AddSecurePost('/{referenceNumber}/CheckIn', [$writeService, 'Checkin'], WebServices::CheckinReservation);
+    $category->AddSecurePost('/{referenceNumber}/CheckOut', [$writeService, 'Checkout'], WebServices::CheckoutReservation);
+    $category->AddSecureDelete('/{referenceNumber}', [$writeService, 'Delete'], WebServices::DeleteReservation);
 
     $registry->AddCategory($category);
 }
 
-function RegisterResources(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterResources(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $resourceRepository = new ResourceRepository();
     $attributeService = new AttributeService(new AttributeRepository());
@@ -164,15 +203,15 @@ function RegisterResources(SlimServer $server, SlimWebServiceRegistry $registry)
     $category->AddSecureGet('/Availability', [$webService, 'GetAvailability'], WebServices::AllAvailability);
     $category->AddSecureGet('/Groups', [$webService, 'GetGroups'], WebServices::GetResourceGroups);
     $category->AddSecureGet('/Types', [$webService, 'GetTypes'], WebServices::GetResourceTypes);
-    $category->AddSecureGet('/:resourceId', [$webService, 'GetResource'], WebServices::GetResource);
-    $category->AddSecureGet('/:resourceId/Availability', [$webService, 'GetAvailability'], WebServices::GetResourceAvailability);
+    $category->AddSecureGet('/{resourceId}', [$webService, 'GetResource'], WebServices::GetResource);
+    $category->AddSecureGet('/{resourceId}/Availability', [$webService, 'GetAvailability'], WebServices::GetResourceAvailability);
     $category->AddAdminPost('/', [$writeWebService, 'Create'], WebServices::CreateResource);
-    $category->AddAdminPost('/:resourceId', [$writeWebService, 'Update'], WebServices::UpdateResource);
-    $category->AddAdminDelete('/:resourceId', [$writeWebService, 'Delete'], WebServices::DeleteResource);
+    $category->AddAdminPost('/{resourceId}', [$writeWebService, 'Update'], WebServices::UpdateResource);
+    $category->AddAdminDelete('/{resourceId}', [$writeWebService, 'Delete'], WebServices::DeleteResource);
     $registry->AddCategory($category);
 }
 
-function RegisterAccessories(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterAccessories(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $webService = new AccessoriesWebService($server, new ResourceRepository(), new AccessoryRepository());
 
@@ -180,11 +219,11 @@ function RegisterAccessories(SlimServer $server, SlimWebServiceRegistry $registr
     $category = new SlimWebServiceRegistryCategory('Accessories', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetAll'], WebServices::AllAccessories);
-    $category->AddSecureGet('/:accessoryId', [$webService, 'GetAccessory'], WebServices::GetAccessory);
+    $category->AddSecureGet('/{accessoryId}', [$webService, 'GetAccessory'], WebServices::GetAccessory);
     $registry->AddCategory($category);
 }
 
-function RegisterUsers(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterUsers(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $attributeService = new AttributeService(new AttributeRepository());
     $webService = new UsersWebService($server, new UserRepositoryFactory(), $attributeService);
@@ -197,15 +236,15 @@ function RegisterUsers(SlimServer $server, SlimWebServiceRegistry $registry)
     $category = new SlimWebServiceRegistryCategory('Users', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetUsers'], WebServices::AllUsers);
-    $category->AddSecureGet('/:userId', [$webService, 'GetUser'], WebServices::GetUser);
+    $category->AddSecureGet('/{userId}', [$webService, 'GetUser'], WebServices::GetUser);
     $category->AddAdminPost('/', [$writeWebService, 'Create'], WebServices::CreateUser);
-    $category->AddAdminPost('/:userId', [$writeWebService, 'Update'], WebServices::UpdateUser);
-    $category->AddAdminPost('/:userId/Password', [$writeWebService, 'UpdatePassword'], WebServices::UpdatePassword);
-    $category->AddAdminDelete('/:userId', [$writeWebService, 'Delete'], WebServices::DeleteUser);
+    $category->AddAdminPost('/{userId}', [$writeWebService, 'Update'], WebServices::UpdateUser);
+    $category->AddAdminPost('/{userId}/Password', [$writeWebService, 'UpdatePassword'], WebServices::UpdatePassword);
+    $category->AddAdminDelete('/{userId}', [$writeWebService, 'Delete'], WebServices::DeleteUser);
     $registry->AddCategory($category);
 }
 
-function RegisterSchedules(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterSchedules(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $webService = new SchedulesWebService($server, new ScheduleRepository(), new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization())));
 
@@ -213,12 +252,12 @@ function RegisterSchedules(SlimServer $server, SlimWebServiceRegistry $registry)
     $category = new SlimWebServiceRegistryCategory('Schedules', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetSchedules'], WebServices::AllSchedules);
-    $category->AddSecureGet('/:scheduleId', [$webService, 'GetSchedule'], WebServices::GetSchedule);
-    $category->AddSecureGet('/:scheduleId/Slots', [$webService, 'GetSlots'], WebServices::GetScheduleSlots);
+    $category->AddSecureGet('/{scheduleId}', [$webService, 'GetSchedule'], WebServices::GetSchedule);
+    $category->AddSecureGet('/{scheduleId}/Slots', [$webService, 'GetSlots'], WebServices::GetScheduleSlots);
     $registry->AddCategory($category);
 }
 
-function RegisterAttributes(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterAttributes(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $webService = new AttributesWebService($server, new AttributeService(new AttributeRepository()));
     $writeWebService = new AttributesWriteWebService($server, new AttributeSaveController(new AttributeRepository()));
@@ -226,15 +265,15 @@ function RegisterAttributes(SlimServer $server, SlimWebServiceRegistry $registry
     $roGroupId = GetConfigGroup(ConfigKeys::API_ATTRIBUTES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Attributes', roGroupId: $roGroupId);
 
-    $category->AddSecureGet('Category/:categoryId', [$webService, 'GetAttributes'], WebServices::AllCustomAttributes);
-    $category->AddSecureGet('/:attributeId', [$webService, 'GetAttribute'], WebServices::GetCustomAttribute);
+    $category->AddSecureGet('Category/{categoryId}', [$webService, 'GetAttributes'], WebServices::AllCustomAttributes);
+    $category->AddSecureGet('/{attributeId}', [$webService, 'GetAttribute'], WebServices::GetCustomAttribute);
     $category->AddAdminPost('/', [$writeWebService, 'Create'], WebServices::CreateCustomAttribute);
-    $category->AddAdminPost('/:attributeId', [$writeWebService, 'Update'], WebServices::UpdateCustomAttribute);
-    $category->AddAdminDelete('/:attributeId', [$writeWebService, 'Delete'], WebServices::DeleteCustomAttribute);
+    $category->AddAdminPost('/{attributeId}', [$writeWebService, 'Update'], WebServices::UpdateCustomAttribute);
+    $category->AddAdminDelete('/{attributeId}', [$writeWebService, 'Delete'], WebServices::DeleteCustomAttribute);
     $registry->AddCategory(category: $category);
 }
 
-function RegisterGroups(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterGroups(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $groupRepository = new GroupRepository();
     $webService = new GroupsWebService($server, $groupRepository, $groupRepository);
@@ -244,18 +283,18 @@ function RegisterGroups(SlimServer $server, SlimWebServiceRegistry $registry)
     $category = new SlimWebServiceRegistryCategory('Groups', roGroupId: $roGroupId);
 
     $category->AddSecureGet('/', [$webService, 'GetGroups'], WebServices::AllGroups);
-    $category->AddSecureGet('/:groupId', [$webService, 'GetGroup'], WebServices::GetGroup);
+    $category->AddSecureGet('/{groupId}', [$webService, 'GetGroup'], WebServices::GetGroup);
     $category->AddAdminPost('/', [$writeWebService, 'Create'], WebServices::CreateGroup);
-    $category->AddAdminPost('/:groupId', [$writeWebService, 'Update'], WebServices::UpdateGroup);
-    $category->AddAdminPost('/:groupId/Roles', [$writeWebService, 'Roles'], WebServices::UpdateGroupRoles);
-    $category->AddAdminPost('/:groupId/Permissions', [$writeWebService, 'Permissions'], WebServices::UpdateGroupPermissions);
-    $category->AddAdminPost('/:groupId/Users', [$writeWebService, 'Users'], WebServices::UpdateGroupUsers);
-    $category->AddAdminDelete('/:groupId', [$writeWebService, 'Delete'], WebServices::DeleteGroup);
+    $category->AddAdminPost('/{groupId}', [$writeWebService, 'Update'], WebServices::UpdateGroup);
+    $category->AddAdminPost('/{groupId}/Roles', [$writeWebService, 'Roles'], WebServices::UpdateGroupRoles);
+    $category->AddAdminPost('/{groupId}/Permissions', [$writeWebService, 'Permissions'], WebServices::UpdateGroupPermissions);
+    $category->AddAdminPost('/{groupId}/Users', [$writeWebService, 'Users'], WebServices::UpdateGroupUsers);
+    $category->AddAdminDelete('/{groupId}', [$writeWebService, 'Delete'], WebServices::DeleteGroup);
 
     $registry->AddCategory($category);
 }
 
-function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
+function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry): void
 {
     $userRepository = new UserRepository();
     $attributeService = new AttributeService(new AttributeRepository());
@@ -270,9 +309,9 @@ function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
     $category = new SlimWebServiceRegistryCategory('Accounts', roGroupId: $roGroupId, rwGroupId: $rwGroupId);
 
     $category->AddPost('/', [$webService, 'Create'], WebServices::CreateAccount);
-    $category->AddSecurePost('/:userId', [$webService, 'Update'], WebServices::UpdateAccount);
-    $category->AddSecurePost('/:userId/Password', [$webService, 'UpdatePassword'], WebServices::UpdateAccountPassword);
-    $category->AddSecureGet('/:userId', [$webService, 'GetAccount'], WebServices::GetAccount);
+    $category->AddSecurePost('/{userId}', [$webService, 'Update'], WebServices::UpdateAccount);
+    $category->AddSecurePost('/{userId}/Password', [$webService, 'UpdatePassword'], WebServices::UpdateAccountPassword);
+    $category->AddSecureGet('/{userId}', [$webService, 'GetAccount'], WebServices::GetAccount);
 
     $registry->AddCategory($category);
 }

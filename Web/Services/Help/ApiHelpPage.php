@@ -2,7 +2,7 @@
 
 class ApiHelpPage
 {
-    public static function Render(SlimWebServiceRegistry $registry, Slim\Slim $app)
+    public static function Render(SlimWebServiceRegistry $registry)
     {
         $head = <<<EOT
         <!DOCTYPE html>
@@ -129,7 +129,7 @@ EOT;
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
                     $request = $md->Request();
-                    self::EchoCommonHeader($md, $service, $app);
+                    self::EchoCommonHeader($md, $service);
                     echo '<h5>Request</h5>';
                     if (is_object($request)) {
                         echo "<div class='code'><pre>" . json_encode($request, JSON_PRETTY_PRINT) . '</pre></div>';
@@ -161,7 +161,7 @@ EOT;
                     echo '</h2>';
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
-                    self::EchoCommon($md, $service, $app);
+                    self::EchoCommon($md, $service);
                     echo '</div></div></div>';
                 }
                 echo '</div>';
@@ -184,7 +184,7 @@ EOT;
                     echo '</h2>';
                     echo "<div id='$collapseId' class='accordion-collapse collapse'>";
                     echo "<div class='accordion-body'>";
-                    self::EchoCommon($md, $service, $app);
+                    self::EchoCommon($md, $service);
                     echo '</div></div></div>';
                 }
                 echo '</div>';
@@ -200,17 +200,17 @@ EOT;
 EOT;
     }
 
-    private static function EchoCommon(SlimServiceMetadata $md, $endpoint, Slim\Slim $app)
+    private static function EchoCommon(SlimServiceMetadata $md, $endpoint): void
     {
-        self::EchoCommonHeader($md, $endpoint, $app);
+        self::EchoCommonHeader($md, $endpoint);
         self::EchoResponse($md);
     }
 
-    private static function EchoCommonHeader(SlimServiceMetadata $md, $endpoint, Slim\Slim $app)
+    private static function EchoCommonHeader(SlimServiceMetadata $md, $endpoint): void
     {
         echo "<h5>Name</h5><p>{$md->Name()}</p>";
         echo '<h5>Description</h5><p>' . nl2br($md->Description()) . '</p>';
-        echo '<h5>Route</h5><p><code>' . $app->urlFor($endpoint->RouteName()) . '</code></p>';
+        echo '<h5>Route</h5><p><code>' . $endpoint->Route() . '</code></p>';
 
         if ($endpoint->IsSecure()) {
             echo "<p class='secure'>🔒 This service is secure and requires authentication</p>";

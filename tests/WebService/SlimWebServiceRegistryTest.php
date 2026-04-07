@@ -2,81 +2,9 @@
 
 declare(strict_types=1);
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
-require_once(ROOT_DIR . 'lib/external/Slim/Route.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
 
-class TestSlimCall
-{
-    public $route;
-    public $callback;
-    public $response;
-
-    public function __construct($route, $callback, $response)
-    {
-        $this->route = $route;
-        $this->callback = $callback;
-        $this->response = $response;
-    }
-
-    public function name()
-    {
-        return $this->response->getName();
-    }
-}
-
-class TestSlim extends Slim\Slim
-{
-    public function __construct()
-    {
-    }
-
-    /**
-     * @var array|TestSlimCall[]
-     */
-    public $gets = [];
-    /**
-     * @var array|TestSlimCall[]
-     */
-    public $posts = [];
-    /**
-     * @var array|TestSlimCall[]
-     */
-    public $deletes = [];
-    public function get()
-    {
-        $args = func_get_args();
-        $route = $args[0];
-        $callback = $args[1];
-
-        $response = new Slim\Route($route, $callback);
-        $this->gets[] = new TestSlimCall($route, $callback, $response);
-        return $response;
-    }
-
-    public function post()
-    {
-        $args = func_get_args();
-        $route = $args[0];
-        $callback = $args[1];
-
-        $response = new Slim\Route($route, $callback);
-        $this->posts[] = new TestSlimCall($route, $callback, $response);
-        return $response;
-    }
-
-    public function delete()
-    {
-        $args = func_get_args();
-        $route = $args[0];
-        $callback = $args[1];
-
-        $response = new Slim\Route($route, $callback);
-        $this->deletes[] = new TestSlimCall($route, $callback, $response);
-        return $response;
-    }
-}
-
+use Slim\Factory\AppFactory;
 
 class SlimWebServiceRegistryTest extends TestBase
 {
@@ -85,13 +13,22 @@ class SlimWebServiceRegistryTest extends TestBase
         parent::setup();
     }
 
-    public function testRegistersCategoryWithSlim()
+    /**
+     * @return array{0: \Slim\App, 1: SlimWebServiceRegistry}
+     */
+    private function createRegistry(): array
+    {
+        $app = AppFactory::create();
+        $server = $this->createMock(SlimServer::class);
+        $registry = new SlimWebServiceRegistry($app, $server);
+        return [$app, $registry];
+    }
+
+    public function testRegistersCategoryWithSlim(): void
     {
         $callback = [$this, 'cb'];
 
-        $slim = new TestSlim();
-
-        $registry = new SlimWebServiceRegistry($slim);
+        [$app, $registry] = $this->createRegistry();
 
         $c1Name = 'Something';
         $c2Name = 'SomethingElse';
@@ -100,12 +37,12 @@ class SlimWebServiceRegistryTest extends TestBase
         $category2 = new SlimWebServiceRegistryCategory($c2Name);
 
         $c1p1 = '/post/1/';
-        $c1p2 = '/get/:1';
-        $c1p3 = '/delete/:1';
+        $c1p2 = '/get/{id1}';
+        $c1p3 = '/delete/{id1}';
 
         $c2p1 = 'post/2/';
-        $c2p2 = 'get/:2';
-        $c2p3 = 'delete/:2';
+        $c2p2 = 'get/{id2}';
+        $c2p3 = 'delete/{id2}';
 
         $c1p1name = 'c1p1name';
         $c1p2name = 'c1p2name';
@@ -115,116 +52,95 @@ class SlimWebServiceRegistryTest extends TestBase
         $category1->AddGet($c1p2, $callback, $c1p2name);
         $category1->AddDelete($c1p3, $callback, $c1p3name);
 
-        $category2->AddPost($c2p1, $callback, '2');
-        $category2->AddGet($c2p2, $callback, '3');
-        $category2->AddDelete($c2p3, $callback, '4');
+        $c2p1name = '2';
+        $c2p2name = '3';
+        $c2p3name = '4';
+
+        $category2->AddPost($c2p1, $callback, $c2p1name);
+        $category2->AddGet($c2p2, $callback, $c2p2name);
+        $category2->AddDelete($c2p3, $callback, $c2p3name);
 
         $registry->AddCategory($category1);
         $registry->AddCategory($category2);
 
-        $this->assertEquals('/Something/post/1', $slim->posts[0]->route);
-        $this->assertEquals($callback, $slim->posts[0]->callback);
-        $this->assertEquals($c1p1name, $slim->posts[0]->name());
+        $routesByName = $this->getRoutesByName($app);
+
+        $this->assertArrayHasKey($c1p1name, $routesByName);
+        $this->assertEquals('/Something/post/1', $routesByName[$c1p1name]->getPattern());
+        $this->assertEquals(['POST'], $routesByName[$c1p1name]->getMethods());
         $this->assertFalse($registry->IsSecure($c1p1name));
 
-        $this->assertEquals('/Something/get/:1', $slim->gets[0]->route);
-        $this->assertEquals($c1p2name, $slim->gets[0]->name());
-        $this->assertEquals($callback, $slim->gets[0]->callback);
+        $this->assertArrayHasKey($c1p2name, $routesByName);
+        $this->assertEquals('/Something/get/{id1}', $routesByName[$c1p2name]->getPattern());
+        $this->assertEquals(['GET'], $routesByName[$c1p2name]->getMethods());
         $this->assertFalse($registry->IsSecure($c1p2name));
 
-        $this->assertEquals('/Something/delete/:1', $slim->deletes[0]->route);
-        $this->assertEquals($c1p3name, $slim->deletes[0]->name());
-        $this->assertEquals($callback, $slim->deletes[0]->callback);
+        $this->assertArrayHasKey($c1p3name, $routesByName);
+        $this->assertEquals('/Something/delete/{id1}', $routesByName[$c1p3name]->getPattern());
+        $this->assertEquals(['DELETE'], $routesByName[$c1p3name]->getMethods());
         $this->assertFalse($registry->IsSecure($c1p3name));
 
-        $this->assertEquals('/SomethingElse/post/2', $slim->posts[1]->route);
-        $this->assertEquals($callback, $slim->posts[1]->callback);
-        $this->assertEquals('/SomethingElse/get/:2', $slim->gets[1]->route);
-        $this->assertEquals($callback, $slim->gets[1]->callback);
-        $this->assertEquals('/SomethingElse/delete/:2', $slim->deletes[1]->route);
-        $this->assertEquals($callback, $slim->deletes[1]->callback);
+        $this->assertArrayHasKey($c2p1name, $routesByName);
+        $this->assertEquals('/SomethingElse/post/2', $routesByName[$c2p1name]->getPattern());
+        $this->assertArrayHasKey($c2p2name, $routesByName);
+        $this->assertEquals('/SomethingElse/get/{id2}', $routesByName[$c2p2name]->getPattern());
+        $this->assertArrayHasKey($c2p3name, $routesByName);
+        $this->assertEquals('/SomethingElse/delete/{id2}', $routesByName[$c2p3name]->getPattern());
     }
 
-    public function testRegistersSecureRoute()
+    public function testRegistersSecureRoute(): void
     {
         $callback = [$this, 'cb'];
 
-        $slim = new TestSlim();
-
-        $registry = new SlimWebServiceRegistry($slim);
+        [$app, $registry] = $this->createRegistry();
 
         $c1Name = 'Something';
-
         $category1 = new SlimWebServiceRegistryCategory($c1Name);
-
-        $c1p1 = '/post/1/';
-        $c1p2 = '/get/:1';
-        $c1p3 = '/delete/:1';
 
         $c1p1name = 'c1p1name';
         $c1p2name = 'c1p2name';
         $c1p3name = 'c1p3name';
 
-        $category1->AddSecurePost($c1p1, $callback, $c1p1name);
-        $category1->AddSecureGet($c1p2, $callback, $c1p2name);
-        $category1->AddSecureDelete($c1p3, $callback, $c1p3name);
+        $category1->AddSecurePost('/post/1/', $callback, $c1p1name);
+        $category1->AddSecureGet('/get/{id}', $callback, $c1p2name);
+        $category1->AddSecureDelete('/delete/{id}', $callback, $c1p3name);
 
         $registry->AddCategory($category1);
 
-        $this->assertEquals('/Something/post/1', $slim->posts[0]->route);
-        $this->assertEquals($callback, $slim->posts[0]->callback);
-        $this->assertEquals($c1p1name, $slim->posts[0]->name());
+        $routesByName = $this->getRoutesByName($app);
 
-        $this->assertEquals('/Something/get/:1', $slim->gets[0]->route);
-        $this->assertEquals($c1p2name, $slim->gets[0]->name());
-        $this->assertEquals($callback, $slim->gets[0]->callback);
+        $this->assertArrayHasKey($c1p1name, $routesByName);
+        $this->assertEquals(['POST'], $routesByName[$c1p1name]->getMethods());
 
-        $this->assertEquals('/Something/delete/:1', $slim->deletes[0]->route);
-        $this->assertEquals($c1p3name, $slim->deletes[0]->name());
-        $this->assertEquals($callback, $slim->deletes[0]->callback);
+        $this->assertArrayHasKey($c1p2name, $routesByName);
+        $this->assertEquals(['GET'], $routesByName[$c1p2name]->getMethods());
+
+        $this->assertArrayHasKey($c1p3name, $routesByName);
+        $this->assertEquals(['DELETE'], $routesByName[$c1p3name]->getMethods());
 
         $this->assertTrue($registry->IsSecure($c1p1name));
         $this->assertTrue($registry->IsSecure($c1p2name));
         $this->assertTrue($registry->IsSecure($c1p3name));
     }
 
-    public function testRegistersAdminRoute()
+    public function testRegistersAdminRoute(): void
     {
         $callback = [$this, 'cb'];
 
-        $slim = new TestSlim();
-
-        $registry = new SlimWebServiceRegistry($slim);
+        [$app, $registry] = $this->createRegistry();
 
         $c1Name = 'Something';
-
         $category1 = new SlimWebServiceRegistryCategory($c1Name);
-
-        $c1p1 = '/post/1/';
-        $c1p2 = '/get/:1';
-        $c1p3 = '/delete/:1';
 
         $c1p1name = 'c1p1name';
         $c1p2name = 'c1p2name';
         $c1p3name = 'c1p3name';
 
-        $category1->AddAdminPost($c1p1, $callback, $c1p1name);
-        $category1->AddAdminGet($c1p2, $callback, $c1p2name);
-        $category1->AddAdminDelete($c1p3, $callback, $c1p3name);
+        $category1->AddAdminPost('/post/1/', $callback, $c1p1name);
+        $category1->AddAdminGet('/get/{id}', $callback, $c1p2name);
+        $category1->AddAdminDelete('/delete/{id}', $callback, $c1p3name);
 
         $registry->AddCategory($category1);
-
-        $this->assertEquals('/Something/post/1', $slim->posts[0]->route);
-        $this->assertEquals($callback, $slim->posts[0]->callback);
-        $this->assertEquals($c1p1name, $slim->posts[0]->name());
-
-        $this->assertEquals('/Something/get/:1', $slim->gets[0]->route);
-        $this->assertEquals($c1p2name, $slim->gets[0]->name());
-        $this->assertEquals($callback, $slim->gets[0]->callback);
-
-        $this->assertEquals('/Something/delete/:1', $slim->deletes[0]->route);
-        $this->assertEquals($c1p3name, $slim->deletes[0]->name());
-        $this->assertEquals($callback, $slim->deletes[0]->callback);
 
         $this->assertTrue($registry->IsSecure($c1p1name));
         $this->assertTrue($registry->IsSecure($c1p2name));
@@ -235,8 +151,21 @@ class SlimWebServiceRegistryTest extends TestBase
         $this->assertTrue($registry->IsLimitedToAdmin($c1p3name));
     }
 
-    private function cb()
+    public function cb(): void
     {
         // callback function for tests
     }
+
+    /**
+     * @return array<string, \Slim\Interfaces\RouteInterface>
+     */
+    private function getRoutesByName(\Slim\App $app): array
+    {
+        $routesByName = [];
+        foreach ($app->getRouteCollector()->getRoutes() as $route) {
+            $routesByName[$route->getName()] = $route;
+        }
+        return $routesByName;
+    }
+
 }

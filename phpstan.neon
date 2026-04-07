@@ -26,7 +26,6 @@ parameters:
             - Web/css/
             - Web/scripts/
             - build/ (?)
-            - lib/external/
             # Do not report diagnostics inside `plugins`: The
             # legacy/third-party code is noisy. This keeps analysis focused on
             # core app code while still allowing symbol discovery.
