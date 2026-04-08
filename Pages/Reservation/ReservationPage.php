@@ -219,6 +219,7 @@ abstract class ReservationPage extends Page implements IReservationPage
                 'weekly' => ['key' => 'Weekly', 'everyKey' => 'weeks'],
                 'monthly' => ['key' => 'Monthly', 'everyKey' => 'months'],
                 'yearly' => ['key' => 'Yearly', 'everyKey' => 'years'],
+                'custom' => ['key' => 'Custom', 'everyKey' => ''],
             ]
         );
         $this->Set(
@@ -233,6 +234,11 @@ abstract class ReservationPage extends Page implements IReservationPage
                 6 => 'DaySaturdayAbbr',
             ]
         );
+        $this->Set(
+            'DayNamesFull',
+            Resources::GetInstance()->GetDays('full')
+        );
+        $this->Set('CustomAttributeTypeCheckbox', CustomAttributeTypes::CHECKBOX);
 
         $this->Set('TitleRequired', $config->GetKey(ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter()));
         $this->Set('DescriptionRequired', $config->GetKey(ConfigKeys::RESERVATION_DESCRIPTION_REQUIRED, new BooleanConverter()));

@@ -538,9 +538,11 @@
 {jsfile src="force-numeric.js"}
 {jsfile src="reservation-reminder.js"}
 {jsfile src="ajax-helpers.js"}
+{jsfile src="reservation-pdf.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
 {include file="Reservation/pdf_libraries.tpl"}
+{include file="Reservation/pdf.tpl"}
 <script type="text/javascript">
     $(function() {
         var scopeOptions = {
@@ -640,10 +642,6 @@
         });
 
         $('#userName').bindUserDetails();
-
-        // jsPDF
-        {include file="Reservation/pdf.tpl"}
-        //
 
         translateTooltips();
 
