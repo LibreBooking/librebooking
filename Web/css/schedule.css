@@ -420,8 +420,14 @@ ul.jqtree-tree .jqtree-toggler {
   color: #72716d;
 }
 
-#calendar_toggle span {
-  font-size: 16pt;
+.schedule_icon {
+  height: 24px;
+  width: auto;
+  font-size: 24px;
+}
+
+img.schedule_icon {
+  display: block;
 }
 
 #loading-schedule {

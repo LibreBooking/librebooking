@@ -84,28 +84,35 @@
                     {assign var=titleWidth value="col-sm-6 col-12"}
                     <div id="schedule-actions" class="col-sm-3 col-12">
                         {block name="actions"}
-                            <div class="d-flex align-items-center">
-                                <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}"><span
-                                        class="bi bi-printer"></span></a>
+                            <div class="d-flex align-items-center mb-2">
+                                <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}">
+                                    <span class="bi bi-printer schedule_icon"></span>
+                                </a>
                                 <a href="#" id="make_default" class="link-primary me-2" style="display:none;"
-                                    title="{translate key='MakeDefaultSchedule'}"><i class="bi bi-star-fill"></i></a>
-                                <a href="#" class="schedule-style me-1" id="schedule_standard"
+                                    title="{translate key='MakeDefaultSchedule'}">
+                                    <i class="bi bi-star-fill schedule_icon"></i>
+                                </a>
+                                <a href="#" class="schedule-style me-2 d-flex align-items-center" id="schedule_standard"
                                     schedule-display="{ScheduleStyle::Standard->value}"
                                     title="{translate key='StandardScheduleDisplay'}">
-                                    <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
+                                    <img class="schedule_icon shadow-sm" src="img/table.png"
+                                        alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style me-1" id="schedule_tall"
+                                <a href="#" class="schedule-style me-2 d-flex align-items-center" id="schedule_tall"
                                     schedule-display="{ScheduleStyle::Tall->value}" title="{translate key='TallScheduleDisplay'}">
-                                    <img src="img/table-tall.png" alt="{translate key='TallScheduleDisplay'}" />
+                                    <img class="schedule_icon shadow-sm" src="img/table-tall.png"
+                                        alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-block me-1" id="schedule_wide"
+                                <a href="#" class="schedule-style d-none d-md-flex me-2 align-items-center" id="schedule_wide"
                                     schedule-display="{ScheduleStyle::Wide->value}" title="{translate key='WideScheduleDisplay'}">
-                                    <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
+                                    <img class="schedule_icon shadow-sm" src="img/table-wide.png"
+                                        alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
+                                <a href="#" class="schedule-style d-none d-md-flex align-items-center" id="schedule_week"
                                     schedule-display="{ScheduleStyle::CondensedWeek->value}"
                                     title="{translate key='CondensedWeekScheduleDisplay'}">
-                                    <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
+                                    <img class="schedule_icon shadow-sm" src="img/table-week.png"
+                                        alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
@@ -134,7 +141,7 @@
                         <a class="link-primary" href="#" id="calendar_toggle" title="{translate key=ShowHideNavigation}"
                             data-bs-toggle="collapse" data-bs-target="#individualDates" aria-expanded="false"
                             aria-controls="individualDates">
-                            <span class="bi bi-calendar"></span>
+                            <span class="bi bi-calendar schedule_icon"></span>
                             <span class="visually-hidden">{translate key=ShowHideNavigation}</span>
                         </a>
                     </div>
