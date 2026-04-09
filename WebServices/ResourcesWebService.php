@@ -58,36 +58,14 @@ class ResourcesWebService
      */
     public function GetAll()
     {
-        $scheduleIds = null;
-        $scheduleIdParam = $this->server->GetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID);
-        if ($scheduleIdParam !== null && $scheduleIdParam !== '') {
-            $rawIds = explode(',', $scheduleIdParam);
-            foreach ($rawIds as $id) {
-                if (!ctype_digit($id) || (int)$id === 0) {
-                    $this->server->WriteResponse(
-                        RestResponse::BadRequest("Invalid scheduleId '$id': must be a positive integer"),
-                        RestResponse::BAD_REQUEST_CODE
-                    );
-                    return;
-                }
-            }
-            $scheduleIds = array_map('intval', $rawIds);
+        $scheduleIds = $this->parsePositiveIntegerIds(paramName: WebServiceQueryStringKeys::SCHEDULE_ID);
+        if ($scheduleIds === false) {
+            return;
         }
 
-        $groupIds = null;
-        $groupIdParam = $this->server->GetQueryString(WebServiceQueryStringKeys::GROUP_ID);
-        if ($groupIdParam !== null && $groupIdParam !== '') {
-            $rawIds = explode(',', $groupIdParam);
-            foreach ($rawIds as $id) {
-                if (!ctype_digit($id) || (int)$id === 0) {
-                    $this->server->WriteResponse(
-                        RestResponse::BadRequest("Invalid groupId '$id': must be a positive integer"),
-                        RestResponse::BAD_REQUEST_CODE
-                    );
-                    return;
-                }
-            }
-            $groupIds = array_map('intval', $rawIds);
+        $groupIds = $this->parsePositiveIntegerIds(paramName: WebServiceQueryStringKeys::GROUP_ID);
+        if ($groupIds === false) {
+            return;
         }
 
         $resources = $this->resourceRepository->GetUserResourceList();
@@ -260,6 +238,33 @@ class ResourcesWebService
         $groups = $this->resourceRepository->GetResourceGroups();
 
         $this->server->WriteResponse(new ResourceGroupsResponse($groups));
+    }
+
+    /**
+     * Parses a comma-separated list of positive integers from a query string parameter.
+     *
+     * @return int[]|false|null int[] on success, null if param absent/empty, false if invalid
+     *                          (a 400 response has already been written)
+     */
+    private function parsePositiveIntegerIds(string $paramName): array|false|null
+    {
+        $param = $this->server->GetQueryString($paramName);
+        if ($param === null || $param === '') {
+            return null;
+        }
+
+        $rawIds = explode(',', $param);
+        foreach ($rawIds as $id) {
+            if (!ctype_digit($id) || (int)$id === 0) {
+                $this->server->WriteResponse(
+                    RestResponse::BadRequest("Invalid $paramName '$id': must be a positive integer"),
+                    RestResponse::BAD_REQUEST_CODE
+                );
+                return false;
+            }
+        }
+
+        return array_map('intval', $rawIds);
     }
 
     /**
