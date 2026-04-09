@@ -209,7 +209,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
         $this->Set('ReservationId', $this->GetReservationId());
 
-        $this->Display('Ajax/reservation_popup.tpl');
+        $this->Display('Ajax/respopup.tpl');
     }
 
     /**
@@ -433,8 +433,8 @@ class ReservationPopupPresenter
     {
         $userSession = ServiceLocator::GetServer()->GetUserSession();
 
-        // ÄNDERUNG: Anonymer User mit view.reservations=true bekommt die Ressourcen
-        // der aktuellen Reservierung direkt – keine DB-Berechtigungsabfrage nötig
+        // For anonymous users with view.reservations=true, use the resource IDs
+        // of the current reservation directly - no DB permission lookup needed
         $allowGuestView = Configuration::Instance()->GetKey(
             ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
             new BooleanConverter()
@@ -446,7 +446,7 @@ class ReservationPopupPresenter
             return;
         }
 
-        // Eingeloggte User: bisherige Logik unverändert
+        // Logged-in users: keep existing logic unchanged
         $resourceRepo = new ResourceRepository();
         $resourceIds = [];
 

@@ -68,23 +68,23 @@ class SlotLabelFactory
             return '';
         }
 
-        // ÄNDERUNG 1: Anonyme User dürfen Details sehen wenn view.reservations=true
+        // Anonymous users may see details if view.reservations=true
         $isAnonymousUser = !$this->user->IsLoggedIn();
 
         if ($isAnonymousUser) {
-            // Anonymer User und view.reservations=false → nichts anzeigen
+            // Anonymous user and view.reservations=false: show nothing
             if (!$shouldHideReservations) {
                 return '';
             }
-            // Anonymer User und view.reservations=true → Ressourcen-Berechtigungsprüfung
-            // überspringen (UserId=0 hat keine DB-Einträge), direkt zum Label aufbauen
+            // Anonymous user and view.reservations=true: skip the DB resource
+            // permission check (UserId=0 has no DB entries) and proceed to build the label
         } else {
-            // Eingeloggte User: bisherige Logik unverändert
+            // Logged-in users: keep existing logic unchanged
             if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
                 return '';
             }
 
-            // ÄNDERUNG 2: Ressourcen-Berechtigungsprüfung nur für eingeloggte User
+            // Resource permission check only for logged-in users
             if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId))
                 && !$reservation->IsUserOwner($this->user->UserId)
                 && !$reservation->IsUserInvited($this->user->UserId)
