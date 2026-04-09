@@ -525,8 +525,8 @@ class ConfigurationFile implements IConfigurationFile
         $section = $configDef['section'] ?? null;
         $converter = $converter ?? $this->GetDefaultConverter($configDef);
 
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $configDef['key']));
-        $envValue = env($envKey);
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $configDef);
+        $envValue = $envKey !== null ? env($envKey) : null;
 
         if (!empty($envValue)) {
             $value = $envValue;

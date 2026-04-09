@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT_DIR . 'lib/Config/ConfigKeysMeta.php');
+
 abstract class AbstractConfigKeys
 {
     /** @var array<class-string, array> */
@@ -120,12 +122,10 @@ abstract class AbstractConfigKeys
 
     public static function hasEnv($config): bool
     {
-        $key = $config['key'] ?? null;
-        if (!is_string($key) || $key === '') {
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $config);
+        if ($envKey === null) {
             return false;
         }
-
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $key));
 
         return getenv($envKey) !== false;
     }

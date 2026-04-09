@@ -367,6 +367,51 @@ PHP
         $this->assertEquals('UCT', $config->GetDefaultTimezone());
     }
 
+    public function testPluginEnvUsesSectionQualifiedNames(): void
+    {
+        putenv('LB_SERVER1_KEY=env-section-qualified');
+        putenv('LB_KEY=legacy-bare-name');
+        putenv('LB_KEY1');
+
+        try {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_plugin_config.php',
+                '',
+                TestPluginConfigKeys::CONFIG_ID,
+                false,
+                TestPluginConfigKeys::class
+            );
+            $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
+
+            $this->assertSame('env-section-qualified', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+            $this->assertSame('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+        } finally {
+            putenv('LB_SERVER1_KEY');
+            putenv('LB_KEY');
+            putenv('LB_KEY1');
+        }
+    }
+
+    public function testPluginHasEnvUsesSectionQualifiedNames(): void
+    {
+        putenv('LB_SERVER2_KEY=value-from-env');
+        putenv('LB_KEY1');
+
+        try {
+            $this->assertTrue(TestPluginConfigKeys::hasEnv(TestPluginConfigKeys::SERVER2_KEY));
+            $this->assertFalse(TestPluginConfigKeys::hasEnv(TestPluginConfigKeys::KEY1));
+        } finally {
+            putenv('LB_SERVER2_KEY');
+            putenv('LB_KEY1');
+        }
+    }
+
+    public function testConfigKeysMetaEnvKeyForConfigUsesCanonicalPluginKey(): void
+    {
+        $this->assertSame('LB_SERVER1_KEY', ConfigKeysMeta::envKeyForConfig(TestPluginConfigKeys::SERVER1_KEY));
+        $this->assertSame('LB_KEY1', ConfigKeysMeta::envKeyForConfig(TestPluginConfigKeys::KEY1));
+    }
+
     // /**
     //  * Test that the actual config.dist.php loads correctly
     //  * and all its nested values are accessible

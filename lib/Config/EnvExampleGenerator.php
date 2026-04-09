@@ -138,7 +138,10 @@ class EnvExampleGenerator
         $comment = ConfigKeysMeta::getComment(entry: $entry);
         $choices = $entry['choices'] ?? null;
         $type = $entry['type'] ?? 'string';
-        $envKey = ConfigKeysMeta::envKey(configKey: $entry['key']);
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $entry);
+        if ($envKey === null) {
+            throw new \LogicException('Env example entry is missing a canonical config key name.');
+        }
 
         if ($comment !== '') {
             $hasExplicitComment = isset($entry['config_file_comment']) && $entry['config_file_comment'] !== '';

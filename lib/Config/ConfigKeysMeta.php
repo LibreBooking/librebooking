@@ -3,6 +3,34 @@
 class ConfigKeysMeta
 {
     /**
+     * Return the canonical config key name for an entry.
+     *
+     * Plugin entries with a section use the fully qualified section.key name.
+     */
+    public static function canonicalKeyName(array $config): ?string
+    {
+        $key = $config['key'] ?? null;
+        if (!is_string($key) || $key === '') {
+            return null;
+        }
+
+        $section = $config['section'] ?? null;
+        if (is_string($section) && $section !== '') {
+            // Main config entries already store fully qualified keys like
+            // "reservation.start.time.constraint" and use "section" only for grouping.
+            if (str_starts_with($key, $section . '.')) {
+                return $key;
+            }
+
+            // Plugin config entries store the leaf key plus a separate section, so
+            // their canonical name needs to be reconstructed as "section.key".
+            return "{$section}.{$key}";
+        }
+
+        return $key;
+    }
+
+    /**
      * Get the comment text for a config entry.
      *
      * Prefers 'config_file_comment' field, falls back to 'description'.
@@ -69,13 +97,16 @@ class ConfigKeysMeta
     }
 
     /**
-     * Derive the environment variable name for a config key.
-     *
-     * Matches the logic in AbstractConfigKeys::hasEnv().
+     * Derive the environment variable name for a config entry definition.
      */
-    public static function envKey(string $configKey): string
+    public static function envKeyForConfig(array $config): ?string
     {
-        return strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $configKey));
+        $canonicalKey = self::canonicalKeyName(config: $config);
+        if ($canonicalKey === null) {
+            return null;
+        }
+
+        return strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $canonicalKey));
     }
 
     public const SECTION_TITLES = [

@@ -23,7 +23,7 @@ class EnvExampleGeneratorTest extends TestBase
         $content = EnvExampleGenerator::render();
 
         foreach (ConfigKeys::all() as $entry) {
-            $envKey = ConfigKeysMeta::envKey(configKey: $entry['key']);
+            $envKey = ConfigKeysMeta::envKeyForConfig(config: $entry);
             $this->assertStringContainsString(
                 $envKey . '=',
                 $content,
@@ -34,11 +34,11 @@ class EnvExampleGeneratorTest extends TestBase
 
     public function testEnvKeyFormatMatchesAbstractConfigKeys(): void
     {
-        // Verify our envKey derivation matches the one used at runtime
+        // Verify canonical env keys follow the expected LB_* naming convention
         foreach (ConfigKeys::all() as $entry) {
             $key = $entry['key'];
             $expected = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $key));
-            $actual = ConfigKeysMeta::envKey(configKey: $key);
+            $actual = ConfigKeysMeta::envKeyForConfig(config: $entry);
 
             $this->assertSame(
                 $expected,
