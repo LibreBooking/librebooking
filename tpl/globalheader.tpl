@@ -74,11 +74,6 @@
             <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         {/if}
     {/if}
-    {if isset($Fullcalendar) && $Fullcalendar}
-        {vendor_css src="fullcalendar/3.4.0/css/fullcalendar.min.css"}
-        <link rel='stylesheet' type='text/css' href='{$Path}assets/vendor/fullcalendar/3.4.0/css/fullcalendar.print.css'
-            media='print' />
-    {/if}
 
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {cssfile src="assets/fonts/hind/v18/hind.css"}

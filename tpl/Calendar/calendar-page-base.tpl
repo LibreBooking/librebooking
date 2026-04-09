@@ -56,6 +56,7 @@
     {jsfile src="reservationPopup.js"}
     {jsfile src="calendar.js"}
     {jsfile src="ajax-helpers.js"}
+    {jsfile src="date-helper.js"}
     {jsfile src="autocomplete.js"}
     {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
@@ -64,11 +65,12 @@
 
             var options = {
                 view: '{$CalendarType|escape:javascript}',
-                defaultDate: moment('{$DisplayDate->Format('Y-m-d')}', 'YYYY-MM-DD'),
+                defaultDate: '{$DisplayDate->Format('Y-m-d')}',
                 todayText: '{{translate key=Today}|escape:'javascript'}',
                 dayText: '{{translate key=Day}|escape:'javascript'}',
                 monthText: '{{translate key=Month}|escape:'javascript'}',
                 weekText: '{{translate key=Week}|escape:'javascript'}',
+                listText: '{{translate key=List}|escape:'javascript'}',
                 dayClickUrl: '{$pageUrl}?ct={CalendarTypes::Day}&sid={$ScheduleId|escape:'javascript'}&rid={$ResourceId|escape:'javascript'}&gid={if isset($GroupId)}{$GroupId|escape:'javascript'}{/if}',
                 dayClickUrlTemplate: '{$pageUrl}?ct={CalendarTypes::Day}&sid=[sid]&rid=[rid]&gid=[gid]',
                 dayNames: {js_array array=$DayNames},

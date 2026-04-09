@@ -731,7 +731,7 @@
 
 	<div id="customLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
 		aria-labelledby="customLayoutDialogLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="customLayoutDialogLabel">{translate key=ChangeLayout}</h5>
@@ -944,7 +944,8 @@
 						today: "{{translate key=Today}|escape:'javascript'}",
 						month: "{{translate key=Month}|escape:'javascript'}",
 						week: "{{translate key=Week}|escape:'javascript'}",
-						day: "{{translate key=Day}|escape:'javascript'}"
+						day: "{{translate key=Day}|escape:'javascript'}",
+						list: "{{translate key=List}|escape:'javascript'}"
 					},
 					defaultDate: '{Date::Now()->ToTimezone({$Timezone})->Format("Y-m-d")}',
 					eventsUrl: '{$smarty.server.SCRIPT_NAME}'

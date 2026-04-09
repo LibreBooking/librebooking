@@ -15,6 +15,58 @@ function Calendar(opts) {
     moveErrorsList: $('#moveErrorsList'),
   };
 
+  // Helper functions for FullCalendar v6
+  function normalizeLocale(locale) {
+    return (locale || document.documentElement.lang || 'en').replace('_', '-');
+  }
+
+  function mapCurrentViewToLegacy(viewType) {
+    switch (viewType) {
+      case 'timeGridWeek':
+      case 'listWeek':
+        return 'agendaWeek';
+      case 'timeGridDay':
+      case 'listDay':
+        return 'agendaDay';
+      case 'listMonth':
+      case 'dayGridMonth':
+      default:
+        return 'month';
+    }
+  }
+
+  function mapLegacyViewToCurrent(viewName) {
+    switch (viewName) {
+      case 'agendaWeek':
+        return 'timeGridWeek';
+      case 'agendaDay':
+        return 'timeGridDay';
+      case 'month':
+      default:
+        return 'dayGridMonth';
+    }
+  }
+
+  function getTimeFormatOptions(format) {
+    switch (format) {
+      case 'H:i':
+        return { hour: '2-digit', minute: '2-digit', hour12: false };
+      case 'G:i':
+      case 'G.i':
+        return { hour: 'numeric', minute: '2-digit', hour12: false };
+      case 'h:i':
+        return { hour: '2-digit', minute: '2-digit', hour12: true, meridiem: false };
+      case 'h:i A':
+      case 'h:i a':
+        return { hour: '2-digit', minute: '2-digit', hour12: true, meridiem: 'short' };
+      case 'g:i A':
+      case 'g:i a':
+        return { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' };
+      default:
+        return { hour: '2-digit', minute: '2-digit', hour12: false };
+    }
+  }
+
   Calendar.prototype.init = function () {
     function showLoadingIndicator() {
       elements.loadingIndicator.removeClass('d-none');
@@ -24,54 +76,79 @@ function Calendar(opts) {
       elements.loadingIndicator.addClass('d-none');
     }
 
-    _fullCalendar = $('#calendar').fullCalendar({
-      header: {
+    var calendarElement = document.getElementById('calendar');
+    var timeFormat = getTimeFormatOptions(_options.timeFormat);
+
+    _fullCalendar = new FullCalendar.Calendar(calendarElement, {
+      themeSystem: 'standard',
+      headerToolbar: {
         left: 'prev,next,today',
         center: 'title',
-        right: 'month,agendaWeek,agendaDay',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
       },
       buttonText: {
         today: _options.todayText,
-        month: _options.monthText,
-        week: _options.weekText,
-        day: _options.dayText,
       },
       allDaySlot: false,
       weekNumbers: _options.showWeekNumbers,
-      defaultView: _options.view,
-      defaultDate: _options.defaultDate,
-      eventSources: [
-        {
-          url: _options.eventsUrl,
-          type: 'GET',
-          data: _options.eventsData,
+      initialView: mapLegacyViewToCurrent(_options.view),
+      initialDate: _options.defaultDate,
+      locale: normalizeLocale(_options.locale),
+      events: {
+        url: _options.eventsUrl,
+        extraParams: function () {
+          return Object.assign({}, _options.eventsData);
         },
-      ],
-      eventRender: function (event, element, view) {
-        if (!_.isEmpty(event.id)) {
-          element.attachReservationPopup(event.id);
-          var moment = view.start;
-          if (view.type == 'month') {
-            moment = view.currentRange.start;
-          }
-          var redirect =
-            _options.returnTo + encodeURIComponent('?ct=' + view.name + '&start=' + moment.format('YYYY-MM-DD'));
-          var finalUrl = event.url.replace('[redirect]', redirect);
-          element.attr('href', finalUrl);
+      },
+      eventDidMount: function (info) {
+        if (!_.isEmpty(info.event.id) && !$(info.el).hasClass('unreservable')) {
+          $(info.el).attachReservationPopup(info.event.id);
+        }
+        var startStr;
+        // Use currentStart to maintain a stable URL across all main views
+        switch (info.view.type) {
+          case 'dayGridMonth':
+          case 'timeGridWeek':
+          case 'timeGridDay':
+          case 'listWeek':
+          case 'listDay':
+            startStr = dateHelper.formatDate(info.view.currentStart);
+            break;
+          default:
+            startStr = dateHelper.formatDate(info.event.start);
+        }
+        var redirect =
+          _options.returnTo +
+          encodeURIComponent('?ct=' + mapCurrentViewToLegacy(info.view.type) + '&start=' + startStr);
+        var finalUrl = info.event.url ? info.event.url.replace('[redirect]', redirect) : null;
+        if (finalUrl) {
+          info.el.setAttribute('href', finalUrl);
         }
       },
-      dayClick: dayClick,
-      dayNames: _options.dayNames,
-      dayNamesShort: _options.dayNamesShort,
-      monthNames: _options.monthNames,
-      monthNamesShort: _options.monthNamesShort,
-      timeFormat: _options.timeFormat,
+      eventClick: function (info) {
+        var startStr =
+          info.view.type === 'dayGridMonth'
+            ? dateHelper.formatDate(info.view.currentStart)
+            : dateHelper.formatDate(info.event.start);
+        var redirect =
+          _options.returnTo +
+          encodeURIComponent('?ct=' + mapCurrentViewToLegacy(info.view.type) + '&start=' + startStr);
+        var finalUrl = info.event.url ? info.event.url.replace('[redirect]', redirect) : null;
+        if (finalUrl) {
+          info.jsEvent.preventDefault();
+          window.location = finalUrl;
+        }
+      },
+      dateClick: dayClick,
       firstDay: _options.firstDay,
       views: {
-        agendaDay: { slotLabelFormat: _options.timeFormat },
-        agendaWeek: { slotLabelFormat: _options.timeFormat },
+        dayGridMonth: { buttonText: _options.monthText },
+        timeGridDay: { buttonText: _options.dayText, slotLabelFormat: timeFormat },
+        timeGridWeek: { buttonText: _options.weekText, slotLabelFormat: timeFormat },
+        listWeek: { buttonText: _options.listText || 'List' },
       },
-      slotLabelFormat: _options.timeFormat,
+      slotLabelFormat: timeFormat,
+      eventTimeFormat: timeFormat,
       loading: function (isLoading) {
         if (isLoading) {
           showLoadingIndicator();
@@ -79,11 +156,11 @@ function Calendar(opts) {
           hideLoadingIndicator();
         }
       },
-      eventDrop: function (event, delta, revertFunc) {
+      eventDrop: function (info) {
         var handleMoveResponse = function (result) {
           hideLoadingIndicator();
           if (result.errors.length > 0) {
-            revertFunc();
+            info.revert();
 
             var messages = result.errors.join('</li><li>');
             messages = '<li>' + messages + '</li>';
@@ -92,31 +169,30 @@ function Calendar(opts) {
           }
         };
 
-        elements.moveReferenceNumber.val(event.id);
-        elements.moveStartDate.val(event.start.format('YYYY-MM-DD HH:mm'));
+        elements.moveReferenceNumber.val(info.event.id);
+        elements.moveStartDate.val(dateHelper.formatDate(info.event.start, true));
         ajaxPost(elements.moveReservationForm, _options.moveReservationUrl, showLoadingIndicator, handleMoveResponse);
       },
     });
 
-    $('.fc-widget-content').hover(
-      function () {
-        $(this).addClass('hover');
-      },
-
-      function () {
-        $(this).removeClass('hover');
-      }
-    );
+    _fullCalendar.render();
 
     $('.reservation').each(function (index, value) {
       var refNum = $(this).attr('refNum');
-      value.attachReservationPopup(refNum);
+      if (!$(value).hasClass('unreservable')) {
+        value.attachReservationPopup(refNum);
+      }
     });
 
     $('#calendarFilter').on('change', function () {
       var sid = '';
       var rid = '';
-      var gid = getQueryStringValue('gid');
+      var gid =
+        typeof _options.eventsData.gid !== 'undefined'
+          ? _options.eventsData.gid
+          : typeof getQueryStringValue === 'function'
+            ? getQueryStringValue('gid')
+            : '';
 
       if ($(this).find(':selected').hasClass('schedule')) {
         sid = $(this).val().replace('s', '');
@@ -136,7 +212,7 @@ function Calendar(opts) {
         .replace('[sid]', sid)
         .replace('[rid]', rid)
         .replace('[gid]', gid);
-      _fullCalendar.fullCalendar('refetchEvents');
+      _fullCalendar.refetchEvents();
 
       rebindSubscriptionData(rid, sid, gid);
     });
@@ -213,13 +289,13 @@ function Calendar(opts) {
     function selectOwner(ui, textbox) {
       textbox.val(ui.item.label);
       _options.eventsData.uid = ui.item.value;
-      _fullCalendar.fullCalendar('refetchEvents');
+      _fullCalendar.refetchEvents();
     }
 
     function selectParticipant(ui, textbox) {
       textbox.val(ui.item.label);
       _options.eventsData.pid = ui.item.value;
-      _fullCalendar.fullCalendar('refetchEvents');
+      _fullCalendar.refetchEvents();
     }
 
     const ownerFilter = $('#ownerFilter');
@@ -238,7 +314,7 @@ function Calendar(opts) {
       _options.eventsData.pid = null;
       ownerFilter.val('');
       participantFilter.val('');
-      _fullCalendar.fullCalendar('refetchEvents');
+      _fullCalendar.refetchEvents();
     });
   };
 
@@ -319,23 +395,29 @@ function Calendar(opts) {
     }
   };
 
-  var dayClick = function (date, jsEvent, view) {
-    dateVar = date;
+  var dayClick = function (info) {
+    dateVar = new Date(info.date);
 
     if (!opts.reservable) {
       drillDownClick();
       return;
     }
 
-    if (view.name.indexOf('Day') > 0) {
+    if (info.view.type.indexOf('timeGrid') === 0) {
       handleTimeClick();
     } else {
-      //dayDialog.dialog({modal: false, height: 70, width: 'auto'});
       dayDialog.removeClass('d-none');
+      // Hide the create button if the filter is schedule
+      var calendarFilterVal = $('#calendarFilter').val();
+      if (calendarFilterVal && calendarFilterVal.startsWith('s')) {
+        $('#dayDialogCreate').hide();
+      } else {
+        $('#dayDialogCreate').show();
+      }
       dayDialog.position({
         my: 'left bottom',
         at: 'left top',
-        of: jsEvent,
+        of: info.jsEvent,
       });
     }
   };
@@ -356,17 +438,16 @@ function Calendar(opts) {
   };
 
   var drillDownClick = function () {
-    var month = dateVar.month() + 1;
-    var url = _options.dayClickUrl;
-    url = url + '&start=' + dateVar.year() + '-' + month + '-' + dateVar.date();
-
-    window.location = url;
+    if (_fullCalendar && dateVar) {
+      _fullCalendar.changeView('timeGridDay', dateVar);
+      dayDialog.addClass('d-none');
+    }
   };
 
   var openNewReservation = function () {
-    var view = _fullCalendar.fullCalendar('getView');
-    var end = moment(dateVar).add(30, 'minutes');
-    var start = moment(dateVar).format('YYYY-MM-DD');
+    var view = _fullCalendar.view;
+    var end = new Date(dateVar.getTime() + 30 * 60000);
+    var start = dateHelper.formatDate(dateVar);
 
     var url =
       _options.reservationUrl +
@@ -376,11 +457,11 @@ function Calendar(opts) {
       getUrlFormattedDate(end) +
       '&redirect=' +
       _options.returnTo +
-      encodeURIComponent('?ct=' + view.name + '&start=' + start);
+      encodeURIComponent('?ct=' + mapCurrentViewToLegacy(view.type) + '&start=' + start);
     window.location = url;
   };
 
   var getUrlFormattedDate = function (d) {
-    return encodeURIComponent(d.format('YYYY-MM-DD HH:mm'));
+    return encodeURIComponent(dateHelper.formatDate(d, true));
   };
 }

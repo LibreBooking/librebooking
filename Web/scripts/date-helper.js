@@ -243,6 +243,7 @@ var dateHelper = (function () {
   }
 
   return {
+    pad,
     formatDate,
     parseYMDDate,
     MoreThanOneDayBetweenBeginAndEnd: function (beginDateElement, beginTimeElement, endDateElement, endTimeElement) {

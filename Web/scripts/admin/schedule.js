@@ -629,19 +629,20 @@ function ScheduleManagement(opts) {
   };
 
   var _fullCalendar = null;
+
   var showChangeCustomLayout = function (scheduleId) {
     $('#customLayoutDialog').unbind();
 
     function updateEvent(event) {
-      elements.slotStartDate.val(event.start.format('YYYY-MM-DD HH:mm'));
-      elements.slotEndDate.val(event.end.format('YYYY-MM-DD HH:mm'));
+      elements.slotStartDate.val(dateHelper.formatDate(event.start, true));
+      elements.slotEndDate.val(dateHelper.formatDate(event.end, true));
       elements.slotId.val(event.id);
       ajaxPost(
         elements.layoutSlotForm,
         options.submitUrl + '?action=' + options.updateLayoutSlot + '&sid=' + getActiveScheduleId(),
         null,
         function (data) {
-          _fullCalendar.fullCalendar('refetchEvents');
+          _fullCalendar.refetchEvents();
         }
       );
     }
@@ -649,81 +650,91 @@ function ScheduleManagement(opts) {
     $('#customLayoutDialog').unbind('shown.bs.modal');
     $('#customLayoutDialog').on('shown.bs.modal', function () {
       if (_fullCalendar != null) {
-        _fullCalendar.fullCalendar('destroy');
+        _fullCalendar.destroy();
       }
-      var calendar = $('#calendar');
-      _fullCalendar = calendar.fullCalendar({
-        header: {
-          left: 'prev,next,today',
+      var calendarElement = document.getElementById('calendar');
+      _fullCalendar = new FullCalendar.Calendar(calendarElement, {
+        themeSystem: 'standard',
+        headerToolbar: {
+          left: 'prev,next today',
           center: 'title',
-          right: 'month,agendaWeek,agendaDay',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
         },
-        buttonText: opts.calendarOptions.buttonText,
+        buttonText: {
+          today: opts.calendarOptions.buttonText.today,
+        },
         allDaySlot: false,
-        defaultDate: opts.calendarOptions.defaultDate,
-        defaultView: 'month',
-        eventSources: [
-          {
-            url: opts.calendarOptions.eventsUrl,
-            type: 'GET',
-            data: {
-              dr: 'events',
-              sid: scheduleId,
-            },
+        initialDate: opts.calendarOptions.defaultDate,
+        initialView: 'dayGridMonth',
+        locale: (document.documentElement.lang || 'en').replace('_', '-'),
+        views: {
+          dayGridMonth: { buttonText: opts.calendarOptions.buttonText.month },
+          timeGridWeek: { buttonText: opts.calendarOptions.buttonText.week },
+          timeGridDay: { buttonText: opts.calendarOptions.buttonText.day },
+          listWeek: { buttonText: opts.calendarOptions.buttonText.list || 'List' },
+        },
+        events: {
+          url: opts.calendarOptions.eventsUrl,
+          method: 'GET',
+          extraParams: {
+            dr: 'events',
+            sid: scheduleId,
           },
-        ],
-        dayClick: function (date, jsEvent, view) {
-          if (view.name == 'month') {
-            calendar.fullCalendar('changeView', 'agendaDay');
-            calendar.fullCalendar('gotoDate', date);
+        },
+        dateClick: function (info) {
+          if (info.view.type == 'dayGridMonth') {
+            _fullCalendar.changeView('timeGridDay');
+            _fullCalendar.gotoDate(info.date);
           }
         },
         selectable: true,
-        selectHelper: true,
+        selectMirror: true,
         editable: true,
         droppable: true,
         eventOverlap: false,
-        select: function (start, end, jsEvent, view) {
-          if (view.name != 'month') {
+        select: function (info) {
+          if (info.view.type != 'dayGridMonth') {
             elements.confirmCreateSlotDialog.show();
             elements.confirmCreateSlotDialog.position({
               my: 'left bottom',
               at: 'left top',
-              of: jsEvent,
+              of: info.jsEvent,
             });
             $('#confirmCreateOK').unbind('click');
             $('#confirmCreateOK').click(function (e) {
-              elements.slotStartDate.val(start.format('YYYY-MM-DD HH:mm'));
-              elements.slotEndDate.val(end.format('YYYY-MM-DD HH:mm'));
+              elements.slotStartDate.val(dateHelper.formatDate(info.start, true));
+              elements.slotEndDate.val(dateHelper.formatDate(info.end, true));
               ajaxPost(
                 elements.layoutSlotForm,
                 options.submitUrl + '?action=' + options.addLayoutSlot + '&sid=' + getActiveScheduleId(),
                 null,
                 function () {
-                  _fullCalendar.fullCalendar('refetchEvents');
+                  _fullCalendar.refetchEvents();
                   elements.confirmCreateSlotDialog.hide();
                 }
               );
             });
           }
         },
-        eventClick: function (event, jsEvent, view) {
-          elements.deleteSlotStartDate.val(event.start.format('YYYY-MM-DD HH:mm'));
-          elements.deleteSlotEndDate.val(event.end.format('YYYY-MM-DD HH:mm'));
+        eventClick: function (info) {
+          elements.deleteSlotStartDate.val(dateHelper.formatDate(info.event.start, true));
+          elements.deleteSlotEndDate.val(dateHelper.formatDate(info.event.end, true));
           elements.deleteCustomLayoutDialog.show();
           elements.deleteCustomLayoutDialog.position({
             my: 'left bottom',
             at: 'left top',
-            of: jsEvent,
+            of: info.jsEvent,
           });
         },
-        eventDrop: function (event, delta, revertFunc) {
-          updateEvent(event);
+        eventDrop: function (info) {
+          updateEvent(info.event);
         },
-        eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
-          updateEvent(event);
+        eventResize: function (info) {
+          updateEvent(info.event);
         },
       });
+
+      _fullCalendar.render();
     });
 
     $('#customLayoutDialog').modal('show');
@@ -731,7 +742,7 @@ function ScheduleManagement(opts) {
 
   function afterDeleteSlot() {
     elements.deleteCustomLayoutDialog.hide();
-    _fullCalendar.fullCalendar('refetchEvents');
+    _fullCalendar.refetchEvents();
   }
 
   function wireUpTimePickers(startTime, endTime) {

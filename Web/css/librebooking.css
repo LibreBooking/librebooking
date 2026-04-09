@@ -703,3 +703,76 @@ span.flatpickr-weekday {
 .flatpickr-months .flatpickr-next-month {
   fill: var(--text-color-btn) !important;
 }
+
+.fc .fc-button-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.fc .fc-daygrid-day-number {
+  color: var(--bs-body-color);
+  text-decoration: none;
+}
+
+.fc-daygrid-event-dot,
+.fc .fc-list-event-dot {
+  display: none;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-end,
+.fc-direction-rtl .fc-daygrid-event.fc-event-start {
+  padding: 2px 0.5em 2px 2px !important;
+  text-wrap: initial !important;
+}
+
+a.fc-event,
+a.fc-event:hover {
+  text-decoration: none;
+  border-color: var(--reservedMine);
+}
+
+.fc-event,
+.fc-event:hover {
+  transition: background 0.2s;
+}
+
+.fc-list-event.unreservable:hover,
+.fc-list-event.unreservable:hover td,
+.fc-event.unreservable:hover {
+  background-color: var(--unreservable) !important;
+}
+
+.fc-direction-ltr .fc-list-day-text,
+.fc-direction-rtl .fc-list-day-side-text,
+.fc-direction-ltr .fc-list-day-side-text,
+.fc-direction-rtl .fc-list-day-text {
+  color: var(--bs-body-color);
+  text-decoration: none;
+}
+
+.fc-event:hover,
+.fc-list-event:hover,
+.fc-list-event:hover td {
+  background-color: color-mix(in srgb, var(--hiliteReservation) 85%, #fff 15%) !important;
+  text-decoration: none;
+}
+
+.fc-list-event a,
+.fc-list-event a:hover,
+.fc-list-event a:active,
+.fc-list-event a:focus {
+  text-decoration: none !important;
+}
+
+.fc-day-past {
+  background-color: var(--pasttime) !important;
+}
+
+.fc-timegrid-event-harness > .fc-timegrid-event {
+  inset: 0 -4px 0 0;
+}

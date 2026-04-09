@@ -70,9 +70,9 @@
     {/if}
 {/if}
 {if isset($Fullcalendar) && $Fullcalendar}
-    {vendor_js src="fullcalendar/3.4.0/js/fullcalendar.js"}
+    {vendor_js src="fullcalendar/6.1.20/js/index.global.min.js"}
     {if $HtmlLang != 'en'}
-        {vendor_js src="fullcalendar/3.4.0/js/lang/$HtmlLang.js"}
+        {vendor_js src="fullcalendar/6.1.20/js/locales-all.global.min.js"}
     {/if}
 {/if}
 
