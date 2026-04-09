@@ -230,6 +230,255 @@ class ResourcesWebServiceTest extends TestBase
         );
     }
 
+    private function buildGroupTree(int $groupId, array $resourceIds): ResourceGroupTree
+    {
+        $tree = new ResourceGroupTree();
+        $tree->AddGroup(new ResourceGroup($groupId, "Group $groupId"));
+        foreach ($resourceIds as $resourceId) {
+            $tree->AddAssignment(new ResourceGroupAssignment(
+                group_id: $groupId,
+                resource_name: "Resource $resourceId",
+                resource_id: $resourceId,
+                resourceAdminGroupId: null,
+                scheduleId: 1,
+                statusId: ResourceStatus::AVAILABLE,
+                scheduleAdminGroupId: null,
+                requiresApproval: false,
+                isCheckInEnabled: false,
+                isAutoReleased: false,
+                autoReleaseMinutes: null,
+                minLength: null,
+                resourceTypeId: null,
+                color: null,
+                maxConcurrentReservations: null
+            ));
+        }
+        return $tree;
+    }
+
+    public function testFiltersResourceListByGroupId()
+    {
+        $groupId = 3;
+        $matchingResourceId = 123;
+        $otherResourceId = 456;
+
+        $matchingResource = new FakeBookableResource($matchingResourceId);
+        $otherResource = new FakeBookableResource($otherResourceId);
+
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, $groupId);
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$matchingResource, $otherResource]);
+
+        $groupTree = $this->buildGroupTree($groupId, [$matchingResourceId]);
+        $this->repository->expects($this->once())
+                         ->method('GetResourceGroups')
+                         ->willReturn($groupTree);
+
+        $attributes = new AttributeList();
+        $this->attributeService->expects($this->once())
+                               ->method('GetAttributes')
+                               ->with(
+                                   $this->equalTo(CustomAttributeCategory::RESOURCE),
+                                   $this->equalTo([$matchingResourceId])
+                               )
+                               ->willReturn($attributes);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(
+            new ResourcesResponse($this->server, [$matchingResource], $attributes),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testFiltersResourceListByMultipleGroupIds()
+    {
+        $groupId1 = 3;
+        $groupId2 = 7;
+        $resourceId1 = 123;
+        $resourceId2 = 456;
+        $otherResourceId = 789;
+
+        $resource1 = new FakeBookableResource($resourceId1);
+        $resource2 = new FakeBookableResource($resourceId2);
+        $otherResource = new FakeBookableResource($otherResourceId);
+
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, "$groupId1,$groupId2");
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$resource1, $resource2, $otherResource]);
+
+        $tree = new ResourceGroupTree();
+        $tree->AddGroup(new ResourceGroup($groupId1, "Group $groupId1"));
+        $tree->AddGroup(new ResourceGroup($groupId2, "Group $groupId2"));
+        $tree->AddAssignment(new ResourceGroupAssignment(
+            group_id: $groupId1,
+            resource_name: "Resource $resourceId1",
+            resource_id: $resourceId1,
+            resourceAdminGroupId: null,
+            scheduleId: 1,
+            statusId: ResourceStatus::AVAILABLE,
+            scheduleAdminGroupId: null,
+            requiresApproval: false,
+            isCheckInEnabled: false,
+            isAutoReleased: false,
+            autoReleaseMinutes: null,
+            minLength: null,
+            resourceTypeId: null,
+            color: null,
+            maxConcurrentReservations: null
+        ));
+        $tree->AddAssignment(new ResourceGroupAssignment(
+            group_id: $groupId2,
+            resource_name: "Resource $resourceId2",
+            resource_id: $resourceId2,
+            resourceAdminGroupId: null,
+            scheduleId: 1,
+            statusId: ResourceStatus::AVAILABLE,
+            scheduleAdminGroupId: null,
+            requiresApproval: false,
+            isCheckInEnabled: false,
+            isAutoReleased: false,
+            autoReleaseMinutes: null,
+            minLength: null,
+            resourceTypeId: null,
+            color: null,
+            maxConcurrentReservations: null
+        ));
+
+        $this->repository->expects($this->once())
+                         ->method('GetResourceGroups')
+                         ->willReturn($tree);
+
+        $attributes = new AttributeList();
+        $this->attributeService->expects($this->once())
+                               ->method('GetAttributes')
+                               ->with(
+                                   $this->equalTo(CustomAttributeCategory::RESOURCE),
+                                   $this->equalTo([$resourceId1, $resourceId2])
+                               )
+                               ->willReturn($attributes);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(
+            new ResourcesResponse($this->server, [$resource1, $resource2], $attributes),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testFiltersResourceListByGroupIdIncludesSubGroups()
+    {
+        $parentGroupId = 3;
+        $childGroupId = 5;
+        $matchingResourceId = 123;
+        $otherResourceId = 456;
+
+        $matchingResource = new FakeBookableResource($matchingResourceId);
+        $otherResource = new FakeBookableResource($otherResourceId);
+
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, $parentGroupId);
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$matchingResource, $otherResource]);
+
+        $tree = new ResourceGroupTree();
+        $tree->AddGroup(new ResourceGroup($parentGroupId, 'Parent'));
+        $tree->AddGroup(new ResourceGroup($childGroupId, 'Child', $parentGroupId));
+        $tree->AddAssignment(new ResourceGroupAssignment(
+            group_id: $childGroupId,
+            resource_name: "Resource $matchingResourceId",
+            resource_id: $matchingResourceId,
+            resourceAdminGroupId: null,
+            scheduleId: 1,
+            statusId: ResourceStatus::AVAILABLE,
+            scheduleAdminGroupId: null,
+            requiresApproval: false,
+            isCheckInEnabled: false,
+            isAutoReleased: false,
+            autoReleaseMinutes: null,
+            minLength: null,
+            resourceTypeId: null,
+            color: null,
+            maxConcurrentReservations: null
+        ));
+
+        $this->repository->expects($this->once())
+                         ->method('GetResourceGroups')
+                         ->willReturn($tree);
+
+        $attributes = new AttributeList();
+        $this->attributeService->expects($this->once())
+                               ->method('GetAttributes')
+                               ->with(
+                                   $this->equalTo(CustomAttributeCategory::RESOURCE),
+                                   $this->equalTo([$matchingResourceId])
+                               )
+                               ->willReturn($attributes);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(
+            new ResourcesResponse($this->server, [$matchingResource], $attributes),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns400ForNonIntegerGroupId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, '1,abc,2');
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(
+            RestResponse::BadRequest("Invalid groupId 'abc': must be a positive integer"),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns400ForZeroGroupId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, '0');
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::BAD_REQUEST_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(
+            RestResponse::BadRequest("Invalid groupId '0': must be a positive integer"),
+            $this->server->_LastResponse
+        );
+    }
+
+    public function testReturns404ForNonExistentGroupId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::GROUP_ID, '999');
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([]);
+
+        $groupTree = new ResourceGroupTree();
+        $this->repository->expects($this->once())
+                         ->method('GetResourceGroups')
+                         ->willReturn($groupTree);
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::NOT_FOUND_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(RestResponse::NotFound(), $this->server->_LastResponse);
+    }
+
     public function testGetsStatuses()
     {
         $this->service->GetStatuses();

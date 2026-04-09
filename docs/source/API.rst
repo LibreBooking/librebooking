@@ -62,6 +62,12 @@ To combine multiple parameters::
 
     /Web/Services/index.php/Reservations/?scheduleId=1&userId=5
 
+To filter resources by group::
+
+    /Web/Services/index.php/Resources/?groupId=1
+
+    /Web/Services/index.php/Resources/?groupId=1,2,3
+
 POST Requests
 ~~~~~~~~~~~~~
 
@@ -2166,6 +2172,13 @@ comma-separated (e.g. ``scheduleId=1,2,3``). If provided, only resources
 belonging to those schedules will be returned. Each value must be a positive
 integer (greater than zero); if any value is non-integer or zero, a ``400 Bad
 Request`` is returned.
+
+Optional query string parameter: ``groupId``. One or more resource group IDs,
+comma-separated (e.g. ``groupId=1,2,3``). If provided, only resources belonging
+to those groups (including resources in sub-groups) will be returned. Each value
+must be a positive integer (greater than zero); if any value is non-integer or
+zero, a ``400 Bad Request`` is returned. If any group ID does not exist, a
+``404 Not Found`` is returned.
 
 **Route:** ``/Web/Services/index.php/Resources/``
 

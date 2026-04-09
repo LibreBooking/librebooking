@@ -52,6 +52,7 @@ class ResourcesWebService
      * @name GetAllResources
      * @description Loads all resources
      * Optional query string parameter: scheduleId. One or more schedule IDs, comma-separated (e.g. scheduleId=1,2,3). If provided, only resources belonging to those schedules will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned.
+     * Optional query string parameter: groupId. One or more resource group IDs, comma-separated (e.g. groupId=1,2,3). If provided, only resources belonging to those groups (including sub-groups) will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned. If any group ID does not exist, a 404 Not Found is returned.
      * @response ResourcesResponse
      * @return void
      */
@@ -73,12 +74,49 @@ class ResourcesWebService
             $scheduleIds = array_map('intval', $rawIds);
         }
 
+        $groupIds = null;
+        $groupIdParam = $this->server->GetQueryString(WebServiceQueryStringKeys::GROUP_ID);
+        if ($groupIdParam !== null && $groupIdParam !== '') {
+            $rawIds = explode(',', $groupIdParam);
+            foreach ($rawIds as $id) {
+                if (!ctype_digit($id) || (int)$id === 0) {
+                    $this->server->WriteResponse(
+                        RestResponse::BadRequest("Invalid groupId '$id': must be a positive integer"),
+                        RestResponse::BAD_REQUEST_CODE
+                    );
+                    return;
+                }
+            }
+            $groupIds = array_map('intval', $rawIds);
+        }
+
         $resources = $this->resourceRepository->GetUserResourceList();
 
         if ($scheduleIds !== null) {
             $filteredResources = [];
             foreach ($resources as $resource) {
                 if (in_array($resource->GetScheduleId(), $scheduleIds)) {
+                    $filteredResources[] = $resource;
+                }
+            }
+            $resources = $filteredResources;
+        }
+
+        if ($groupIds !== null) {
+            $groupTree = $this->resourceRepository->GetResourceGroups();
+            $groupList = $groupTree->GetGroupList();
+            $groupResourceIds = [];
+            foreach ($groupIds as $groupId) {
+                if (!array_key_exists($groupId, $groupList)) {
+                    $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
+                    return;
+                }
+                $groupResourceIds = array_merge($groupResourceIds, $groupTree->GetResourceIds($groupId));
+            }
+            $groupResourceIds = array_unique($groupResourceIds);
+            $filteredResources = [];
+            foreach ($resources as $resource) {
+                if (in_array($resource->GetId(), $groupResourceIds)) {
                     $filteredResources[] = $resource;
                 }
             }
