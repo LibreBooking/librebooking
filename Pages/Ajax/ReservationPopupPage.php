@@ -441,7 +441,7 @@ class ReservationPopupPresenter
         );
 
         if (!$userSession->IsLoggedIn() && $allowGuestView && $reservation !== null) {
-            $resourceIds = array_map(fn($r) => $r->GetResourceId(), $reservation->Resources);
+            $resourceIds = array_map(fn ($r) => $r->GetResourceId(), $reservation->Resources);
             $this->_page->BindViewableResourceReservations($resourceIds);
             return;
         }
