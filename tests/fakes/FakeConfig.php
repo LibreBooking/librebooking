@@ -141,6 +141,11 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
         }
     }
 
+    public function GetValues(): array
+    {
+        return $this->_values;
+    }
+
     public function EnableSubscription()
     {
     }

@@ -6,21 +6,12 @@ class LdapConfigKeys extends PluginConfigKeys
 {
     public const CONFIG_ID = 'ldap';
 
-    public const HOST = [
-        'key' => 'host',
+    public const URI = [
+        'key' => 'uri',
         'type' => 'string',
         'default' => '',
-        'label' => 'LDAP Host',
-        'description' => 'Hostname or IP address of LDAP server. Should start with ldap:// or ldaps://',
-        'section' => 'ldap'
-    ];
-
-    public const PORT = [
-        'key' => 'port',
-        'type' => 'integer',
-        'default' => 389,
-        'label' => 'LDAP Port',
-        'description' => 'Port of LDAP server (usually 389 or 636 for SSL)',
+        'label' => 'LDAP server URI(s)',
+        'description' => 'LDAP server URI(s). Use ldap:// or ldaps://. For multiple servers, separate URIs with spaces.',
         'section' => 'ldap'
     ];
 

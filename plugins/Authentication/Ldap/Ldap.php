@@ -108,7 +108,13 @@ class Ldap extends Authentication implements IAuthentication
         $this->password = $password;
 
         $username = $this->CleanUsername($username);
-        $connected = $this->ldap->Connect();
+
+        try {
+            $connected = $this->ldap->Connect();
+        } catch (RuntimeException $e) {
+            Log::Error('LDAP configuration error: %s', $e->getMessage());
+            throw $e;
+        }
 
         if (!$connected) {
             throw new Exception('Could not connect to LDAP server. Please check your LDAP configuration settings');

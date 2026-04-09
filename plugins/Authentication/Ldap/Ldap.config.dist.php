@@ -6,11 +6,16 @@
 return [
     'settings' => [
         'ldap' => [
-            // comma separated list of ldap servers such as ldap://mydomain1,ldap://localhost
-            'host' => 'ldap://localhost',
-
-            // default ldap port 389 or 636 for ssl.
-            'port' => 389,
+            // LDAP URI(s). For multiple servers, separate each URI with spaces.
+            // If no port is specified, defaults are: ldap:// = 389, ldaps:// = 636.
+            // examples:
+            //   'ldap://ldap1.example.com'
+            //   'ldap://ldap1.example.com:389'
+            //   'ldaps://ldap1.example.com'
+            //   'ldaps://ldap1.example.com:636'
+            //   'ldap://ldap1.example.com:389 ldap://ldap2.example.com:389'
+            //   'ldaps://ldap1.example.com:636 ldaps://ldap2.example.com:636'
+            'uri' => 'ldap://localhost:389',
 
             // LDAP protocol version
             'version' => 3,
