@@ -2171,7 +2171,8 @@ Optional query string parameter: ``scheduleId``. One or more schedule IDs,
 comma-separated (e.g. ``scheduleId=1,2,3``). If provided, only resources
 belonging to those schedules will be returned. Each value must be a positive
 integer (greater than zero); if any value is non-integer or zero, a ``400 Bad
-Request`` is returned.
+Request`` is returned. If any schedule ID does not exist, a ``404 Not Found``
+is returned.
 
 Optional query string parameter: ``groupId``. One or more resource group IDs,
 comma-separated (e.g. ``groupId=1,2,3``). If provided, only resources belonging

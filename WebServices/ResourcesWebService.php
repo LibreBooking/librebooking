@@ -16,42 +16,19 @@ require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceGroupsResponse.p
 
 class ResourcesWebService
 {
-    /**
-     * @var IRestServer
-     */
-    private $server;
-
-    /**
-     * @var IResourceRepository
-     */
-    private $resourceRepository;
-
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
-
-    /**
-     * @var IReservationViewRepository
-     */
-    private $reservationRepository;
-
     public function __construct(
-        IRestServer $server,
-        IResourceRepository $resourceRepository,
-        IAttributeService $attributeService,
-        IReservationViewRepository $reservationRepository
+        private IRestServer $server,
+        private IResourceRepository $resourceRepository,
+        private IAttributeService $attributeService,
+        private IReservationViewRepository $reservationRepository,
+        private IScheduleRepository $scheduleRepository
     ) {
-        $this->server = $server;
-        $this->resourceRepository = $resourceRepository;
-        $this->attributeService = $attributeService;
-        $this->reservationRepository = $reservationRepository;
     }
 
     /**
      * @name GetAllResources
      * @description Loads all resources
-     * Optional query string parameter: scheduleId. One or more schedule IDs, comma-separated (e.g. scheduleId=1,2,3). If provided, only resources belonging to those schedules will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned.
+     * Optional query string parameter: scheduleId. One or more schedule IDs, comma-separated (e.g. scheduleId=1,2,3). If provided, only resources belonging to those schedules will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned. If any schedule ID does not exist, a 404 Not Found is returned.
      * Optional query string parameter: groupId. One or more resource group IDs, comma-separated (e.g. groupId=1,2,3). If provided, only resources belonging to those groups (including sub-groups) will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned. If any group ID does not exist, a 404 Not Found is returned.
      * @response ResourcesResponse
      * @return void
@@ -68,6 +45,18 @@ class ResourcesWebService
             return;
         }
 
+        if ($scheduleIds !== null) {
+            foreach ($scheduleIds as $scheduleId) {
+                if ($this->scheduleRepository->LoadById($scheduleId) === null) {
+                    $this->server->WriteResponse(
+                        restResponse: RestResponse::NotFound(),
+                        statusCode: RestResponse::NOT_FOUND_CODE
+                    );
+                    return;
+                }
+            }
+        }
+
         $resources = $this->resourceRepository->GetUserResourceList();
 
         if ($scheduleIds !== null) {
@@ -81,6 +70,7 @@ class ResourcesWebService
         }
 
         if ($groupIds !== null) {
+            // GetResourceGroups() returns the full tree, used for both existence checks and sub-group traversal.
             $groupTree = $this->resourceRepository->GetResourceGroups();
             $groupList = $groupTree->GetGroupList();
             $groupResourceIds = [];
@@ -89,6 +79,7 @@ class ResourcesWebService
                     $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
                     return;
                 }
+                // GetResourceIds() recurses into sub-groups.
                 $groupResourceIds = array_merge($groupResourceIds, $groupTree->GetResourceIds($groupId));
             }
             $groupResourceIds = array_unique($groupResourceIds);
@@ -242,6 +233,7 @@ class ResourcesWebService
 
     /**
      * Parses a comma-separated list of positive integers from a query string parameter.
+     * Duplicate values are removed; the returned array is unique and re-indexed.
      *
      * @return int[]|false|null int[] on success, null if param absent/empty, false if invalid
      *                          (a 400 response has already been written)
@@ -264,7 +256,7 @@ class ResourcesWebService
             }
         }
 
-        return array_map('intval', $rawIds);
+        return array_values(array_unique(array_map('intval', $rawIds)));
     }
 
     /**

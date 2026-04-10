@@ -17,6 +17,8 @@ class ResourcesWebServiceTest extends TestBase
 
     private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
+
     /**
      * @var ResourcesWebService
      */
@@ -30,8 +32,15 @@ class ResourcesWebServiceTest extends TestBase
         $this->repository = $this->createMock('IResourceRepository');
         $this->reservationRepository = $this->createMock('IReservationViewRepository');
         $this->attributeService = $this->createMock('IAttributeService');
+        $this->scheduleRepository = $this->createMock('IScheduleRepository');
 
-        $this->service = new ResourcesWebService($this->server, $this->repository, $this->attributeService, $this->reservationRepository);
+        $this->service = new ResourcesWebService(
+            server: $this->server,
+            resourceRepository: $this->repository,
+            attributeService: $this->attributeService,
+            reservationRepository: $this->reservationRepository,
+            scheduleRepository: $this->scheduleRepository
+        );
     }
 
     public function testGetsResourceById()
@@ -121,6 +130,11 @@ class ResourcesWebServiceTest extends TestBase
 
         $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, $scheduleId);
 
+        $this->scheduleRepository->expects($this->once())
+                                 ->method('LoadById')
+                                 ->with($scheduleId)
+                                 ->willReturn(new Schedule(id: $scheduleId, name: null, isDefault: false, weekdayStart: null, daysVisible: null));
+
         $this->repository->expects($this->once())
                          ->method('GetUserResourceList')
                          ->willReturn([$matchingResource, $otherResource]);
@@ -161,6 +175,13 @@ class ResourcesWebServiceTest extends TestBase
 
         $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, "$scheduleId1,$scheduleId2");
 
+        $this->scheduleRepository->expects($this->exactly(2))
+                                 ->method('LoadById')
+                                 ->willReturnMap([
+                                     [$scheduleId1, new Schedule(id: $scheduleId1, name: null, isDefault: false, weekdayStart: null, daysVisible: null)],
+                                     [$scheduleId2, new Schedule(id: $scheduleId2, name: null, isDefault: false, weekdayStart: null, daysVisible: null)],
+                                 ]);
+
         $this->repository->expects($this->once())
                          ->method('GetUserResourceList')
                          ->willReturn([$resource1, $resource2, $otherResource]);
@@ -180,6 +201,71 @@ class ResourcesWebServiceTest extends TestBase
             new ResourcesResponse($this->server, [$resource1, $resource2], $attributes),
             $this->server->_LastResponse
         );
+    }
+
+    public function testReturns404ForNonExistentScheduleId()
+    {
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '999');
+
+        $this->scheduleRepository->expects($this->once())
+                                 ->method('LoadById')
+                                 ->with(999)
+                                 ->willReturn(null);
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::NOT_FOUND_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(RestResponse::NotFound(), $this->server->_LastResponse);
+    }
+
+    public function testReturns404WhenOneOfMultipleScheduleIdsDoesNotExist()
+    {
+        // ID 1 exists, ID 999 does not — the endpoint must return 404 regardless.
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '1,999');
+
+        $this->scheduleRepository->expects($this->exactly(2))
+                                 ->method('LoadById')
+                                 ->willReturnMap([
+                                     [1, new Schedule(id: 1, name: null, isDefault: false, weekdayStart: null, daysVisible: null)],
+                                     [999, null],
+                                 ]);
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->service->GetAll();
+
+        $this->assertEquals(RestResponse::NOT_FOUND_CODE, $this->server->_LastResponseCode);
+        $this->assertEquals(RestResponse::NotFound(), $this->server->_LastResponse);
+    }
+
+    public function testDeduplicatesScheduleIds()
+    {
+        $scheduleId = 1;
+        $resource = new FakeBookableResource(resourceId: 1, name: 'resource-1');
+        $resource->SetScheduleId($scheduleId);
+
+        // Three duplicate IDs — parsePositiveIntegerIds should reduce these to one.
+        $this->server->SetQueryString(WebServiceQueryStringKeys::SCHEDULE_ID, '1,1,1');
+
+        // The core assertion: LoadById must be called exactly once, not three times,
+        // proving de-duplication happened before the existence-check loop.
+        $this->scheduleRepository->expects($this->once())
+                                 ->method('LoadById')
+                                 ->with($scheduleId)
+                                 ->willReturn(new Schedule(id: $scheduleId, name: null, isDefault: false, weekdayStart: null, daysVisible: null));
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceList')
+                         ->willReturn([$resource]);
+
+        // Stub with an empty AttributeList so the response can be built; content is not under test here.
+        $this->attributeService->method('GetAttributes')->willReturn(new AttributeList());
+
+        $this->service->GetAll();
     }
 
     public function testReturns400ForNonIntegerScheduleId()
