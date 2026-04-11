@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13f519c85bf39cea30b16a4b09050839",
+    "content-hash": "d993138bcca8c477b139f74fa4451444",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2680,211 +2680,6 @@
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
-            "name": "pear/console_getopt",
-            "version": "v1.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pear/Console_Getopt.git",
-                "reference": "a41f8d3e668987609178c7c4a9fe48fecac53fa0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pear/Console_Getopt/zipball/a41f8d3e668987609178c7c4a9fe48fecac53fa0",
-                "reference": "a41f8d3e668987609178c7c4a9fe48fecac53fa0",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Console": "./"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "./"
-            ],
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Andrei Zmievski",
-                    "email": "andrei@php.net",
-                    "role": "Lead"
-                },
-                {
-                    "name": "Stig Bakken",
-                    "email": "stig@php.net",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Greg Beaver",
-                    "email": "cellog@php.net",
-                    "role": "Helper"
-                }
-            ],
-            "description": "More info available on: http://pear.php.net/package/Console_Getopt",
-            "support": {
-                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Console_Getopt",
-                "source": "https://github.com/pear/Console_Getopt"
-            },
-            "time": "2019-11-20T18:27:48+00:00"
-        },
-        {
-            "name": "pear/net_ldap2",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pear/Net_LDAP2.git",
-                "reference": "6eae6d20533469ffe1c01684923cd09f0fae3b77"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pear/Net_LDAP2/zipball/6eae6d20533469ffe1c01684923cd09f0fae3b77",
-                "reference": "6eae6d20533469ffe1c01684923cd09f0fae3b77",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ldap": "*",
-                "pear/pear-core-minimal": "^1.10.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9 || ^10.3"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "Net/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "."
-            ],
-            "license": [
-                "LGPL-3.0"
-            ],
-            "description": "Object oriented interface for searching and manipulating LDAP-entries",
-            "homepage": "http://pear.php.net/package/Net_LDAP2",
-            "keywords": [
-                "PEAR",
-                "ldap"
-            ],
-            "support": {
-                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_LDAP2",
-                "source": "https://github.com/pear/Net_LDAP2"
-            },
-            "time": "2023-10-12T20:00:01+00:00"
-        },
-        {
-            "name": "pear/pear-core-minimal",
-            "version": "v1.10.18",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pear/pear-core-minimal.git",
-                "reference": "c7b55789d01de0ce090d289b73f1bbd6a2f113b1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/c7b55789d01de0ce090d289b73f1bbd6a2f113b1",
-                "reference": "c7b55789d01de0ce090d289b73f1bbd6a2f113b1",
-                "shasum": ""
-            },
-            "require": {
-                "pear/console_getopt": "~1.4",
-                "pear/pear_exception": "~1.0",
-                "php": ">=5.4"
-            },
-            "replace": {
-                "rsky/pear-core-min": "self.version"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "src/"
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Weiske",
-                    "email": "cweiske@php.net",
-                    "role": "Lead"
-                }
-            ],
-            "description": "Minimal set of PEAR core files to be used as composer dependency",
-            "support": {
-                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR",
-                "source": "https://github.com/pear/pear-core-minimal"
-            },
-            "time": "2025-12-14T20:37:07+00:00"
-        },
-        {
-            "name": "pear/pear_exception",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pear/PEAR_Exception.git",
-                "reference": "b14fbe2ddb0b9f94f5b24cf08783d599f776fff0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/b14fbe2ddb0b9f94f5b24cf08783d599f776fff0",
-                "reference": "b14fbe2ddb0b9f94f5b24cf08783d599f776fff0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "<9"
-            },
-            "type": "class",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "PEAR/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "."
-            ],
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Helgi Thormar",
-                    "email": "dufuz@php.net"
-                },
-                {
-                    "name": "Greg Beaver",
-                    "email": "cellog@php.net"
-                }
-            ],
-            "description": "The PEAR Exception base class.",
-            "homepage": "https://github.com/pear/PEAR_Exception",
-            "keywords": [
-                "exception"
-            ],
-            "support": {
-                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR_Exception",
-                "source": "https://github.com/pear/PEAR_Exception"
-            },
-            "time": "2021-03-21T15:43:46+00:00"
-        },
-        {
             "name": "php-http/discovery",
             "version": "1.20.0",
             "source": {
@@ -4334,6 +4129,155 @@
                 }
             ],
             "time": "2026-01-29T09:40:50+00:00"
+        },
+        {
+            "name": "symfony/ldap",
+            "version": "v7.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ldap.git",
+                "reference": "1ed5073879bb2e1ef0cdd0f848f9a1a19812b297"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ldap/zipball/1ed5073879bb2e1ef0cdd0f848f9a1a19812b297",
+                "reference": "1ed5073879bb2e1ef0cdd0f848f9a1a19812b297",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ldap": "*",
+                "php": ">=8.2",
+                "symfony/options-resolver": "^7.3|^8.0"
+            },
+            "conflict": {
+                "symfony/security-core": "<6.4"
+            },
+            "require-dev": {
+                "symfony/security-core": "^6.4|^7.0|^8.0",
+                "symfony/security-http": "^6.4|^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Ldap\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charles Sarrazin",
+                    "email": "charles@sarraz.in"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides a LDAP client for PHP on top of PHP's ldap extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "active-directory",
+                "ldap"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/ldap/tree/v7.4.8"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-03-30T14:57:54+00:00"
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "v7.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "b38026df55197f9e39a44f3215788edf83187b80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/b38026df55197f9e39a44f3215788edf83187b80",
+                "reference": "b38026df55197f9e39a44f3215788edf83187b80",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an improved replacement for the array_replace PHP function",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/options-resolver/tree/v7.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-11-12T15:39:26+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -8336,77 +8280,6 @@
                 }
             ],
             "time": "2026-02-25T16:50:00+00:00"
-        },
-        {
-            "name": "symfony/options-resolver",
-            "version": "v7.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "b38026df55197f9e39a44f3215788edf83187b80"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/b38026df55197f9e39a44f3215788edf83187b80",
-                "reference": "b38026df55197f9e39a44f3215788edf83187b80",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\OptionsResolver\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Provides an improved replacement for the array_replace PHP function",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "config",
-                "configuration",
-                "options"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/options-resolver/tree/v7.4.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2025-11-12T15:39:26+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",

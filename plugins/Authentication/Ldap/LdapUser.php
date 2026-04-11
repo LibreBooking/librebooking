@@ -1,23 +1,30 @@
 <?php
 
+use Symfony\Component\Ldap\Entry;
+
 class LdapUser
 {
-    private $fname;
-    private $lname;
-    private $mail;
-    private $phone;
-    private $institution;
-    private $title;
-    private $dn;
-    private $mapping;
-    private $groups;
+    private string $fname;
+    private string $lname;
+    private string $mail;
+    private string $phone;
+    private string $institution;
+    private string $title;
+    private string $dn;
+    /**
+     * @var array<string, string>
+     */
+    private array $mapping;
+    /**
+     * @var string[]
+     */
+    private array $groups;
 
     /**
-     * @param $entry Net_LDAP2_Entry
-     * @param $mapping string[]|array
-     * @param $userGroups string[]
+     * @param array<string, string> $mapping
+     * @param string[] $userGroups
      */
-    public function __construct($entry, $mapping, $userGroups = [])
+    public function __construct(Entry $entry, array $mapping, array $userGroups = [])
     {
         $this->mapping = $mapping;
         $this->fname = $this->Get($entry, 'givenname');
@@ -26,67 +33,67 @@ class LdapUser
         $this->phone = $this->Get($entry, 'telephonenumber');
         $this->institution = $this->Get($entry, 'physicaldeliveryofficename');
         $this->title = $this->Get($entry, 'title');
-        $this->dn = $entry->dn();
+        $this->dn = $this->ReadDn($entry);
         $this->groups = $userGroups;
     }
 
-    public function GetFirstName()
+    public function GetFirstName(): string
     {
         return $this->fname;
     }
 
-    public function GetLastName()
+    public function GetLastName(): string
     {
         return $this->lname;
     }
 
-    public function GetEmail()
+    public function GetEmail(): string
     {
         return $this->mail;
     }
 
-    public function GetPhone()
+    public function GetPhone(): string
     {
         return $this->phone;
     }
 
-    public function GetInstitution()
+    public function GetInstitution(): string
     {
         return $this->institution;
     }
 
-    public function GetTitle()
+    public function GetTitle(): string
     {
         return $this->title;
     }
 
-    public function GetDn()
+    public function GetDn(): string
     {
         return $this->dn;
     }
 
-    public function GetGroups()
+    public function GetGroups(): array
     {
         return $this->groups;
     }
 
-    /**
-     * @param Net_LDAP2_Entry $entry
-     * @param string $field
-     * @return string
-     */
-    private function Get($entry, $field)
+    private function Get(Entry $entry, string $field): string
     {
         $actualField = $field;
         if (array_key_exists($field, $this->mapping)) {
             $actualField = $this->mapping[$field];
         }
-        $value = $entry->getValue($actualField);
-
-        if (is_array($value)) {
-            return $value[0];
+        // LDAP attribute names are case-insensitive; use case-insensitive lookup.
+        $values = $entry->getAttribute(name: $actualField, caseSensitive: false);
+        if (is_array($values) && !empty($values)) {
+            return (string)$values[0];
         }
 
-        return $value;
+        return '';
+    }
+
+    private function ReadDn(Entry $entry): string
+    {
+        return $entry->getDn();
     }
 }

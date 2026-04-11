@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once(ROOT_DIR . 'plugins/Authentication/Ldap/namespace.php');
+use Symfony\Component\Ldap\Entry;
 
 class LdapTest extends TestBase
 {
@@ -54,15 +55,16 @@ class LdapTest extends TestBase
         $this->fakeRegistration = new FakeRegistration();
         $this->encryption = new FakePasswordEncryption();
 
-        $ldapEntry = new TestLdapEntry();
-        $ldapEntry->Set('sn', 'user');
-        $ldapEntry->Set('givenname', 'test');
-        $ldapEntry->Set('mail', 'ldap@user.com');
-        $ldapEntry->Set('telephonenumber', '000-000-0000');
-        $ldapEntry->Set('physicaldeliveryofficename', '');
-        $ldapEntry->Set('title', '');
-        $ldapEntry->Set('groups', 'memberOf');
-        $ldapEntry->Set('filter', '');
+        $ldapEntry = new Entry('cn=test,dc=example,dc=org', [
+            'sn' => ['user'],
+            'givenname' => ['test'],
+            'mail' => ['ldap@user.com'],
+            'telephonenumber' => ['000-000-0000'],
+            'physicaldeliveryofficename' => [''],
+            'title' => [''],
+            'groups' => ['memberOf'],
+            'filter' => [''],
+        ]);
 
         $this->ldapUser = new LdapUser($ldapEntry, []);
 
@@ -217,10 +219,10 @@ class LdapTest extends TestBase
         $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $ldapOptions = new LdapOptions();
-        $options = $ldapOptions->Ldap2Config();
+        $options = $ldapOptions->GetConnectionConfig();
 
         $this->assertNotNull($this->fakeConfig->_RegisteredFiles[LdapConfigKeys::CONFIG_ID]);
-        $this->assertEquals('ldap://localhost:389', $options['host'][0], 'controllers must be an array of URIs');
+        $this->assertEquals($uris, $options['connectionString'], 'connectionString should match configured URI list');
         $this->assertEquals($binddn, $options['binddn']);
         $this->assertEquals($password, $options['bindpw']);
         $this->assertEquals($base, $options['basedn']);
@@ -256,7 +258,7 @@ class LdapTest extends TestBase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("LDAP settings 'host' and 'port' have been removed");
 
-        $options->Ldap2Config();
+        $options->GetConnectionConfig();
     }
 
     public function testThrowsIfLegacyPortIsConfigured()
@@ -274,13 +276,14 @@ class LdapTest extends TestBase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("LDAP settings 'host' and 'port' have been removed");
 
-        $options->Ldap2Config();
+        $options->GetConnectionConfig();
     }
 
     public function testUserHandlesArraysAsAttribute()
     {
-        $ldapEntry = new TestLdapEntry();
-        $ldapEntry->Set('sn', ['user', 'user2']);
+        $ldapEntry = new Entry('cn=test,dc=example,dc=org', [
+            'sn' => ['user', 'user2'],
+        ]);
         $user = new LdapUser($ldapEntry, []);
 
         $this->assertEquals('user', $user->GetLastName());
@@ -356,6 +359,19 @@ class LdapTest extends TestBase
         $this->assertEquals('uid', $options->GetUserIdAttribute());
     }
 
+    public function testThrowsForInvalidUserIdAttribute(): void
+    {
+        $configFile = new FakeConfigFile();
+        $configFile->SetKey(LdapConfigKeys::USER_ID_ATTRIBUTE, 'uid)(|(cn=*))');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
+
+        $options = new LdapOptions();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Invalid LDAP attribute name for user.id.attribute');
+        $options->GetUserIdAttribute();
+    }
+
     public function testMapsUserAttributes()
     {
         $mapping = [
@@ -364,11 +380,12 @@ class LdapTest extends TestBase
             'mail' => 'fooName',
         ];
 
-        $entry = new TestLdapEntry();
-        $entry->Set('sn', 'sn');
-        $entry->Set('givenname', 'given');
-        $entry->Set('fooName', 'foo');
-        $entry->Set('telephonenumber', 'phone');
+        $entry = new Entry('cn=test,dc=example,dc=org', [
+            'sn' => ['sn'],
+            'givenname' => ['given'],
+            'fooName' => ['foo'],
+            'telephonenumber' => ['phone'],
+        ]);
 
         $user = new LdapUser($entry, $mapping);
 
@@ -397,33 +414,33 @@ class FakeLdapOptions extends LdapOptions
 
     public $_RetryAgainstDatabase = false;
 
-    public function RetryAgainstDatabase()
+    public function RetryAgainstDatabase(): bool
     {
         return $this->_RetryAgainstDatabase;
     }
 
-    public function IsLdapDebugOn()
+    public function IsLdapDebugOn(): bool
     {
         return false;
     }
 
-    public function CleanUsername()
+    public function CleanUsername(): bool
     {
         return true;
     }
 
-    public function AttributeMapping()
+    public function AttributeMapping(): array
     {
         return parent::AttributeMapping(); // TODO: Change the autogenerated stub
     }
 
-    public function Filter()
+    public function Filter(): string
     {
         return '';
     }
 }
 
-class FakeLdapWrapper extends Ldap2Wrapper
+class FakeLdapWrapper extends SymfonyLdapWrapper
 {
     public function __construct()
     {
@@ -443,7 +460,7 @@ class FakeLdapWrapper extends Ldap2Wrapper
 
     public ?\RuntimeException $_ConnectException = null;
 
-    public function Connect()
+    public function Connect(): bool
     {
         $this->_ConnectCalled = true;
         if ($this->_ConnectException !== null) {
@@ -452,7 +469,7 @@ class FakeLdapWrapper extends Ldap2Wrapper
         return $this->_ExpectedConnect;
     }
 
-    public function Authenticate($username, $password, $filter)
+    public function Authenticate(string $username, string $password, string $filter): bool
     {
         $this->_AuthenticateCalled = true;
         $this->_LastUsername = $username;
@@ -461,41 +478,10 @@ class FakeLdapWrapper extends Ldap2Wrapper
         return $this->_ExpectedAuthenticate;
     }
 
-    public function GetLdapUser($username)
+    public function GetLdapUser(string $username): ?LdapUser
     {
         $this->_GetLdapUserCalled = true;
 
         return $this->_ExpectedLdapUser;
-    }
-}
-
-class TestLdapEntry
-{
-    private $_values = [];
-    private $_dn = 'cn=test,dc=example,dc=org';
-
-    public function __construct()
-    {
-        $this->Set('givenname', '');
-        $this->Set('sn', '');
-        $this->Set('mail', '');
-        $this->Set('telephonenumber', '');
-        $this->Set('physicaldeliveryofficename', '');
-        $this->Set('title', '');
-    }
-
-    public function getValue($attr, $option = null)
-    {
-        return $this->_values[$attr];
-    }
-
-    public function dn()
-    {
-        return $this->_dn;
-    }
-
-    public function Set($attr, $value)
-    {
-        $this->_values[$attr] = $value;
     }
 }

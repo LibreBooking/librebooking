@@ -17,7 +17,7 @@ class Ldap extends Authentication implements IAuthentication
     private $authToDecorate;
 
     /**
-     * @var Ldap2Wrapper
+     * @var SymfonyLdapWrapper
      */
     private $ldap;
 
@@ -77,7 +77,7 @@ class Ldap extends Authentication implements IAuthentication
 
     /**
      * @param IAuthentication $authentication Authentication class to decorate
-     * @param Ldap2Wrapper $ldapImplementation The actual LDAP implementation to work against
+     * @param SymfonyLdapWrapper $ldapImplementation The actual LDAP implementation to work against
      * @param LdapOptions $ldapOptions Options to use for LDAP configuration
      */
     public function __construct(IAuthentication $authentication, $ldapImplementation = null, $ldapOptions = null)
@@ -99,7 +99,7 @@ class Ldap extends Authentication implements IAuthentication
 
         $this->ldap = $ldapImplementation;
         if ($ldapImplementation == null) {
-            $this->ldap = new Ldap2Wrapper($this->options);
+            $this->ldap = new SymfonyLdapWrapper($this->options);
         }
     }
 

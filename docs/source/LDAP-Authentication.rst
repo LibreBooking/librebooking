@@ -16,13 +16,13 @@ Before enabling the LDAP plugin, install LDAP support for PHP and the LDAP clien
    #   dnf install php-ldap
    #   apt install php-ldap
 
-   composer require pear/net_ldap2
+   composer require symfony/ldap
 
-If ``pear/net_ldap2`` is not installed, enabling the LDAP plugin will fail with:
+If ``symfony/ldap`` is not installed, enabling the LDAP plugin will fail with:
 
 .. code-block:: text
 
-   The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2
+   The LDAP plugin requires symfony/ldap. Install it with: composer require symfony/ldap
 
 Enable the Plugin
 -----------------

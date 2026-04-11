@@ -4,12 +4,6 @@ require_once(ROOT_DIR . '/lib/Config/namespace.php');
 
 class LdapOptions
 {
-    private $_options = [];
-    /**
-     * @var array<string, mixed>
-     */
-    private $rawLdapSettings = [];
-
     public function __construct()
     {
         $configPath = dirname(__FILE__) . '/Ldap.config.php';
@@ -25,50 +19,53 @@ class LdapOptions
             LdapConfigKeys::class
         );
 
-        $allValues = Configuration::Instance()->File(LdapConfigKeys::CONFIG_ID)->GetValues();
-        $this->rawLdapSettings = $allValues['ldap'] ?? [];
     }
 
-    public function Ldap2Config()
+    /**
+     * @return array<string, mixed>
+     */
+    public function GetConnectionConfig(): array
     {
-        $hosts = $this->GetUris();
-        $this->SetOption('host', $hosts);
-        $this->SetOption('starttls', $this->GetConfig(LdapConfigKeys::STARTTLS, new BooleanConverter()));
-        $this->SetOption('version', $this->GetConfig(LdapConfigKeys::VERSION, new IntConverter()));
-        $this->SetOption('binddn', $this->GetConfig(LdapConfigKeys::BINDDN));
-        $this->SetOption('bindpw', $this->GetConfig(LdapConfigKeys::BINDPW));
-        $this->SetOption('basedn', $this->GetConfig(LdapConfigKeys::BASEDN));
-        $this->SetOption('filter', $this->GetConfig(LdapConfigKeys::FILTER));
-        $this->SetOption('scope', $this->GetConfig(LdapConfigKeys::SCOPE));
+        $connectionString = $this->GetValidatedConnectionString();
 
-        return $this->_options;
+        return [
+            'connectionString' => $connectionString,
+            'starttls' => $this->GetConfig(LdapConfigKeys::STARTTLS, new BooleanConverter()),
+            'version' => $this->GetConfig(LdapConfigKeys::VERSION, new IntConverter()),
+            'binddn' => $this->GetConfig(LdapConfigKeys::BINDDN),
+            'bindpw' => $this->GetConfig(LdapConfigKeys::BINDPW),
+            'basedn' => $this->BaseDn(),
+            'filter' => $this->GetConfig(LdapConfigKeys::FILTER),
+            'scope' => $this->GetScope(),
+        ];
     }
 
-    public function RetryAgainstDatabase()
+    public function RetryAgainstDatabase(): bool
     {
         return $this->GetConfig(LdapConfigKeys::RETRY_AGAINST_DATABASE, new BooleanConverter());
     }
 
-    public function Controllers()
+    /**
+     * @return string[]
+     */
+    public function Controllers(): array
     {
-        return $this->GetUris();
+        return $this->SplitAndValidateUris($this->GetValidatedConnectionString());
     }
 
-    private function SetOption($key, $value)
-    {
-        if (empty($value)) {
-            $value = null;
-        }
-
-        $this->_options[$key] = $value;
-    }
-
-    private function GetConfig($configDef, $converter = null)
+    /**
+     * @param array<string, mixed> $configDef
+     * @return mixed
+     */
+    private function GetConfig(array $configDef, $converter = null)
     {
         return Configuration::Instance()->File(LdapConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 
-    private function GetUris()
+    /**
+     * @return string
+     */
+    private function GetValidatedConnectionString(): string
     {
         $this->AssertLegacyHostPortNotConfigured();
 
@@ -77,7 +74,18 @@ class LdapOptions
             throw new RuntimeException("LDAP setting 'uri' is required and must contain at least one ldap:// or ldaps:// URI.");
         }
 
-        $uris = preg_split('/\s+/', $uriConfig) ?: [];
+        $this->SplitAndValidateUris($uriConfig);
+
+        return $uriConfig;
+    }
+
+    /**
+     * @param string $connectionString
+     * @return string[]
+     */
+    private function SplitAndValidateUris(string $connectionString): array
+    {
+        $uris = preg_split('/\s+/', trim($connectionString)) ?: [];
         foreach ($uris as $uri) {
             $scheme = parse_url($uri, PHP_URL_SCHEME);
             $host = parse_url($uri, PHP_URL_HOST);
@@ -92,31 +100,60 @@ class LdapOptions
         return $uris;
     }
 
-    private function AssertLegacyHostPortNotConfigured()
+    private function AssertLegacyHostPortNotConfigured(): void
     {
-        if (array_key_exists('host', $this->rawLdapSettings) || array_key_exists('port', $this->rawLdapSettings)) {
+        $legacyHost = trim($this->GetConfig([
+            'key' => 'host',
+            'section' => 'ldap',
+            'type' => 'string'
+        ]));
+        $legacyPort = trim($this->GetConfig([
+            'key' => 'port',
+            'section' => 'ldap',
+            'type' => 'string'
+        ]));
+
+        if (!empty($legacyHost) || !empty($legacyPort)) {
             throw new RuntimeException("LDAP settings 'host' and 'port' have been removed. Use only the 'uri' setting.");
         }
     }
 
-    public function BaseDn()
+    public function BaseDn(): string
     {
-        $baseDnKey = LdapConfigKeys::BASEDN['key'];
-        return $this->_options[$baseDnKey];
+        return trim($this->GetConfig(LdapConfigKeys::BASEDN));
     }
 
-    public function IsLdapDebugOn()
+    /**
+     * @return string|null
+     */
+    public function GetScope(): ?string
+    {
+        $scope = trim($this->GetConfig(LdapConfigKeys::SCOPE));
+        if ($scope === '') {
+            return null;
+        }
+
+        return $scope;
+    }
+
+    public function IsLdapDebugOn(): bool
     {
         return $this->GetConfig(LdapConfigKeys::DEBUG_ENABLED, new BooleanConverter());
     }
 
-    public function Attributes()
+    /**
+     * @return string[]
+     */
+    public function Attributes(): array
     {
         $attributes = $this->AttributeMapping();
         return array_values($attributes);
     }
 
-    public function AttributeMapping()
+    /**
+     * @return array<string, string>
+     */
+    public function AttributeMapping(): array
     {
         $attributes = [
             'sn' => 'sn',
@@ -142,12 +179,16 @@ class LdapOptions
     /**
      * @return string
      */
-    public function GetUserIdAttribute()
+    public function GetUserIdAttribute(): string
     {
-        $attribute = $this->GetConfig(LdapConfigKeys::USER_ID_ATTRIBUTE);
+        $attribute = trim((string)$this->GetConfig(LdapConfigKeys::USER_ID_ATTRIBUTE));
 
         if (empty($attribute)) {
             return 'uid';
+        }
+
+        if (!$this->IsValidLdapAttributeName($attribute)) {
+            throw new RuntimeException(sprintf("Invalid LDAP attribute name for user.id.attribute: '%s'", $attribute));
         }
 
         return $attribute;
@@ -156,23 +197,23 @@ class LdapOptions
     /**
      * @return string
      */
-    public function GetRequiredGroup()
+    public function GetRequiredGroup(): string
     {
-        return $this->GetConfig(LdapConfigKeys::REQUIRED_GROUP);
+        return (string)$this->GetConfig(LdapConfigKeys::REQUIRED_GROUP);
     }
 
     /**
      * @return string
      */
-    public function Filter()
+    public function Filter(): string
     {
-        return $this->GetConfig(LdapConfigKeys::FILTER);
+        return (string)$this->GetConfig(LdapConfigKeys::FILTER);
     }
 
     /**
      * @return bool
      */
-    public function SyncGroups()
+    public function SyncGroups(): bool
     {
         return $this->GetConfig(LdapConfigKeys::SYNC_GROUPS, new BooleanConverter());
     }
@@ -180,8 +221,14 @@ class LdapOptions
     /**
      * @return bool
      */
-    public function CleanUsername()
+    public function CleanUsername(): bool
     {
         return !$this->GetConfig(LdapConfigKeys::PREVENT_CLEAN_USERNAME, new BooleanConverter());
+    }
+
+    private function IsValidLdapAttributeName(string $attribute): bool
+    {
+        // Allow common attribute names (including underscore/dot variants) and OID notation.
+        return preg_match('/^([A-Za-z][A-Za-z0-9_.;-]*|[0-9]+(?:\.[0-9]+)+)$/', $attribute) === 1;
     }
 }
