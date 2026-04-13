@@ -23,7 +23,7 @@
         "microsoft/microsoft-graph": "^2.0",
         "joelbutcher/facebook-graph-sdk": "^6.1",
         "mobiledetect/mobiledetectlib": "^4.8",
-        "bacon/bacon-qr-code": "^3.0",
+        "bacon/bacon-qr-code": "^3.1",
         "mibe/feedwriter": "^1.1",
         "sabre/vobject": "^4.5",
         "egulias/email-validator": "^4.0",
