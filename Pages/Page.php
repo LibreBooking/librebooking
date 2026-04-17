@@ -94,16 +94,31 @@ abstract class Page implements IPage
 
         $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
 
-        $this->smarty->assign('LogoUrl', 'librebooking.png');
+        $logoUrl = 'librebooking.svg';
         if (file_exists($this->path . 'img/custom-logo.png')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.png');
+            $logoUrl = 'custom-logo.png';
         }
         if (file_exists($this->path . 'img/custom-logo.gif')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.gif');
+            $logoUrl = 'custom-logo.gif';
         }
         if (file_exists($this->path . 'img/custom-logo.jpg')) {
-            $this->smarty->assign('LogoUrl', 'custom-logo.jpg');
+            $logoUrl = 'custom-logo.jpg';
         }
+        if (file_exists($this->path . 'img/custom-logo.svg')) {
+            $logoUrl = 'custom-logo.svg';
+        }
+        $this->smarty->assign('LogoUrl', $logoUrl);
+
+        $logoSvgContent = null;
+        if (str_ends_with($logoUrl, '.svg')) {
+            $svgContent = file_get_contents($this->path . 'img/' . $logoUrl);
+            if ($svgContent !== false) {
+                // Strip the XML declaration so the SVG can be safely inlined into HTML
+                $svgContent = preg_replace('/<\?xml[^?]*\?>\s*/i', '', $svgContent);
+                $logoSvgContent = $svgContent;
+            }
+        }
+        $this->smarty->assign('LogoSvgContent', $logoSvgContent);
 
         $this->smarty->assign('CssUrl', 'null-style.css');
         if (file_exists($this->path . 'css/custom-style.css')) {

@@ -25,7 +25,7 @@
                 <ul class="list-group mb-2">
 
                     <li class="list-group-item">
-                        <h4>{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</h4>
+                        <h4>{translate key="Logo"} (*.png, *.gif, *.jpg, *.svg - Recommended height 75px)</h4>
                         <img src="{$ScriptUrl}/img/{$LogoUrl}" class="d-block mx-auto mw-100" />
                         <div class="d-flex align-items-center justify-content-center my-2">
                             <a href="{$ScriptUrl}/img/{$LogoUrl}" download="{$ScriptUrl}/img/{$LogoUrl}"
@@ -36,7 +36,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=LOGO_FILE} class="form-control" id="logoFile"
-                                accept=".png, .gif, .jpg, .jpeg" />
+                                accept=".png, .gif, .jpg, .jpeg, .svg" />
                             <a href="#" class="clearInput inline input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>

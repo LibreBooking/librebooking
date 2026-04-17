@@ -75,6 +75,39 @@ img.logo {
   max-height: 50px;
 }
 
+.navbar-brand {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  color: var(--primary);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.logo svg {
+  display: block;
+
+  /* 2× Bootstrap h5 line height (1.25rem × 1.2 × 2) */
+  height: 3rem;
+  width: auto;
+}
+
+.logo-svg {
+  color: var(--primary);
+  max-width: 240px;
+}
+
+.logo-svg svg {
+  display: block;
+  max-width: 100%;
+  height: var(--logo-height, 50px);
+  width: auto;
+}
+
 .nav-link:hover {
   color: var(--primary-hover) !important;
 }

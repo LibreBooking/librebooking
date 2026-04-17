@@ -116,7 +116,7 @@ class ManageThemePresenter extends ActionPresenter
     protected function LoadValidators($action)
     {
         $this->page->RegisterValidator('logoFile', new FileUploadValidator($this->page->GetLogoFile()));
-        $this->page->RegisterValidator('logoFileExt', new FileTypeValidator($this->page->GetLogoFile(), ['jpg', 'png', 'gif']));
+        $this->page->RegisterValidator('logoFileExt', new FileTypeValidator($this->page->GetLogoFile(), ['jpg', 'png', 'gif', 'svg']));
         $this->page->RegisterValidator('cssFile', new FileUploadValidator($this->page->GetCssFile()));
         $this->page->RegisterValidator('cssFileExt', new FileTypeValidator($this->page->GetCssFile(), 'css'));
         $this->page->RegisterValidator('faviconFile', new FileUploadValidator($this->page->GetFaviconFile()));
