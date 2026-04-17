@@ -131,6 +131,34 @@ LibreBooking ignores the custom version and logs an error.
 
      git describe --tags --long > config/custom-version.txt
 
+Maintenance Mode
+----------------
+
+LibreBooking can be placed into maintenance mode by creating a file named
+``maint.txt`` in the root directory of the installation.
+
+When ``<INSTALL_DIR>/maint.txt`` exists, normal page rendering is replaced
+with a maintenance notice. This is useful during upgrades, database
+migrations, or other planned maintenance windows where users should not use
+the application.
+
+**Enable maintenance mode**
+
+  .. code-block:: bash
+
+     touch maint.txt
+
+**Disable maintenance mode**
+
+  .. code-block:: bash
+
+     rm maint.txt
+
+The contents of ``maint.txt`` are not used. LibreBooking only checks whether
+the file exists. The maintenance notice text comes from the
+``MaintenanceNotice`` language string and can be customized with
+``config/lang-overrides.php``.
+
 Application Advanced Settings
 -----------------------------
 

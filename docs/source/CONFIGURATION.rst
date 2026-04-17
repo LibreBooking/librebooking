@@ -9,6 +9,7 @@ Basic Configuration
 For new installations and common settings, see :doc:`BASIC-CONFIGURATION`.
 
 This covers:
+
 - Essential settings to get started
 - Database configuration
 - Email setup
@@ -22,10 +23,12 @@ Advanced Configuration
 For detailed configuration and advanced features, see :doc:`ADVANCED-CONFIGURATION`.
 
 This covers:
+
 - All configuration options in detail
 - Advanced email and logging settings
 - Schedule and reservation behavior
 - Security headers and authentication providers
+- Maintenance mode
 - API configuration
 - Plugin system
 - Performance tuning
