@@ -465,7 +465,7 @@ class Queries
 
     public const GET_ALL_RESOURCE_TYPES = 'SELECT *,
 			(SELECT GROUP_CONCAT(CONCAT(`cav`.`custom_attribute_id`, \'=\', `cav`.`attribute_value`) SEPARATOR "!sep!")
-							FROM `custom_attribute_values` `cav` INNER JOIN `custom_attribute_entities` `cae` on `cav`.`custom_attribute_id` = cae.custom_attribute_id
+							FROM `custom_attribute_values` `cav`
 							WHERE `cav`.`entity_id` = `r`.`resource_type_id` AND `cav`.`attribute_category` = 5) as `attribute_list`
 							FROM `resource_types` `r`';
 
@@ -608,7 +608,7 @@ class Queries
 		WHERE `group_id` = @groupid';
 
     public const GET_GROUP_RESOURCES_ID =
-        'SELECT `resource_id` FROM `resources` 
+        'SELECT `resource_id` FROM `resources`
 		WHERE `admin_group_id` = @groupid';
 
     public const GET_GROUP_SCHEDULES_ID =
@@ -617,8 +617,8 @@ class Queries
 
     public const GET_RESOURCE_ADMIN_RESOURCES =
         'SELECT `resource_id`, `name` , `schedule_id`, `admin_group_id`
-		FROM `resources` 
-		WHERE `admin_group_id` 
+		FROM `resources`
+		WHERE `admin_group_id`
 		IN (
 			SELECT `g`.group_id
 			FROM `user_groups` `ug`
@@ -640,7 +640,7 @@ class Queries
     public const GET_SCHEDULE_ADMIN_RESOURCES =
         'SELECT `resource_id`, `name` , `schedule_id`, `admin_group_id`
 		FROM `resources`
-		WHERE `schedule_id` 
+		WHERE `schedule_id`
 		IN
 			(SELECT `schedule_id`
 			FROM `schedules`
@@ -1326,14 +1326,14 @@ class QueryBuilder
 
     public static function GET_RESERVATION_MISSING_CHECK_IN_OUT_LIST()
     {
-        return self::Build(self::$SELECT_LIST_FRAGMENT, null, ' AND 
+        return self::Build(self::$SELECT_LIST_FRAGMENT, null, ' AND
 					(@all_owners = 1 OR `ru`.`user_id` IN (@userid) ) AND
 					(@levelid = 0 OR `ru`.`reservation_user_level` = @levelid) AND
 					(@all_schedules = 1 OR `resources`.`schedule_id` IN (@scheduleid)) AND
 					(@all_resources = 1 OR `rr`.`resource_id` IN (@resourceid)) AND
 					(@all_participants = 1 OR `ri`.`reservation_instance_id` IN (SELECT `reservation_instance_id` FROM `reservation_users` WHERE `user_id` IN (@participant_id) AND `reservation_user_level` IN (2, 3))) AND
 					(@startDate IS NULL OR `ri`.`start_date` >= @startDate) AND (`ri`.`end_date` <= @endDate) AND
-					(`resources`.`enable_check_in` = 1) AND 
+					(`resources`.`enable_check_in` = 1) AND
 					(`ri`.`checkout_date` is NULL AND `ri`.`end_date` <= @current_date AND `ri`.`checkin_date` is NOT NULL)');
     }
 
