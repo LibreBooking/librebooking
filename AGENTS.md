@@ -318,6 +318,39 @@ Add a new schedules endpoint which allows getting the resources of a schedule.
 Closes: #2222
 ```
 
+### AI Attribution
+
+When an AI coding assistant contributed meaningfully to a commit (writing or
+significantly modifying code, suggesting the fix, generating tests, etc.),
+add an `Assisted-by` trailer to the commit message footer:
+
+```text
+Assisted-by: <AgentName>:<ModelVersion>
+```
+
+**Rules**:
+
+- Place `Assisted-by` in the commit footer, alongside any `Closes:` or
+  `BREAKING CHANGE:` lines
+- Use the agent name and model version that did the work (e.g.
+  `Claude:claude-sonnet-4-6`)
+- Omit the tag when the AI contribution was trivial (e.g. a one-word
+  suggestion accepted unchanged, or only autocomplete)
+- Do **not** add `Assisted-by` for purely mechanical operations (running
+  linters, reformatting, applying `composer fix`)
+
+**Example**:
+
+```text
+fix(reservations): correct overlap check for multi-day bookings
+
+The start-of-day boundary was calculated in UTC rather than the
+schedule's local timezone, causing false conflicts.
+
+Closes: #1234
+Assisted-by: Claude:claude-sonnet-4-6
+```
+
 ### Pull Request Guidelines
 
 1. **Target branch**: PRs should target `develop` (not main/master)
