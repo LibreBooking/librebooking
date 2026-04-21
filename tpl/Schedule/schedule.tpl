@@ -74,8 +74,17 @@
     {/if}
 
     {if $IsAccessible}
-        <div id="defaultSetMessage" class="alert alert-success d-none">
-            {translate key=DefaultScheduleSet}
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="defaultSetToast" class="toast align-items-center bg-primary text-white border-0 d-none" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle-fill me-2"></i>{translate key=DefaultScheduleSet}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="{translate key=Close}"></button>
+                </div>
+            </div>
         </div>
         {block name="schedule_control"}
             <div class="row">
@@ -85,31 +94,40 @@
                     <div id="schedule-actions" class="col-sm-3 col-12">
                         {block name="actions"}
                             <div class="d-flex align-items-center mb-2">
-                                <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}">
-                                    <span class="bi bi-printer schedule_icon"></span>
-                                </a>
-                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;"
-                                    title="{translate key='MakeDefaultSchedule'}">
-                                    <i class="bi bi-star-fill schedule_icon"></i>
-                                </a>
-                                <a href="#" class="schedule-style me-2 d-flex align-items-center" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard->value}"
+                                <div class="me-4 d-flex align-items-center gap-2">
+                                    <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}">
+                                        <i class="bi bi-printer schedule_icon"></i>
+                                    </a>
+                                    {if $LoggedIn}
+                                        <a href="#" id="make_default" class="link-primary" title="{translate key='MakeDefaultSchedule'}">
+                                            <i class="bi bi-star-fill schedule_icon"></i>
+                                        </a>
+                                    {/if}
+                                </div>
+                                <a href="#"
+                                    class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Standard->value} active{/if}"
+                                    id="schedule_standard" schedule-display="{ScheduleStyle::Standard->value}"
                                     title="{translate key='StandardScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table.png"
                                         alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style me-2 d-flex align-items-center" id="schedule_tall"
-                                    schedule-display="{ScheduleStyle::Tall->value}" title="{translate key='TallScheduleDisplay'}">
+                                <a href="#"
+                                    class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Tall->value} active{/if}"
+                                    id="schedule_tall" schedule-display="{ScheduleStyle::Tall->value}"
+                                    title="{translate key='TallScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-tall.png"
                                         alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-flex me-2 align-items-center" id="schedule_wide"
-                                    schedule-display="{ScheduleStyle::Wide->value}" title="{translate key='WideScheduleDisplay'}">
+                                <a href="#"
+                                    class="schedule-style d-none d-md-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
+                                    id="schedule_wide" schedule-display="{ScheduleStyle::Wide->value}"
+                                    title="{translate key='WideScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-wide.png"
                                         alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-flex align-items-center" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek->value}"
+                                <a href="#"
+                                    class="schedule-style d-none d-md-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
+                                    id="schedule_week" schedule-display="{ScheduleStyle::CondensedWeek->value}"
                                     title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-week.png"
                                         alt="{translate key='CondensedWeekScheduleDisplay'}" />
@@ -478,6 +496,7 @@
     $(document).ready(function() {
         const schedule = new Schedule(scheduleOpts, {$ResourceGroupsAsJson});
         schedule.init();
+
     });
 
     $('#schedules').select2({
