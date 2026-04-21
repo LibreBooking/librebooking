@@ -528,7 +528,6 @@
 {control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
 {control type="DatePickerSetupControl" ControlId="RepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone) Multiple=false}
 
-{vendor_js src="moment/2.13.0/js/moment.min.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="userPopup.js"}
 {jsfile src="date-helper.js"}
