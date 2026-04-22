@@ -128,7 +128,11 @@
                                         <div class="reservable clickres" ref="{$href}&rd={formatdate date=$date key=url}"
                                             data-href="{$href}" data-start="{$date->Format('Y-m-d H:i:s')|escape:url}"
                                             data-end="{$date->Format('Y-m-d H:i:s')|escape:url}">
-                                            <i class="bi bi-plus-circle-fill"></i> {translate key=CreateReservation}
+                                            <i class="bi bi-plus-circle-fill" ref="{$href}&rd={formatdate date=$date key=url}"
+                                                data-href="{$href}" data-start="{$date->Format('Y-m-d H:i:s')|escape:url}"
+                                                data-end="{$date->Format('Y-m-d H:i:s')|escape:url}">
+                                            </i> 
+                                            {translate key=CreateReservation}
                                             <input type="hidden" class="href" value="{$href}" />
                                         </div>
                                     {/if}
@@ -161,4 +165,4 @@
             });
         });
     </script>
-{/block}Z
+{/block}
