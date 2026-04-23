@@ -843,27 +843,38 @@ function Schedule(opts, resourceGroups) {
     });
   };
 
-  this.initUserDefaultSchedule = function (anonymous) {
-    var makeDefaultButton = $('#make_default');
-    if (anonymous) {
-      makeDefaultButton.hide();
-      return;
-    }
+  this.initUserDefaultSchedule = function () {
+    const makeDefaultButton = document.getElementById('make_default');
+    const scheduleInput = document.getElementById('scheduleId');
 
-    makeDefaultButton.show();
+    if (!makeDefaultButton) return;
 
-    var defaultSetMessage = $('#defaultSetMessage');
-    makeDefaultButton.click(function (e) {
+    makeDefaultButton.addEventListener('click', function (e) {
       e.preventDefault();
-      var scheduleId = $('#scheduleId').val();
-      var changeDefaultUrl = options.setDefaultScheduleUrl.replace('[scheduleId]', scheduleId);
 
-      $.ajax({
-        url: changeDefaultUrl,
-        success: function (data) {
-          defaultSetMessage.show().delay(5000).fadeOut();
-        },
-      });
+      const scheduleId = scheduleInput.value;
+      const changeDefaultUrl = options.setDefaultScheduleUrl.replace('[scheduleId]', scheduleId);
+
+      fetch(changeDefaultUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Request failed with status ${response.status}${response.statusText ? ` ${response.statusText}` : ''}`
+            );
+          }
+          return response.json().catch(() => null);
+        })
+        .then(() => {
+          // Toast to display a success message when changing the default schedule
+          const toastEl = document.getElementById('defaultSetToast');
+          if (toastEl && window.bootstrap && window.bootstrap.Toast) {
+            toastEl.classList.remove('d-none');
+            window.bootstrap.Toast.getOrCreateInstance(toastEl).show();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     });
   };
 

@@ -46,6 +46,41 @@ var dateHelper = (function () {
     };
   }
 
+  // Pads a number to 2 digits with leading zero
+  const pad = (n) => n.toString().padStart(2, '0');
+
+  /**
+   * Formats a Date object as 'YYYY-MM-DD' or 'YYYY-MM-DD HH:mm'.
+   *
+   * By default, uses local time components (getFullYear, getMonth, getDate, etc.).
+   * Set useUtc=true to use UTC components (getUTCFullYear, ...).
+   *
+   * WARNING: For Date objects created from 'YYYY-MM-DD' (e.g., via parseYMDDate),
+   * using toISOString() or UTC methods will shift the day if your local timezone is behind UTC.
+   * Always use the default (local) mode for calendar and reservation logic unless you explicitly need UTC.
+   *
+   * Examples:
+   *   formatDate(new Date(2026, 3, 22))            // '2026-04-22' (local)
+   *   formatDate(new Date(2026, 3, 22, 15, 30), true) // '2026-04-22 15:30' (local)
+   *   formatDate(new Date(Date.UTC(2026, 3, 22)), false, true) // '2026-04-22' (UTC)
+   *
+   * @param {Date} date
+   * @param {boolean} withTime - If true, includes ' HH:mm'
+   * @param {boolean} useUtc - If true, uses UTC components (default: false)
+   * @returns {string}
+   */
+  function formatDate(date, withTime = false, useUtc = false) {
+    if (!(date instanceof Date) || isNaN(date)) return '';
+    const y = useUtc ? date.getUTCFullYear() : date.getFullYear();
+    const m = useUtc ? date.getUTCMonth() + 1 : date.getMonth() + 1;
+    const d = useUtc ? date.getUTCDate() : date.getDate();
+    const ymd = y + '-' + pad(m) + '-' + pad(d);
+    if (!withTime) return ymd;
+    const hh = useUtc ? date.getUTCHours() : date.getHours();
+    const mm = useUtc ? date.getUTCMinutes() : date.getMinutes();
+    return ymd + ' ' + pad(hh) + ':' + pad(mm);
+  }
+
   /**
    * Parses a time string into a Date object (today's date).
    *
@@ -93,7 +128,6 @@ var dateHelper = (function () {
    *   text: string   // Human-readable representation according to format
    * }}
    */
-  const pad = (n) => n.toString().padStart(2, '0');
 
   function formatTime(hour24, minute, format) {
     const value = `${pad(hour24)}:${pad(minute)}`; // internal value always 24h
@@ -191,7 +225,26 @@ var dateHelper = (function () {
     }
   }
 
+  /**
+   * Parses a 'YYYY-MM-DD' string into a Date object (local time).
+   *
+   * @param {string} ymd - Date string in 'YYYY-MM-DD' format
+   * @returns {Date|null}
+   */
+  function parseYMDDate(ymd) {
+    if (!ymd || typeof ymd !== 'string') return null;
+    var parts = ymd.split('-');
+    if (parts.length !== 3) return null;
+    var year = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1;
+    var day = parseInt(parts[2], 10);
+    if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
+    return new Date(year, month, day);
+  }
+
   return {
+    formatDate,
+    parseYMDDate,
     MoreThanOneDayBetweenBeginAndEnd: function (beginDateElement, beginTimeElement, endDateElement, endTimeElement) {
       var begin = this.GetDate(beginDateElement, beginTimeElement);
       var end = this.GetDate(endDateElement, endTimeElement);

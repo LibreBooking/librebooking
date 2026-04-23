@@ -348,8 +348,10 @@ ul.jqtree-tree .jqtree-toggler {
   top: 10%;
 }
 
-#make_default {
-  padding-right: 10px;
+.schedule-style.active {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .table-cell-wrapper {

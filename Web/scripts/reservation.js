@@ -85,7 +85,7 @@ function Reservation(opts) {
 
   Reservation.prototype.init = function (ownerId, startDateString, endDateString) {
     _ownerId = ownerId;
-    _startDate = moment(startDateString, 'YYYY-MM-DD HH:mm');
+    _startDate = new Date(startDateString.replace(' ', 'T'));
     participation.addedUsers.push(ownerId);
 
     SetUpAdHocEmail();
@@ -639,8 +639,8 @@ function Reservation(opts) {
         $(v).prop('checked', false);
       });
 
-    var date = moment(elements.beginDate.val() + 'T' + elements.beginTime.val());
-    var checkbox = $('#repeatDay' + date.day());
+    var date = dateHelper.GetDate(elements.beginDate, elements.beginTime);
+    var checkbox = $('#repeatDay' + date.getDay());
     checkbox.prop('checked', true);
     checkbox.parent().addClass('active');
   };
@@ -839,21 +839,25 @@ function Reservation(opts) {
     });
 
     var previousDateEndsAtMidnight = function (scheduleId, date) {
-      var currDate = moment(date, 'YYYY-MM-DD');
-      currDate.subtract(1, 'days');
-      var weekday = currDate.day();
+      var currDate = dateHelper.parseYMDDate(date);
+      if (!currDate) return false;
+      // Subtract one day to view the layout of the previous day.
+      var prevDate = new Date(currDate.getTime());
+      prevDate.setDate(prevDate.getDate() - 1);
+      var weekday = prevDate.getDay();
 
       if (layoutCache[weekday] == null) {
-        getLayoutItems(scheduleId, currDate.format('Y-M-D'));
+        getLayoutItems(scheduleId, dateHelper.formatDate(prevDate));
       }
 
       var lastPeriod = _.last(layoutCache[weekday]);
-      return lastPeriod.isReservable == true && lastPeriod.end == '00:00:00';
+      return lastPeriod && lastPeriod.isReservable == true && lastPeriod.end == '00:00:00';
     };
 
     var getLayoutItems = function (scheduleId, date) {
-      var currDate = moment(date, 'YYYY-MM-DD');
-      var weekday = currDate.day();
+      var currDate = dateHelper.parseYMDDate(date);
+      if (!currDate) return [];
+      var weekday = currDate.getDay();
 
       if (layoutCache[weekday] != null) {
         return layoutCache[weekday];
@@ -1076,8 +1080,8 @@ function Reservation(opts) {
       if (autoReleaseMinutes != '') {
         var interval;
         var updateAutoReleaseMinutes = function () {
-          var ms = _startDate.diff(moment());
-          var releaseMinutesText = Math.max(0, Math.ceil(moment.duration(ms).asMinutes()) + autoReleaseMinutes);
+          var ms = _startDate.getTime() - Date.now();
+          var releaseMinutesText = Math.max(0, Math.ceil(ms / 60000) + autoReleaseMinutes);
           $('.autoReleaseMinutes').text(releaseMinutesText);
 
           if (releaseMinutesText <= 0) {
