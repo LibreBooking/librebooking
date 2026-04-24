@@ -47,6 +47,13 @@
   --text-color-btn: #ffffff;
 }
 
+[data-bs-theme='cake_blue'] {
+  --primary: #003873;
+  --primary-hover: #002042;
+  --primary-disabled: #909090;
+  --text-color-btn: #ffffff;
+}
+
 [data-bs-theme='orange'] {
   --primary: #b05e2a;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
