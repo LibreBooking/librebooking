@@ -13,43 +13,43 @@
 
 [data-bs-theme='default'] {
   --primary: #669999;
-  --primary-hover: #527a7a;
-  --primary-disabled: #85adad;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dimgray'] {
   --primary: #696969;
-  --primary-hover: #595959;
-  --primary-disabled: #808080;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dark_red'] {
   --primary: #8b0000;
-  --primary-hover: #660000;
-  --primary-disabled: #b30000;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dark_green'] {
   --primary: #006400;
-  --primary-hover: #003300;
-  --primary-disabled: #009900;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='french_blue'] {
   --primary: #0072b5;
-  --primary-hover: #005180;
-  --primary-disabled: #0091e6;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='orange'] {
   --primary: #be6e34;
-  --primary-hover: #a05c2c;
-  --primary-disabled: #e4b99b;
+  --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+  --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
@@ -552,17 +552,6 @@ input.mid-number {
   font-size: 14px;
   min-width: 450px;
   text-align: left;
-}
-
-.fc-past {
-  background-color: var(--pasttime) !important;
-  color: #333;
-}
-
-.fc-future.hover {
-  background-color: var(--hiliteReservation) !important;
-  color: #ffffff;
-  cursor: pointer;
 }
 
 .resourceName {

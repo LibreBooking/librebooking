@@ -431,7 +431,13 @@
     {csrf_token}
 </form>
 
-<div id="loading-schedule" class="d-none">Loading reservations...</div>
+<div id="loading-schedule" class="d-none d-flex align-items-center gap-2 p-3 border rounded-2 bg-white
+opacity-75">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">{translate key='Working'}</span>
+    </div>
+    <span aria-hidden="true">{translate key='Working'}</span>
+</div>
 
 {include file="javascript-includes.tpl" Select2=true Clear=true DatePicker=true}
 

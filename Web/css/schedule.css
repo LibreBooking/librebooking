@@ -46,7 +46,7 @@ table.reservations td.resourcename a:hover {
 table.reservations td.resdate {
   width: 150px;
   padding: 0 3px;
-  background-color: #36648b;
+  background-color: color-mix(in srgb, var(--reserved) 60%, black);
   color: #f0f0f0;
 }
 
@@ -207,7 +207,7 @@ td.dropped {
 }
 
 .reserved.hilite {
-  opacity: 0.75;
+  background-color: color-mix(in srgb, var(--reserved), white 30%);
 }
 
 .reserved.mine {
@@ -215,7 +215,7 @@ td.dropped {
 }
 
 .reserved.mine.hilite {
-  opacity: 0.75;
+  background-color: color-mix(in srgb, var(--reservedMine), white 30%);
   color: #ffffff;
 }
 
@@ -224,11 +224,11 @@ td.dropped {
 }
 
 .reserved.participating.hilite {
-  opacity: 0.75;
+  background-color: color-mix(in srgb, var(--reservedParticipating), white 30%);
 }
 
 .past {
-  opacity: 0.6;
+  background-color: color-mix(in srgb, var(--reserved), white 40%);
 }
 
 .reserved.pending {
@@ -237,12 +237,12 @@ td.dropped {
 }
 
 .reserved.pending.hilite {
-  opacity: 0.75;
+  background-color: color-mix(in srgb, var(--reservedPending), white 30%);
 }
 
 .reservable.hilite,
 #reservations .ui-selecting {
-  background-color: #23bf35;
+  background-color: var(--hiliteReservation);
 }
 
 .hilite {
@@ -251,7 +251,7 @@ td.dropped {
 
 .reservable.clicked,
 #reservations .ui-selected {
-  background-color: #259433;
+  background-color: var(--hiliteReservation);
 }
 
 .reserved.clicked {
@@ -414,12 +414,7 @@ ul.jqtree-tree .jqtree-toggler {
 }
 
 #calendar_toggle {
-  color: #585754;
   padding-left: 5px;
-}
-
-#calendar_toggle:hover {
-  color: #72716d;
 }
 
 .schedule_icon {
@@ -434,22 +429,11 @@ img.schedule_icon {
 
 #loading-schedule {
   position: fixed;
-  height: 30px;
-  background-color: rgb(76 175 80 / 0.7);
-  border: solid 2px rgb(32 65 32 / 0.7);
-  top: 300px;
+  top: 50%;
   left: 50%;
-  z-index: 101;
-  width: auto;
-  padding: 0 30px;
-  line-height: 30px;
-  text-align: center;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  display: inline-block;
-  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  z-index: 101;
+  display: inline-block;
 }
 
 #page-schedule a {
@@ -462,10 +446,6 @@ img.schedule_icon {
   border-radius: 1px;
   padding: 1px 2px;
   margin: 1px;
-}
-
-a.toggle-sidebar {
-  color: #585754;
 }
 
 .no-resource-warning {
