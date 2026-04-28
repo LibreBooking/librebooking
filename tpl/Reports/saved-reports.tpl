@@ -33,7 +33,8 @@
 									{foreach from=$ReportList item=report}
 										<tr reportId="{$report->Id()}">
 											<td><span class="fw-bold">{$report->ReportName()|default:$untitled}</span></td>
-											<td class="right"><span
+											<td data-order="{format_date date=$report->DateCreated() format='Y-m-d H:i:s'}">
+												<span
 													class="report-created-date fst-italic">{format_date date=$report->DateCreated()}</span>
 											</td>
 

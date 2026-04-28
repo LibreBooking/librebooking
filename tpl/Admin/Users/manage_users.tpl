@@ -107,8 +107,11 @@
                                 <td>{$user->Phone}</td>
                                 <td>{$user->Organization}</td>
                                 <td>{$user->Position}</td>
-                                <td>{format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
-                                <td>{format_date date=$user->LastLogin key=short_datetime timezone=$Timezone}</td>
+                                <td
+                                    data-order="{format_date date=$user->DateCreated format='Y-m-d H:i' timezone=$Timezone}">
+                                    {format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
+                                <td data-order="{format_date date=$user->LastLogin format='Y-m-d H:i' timezone=$Timezone}">
+                                    {format_date date=$user->LastLogin key=short_datetime timezone=$Timezone}</td>
                                 <td class="action"><a href="#"
                                         class="update changeStatus link-primary">{$statusDescriptions[$user->StatusId]}</a>
                                     {indicator id="userStatusIndicator"}

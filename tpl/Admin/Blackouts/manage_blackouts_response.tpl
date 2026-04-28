@@ -27,8 +27,10 @@
 						<tr>
 							<td>{if !empty($blackout->Title)}{$blackout->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}
 							</td>
-							<td>{formatdate date=$blackout->StartDate timezone=$Timezone key=res_popup}</td>
-							<td>{formatdate date=$blackout->EndDate timezone=$Timezone key=res_popup}</td>
+							<td data-order="{formatdate date=$blackout->StartDate timezone=$Timezone format='Y-m-d H:i:s'}">
+								{formatdate date=$blackout->StartDate timezone=$Timezone key=res_popup}</td>
+							<td data-order="{formatdate date=$blackout->EndDate timezone=$Timezone format='Y-m-d H:i:s'}">
+								{formatdate date=$blackout->EndDate timezone=$Timezone key=res_popup}</td>
 						</tr>
 					{/foreach}
 				</tbody>
