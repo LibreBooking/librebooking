@@ -49,7 +49,7 @@
                                 {object_html_options options=$Languages key='GetLanguageCode' label='GetDisplayName' selected=$setting->Value|strtolower}
                             </select>
                         {elseif $setting->Key == $DefaultHomepageKey}
-                            <select id="default__homepage" name="{$name}" {$disabled} class="form-select form-select-sm">
+                            <select id="default__homepage|" name="{$name}" {$disabled} class="form-select form-select-sm">
                                 {html_options options=$setting->Choices  selected=$setting->Value}
                             </select> <a href="#" id="applyHomepage" class="link-primary">{translate key=ApplyToCurrentUsers}</a>
                         {elseif $setting->IsPrivate}
@@ -102,7 +102,7 @@
         <div class="card shadow">
             <div class="card-body">
                 {assign var=HelpUrl value="https://github.com/LibreBooking/librebooking/wiki/Administration"}
-                <h3 class="text-center border-bottom mb-3">{translate key=ConfigurationUpdateHelp args=$HelpUrl}</h3>
+                <h2 class="text-center border-bottom mb-3">{translate key=ConfigurationUpdateHelp args=$HelpUrl}</h2>
                 <div id="updatedMessage" class="alert alert-success" style="display:none;">
                     {translate key=ConfigurationUpdated}
                 </div>

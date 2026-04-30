@@ -41,8 +41,9 @@
                             <td>{$rule->RequiredValue}</td>
                             <td style="background-color:{$rule->Color}">&nbsp;</td>
                             <td class="action">
-                                <a href="#" class="update delete" ruleId="{$rule->Id}"><span
-                                        class="bi bi-trash3-fill icon text-danger remove"></span></a>
+                                <a href="#" class="update delete" ruleId="{$rule->Id}" aria-label="{translate key=Delete}">
+                                    <span class="bi bi-trash3-fill icon text-danger remove"></span>
+                                </a>
                             </td>
                         </tr>
                     {/foreach}

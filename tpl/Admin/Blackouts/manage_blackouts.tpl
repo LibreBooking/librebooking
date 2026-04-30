@@ -189,18 +189,18 @@
 								<td class="date">{formatdate date=$blackout->EndDate timezone=$Timezone key=res_popup}</td>
 								<td>{$blackout->Title}</td>
 								<td>{fullname first=$blackout->FirstName last=$blackout->LastName}</td>
-								<td class="update edit"><a class="link-primary" href="#"><i
-											class="bi bi-pencil-square"></i></a>
+								<td class="update edit"><a href="#" class="link-primary"
+										aria-label="{translate key=Edit}"><i class="bi bi-pencil-square"></i></a>
 								</td>
 								{if $blackout->IsRecurring}
 									<td class="update">
-										<a href="#" class="update delete-recurring"><i
-												class="bi bi-trash3-fill text-danger icon remove"></i></a>
+										<a href="#" class="update delete-recurring" aria-label="{translate key=Delete}"><i
+												class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
 									</td>
 								{else}
 									<td class="update">
-										<a href="#" class="update delete"><i
-												class="bi bi-trash3-fill text-danger icon remove"></i></a>
+										<a href="#" class="update delete" aria-label="{translate key=Delete}"><i
+												class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
 									</td>
 								{/if}
 								<td class="action-delete">

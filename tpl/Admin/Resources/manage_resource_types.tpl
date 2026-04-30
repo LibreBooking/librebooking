@@ -67,15 +67,19 @@
 							<td>{$type->Name()}</td>
 							<td>{$type->Description()|nl2br}</td>
 							<td class="action">
-								<a href="#" class="update edit link-primary"><span class="bi bi-pencil-square icon"></a> |
-								<a href="#" class="update delete"><span
-										class="bi bi-trash3-fill text-danger icon remove"></span></a>
+								<a href="#" class="update edit link-primary" aria-label="{translate key=Edit}">
+									<span class="bi bi-pencil-square icon"></span>
+								</a> |
+								<a href="#" class="update delete" aria-label="{translate key=Delete}">
+									<span class="bi bi-trash3-fill text-danger icon remove"></span>
+								</a>
 								<input type="hidden" class="id" value="{$id}" />
 							</td>
 							{if $AttributeList|default:array()|count > 0}
 								<td>
 									{foreach from=$AttributeList item=attribute}
-										{include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourceTypesActions::ChangeAttribute}" id=$id attribute=$attribute value=$type->GetAttributeValue($attribute->Id())}
+										{include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourceTypesActions::ChangeAttribute}"
+										id=$id attribute=$attribute value=$type->GetAttributeValue($attribute->Id())}
 									{/foreach}
 								</td>
 							{/if}

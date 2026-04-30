@@ -42,7 +42,7 @@
 				<div class="d-flex justify-content-center gap-5">
 					<div id="group-tree"></div>
 					<div id="resource-list">
-						<h4>{translate key=Resources}</h4>
+						<div class="fs-4">{translate key=Resources}</div>
 						{foreach from=$Resources item=resource}
 							<div class="resource-draggable" resource-name="{$resource->GetName()|escape:javascript}"
 								resource-id="{$resource->GetId()}">{$resource->GetName()}</div>

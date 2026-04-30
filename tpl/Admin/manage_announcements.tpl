@@ -134,12 +134,12 @@
 								</td>
 								<td class="action announcementActions">
 									<a href="#" title="{translate key=Edit}" class="update edit link-primary"><span
-											class="bi bi-pencil-square icon"></a>
-									<div class="vr"></div>
+											class="bi bi-pencil-square icon"></span></a>
+									<div class="vr mx-1"></div>
 									{if $announcement->CanEmail()}
 										<a href="#" title="{translate key=Email}" class="update sendEmail link-primary"><span
-												class="bi bi-envelope icon"></a>
-										<div class="vr"></div>
+												class="bi bi-envelope icon"></span></a>
+										<div class="vr mx-1"></div>
 									{/if}
 									<a href="#" title="{translate key=Delete}" class="update delete"><span
 											class="bi bi-trash3-fill text-danger icon remove"></span></a>

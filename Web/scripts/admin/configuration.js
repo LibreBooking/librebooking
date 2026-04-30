@@ -21,7 +21,7 @@ function Configuration() {
 
     elements.updateHomepageButton.click(function (e) {
       e.preventDefault();
-      $('#homepage_id').val($('#default__homepage').val());
+      $('#homepage_id').val($('#default__homepage\\|').val());
       elements.updateHomepageForm.submit();
     });
 

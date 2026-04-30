@@ -13,9 +13,9 @@
                         <div class="d-flex align-items-start">
                             <i class="bi bi-calendar-check fs-5 link-primary mt-1 me-2"></i>
                             <div>
-                                <h6 class="mb-0 d-block">{translate key=Reservations}
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=Reservations}
                                     <span class="badge bg-primary ms-2">{$ReservationCount}</span>
-                                </h6>
+                                </div>
                                 <div class="text-muted small">{translate key=DeleteReservationsBefore}</div>
                             </div>
                         </div>
@@ -40,9 +40,9 @@
                         <div class="d-flex align-items-start">
                             <i class="bi bi-trash fs-5 text-warning mt-1 me-2"></i>
                             <div>
-                                <h6 class="mb-0 d-block">{translate key=DeletedReservations}
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=DeletedReservations}
                                     <span class="badge bg-warning text-dark ms-2">{$DeletedReservationCount}</span>
-                                </h6>
+                                </div>
                                 <div class="text-muted small">{translate key=PermanentlyPurgeAllDeletedReservations}
                                 </div>
                             </div>
@@ -63,9 +63,9 @@
                         <div class="d-flex align-items-start">
                             <i class="bi bi-clock-history fs-5 link-primary mt-1 me-2"></i>
                             <div>
-                                <h6 class="mb-0 d-block">{translate key=ManageBlackouts}
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=ManageBlackouts}
                                     <span class="badge bg-primary ms-2">{$BlackoutsCount}</span>
-                                </h6>
+                                </div>
                                 <div class="text-muted small">{translate key=DeleteBlackoutsBefore}</div>
                             </div>
                         </div>
@@ -90,9 +90,9 @@
                         <div class="d-flex align-items-start">
                             <i class="bi bi-person-x fs-5 link-primary mt-1 me-2"></i>
                             <div>
-                                <h6 class="mb-0 d-block">{translate key=Users}
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=Users}
                                     <span class="badge bg-primary ms-2">{$UserCount}</span>
-                                </h6>
+                                </div>
                                 <div class="text-muted small">{translate key=PermanentlyDeleteUsers}</div>
                             </div>
                         </div>

@@ -4,27 +4,25 @@
     <div class="border-bottom mb-3 clearfix">
         <div class="dropdown admin-header-more float-end">
             <div class="btn-group btn-group-sm">
-                <a role="menuitem" href="#" class="add-group btn btn-primary" id="add-group"><i
-                        class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="AddGroup"}
-
+                <a href="#" class="add-group btn btn-primary" id="add-group">
+                    <i class="bi bi-plus-circle-fill me-1"></i>
+                    {translate key="AddGroup"}
                 </a>
                 <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
-                    data-bs-toggle="dropdown">
-                    <span class="visually-hidden">{translate key='More'}</span>
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="{translate key='More'}">
                     <i class="bi bi-three-dots"></i>
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="moreResourceActions">
-                    <li role="presentation">
-                        <a role="menuitem" href="#" class="import-groups dropdown-item" id="import-groups"
-                            data-bs-toggle="modal" data-bs-target="#importGroupsDialog">
+                <ul class="dropdown-menu" aria-labelledby="moreResourceActions">
+                    <li>
+                        <a href="#" class="import-groups dropdown-item" id="import-groups" data-bs-toggle="modal"
+                            data-bs-target="#importGroupsDialog">
                             <i class="bi bi-download me-1"></i>{translate key="Import"}
                         </a>
                     </li>
-                    <li role="presentation">
-                        <a role="menuitem" href="{$smarty.server.SCRIPT_NAME}?dr=export"
-                            download="{$smarty.server.SCRIPT_NAME}?dr=export" class="export-groups dropdown-item"
-                            id="export-groups" target="_blank"> <i
-                                class="bi bi-upload me-1"></i>{translate key="Export"}
+                    <li>
+                        <a href="{$smarty.server.SCRIPT_NAME}?dr=export" download class="export-groups dropdown-item"
+                            id="export-groups" target="_blank">
+                            <i class="bi bi-upload me-1"></i>{translate key="Export"}
                         </a>
                     </li>
                 </ul>
@@ -71,8 +69,7 @@
                                         <div class="btn-group btn-group-sm">
                                             <a href="#" class="update roles btn btn-outline-primary">{translate key='Change'}</a>
                                             <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"
-                                                data-bs-toggle="dropdown">
-                                                <span class="visually-hidden">{translate key=More}</span>
+                                                data-bs-toggle="dropdown" aria-label="{translate key='More'}">
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                                 <li>
@@ -116,9 +113,10 @@
                                 {/if}
                             </td>
                             <td class="action">
-                                <a href="#" class="update rename link-primary"><span class="bi bi-pencil-square icon"></a> |
-                                <a href="#" class="update delete"><span
-                                        class="bi bi-trash3-fill text-danger icon remove"></span></a>
+                                <a href="#" class="update rename link-primary" aria-label="{translate key=Edit}">
+                                    <span class="bi bi-pencil-square icon"></span></a> |
+                                <a href="#" class="update delete" aria-label="{translate key=Delete}">
+                                    <span class="bi bi-trash3-fill text-danger icon remove"></span></a>
                             </td>
                         </tr>
                     {/foreach}
@@ -517,9 +515,9 @@
                             <a class="alert-link" href="{$smarty.server.SCRIPT_NAME}">{translate key=Done}</a>
                         </div>
                         <div class="">
+                            <label class="visually-hidden" for="groupsImportFile">{translate key=File}</label>
                             <input type="file" class="form-control" {formname key=GROUP_IMPORT_FILE}
                                 id="groupsImportFile" />
-                            <label for="groupsImportFile" class="visually-hidden">Group Import File</label>
                             <div class="form-check mt-1">
                                 <input class="form-check-input" type="checkbox" id="updateOnImport"
                                     {formname key=UPDATE_ON_IMPORT} />

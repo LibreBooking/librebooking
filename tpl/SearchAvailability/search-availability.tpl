@@ -27,14 +27,14 @@
                         <div class="input-group input-group-sm">
                             <input type="number" min="0" step="1" value="0" class="form-control hours-minutes"
                                 id="hours" {formname key=HOURS} autofocus="autofocus" />
-                            <label class="input-group-text hours-minutes">{translate key=Hours}</label>
+                            <label class="input-group-text hours-minutes" for="hours">{translate key=Hours}</label>
                         </div>
                     </div>
                     <div class="form-group col-6 col-sm-2 me-1 me-md-5">
                         <div class="input-group input-group-sm">
                             <input type="number" min="0" step="5" value="30" class="form-control hours-minutes"
                                 id="minutes" {formname key=MINUTES} />
-                            <span class="input-group-text hours-minutes" for="minutes">{translate key=Minutes}</span>
+                            <label class="input-group-text hours-minutes" for="minutes">{translate key=Minutes}</label>
                         </div>
                     </div>
 

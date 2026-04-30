@@ -189,22 +189,25 @@
                     <div class="schedule-dates d-flex justify-content-center mt-2 fs-5 gap-2">
                         {assign var=TodaysDate value=Date::Now()}
                         <a href="#" class="change-date link-primary" data-year="{$TodaysDate->Year()}"
-                            data-month="{$TodaysDate->Month()}" data-day="{$TodaysDate->Day()}" alt="{translate key=Today}"><i
-                                class="bi bi-house-fill"></i>
-                            <span class="visually-hidden">{translate key=Today}</span>
+                            data-month="{$TodaysDate->Month()}" data-day="{$TodaysDate->Day()}" aria-label="{translate key=Today}">
+                            <i class="bi bi-house-fill" aria-hidden="true"></i>
                         </a>
                         {assign var=FirstDate value=$DisplayDates->GetBegin()}
                         {assign var=LastDate value=$DisplayDates->GetEnd()->AddDays(-1)}
                         <a href="#" class="change-date link-primary" data-year="{$PreviousDate->Year()}"
-                            data-month="{$PreviousDate->Month()}" data-day="{$PreviousDate->Day()}"><i
-                                class="bi bi-arrow-left-circle-fill"></i></a>
+                            data-month="{$PreviousDate->Month()}" data-day="{$PreviousDate->Day()}"
+                            aria-label="{translate key=PreviousWeek}">
+                            <i class="bi bi-arrow-left-circle-fill" aria-hidden="true"></i>
+                        </a>
                         {formatdate date=$FirstDate}
                         {if $ShowWeekNumbers}({$FirstDate->WeekNumber()}){/if}
                         -
                         {formatdate date=$LastDate}
                         {if $ShowWeekNumbers}({$LastDate->WeekNumber()}){/if}
                         <a href="#" class="change-date link-primary" data-year="{$NextDate->Year()}" data-month="{$NextDate->Month()}"
-                            data-day="{$NextDate->Day()}"><i class="bi bi-arrow-right-circle-fill"></i></a>
+                            data-day="{$NextDate->Day()}" aria-label="{translate key=NextWeek}">
+                            <i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i>
+                        </a>
                     </div>
                     {if $ShowFullWeekLink}
                         <div class="d-flex justify-content-center fs-5">

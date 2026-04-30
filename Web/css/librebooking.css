@@ -75,6 +75,13 @@ img.logo {
   max-height: 50px;
 }
 
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:focus-visible {
+  color: var(--text-color-btn);
+  background-color: var(--primary);
+}
+
 .nav-link:hover {
   color: var(--primary-hover) !important;
 }
@@ -706,6 +713,10 @@ span.flatpickr-weekday {
 .fc .fc-daygrid-day-number {
   color: var(--bs-body-color);
   text-decoration: none;
+}
+
+.fc .fc-daygrid-event-harness {
+  margin-bottom: 5px;
 }
 
 .fc-daygrid-event-dot,

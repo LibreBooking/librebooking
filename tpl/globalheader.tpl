@@ -132,7 +132,8 @@
         <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
             <div class="container-fluid">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
-                    data-bs-target="#librebooking-navigation">
+                    data-bs-target="#librebooking-navigation" aria-controls="librebooking-navigation" aria-expanded="false"
+                    aria-label="{translate key=ShowHideNavigation}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="librebooking-navigation">
@@ -432,4 +433,4 @@
         </nav>
     {/if}
 
-<div id="main" class="container-fluid my-3">
+<div id="main" class="container-fluid my-3" role="main">

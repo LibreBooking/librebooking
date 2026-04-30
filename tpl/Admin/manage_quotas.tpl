@@ -259,8 +259,10 @@
 										<span class="fw-bold">{$scope}</span>.
 										{translate key=QuotaEnforcement args="$enforceHours,$enforceDays"}
 									</div>
-									<a href="#" quotaId="{$quota->Id}" class="delete float-end"><span
-											class="bi bi-trash3-fill text-danger icon remove"></span></a>
+									<a href="#" quotaId="{$quota->Id}" class="delete float-end"
+										aria-label="{translate key=Delete}">
+										<span class="bi bi-trash3-fill text-danger icon remove"
+											aria-hidden="true"></span></a>
 								</td>
 							</tr>
 						{foreachelse}
