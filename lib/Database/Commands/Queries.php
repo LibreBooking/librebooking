@@ -92,6 +92,11 @@ class Queries
         'INSERT INTO `peak_times` (`schedule_id`, `all_day`, `start_time`, `end_time`, `every_day`, `peak_days`, `all_year`, `begin_month`, `begin_day`, `end_month`, `end_day`)
 			VALUES (@scheduleid, @all_day, @start_time, @end_time, @every_day, @peak_days, @all_year, @begin_month, @begin_day, @end_month, @end_day)';
 
+    public const UPDATE_PEAK_TIMES =
+        'INSERT INTO `peak_times` (`peak_times_id`, `schedule_id`, `all_day`, `start_time`, `end_time`, `every_day`, `peak_days`, `all_year`, `begin_month`, `begin_day`, `end_month`, `end_day`)
+			VALUES (@peak_times_id, @scheduleid, @all_day, @start_time, @end_time, @every_day, @peak_days, @all_year, @begin_month, @begin_day, @end_month, @end_day)
+			ON DUPLICATE KEY UPDATE `all_day` = @all_day, `start_time` = @start_time, `end_time` = @end_time, `every_day` = @every_day, `peak_days` = @peak_days, `all_year` = @all_year, `begin_month` = @begin_month, `begin_day` = @begin_day, `end_month` = @end_month, `end_day` = @end_day';
+
     public const ADD_REFUND_TRANSACTION_LOG =
         'INSERT INTO `refund_transaction_log` (`payment_transaction_log_id`, `status`, `transaction_id`, `total_refund_amount`, `payment_refund_amount`, `fee_refund_amount`, `transaction_href`, `date_created`, `gateway_date_created`, `refund_response`)
           VALUES (@payment_transaction_log_id, @status, @transaction_id, @total_refund_amount, @payment_refund_amount, @fee_refund_amount, @transaction_href, @date_created, @gateway_date_created, @refund_response)';
@@ -254,7 +259,9 @@ class Queries
 
     public const DELETE_PAYMENT_GATEWAY_SETTINGS = 'DELETE FROM `payment_gateway_settings` WHERE `gateway_type` = @gateway_type';
 
-    public const DELETE_PEAK_TIMES = 'DELETE FROM `peak_times` WHERE `schedule_id` = @scheduleid';
+    public const DELETE_ALL_PEAK_TIMES = 'DELETE FROM `peak_times` WHERE `schedule_id` = @scheduleid';
+
+    public const DELETE_PEAK_TIMES = 'DELETE FROM `peak_times` WHERE `schedule_id` = @scheduleid AND `peak_times_id` = @peak_times_id';
 
     public const DELETE_QUOTA = 'DELETE FROM `quotas` WHERE `quota_id` = @quotaid';
 

@@ -120,6 +120,7 @@ class ParameterNames
     public const PAYMENT_GATEWAY_NAME = '@gateway_name';
     public const PAYMENT_GATEWAY_RESPONSE = '@payment_response';
     public const PEAK_CREDIT_COUNT = '@peak_credit_count';
+    public const PEAK_TIMES_ID = '@peak_times_id';
     public const PEAK_TIMES_ALL_DAY = '@all_day';
     public const PEAK_TIMES_START_TIME = '@start_time';
     public const PEAK_TIMES_END_TIME = '@end_time';

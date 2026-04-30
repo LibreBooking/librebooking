@@ -87,6 +87,23 @@ interface IScheduleRepository
 
     /**
      * @param int $scheduleId
+     * @param PeakTimes $peakTimes
+     */
+    public function AddPeakTimes($scheduleId, PeakTimes $peakTimes);
+
+    /**
+     * @param int $peakTimesId
+     * @param int $scheduleId
+     */
+    public function DeletePeakTimes($peakTimesId, $scheduleId);
+
+    /**
+     * @param int $scheduleId
+     */
+    public function DeleteAllPeakTimes($scheduleId);
+
+    /**
+     * @param int $scheduleId
      * @param Date $start
      * @param Date $end
      */
@@ -313,8 +330,9 @@ class ScheduleRepository implements IScheduleRepository
         }
 
         $reader = ServiceLocator::GetDatabase()->Query(new GetPeakTimesCommand($scheduleId));
-        if ($row = $reader->GetRow()) {
-            $layout->ChangePeakTimes(PeakTimes::FromRow($row));
+
+        while ($row = $reader->GetRow()) {
+            $layout->AddPeakTimes(PeakTimes::FromRow($row));
         }
 
         $reader->Free();
@@ -414,24 +432,56 @@ class ScheduleRepository implements IScheduleRepository
 
     public function UpdatePeakTimes($scheduleId, ScheduleLayout $layout)
     {
-        ServiceLocator::GetDatabase()->Execute(new DeletePeakTimesCommand($scheduleId));
-
         if ($layout->HasPeakTimesDefined()) {
-            $peakTimes = $layout->GetPeakTimes();
-            ServiceLocator::GetDatabase()->Execute(new AddPeakTimesCommand(
-                $scheduleId,
-                $peakTimes->IsAllDay(),
-                $peakTimes->GetBeginTime(),
-                $peakTimes->GetEndTime(),
-                $peakTimes->IsEveryDay(),
-                implode(',', $peakTimes->GetWeekdays()),
-                $peakTimes->IsAllYear(),
-                $peakTimes->GetBeginDay(),
-                $peakTimes->GetBeginMonth(),
-                $peakTimes->GetEndDay(),
-                $peakTimes->GetEndMonth()
-            ));
+            foreach ($layout->GetPeakTimes() as $peakTimes) {
+                ServiceLocator::GetDatabase()->Execute(new UpdatePeakTimesCommand(
+                    $peakTimes->getPeakTimesId(),
+                    $scheduleId,
+                    $peakTimes->IsAllDay(),
+                    $peakTimes->GetBeginTime(),
+                    $peakTimes->GetEndTime(),
+                    $peakTimes->IsEveryDay(),
+                    implode(',', $peakTimes->GetWeekdays()),
+                    $peakTimes->IsAllYear(),
+                    $peakTimes->GetBeginDay(),
+                    $peakTimes->GetBeginMonth(),
+                    $peakTimes->GetEndDay(),
+                    $peakTimes->GetEndMonth()
+                ));
+            }
         }
+    }
+
+    public function DeletePeakTimes($peakTimesId, $scheduleId)
+    {
+        ServiceLocator::GetDatabase()->Execute(new DeletePeakTimesCommand(
+            $peakTimesId,
+            $scheduleId
+        ));
+    }
+
+    public function DeleteAllPeakTimes($scheduleId)
+    {
+        ServiceLocator::GetDatabase()->Execute(new DeleteAllPeakTimesCommand(
+            $scheduleId
+        ));
+    }
+
+    public function AddPeakTimes($scheduleId, PeakTimes $peakTimes)
+    {
+        return ServiceLocator::GetDatabase()->ExecuteInsert(new AddPeakTimesCommand(
+            $scheduleId,
+            $peakTimes->IsAllDay(),
+            $peakTimes->GetBeginTime(),
+            $peakTimes->GetEndTime(),
+            $peakTimes->IsEveryDay(),
+            implode(',', $peakTimes->GetWeekdays()),
+            $peakTimes->IsAllYear(),
+            $peakTimes->GetBeginDay(),
+            $peakTimes->GetBeginMonth(),
+            $peakTimes->GetEndDay(),
+            $peakTimes->GetEndMonth()
+        ));
     }
 
     public function AddCustomLayoutPeriod($scheduleId, Date $start, Date $end)

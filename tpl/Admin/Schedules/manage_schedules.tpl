@@ -138,12 +138,12 @@
 
 														{if $CreditsEnabled}
 															<span>{translate key=PeakTimes}</span>
-															<a class="update changePeakTimes link-primary" href="#">
+															<a class="update addPeakTimes link-primary" href="#">
 																<span class="visually-hidden">{translate key=PeakTimes}</span>
-																<span class="bi bi-pencil-square"></span>
+																<span class="bi bi-plus-square"></span>
 															</a>
-															<div class="peakPlaceHolder">
-																{include file="Admin/Schedules/manage_peak_times.tpl" Layout=$Layouts[$id] Months=$Months DayNames=$DayNames}
+															<div class="peakTimesList">
+																{include file="Admin/Schedules/manage_peak_times_list.tpl" PeakTimesArr=$Layouts[$id]->GetPeakTimes()}
 															</div>
 														{/if}
 
@@ -531,9 +531,9 @@
 
 	<div id="peakTimesDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="peakTimesDialogLabel"
 		aria-hidden="true">
-		<form id="peakTimesForm" method="post">
-			<div class="modal-dialog">
-				<div class="modal-content">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form id="peakTimesForm" method="post">
 					<div class="modal-header">
 						<h5 class="modal-title" id="peakTimesDialogLabel">{translate key=PeakTimes}</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
@@ -653,17 +653,22 @@
 							</div>
 						</div>
 
-						<input type="hidden" {formname key=PEAK_DELETE} id="deletePeakTimes" value="" />
+						<input type="hidden" {formname key=PEAK_TIMES_ID} id="peakTimesId" value="" />
+						<input type="hidden" class='peakTimesHiddenInput' {formname key=PEAK_DELETE} id="deletePeakTimes" value="" />
+						<input type="hidden" class='peakTimesHiddenInput' {formname key=PEAK_ADD} id="addPeakTimes" value="" />
+						<input type="hidden" class='peakTimesHiddenInput' {formname key=PEAK_UPDATE} id="updatePeakTimes" value="" />
+						<input type="hidden" id="activePeakTimesId" value="" />
 					</div>
 					<div class="modal-footer">
 						{delete_button class='pull-left' id="deletePeakBtn"}
 						{cancel_button}
-						{update_button}
+						{update_button id="updatePeakBtn"}
+						{add_button id="addPeakBtn"}
 						{indicator}
 					</div>
-				</div>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
 
 	<div id="availabilityDialog" class="modal fade" tabindex="-1" role="dialog"
@@ -928,7 +933,8 @@
 				saveRedirect: '{$smarty.server.SCRIPT_NAME}',
 				changeLayoutAction: '{ManageSchedules::ActionChangeLayout}',
 				addAction: '{ManageSchedules::ActionAdd}',
-				peakTimesAction: '{ManageSchedules::ActionChangePeakTimes}',
+				updatePeakTimesAction: '{ManageSchedules::ActionUpdatePeakTimes}',
+
 				makeDefaultAction: '{ManageSchedules::ActionMakeDefault}',
 				deleteAction: '{ManageSchedules::ActionDelete}',
 				availabilityAction: '{ManageSchedules::ActionChangeAvailability}',

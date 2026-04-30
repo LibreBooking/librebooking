@@ -13,6 +13,11 @@ interface IUpdateSchedulePage
     public function GetScheduleId();
 
     /**
+     * @return int
+     */
+    public function GetPeakTimesId();
+
+    /**
      * @return string
      */
     public function GetScheduleName();
@@ -172,6 +177,17 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function GetDeletePeakTimes();
 
     /**
+     * @return bool
+     */
+    public function GetAddPeakTimes();
+
+
+    /**
+     * @return bool
+     */
+    public function GetUpdatePeakTimes();
+
+    /**
      * @param BookableResource[] $resources
      */
     public function BindResources($resources);
@@ -281,11 +297,11 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $this->_presenter->PageLoad();
 
         $resources = Resources::GetInstance();
-        $this->Set('DayNames', $resources->GetDays('full'));
+        $this->Set('DayNames', $resources->GetDays('abbr'));
         $this->Set('Today', Resources::GetInstance()->GetString('Today'));
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
         $this->Set('DefaultDate', Date::Now()->SetTimeString('08:00'));
-        $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
+        $this->Set('Months', Resources::GetInstance()->GetMonths('abbr'));
         $this->Set('DayList', range(1, 31));
         $this->Set('StyleNames', [
             ScheduleStyle::Standard->value => $resources->GetString('Standard'),
@@ -299,9 +315,10 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     public function DisplayPeakTimes(IScheduleLayout $layout)
     {
         $this->Set('Layout', $layout);
-        $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
-        $this->Set('DayNames', Resources::GetInstance()->GetDays('full'));
-        $this->Display('Admin/Schedules/manage_peak_times.tpl');
+        $this->Set('Months', Resources::GetInstance()->GetMonths('abbr'));
+        $this->Set('DayNames', Resources::GetInstance()->GetDays('abbr'));
+        $this->Set('PeakTimesArr', $layout->GetPeakTimes());
+        $this->Display('Admin/Schedules/manage_peak_times_list.tpl');
     }
 
     public function ProcessAction()
@@ -330,6 +347,11 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         }
 
         return $id;
+    }
+
+    public function GetPeakTimesId()
+    {
+        return $this->GetForm(FormKeys::PEAK_TIMES_ID);
     }
 
     public function GetScheduleName()
@@ -555,6 +577,18 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     {
         $delete = $this->GetForm(FormKeys::PEAK_DELETE);
         return $delete == '1';
+    }
+
+    public function GetAddPeakTimes()
+    {
+        $add = $this->GetForm(FormKeys::PEAK_ADD);
+        return $add == '1';
+    }
+
+    public function GetUpdatePeakTimes()
+    {
+        $update = $this->GetForm(FormKeys::PEAK_UPDATE);
+        return $update == '1';
     }
 
     public function BindResources($resources)
