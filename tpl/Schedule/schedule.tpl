@@ -445,7 +445,7 @@ opacity-75">
 
 {/block}
 
-{vendor_js src="html2canvas/1.4.1/js/html2canvas.min.js"}
+{vendor_js src="html2canvas-pro/2.0.2/js/html2canvas-pro.min.js"}
 {jsfile src="reservationPopup.js"}
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}

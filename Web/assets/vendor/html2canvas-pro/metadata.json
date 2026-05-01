@@ -1,0 +1,8 @@
+{
+    "name": "html2canvas-pro",
+    "version": "2.0.2",
+    "description": "Screenshots with JavaScript.",
+    "homepage": "https://yorickshan.github.io/html2canvas-pro/",
+    "source": "https://github.com/yorickshan/html2canvas-pro",
+    "license": "MIT"
+}

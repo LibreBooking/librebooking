@@ -1,8 +1,0 @@
-{
-  "name": "html2canvas",
-  "version": "1.4.1",
-  "description": "Screenshots with JavaScript.",
-  "homepage": "https://html2canvas.hertzen.com/",
-  "source": "https://github.com/niklasvh/html2canvas/releases/tag/v1.4.1",
-  "license": "MIT"
-}
