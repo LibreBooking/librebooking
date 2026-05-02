@@ -22,7 +22,7 @@
         "google/apiclient": "^2.19",
         "microsoft/microsoft-graph": "^3.0",
         "joelbutcher/facebook-graph-sdk": "^6.1",
-        "mobiledetect/mobiledetectlib": "^4.8",
+        "mobiledetect/mobiledetectlib": "^4.10",
         "bacon/bacon-qr-code": "^3.1",
         "mibe/feedwriter": "^1.1",
         "sabre/vobject": "^4.5",
