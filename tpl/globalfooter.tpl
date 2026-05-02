@@ -2,7 +2,7 @@
 	<div id="button-up" class="bg-primary rounded-circle text-white">
 		<i class="bi bi-chevron-double-up" aria-hidden="true"></i>
 	</div>
-	<footer class="bg-light border-top text-center pt-2" role="contentinfo">
+	<footer class="bg-light border-top text-center py-1" role="contentinfo">
 		{if $CompanyName neq ''}
 			<div class="mb-2"><a class="link-primary" href="{$CompanyUrl}">{$CompanyName}</a></div>
 		{/if}

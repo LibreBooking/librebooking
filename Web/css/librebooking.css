@@ -12,28 +12,28 @@
 }
 
 [data-bs-theme='default'] {
-  --primary: #669999;
+  --primary: #2b6b6b;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
   --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dimgray'] {
-  --primary: #696969;
+  --primary: #4d5a5a;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
   --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dark_red'] {
-  --primary: #8b0000;
+  --primary: #6b2d3a;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
   --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
 }
 
 [data-bs-theme='dark_green'] {
-  --primary: #006400;
+  --primary: #0d4d2e;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
   --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
@@ -47,15 +47,10 @@
 }
 
 [data-bs-theme='orange'] {
-  --primary: #be6e34;
+  --primary: #b05e2a;
   --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
   --primary-disabled: color-mix(in oklab, var(--primary) 40%, white);
   --text-color-btn: #ffffff;
-}
-
-html,
-body {
-  height: 99%;
 }
 
 body {
@@ -65,6 +60,8 @@ body {
   font-size: 14px;
   display: flex;
   flex-direction: column;
+  background-color: #f6f6f4;
+  min-height: 100vh;
 }
 
 footer {
