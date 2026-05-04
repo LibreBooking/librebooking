@@ -2,13 +2,14 @@
   --color-lines: #a6a6a6;
   --reservable: #ffffff;
   --unreservable: #cf9d9b;
-  --reserved: #408ad2;
+  --reserved: #4995e2;
   --reservedMine: #6f9bae;
   --reservedParticipating: #875cae;
   --reservedPending: #f2dfbf;
   --pasttime: #bdbdbd;
   --hiliteReservation: #79bf40;
-  --bs-body-color: #464d53;
+  --label-text-on-light: #1a2b30;
+  --label-text-on-dark: #ffffff;
 }
 
 [data-bs-theme='default'] {
@@ -484,10 +485,6 @@ ul.jqtree-tree .group-resource .jqtree-title {
   max-width: 700px;
 }
 
-table.reservations td {
-  border: solid var(--color-lines) 1px !important;
-}
-
 .availability-highlighter {
   position: absolute;
   background-color: rebeccapurple;
@@ -708,7 +705,7 @@ span.flatpickr-weekday {
 }
 
 .fc .fc-daygrid-day-number {
-  color: var(--bs-body-color);
+  color: var(--label-text-on-light);
   text-decoration: none;
 }
 
@@ -748,7 +745,7 @@ a.fc-event:hover {
 .fc-direction-rtl .fc-list-day-side-text,
 .fc-direction-ltr .fc-list-day-side-text,
 .fc-direction-rtl .fc-list-day-text {
-  color: var(--bs-body-color);
+  color: var(--label-text-on-light);
   text-decoration: none;
 }
 

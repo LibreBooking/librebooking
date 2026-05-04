@@ -15,7 +15,7 @@ table.reservations thead td {
 }
 
 table.reservations td {
-  border: solid #36648b 1px;
+  border: solid var(--color-lines) 1px;
   height: 40px;
   display: table-cell;
   padding: 0;
@@ -24,7 +24,7 @@ table.reservations td {
 table.reservations td.resourcename {
   padding: 0 3px;
   background-color: #ededed;
-  color: #999999;
+  color: var(--label-text-on-light);
   width: 150px;
   height: 40px;
   max-width: 100%;
@@ -52,7 +52,7 @@ table.reservations td.resdate {
 
 table.reservations tr.today td.resdate,
 table.reservations td.today {
-  color: #ffffff;
+  color: var(--label-text-on-light);
   background-color: #5199d1;
 }
 
@@ -63,11 +63,11 @@ table.reservations tr.today td.reslabel {
 table.reservations td.reslabel {
   padding-left: 2px;
   background-color: #ededed;
-  color: #333333;
+  color: var(--label-text-on-light);
 }
 
 table.reservations tr.today td.reslabel {
-  color: #000000;
+  color: var(--label-text-on-light);
 }
 
 table.reservations.reservations-tall {
@@ -172,18 +172,17 @@ table.reservations.mobile div.reservable {
 .unreservable,
 .buffer {
   background-color: var(--unreservable);
-  color: #fff;
+  color: var(--label-text-on-light);
 }
 
 td.reservable,
 div.reservable {
   background-color: var(--reservable);
-  color: #333;
 }
 
 .reserved {
   background-color: var(--reserved);
-  color: #fff;
+  color: var(--label-text-on-light);
   cursor: pointer;
 }
 
@@ -212,15 +211,17 @@ td.dropped {
 
 .reserved.mine {
   background-color: var(--reservedMine);
+  color: var(--label-text-on-light);
 }
 
 .reserved.mine.hilite {
   background-color: color-mix(in srgb, var(--reservedMine), white 30%);
-  color: #ffffff;
+  color: var(--label-text-on-light);
 }
 
 .reserved.participating {
   background-color: var(--reservedParticipating);
+  color: var(--label-text-on-dark);
 }
 
 .reserved.participating.hilite {
@@ -233,7 +234,7 @@ td.dropped {
 
 .reserved.pending {
   background-color: var(--reservedPending);
-  color: black;
+  color: var(--label-text-on-light);
 }
 
 .reserved.pending.hilite {
@@ -243,6 +244,7 @@ td.dropped {
 .reservable.hilite,
 #reservations .ui-selecting {
   background-color: var(--hiliteReservation);
+  color: var(--label-text-on-light);
 }
 
 .hilite {
@@ -266,7 +268,7 @@ td.dropped {
   background:
     repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px),
     linear-gradient(to bottom, #eee, #999);
-  color: black;
+  color: var(--label-text-on-light);
 }
 
 .schedule_title {
@@ -305,37 +307,23 @@ table.reservations td.resourcename.hilite {
 }
 
 div.legend {
-  line-height: 22px;
   width: 110px;
-  border: solid #555 1px;
   text-align: center;
-  display: inline-block;
   margin: 0 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
   cursor: default;
+  color: var(--label-text-on-light);
 }
 
 .reservations-left-header {
-  border-bottom: solid 1px #e9e9e9;
-  font-weight: bold;
   font-size: 1.3em;
-  text-align: center;
-  padding: 3px 0;
-  color: #585754;
 }
 
 .reservations-left-content {
   padding: 10px;
 }
 
-ul.jqtree-tree .group-resource .jqtree-title {
-  color: #111111;
-}
-
-#reservations-left > h4 {
-  text-align: center;
+ul.jqtree-tree .jqtree-title-button-left {
+  margin-bottom: 6px;
 }
 
 ul.jqtree-tree li.jqtree-selected > .jqtree-element,
@@ -365,11 +353,6 @@ ul.jqtree-tree .jqtree-toggler {
   text-align: center;
 }
 
-#reservations-left {
-  padding: 0;
-  font-size: 0.9em;
-}
-
 @media only screen and (min-width: 768px) {
   #reservations-left {
     position: -webkit-sticky;
@@ -379,14 +362,9 @@ ul.jqtree-tree .jqtree-toggler {
   }
 }
 
-#reservations-left hr {
-  border: 0;
-  height: 1px;
-  background-color: #bcbcbc;
-}
-
 #reservations-left .btn {
   width: 100%;
+  margin-bottom: 6px;
 }
 
 #reservations-left .textbox {
