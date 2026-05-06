@@ -23,6 +23,12 @@
                 <div class="reservationHeader">
                     <h3 class="mb-0">{block name=reservationHeader}{translate key="CreateReservationHeading"}{/block}
                     </h3>
+                    {if !empty($ReferenceNumber)}
+                        <div class="form-group">
+                            <label class="fw-bold">{translate key=ReferenceNumber}</label>
+                            {$ReferenceNumber}
+                        </div>
+                    {/if}
                 </div>
                 <div class="float-end buttonsEdit">
                     <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -308,20 +314,11 @@
                             {if $DescriptionRequired}required="required" {/if}>{$Description}</textarea>
                     </div>
 
-                    {if !empty($ReferenceNumber)}
-                    <div class="">
-                        <div class="form-group">
-                            <label class="fw-bold">{translate key=ReferenceNumber}</label>
-                            {$ReferenceNumber}
-                        </div>
-                    </div>
-                    {/if}
                 </div>
             </div>
 
-            <div class="order-bottom border-bottom py-2">
-                <div id="custom-attributes-placeholder"></div>
-            </div>
+            <div id="custom-attributes-placeholder"></div>
+
             {if $UploadsEnabled}
             <div class="border-bottom py-2">
                 <div class="reservationAttachments">
