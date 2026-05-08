@@ -49,7 +49,13 @@
 
 														<div>{translate key='ScheduleAdministrator'}
 															<span
-																class="fw-bold">{($GroupLookup[$schedule->GetAdminGroupId()]) ? $GroupLookup[$schedule->GetAdminGroupId()]->Name : 'None'}
+																class="fw-bold">
+																{assign var=adminGroupId value=$schedule->GetAdminGroupId()}
+																{if $adminGroupId !== null && isset($GroupLookup[$adminGroupId])}
+																	{$GroupLookup[$adminGroupId]->Name|escape:'html'}
+																{else}
+																	{translate key='None'}
+																{/if}
 															</span>
 														</div>
 

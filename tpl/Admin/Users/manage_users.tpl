@@ -103,7 +103,7 @@
                         {foreach from=$users item=user}
                             {assign var=id value=$user->Id}
                             <tr data-userId="{$id}">
-                                <td>{fullname first=$user->First|unescape:'html' last=$user->Last|unescape:'html' ignorePrivacy="true"}
+                                <td>{fullname first=$user->First|default:''|unescape:'html' last=$user->Last|default:''|unescape:'html' ignorePrivacy="true"}
                                 </td>
                                 <td>{$user->Username}</td>
                                 <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>

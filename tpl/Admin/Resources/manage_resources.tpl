@@ -494,7 +494,14 @@
 																	<span class="propertyValue resourceAdminValue"
 																		data-type="select" data-pk="{$id}"
 																		data-value="{$resource->GetAdminGroupId()}"
-																		data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">{$GroupLookup[$resource->GetAdminGroupId()]->Name}</span>
+																		 data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">
+																			{assign var=adminGroupId value=$resource->GetAdminGroupId()}
+																			{if $adminGroupId !== null && isset($GroupLookup[$adminGroupId])}
+																				{$GroupLookup[$adminGroupId]->Name|escape:'html'}
+																			{else}
+																				{translate key='None'}
+																			{/if}
+																		</span>
 																</div>
 															</div>
 															<div class="mt-2">

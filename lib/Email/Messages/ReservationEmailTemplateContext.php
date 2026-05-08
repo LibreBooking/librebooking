@@ -274,7 +274,8 @@ class ReservationEmailTemplateContext
         $groups = $this->ResourceAdminGroupsById();
         $groupId = $resource->GetAdminGroupId();
 
-        return isset($groups[$groupId]) ? $groups[$groupId]->Name : '';
+        $key = $groupId ?? '';
+        return isset($groups[$key]) ? $groups[$key]->Name : '';
     }
 
     /**

@@ -69,10 +69,11 @@
 																data-type="select" data-pk="{$id}"
 																data-value="{$schedule->GetAdminGroupId()}"
 																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">
-																{if isset($GroupLookup[$schedule->GetAdminGroupId()])}
-																	{$GroupLookup[$schedule->GetAdminGroupId()]->Name|escape:'html'}
+																{assign var=adminGroupId value=$schedule->GetAdminGroupId()}
+																{if $adminGroupId !== null && isset($GroupLookup[$adminGroupId])}
+																	{$GroupLookup[$adminGroupId]->Name|escape:'html'}
 																{else}
-																	None
+																	{translate key='None'}
 																{/if}
 															</span>
 															{if $AdminGroups|default:array()|count > 0}

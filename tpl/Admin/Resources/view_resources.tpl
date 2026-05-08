@@ -292,9 +292,15 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <label
-                                                                    class="inline fw-bold">{translate key='ResourceAdministrator'}</label>
-                                                                <span>{$ResourceAdminGroup[$resource->GetAdminGroupId()]->Name}</span>
+                                                                <label class="inline fw-bold">{translate key='ResourceAdministrator'}</label>
+                                                                <span>
+                                                                    {assign var=adminGroupId value=$resource->GetAdminGroupId()}
+                                                                    {if $adminGroupId !== null && isset($ResourceAdminGroup[$adminGroupId])}
+                                                                        {$ResourceAdminGroup[$adminGroupId]->Name|escape:'html'}
+                                                                    {else}
+                                                                        {translate key='None'}
+                                                                    {/if}
+                                                                </span>
                                                             </div>
 
                                                         </div>

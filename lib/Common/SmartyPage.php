@@ -1034,7 +1034,7 @@ class SmartyPage extends Smarty
 
     public function ArrayKeyExists(string|int|float|bool|null $key, array $array): bool
     {
-        return array_key_exists($key, $array);
+        return array_key_exists($key ?? '', $array);
     }
 
     public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int
