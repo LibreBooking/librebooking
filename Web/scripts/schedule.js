@@ -6,11 +6,30 @@ function Schedule(opts, resourceGroups) {
   const groupDiv = $('#resourceGroups');
   const multidateselect = $('#multidateselect');
   let renderingEvents = false;
+  let hasAutoScrolledToday = false;
 
   const ScheduleStandard = '0';
   const ScheduleWide = '1';
   const ScheduleTall = '2';
   const ScheduleCondensed = '3';
+
+  function autoScrollToToday() {
+    if (!scheduleOpts.autoScrollToday || hasAutoScrolledToday) {
+      return;
+    }
+
+    const today = document.querySelector('#reservations tr.today');
+    if (!today) {
+      return;
+    }
+
+    hasAutoScrolledToday = true;
+
+    today.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
 
   this.init = function () {
     this.initUserDefaultSchedule();
@@ -20,18 +39,6 @@ function Schedule(opts, resourceGroups) {
     this.initResources();
     this.initNavigation();
     addNumericalIdsToRows();
-
-    if (scheduleOpts.autoScrollToday) {
-      var today = $('.today');
-      if (today && today.length > 0) {
-        $('html, body').animate(
-          {
-            scrollTop: today.offset().top - 50,
-          },
-          500
-        );
-      }
-    }
 
     $(window).on(
       'resize',
@@ -274,6 +281,15 @@ function Schedule(opts, resourceGroups) {
     }
 
     ajaxPost($('#fetchReservationsForm'), options.reservationLoadUrl, null, function (reservationList) {
+      function finishRender() {
+        if (options.isReservable) {
+          initReservable();
+        }
+        $('#loading-schedule').addClass('d-none');
+        renderingEvents = false;
+        autoScrollToToday();
+      }
+
       reservationList.sort((r1, r2) => {
         const resourceOrder = options.resourceOrder[r1.ResourceId] - options.resourceOrder[r2.ResourceId];
         if (resourceOrder === 0) {
@@ -352,11 +368,7 @@ function Schedule(opts, resourceGroups) {
             t.append(divs);
           });
 
-        if (options.isReservable) {
-          initReservable();
-        }
-        $('#loading-schedule').addClass('d-none');
-        renderingEvents = false;
+        finishRender();
 
         return;
       }
@@ -701,12 +713,7 @@ function Schedule(opts, resourceGroups) {
           });
       });
 
-      if (options.isReservable) {
-        initReservable();
-      }
-
-      $('#loading-schedule').addClass('d-none');
-      renderingEvents = false;
+      finishRender();
     });
   }
 
