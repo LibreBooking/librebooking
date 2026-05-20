@@ -59,13 +59,18 @@ class iCalendarReservationView
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
-        $this->Description =  $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
+        $this->Summary = $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
+        // Escape real newlines as RFC 5545 TEXT sequences so all DESCRIPTION usages
+        // in the iCal template (including VALARM) remain RFC-compliant.
+        $this->Description = $canViewDetails ? str_replace(["
+", "
+", "
+"], '\\n', $res->Description ?? '') : $privateNotice;
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
         $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateNotice;
         $this->RecurRule = $this->CreateRecurRule($res);
         $this->ReferenceNumber = $res->ReferenceNumber;
-        $this->Summary = $canViewDetails ? $res->Title : $privateNotice;
         $this->ReservationUrl = sprintf(
             '%s/%s?%s=%s',
             Configuration::Instance()->GetScriptUrl(),

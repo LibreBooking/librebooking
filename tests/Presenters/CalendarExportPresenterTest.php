@@ -148,6 +148,54 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->Description);
     }
 
+    public function testViewShowsFormattedSummaryWhenDetailsVisible()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        // IsUserOwner requires both UserId and UserLevelId so SlotLabelFactory.Format
+        // does not short-circuit and return an empty string.
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'My Booking Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Test';
+        $res->OwnerLastName = 'User';
+        $res->OwnerEmailAddress = 'test@example.com';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+
+        $this->assertEquals('My Booking Title', $reservationView->Summary);
+    }
+
+    public function testViewShowsDescriptionFromReservationNotesWhenDetailsVisible()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->Description = 'Booking notes';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('Booking notes', $reservationView->Description);
+    }
+
+    public function testViewEscapesNewlinesInDescriptionForICalCompliance()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->Description = "First line\r\nSecond line\nThird line";
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('First line\\nSecond line\\nThird line', $reservationView->Description);
+    }
+
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
     {
         $this->fakeConfig->SetKey('version', '9.9.9-user-config');
