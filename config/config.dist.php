@@ -491,6 +491,9 @@ return [
 
             # Number of past days to include in ICS feeds
             'past.days' => 0,
+
+            # Enable HTTP Basic Authentication on ICS calendar subscription URLs (true/false)
+            'basic.auth' => false,
         ],
 
         #############################

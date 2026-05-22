@@ -152,4 +152,9 @@ class FakeAuth implements IAuthentication
     {
         return true;
     }
+
+    public function BuildSession(string $username): UserSession
+    {
+        return $this->_Session;
+    }
 }

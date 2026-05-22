@@ -1115,6 +1115,15 @@ class ConfigKeys extends AbstractConfigKeys
         'description' => 'Number of past days to include in ICS feeds',
         'section' => 'ics'
     ];
+    public const ICS_BASIC_AUTH = [
+        'key' => 'ics.basic.auth',
+        'type' => 'boolean',
+        'default' => false,
+        'label' => 'ICS Subscription Basic Auth',
+        'description' => 'Allow HTTP Basic Authentication on ICS calendar subscription URLs. When enabled, clients may supply credentials to receive a fully authenticated feed.',
+        'config_file_comment' => 'Enable HTTP Basic Authentication on ICS calendar subscription URLs',
+        'section' => 'ics'
+    ];
 
     // Data Retention and Deletion
 

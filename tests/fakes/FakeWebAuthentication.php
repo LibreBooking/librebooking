@@ -53,6 +53,11 @@ class FakeAuthentication implements IAuthentication
         // TODO: Implement HandleLoginFailure() method.
     }
 
+    public function BuildSession(string $username): UserSession
+    {
+        return $this->_UserSession;
+    }
+
     /**
      * @return bool
      */
@@ -161,7 +166,9 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_LoginCalled = false;
 
     public $_ValidateResult = false;
+    public $_ValidateCalled = false;
     public $_ValidateException = null;
+    public ?UserSession $_FeedUserSession = null;
 
     public $_ShowUsernamePrompt = false;
     public $_ShowPasswordPrompt = false;
@@ -177,6 +184,7 @@ class FakeWebAuthentication implements IWebAuthentication
 
     public function Validate($username, $password)
     {
+        $this->_ValidateCalled = true;
         $this->_LastLogin = $username;
         $this->_LastPassword = $password;
 
@@ -271,5 +279,14 @@ class FakeWebAuthentication implements IWebAuthentication
     public function GetPasswordResetUrl()
     {
         return '';
+    }
+
+    public $_LoginForFeedCalled = false;
+
+    public function LoginForFeed(string $username): UserSession
+    {
+        $this->_LoginForFeedCalled = true;
+        $this->_LastLogin = $username;
+        return $this->_FeedUserSession ?? new UserSession(0);
     }
 }
