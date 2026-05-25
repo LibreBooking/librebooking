@@ -27,7 +27,7 @@
         "mibe/feedwriter": "^1.1",
         "sabre/vobject": "^4.5",
         "egulias/email-validator": "^4.0",
-        "phpmailer/phpmailer": "^7.0",
+        "phpmailer/phpmailer": "^7.1",
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0",
         "vlucas/phpdotenv": "^5.6",
