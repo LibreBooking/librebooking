@@ -42,6 +42,7 @@ class LoginPresenterTest extends TestBase
         $this->page = new FakeLoginPage();
         $this->captchaService = $this->createMock('ICaptchaService');
         $this->announcementRepository = new FakeAnnouncementRepository();
+        $this->fakeConfig->_ScriptUrl = 'https://booked.example/Web';
 
         $this->page->_EmailAddress = 'nobody@localhost';
         $this->page->_Password = 'somepassword';
@@ -97,6 +98,47 @@ class LoginPresenterTest extends TestBase
         $this->presenter->Login();
 
         $this->assertEquals($redirect, $this->page->_LastRedirect);
+    }
+
+    public function testRedirectsToSameOriginAbsoluteRequestedPage()
+    {
+        $redirect = 'https://booked.example/Web/someurl/something.php';
+        $this->page->_ResumeUrl = $redirect;
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals($redirect, $this->page->_LastRedirect);
+    }
+
+    public function testBlocksAbsoluteExternalUrlRedirect()
+    {
+        $this->page->_ResumeUrl = 'https://evil.com/steal';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
+    }
+
+    public function testBlocksProtocolRelativeExternalUrlRedirect()
+    {
+        $this->page->_ResumeUrl = '//evil.com/steal';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
+    }
+
+    public function testBlocksJavascriptRedirect()
+    {
+        $this->page->_ResumeUrl = 'javascript:alert(1)';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
     }
 
     public function testPageLoadSetsVariablesCorrectly()

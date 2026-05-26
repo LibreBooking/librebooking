@@ -160,23 +160,26 @@ abstract class Page implements IPage
 
     public function Redirect($url)
     {
-        if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
-        }
-
-        $url = str_replace('&amp;', '&', $url);
+        $url = $this->SanitizeRedirectUrl($url);
         header("Location: $url");
         die();
     }
 
     public function RedirectResume($url)
     {
-        if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
-        }
-
+        $url = $this->SanitizeRedirectUrl($url);
         header("Location: $url");
         die();
+    }
+
+    private function SanitizeRedirectUrl(string $url): string
+    {
+        return RedirectUrlSanitizer::Sanitize(
+            url: $url,
+            path: $this->path,
+            scriptUrl: Configuration::Instance()->GetScriptUrl(),
+            fallback: Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID)
+        );
     }
 
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
