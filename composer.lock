@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fdb8b8d0d92d17f6907339b5b728911",
+    "content-hash": "70da81aa19aeb59f77d1281b2653c1b1",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1948,16 +1948,16 @@
         },
         {
             "name": "microsoft/microsoft-graph",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoftgraph/msgraph-sdk-php.git",
-                "reference": "5c0de2bb7c210552f4dc6c73373c0b4317ac8b6b"
+                "reference": "6b466f7bf232e4ad44c8a2cb09ed185292059b15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoftgraph/msgraph-sdk-php/zipball/5c0de2bb7c210552f4dc6c73373c0b4317ac8b6b",
-                "reference": "5c0de2bb7c210552f4dc6c73373c0b4317ac8b6b",
+                "url": "https://api.github.com/repos/microsoftgraph/msgraph-sdk-php/zipball/6b466f7bf232e4ad44c8a2cb09ed185292059b15",
+                "reference": "6b466f7bf232e4ad44c8a2cb09ed185292059b15",
                 "shasum": ""
             },
             "require": {
@@ -1989,9 +1989,9 @@
             "homepage": "https://developer.microsoft.com/en-us/graph",
             "support": {
                 "issues": "https://github.com/microsoftgraph/msgraph-sdk-php/issues",
-                "source": "https://github.com/microsoftgraph/msgraph-sdk-php/tree/v3.0.0"
+                "source": "https://github.com/microsoftgraph/msgraph-sdk-php/tree/v3.1.0"
             },
-            "time": "2026-04-20T17:03:02+00:00"
+            "time": "2026-05-07T20:26:46+00:00"
         },
         {
             "name": "microsoft/microsoft-graph-core",
@@ -3875,16 +3875,16 @@
         },
         {
             "name": "stduritemplate/stduritemplate",
-            "version": "2.0.8",
+            "version": "2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/std-uritemplate/std-uritemplate-php.git",
-                "reference": "4c08308d512d5f349acdd415800f011300f7cf98"
+                "reference": "5a4b7dc1f6888267564fe4a311bc69a231fb21bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/std-uritemplate/std-uritemplate-php/zipball/4c08308d512d5f349acdd415800f011300f7cf98",
-                "reference": "4c08308d512d5f349acdd415800f011300f7cf98",
+                "url": "https://api.github.com/repos/std-uritemplate/std-uritemplate-php/zipball/5a4b7dc1f6888267564fe4a311bc69a231fb21bc",
+                "reference": "5a4b7dc1f6888267564fe4a311bc69a231fb21bc",
                 "shasum": ""
             },
             "require": {
@@ -3908,9 +3908,9 @@
             ],
             "description": "Std UriTemplate, RFC 6570 implementation",
             "support": {
-                "source": "https://github.com/std-uritemplate/std-uritemplate-php/tree/2.0.8"
+                "source": "https://github.com/std-uritemplate/std-uritemplate-php/tree/2.0.10"
             },
-            "time": "2025-10-16T15:52:12+00:00"
+            "time": "2026-05-20T14:49:34+00:00"
         },
         {
             "name": "stripe/stripe-php",
