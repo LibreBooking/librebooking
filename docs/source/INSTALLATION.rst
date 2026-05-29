@@ -612,6 +612,12 @@ After the database has been set up you will need to register the account
 for your application administrator. Navigate to register.php register an
 account with email address set as the ``'admin.email'`` value in your configuration.
 
+Grant administrator permissions only to trusted users. Administrator accounts
+can change configuration, users, groups, resources, schedules, announcements,
+reservations, templates, and other content that may be shown to other users or
+sent by email. Use the smallest administrator role needed for the user's
+responsibilities, and remove administrator access when it is no longer needed.
+
 Upgrading
 ---------
 

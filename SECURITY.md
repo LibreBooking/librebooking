@@ -60,3 +60,16 @@ Reports submitted primarily to obtain CVE assignment will be closed. Do not
 submit reports solely to request CVE assignment. We do not provide CVE
 sponsorship, CVE write-ups, embargo coordination for CVE publication, or
 repeated status updates for CVE records.
+
+## Administrator Trust Model
+
+Grant application, group, resource, and schedule administrator permissions only
+to trusted users. Administrators can change configuration, users, groups,
+resources, schedules, announcements, reservations, templates, and other content
+that may be displayed to other users or sent by email.
+
+LibreBooking treats administrator accounts as privileged operators, not as
+untrusted users. A malicious or compromised administrator account can affect the
+confidentiality, integrity, and availability of a LibreBooking installation.
+Use strong passwords, revoke unused administrator access, and assign the
+smallest administrator role needed for the user's responsibilities.
