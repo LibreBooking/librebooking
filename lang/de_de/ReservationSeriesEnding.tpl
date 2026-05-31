@@ -1,11 +1,11 @@
 <p>
 	Hallo,<br/>
-	Ihre Reservierung beginnt bald.
+	Ihre Serien-Reservierung f&uuml;r {$ResourceName} endet am {formatdate date=$StartDate key=reservation_email}.
 </p>
+
+<p><strong>Reservierungsdetails:</strong></p>
 <p>
-	<strong>Reservierungsdetails</strong><br/>
-	<br/>
-	<strong>Beginn:</strong> {formatdate date=$StartDate key=reservation_email}<br/>
+	<strong>Start:</strong> {formatdate date=$StartDate key=reservation_email}<br/>
 	<strong>Ende:</strong> {formatdate date=$EndDate key=reservation_email}<br/>
 	<strong>Ressource:</strong> {$ResourceName}<br/>
 	<strong>Titel:</strong> {$Title}<br/>
@@ -14,7 +14,5 @@
 
 <p>
 	<a href="{$ScriptUrl}/{$ReservationUrl}">Reservierung ansehen</a> |
-	<a href="{$ScriptUrl}/{$ICalUrl}">Zum Kalender hinzuf&uuml;gen</a> |
 	<a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a>
 </p>
-

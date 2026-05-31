@@ -39,7 +39,7 @@ Beschreibung: {$Description|nl2br}<br/>
 
 {if $Accessories|default:array()|count > 0}
     <br/>
-    Zubehör:
+    Zubeh&ouml;r:
     <br/>
     {foreach from=$Accessories item=accessory}
         ({$accessory->QuantityReserved}) {$accessory->Name}
@@ -47,5 +47,5 @@ Beschreibung: {$Description|nl2br}<br/>
     {/foreach}
 {/if}
 <br/>
-<a href="{$ScriptUrl}">Anmelden bei LibreBooking</a>
+<a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a>
 

@@ -1,3 +1,4 @@
-Ihren Reservierungsbericht finden Sie im Anhang.<br/>
+Hallo,<br/>
+Ihren Reservierungsbericht aus {$AppTitle} finden Sie im Anhang.<br/>
 
-<a href="{$ScriptUrl}">Anmelden bei LibreBooking</a>
+<p><a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a></p>

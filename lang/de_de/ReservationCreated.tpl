@@ -1,3 +1,5 @@
+Sie haben die folgende Reservierung erstellt.<br/>
+<br/>
 	Reservierungsdetails:
 	<br/>
 	<br/>
@@ -44,7 +46,7 @@
 
 	{if count($RepeatDates) gt 0}
 		<br/>
-		Diese Reservierung gilt für den/die folgenden Tag(e):
+		Diese Reservierung gilt f&uuml;r den/die folgenden Tag(e):
 		<br/>
 	{/if}
 
@@ -53,7 +55,7 @@
 	{/foreach}
 
 	{if $Accessories|default:array()|count > 0}
-		<br/>Zubehör:<br/>
+		<br/>Zubeh&ouml;r:<br/>
 		{foreach from=$Accessories item=accessory}
 			({$accessory->QuantityReserved}) {$accessory->Name}<br/>
 		{/foreach}
@@ -68,8 +70,8 @@
 
 	{if $RequiresApproval}
 		<br/>
-		Eine oder mehrere Ressourcen benötigen eine Genehmigung.
-		Diese Reservierung wird zurückgehalten, bis sie genehmigt ist.
+		Eine oder mehrere Ressourcen ben&ouml;tigen eine Genehmigung.
+		Diese Reservierung wird zur&uuml;ckgehalten, bis sie genehmigt ist.
 	{/if}
 
 	{if !empty($ApprovedBy)}
@@ -80,6 +82,6 @@
 	<br/>
 	<br/>
 	<a href="{$ScriptUrl}/{$ReservationUrl}">Reservierung ansehen</a> |
-	<a href="{$ScriptUrl}/{$ICalUrl}">Zum Kalender hinzufügen</a> |
-	<a href="{$ScriptUrl}">Anmelden bei {$AppTitle}</a>
+	<a href="{$ScriptUrl}/{$ICalUrl}">Zum Kalender hinzuf&uuml;gen</a> |
+	<a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a>
 
