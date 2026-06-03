@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/RegistrationPage.php');
 
 class FakeRegistrationPage extends FakePageBase implements IRegistrationPage
@@ -217,9 +219,9 @@ class FakeRegistrationPage extends FakePageBase implements IRegistrationPage
     }
 
     /**
-     * @return array|AttributeValue[]
+     * @return array|AttributeFormElement[]
      */
-    public function GetAttributes()
+    public function GetAttributes(): array
     {
         return $this->_AttributeValues;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeDailyLayout implements IDailyLayout
 {
     public $_Timezone;
@@ -21,8 +23,7 @@ class FakeDailyLayout implements IDailyLayout
      */
     public function IsDateReservable(Date $date)
     {
-        // TODO: Implement IsDateReservable() method.
-        return null;
+        return true;
     }
 
     /**
@@ -31,8 +32,7 @@ class FakeDailyLayout implements IDailyLayout
      */
     public function GetLabels(Date $displayDate)
     {
-        // TODO: Implement GetLabels() method.
-        return null;
+        return [];
     }
 
     /**
@@ -51,8 +51,7 @@ class FakeDailyLayout implements IDailyLayout
      */
     public function GetSummary(Date $date, $resourceId)
     {
-        // TODO: Implement GetSummary() method.
-        return null;
+        throw new LogicException('GetSummary() not implemented in FakeDailyLayout');
     }
 
     /**

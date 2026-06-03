@@ -1,9 +1,7 @@
 <?php
 
-// debugging tools / libs
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require ROOT_DIR . 'vendor/autoload.php';
-}
+require_once(ROOT_DIR . 'lib/ComposerDependenciesGuard.php');
+EnsureComposerDependenciesInstalledForRequest();
 
 require_once(ROOT_DIR . 'Pages/IPage.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
@@ -15,6 +13,8 @@ use Detection\MobileDetect;
 
 abstract class Page implements IPage
 {
+    private static ?string $displayVersion = null;
+
     /**
      * @var SmartyPage
      */
@@ -46,6 +46,7 @@ abstract class Page implements IPage
         $this->smarty->assign('Timezone', $userSession->Timezone);
         $this->smarty->assign('Charset', $resources->Charset);
         $this->smarty->assign('CurrentLanguage', $resources->CurrentLanguage);
+        $this->smarty->assign('AvailableLanguages', $resources->AvailableLanguages);
         $this->smarty->assign('HtmlLang', $resources->HtmlLang);
         $this->smarty->assign('HtmlTextDirection', $resources->TextDirection);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
@@ -59,7 +60,9 @@ abstract class Page implements IPage
         $this->smarty->assign('CalendarJSFile', $resources->CalendarLanguageFile);
 
         $this->smarty->assign('LoggedIn', $userSession->IsLoggedIn());
+        $this->smarty->assign('CSRFToken', $userSession->CSRFToken);
         $this->smarty->assign('Version', Configuration::VERSION);
+        $this->smarty->assign('DisplayVersion', $this->GetDisplayVersion());
         $this->smarty->assign('Path', $this->path);
         $this->smarty->assign('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->smarty->assign('UserName', !is_null($userSession) ? $userSession->FirstName : '');
@@ -157,23 +160,26 @@ abstract class Page implements IPage
 
     public function Redirect($url)
     {
-        if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
-        }
-
-        $url = str_replace('&amp;', '&', $url);
+        $url = $this->SanitizeRedirectUrl($url);
         header("Location: $url");
         die();
     }
 
     public function RedirectResume($url)
     {
-        if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
-        }
-
+        $url = $this->SanitizeRedirectUrl($url);
         header("Location: $url");
         die();
+    }
+
+    private function SanitizeRedirectUrl(string $url): string
+    {
+        return RedirectUrlSanitizer::Sanitize(
+            url: $url,
+            path: $this->path,
+            scriptUrl: Configuration::Instance()->GetScriptUrl(),
+            fallback: Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID)
+        );
     }
 
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
@@ -187,7 +193,7 @@ abstract class Page implements IPage
 
     public function GetLastPage($defaultPage = '')
     {
-        $referer = filter_var(getenv("HTTP_REFERER"), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $referer = filter_var(getenv('HTTP_REFERER'), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($referer)) {
             return empty($defaultPage) ? Pages::LOGIN : $defaultPage;
         }
@@ -394,13 +400,13 @@ abstract class Page implements IPage
 
     protected function DisplayCsv($templateName, $fileName)
     {
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: private", false);
-        header("Content-Type: application/octet-stream");
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);
+        header('Content-Type: application/octet-stream');
         header("Content-Disposition: attachment; filename=$fileName;");
-        header("Content-Transfer-Encoding: binary");
+        header('Content-Transfer-Encoding: binary');
         echo chr(239) . chr(187) . chr(191);
 
         $this->Display($templateName);
@@ -442,7 +448,6 @@ abstract class Page implements IPage
         if ($config->GetKey(ConfigKeys::SECURITY_HEADERS, new BooleanConverter())) {
             header('Strict-Transport-Security: ' . $config->GetKey(ConfigKeys::SECURITY_STRICT_TRANSPORT));
             header('X-Frame-Options: ' . $config->GetKey(ConfigKeys::SECURITY_X_FRAME));
-            header('X-XSS-Protection: ' . $config->GetKey(ConfigKeys::SECURITY_X_XSS));
             header('X-Content-Type-Options: ' . $config->GetKey(ConfigKeys::SECURITY_X_CONTENT_TYPE));
             header('Content-Security-Policy: ' . $config->GetKey(ConfigKeys::SECURITY_CONTENT_SECURITY_POLICY));
         }
@@ -485,5 +490,16 @@ abstract class Page implements IPage
         // TODO Actually check for new versions on git / save install date to DB.
         // The old Method doesn't work when deleting cookies and confuses the users.
         return false;
+    }
+
+    private function GetDisplayVersion(): string
+    {
+        if (self::$displayVersion !== null) {
+            return self::$displayVersion;
+        }
+
+        $resolver = new VersionDisplayResolver();
+        self::$displayVersion = $resolver->GetDisplayVersion(Configuration::VERSION);
+        return self::$displayVersion;
     }
 }

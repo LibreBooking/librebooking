@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Controllers/UserSaveController.php');
 
 class UserSaveControllerTest extends TestBase
@@ -9,20 +11,11 @@ class UserSaveControllerTest extends TestBase
      */
     private $controller;
 
-    /**
-     * @var IManageUsersServiceFactory
-     */
-    private $manageUserServiceFactory;
+    private IManageUsersServiceFactory&\PHPUnit\Framework\MockObject\MockObject $manageUserServiceFactory;
 
-    /**
-     * @var IManageUsersService
-     */
-    private $manageUsersService;
+    private IManageUsersService&\PHPUnit\Framework\MockObject\MockObject $manageUsersService;
 
-    /**
-     * @var IUserRequestValidator
-     */
-    private $requestValidator;
+    private IUserRequestValidator&\PHPUnit\Framework\MockObject\MockObject $requestValidator;
 
     public function setUp(): void
     {

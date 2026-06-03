@@ -6,7 +6,7 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
 
-use \FeedWriter\ATOM;
+use FeedWriter\ATOM;
 
 class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 {
@@ -116,11 +116,11 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 
     public function GetPastNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST));
     }
 
     public function GetFutureNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE));
     }
 }

@@ -83,7 +83,7 @@ try {
 } catch (CAS_ProxyTicketException $e) {
     if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE) {
         echo '<div class="error">';
-        echo "Your login has timed out. You need to log in again.";
+        echo 'Your login has timed out. You need to log in again.';
         echo '</div>';
     } else {
         // Other proxy ticket errors are from bad request format (shouldn't happen)
@@ -98,6 +98,6 @@ try {
     throw $e;
 }
 
-                                                             ?>
+?>
   </body>
 </html>

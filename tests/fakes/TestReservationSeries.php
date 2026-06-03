@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once ROOT_DIR . '/Domain/namespace.php';
 
 class TestReservationSeries extends ReservationSeries

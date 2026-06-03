@@ -1,53 +1,26 @@
 <?php
 
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailTemplateContext.php');
 
 // TODO: Need a way to unit test this
 class ReservationCreatedEmailAdmin extends EmailMessage
 {
-    /**
-     * @var UserDto
-     */
-    protected $adminDto;
+    protected UserDto $adminDto;
 
-    /**
-     * @var User
-     */
-    protected $reservationOwner;
+    protected User $reservationOwner;
 
-    /**
-     * @var ReservationSeries
-     */
-    protected $reservationSeries;
+    protected ReservationSeries $reservationSeries;
 
-    /**
-     * @var IResource
-     */
-    protected $resource;
+    protected BookableResource $resource;
 
-    /**
-     * @var IAttributeRepository
-     */
-    protected $attributeRepository;
+    protected IAttributeRepository $attributeRepository;
 
-    /**
-     * @var string
-     */
-    protected $timezone;
-    /**
-     * @var IUserRepository
-     */
-    private $userRepository;
+    private string $timezone;
 
-    /**
-     * @param UserDto $adminDto
-     * @param User $reservationOwner
-     * @param ReservationSeries $reservationSeries
-     * @param IResource $primaryResource
-     * @param IAttributeRepository $attributeRepository
-     * @param IUserRepository $userRepository
-     */
-    public function __construct(UserDto $adminDto, User $reservationOwner, ReservationSeries $reservationSeries, IResource $primaryResource, IAttributeRepository $attributeRepository, IUserRepository $userRepository)
+    private IUserRepository $userRepository;
+
+    public function __construct(UserDto $adminDto, User $reservationOwner, ReservationSeries $reservationSeries, BookableResource $primaryResource, IAttributeRepository $attributeRepository, IUserRepository $userRepository)
     {
         parent::__construct($adminDto->Language());
 
@@ -56,7 +29,8 @@ class ReservationCreatedEmailAdmin extends EmailMessage
         $this->reservationSeries = $reservationSeries;
         $this->resource = $primaryResource;
         $this->attributeRepository = $attributeRepository;
-        $this->timezone = $adminDto->Timezone();
+        $adminTimezone = $adminDto->Timezone();
+        $this->timezone = !empty($adminTimezone) ? $adminTimezone : Configuration::Instance()->GetDefaultTimezone();
         $this->userRepository = $userRepository;
     }
 
@@ -100,6 +74,13 @@ class ReservationCreatedEmailAdmin extends EmailMessage
 
     protected function PopulateTemplate()
     {
+        $context = new ReservationEmailTemplateContext(
+            reservationSeries: $this->reservationSeries,
+            reservationOwner: $this->reservationOwner,
+            primaryResource: $this->resource,
+            attributeRepository: $this->attributeRepository
+        );
+
         $this->Set('UserName', $this->reservationOwner->FullName());
 
         $currentInstance = $this->reservationSeries->CurrentInstance();
@@ -107,54 +88,30 @@ class ReservationCreatedEmailAdmin extends EmailMessage
         $this->Set('StartDate', $currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $currentInstance->EndDate()->ToTimezone($this->timezone));
         $this->Set('ResourceName', $this->resource->GetName());
+        $resourceImage = ReservationEmailTemplateContext::BuildResourceImageUrl($this->reservationSeries->Resource()->GetImage());
+        if ($resourceImage != null) {
+            $this->Set('ResourceImage', $resourceImage);
+        }
         $this->Set('Title', $this->reservationSeries->Title());
         $this->Set('Description', $this->reservationSeries->Description());
 
-        $img = $this->reservationSeries->Resource()->GetImage();
-        if (!empty($img)) {
-            $this->Set('ResourceImage', $this->GetFullImagePath($img));
-        }
-
-        $repeatDates = [];
-        $repeatRanges = [];
-        if ($this->reservationSeries->IsRecurring()) {
-            foreach ($this->reservationSeries->Instances() as $repeated) {
-                $repeatDates[] = $repeated->StartDate()->ToTimezone($this->timezone);
-                $repeatRanges[] = $repeated->Duration()->ToTimezone($this->timezone);
-            }
-        }
-        $this->Set('RepeatDates', $repeatDates);
-        $this->Set('RepeatRanges', $repeatRanges);
+        $repeatVariables = $context->GetRecurrenceInstances($this->timezone);
+        $this->Set('RepeatDates', $repeatVariables['RepeatDates']);
+        $this->Set('RepeatRanges', $repeatVariables['RepeatRanges']);
         $this->Set('RequiresApproval', $this->reservationSeries->RequiresApproval());
-        $this->Set('ReservationUrl', Pages::RESERVATION . "?" . QueryStringKeys::REFERENCE_NUMBER . '=' . $currentInstance->ReferenceNumber());
+        $this->Set('ReservationUrl', Pages::RESERVATION . '?' . QueryStringKeys::REFERENCE_NUMBER . '=' . $currentInstance->ReferenceNumber());
 
-        $resourceNames = [];
-        foreach ($this->reservationSeries->AllResources() as $resource) {
-            $resourceNames[] = $resource->GetName();
-        }
-        $this->Set('ResourceNames', $resourceNames);
+        $this->Set('ResourceNames', $context->ResourceNames());
+        $this->Set('Resources', $context->Resources(true));
         $this->Set('Accessories', $this->reservationSeries->Accessories());
 
-        $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
-        $attributeValues = [];
-        foreach ($attributes as $attribute) {
-            if (($attribute->HasSecondaryEntities()) && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
-                $attributeValues[] = new LBAttribute($attribute, $this->reservationSeries->GetAttributeValue($attribute->Id()));
-            }
-        }
+        $this->Set('Attributes', $context->ReservationAttributes());
 
-        $this->Set('Attributes', $attributeValues);
-
-        $bookedBy = $this->reservationSeries->BookedBy();
-        if ($bookedBy != null && ($bookedBy->UserId != $this->reservationOwner->Id())) {
-            $this->Set('CreatedBy', new FullName($bookedBy->FirstName, $bookedBy->LastName));
+        $createdBy = $context->CreatedBy();
+        if ($createdBy != null) {
+            $this->Set('CreatedBy', $createdBy);
         }
 
         $this->Set('ReferenceNumber', $this->reservationSeries->CurrentInstance()->ReferenceNumber());
-    }
-
-    private function GetFullImagePath($img)
-    {
-        return Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL) . '/' . $img;
     }
 }

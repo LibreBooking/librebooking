@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\MockObject\MockObject;
 
 require_once(ROOT_DIR . 'lib/Application/Reservation/ManageBlackoutsService.php');
@@ -220,6 +222,72 @@ class BlackoutsServiceTest extends TestBase
 
         $this->assertFalse($result->WasSuccessful());
         $this->assertNotEmpty($result->Message());
+    }
+
+    public function testAddReturnsErrorWhenRecurringBlackoutHasNoTerminationDate()
+    {
+        $start = Date::Parse('2011-01-01 01:01:01');
+        $end = Date::Parse('2011-01-01 02:02:02');
+        $date = new DateRange($start, $end);
+        $resourceIds = [1];
+        $title = 'title';
+
+        $repeatWeekly = new RepeatWeekly(1, NullDate::Instance(), [1, 3, 5]);
+
+        $result = $this->service->Add($date, $resourceIds, $title, $this->conflictHandler, $repeatWeekly);
+
+        $this->assertFalse($result->WasSuccessful());
+        $this->assertNotEmpty($result->Message());
+        $this->assertNull($this->blackoutRepository->_Added);
+    }
+
+    public function testUpdateReturnsErrorWhenRecurringBlackoutHasNoTerminationDate()
+    {
+        $start = Date::Parse('2011-01-01 01:01:01');
+        $end = Date::Parse('2011-01-01 02:02:02');
+        $date = new DateRange($start, $end);
+        $resourceIds = [1];
+        $title = 'title';
+        $blackoutInstanceId = 10;
+
+        $repeatWeekly = new RepeatWeekly(1, NullDate::Instance(), [1, 3, 5]);
+
+        $result = $this->service->Update(
+            $blackoutInstanceId,
+            $date,
+            $resourceIds,
+            $title,
+            $this->conflictHandler,
+            $repeatWeekly,
+            SeriesUpdateScope::FullSeries
+        );
+
+        $this->assertFalse($result->WasSuccessful());
+        $this->assertNotEmpty($result->Message());
+        $this->assertNull($this->blackoutRepository->_Updated);
+    }
+
+    public function testAddAllowsCustomRecurringBlackoutWithoutTerminationDate()
+    {
+        $start = Date::Parse('2011-01-01 01:01:01');
+        $end = Date::Parse('2011-01-01 02:02:02');
+        $date = new DateRange($start, $end);
+        $resourceIds = [1];
+        $title = 'title';
+        $repeatCustom = new RepeatCustom([Date::Parse('2011-01-03'), Date::Parse('2011-01-05')]);
+
+        $this->reservationViewRepository->expects($this->exactly(3))
+                                        ->method('GetBlackoutsWithin')
+                                        ->willReturn([]);
+
+        $this->reservationViewRepository->expects($this->exactly(3))
+                                        ->method('GetReservations')
+                                        ->willReturn([]);
+
+        $result = $this->service->Add($date, $resourceIds, $title, $this->conflictHandler, $repeatCustom);
+
+        $this->assertTrue($result->WasSuccessful());
+        $this->assertNotNull($this->blackoutRepository->_Added);
     }
 
     public function testDeletesBlackoutById()

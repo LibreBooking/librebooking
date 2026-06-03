@@ -93,7 +93,7 @@ class ICalImportPresenter extends ActionPresenter
             die('Invalid import file: ' . $e->getMessage());
         }
 
-        $events = $vcalendar->VEVENT;
+        $events = $vcalendar->select('VEVENT');
         Log::Debug('Found %s events in ics file', count($events));
 
         foreach ($events as $event) {

@@ -1,0 +1,8 @@
+{
+  "name": "hind",
+  "version": "v18",
+  "description": "Hind is an open source sans-serif typeface for Latin and Devanagari scripts.",
+  "homepage": "https://fonts.google.com/specimen/Hind",
+  "source": "https://github.com/google/fonts/tree/main/ofl/hind",
+  "license": "OFL-1.1"
+}

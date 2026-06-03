@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ReservationStartTimeRuleTest extends TestBase
 {
-    /**
-     * @var IScheduleRepository
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IScheduleLayout
-     */
-    private $layout;
+    private IScheduleLayout&\PHPUnit\Framework\MockObject\MockObject $layout;
 
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 
 class RepeatOptionsTest extends TestBase
@@ -59,7 +61,7 @@ class RepeatOptionsTest extends TestBase
 
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testRepeatWeeklyCreatesRecurrenceOnSpecifiedDaysEveryIntervalUntilEndAcrossDST()
@@ -89,7 +91,7 @@ class RepeatOptionsTest extends TestBase
         $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
         $this->assertTrue($thirdDate->Equals($repeatedDates[2]), $thirdDate->ToString() . ' ' . $repeatedDates[2]->ToString());
         $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString() . ' ' . $repeatedDates[3]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testRepeatWeeklyCreatesRecurrenceOnSingleDayEveryIntervalUntilEndAcrossDST()
@@ -114,7 +116,7 @@ class RepeatOptionsTest extends TestBase
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
         $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString() . ' ' . $repeatedDates[3]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfMonthWhenDayIsInAllMonths()
@@ -138,7 +140,7 @@ class RepeatOptionsTest extends TestBase
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
         $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfMonthWhenDayIsNotInAllMonths()
@@ -193,7 +195,7 @@ class RepeatOptionsTest extends TestBase
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
         $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfWeekWhenWeekIsNotInAllMonths()
@@ -216,7 +218,7 @@ class RepeatOptionsTest extends TestBase
 
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testYearlyRepeat()
@@ -238,7 +240,7 @@ class RepeatOptionsTest extends TestBase
 
         $this->assertEquals($totalDates, count($repeatedDates));
         $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testFactoryCreatesRepeatDailyOptions()
@@ -339,7 +341,7 @@ class RepeatOptionsTest extends TestBase
         $custom = new RepeatCustom([]);
         $config = RepeatConfiguration::Create($custom->RepeatType(), $custom->ConfigurationString());
         $this->assertEquals(RepeatType::Custom, $config->Type);
-        $this->assertEquals("", $config->Interval);
+        $this->assertEquals('', $config->Interval);
         $this->assertEquals(new NullDate(), $config->TerminationDate);
     }
 

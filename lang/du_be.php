@@ -319,6 +319,7 @@ class du_be extends en_gb
         $strings['NoResourcePermission'] = 'U hebt onvoldoende rechten om toegang tot een of meerdere van de resources te verkrijgen';
         $strings['ConflictingReservationDates'] = 'Er zijn conflicterende reserveringen op volgende data:';
         $strings['StartDateBeforeEndDateRule'] = 'De startdatum moet voor de einddatum liggen';
+        $strings['RecurringWithoutTerminationRule'] = 'Een einddatum is vereist voor terugkerende blokkeringen.';
         $strings['StartIsInPast'] = 'Een startdatum in het verleden is ongeldig';
         $strings['EmailDisabled'] = 'De beheerder zette de optie email meldingen af';
         $strings['ValidLayoutRequired'] = 'Slots moeten voor de volledige 24 uren van de dag voorzien worden, beginnend en eindigend om 12:00 AM.';
@@ -420,7 +421,7 @@ class du_be extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Er zijn geen ontbrekende uitcheckreserveringen';
-        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';              
+        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

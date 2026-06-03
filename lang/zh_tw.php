@@ -507,6 +507,7 @@ class zh_tw extends en_us
         $strings['NoResourcePermission'] = '您沒有權限訪問一個或一個以上的請求.';
         $strings['ConflictingReservationDates'] = '在接下來的日子裡存在有衝突的預約:';
         $strings['StartDateBeforeEndDateRule'] = '開始時間和日期必須早於結束時間和日期';
+        $strings['RecurringWithoutTerminationRule'] = '重複封鎖需要設定終止日期。';
         $strings['StartIsInPast'] = '開始時間和日期必須比當前時間晚';
         $strings['EmailDisabled'] = '管理員已經禁止了郵件提醒';
         $strings['ValidLayoutRequired'] = '時間間隔必須提供全天24小時而且必須從上午12時開始並結束於上午12時.';
@@ -639,12 +640,12 @@ class zh_tw extends en_us
         $strings['PendingApprovalReservations'] = '等待審批的預訂';
         $strings['LaterThisMonth'] = '本月晚些時候';
         $strings['LaterThisYear'] = '本年晚些時候';
-        $strings['Remaining'] = '剩餘';        
+        $strings['Remaining'] = '剩餘';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = '沒有遺失的退房預訂';
-        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';        
+        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

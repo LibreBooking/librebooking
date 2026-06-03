@@ -405,24 +405,24 @@ class CustomAttribute
      * @param $value mixed
      * @return bool
      */
-    public function SatisfiesRequired($value)
+    public function SatisfiesRequired(mixed $value): bool
     {
         if (!$this->required) {
             return true;
         }
 
-        $trimmed = trim($value);
-        return !(empty($trimmed) && !is_numeric($trimmed));
+        $trimmed = trim((string) ($value ?? ''));
+        return ($trimmed !== '');
     }
 
     /**
      * @param $value mixed
      * @return bool
      */
-    public function SatisfiesConstraint($value)
+    public function SatisfiesConstraint(mixed $value): bool
     {
         if (!empty($this->regex)) {
-            return preg_match($this->regex, $value) > 0;
+            return preg_match($this->regex, (string) ($value ?? '')) > 0;
         }
 
         if (!empty($this->possibleValues)) {

@@ -299,10 +299,10 @@ class PayPalGateway implements IPaymentGateway
 
     private function GetBaseUrl()
     {
-        $baseUrl = "https://api.paypal.com";
+        $baseUrl = 'https://api.paypal.com';
         $paypalEnvironment = $this->Environment();
-        if (strtolower($paypalEnvironment) == "sandbox") {
-            $baseUrl = "https://api-m.sandbox.paypal.com";
+        if (strtolower($paypalEnvironment) == 'sandbox') {
+            $baseUrl = 'https://api-m.sandbox.paypal.com';
         }
         return $baseUrl;
     }
@@ -318,12 +318,12 @@ class PayPalGateway implements IPaymentGateway
         $resources = Resources::GetInstance();
         $baseUrl = $this->GetBaseUrl();
         $token = $this->GetAuthToken($baseUrl);
-        $body = "";
+        $body = '';
 
         try {
             Log::Debug('PayPal Checkout/Orders CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
             $checkoutUrl = "$baseUrl/v2/checkout/orders";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             $purchaseRequest = ['description' => $resources->GetString('CreditPurchase'), 'amount' => ['value' => "{$cart->Total()}", 'currency_code' => $cart->Currency]];
             $data = [
                 'intent' => 'CAPTURE',
@@ -335,7 +335,7 @@ class PayPalGateway implements IPaymentGateway
             $response = Unirest\Request::post($checkoutUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Checkout/Orders Url: %s, Request: %s, Response: %s", $checkoutUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Checkout/Orders Url: %s, Request: %s, Response: %s', $checkoutUrl, $body, json_encode($response->body));
             }
 
             return $response->body;
@@ -366,18 +366,18 @@ class PayPalGateway implements IPaymentGateway
         try {
             Log::Debug('PayPal Capture CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
             $checkoutUrl = "$baseUrl/v2/checkout/orders/$paymentId/capture";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($checkoutUrl, $headers);
 
             $sale = $response->body->purchase_units[0]->payments->captures[0];
-            $self = "";
-            $refund = "";
+            $self = '';
+            $refund = '';
             foreach ($sale->links as $link) {
-                if ($link->rel == "self") {
+                if ($link->rel == 'self') {
                     $self = $link->href;
                 }
-                if ($link->rel == "refund") {
+                if ($link->rel == 'refund') {
                     $refund = $link->href;
                 }
             }
@@ -402,7 +402,7 @@ class PayPalGateway implements IPaymentGateway
                 json_encode($response->body)
             );
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Capture Url: %s, Response: %s", $checkoutUrl, json_encode($response->body));
+                Log::Debug('PayPal Capture Url: %s, Response: %s', $checkoutUrl, json_encode($response->body));
             }
 
             return $response->body;
@@ -427,19 +427,19 @@ class PayPalGateway implements IPaymentGateway
             Log::Debug('PayPal Refund. TransactionId: %s, InvoiceNumber: %s, Total: %s', $log->TransactionId, $log->InvoiceNumber, $amount);
             $refundUrl = "$baseUrl/v2/payments/captures/{$log->InvoiceNumber}/refund";
             //			$refundUrl = "$baseUrl/v2/payments/captures/{$log->TransactionId}/refund";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             $data = ['amount' => ['value' => "{$amount}", 'currency_code' => $log->Currency]];
             $body = Unirest\Request\Body::json($data);
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($refundUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Refund Url: %s, Request: %s, Response: %s", $refundUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Refund Url: %s, Request: %s, Response: %s', $refundUrl, $body, json_encode($response->body));
             }
 
-            $self = "";
+            $self = '';
             foreach ($response->body->links as $link) {
-                if ($link->rel == "self") {
+                if ($link->rel == 'self') {
                     $self = $link->href;
                 }
             }
@@ -455,7 +455,7 @@ class PayPalGateway implements IPaymentGateway
                 $breakdown ? $breakdown->paypal_fee->value : 0,
                 $self,
                 Date::Now(),
-                $response->body->create_time ? $response->body->create_time : "",
+                $response->body->create_time ? $response->body->create_time : '',
                 json_encode($response->body)
             );
 
@@ -588,10 +588,12 @@ class StripeGateway implements IPaymentGateway
                 Log::Debug('Stripe charge response %s', json_encode($charge));
             }
 
+            $chargeData = $charge->toArray();
+
             $logger->LogPayment(
                 $cart->UserId,
                 $charge->status,
-                $charge->invoice,
+                $chargeData['invoice'] ?? null,
                 $charge->id,
                 $currency->FromStripe($charge->amount),
                 $currency->FromStripe($charge->balance_transaction->fee),

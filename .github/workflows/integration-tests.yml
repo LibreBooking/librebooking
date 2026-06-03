@@ -1,0 +1,72 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mirror.gcr.io/library/mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: librebooking_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mysqli, pdo_mysql
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v4
+
+      - name: Load database schema
+        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-schema.sql
+
+      - name: Apply database upgrades
+        run: php phing-tasks/UpgradeDbTask.php root root 127.0.0.1 librebooking_test database_schema
+
+      - name: Load base data
+        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-data.sql
+
+      - name: Load sample data
+        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/sample-data-utf8.sql
+
+      - name: Generate test config
+        env:
+          LB_TEST_DB_HOST: '127.0.0.1'
+          LB_TEST_DB_PORT: '3306'
+          LB_TEST_DB_NAME: 'librebooking_test'
+          LB_TEST_DB_USER: 'root'
+          LB_TEST_DB_PASSWORD: 'root'
+        run: php tests/Integration/create-test-config.php
+
+      - name: Create template cache directory
+        run: mkdir -p tpl_c
+
+      - name: Run smoke tests
+        run: composer test:integration

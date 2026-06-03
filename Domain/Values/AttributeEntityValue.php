@@ -31,6 +31,6 @@ class AttributeEntityValue
 
     public function __toString()
     {
-        return sprintf("AttributeEntityValue attributeid:%s entityid:%s value:%s", $this->AttributeId, $this->EntityId, $this->Value);
+        return sprintf('AttributeEntityValue attributeid:%s entityid:%s value:%s', $this->AttributeId, $this->EntityId, $this->Value);
     }
 }

@@ -189,8 +189,8 @@ class QuartzyImportPresenter extends ActionPresenter
     private function GetCsvData($path)
     {
         $lines = [];
-        if (($handle = fopen($path, "r")) !== false) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+        if (($handle = fopen($path, 'r')) !== false) {
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $lines[] = $data;
             }
             fclose($handle);

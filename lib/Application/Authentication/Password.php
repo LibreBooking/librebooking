@@ -109,7 +109,7 @@ class Password implements IPassword
 
         $length = 10;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%';
-        $password ='';
+        $password = '';
         $max = strlen($characters) - 1;
 
         for ($i = 0; $i < $length; $i++) {

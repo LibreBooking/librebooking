@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationMovePresenter.php');
 require_once(ROOT_DIR . 'Pages/Ajax/ReservationMovePage.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -18,25 +20,16 @@ class ReservationMovePresenterTest extends TestBase
      */
     private $page;
 
-    /**
-     * @var IUpdateReservationPersistenceService
-     */
-    private $persistenceService;
+    private IUpdateReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
     /**
      * @var ReservationMovePresenter
      */
     private $presenter;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     public function setUp(): void
     {
@@ -238,8 +231,7 @@ class FakeReservationMovePage implements IReservationMovePage
      */
     public function GetRetryParameters()
     {
-        // TODO: Implement GetRetryParameters() method.
-        return null;
+        return [];
     }
 
     /**

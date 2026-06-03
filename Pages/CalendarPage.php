@@ -94,7 +94,7 @@ class CalendarUrl
      * @static
      * @param $date Date
      * @param $type string
-     * @return PersonalCalendarUrl
+     * @return CalendarUrl
      */
     public static function Create($date, $type)
     {

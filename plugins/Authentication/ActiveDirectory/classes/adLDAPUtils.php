@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4
@@ -65,15 +66,15 @@ class adLDAPUtils
     public function niceNames($groups)
     {
         $groupArray = [];
-        for ($i=0; $i<$groups["count"]; $i++) { // For each group
+        for ($i = 0; $i < $groups['count']; $i++) { // For each group
             $line = $groups[$i];
 
-            if (strlen($line)>0) {
+            if (strlen($line) > 0) {
                 // More presumptions, they're all prefixed with CN=
                 // so we ditch the first three characters and the group
                 // name goes up to the first comma
-                $bits=explode(",", $line);
-                $groupArray[] = substr($bits[0], 3, (strlen($bits[0])-3));
+                $bits = explode(',', $line);
+                $groupArray[] = substr($bits[0], 3, (strlen($bits[0]) - 3));
             }
         }
         return $groupArray;
@@ -87,7 +88,7 @@ class adLDAPUtils
     */
     public function escapeCharacters($str)
     {
-        $str = str_replace(",", "\,", $str);
+        $str = str_replace(',', "\,", $str);
         return $str;
     }
 
@@ -107,7 +108,7 @@ class adLDAPUtils
             '/([\x00-\x1F\*\(\)\\\\])/',
             function ($matches) {
                 foreach ($matches as $match) {
-                    return join("", unpack("H2", "$1"));
+                    return join('', unpack('H2', '$1'));
                 }
             },
             $str
@@ -133,7 +134,7 @@ class adLDAPUtils
         $octet_str .= '\\' . substr($strGUID, 14, 2);
         $octet_str .= '\\' . substr($strGUID, 12, 2);
         //$octet_str .= '\\' . substr($strGUID, 16, strlen($strGUID));
-        for ($i=16; $i<=(strlen($strGUID)-2); $i++) {
+        for ($i = 16; $i <= (strlen($strGUID) - 2); $i++) {
             if (($i % 2) == 0) {
                 $octet_str .= '\\' . substr($strGUID, $i, 2);
             }
@@ -156,10 +157,10 @@ class adLDAPUtils
         $auth = hexdec(substr($hex_sid, 4, 12));
         $result = "$rev-$auth";
 
-        for ($x=0;$x < $subcount; $x++) {
+        for ($x = 0;$x < $subcount; $x++) {
             $subauth[$x] =
                 hexdec($this->littleEndian(substr($hex_sid, 16 + ($x * 8), 8)));
-            $result .= "-" . $subauth[$x];
+            $result .= '-' . $subauth[$x];
         }
 
         // Cheat by tacking on the S-
@@ -216,7 +217,7 @@ class adLDAPUtils
     public function decodeGuid($binaryGuid)
     {
         if ($binaryGuid === null) {
-            return "Missing compulsory field [binaryGuid]";
+            return 'Missing compulsory field [binaryGuid]';
         }
 
         $strGUID = $this->binaryToText($binaryGuid);
@@ -242,7 +243,7 @@ class adLDAPUtils
     {
         $encode = false;
         if (is_string($item)) {
-            for ($i=0; $i<strlen($item); $i++) {
+            for ($i = 0; $i < strlen($item); $i++) {
                 if (ord($item[$i]) >> 7) {
                     $encode = true;
                 }

@@ -34,7 +34,7 @@ class ResourceAvailabilityRule implements IReservationValidationRule
         if ($shouldSkipConflicts) {
             foreach ($conflicts->Conflicts() as $conflict) {
                 Log::Debug(
-                    "Skipping conflicting reservation. Reference number %s conflicts with existing %s with id %s on %s",
+                    'Skipping conflicting reservation. Reference number %s conflicts with existing %s with id %s on %s',
                     $conflict->Reservation->ReferenceNumber(),
                     get_class($conflict->Conflict),
                     $conflict->Conflict->GetId(),

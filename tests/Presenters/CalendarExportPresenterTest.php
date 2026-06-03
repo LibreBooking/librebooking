@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportPage.php');
 require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
 
@@ -98,9 +100,9 @@ class CalendarExportPresenterTest extends TestBase
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId + 1;
-        $res->OwnerFirstName = "f";
-        $res->OwnerLastName = "l";
-        $res->OwnerEmailAddress = "e@m.com";
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
         $this->assertEquals($res->OwnerEmailAddress, $reservationView->OrganizerEmail);
@@ -114,9 +116,9 @@ class CalendarExportPresenterTest extends TestBase
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId;
-        $res->OwnerFirstName = "f";
-        $res->OwnerLastName = "l";
-        $res->OwnerEmailAddress = "e@m.com";
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
         $this->assertEquals('e-noreply@m.com', $reservationView->OrganizerEmail);
@@ -144,5 +146,20 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->OrganizerEmail);
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
+    }
+
+    public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
+    {
+        $this->fakeConfig->SetKey('version', '9.9.9-user-config');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+
+        $display = new CalendarExportDisplay();
+        $calendar = $display->Render([]);
+
+        $this->assertStringContainsString(
+            'PRODID:-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
+            $calendar
+        );
+        $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
     }
 }

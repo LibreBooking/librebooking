@@ -112,6 +112,8 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
+        $this->Set('BeginDate', Date::Now());
+        $this->Set('EndDate', Date::Now()->AddDays(7));
         $this->Display('Search/search-reservations.tpl');
     }
 
@@ -161,7 +163,7 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
 
     public function GetUserId()
     {
-        return $this->GetForm(FormKeys::USER_ID);
+        return intval($this->GetForm(FormKeys::USER_ID));
     }
 
     public function GetResources()
@@ -171,7 +173,11 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
             return [];
         }
 
-        return $resources;
+        if (!is_array($resources)) {
+            return [intval($resources)];
+        }
+
+        return array_map('intval', $resources);
     }
 
     public function GetSchedules()
@@ -181,7 +187,11 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
             return [];
         }
 
-        return $schedules;
+        if (!is_array($schedules)) {
+            return [intval($schedules)];
+        }
+
+        return array_map('intval', $schedules);
     }
 
     public function GetTitle()

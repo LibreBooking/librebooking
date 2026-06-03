@@ -1,13 +1,15 @@
 /vendor/*
-/composer.lock
+/node_modules/
 
 /build/*
 /tools/*
 /var/*
 
-# Customized Confiuration Files
+# Customized Configuration Files
 /config/config.php
 /config/log4php.config.xml
+/config/custom-version.txt
+/config/version-suffix.txt
 **/*.config.php
 
 /lib/external/phpqrcode/cache/*

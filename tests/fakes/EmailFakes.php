@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 @define('BASE_DIR', dirname(__FILE__) . '/../..');
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 
@@ -20,11 +22,13 @@ class FakeMailer extends PHPMailer
     public function AddAddress($address, $name = '')
     {
         $this->addresses[] = $address;
+        return true;
     }
 
     public function Send()
     {
         $this->sendWasCalled = true;
+        return true;
     }
 
     public function IsHTML($bool = true)

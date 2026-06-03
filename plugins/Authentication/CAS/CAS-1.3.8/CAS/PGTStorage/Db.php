@@ -100,7 +100,7 @@ class CAS_PGTStorage_Db extends CAS_PGTStorage_AbstractStorage
      */
     public function getStorageType()
     {
-        return "db";
+        return 'db';
     }
 
     /**
@@ -138,10 +138,10 @@ class CAS_PGTStorage_Db extends CAS_PGTStorage_AbstractStorage
     public function __construct(
         $cas_parent,
         $dsn_or_pdo,
-        $username='',
-        $password='',
-        $table='',
-        $driver_options=null
+        $username = '',
+        $password = '',
+        $table = '',
+        $driver_options = null
     ) {
         phpCAS::traceBegin();
         // call the ancestor's constructor

@@ -319,7 +319,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
 
     public function BindViewableResourceReservations($resourceIds)
     {
-        $this->Set('CanViewResourceReservations',$resourceIds);
+        $this->Set('CanViewResourceReservations', $resourceIds);
     }
 }
 

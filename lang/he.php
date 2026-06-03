@@ -624,6 +624,7 @@ class he extends en_gb
         $strings['NoResourcePermission'] = 'אין לך הרשאות לגשת לאחד או יותר מהמשאבים המבוקשים';
         $strings['ConflictingReservationDates'] = 'כבר קיימת הזמנה לחדר זה באותו מועד:';
         $strings['StartDateBeforeEndDateRule'] = 'תאריך/שעת התחלה חייב להיות לפני תאריך/שעת סיום';
+        $strings['RecurringWithoutTerminationRule'] = 'נדרש תאריך סיום עבור חסימות חוזרות.';
         $strings['StartIsInPast'] = 'תאריך/שעת התחלה לא יכול להיות בעבר';
         $strings['EmailDisabled'] = 'מנהל המערכת ביטל הודעות באמצעות דואר אלקטרוני';
         $strings['ValidLayoutRequired'] = 'יש לשבץ כל 24 שעות היממא, החל ומסיים בחצות הלילה.';
@@ -743,7 +744,7 @@ class he extends en_gb
         $strings['NoGroupUpcomingReservations'] = 'אין לקבוצתך הזמנות עתידיות';
         $strings['GroupUpcomingReservations'] = 'הזמנות קבוצתי(ות) הבאות';
         //End Group Upcoming Reservations
-        
+
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'אירעה שגיאה בעת ניסיון להתחבר עם Facebook. אנא נסה שוב.';
         //End Facebook Login SDK Error
@@ -758,7 +759,7 @@ class he extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'אין הזמנות ליציאה חסרות';
-        $strings['MissingCheckOutReservations'] = 'הזמנות ליציאה חסרות';        
+        $strings['MissingCheckOutReservations'] = 'הזמנות ליציאה חסרות';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

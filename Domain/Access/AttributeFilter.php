@@ -36,7 +36,7 @@ class AttributeFilter
             }
         }
 
-        $f->AppendSql("WHERE [attribute_list_token] )");
+        $f->AppendSql('WHERE [attribute_list_token] )');
         $f->Substitute('attribute_list_token', $attributeFragment);
 
         if ($filteringAttributes) {

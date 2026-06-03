@@ -84,7 +84,7 @@
                     <div class="col-12 col-sm-6">
                         <div class="form-group">
                             <label class="reg fw-bold" for="homepage">{translate key="DefaultPage"}</label>
-                            <select {formname key='DEFAULT_HOMEPAGE'} id="homepage" class="form-select">
+                            <select {formname key='DEFAULT_HOMEPAGE'} id="homepage" class="form-select form-select-sm">
                                 {html_options values=$HomepageValues output=$HomepageOutput selected=$Homepage}
                             </select>
                         </div>
@@ -93,7 +93,7 @@
                     <div class="col-12 col-sm-6">
                         <div class="form-group">
                             <label class="reg fw-bold" for="timezoneDropDown">{translate key="Timezone"}</label>
-                            <select {formname key='TIMEZONE'} class="form-select" id="timezoneDropDown">
+                            <select {formname key='TIMEZONE'} class="form-select form-select-sm" id="timezoneDropDown">
                                 {html_options values=$TimezoneValues output=$TimezoneOutput selected=$Timezone}
                             </select>
                         </div>
@@ -103,8 +103,8 @@
                         <div class="form-group">
                             <label class="reg fw-bold" for="phone">{translate key="Phone"}</label>
                             {if $AllowPhoneChange}
-                                <input type="text" id="phone" {formname key="PHONE"} class="form-control" size="20"
-                                    value="{$Phone}" {if $RequirePhone}required="required" data-bv-notempty="true"
+                                <input type="text" id="phone" {formname key="PHONE"} class="form-control form-control-sm"
+                                    size="20" value="{$Phone}" {if $RequirePhone}required="required" data-bv-notempty="true"
                                     data-bv-notempty-message="{translate key=PhoneRequired}" {/if} />
                             {else}
                                 <span>{$Phone}</span>
@@ -117,10 +117,10 @@
                         <div class="form-group">
                             <label class="reg fw-bold" for="txtOrganization">{translate key="Organization"}</label>
                             {if $AllowOrganizationChange}
-                                <input type="text" id="txtOrganization" {formname key="ORGANIZATION"} class="form-control"
-                                    size="20" value="{$Organization}" {if $RequireOrganization}required="required"
-                                        data-bv-notempty="true" data-bv-notempty-message="{translate key=OrganizationRequired}"
-                                    {/if} />
+                                <input type="text" id="txtOrganization" {formname key="ORGANIZATION"}
+                                    class="form-control form-control-sm" size="20" value="{$Organization}"
+                                    {if $RequireOrganization}required="required" data-bv-notempty="true"
+                                    data-bv-notempty-message="{translate key=OrganizationRequired}" {/if} />
                             {else}
                                 <span>{$Organization}</span>
                                 <input type="hidden" {formname key=ORGANIZATION} value="{$Organization}" />
@@ -132,8 +132,9 @@
                         <div class="form-group">
                             <label class="reg fw-bold" for="txtPosition">{translate key="Position"}</label>
                             {if $AllowPositionChange}
-                                <input type="text" id="txtPosition" {formname key="POSITION"} class="form-control" size="20"
-                                    value="{$Position}" {if $RequirePosition}required="required" data-bv-notempty="true"
+                                <input type="text" id="txtPosition" {formname key="POSITION"}
+                                    class="form-control form-control-sm" size="20" value="{$Position}"
+                                    {if $RequirePosition}required="required" data-bv-notempty="true"
                                     data-bv-notempty-message="{translate key=PositionRequired}" {/if} />
                             {else}
                                 <span>{$Position}</span>
@@ -142,18 +143,11 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6">
-                        {if $Attributes|default:array()|count > 0}
-                            {control type="AttributeControl" attribute=$Attributes[0]}
-                        {/if}
-                    </div>
-
-
-                    {if $Attributes|default:array()|count > 1}
+                    {foreach from=$Attributes item=attribute}
                         <div class="col-12 col-sm-6">
-                            {control type="AttributeControl" attribute=$Attributes[$i]}
+                            {control type="AttributeControl" attribute=$attribute}
                         </div>
-                    {/if}
+                    {/foreach}
 
                     <div class="d-grid mt-3">
                         <button type="submit" class="update btn btn-primary btn-block" name="{Actions::SAVE}"

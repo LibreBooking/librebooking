@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
@@ -29,7 +31,7 @@ class ReservationInitializationTest extends TestBase
     private $page;
 
     /**
-     * @var NewReservationInitializer|PHPUnit\Framework\MockObject\MockObject
+     * @var NewReservationInitializer
      */
     private $initializer;
 
@@ -106,6 +108,8 @@ class ReservationInitializationTest extends TestBase
 
     public function testBindsToClosestPeriod()
     {
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/New_York'));
+
         $page = $this->createMock('INewReservationPage');
         $binder = $this->createMock('IReservationComponentBinder');
 

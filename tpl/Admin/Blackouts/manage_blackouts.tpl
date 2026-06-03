@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Timepicker=true DataTable=true}
+{include file='globalheader.tpl' DataTable=true}
 <div id="page-manage-blackouts" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=ManageBlackouts}</h1>
 	<div class="accordion">
@@ -16,25 +16,23 @@
 						<div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
 							<div class="d-flex align-items-center flex-wrap gap-1 me-sm-4">
 								<label class="fw-bold" for="addStartDate">{translate key=BeginDate}</label>
-								<input type="date" id="addStartDate" class="form-control form-control-sm me-1 dateinput"
-									value="{formatdate date=$AddStartDate format='Y-m-d'}" />
-								<input {formname key=BEGIN_DATE} id="formattedAddStartDate" type="hidden"
-									value="{formatdate date=$AddStartDate key=system}" />
-								<input {formname key=BEGIN_TIME} type="text" id="addStartTime"
-									class="form-select form-select-sm dateinput timepicker"
-									value="{format_date format='h:00 A' date=now}" title="{translate key=StartTime}" />
+								<input type="text" id="addStartDate" {formname key=BEGIN_DATE}
+									class="form-control form-control-sm w-auto" />
+								<select {formname key=BEGIN_TIME} id="addStartTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{format_date format='H:00' date=now}">
+								</select>
 								<label for="addStartTime" class="visually-hidden">{translate key=StartTime}</label>
 							</div>
 							<div class="d-flex align-items-center flex-wrap gap-1">
 								<label class="fw-bold" for="addEndDate">{translate key=EndDate}</label>
-								<input type="date" id="addEndDate" class="form-control form-control-sm me-1 dateinput"
-									size="10" value="{formatdate date=$AddEndDate format='Y-m-d'}" />
-								<input {formname key=END_DATE} type="hidden" id="formattedAddEndDate"
-									value="{formatdate date=$AddEndDate key=system}" />
-								<input {formname key=END_TIME} type="text" id="addEndTime"
-									class="form-select form-select-sm dateinput timepicker"
-									value="{format_date format='h:00 A' date=Date::Now()->AddHours(1)}"
-									title="{translate key=EndTime}" />
+								<input type="text" id="addEndDate" {formname key=END_DATE}
+									class="form-control form-control-sm w-auto" />
+								<select {formname key=END_TIME} id="addEndTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30"
+									data-default="{format_date format='H:00' date=Date::Now()->AddHours(1)}">
+								</select>
 								<label for="addEndTime" class="visually-hidden">{translate key=EndTime}</label>
 							</div>
 						</div>
@@ -69,7 +67,7 @@
 								class="form-control form-control-sm w-auto required has-feedback" />
 						</div>
 						<div class="form-group mb-2">
-							{control type="RecurrenceControl" RepeatTerminationDate=$RepeatTerminationDate}
+							{control type="RecurrenceControl"}
 						</div>
 						<div class="form-group">
 							<div class="form-check form-check-inline">
@@ -96,8 +94,8 @@
 						</div>
 
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 						</div>
 					</div>
 				</div>
@@ -116,21 +114,15 @@
 					<div class="accordion-body row gy-2">
 						<div class="form-group col-12 col-sm-4">
 							<div class="d-flex align-items-center justify-content-between flex-wrap">
-								<div>
+								<div class="d-flex flex-column">
 									<label for="startDate" class="fw-bold">{translate key=BeginDate}</label>
-									<input id="startDate" type="date" class="form-control form-control-sm dateinput"
-										value="{formatdate date=$StartDate format='Y-m-d'}" title="Between start date"
+									<input id="startDate" type="text" class="form-control form-control-sm w-auto"
 										placeholder="{translate key=BeginDate}" />
-									<input id="formattedStartDate" type="hidden"
-										value="{formatdate date=$StartDate key=system}" />
 								</div>
-								<div class="ms-1">
+								<div class="d-flex flex-column">
 									<label for="endDate" class="fw-bold">{translate key=EndDate}</label>
-									<input id="endDate" type="date" class="form-control form-control-sm dateinput"
-										value="{formatdate date=$EndDate format='Y-m-d'}"
+									<input id="endDate" type="text" class="form-control form-control-sm w-auto"
 										placeholder="{translate key=EndDate}" />
-									<input id="formattedEndDate" type="hidden"
-										value="{formatdate date=$EndDate key=system}" />
 								</div>
 							</div>
 						</div>
@@ -151,7 +143,7 @@
 							</select>
 						</div>
 						<div class="accordion-footer border-top pt-3">
-							{filter_button class="btn-sm" id="filter"}
+							{filter_button id="filter"}
 							<button id="showAll" class="btn btn-outline-secondary btn-sm"><i
 									class="bi bi-list-task me-1"></i>{translate key=ViewAll}</button>
 						</div>
@@ -197,18 +189,18 @@
 								<td class="date">{formatdate date=$blackout->EndDate timezone=$Timezone key=res_popup}</td>
 								<td>{$blackout->Title}</td>
 								<td>{fullname first=$blackout->FirstName last=$blackout->LastName}</td>
-								<td class="update edit"><a class="link-primary" href="#"><i
-											class="bi bi-pencil-square"></i></a>
+								<td class="update edit"><a href="#" class="link-primary"
+										aria-label="{translate key=Edit}"><i class="bi bi-pencil-square"></i></a>
 								</td>
 								{if $blackout->IsRecurring}
 									<td class="update">
-										<a href="#" class="update delete-recurring"><i
-												class="bi bi-trash3-fill text-danger icon remove"></i></a>
+										<a href="#" class="update delete-recurring" aria-label="{translate key=Delete}"><i
+												class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
 									</td>
 								{else}
 									<td class="update">
-										<a href="#" class="update delete"><i
-												class="bi bi-trash3-fill text-danger icon remove"></i></a>
+										<a href="#" class="update delete" aria-label="{translate key=Delete}"><i
+												class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
 									</td>
 								{/if}
 								<td class="action-delete">
@@ -311,7 +303,7 @@
 	</div>
 
 	{csrf_token}
-	{include file="javascript-includes.tpl" Timepicker=true DataTable=true}
+	{include file="javascript-includes.tpl" DataTable=true}
 	{datatable tableId=$tableId}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="ajax-helpers.js"}
@@ -348,8 +340,8 @@
 			};
 
 			var recurElements = {
-				beginDate: $('#formattedAddStartDate'),
-				endDate: $('#formattedAddEndDate'),
+				beginDate: $('#addStartDate'),
+				endDate: $('#addEndDate'),
 				beginTime: $('#addStartTime'),
 				endTime: $('#addEndTime')
 			};
@@ -363,17 +355,17 @@
 		});
 	</script>
 
-	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}
-	{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
-	{control type="DatePickerSetupControl" ControlId="addStartDate" AltId="formattedAddStartDate"}
-	{control type="DatePickerSetupControl" ControlId="addEndDate" AltId="formattedAddEndDate"}
-	{control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat"}
-	{control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate"}
+	{control type="DatePickerSetupControl" ControlId="startDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="endDate" DefaultDate=$EndDate}
+	{control type="DatePickerSetupControl" ControlId="addStartDate" DefaultDate=$AddStartDate}
+	{control type="DatePickerSetupControl" ControlId="addEndDate" DefaultDate=$AddEndDate}
+	{control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$AddEndDate}
+	{control type="DatePickerSetupControl" ControlId="RepeatDate" Multiple=false}
 
 
 	<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
 		aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-body">
 					<div id="creatingNotification">
@@ -387,7 +379,7 @@
 
 	<div class="modal fade" id="update-box" tabindex="-1" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
 		aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-body">
 					{indicator id="update-spinner"}

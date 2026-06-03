@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationUpdatePresenter.php');
 require_once(ROOT_DIR . 'Pages/Ajax/ReservationUpdatePage.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -18,20 +20,11 @@ class ReservationUpdatePresenterTest extends TestBase
      */
     private $page;
 
-    /**
-     * @var IUpdateReservationPersistenceService
-     */
-    private $persistenceService;
+    private IUpdateReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
-    /**
-     * @var IResourceRepository
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     /**
      * @var FakeScheduleRepository
@@ -111,19 +104,20 @@ class ReservationUpdatePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$this->page->resourceId, $resource],
-                                     [$additionalId1, $additional1],
-                                     [$additionalId2, $additional2]
-                                 ]);
+                                     [
+                                         [$this->page->resourceId, $resource],
+                                         [$additionalId1, $additional1],
+                                         [$additionalId2, $additional2]
+                                     ]
+                                 );
 
         $this->page->repeatType = RepeatType::Daily;
         $roFactory = new RepeatOptionsFactory();
         $repeatOptions = $roFactory->CreateFromComposite($this->page, $this->user->Timezone);
 
         $expectedDuration = DateRange::Create(
-            $this->page->GetStartDate() . " " . $this->page->GetStartTime(),
-            $this->page->GetEndDate() . " " . $this->page->GetEndTime(),
+            $this->page->GetStartDate() . ' ' . $this->page->GetStartTime(),
+            $this->page->GetEndDate() . ' ' . $this->page->GetEndTime(),
             $timezone
         );
 

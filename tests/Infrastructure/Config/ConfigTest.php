@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
 require_once(ROOT_DIR . 'tests/data/test_plugin_configclass.php');
+require_once(ROOT_DIR . 'tests/data/test_plugin_configclass_collision.php');
 
 class ConfigTest extends TestBase
 {
-
     private const CONFIG_ID = 'test';
 
     public function setup(): void
@@ -20,7 +22,7 @@ class ConfigTest extends TestBase
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
         $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
         $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
         $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
         $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
@@ -28,37 +30,218 @@ class ConfigTest extends TestBase
 
     public function testLegacyConfigLoadsAllValues()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_legacy_config.php', '', self::CONFIG_ID, true);
-        $config = Configuration::Instance()->File(self::CONFIG_ID);
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_legacy_config.php', '', self::CONFIG_ID, true);
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
-        $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
-        $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
-        $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
+            $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
+            $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+            $this->assertEquals('legacy/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+            $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
+        });
+
+        $this->assertLogMessage($errorLogs, 'Legacy config format detected', 'legacy config format detection');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'allow.self.registration'", 'deprecated allow.self.registration key');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'image.upload.directory'", 'deprecated image.upload.directory key');
     }
 
-    public function testMainConfigValidation()
+    public function testHistoricalLegacyConfigDevelParsesCorrectly(): void
+    {
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_legacy_config_devel.php',
+                '',
+                self::CONFIG_ID,
+                true
+            );
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+            $this->assertEquals('UTC', $config->GetDefaultTimezone());
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
+            $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+            $this->assertEquals(true, $config->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter()));
+            $this->assertEquals('Web/uploads/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+            $this->assertEquals(3, $config->GetKey(ConfigKeys::CLEANUP_YEARS_OLD_DATA, new IntConverter()));
+            $this->assertEquals('slack_token', $config->GetKey(ConfigKeys::SLACK_TOKEN));
+            $this->assertEquals('tracking_id', $config->GetKey(ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
+            $this->assertArrayNotHasKey('', $config->GetValues());
+        });
+
+        $this->assertLogMessage($errorLogs, 'Legacy config format detected', 'legacy config.devel format detection');
+        $this->assertLogMessage($errorLogs, "Deprecated config key 'delete.old.data.years.old.data'", 'deprecated cleanup legacy key');
+
+        foreach ($errorLogs as $log) {
+            $this->assertFalse(
+                str_contains($log, 'Unknown config key:'),
+                'historical legacy config.devel should not produce unknown key logs'
+            );
+        }
+    }
+
+    public function testMixedCaseSectionNamesResolveCorrectly()
     {
         Configuration::Instance()->Register(
-            ROOT_DIR . 'tests/data/test_invalid_config.php',
+            ROOT_DIR . 'tests/data/test_mixed_case_sections_config.php',
             '',
             self::CONFIG_ID,
             true
         );
-
         $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $appDebug = $config->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
-        $this->assertFalse($appDebug, "Invalid boolean should be replaced with default");
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
+        $this->assertEquals('pgsql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+        $this->assertEquals('mixed-case/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+    }
 
-        $timeout = $config->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
-        $this->assertEquals(30, $timeout, "Invalid integer should be replaced with default");
+    public function testMixedCaseSectionNamesNewFormatResolveCorrectly()
+    {
+        Configuration::Instance()->Register(
+            ROOT_DIR . 'tests/data/test_mixed_case_new_format_config.php',
+            '',
+            self::CONFIG_ID,
+            true
+        );
+        $config = Configuration::Instance()->File(self::CONFIG_ID);
 
-        $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
-        $this->assertEquals('none', $loggingLevel, "Invalid choice should be replaced with default");
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
+        $this->assertEquals('pgsql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
+        $this->assertEquals('mixed-case/images', $config->GetKey(ConfigKeys::UPLOAD_IMAGE_DIRECTORY));
+    }
 
-        $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-        $this->assertEquals(6, $minimumLetters, "Type conversion should return integer");
+    public function testLegacySectionRenamesDoNotProduceFlattenedMergedKeys(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['delete.old.data']['years.old.data'] = 7;
+$conf['settings']['delete.old.data']['delete.old.announcements'] = true;
+$conf['settings']['delete.old.data']['delete.old.blackouts'] = true;
+$conf['settings']['delete.old.data']['delete.old.reservations'] = true;
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('cleanup.years.old.data', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.announcements', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.blackouts', $values);
+        $this->assertArrayNotHasKey('cleanup.delete.old.reservations', $values);
+
+        $this->assertSame(7, $values['cleanup']['years.old.data']);
+        $this->assertTrue($values['cleanup']['delete.old.announcements']);
+        $this->assertTrue($values['cleanup']['delete.old.blackouts']);
+        $this->assertTrue($values['cleanup']['delete.old.reservations']);
+    }
+
+    public function testLegacyImageUploadKeysRewriteToUploadsSection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['image.upload']['directory'] = '/custom/path';
+$conf['settings']['image.upload']['url'] = '/custom/url';
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('uploads.image.upload.directory', $values);
+        $this->assertArrayNotHasKey('uploads.image.upload.url', $values);
+
+        $this->assertSame('/custom/path', $values['uploads']['image.upload.directory']);
+        $this->assertSame('/custom/url', $values['uploads']['image.upload.url']);
+    }
+
+    public function testTopLevelLegacyKeyCanRewriteIntoCanonicalSection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['enable.email'] = true;
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('email.enabled', $values);
+        $this->assertTrue($values['email']['enabled']);
+    }
+
+    public function testLaterKeyWinsWhenLegacyAndCanonicalFormsAreBothPresent(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['delete.old.data']['years.old.data'] = 7;
+$conf['settings']['cleanup']['years.old.data'] = 3;
+PHP
+        );
+
+        $this->assertSame(3, $config->GetValues()['cleanup']['years.old.data']);
+    }
+
+    public function testNestedLegacyKeysDoNotCreateEmptyTopLevelBucket(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
+$conf['settings']['slack']['token'] = 'xoxb-test-token';
+PHP
+        );
+
+        $values = $config->GetValues();
+
+        $this->assertArrayNotHasKey('', $values);
+        $this->assertSame('G-TEST123', $values['google.analytics.tracking.id']);
+        $this->assertSame('xoxb-test-token', $values['slack.token']);
+    }
+
+    public function testGetKeyRetrievesUnsectionedKeysWithEmptySection(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            <<<'PHP'
+<?php
+$conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
+$conf['settings']['slack']['token'] = 'xoxb-test-token';
+PHP
+        );
+
+        $this->assertSame('G-TEST123', $config->GetKey(ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
+        $this->assertSame('xoxb-test-token', $config->GetKey(ConfigKeys::SLACK_TOKEN));
+    }
+
+    public function testMainConfigValidation()
+    {
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_invalid_config.php',
+                '',
+                self::CONFIG_ID,
+                true
+            );
+
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+            $appDebug = $config->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
+            $this->assertFalse($appDebug, 'Invalid boolean should be replaced with default');
+
+            $timeout = $config->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
+            $this->assertEquals(30, $timeout, 'Invalid integer should be replaced with default');
+
+            $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
+            $this->assertEquals('error', $loggingLevel, 'Invalid choice should be replaced with default');
+
+            $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
+            $this->assertEquals(6, $minimumLetters, 'Type conversion should return integer');
+        });
+
+        $this->assertLogMessage($errorLogs, "Invalid type for 'app.debug'. Should be 'boolean'", 'app.debug type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'app.title'. Should be 'string'", 'app.title type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid value 'super-verbose' for 'logging.level'", 'logging.level value validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'inactivity.timeout'. Should be 'integer'", 'inactivity.timeout type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'password.minimum.letters'. Should be 'integer'", 'password.minimum.letters type validation error');
     }
 
     public function testRegistersPluginConfigFiles()
@@ -69,26 +252,107 @@ class ConfigTest extends TestBase
         ;
         $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
-        $this->assertEquals('US/Central', $config->GetDefaultTimezone());
+        $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
         $this->assertEquals('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
         $this->assertEquals('value2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
         $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
     }
 
 
-    public function testPluginConfigValidation()
+    public function testMixedCasePluginConfigResolveCorrectly()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_invalid_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
+        Configuration::Instance()->Register(
+            ROOT_DIR . 'tests/data/test_mixed_case_plugin_config.php',
+            '',
+            TestPluginConfigKeys::CONFIG_ID,
+            false,
+            TestPluginConfigKeys::class
+        );
         $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
-        // Test that invalid string is replaced with default
-        $this->assertEquals('default1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+        $this->assertEquals('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+        $this->assertEquals('value2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+        $this->assertEquals('value3', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+    }
 
-        // Test that invalid string is replaced with default
-        $this->assertEquals('default2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+    public function testPluginConfigRejectsCaseInsensitiveKeyCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollision::class
+            )
+        );
 
-        // Test that invalid choice is replaced with default
-        $this->assertEquals('option1', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+        TestPluginConfigKeysCollision::findByKey('server1.key');
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveKeyCollisionsWhenEntriesShareTheSameKeyName()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionSameKey::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionSameKey::findByKey('server1.key');
+    }
+
+    public function testPluginConfigAllowsTheSameKeyNameInDifferentSections()
+    {
+        $this->assertSame(
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER1_KEY,
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server1.key')
+        );
+        $this->assertSame(
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER2_KEY,
+            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server2.key')
+        );
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveLegacyToCanonicalCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionLegacyVsCanonical::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionLegacyVsCanonical::findByKey('server1.key');
+    }
+
+    public function testPluginConfigRejectsCaseInsensitiveLegacyToLegacyCollisions()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Case-insensitive config key collision detected in %s',
+                TestPluginConfigKeysCollisionLegacyVsLegacy::class
+            )
+        );
+
+        TestPluginConfigKeysCollisionLegacyVsLegacy::findByKey('server1.key1');
+    }
+
+    public function testPluginConfigValidation()
+    {
+        $errorLogs = $this->captureErrorLog(function () {
+            Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_invalid_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
+            $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
+
+            $this->assertEquals('default1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+            $this->assertEquals('default2', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+            $this->assertEquals('option1', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER2_KEY));
+        });
+
+        $this->assertLogMessage($errorLogs, "Invalid type for 'key1'. Should be 'string', using default.", 'key1 type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'server1.key'. Should be 'string', using default.", 'server1.key type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid value 'invalid' for 'server2.key'. Should be one of the following options: [value1 => Option 1, value2 => Option 2, value3 => Option 3]", 'server2.key value validation error');
     }
 
     public function testEnvOverridesConfigWithPutenv()
@@ -103,10 +367,55 @@ class ConfigTest extends TestBase
         $this->assertEquals('UCT', $config->GetDefaultTimezone());
     }
 
-    /**
-     * Test that the actual config.dist.php loads correctly
-     * and all its nested values are accessible
-     */
+    public function testPluginEnvUsesSectionQualifiedNames(): void
+    {
+        putenv('LB_SERVER1_KEY=env-section-qualified');
+        putenv('LB_KEY=legacy-bare-name');
+        putenv('LB_KEY1');
+
+        try {
+            Configuration::Instance()->Register(
+                ROOT_DIR . 'tests/data/test_plugin_config.php',
+                '',
+                TestPluginConfigKeys::CONFIG_ID,
+                false,
+                TestPluginConfigKeys::class
+            );
+            $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
+
+            $this->assertSame('env-section-qualified', $pluginConfig->GetKey(TestPluginConfigKeys::SERVER1_KEY));
+            $this->assertSame('value1', $pluginConfig->GetKey(TestPluginConfigKeys::KEY1));
+        } finally {
+            putenv('LB_SERVER1_KEY');
+            putenv('LB_KEY');
+            putenv('LB_KEY1');
+        }
+    }
+
+    public function testPluginHasEnvUsesSectionQualifiedNames(): void
+    {
+        putenv('LB_SERVER2_KEY=value-from-env');
+        putenv('LB_KEY1');
+
+        try {
+            $this->assertTrue(TestPluginConfigKeys::hasEnv(TestPluginConfigKeys::SERVER2_KEY));
+            $this->assertFalse(TestPluginConfigKeys::hasEnv(TestPluginConfigKeys::KEY1));
+        } finally {
+            putenv('LB_SERVER2_KEY');
+            putenv('LB_KEY1');
+        }
+    }
+
+    public function testConfigKeysMetaEnvKeyForConfigUsesCanonicalPluginKey(): void
+    {
+        $this->assertSame('LB_SERVER1_KEY', ConfigKeysMeta::envKeyForConfig(TestPluginConfigKeys::SERVER1_KEY));
+        $this->assertSame('LB_KEY1', ConfigKeysMeta::envKeyForConfig(TestPluginConfigKeys::KEY1));
+    }
+
+    // /**
+    //  * Test that the actual config.dist.php loads correctly
+    //  * and all its nested values are accessible
+    //  */
     public function testConfigDistLoadsCorrectly()
     {
         // Load the config.dist.php file
@@ -200,6 +509,39 @@ class ConfigTest extends TestBase
                         "String value mismatch for key '$key'"
                     );
                 }
+            }
+        }
+    }
+
+    private function createConfigurationFileFromContents(string $contents): ConfigurationFile
+    {
+        $path = tempnam(sys_get_temp_dir(), 'config-rewrite-test-');
+        if ($path === false) {
+            throw new RuntimeException('Failed to create temporary config file.');
+        }
+
+        try {
+            if (file_put_contents($path, $contents) === false) {
+                throw new RuntimeException('Failed to write temporary config file.');
+            }
+
+            $conf = [];
+            $loaded = require $path;
+
+            if (is_array($loaded) && isset($loaded['settings'])) {
+                return new ConfigurationFile($loaded);
+            }
+
+            if (isset($conf['settings'])) {
+                return new ConfigurationFile([
+                    Configuration::SETTINGS => $conf['settings'],
+                ]);
+            }
+
+            throw new RuntimeException("Invalid config file: 'settings' section missing");
+        } finally {
+            if (file_exists($path)) {
+                unlink($path);
             }
         }
     }

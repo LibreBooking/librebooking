@@ -1,38 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Schedule/ResourceService.php');
 
 class ResourceServiceTest extends TestBase
 {
-    /**
-     * @var IPermissionService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $permissionService;
+    private IPermissionService&\PHPUnit\Framework\MockObject\MockObject $permissionService;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     /**
      * @var ResourceService
      */
     private $resourceService;
 
-    /**
-     * @var IAccessoryRepository
-     */
-    private $accessoryRepository;
+    private IAccessoryRepository&\PHPUnit\Framework\MockObject\MockObject $accessoryRepository;
 
     public function setUp(): void
     {
@@ -76,8 +63,7 @@ class ResourceServiceTest extends TestBase
                 ->method('CanAccessResource')
                 ->willReturnCallback(function ($res, $u) use ($matcher, $resource1, $resource2, $resource3, $resource4, $user) {
                     $this->assertEquals($u, $user);
-                    match ($matcher->numberOfInvocations())
-                    {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
                         3 => $this->assertEquals($res, $resource3),
@@ -190,11 +176,9 @@ class ResourceServiceTest extends TestBase
         $this->permissionService
                 ->expects($matcher)
                 ->method('CanAccessResource')
-                ->willReturnCallback(function($res, $ses) use ($resource1, $resource2, $session, $matcher)
-                {
+                ->willReturnCallback(function ($res, $ses) use ($resource1, $resource2, $session, $matcher) {
                     $this->assertEquals($ses, $session);
-                    match ($matcher->numberOfInvocations())
-                    {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
                     };
@@ -348,7 +332,7 @@ class ResourceServiceTest extends TestBase
 
     public function testGetsAccessoriesFromRepository()
     {
-        $accessories = [new Accessory(4, "lksjdf", 23)];
+        $accessories = [new Accessory(4, 'lksjdf', 23)];
 
         $this->accessoryRepository
                 ->expects($this->once())

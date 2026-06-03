@@ -14,16 +14,17 @@
     <link rel="icon" href="{$Path}{$FaviconUrl}" />
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {jsfile src="js/jquery-3.3.1.min.js"}
-        {jsfile src="js/jquery-migrate-3.0.1.min.js"}
-        {jsfile src="js/jquery-ui.1.12.1.custom.min.js"}
-        {jsfile src="bootstrap/js/bootstrap.bundle.min.js"}
+        {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
+        {vendor_js src="jquery-migrate/3.6.0/jquery-migrate-3.6.0.min.js"}
+        {vendor_js src="jquery-ui/1.14.2/js/jquery-ui.1.14.2.min.js"}
+        {vendor_js src="bootstrap/5.3.3/js/bootstrap.bundle.min.js"}
     {else}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-migrate-3.0.1.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-migrate-3.6.0.min.js"
+            integrity="sha256-LWwll4H5AAC/20gH21NFgk4rYMvZhvc1KD0c5iG7QvM=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"
+            integrity="sha256-mblSWfbYzaq/f+4akyMhE6XELCou4jbkgPv+JQPER2M=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
@@ -33,38 +34,25 @@
 
     <!-- CSS -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {cssfile src="scripts/css/smoothness/jquery-ui.1.12.1.custom.min.css"}
-        {cssfile src="css/bootstrap-icons/css/bootstrap-icons.min.css" rel="stylesheet"}
-        {cssfile src="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"}
-        {if isset($Qtip) && $Qtip}
-            {cssfile src="css/jquery.qtip.min.css" rel="stylesheet"}
-        {/if}
-        {if isset($Validator) && $Validator}
-            {cssfile src="css/bootstrapValidator.min.css" rel="stylesheet"}
-        {/if}
+        {vendor_css src="jquery-ui/1.14.2/css/jquery-ui.1.14.2.min.css"}
+        {vendor_css src="bootstrap-icons/1.11.3/css/bootstrap-icons.min.css"}
+        {vendor_css src="bootstrap/5.3.3/css/bootstrap.css"}
+        {vendor_css src="flatpickr/4.6.13/css/flatpickr.min.css"}
         {if isset($Trumbowyg) && $Trumbowyg}
-            {cssfile src="css/trumbowyg.min.css" rel="stylesheet"}
+            {vendor_css src="trumbowyg/2.27.3/css/trumbowyg.min.css"}
         {/if}
         {if isset($DataTable) && $DataTable}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet"}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet"}
-            {cssfile src="scripts/css/datatable/cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet"}
-        {/if}
-        {if isset($DatePicker) && $DatePicker}
-            {cssfile src="scripts/css/flatpickr/cdn.jsdelivr.net/npm/flatpickr/4.6.13/dist/flatpickr.min.css" rel="stylesheet"}
+            {vendor_css src="datatables/1.13.7/css/dataTables.bootstrap5.min.css"}
+            {vendor_css src="datatables-responsive/2.5.0/css/responsive.bootstrap5.min.css"}
+            {vendor_css src="datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css"}
         {/if}
     {else}
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" />
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/smoothness/jquery-ui.css" type="text/css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" type="text/css" />
-        {if isset($Validator) && $Validator}
-            <link rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
-                type="text/css" />
-        {/if}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
+            integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
         {if isset($Trumbowyg) && $Trumbowyg}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
                 type="text/css" />
@@ -75,27 +63,25 @@
             <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"
                 type="text/css">
         {/if}
-        {if isset($DatePicker) && $DatePicker}
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
-        {/if}
     {/if}
     {if isset($InlineEdit) && $InlineEdit}
-        {cssfile src="scripts/js/x-editable/css/bootstrap-editable.css" rel="stylesheet"}
-        {cssfile src="scripts/js/wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet"}
+        {vendor_css src="x-editable/1.5.1/css/bootstrap-editable.css"}
     {/if}
     {if isset($Select2) && $Select2}
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    {/if}
-    {if isset($Timepicker) && $Timepicker}
-        {cssfile src="scripts/css/timePicker.css" rel="stylesheet"}
-    {/if}
-    {if isset($Fullcalendar) && $Fullcalendar}
-        {cssfile src="scripts/css/fullcalendar.min.css"}
-        <link rel='stylesheet' type='text/css' href='{$Path}scripts/css/fullcalendar.print.css' media='print' />
+        {if isset($UseLocalJquery) && $UseLocalJquery}
+            {vendor_css src="select2/4.1.0-rc.0/css/select2.min.css"}
+        {else}
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        {/if}
     {/if}
 
-    {jsfile src="js/jquery-ui-timepicker-addon.js"}
-    {cssfile src="scripts/css/jquery-ui-timepicker-addon.css"}
+    {if isset($UseLocalJquery) && $UseLocalJquery}
+        {cssfile src="assets/fonts/hind/v18/hind.css"}
+    {else}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;700&display=swap" />
+    {/if}
     {cssfile src="librebooking.css"}
     {if isset($cssFiles) && $cssFiles neq ''}
         {assign var='CssFileList' value=$cssFiles|split:','}
@@ -125,6 +111,12 @@
 
 <body data-bs-theme='{$cssTheme}'>
 
+    <noscript>
+        <div class="alert alert-warning text-center m-2" role="alert">
+            {translate key="JavascriptRequired"}
+        </div>
+    </noscript>
+
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
@@ -140,7 +132,8 @@
         <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
             <div class="container-fluid">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
-                    data-bs-target="#librebooking-navigation">
+                    data-bs-target="#librebooking-navigation" aria-controls="librebooking-navigation" aria-expanded="false"
+                    aria-label="{translate key=ShowHideNavigation}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="librebooking-navigation">
@@ -384,9 +377,30 @@
                                         </li>
                                         <li id="navNewVersion" class="new-version">
                                             <a class="dropdown-item"
-                                                href="https://github.com/LibreBooking/app/releases">{translate key=WhatsNew}</a>
+                                                href="https://github.com/LibreBooking/librebooking/releases">{translate key=WhatsNew}</a>
                                         </li>
                                     {/if}
+                                </ul>
+                            </li>
+                        {/if}
+                        {if isset($LoggedIn) && $LoggedIn && count($AvailableLanguages) > 1}
+                            <li class="nav-item dropdown" id="navLanguageDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown" aria-label="{translate key=ChangeLanguage}"
+                                    title="{translate key=ChangeLanguage}">
+                                    <span class="visually-hidden">{translate key=ChangeLanguage}</span>
+                                    <i class="bi bi-globe-americas" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" id="languageDropdownMenu"
+                                    style="max-height: 70vh; overflow-y: auto; min-width: 14rem;">
+                                    {foreach from=$AvailableLanguages item=lang}
+                                        <li>
+                                            <a class="dropdown-item {if $CurrentLanguage == $lang->GetLanguageCode()}active{/if}"
+                                                href="#" data-lang-code="{$lang->GetLanguageCode()}">
+                                                {$lang->GetDisplayName()}
+                                            </a>
+                                        </li>
+                                    {/foreach}
                                 </ul>
                             </li>
                         {/if}
@@ -395,11 +409,11 @@
                                 data-bs-toggle="dropdown">{translate key="Help"}</a>
                             <ul class="dropdown-menu  dropdown-menu-end">
                                 <li id="navHelp"><a class="dropdown-item"
-                                        href="https://github.com/LibreBooking/app/wiki">{translate key=Help}</a>
+                                        href="https://github.com/LibreBooking/librebooking/wiki">{translate key=Help}</a>
                                 </li>
                                 {if isset($CanViewAdmin) && $CanViewAdmin}
                                     <li id="navHelpAdmin"><a class="dropdown-item"
-                                            href="https://github.com/LibreBooking/app/wiki/Administration">{translate key=Administration}</a>
+                                            href="https://github.com/LibreBooking/librebooking/wiki/Administration">{translate key=Administration}</a>
                                     </li>
                                 {/if}
                                 <li id="navAbout"><a class="dropdown-item"
@@ -419,4 +433,4 @@
         </nav>
     {/if}
 
-<div id="main" class="container-fluid my-3">
+<div id="main" class="container-fluid my-3" role="main">

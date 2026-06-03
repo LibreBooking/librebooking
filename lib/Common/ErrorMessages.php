@@ -8,6 +8,8 @@ class ErrorMessages
     public const MISSING_SCHEDULE = 3;
     public const RESERVATION_NOT_FOUND = 4;
     public const RESERVATION_NOT_AVAILABLE = 5;
+    public const DATABASE_CONNECTION = 6;
+    public const DATABASE_NOT_FOUND = 7;
 
     private $_resourceKeys = [];
     private static $_instance;
@@ -19,6 +21,8 @@ class ErrorMessages
         $this->SetKey(ErrorMessages::MISSING_SCHEDULE, 'MissingReservationScheduleError');
         $this->SetKey(ErrorMessages::RESERVATION_NOT_FOUND, 'ReservationNotFoundError');
         $this->SetKey(ErrorMessages::RESERVATION_NOT_AVAILABLE, 'ReservationNotAvailable');
+        $this->SetKey(ErrorMessages::DATABASE_CONNECTION, 'DatabaseConnectionError');
+        $this->SetKey(ErrorMessages::DATABASE_NOT_FOUND, 'DatabaseNotFoundError');
     }
 
     /**

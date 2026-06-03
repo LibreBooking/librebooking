@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 
 class ResourceParticipationRuleTest extends TestBase

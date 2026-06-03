@@ -72,7 +72,7 @@ abstract class SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s-%s", get_class($this), $this->id);
+        return sprintf('%s-%s', get_class($this), $this->id);
     }
 
     public static function Compare(SeriesEvent $event1, SeriesEvent $event2)
@@ -109,7 +109,7 @@ class InstanceAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -136,7 +136,7 @@ class InstanceRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -163,7 +163,7 @@ class InstanceUpdatedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -176,7 +176,7 @@ class SeriesBranchedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -197,7 +197,7 @@ class SeriesDeletedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -241,7 +241,7 @@ class ResourceRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->ResourceId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->ResourceId(), $this->series->SeriesId());
     }
 }
 
@@ -293,7 +293,7 @@ class ResourceAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->ResourceId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->ResourceId(), $this->series->SeriesId());
     }
 
     public function ResourceLevel()
@@ -311,7 +311,7 @@ class SeriesApprovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -347,7 +347,7 @@ class AccessoryAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->accessory->__toString());
+        return sprintf('%s%s', get_class($this), $this->accessory->__toString());
     }
 }
 
@@ -375,7 +375,7 @@ class AccessoryRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->accessory->__toString());
+        return sprintf('%s%s', get_class($this), $this->accessory->__toString());
     }
 }
 
@@ -411,7 +411,7 @@ class AttributeAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->attribute->__toString());
+        return sprintf('%s%s', get_class($this), $this->attribute->__toString());
     }
 }
 
@@ -439,7 +439,7 @@ class AttributeRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->attribute->__toString());
+        return sprintf('%s%s', get_class($this), $this->attribute->__toString());
     }
 }
 
@@ -494,7 +494,7 @@ class OwnerChangedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s%s",
+            '%s%s%s%s',
             get_class($this),
             $this->OldOwnerId(),
             $this->NewOwnerId(),
@@ -546,7 +546,7 @@ class AttachmentRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->FileId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->FileId(), $this->series->SeriesId());
     }
 }
 
@@ -570,7 +570,7 @@ class ReminderAddedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s%s",
+            '%s%s%s%s',
             get_class($this),
             $this->MinutesPrior(),
             $this->ReminderType(),
@@ -623,7 +623,7 @@ class ReminderRemovedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s",
+            '%s%s%s',
             get_class($this),
             $this->ReminderType(),
             $this->series->SeriesId()

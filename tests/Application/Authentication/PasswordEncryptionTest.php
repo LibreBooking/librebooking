@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 class PasswordEncryptionTest extends TestBase
@@ -14,6 +16,6 @@ class PasswordEncryptionTest extends TestBase
 
         $expectedEncryptedPassword = sha1($password . $salt);
 
-        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, "Password was not encrypted correctly");
+        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, 'Password was not encrypted correctly');
     }
 }

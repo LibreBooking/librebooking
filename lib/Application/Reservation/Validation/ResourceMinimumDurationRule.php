@@ -26,7 +26,7 @@ class ResourceMinimumDurationRule implements IReservationValidationRule
                 if ($end->LessThan($minEnd)) {
                     return new ReservationRuleResult(
                         false,
-                        $r->GetString("MinDurationError", $minDuration)
+                        $r->GetString('MinDurationError', $minDuration)
                     );
                 }
             }

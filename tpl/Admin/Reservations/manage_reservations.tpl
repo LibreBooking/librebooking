@@ -62,17 +62,11 @@
 							class="form-group filter-dates {$groupClass} d-flex justify-content-between align-items-center">
 							<div>
 								<label for="startDate" class="fw-bold">{translate key='BeginDate'}</label>
-								<input id="startDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$StartDate format='Y-m-d'}" />
-								<input id="formattedStartDate" type="hidden"
-									value="{formatdate date=$StartDate key=system}" />
+								<input id="startDate" type="text" class="form-control form-control-sm" />
 							</div>
 							<div>
 								<label for="endDate" class="fw-bold">{translate key='EndDate'}</label>
-								<input id="endDate" type="date" class="form-control form-control-sm dateinput inline"
-									value="{formatdate date=$EndDate format='Y-m-d'}" />
-								<input id="formattedEndDate" type="hidden"
-									value="{formatdate date=$EndDate key=system}" />
+								<input id="endDate" type="text" class="form-control form-control-sm" />
 							</div>
 						</div>
 						<div class="form-group filter-user {$groupClass}">
@@ -168,8 +162,8 @@
 					</form>
 
 					<div class="accordion-footer border-top mt-3 pt-3">
-						{filter_button id="filter" class="btn-sm"}
-						{reset_button id="clearFilter" class="btn-sm"}
+						{filter_button id="filter"}
+						{reset_button id="clearFilter"}
 					</div>
 				</div>
 			</div>
@@ -226,11 +220,10 @@
 							{/if}
 							{assign var=reservationId value=$reservation->ReservationId}
 							<tr class="{$rowCss} {if $IsDesktop}editable{/if}" data-seriesId="{$reservation->SeriesId}"
-								data-refnum="{$reservation->ReferenceNumber}" data-bs-custom-class="respopup-tooltip"
-								data-bs-html="true">
+								data-refnum="{$reservation->ReferenceNumber}">
 								<td class="id d-none">{$reservationId}</td>
 								<td class="user">
-									{fullname first=$reservation->FirstName last=$reservation->LastName ignorePrivacy=true}
+									{fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=true}
 								</td>
 								<td class="resource">{$reservation->ResourceName}
 									{if $reservation->ResourceStatusId == ResourceStatus::AVAILABLE}
@@ -244,8 +237,10 @@
 										{*<span class="reservationResourceStatusReason">{$StatusReasons[$reservation->ResourceStatusReasonId]->Description()}</span>*}
 									{*{/if}*}
 								</td>
-								<td class="reservationTitle">{$reservation->Title}</td>
-								<td class="description">{$reservation->Description}</td>
+								<td><span
+										class="reservationTitle">{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}</span>
+								</td>
+								<td class="description">{$reservation->Description|escape:'html'}</td>
 								<td class="date">
 									{formatdate date=$reservation->StartDate timezone=$Timezone key=short_reservation_date}
 								</td>
@@ -478,7 +473,7 @@
 						<div class="">
 							<label for="reservationImportFile" class="visually-hidden">{translate key=File}</label>
 							<input type="file" {formname key=RESERVATION_IMPORT_FILE} id="reservationImportFile"
-								class="form-control" accept=".csv" />
+								class="form-control form-control-sm" accept=".csv" />
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -502,17 +497,17 @@
 					</div>
 					<div class="modal-body">
 						<div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="manual" id="tos_manual_radio"
 									checked="checked" data-ref="tos_manual_div" class="toggle form-check-input">
 								<label for="tos_manual_radio">{translate key=EnterTermsManually}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="url" id="tos_url_radio"
 									data-ref="tos_url_div" class="toggle form-check-input">
 								<label for="tos_url_radio">{translate key=LinkToTerms}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_METHOD} value="upload" id="tos_upload_radio"
 									data-ref="tos_upload_div" class="toggle form-check-input">
 								<label for="tos_upload_radio">{translate key=UploadTerms}</label>
@@ -521,14 +516,14 @@
 						<div id="tos_manual_div" class="tos-div">
 							<div class="form-group">
 								<label for="tos-manual" class="fw-bold">{translate key=TermsOfService}</label>
-								<textarea id="tos-manual" class="form-control w-100" rows="10"
+								<textarea id="tos-manual" class="form-control form-control-sm w-100" rows="10"
 									{formname key=TOS_TEXT}></textarea>
 							</div>
 						</div>
 						<div id="tos_url_div" class="tos-div d-none">
 							<div class="form-group">
 								<label for="tos-url" class="fw-bold">{translate key=LinkToTerms}</label>
-								<input type="url" id="tos-url" class="form-control"
+								<input type="url" id="tos-url" class="form-control form-control-sm"
 									placeholder="http://www.example.com/tos.html" {formname key=TOS_URL}
 									maxlength="255" />
 							</div>
@@ -551,13 +546,13 @@
 						</div>
 						<div class="mt-3">
 							<div>{translate key=RequireTermsOfServiceAcknowledgement}</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_APPLICABILITY} class="form-check-input"
 									value="{TermsOfService::RESERVATION}" id="tos_reservation" checked="checked">
 								<label for="tos_reservation"
 									class="form-check-label">{translate key=UponReservation}</label>
 							</div>
-							<div class="form-check form-check-inline">
+							<div class="form-check">
 								<input type="radio" {formname key=TOS_APPLICABILITY} class="form-check-input"
 									value="{TermsOfService::REGISTRATION}" id="tos_registration">
 								<label for="tos_registration"
@@ -580,11 +575,11 @@
 	{datatable tableId=$tableId}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/reservations.js"}
-
+	{jsfile src="search-clear.js"}
 	{jsfile src="autocomplete.js"}
 	{jsfile src="reservationPopup.js"}
 	{jsfile src="approval.js"}
-	{jsfile src="dropzone.js"}
+	{vendor_js src="dropzone/1.0.0/js/dropzone.js"}
 
 	<script type="text/javascript">
 		/*function hidePopoversWhenClickAway() {
@@ -678,8 +673,8 @@
 		});
 	</script>
 
-	{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedStartDate"}
-	{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
+	{control type="DatePickerSetupControl" ControlId="startDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="endDate" DefaultDate=$EndDate}
 
 	{csrf_token}
 
@@ -689,5 +684,4 @@
 	</div>
 
 </div>
-{jsfile src="search-clear.js"}
 {include file='globalfooter.tpl'}

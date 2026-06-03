@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
 require_once(ROOT_DIR . 'Presenters/CalendarSubscriptionPresenter.php');
 
@@ -146,8 +148,8 @@ class CalendarSubscriptionPresenterTest extends TestBase
     {
         $publicId = '1';
         $reservationResult = [
-                new TestReservationItemView(1, Date::Now(), Date::Now(), 1),
-                new TestReservationItemView(2, Date::Now(), Date::Now(), 2),
+            new TestReservationItemView(1, Date::Now(), Date::Now(), 1),
+            new TestReservationItemView(2, Date::Now(), Date::Now(), 2),
         ];
 
         $resourceIds = [2];
@@ -186,7 +188,7 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
 
     public $UserId;
 
-    public $SubscriptionKey = "123";
+    public $SubscriptionKey = '123';
     public $PastDays;
     public $FutureDays;
 
@@ -222,8 +224,7 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
 
     public function GetAccessoryIds()
     {
-        // TODO: Implement GetAccessoryIds() method.
-        return null;
+        return 0;
     }
 
     public function GetPastNumberOfDays()

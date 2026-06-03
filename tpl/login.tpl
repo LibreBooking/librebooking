@@ -32,7 +32,11 @@
 
                         {if $ShowLoginError}
                             <div id="loginError" class="alert alert-danger">
-                                {translate key='LoginError'}
+                                {if !empty($LoginErrorMessage)}
+                                    {$LoginErrorMessage}
+                                {else}
+                                    {translate key='LoginError'}
+                                {/if}
                             </div>
                         {/if}
 
@@ -131,6 +135,7 @@
                                 {translate key='ForgotMyPassword'}</a>
                         </div>
                     {/if}
+                    {if count($Languages) > 1}
                     <div id="change-language" class="text-end">
                         <a type="button" class="link-primary" data-bs-toggle="collapse"
                             data-bs-target="#change-language-options"><span><i class="bi bi-globe-americas"></i></span>
@@ -142,6 +147,7 @@
                             </select>
                         </div>
                     </div>
+                    {/if}
                 </div>
             </div>
 

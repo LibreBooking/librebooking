@@ -52,9 +52,9 @@ class CAS_ProxyTicketException extends BadMethodCallException implements CAS_Exc
     {
         // Warn if the code is not in our allowed list
         $ptCodes = [
-        PHPCAS_SERVICE_PT_FAILURE,
-        PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE,
-        PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE,
+            PHPCAS_SERVICE_PT_FAILURE,
+            PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE,
+            PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE,
         ];
         if (!in_array($code, $ptCodes)) {
             trigger_error(

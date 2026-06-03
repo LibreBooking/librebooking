@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAuthentication implements IAuthentication
 {
     public $_ValidateResult = false;
@@ -39,8 +41,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AreCredentialsKnown()
     {
-        // TODO: Implement AreCredentialsKnown() method.
-        return null;
+        return false;
     }
 
     /**
@@ -57,8 +58,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowUsernamePrompt()
     {
-        // TODO: Implement ShowUsernamePrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -66,8 +66,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowPasswordPrompt()
     {
-        // TODO: Implement ShowPasswordPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -75,8 +74,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowPersistLoginPrompt()
     {
-        // TODO: Implement ShowPersistLoginPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -84,8 +82,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function ShowForgotPasswordPrompt()
     {
-        // TODO: Implement ShowForgotPasswordPrompt() method.
-        return null;
+        return false;
     }
 
     /**
@@ -93,8 +90,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowUsernameChange()
     {
-        // TODO: Implement AllowUsernameChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -102,8 +98,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowEmailAddressChange()
     {
-        // TODO: Implement AllowEmailAddressChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -111,8 +106,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPasswordChange()
     {
-        // TODO: Implement AllowPasswordChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -120,8 +114,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowNameChange()
     {
-        // TODO: Implement AllowNameChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -129,8 +122,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPhoneChange()
     {
-        // TODO: Implement AllowPhoneChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -138,8 +130,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowOrganizationChange()
     {
-        // TODO: Implement AllowOrganizationChange() method.
-        return null;
+        return false;
     }
 
     /**
@@ -147,8 +138,7 @@ class FakeAuthentication implements IAuthentication
      */
     public function AllowPositionChange()
     {
-        // TODO: Implement AllowPositionChange() method.
-        return null;
+        return false;
     }
 }
 
@@ -171,6 +161,7 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_LoginCalled = false;
 
     public $_ValidateResult = false;
+    public $_ValidateException = null;
 
     public $_ShowUsernamePrompt = false;
     public $_ShowPasswordPrompt = false;
@@ -180,12 +171,18 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_IsLoggedIn = false;
     public $_AreCredentialsKnown = false;
 
-    public function postLogout(UserSession $user) { }
+    public function postLogout(UserSession $user)
+    {
+    }
 
     public function Validate($username, $password)
     {
         $this->_LastLogin = $username;
         $this->_LastPassword = $password;
+
+        if ($this->_ValidateException instanceof Throwable) {
+            throw $this->_ValidateException;
+        }
 
         return $this->_ValidateResult;
     }

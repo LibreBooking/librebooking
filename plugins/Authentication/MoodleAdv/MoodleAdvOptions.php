@@ -60,7 +60,6 @@ class MoodleAdvOptions
 
     private function GetConfig($configDef, $converter = null)
     {
-        $keyName = is_array($configDef) ? $configDef['key'] : $configDef;
-        return Configuration::Instance()->File(MoodleAdvConfigKeys::CONFIG_ID)->GetKey($keyName, $converter);
+        return Configuration::Instance()->File(MoodleAdvConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/ManageUsersPresenter.php');
 require_once(ROOT_DIR . 'Pages/Admin/ManageUsersPage.php');
 
@@ -20,10 +22,7 @@ class ManageUsersPresenterTest extends TestBase
      */
     public $resourceRepo;
 
-    /**
-     * @var IManageUsersService|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $manageUsersService;
+    public IManageUsersService&\PHPUnit\Framework\MockObject\MockObject $manageUsersService;
 
     /**
      * @var ManageUsersPresenter
@@ -35,20 +34,11 @@ class ManageUsersPresenterTest extends TestBase
      */
     public $attributeService;
 
-    /**
-     * @var PasswordEncryption
-     */
-    public $encryption;
+    public PasswordEncryption&\PHPUnit\Framework\MockObject\MockObject $encryption;
 
-    /**
-     * @var IGroupRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $groupRepository;
+    public IGroupRepository&\PHPUnit\Framework\MockObject\MockObject $groupRepository;
 
-    /**
-     * @var IGroupViewRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    public $groupViewRepository;
+    public IGroupViewRepository&\PHPUnit\Framework\MockObject\MockObject $groupViewRepository;
 
     public function setUp(): void
     {
@@ -127,13 +117,13 @@ class ManageUsersPresenterTest extends TestBase
     public function testGetsSelectedResourcesFromPageAndAssignsPermission()
     {
         $resourcesThatShouldRemainUnchanged = [5, 10];
-        $allowedResourceIds = [1, 2, 4, 20, 30];
-        $submittedResourceIds = [1, 4];
-        $currentResourceIds = [1, 20, 30];
+        $adminManageableIds = [1, 2, 4, 20, 30];
+        $submittedResourceIds = ['1_0', '4_0'];
+        $currentFullAccessIds = [1, 20, 30];
 
-        $expectedResourceIds = [1, 4, 5, 10];
+        $expectedFullAccessIds = [1, 4, 5, 10];
 
-        $allResourceIds = array_unique(array_merge($resourcesThatShouldRemainUnchanged, $allowedResourceIds, $submittedResourceIds, $currentResourceIds));
+        $allResourceIds = array_unique(array_merge($resourcesThatShouldRemainUnchanged, $adminManageableIds, [1, 4], $currentFullAccessIds));
 
         $resources = [];
         foreach ($allResourceIds as $rid) {
@@ -144,10 +134,10 @@ class ManageUsersPresenterTest extends TestBase
         $adminUserId = $this->fakeUser->UserId;
 
         $user = new FakeUser();
-        $user->WithAllowedPermissions(array_merge($resourcesThatShouldRemainUnchanged, $currentResourceIds));
+        $user->WithAllowedPermissions(array_merge($resourcesThatShouldRemainUnchanged, $currentFullAccessIds));
 
         $adminUser = new FakeUser();
-        $adminUser->_ResourceAdminResourceIds = $allowedResourceIds;
+        $adminUser->_ResourceAdminResourceIds = $adminManageableIds;
         $adminUser->_IsResourceAdmin = false;
 
         $this->page->_UserId = $userId;
@@ -160,8 +150,55 @@ class ManageUsersPresenterTest extends TestBase
 
         $this->presenter->ChangePermissions();
 
-        $actual = $user->GetAllowedResourceIds();
-        $this->assertEquals(sort($expectedResourceIds), sort($actual));
+        $actualFullAccess = $user->GetFullAccessResourceIds();
+        sort($expectedFullAccessIds);
+        sort($actualFullAccess);
+        $this->assertEquals($expectedFullAccessIds, $actualFullAccess);
+        $this->assertEquals($this->userRepo->_UpdatedUser, $user);
+    }
+
+    public function testViewPermissionsPreservedSeparatelyFromFullPermissions()
+    {
+        // Admin can manage resources [1, 2, 3]
+        // User has full=[1, 5], view=[2, 6]
+        // Admin submits full=[1], view=[3]
+        // Expected: full=[1, 5], view=[3, 6]
+        $adminManageableIds = [1, 2, 3];
+        $submittedResourceIds = ['1_0', '3_1'];
+
+        $allResourceIds = [1, 2, 3, 5, 6];
+        $resources = [];
+        foreach ($allResourceIds as $rid) {
+            $resources[] = new FakeBookableResource($rid);
+        }
+
+        $userId = 9928;
+        $adminUserId = $this->fakeUser->UserId;
+
+        $user = new FakeUser();
+        $user->WithAllowedPermissions([1, 5]);
+        $user->WithViewablePermission([2, 6]);
+
+        $adminUser = new FakeUser();
+        $adminUser->_ResourceAdminResourceIds = $adminManageableIds;
+        $adminUser->_IsResourceAdmin = false;
+
+        $this->page->_UserId = $userId;
+        $this->page->_AllowedResourceIds = $submittedResourceIds;
+
+        $this->resourceRepo->_ResourceList = $resources;
+
+        $this->userRepo->_UserById[$adminUserId] = $adminUser;
+        $this->userRepo->_UserById[$userId] = $user;
+
+        $this->presenter->ChangePermissions();
+
+        $actualFull = $user->GetFullAccessResourceIds();
+        $actualView = $user->GetViewAccessResourceIds();
+        sort($actualFull);
+        sort($actualView);
+        $this->assertEquals([1, 5], $actualFull);
+        $this->assertEquals([3, 6], $actualView);
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
@@ -225,9 +262,9 @@ class ManageUsersPresenterTest extends TestBase
         $this->page->_Attributes = $attributeFormElements;
 
         $extraAttributes = [
-                UserAttribute::Organization => $organization,
-                UserAttribute::Phone => $phone,
-                UserAttribute::Position => $position];
+            UserAttribute::Organization => $organization,
+            UserAttribute::Phone => $phone,
+            UserAttribute::Position => $position];
 
         $this->manageUsersService->expects($this->once())
                                  ->method('UpdateUser')
@@ -266,13 +303,11 @@ class ManageUsersPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->manageUsersService->expects($matcher)
                                  ->method('DeleteUser')
-                                 ->willReturnCallback(function ($userId) use ($matcher)
-                                 {
-                                    match ($matcher->numberOfInvocations())
-                                    {
-                                        1 => $this->assertEquals(809, $userId),
-                                        2 => $this->assertEquals(909, $userId)
-                                    };
+                                 ->willReturnCallback(function ($userId) use ($matcher) {
+                                     match ($matcher->numberOfInvocations()) {
+                                         1 => $this->assertEquals(809, $userId),
+                                         2 => $this->assertEquals(909, $userId)
+                                     };
                                  });
 
         $this->presenter->DeleteMultipleUsers();
@@ -323,9 +358,9 @@ class ManageUsersPresenterTest extends TestBase
                                      $this->equalTo($lang),
                                      $this->equalTo(Pages::DEFAULT_HOMEPAGE_ID),
                                      $this->equalTo([
-                                                               UserAttribute::Organization => null,
-                                                               UserAttribute::Phone => null,
-                                                               UserAttribute::Position => null]),
+                                         UserAttribute::Organization => null,
+                                         UserAttribute::Phone => null,
+                                         UserAttribute::Position => null]),
                                      $this->equalTo([new AttributeValue($attributeId, $attributeValue)])
                                  )
                                  ->willReturn($user);
@@ -364,17 +399,17 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("f1", $row1->firstName);
-        $this->assertEquals("l1", $row1->lastName);
-        $this->assertEquals("p1", $row1->password);
-        $this->assertEquals("ph1", $row1->phone);
-        $this->assertEquals("o1", $row1->organization);
-        $this->assertEquals("po1", $row1->position);
-        $this->assertEquals("t1", $row1->timezone);
-        $this->assertEquals("l1", $row1->language);
-        $this->assertEquals(["g1"], $row1->groups);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('f1', $row1->firstName);
+        $this->assertEquals('l1', $row1->lastName);
+        $this->assertEquals('p1', $row1->password);
+        $this->assertEquals('ph1', $row1->phone);
+        $this->assertEquals('o1', $row1->organization);
+        $this->assertEquals('po1', $row1->position);
+        $this->assertEquals('t1', $row1->timezone);
+        $this->assertEquals('l1', $row1->language);
+        $this->assertEquals(['g1'], $row1->groups);
     }
 
     public function testDefaultsMissingColumns()
@@ -387,16 +422,16 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("f1", $row1->firstName);
-        $this->assertEquals("l1", $row1->lastName);
-        $this->assertEquals("p1", $row1->password);
-        $this->assertEquals("", $row1->phone);
-        $this->assertEquals("", $row1->organization);
-        $this->assertEquals("", $row1->position);
-        $this->assertEquals("", $row1->timezone);
-        $this->assertEquals("", $row1->language);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('f1', $row1->firstName);
+        $this->assertEquals('l1', $row1->lastName);
+        $this->assertEquals('p1', $row1->password);
+        $this->assertEquals('', $row1->phone);
+        $this->assertEquals('', $row1->organization);
+        $this->assertEquals('', $row1->position);
+        $this->assertEquals('', $row1->timezone);
+        $this->assertEquals('', $row1->language);
         $this->assertEquals([], $row1->groups);
     }
 
@@ -410,16 +445,16 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertCount(1, $rows);
 
         $row1 = $rows[0];
-        $this->assertEquals("u1", $row1->username);
-        $this->assertEquals("e1", $row1->email);
-        $this->assertEquals("", $row1->firstName);
-        $this->assertEquals("", $row1->lastName);
-        $this->assertEquals("", $row1->password);
-        $this->assertEquals("", $row1->phone);
-        $this->assertEquals("", $row1->organization);
-        $this->assertEquals("", $row1->position);
-        $this->assertEquals("", $row1->timezone);
-        $this->assertEquals("", $row1->language);
+        $this->assertEquals('u1', $row1->username);
+        $this->assertEquals('e1', $row1->email);
+        $this->assertEquals('', $row1->firstName);
+        $this->assertEquals('', $row1->lastName);
+        $this->assertEquals('', $row1->password);
+        $this->assertEquals('', $row1->phone);
+        $this->assertEquals('', $row1->organization);
+        $this->assertEquals('', $row1->position);
+        $this->assertEquals('', $row1->timezone);
+        $this->assertEquals('', $row1->language);
         $this->assertEquals([], $row1->groups);
     }
 
@@ -494,7 +529,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
      */
     public $_FilterStatusId;
     /**
-     * @var int[]
+     * @var string[]
      */
     public $_AllowedResourceIds;
     /**
@@ -591,6 +626,9 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
         $this->_JsonResponse = $objectToSerialize;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function GetAllowedResourceIds()
     {
         return $this->_AllowedResourceIds;
@@ -673,20 +711,17 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function GetReservationColor()
     {
-        // TODO: Implement GetReservationColor() method.
-        return null;
+        return '';
     }
 
     public function GetValue()
     {
-        // TODO: Implement GetValue() method.
-        return null;
+        return '';
     }
 
     public function GetName()
     {
-        // TODO: Implement GetName() method.
-        return null;
+        return '';
     }
 
     public function ShowTemplateCSV($attributes)
@@ -696,8 +731,13 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function GetImportFile()
     {
-        // TODO: Implement GetImportFile() method.
-        return null;
+        return new UploadedFile([
+            'name' => 'users.csv',
+            'tmp_name' => __FILE__,
+            'type' => 'text/csv',
+            'size' => filesize(__FILE__),
+            'error' => UPLOAD_ERR_OK,
+        ]);
     }
 
     public function SetImportResult($importResult)
@@ -707,8 +747,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function GetInvitedEmails()
     {
-        // TODO: Implement GetInvitedEmails() method.
-        return null;
+        return '';
     }
 
     public function ShowExportCsv()
@@ -728,14 +767,12 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function SendEmailNotification()
     {
-        // TODO: Implement SendEmailNotification() method.
-        return null;
+        return false;
     }
 
     public function GetUpdateOnImport()
     {
-        // TODO: Implement GetUpdateOnImport() method.
-        return null;
+        return false;
     }
 
     public function ShowUserUpdate(User $user, $attributes)

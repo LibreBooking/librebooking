@@ -1,4 +1,5 @@
 <?php
+
 /**
 Modified by Alenka Kavčič (alenka.kavcic@fri.uni-lj.si), UL FRI, July 2015
 Translated and adapted for Slovenian language
@@ -19,7 +20,7 @@ class si_si extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Ime';
         $strings['LastName'] = 'Priimek';
@@ -522,6 +523,7 @@ class si_si extends en_gb
         $strings['NoResourcePermission'] = 'Nimate dovoljenja za dostop do enega ali več zahtevanih virov.';
         $strings['ConflictingReservationDates'] = 'Obstajajo konfliktne rezervacije za naslednje datume:';
         $strings['StartDateBeforeEndDateRule'] = 'Začetni datum in čas rezervacije mora biti pred končnim datumom in časom.';
+        $strings['RecurringWithoutTerminationRule'] = 'Za ponavljajoče blokade je potreben končni datum.';
         $strings['StartIsInPast'] = 'Začetni in končni datum rezervacije ne more biti v preteklosti.';
         $strings['EmailDisabled'] = 'Administrator je onemogočil obveščanje po elektronski pošti.';
         $strings['ValidLayoutRequired'] = 'Termini morajo biti postavljeni za vseh 24 ur v dnevu z začetkom in koncem ob 12:00.';
@@ -668,12 +670,12 @@ class si_si extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervacije, ki čakajo na odobritev';
         $strings['LaterThisMonth'] = 'Kasneje ta mesec';
         $strings['LaterThisYear'] = 'Kasneje letos';
-        $strings['Remaining'] = 'Preostalo';        
+        $strings['Remaining'] = 'Preostalo';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Ni manjkajočih rezervacij za odhod';
-        $strings['MissingCheckOutReservations'] = 'Manjkajoče rezervacije za odhod';        
+        $strings['MissingCheckOutReservations'] = 'Manjkajoče rezervacije za odhod';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -692,7 +694,7 @@ class si_si extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
         DAY NAMES
@@ -718,7 +720,7 @@ class si_si extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
         MONTH NAMES

@@ -1,6 +1,6 @@
 <div class="availableDates" data-has-availability="{$schedule->HasAvailability()|intval}"
-    data-start-date="{formatdate date=$schedule->GetAvailabilityBegin() timezone=$timezone key=general_date}"
-    data-end-date="{formatdate date=$schedule->GetAvailabilityEnd() timezone=$timezone key=general_date}">
+    data-start-date="{formatdate date=$schedule->GetAvailabilityBegin() timezone=$timezone format='Y-m-d'}"
+    data-end-date="{formatdate date=$schedule->GetAvailabilityEnd() timezone=$timezone format='Y-m-d'}">
 </div>
 
 {translate key=Available}

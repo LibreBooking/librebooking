@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/BlackoutRepository.php');
 
 class FakeBlackoutRepository implements IBlackoutRepository
@@ -35,7 +37,7 @@ class FakeBlackoutRepository implements IBlackoutRepository
     public function Add(BlackoutSeries $blackoutSeries)
     {
         $this->_Added = $blackoutSeries;
-        return null;
+        return 1;
     }
 
     /**

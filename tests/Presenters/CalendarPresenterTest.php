@@ -1,49 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/CalendarPage.php');
 require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
 
 class CalendarPresenterTest extends TestBase
 {
-    /**
-     * @var ICommonCalendarPage|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $page;
+    private ICommonCalendarPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
     /**
      * @var CalendarPresenter
      */
     private $presenter;
 
-    /**
-     * @var IReservationViewRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $repository;
+    private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    /**
-     * @var ICalendarFactory|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $calendarFactory;
+    private ICalendarFactory&\PHPUnit\Framework\MockObject\MockObject $calendarFactory;
 
-    /**
-     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
     /**
      * @var FakeUserRepository
      */
     private $userRepository;
 
-    /**
-     * @var IResourceService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceService;
+    private IResourceService&\PHPUnit\Framework\MockObject\MockObject $resourceService;
 
-    /**
-     * @var ICalendarSubscriptionService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $subscriptionService;
+    private ICalendarSubscriptionService&\PHPUnit\Framework\MockObject\MockObject $subscriptionService;
 
     /**
      * @var FakePrivacyFilter
@@ -82,7 +66,7 @@ class CalendarPresenterTest extends TestBase
 
         $userId = $this->fakeUser->UserId;
         $defaultScheduleId = 10;
-        $userTimezone = "America/New_York";
+        $userTimezone = 'America/New_York';
 
         $calendarType = CalendarTypes::Month;
 
@@ -151,7 +135,7 @@ class CalendarPresenterTest extends TestBase
         $calendarFilters = new CalendarFilters($schedules, $resources, $defaultScheduleId, null, new ResourceGroupTree());
         $this->page->expects($this->atLeastOnce())->method('BindFilters')->with($this->equalTo($calendarFilters));
 
-        $this->presenter->PageLoad($this->fakeUser, $userTimezone);
+        $this->presenter->PageLoad($this->fakeUser);
     }
 
     public function testSkipsReservationsForUnknownResources()
@@ -180,15 +164,15 @@ class CalendarPresenterTest extends TestBase
 
         $r1 = new TestReservationItemView(1, $start, $end, 1);
         $r1->SeriesId = 1;
-        $r1->ReferenceNumber = 1;
+        $r1->ReferenceNumber = '1';
 
         $r2 = new TestReservationItemView(2, $start, $end, 2);
         $r2->SeriesId = 1;
-        $r2->ReferenceNumber = 2;
+        $r2->ReferenceNumber = '2';
 
         $r3 = new TestReservationItemView(3, $start, $end, 1);
         $r3->SeriesId = 2;
-        $r3->ReferenceNumber = 2;
+        $r3->ReferenceNumber = '2';
 
         $reservations = [$r1, $r2, $r3];
         $blackouts = [];
@@ -239,5 +223,89 @@ class CalendarPresenterTest extends TestBase
             ->willReturn($layout);
 
         $this->presenter->ProcessDataRequest('events');
+    }
+
+    public function testGuestCalendarEventsUseViewReservationPage(): void
+    {
+        $referenceNumber = 'guest-ref-123';
+        $resourceId = 1;
+        $res = new TestReservationItemView(
+            id: 1,
+            startDate: Date::Now(),
+            endDate: Date::Now()->AddHours(1),
+            resourceId: $resourceId,
+            referenceNumber: $referenceNumber,
+        );
+
+        $resource = new FakeBookableResource($resourceId, 'Room A');
+
+        $guestPresenter = new CalendarPresenter(
+            $this->page,
+            $this->repository,
+            $this->scheduleRepository,
+            $this->userRepository,
+            $this->resourceService,
+            $this->subscriptionService,
+            $this->privacyFilter,
+            new SlotLabelFactory(),
+            reservationPage: Pages::VIEW_RESERVATION,
+        );
+
+        $this->page
+            ->expects($this->atLeastOnce())
+            ->method('GetResourceId')
+            ->willReturn($resourceId);
+        $this->page
+            ->expects($this->atLeastOnce())
+            ->method('GetScheduleId')
+            ->willReturn(null);
+        $this->page
+            ->expects($this->atLeastOnce())
+            ->method('GetGroupId')
+            ->willReturn(null);
+        $this->page
+            ->expects($this->atLeastOnce())
+            ->method('GetUserId')
+            ->willReturn(null);
+        $this->page
+            ->expects($this->atLeastOnce())
+            ->method('GetParticipantId')
+            ->willReturn(null);
+
+        $this->resourceService
+            ->expects($this->atLeastOnce())
+            ->method('GetAllResources')
+            ->willReturn([$resource]);
+        $this->resourceService
+            ->expects($this->atLeastOnce())
+            ->method('GetResource')
+            ->willReturn($resource);
+        $this->repository
+            ->expects($this->atLeastOnce())
+            ->method('GetReservations')
+            ->willReturn([$res]);
+        $this->repository
+            ->expects($this->atLeastOnce())
+            ->method('GetBlackoutsWithin')
+            ->willReturn([]);
+        $this->scheduleRepository
+            ->expects($this->atLeastOnce())
+            ->method('GetLayout')
+            ->willReturn(new FakeScheduleLayout());
+
+        $boundEvents = null;
+        $this->page
+            ->expects($this->once())
+            ->method('BindEvents')
+            ->willReturnCallback(function ($events) use (&$boundEvents) {
+                $boundEvents = $events;
+            });
+
+        $guestPresenter->ProcessDataRequest('events');
+
+        $this->assertNotNull($boundEvents);
+        $this->assertCount(1, $boundEvents);
+        $event = $boundEvents[0]->AsFullCalendarEvent();
+        $this->assertStringStartsWith('view-reservation.php?rn=' . $referenceNumber, $event['url']);
     }
 }

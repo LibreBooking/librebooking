@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function PHPUnit\Framework\matches;
 
 require_once(ROOT_DIR . 'WebServices/SchedulesWebService.php');
@@ -16,15 +18,9 @@ class SchedulesWebServiceTest extends TestBase
      */
     private $server;
 
-    /**
-     * @var IScheduleRepository
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IPrivacyFilter
-     */
-    private $privacyFilter;
+    private IPrivacyFilter&\PHPUnit\Framework\MockObject\MockObject $privacyFilter;
 
     public function setUp(): void
     {
@@ -120,10 +116,22 @@ class SchedulesWebServiceTest extends TestBase
         $matcher = $this->exactly(7);
         $layout->expects($matcher)
                 ->method('GetLayout')
-                ->willReturnCallback(function($date) use (
-                        $periods1, $periods2, $periods3, $periods4, $periods5,
-                        $periods6, $periods7,
-                        $date1, $date2, $date3, $date4, $date5, $date6, $date7) {
+                ->willReturnCallback(function ($date) use (
+                    $periods1,
+                    $periods2,
+                    $periods3,
+                    $periods4,
+                    $periods5,
+                    $periods6,
+                    $periods7,
+                    $date1,
+                    $date2,
+                    $date3,
+                    $date4,
+                    $date5,
+                    $date6,
+                    $date7
+                ) {
                     return match (true) {
                         $this->equalTo($date1)->evaluate($date, returnResult: true) => $periods1,
                         $this->equalTo($date2)->evaluate($date, returnResult: true) => $periods2,

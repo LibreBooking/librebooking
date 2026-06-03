@@ -1,0 +1,47 @@
+name: PHPUnit
+
+# If a pull-request is pushed then cancel all previously running jobs related
+# to that pull-request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+on:
+  # push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.3", "8.4", "8.5"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v4
+
+      - name: Create main config.php for unit tests
+        run: cp config/config.dist.php config/config.php
+
+      - name: Unit Tests
+        run: |
+          set -o pipefail
+          composer phpunit | tee phpunit.log
+          if ! grep -qE "Tests:|OK \(" phpunit.log; then
+            echo "❌ PHPUnit exited early (no summary line found)"
+            exit 1
+          fi

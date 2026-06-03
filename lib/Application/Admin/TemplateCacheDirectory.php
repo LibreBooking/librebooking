@@ -8,7 +8,7 @@ class TemplateCacheDirectory
             $dirName = $this->GetDirectory();
             $cacheDir = opendir($dirName);
             while (false !== ($file = readdir($cacheDir))) {
-                if ($file != "." && $file != "..") {
+                if ($file != '.' && $file != '..') {
                     unlink($dirName . $file);
                 }
             }

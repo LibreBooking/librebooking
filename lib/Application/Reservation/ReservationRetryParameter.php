@@ -2,7 +2,7 @@
 
 class ReservationRetryParameter
 {
-    public static $SKIP_CONFLICTS = "skipconflicts";
+    public static $SKIP_CONFLICTS = 'skipconflicts';
     private $name;
     private $value;
 
@@ -18,8 +18,8 @@ class ReservationRetryParameter
 
     /**
      * @static
-     * @param $params string|string[]|null The result of $this->GetForm(FormKeys::RESERVATION_RETRY_PREFIX)
-     * @return array|AttributeFormElement[]
+     * @param string|array<string, string>|null $params The result of $this->GetForm(FormKeys::RESERVATION_RETRY_PREFIX)
+     * @return list<ReservationRetryParameter>
      */
     public static function GetParamsFromForm($params)
     {

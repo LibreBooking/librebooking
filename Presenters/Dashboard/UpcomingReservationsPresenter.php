@@ -45,11 +45,11 @@ class UpcomingReservationsPresenter
         $today = $now->ToTimezone($timezone)->GetDate();
         $dayOfWeek = $today->Weekday();
 
-        $lastDate = $now->AddDays(13-$dayOfWeek-1);
+        $lastDate = $now->AddDays(13 - $dayOfWeek - 1);
         $consolidated = $this->repository->GetReservations($now, $lastDate, $this->searchUserId, $this->searchUserLevel, null, null, true);
         $tomorrow = $today->AddDays(1);
 
-        $startOfNextWeek = $today->AddDays(7-$dayOfWeek);
+        $startOfNextWeek = $today->AddDays(7 - $dayOfWeek);
 
         $todays = [];
         $tomorrows = [];

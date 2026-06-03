@@ -293,7 +293,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('Timezone', $userTimezone);
         $this->Set('AddStartDate', Date::Now()->ToTimezone($userTimezone));
         $this->Set('AddEndDate', Date::Now()->ToTimezone($userTimezone));
-        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('timepicker'));
+        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
         $this->presenter->PageLoad($userTimezone);
     }
 
@@ -304,6 +304,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     public function ShowBlackout()
     {
+        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
         $this->Display('Admin/Blackouts/manage_blackouts_edit.tpl');
     }
 

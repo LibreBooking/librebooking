@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 
 class DailyLayoutTest extends TestBase
@@ -50,7 +52,7 @@ class DailyLayoutTest extends TestBase
         $displayDate = Date::Parse('2010-03-17', 'America/Chicago');
 
         $periods[] = new SchedulePeriod(Date::Parse('2010-03-16 20:30'), Date::Parse('2010-03-17 12:30'));
-        $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 12:30'), Date::Parse('2010-03-17 20:30'), "start");
+        $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 12:30'), Date::Parse('2010-03-17 20:30'), 'start');
         $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 20:30'), Date::Parse('2010-03-18 12:30'));
 
         $scheduleLayout = $this->createMock('IScheduleLayout');
@@ -59,7 +61,7 @@ class DailyLayoutTest extends TestBase
             ->with($this->equalTo($displayDate))
             ->willReturn($periods);
 
-        $layout = new DailyLayout(new ReservationListing("America/Chicago"), $scheduleLayout);
+        $layout = new DailyLayout(new ReservationListing('America/Chicago'), $scheduleLayout);
         $labels = $layout->GetLabels($displayDate);
 
         $this->assertEquals('12:00', $labels[0]);
@@ -97,7 +99,7 @@ class DailyLayoutTest extends TestBase
             ->method('FitsToHours')
             ->willReturn(true);
 
-        $layout = new DailyLayout(new ReservationListing("America/Chicago"), $scheduleLayout);
+        $layout = new DailyLayout(new ReservationListing('America/Chicago'), $scheduleLayout);
         $labels = $layout->GetPeriods($displayDate, true);
 
         $i = 0;

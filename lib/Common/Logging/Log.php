@@ -1,13 +1,13 @@
 <?php
 
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-  require_once ROOT_DIR . 'vendor/autoload.php';
+    require_once ROOT_DIR . 'vendor/autoload.php';
 }
 
 use Monolog\Logger;
+use Monolog\Level;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\WebProcessor;
-
 
 class Log
 {
@@ -31,27 +31,36 @@ class Log
         $this->logger = new Logger('app');
         $this->sqlLogger = new Logger('sql');
 
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
+        $log_level = self::getLogLevel();
 
         $log_folder = null;
         $log_sql = false;
 
         if ($log_level != 'none') {
-            $log_folder = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER);
+            $log_folder = rtrim(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER), '/');
             $log_sql = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter());
             switch ($log_level) {
                 case 'debug':
-                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Logger::DEBUG));
+                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Level::Debug));
                     break;
                 case 'error':
-                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Logger::ERROR));
+                    $this->logger->pushHandler(new StreamHandler($log_folder.'/app.log', Level::Error));
                     break;
             }
             $this->logger->pushProcessor(new WebProcessor());
         }
         if ($log_sql) {
-            $this->sqlLogger->pushHandler(new StreamHandler($log_folder.'/sql.log', Logger::ERROR));
+            $this->sqlLogger->pushHandler(new StreamHandler($log_folder.'/sql.log', Level::Error));
         }
+    }
+
+    /**
+     * Gets the configured log level in lowercase, with a fallback to 'error' if not set.
+     * @return string The log level ('none', 'error', or 'debug')
+     */
+    private static function getLogLevel(): string
+    {
+        return strtolower(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL) ?? 'error');
     }
 
     /**
@@ -72,8 +81,7 @@ class Log
      */
     public static function Debug($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
-        if ($log_level == 'none') {
+        if (self::getLogLevel() == 'none') {
             return;
         }
 
@@ -103,8 +111,7 @@ class Log
      */
     public static function Error($message, $args = [])
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
-        if ($log_level == 'none') {
+        if (self::getLogLevel() == 'none') {
             return;
         }
 
@@ -148,8 +155,6 @@ class Log
     }
     public static function DebugEnabled()
     {
-        $log_level = Configuration::Instance()->GetKey(ConfigKeys::LOGGING_LEVEL);
-        return $log_level != 'none';
+        return self::getLogLevel() != 'none';
     }
 }
-

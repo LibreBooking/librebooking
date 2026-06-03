@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
@@ -221,16 +223,16 @@ class ReportingServiceTest extends TestBase
          **/
 
         $this->assertEquals($thursday, $data[0][ColumnNames::DATE]);
-        $this->assertEquals(60, $data[0][ColumnNames::UTILIZATION], "6/10");
+        $this->assertEquals(60, $data[0][ColumnNames::UTILIZATION], '6/10');
         $this->assertEquals('r1', $data[0][ColumnNames::RESOURCE_NAME_ALIAS]);
         $this->assertEquals($s1, $data[0][ColumnNames::SCHEDULE_ID]);
         $this->assertEquals($r1, $data[0][ColumnNames::RESOURCE_ID]);
 
         $this->assertEquals($friday, $data[1][ColumnNames::DATE]);
-        $this->assertEquals(100, $data[1][ColumnNames::UTILIZATION], "19/19");
+        $this->assertEquals(100, $data[1][ColumnNames::UTILIZATION], '19/19');
 
         $this->assertEquals($saturday, $data[2][ColumnNames::DATE]);
-        $this->assertEquals(43, $data[2][ColumnNames::UTILIZATION], "6/14");
+        $this->assertEquals(43, $data[2][ColumnNames::UTILIZATION], '6/14');
 
         $this->assertEquals($sunday, $data[3][ColumnNames::DATE]);
         $this->assertEquals(0, $data[3][ColumnNames::UTILIZATION]);
@@ -343,7 +345,7 @@ class ReportingServiceTest extends TestBase
         $format = Resources::GetInstance()->GetDateFormat('general_date');
 
         $this->assertEquals($thursday, $data[0][ColumnNames::DATE]);
-        $this->assertEquals(50, $data[0][ColumnNames::UTILIZATION], "2/4");
+        $this->assertEquals(50, $data[0][ColumnNames::UTILIZATION], '2/4');
         $this->assertEquals('r1', $data[0][ColumnNames::RESOURCE_NAME_ALIAS]);
         $this->assertEquals($s1, $data[0][ColumnNames::SCHEDULE_ID]);
         $this->assertEquals($r1, $data[0][ColumnNames::RESOURCE_ID]);
@@ -352,7 +354,7 @@ class ReportingServiceTest extends TestBase
         $this->assertEquals(0, $data[1][ColumnNames::UTILIZATION]);
 
         $this->assertEquals($saturday, $data[2][ColumnNames::DATE]);
-        $this->assertEquals(100, $data[2][ColumnNames::UTILIZATION], "4/4");
+        $this->assertEquals(100, $data[2][ColumnNames::UTILIZATION], '4/4');
     }
 
     /**
@@ -386,7 +388,7 @@ class ReportingServiceTest extends TestBase
     {
         $slots = [];
         if ($firstHour != 0) {
-            $slots = [new NonSchedulePeriod($date->SetTimeString("00:00"), $date->SetTimeString("$firstHour:00", true))];
+            $slots = [new NonSchedulePeriod($date->SetTimeString('00:00'), $date->SetTimeString("$firstHour:00", true))];
         }
 
         for ($i = $firstHour; $i < $lastHour; $i++) {

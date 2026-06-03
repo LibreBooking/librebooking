@@ -4,13 +4,12 @@
 	{include file="wait-box.tpl" translateKey='Working'}
 </div>
 
-<div id="chartdiv" class="card shadow w-100 my-2" style="display:none;height:400px"></div>
-
-<!--[if lt IE 9]>{jsfile src="js/jqplot/excanvas.js"}<![endif]-->
-{jsfile src="js/jqplot/jquery.jqplot.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.barRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.pointLabels.min.js"}
-{jsfile src="js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"}
+<div id="chartdiv" class="card shadow w-100 my-2 p-3" style="display:none;">
+	<div id="chart-actions" class="d-none justify-content-end gap-2 mb-3">
+		<button type="button" class="btn btn-outline-primary btn-sm" id="btnDownloadChartImage">
+			<i class="bi bi-image me-1"></i>{translate key=Export} PNG
+		</button>
+	</div>
+</div>
+{vendor_js src="chart.js/4.4.9/js/chart.umd.min.js"}
+{vendor_js src="chartjs-plugin-datalabels/2.2.0/js/chartjs-plugin-datalabels.min.js"}

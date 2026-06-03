@@ -18,7 +18,9 @@
         <tbody>
             {foreach from=$TransactionLog item=log}
                 <tr>
-                    <td>{formatdate date=$log->TransactionDate timezone=$Timezone key='general_datetime'}</td>
+                    <td data-order="{formatdate date=$log->TransactionDate timezone=$Timezone format='Y-m-d H:i:s'}">
+                        {formatdate date=$log->TransactionDate timezone=$Timezone key='general_datetime'}
+                    </td>
                     <td>{$log->UserFullName}</td>
                     <td>{$log->Status}</td>
                     <td>{formatcurrency amount=$log->Total currency=$log->Currency}</td>

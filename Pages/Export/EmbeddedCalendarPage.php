@@ -75,7 +75,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
         $this->Set('Reservations', $reservations);
         $this->Set('Timezone', $timezone);
         $this->Set('Range', $Range);
-        $this->Set('Width', (1/7)*100 . '%');
+        $this->Set('Width', (1 / 7) * 100 . '%');
     }
 
     public function DisplayAgenda()
@@ -110,7 +110,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
 
     public function GetDaysToShow()
     {
-        return $this->GetQuerystring(QueryStringKeys::DAY);
+        return intval($this->GetQuerystring(QueryStringKeys::DAY));
     }
 
     public function GetDisplayType()

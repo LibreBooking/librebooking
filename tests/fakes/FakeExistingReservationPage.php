@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
 
 class FakeExistingReservationPage extends FakePageBase implements IExistingReservationPage
@@ -7,8 +9,11 @@ class FakeExistingReservationPage extends FakePageBase implements IExistingReser
     public $_CheckInRequired = false;
     public $_CheckOutRequired = false;
     public $_AutoReleaseMinutes = null;
+    public $_IsUnavailable = false;
 
-    public function BindViewableResourceReservations($resourceIds) { }
+    public function BindViewableResourceReservations($resourceIds)
+    {
+    }
 
     public function GetReferenceNumber()
     {
@@ -239,13 +244,12 @@ class FakeExistingReservationPage extends FakePageBase implements IExistingReser
 
     public function MakeUnavailable()
     {
-        // TODO: Implement MakeUnavailable() method.
+        $this->_IsUnavailable = true;
     }
 
     public function IsUnavailable()
     {
-        // TODO: Implement IsUnavailable() method.
-        return null;
+        return $this->_IsUnavailable;
     }
 
     public function SetTerms($termsOfService)

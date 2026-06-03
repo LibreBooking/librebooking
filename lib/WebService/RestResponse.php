@@ -6,9 +6,10 @@ class RestResponse
     public const CREATED_CODE = 201;
     public const BAD_REQUEST_CODE = 400;
     public const UNAUTHORIZED_CODE = 401;
-    public const FORBIDDEN = 403;
+    public const FORBIDDEN_CODE = 403;
     public const NOT_FOUND_CODE = 404;
     public const SERVER_ERROR = 500;
+    public const SERVICE_UNAVAILABLE = 503;
 
     /**
      * @var array|RestServiceLink[]
@@ -58,6 +59,13 @@ class RestResponse
     {
         $response = new RestResponse();
         $response->message = 'You do not have access to the requested resource';
+        return $response;
+    }
+
+    public static function BadRequest(string $message)
+    {
+        $response = new RestResponse();
+        $response->message = $message;
         return $response;
     }
 }

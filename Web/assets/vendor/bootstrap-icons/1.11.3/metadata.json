@@ -1,0 +1,8 @@
+{
+  "name": "bootstrap-icons",
+  "version": "1.11.3",
+  "description": "Free, high quality, open source icon library with over 2,000 icons.",
+  "homepage": "https://icons.getbootstrap.com/",
+  "source": "https://github.com/twbs/icons/releases/download/v1.11.3/bootstrap-icons-1.11.3.zip",
+  "license": "MIT"
+}

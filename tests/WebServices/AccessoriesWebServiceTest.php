@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/AccessoriesWebService.php');
 
 
@@ -15,15 +17,9 @@ class AccessoriesWebServiceTest extends TestBase
      */
     private $server;
 
-    /**
-     * @var IResourceRepository
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
-    /**
-     * @var IAccessoryRepository
-     */
-    private $accessoryRepository;
+    private IAccessoryRepository&\PHPUnit\Framework\MockObject\MockObject $accessoryRepository;
 
     public function setUp(): void
     {

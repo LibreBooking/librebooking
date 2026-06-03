@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'plugins/Authentication/Ldap/namespace.php');
 
 class LdapTest extends TestBase
@@ -96,6 +98,19 @@ class LdapTest extends TestBase
         $this->assertTrue($this->fakeLdap->_AuthenticateCalled);
     }
 
+    public function testValidateRethrowsRuntimeExceptionFromConnect()
+    {
+        $exception = new RuntimeException("LDAP settings 'host' and 'port' have been removed. Use only the 'uri' setting.");
+        $this->fakeLdap->_ConnectException = $exception;
+
+        $auth = new Ldap($this->fakeAuth, $this->fakeLdap, $this->fakeLdapOptions);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("LDAP settings 'host' and 'port' have been removed");
+
+        $auth->Validate($this->username, $this->password);
+    }
+
     public function testDoesNotTryToLoadUserDetailsIfNotValid()
     {
         $this->fakeLdap->_ExpectedAuthenticate = false;
@@ -184,8 +199,7 @@ class LdapTest extends TestBase
 
     public function testConstructsOptionsCorrectly()
     {
-        $hosts = 'localhost, localhost.2';
-        $port = '389';
+        $uris = 'ldap://localhost:389 ldap://localhost.2:389';
         $binddn = 'cn=admin,ou=users,dc=example,dc=org';
         $password = 'pw';
         $base = 'dc=example,dc=org';
@@ -193,8 +207,7 @@ class LdapTest extends TestBase
         $version = '3';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfigKeys::HOST, $hosts);
-        $configFile->SetKey(LdapConfigKeys::PORT, $port);
+        $configFile->SetKey(LdapConfigKeys::URI, $uris);
         $configFile->SetKey(LdapConfigKeys::BINDDN, $binddn);
         $configFile->SetKey(LdapConfigKeys::BINDPW, $password);
         $configFile->SetKey(LdapConfigKeys::BASEDN, $base);
@@ -207,26 +220,61 @@ class LdapTest extends TestBase
         $options = $ldapOptions->Ldap2Config();
 
         $this->assertNotNull($this->fakeConfig->_RegisteredFiles[LdapConfigKeys::CONFIG_ID]);
-        $this->assertEquals('localhost', $options['host'][0], 'domain_controllers must be an array');
-        $this->assertEquals(intval($port), $options['port'], 'port should be int');
+        $this->assertEquals('ldap://localhost:389', $options['host'][0], 'controllers must be an array of URIs');
         $this->assertEquals($binddn, $options['binddn']);
         $this->assertEquals($password, $options['bindpw']);
         $this->assertEquals($base, $options['basedn']);
         $this->assertEquals(false, $options['starttls']);
-        $this->assertEquals(intval($version), $options['version'], "version should be int");
+        $this->assertEquals(intval($version), $options['version'], 'version should be int');
     }
 
     public function testGetAllHosts()
     {
-        $controllers = 'localhost, localhost.2';
+        $controllers = 'ldap://localhost:389 ldap://localhost.2:389';
 
         $configFile = new FakeConfigFile();
-        $configFile->SetKey(LdapConfigKeys::HOST, $controllers);
+        $configFile->SetKey(LdapConfigKeys::URI, $controllers);
         $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
 
         $options = new LdapOptions();
 
-        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), "comma separated values should become array");
+        $this->assertEquals(['ldap://localhost:389', 'ldap://localhost.2:389'], $options->Controllers(), 'space separated uris should become array');
+    }
+
+    public function testThrowsIfLegacyHostIsConfigured()
+    {
+        $configFile = new FakeConfigFile();
+        $configFile->SetKey([
+            'key' => 'host',
+            'section' => 'ldap',
+            'type' => 'string',
+        ], 'ldap://localhost');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
+
+        $options = new LdapOptions();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("LDAP settings 'host' and 'port' have been removed");
+
+        $options->Ldap2Config();
+    }
+
+    public function testThrowsIfLegacyPortIsConfigured()
+    {
+        $configFile = new FakeConfigFile();
+        $configFile->SetKey([
+            'key' => 'port',
+            'section' => 'ldap',
+            'type' => 'string',
+        ], '389');
+        $this->fakeConfig->SetFile(LdapConfigKeys::CONFIG_ID, $configFile);
+
+        $options = new LdapOptions();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("LDAP settings 'host' and 'port' have been removed");
+
+        $options->Ldap2Config();
     }
 
     public function testUserHandlesArraysAsAttribute()
@@ -262,7 +310,7 @@ class LdapTest extends TestBase
 
     public function testCanGetAttributeMapping()
     {
-        $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
+        $attributeMapping = 'sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename';
 
         $configFile = new FakeConfigFile();
         $configFile->SetKey(LdapConfigKeys::ATTRIBUTE_MAPPING, $attributeMapping);
@@ -343,6 +391,10 @@ class LdapIntegrationTest extends TestBase
 
 class FakeLdapOptions extends LdapOptions
 {
+    public function __construct()
+    {
+    }
+
     public $_RetryAgainstDatabase = false;
 
     public function RetryAgainstDatabase()
@@ -389,9 +441,14 @@ class FakeLdapWrapper extends Ldap2Wrapper
 
     public $_ExpectedLdapUser;
 
+    public ?\RuntimeException $_ConnectException = null;
+
     public function Connect()
     {
         $this->_ConnectCalled = true;
+        if ($this->_ConnectException !== null) {
+            throw $this->_ConnectException;
+        }
         return $this->_ExpectedConnect;
     }
 
@@ -412,11 +469,11 @@ class FakeLdapWrapper extends Ldap2Wrapper
     }
 }
 
-class TestLdapEntry extends Net_LDAP2_Entry
+class TestLdapEntry
 {
     private $_values = [];
+    private $_dn = 'cn=test,dc=example,dc=org';
 
-    // @phpstan-ignore class.notFound
     public function __construct()
     {
         $this->Set('givenname', '');
@@ -430,6 +487,11 @@ class TestLdapEntry extends Net_LDAP2_Entry
     public function getValue($attr, $option = null)
     {
         return $this->_values[$attr];
+    }
+
+    public function dn()
+    {
+        return $this->_dn;
     }
 
     public function Set($attr, $value)

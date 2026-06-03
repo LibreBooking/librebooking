@@ -720,7 +720,7 @@ class ReferenceNumberGenerator
 {
     /**
      * Just for testing
-     * @var string
+     * @var string|null
      */
     public static $__referenceNumber = null;
 

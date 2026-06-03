@@ -123,7 +123,7 @@ class SortCommand extends SqlCommand
         }
 
         $this->Parameters = $baseCommand->Parameters;
-        $sortField = preg_replace("/[^a-zA-Z0-9_]+/", "", $sortField);
+        $sortField = preg_replace('/[^a-zA-Z0-9_]+/', '', $sortField);
         $this->AddParameter(new ParameterRaw('@sort_params', $sortField));
 
         $query = $baseCommand->GetQuery();
@@ -179,8 +179,8 @@ class FilterCommand extends SqlCommand
             $pos = strripos($baseQuery, 'WHERE');
             $baseQuery = substr_replace($baseQuery, 'WHERE (', $pos, strlen('WHERE'));
 
-            $groupBySplit = preg_split("/GROUP BY/ims", $baseQuery);
-            $orderBySplit = preg_split("/ORDER BY/ims", $baseQuery);
+            $groupBySplit = preg_split('/GROUP BY/ims', $baseQuery);
+            $orderBySplit = preg_split('/ORDER BY/ims', $baseQuery);
 
             if (count($groupBySplit) > 1) {
                 $queryFragment = trim($groupBySplit[0]);

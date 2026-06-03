@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAccessoryRepository implements IAccessoryRepository
 {
     public $_AllAccessories = [];
@@ -16,8 +18,7 @@ class FakeAccessoryRepository implements IAccessoryRepository
      */
     public function LoadById($accessoryId)
     {
-        // TODO: Implement LoadById() method.
-        return null;
+        throw new LogicException('LoadById() not implemented in FakeAccessoryRepository');
     }
 
     /**
@@ -34,8 +35,8 @@ class FakeAccessoryRepository implements IAccessoryRepository
      */
     public function Add(Accessory $accessory)
     {
-        // TODO: Implement Add() method.
-        return null;
+        $this->_AllAccessories[] = $accessory;
+        return count($this->_AllAccessories);
     }
 
     /**

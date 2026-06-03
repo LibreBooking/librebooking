@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 class AccountWebServiceTest extends TestBase
@@ -159,13 +161,11 @@ class FakeAccountController implements IAccountController
 
     public function LoadUser(WebServiceUserSession $session)
     {
-        // TODO: Implement GetUserAttributes() method.
-        return null;
+        return new FakeUser();
     }
 
     public function GetUserAttributes(WebServiceUserSession $session)
     {
-        // TODO: Implement GetUserAttributes() method.
-        return null;
+        return new AttributeList();
     }
 }

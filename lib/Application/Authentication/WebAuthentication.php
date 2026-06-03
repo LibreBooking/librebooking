@@ -150,7 +150,11 @@ class WebAuthentication implements IWebAuthentication
             if ($valid) {
                 $loginContext->GetData()->Persist = true;
                 $this->Login($validEmail, $loginContext);
+            } else {
+                $this->DeletePersistLoginCookie();
             }
+        } else {
+            $this->DeletePersistLoginCookie();
         }
 
         Log::Debug('Cookie login. IsValid: %s', $valid);
@@ -171,6 +175,11 @@ class WebAuthentication implements IWebAuthentication
     private function DeleteLoginCookie($userid)
     {
         ServiceLocator::GetServer()->DeleteCookie(new LoginCookie($userid, null));
+    }
+
+    private function DeletePersistLoginCookie()
+    {
+        $this->server->DeleteCookie(new Cookie(CookieKeys::PERSIST_LOGIN, ''));
     }
 
     private function ValidateCookie($loginCookie)

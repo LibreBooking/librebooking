@@ -52,7 +52,15 @@ class ReservationEmailPage extends Page implements IReservationEmailPage
 
     public function GetEmailAddresses()
     {
-        $email = implode(',',$this->GetForm('email')); 
-        return preg_split('/, ?/', $email);
+        $email = $this->GetForm('email');
+
+        if (empty($email)) {
+            return [];
+        }
+
+        $list = is_array($email) ? $email : preg_split('/,/', $email, -1, PREG_SPLIT_NO_EMPTY);
+
+        return array_filter(array_map('trim', $list));
     }
+
 }

@@ -29,17 +29,23 @@
 								{fullname first=$reservation->FirstName last=$reservation->LastName ignorePrivacy=($reservation->OwnerId==$UserId)}
 							</td>
 							<td class="resource">{$reservation->ResourceName}</td>
-							<td class="title">{$reservation->Title}</td>
-							<td class="description">{$reservation->Description}</td>
-							<td class="date">
+							<td class="title"><span
+									class="reservationTitle">{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}</span>
+							</td>
+							<td class="description">{$reservation->Description|escape:'html'}</td>
+							<td
+								data-order="{formatdate date=$reservation->StartDate timezone=$Timezone format='Y-m-d H:i:s'}">
 								{formatdate date=$reservation->StartDate timezone=$Timezone key=short_reservation_date}</td>
-							<td class="date">
+							<td
+								data-order="{formatdate date=$reservation->EndDate timezone=$Timezone format='Y-m-d H:i:s'}">
 								{formatdate date=$reservation->EndDate timezone=$Timezone key=short_reservation_date}</td>
 							<td class="duration">{$reservation->GetDuration()->__toString()}</td>
 							<td class="referenceNumber">{$reservation->ReferenceNumber}</td>
-							<td class="created">
+							<td
+								data-order="{formatdate date=$reservation->CreatedDate timezone=$Timezone format='Y-m-d H:i:s'}">
 								{formatdate date=$reservation->CreatedDate timezone=$Timezone key=short_datetime}</td>
-							<td class="created">
+							<td
+								data-order="{formatdate date=$reservation->ModifiedDate timezone=$Timezone format='Y-m-d H:i:s'}">
 								{formatdate date=$reservation->ModifiedDate timezone=$Timezone key=short_datetime}</td>
 						</tr>
 

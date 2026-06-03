@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 
 class QuotaWhenModifyingTest extends TestBase
@@ -14,10 +16,7 @@ class QuotaWhenModifyingTest extends TestBase
      */
     public $schedule;
 
-    /**
-     * @var IReservationViewRepository
-     */
-    public $reservationViewRepository;
+    public IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationViewRepository;
 
     /**
      * @var FakeUser
@@ -98,7 +97,7 @@ class QuotaWhenModifyingTest extends TestBase
                 ->WithInstance($existing2);
         $series = $builder->BuildTestVersion();
 
-        $series->UpdateDuration(new DateRange($r1start, $r1End->SetTimeString("3:00")));
+        $series->UpdateDuration(new DateRange($r1start, $r1End->SetTimeString('3:00')));
 
         $this->SearchReturns([]);
 

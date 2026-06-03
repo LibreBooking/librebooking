@@ -43,15 +43,9 @@ class ResourceAvailabilityResponse extends RestResponse
      */
     public $resource;
 
-    /**
-     * @var Date|null
-     */
-    public $availableAt;
+    public ?string $availableAt = null;
 
-    /**
-     * @var Date|null
-     */
-    public $availableUntil;
+    public ?string $availableUntil = null;
 
     /**
      * @param IRestServer $server

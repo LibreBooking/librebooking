@@ -58,7 +58,7 @@ interface IManageGroupsPage extends IActionPage
     public function BindRoles($roles);
 
     /**
-     * @return int[]|array
+     * @return int[]|string[]|array
      */
     public function GetAllowedResourceIds();
 

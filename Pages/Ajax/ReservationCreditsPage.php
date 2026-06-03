@@ -80,12 +80,12 @@ class ReservationCreditsPage extends Page implements IReservationCreditsPage
 
     public function GetUserId()
     {
-        return $this->GetForm(FormKeys::USER_ID);
+        return (int)$this->GetForm(FormKeys::USER_ID);
     }
 
     public function GetResourceId()
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return (int)$this->GetForm(FormKeys::RESOURCE_ID);
     }
 
     public function GetStartDate()
@@ -116,10 +116,17 @@ class ReservationCreditsPage extends Page implements IReservationCreditsPage
         }
 
         if (!is_array($resources)) {
-            return [$resources];
+            $resources = [$resources];
         }
 
-        return $resources;
+        $resourceIds = [];
+        foreach ($resources as $resourceId) {
+            if (is_scalar($resourceId)) {
+                $resourceIds[] = (int)$resourceId;
+            }
+        }
+
+        return $resourceIds;
     }
 
     public function GetRepeatType()

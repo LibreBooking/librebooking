@@ -76,11 +76,12 @@ class AccountRequestValidator implements IAccountRequestValidator
 
     public function ValidatePasswordUpdate($request, WebServiceUserSession $session)
     {
+        /** @var IValidator[] $validators */
+        $validators = [];
         $validators[] = new PasswordComplexityValidator($request->newPassword);
         $validators[] = new PasswordValidator($request->currentPassword, $this->userRepository->LoadById($session->UserId));
 
         $errors = [];
-        /** @var IValidator $validator */
         foreach ($validators as $validator) {
             $validator->Validate();
             if (!$validator->IsValid()) {

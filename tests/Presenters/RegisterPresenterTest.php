@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/RegistrationPresenter.php');
 require_once(ROOT_DIR . 'Pages/RegistrationPage.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
@@ -27,20 +29,12 @@ class RegisterPresenterTest extends TestBase
      */
     private $fakeAuth;
 
-    /**
-     * @var ICaptchaService
-     */
-    private $captcha;
+    private ICaptchaService&\PHPUnit\Framework\MockObject\MockObject $captcha;
 
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var ITermsOfServiceRepository
-     */
-    private $termsOfServiceRepository;
+    // Intentionally concrete fake in setUp(), not a PHPUnit mock.
+    private ITermsOfServiceRepository $termsOfServiceRepository;
 
     private $login = 'testlogin';
     private $email = 'test@test.com';
@@ -49,7 +43,7 @@ class RegisterPresenterTest extends TestBase
     private $phone = '123.123.1234';
     private $password = 'password';
     private $confirm = 'password';
-    private $timezone = 'US/Eastern';
+    private $timezone = 'America/New_York';
     private $homepageId = '1';
     private $acknowledgedTerms = true;
 
@@ -77,15 +71,11 @@ class RegisterPresenterTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->page = null;
-        $this->fakeReg = null;
-        $this->fakeAuth = null;
     }
 
     public function testSetsSelectedTimezoneToServerDefault()
     {
-        $expectedTimezone = "America/Chicago";
+        $expectedTimezone = 'America/Chicago';
 
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, $expectedTimezone);
         $this->page->_IsPostBack = false;
@@ -99,7 +89,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testSetsSelectedTimezoneToServerSubmitted()
     {
-        $expectedTimezone = "America/New_York";
+        $expectedTimezone = 'America/New_York';
         $this->page->SetTimezone($expectedTimezone);
         $this->page->_IsPostBack = true;
 
@@ -166,7 +156,7 @@ class RegisterPresenterTest extends TestBase
 
     public function testSetsCaptchaUrl()
     {
-        $url = "http://blah/blah/blah";
+        $url = 'http://blah/blah/blah';
 
         $this->captcha->expects($this->once())
             ->method('GetImageUrl')
@@ -184,10 +174,10 @@ class RegisterPresenterTest extends TestBase
         $this->LoadPageValues();
 
         $additionalFields = [
-                    'phone' => $this->phone,
-                    'instituntion' => '',
-                    'position' => ''
-                    ];
+            'phone' => $this->phone,
+            'instituntion' => '',
+            'position' => ''
+        ];
 
         $this->page->_Action = RegisterActions::Register;
 
@@ -276,9 +266,9 @@ class RegisterPresenterTest extends TestBase
     {
         $list = new FakeAttributeList($attributes);
         $this->attributeService->expects($this->once())
-                ->method('GetAttributes')
-                ->with($this->equalTo(CustomAttributeCategory::USER))
-                ->willReturn($list);
+            ->method('GetAttributes')
+            ->with($this->equalTo(CustomAttributeCategory::USER))
+            ->willReturn($list);
     }
 
     private function LoadPageValues()

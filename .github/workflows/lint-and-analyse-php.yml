@@ -7,7 +7,9 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  # push:
+  push:
+    branches:
+      - develop
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
@@ -18,92 +20,81 @@ permissions:
 
 jobs:
   lint:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5.4.0
+      - uses: actions/setup-python@v6.2.0
         with:
           python-version: "3.13"
       - run: pip install --upgrade tox
       - name: Run commitizen (https://commitizen-tools.github.io/commitizen/)
         run: tox -e cz
-      - name: Run config-check
-        run: tox -e config-check
+      - name: Run doc8
+        run: tox -e doc8
+      - name: Install shellcheck and shfmt
+        run: sudo apt-get update && sudo apt-get install -y shellcheck shfmt
+      - name: Run shellcheck
+        run: |
+          find . -name '*.sh' -not -path './vendor/*' -not -path './node_modules/*' \
+            -exec shellcheck --severity style {} +
+      - name: Run shfmt (indent=4)
+        run: |
+          if ! find . -name '*.sh' -not -path './vendor/*' -not -path './node_modules/*' \
+            -exec shfmt -d -i 4 -ci {} +; then
+            echo ""
+            echo "=========================================="
+            echo "  shfmt found shell script formatting issues."
+            echo "  To fix them locally, run:"
+            echo ""
+            echo "    find . -name '*.sh' -not -path './vendor/*' -not -path './node_modules/*' -exec shfmt -w -i 4 -ci {} +"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
+      - name: Ensure no merge-commits in the Pull Request (PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
+          echo "HEAD_SHA: ${HEAD_SHA}"
+          git fetch origin "${GITHUB_BASE_REF}"
+          MERGE_COMMITS=$(git rev-list --merges origin/${GITHUB_BASE_REF}..${HEAD_SHA})
+          if [[ -n "${MERGE_COMMITS}" ]]; then
+            echo ""
+            echo "=========================================="
+            echo "ERROR: The Pull Request (PR) contains a 'merge commit' which is not allowed: ${MERGE_COMMITS}"
+            echo "Please 'rebase' to remove the 'merge commit'"
+            echo "=========================================="
+            echo ""
+            exit 1
+          fi
 
   markdownlint:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: markdownlint-cli2-action
-        uses: DavidAnson/markdownlint-cli2-action@v20
+        uses: DavidAnson/markdownlint-cli2-action@v23.2.0
         with:
           config: 'docs/.markdownlint.yml'
           globs: |
             *.md
 
-  phpunit:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ["8.2", "8.3", "8.4"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - name: Install Composer dependencies
-        # Allow the previous check to fail but not abort
-        if: always()
-        uses: ramsey/composer-install@v2
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-req=ext-zip"
-
-      - name: Create main config.php for unit tests
-        run: cp config/config.dist.php config/config.php
-
-      - name: Create plugin config.php for unit tests
-        run: |
-          for source in $(find plugins -type f -name "*dist*"); do
-            target=$(echo "${source}" | sed -e "s/.dist//")
-            if ! [ -f "config/$(basename ${target})" ]; then
-              cp --no-clobber "${source}" "config/$(basename ${target})"
-              sudo chown www-data:www-data "config/$(basename ${target})"
-            fi
-            if ! [ -f ${target} ]; then
-              ln -s "config/$(basename ${target})" "${target}"
-            fi
-          done
-
-      - name: Unit Tests
-        run: |
-          composer phpunit | tee phpunit.log
-           if ! grep -qE "Tests:|OK \(" phpunit.log; then
-            echo "❌ PHPUnit exited early (no summary line found)"
-            exit 1
-          fi
-
   lint-php-files:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php-version: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
@@ -111,57 +102,204 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-reqs"
-
-      - name: Update the composer.lock file
-        run: composer update
+        uses: ramsey/composer-install@v4
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      # TODO: Enable this after resolving issues
-      # - name: Cache coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .phpcs-cache
-      #     key: phpcs-cache
-
       - name: Lint PHP files
         run: ./ci/ci-phplint
 
-      # TODO: Enable this after resolving issues
-      # - name: Check coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   run: composer phpcs
+      - name: Check config.dist.php is up-to-date
+        if: matrix.php-version == '8.2'
+        run: |
+          if ! composer config-dist:check; then
+            echo ""
+            echo "=========================================="
+            echo "  config/config.dist.php is out of date."
+            echo "  To regenerate it locally, run:"
+            echo ""
+            echo "    composer config-dist:generate"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
+
+      - name: Check .env.example is up-to-date
+        if: matrix.php-version == '8.2'
+        run: |
+          if ! composer env-example:check; then
+            echo ""
+            echo "=========================================="
+            echo "  .env.example is out of date."
+            echo "  To regenerate it locally, run:"
+            echo ""
+            echo "    composer env-example:generate"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
+
+      - name: Cache php-cs-fixer
+        if: matrix.php-version == '8.2'
+        uses: actions/cache@v5.0.5
+        with:
+          path: var/cache/.php-cs-fixer.cache
+          key: php-cs-fixer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.lock', '.php-cs-fixer.dist.php') }}
+          restore-keys: |
+            php-cs-fixer-${{ runner.os }}-${{ matrix.php-version }}-
+
+      - name: Check coding-standard (php-cs-fixer)
+        if: matrix.php-version == '8.2'
+        run: |
+          if ! composer phpcsfixer:lint; then
+            echo ""
+            echo "=========================================="
+            echo "  php-cs-fixer found code style issues."
+            echo "  To fix them locally, run:"
+            echo ""
+            echo "    composer phpcsfixer:fix"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
 
   analyse-php:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php-version: ["8.4"]
+        include:
+          - php-version: "8.5"
+            stan-label: "base"
+            composer-script: "phpstan"
+            stan-cache-dir: "base"
+            stan-config-file: "phpstan.neon"
+          - php-version: "8.5"
+            stan-label: "next"
+            composer-script: "phpstan_next"
+            stan-cache-dir: "next"
+            stan-config-file: "phpstan_next.neon"
+    name: analyse-php (${{ matrix.stan-label }})
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-#          extensions: mbstring, iconv, mysqli, zip, gd, bz2
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
+        with:
+          custom-cache-suffix: ${{ matrix.stan-label }}
+
+      - name: Cache PHPStan result cache
+        uses: actions/cache@v5.0.5
+        with:
+          path: var/cache/phpstan/${{ matrix.stan-cache-dir }}
+          key: phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.stan-cache-dir }}-${{ hashFiles('composer.lock', matrix.stan-config-file) }}
+          restore-keys: |
+            phpstan-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.stan-cache-dir }}-
 
       - name: Analyse files with PHPStan
-        run: composer phpstan -- --memory-limit 2G
+        run: |
+          if ! composer ${{ matrix.composer-script }} -- --error-format=github --no-progress --memory-limit 2G; then
+            echo "Primary PHPStan run failed. Running debug fallback..."
+            composer ${{ matrix.composer-script }} -- --debug -vvv --error-format=table --memory-limit 2G || true
+            exit 1
+          fi
+
 
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
 #        if: always()
 #        run: composer psalm -- --shepherd
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Check formatting (Prettier)
+        run: |
+          if ! npm run lint:format; then
+            echo ""
+            echo "=========================================="
+            echo "  Prettier found formatting issues."
+            echo "  To fix them locally, run:"
+            echo ""
+            echo "    npm run fix:format"
+            echo ""
+            echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
+            echo "=========================================="
+            exit 1
+          fi
+
+      - name: Lint JavaScript (ESLint)
+        run: |
+          if ! npm run lint:js; then
+            echo ""
+            echo "=========================================="
+            echo "  ESLint found issues."
+            echo "  To auto-fix what it can, run:"
+            echo ""
+            echo "    npm run fix:js"
+            echo ""
+            echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
+            echo "=========================================="
+            exit 1
+          fi
+
+      - name: Lint CSS (Stylelint)
+        run: |
+          if ! npm run lint:css; then
+            echo ""
+            echo "=========================================="
+            echo "  Stylelint found CSS issues."
+            echo "  To auto-fix what it can, run:"
+            echo ""
+            echo "    npm run fix:css"
+            echo ""
+            echo "  Then commit the changes."
+            echo ""
+            echo "  If you haven't set up Node.js tooling yet, run:"
+            echo ""
+            echo "    npm ci"
+            echo ""
+            echo "  This installs the tools needed to run the"
+            echo "  'npm run fix:*' and 'npm run lint:*' commands."
+            echo "  Requires Node.js (see package.json for minimum version)."
+            echo "=========================================="
+            exit 1
+          fi

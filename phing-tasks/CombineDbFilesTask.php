@@ -75,7 +75,7 @@ class CombineDbFilesTask
         $versionInfo = "\r\n\r\n-- UPGRADE TO VERSION $versionNumber\r\n\r\n";
 
         // schema
-        $schemaHandle = fopen($this->schemaFile, "a");
+        $schemaHandle = fopen($this->schemaFile, 'a');
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeSchema";
 
@@ -83,7 +83,7 @@ class CombineDbFilesTask
         fclose($schemaHandle);
 
         // data
-        $dataHandle = fopen($this->dataFile, "a");
+        $dataHandle = fopen($this->dataFile, 'a');
         $upgradeData = $this->GetDataFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeData";
 
@@ -93,7 +93,7 @@ class CombineDbFilesTask
 
     private function CombineUpgradeFiles($upgradeDir, $versionNumber)
     {
-        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", "w+");
+        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", 'w+');
 
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $upgradeData = $this->GetDataFileContents($upgradeDir);
@@ -104,7 +104,7 @@ class CombineDbFilesTask
 
     private function GetFullSql($file)
     {
-        $f = fopen($file, "r");
+        $f = fopen($file, 'r');
         $sql = fread($f, filesize($file));
         fclose($f);
         return $sql;
@@ -128,8 +128,20 @@ class CombineDbFilesTask
     }
 }
 
-$task = new CombineDbFilesTask();
-$task->setSchemadir($argv[1]);
-$task->setSchemafile($argv[2]);
-$task->setDatafile($argv[3]);
-$task->main();
+if (PHP_SAPI === 'cli' && isset($argv, $argc)) {
+    if ($argc < 4 || in_array('--help', $argv) || in_array('-h', $argv)) {
+        echo "Usage: php {$argv[0]} <schema_dir> <schema_file> <data_file>\n";
+        echo "\n";
+        echo "Arguments:\n";
+        echo "  schema_dir   - Directory containing database schema upgrades\n";
+        echo "  schema_file  - Output file path for combined schema SQL\n";
+        echo "  data_file    - Output file path for combined data SQL\n";
+        exit($argc < 4 ? 1 : 0);
+    }
+
+    $task = new CombineDbFilesTask();
+    $task->setSchemadir($argv[1]);
+    $task->setSchemafile($argv[2]);
+    $task->setDatafile($argv[3]);
+    $task->main();
+}

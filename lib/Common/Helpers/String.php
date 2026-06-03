@@ -22,13 +22,13 @@ class BookedStringHelper
      */
     public static function EndsWith($haystack, $needle)
     {
-        $length = strlen($needle);
+        $length = strlen($needle ?? '');
         if ($length == 0) {
             return true;
         }
 
         $start  = $length * -1;
-        return (substr($haystack, $start) === $needle);
+        return (substr($haystack ?? '', $start) === $needle);
     }
 
     /**
@@ -39,7 +39,7 @@ class BookedStringHelper
      */
     public static function Contains($haystack, $needle)
     {
-        return strpos($haystack, $needle) !== false;
+        return strpos($haystack ?? '', $needle ?? '') !== false;
     }
 
     /**

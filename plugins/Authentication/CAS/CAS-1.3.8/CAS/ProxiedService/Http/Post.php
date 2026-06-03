@@ -132,7 +132,7 @@ class CAS_ProxiedService_Http_Post extends CAS_ProxiedService_Http_Abstract
     {
         if (empty($this->_contentType) && !empty($this->_body)) {
             throw new CAS_ProxiedService_Exception(
-                "If you pass a POST body, you must specify a content type via "
+                'If you pass a POST body, you must specify a content type via '
                 .get_class($this).'->setContentType($contentType).'
             );
         }

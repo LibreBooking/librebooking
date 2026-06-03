@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/SearchAvailabilityPresenter.php');
 
 class SearchAvailabilityPresenterTest extends TestBase
@@ -71,37 +73,37 @@ class SearchAvailabilityPresenterTest extends TestBase
         $twoHours2 = $this->GetEmpty($date, '22:00', '00:00');
 
         $scheduleLayout = new ScheduleLayout($tz);
-        $scheduleLayout->AppendPeriod(Time::Parse("00:00", $tz), Time::Parse("00:15", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("00:15", $tz), Time::Parse("00:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("00:30", $tz), Time::Parse("01:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("01:00", $tz), Time::Parse("02:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("2:30", $tz), Time::Parse("12:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("12:30", $tz), Time::Parse("16:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("16:00", $tz), Time::Parse("18:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("18:30", $tz), Time::Parse("19:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("19:30", $tz), Time::Parse("20:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("20:00", $tz), Time::Parse("21:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("21:00", $tz), Time::Parse("22:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("22:00", $tz), Time::Parse("00:00", $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:00', $tz), Time::Parse('00:15', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:15', $tz), Time::Parse('00:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:30', $tz), Time::Parse('01:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('01:00', $tz), Time::Parse('02:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('2:30', $tz), Time::Parse('12:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('12:30', $tz), Time::Parse('16:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('16:00', $tz), Time::Parse('18:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('18:30', $tz), Time::Parse('19:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('19:30', $tz), Time::Parse('20:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('20:00', $tz), Time::Parse('21:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('21:00', $tz), Time::Parse('22:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('22:00', $tz), Time::Parse('00:00', $tz));
 
         $this->scheduleService->_Layout = $scheduleLayout;
         $this->reservationService->_ReservationsAndBlackouts = [
-                new ReservationListItem(new TestBlackoutItemView(1, $date->SetTimeString("20:00"), $date->SetTimeString("21:00"), $resourceId, 1)),
-                new ReservationListItem(new TestBlackoutItemView(2, $date->SetTimeString("21:00"), $date->SetTimeString("22:00"), $resourceId, 1)),
-                new ReservationListItem(new ReservationItemView("1", $date->SetTimeString("02:30"), $date->SetTimeString("12:30"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("2", $date->SetTimeString("12:30"), $date->SetTimeString("16:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("3", $date->SetTimeString("18:30"), $date->SetTimeString("19:30"), "", $resourceId)),
+            new ReservationListItem(new TestBlackoutItemView(1, $date->SetTimeString('20:00'), $date->SetTimeString('21:00'), $resourceId, 1)),
+            new ReservationListItem(new TestBlackoutItemView(2, $date->SetTimeString('21:00'), $date->SetTimeString('22:00'), $resourceId, 1)),
+            new ReservationListItem(new ReservationItemView('1', $date->SetTimeString('02:30'), $date->SetTimeString('12:30'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('2', $date->SetTimeString('12:30'), $date->SetTimeString('16:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('3', $date->SetTimeString('18:30'), $date->SetTimeString('19:30'), '', $resourceId)),
         ];
 
         $this->presenter->SearchAvailability();
 
         $expectedOpenings = [
-                new AvailableOpeningView($resource, $date->SetTimeString("00:00"), $date->SetTimeString("01:00")),
-                new AvailableOpeningView($resource, $date->SetTimeString("00:15"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("00:30"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("01:00"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("16:00"), $date->SetTimeString("18:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("22:00"), $date->AddDays(1)->SetTimeString("00:00")),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:00'), $date->SetTimeString('01:00')),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:15'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:30'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('01:00'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('16:00'), $date->SetTimeString('18:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('22:00'), $date->AddDays(1)->SetTimeString('00:00')),
         ];
         $expectedSearchRange = new DateRange($date->ToTimezone($tz), $date->ToTimezone($tz)->GetDate()->AddDays(1), $tz);
 
@@ -116,14 +118,14 @@ class SearchAvailabilityPresenterTest extends TestBase
 
         $tz = $this->fakeUser->Timezone;
 
-        $resource = new FakeBookableResource($resourceId);
+        $resource = new TestResourceDto($resourceId);
         $this->resourceService->_AllResources = [$resource];
 
         Date::_SetNow(Date::Parse('2016-07-09 12:00'));
         $this->page->_Range = 'thisweek';
 
         $scheduleLayout = new ScheduleLayout($tz);
-        $scheduleLayout->AppendBlockedPeriod(Time::Parse("00:00", $tz), Time::Parse("00:00", $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('00:00', $tz), Time::Parse('00:00', $tz));
         $this->scheduleService->_Layout = $scheduleLayout;
 
         $this->presenter->SearchAvailability();
@@ -150,15 +152,15 @@ class SearchAvailabilityPresenterTest extends TestBase
         for ($hour = 0; $hour < 24; $hour++) {
             $start = $hour == 0 ? '00:00' : "$hour:00";
             $end = $hour + 1;
-            $scheduleLayout->AppendPeriod(Time::Parse($start, $tz), Time::Parse("$end:00", $tz), "", DayOfWeek::SUNDAY);
-            $scheduleLayout->AppendPeriod(Time::Parse($start, $tz), Time::Parse("$end:00", $tz), "", DayOfWeek::MONDAY);
+            $scheduleLayout->AppendPeriod(Time::Parse($start, $tz), Time::Parse("$end:00", $tz), '', DayOfWeek::SUNDAY);
+            $scheduleLayout->AppendPeriod(Time::Parse($start, $tz), Time::Parse("$end:00", $tz), '', DayOfWeek::MONDAY);
         }
-        $midnight = Time::Parse("00:00", $tz);
-        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, "", DayOfWeek::TUESDAY);
-        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, "", DayOfWeek::WEDNESDAY);
-        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, "", DayOfWeek::THURSDAY);
-        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, "", DayOfWeek::FRIDAY);
-        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, "", DayOfWeek::SATURDAY);
+        $midnight = Time::Parse('00:00', $tz);
+        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, '', DayOfWeek::TUESDAY);
+        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, '', DayOfWeek::WEDNESDAY);
+        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, '', DayOfWeek::THURSDAY);
+        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, '', DayOfWeek::FRIDAY);
+        $scheduleLayout->AppendBlockedPeriod($midnight, $midnight, '', DayOfWeek::SATURDAY);
 
         $this->scheduleService->_Layout = $scheduleLayout;
 
@@ -200,13 +202,13 @@ class SearchAvailabilityPresenterTest extends TestBase
 
         $this->scheduleService->_Layout = $scheduleLayout;
         $this->reservationService->_ReservationsAndBlackouts = [
-                new ReservationListItem(new TestReservationItemView(
-                    1,
-                    $date->AddDays(2)->SetTimeString("0:00"),
-                    $date->AddDays(3)->SetTimeString("00:00"),
-                    $resourceId,
-                    "1"
-                )),
+            new ReservationListItem(new TestReservationItemView(
+                1,
+                $date->AddDays(2)->SetTimeString('0:00'),
+                $date->AddDays(3)->SetTimeString('00:00'),
+                $resourceId,
+                '1'
+            )),
         ];
 
         $this->presenter->SearchAvailability();
@@ -237,37 +239,37 @@ class SearchAvailabilityPresenterTest extends TestBase
         $date = Date::Now()->AddDays(1)->ToTimezone($tz)->GetDate();
 
         $scheduleLayout = new ScheduleLayout($tz);
-        $scheduleLayout->AppendPeriod(Time::Parse("00:00", $tz), Time::Parse("00:15", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("00:15", $tz), Time::Parse("00:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("00:30", $tz), Time::Parse("01:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("01:00", $tz), Time::Parse("02:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("2:30", $tz), Time::Parse("12:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("12:30", $tz), Time::Parse("16:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("16:00", $tz), Time::Parse("18:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("18:30", $tz), Time::Parse("19:30", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("19:30", $tz), Time::Parse("20:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("20:00", $tz), Time::Parse("21:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("21:00", $tz), Time::Parse("22:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("22:00", $tz), Time::Parse("00:00", $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:00', $tz), Time::Parse('00:15', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:15', $tz), Time::Parse('00:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('00:30', $tz), Time::Parse('01:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('01:00', $tz), Time::Parse('02:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('2:30', $tz), Time::Parse('12:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('12:30', $tz), Time::Parse('16:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('16:00', $tz), Time::Parse('18:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('18:30', $tz), Time::Parse('19:30', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('19:30', $tz), Time::Parse('20:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('20:00', $tz), Time::Parse('21:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('21:00', $tz), Time::Parse('22:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('22:00', $tz), Time::Parse('00:00', $tz));
 
         $this->scheduleService->_Layout = $scheduleLayout;
         $this->reservationService->_ReservationsAndBlackouts = [
-                new ReservationListItem(new TestBlackoutItemView(1, $date->SetTimeString("20:00"), $date->SetTimeString("21:00"), $resourceId, 1)),
-                new ReservationListItem(new TestBlackoutItemView(2, $date->SetTimeString("21:00"), $date->SetTimeString("22:00"), $resourceId, 1)),
-                new ReservationListItem(new ReservationItemView("1", $date->SetTimeString("02:30"), $date->SetTimeString("12:30"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("2", $date->SetTimeString("12:30"), $date->SetTimeString("16:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("3", $date->SetTimeString("18:30"), $date->SetTimeString("19:30"), "", $resourceId)),
+            new ReservationListItem(new TestBlackoutItemView(1, $date->SetTimeString('20:00'), $date->SetTimeString('21:00'), $resourceId, 1)),
+            new ReservationListItem(new TestBlackoutItemView(2, $date->SetTimeString('21:00'), $date->SetTimeString('22:00'), $resourceId, 1)),
+            new ReservationListItem(new ReservationItemView('1', $date->SetTimeString('02:30'), $date->SetTimeString('12:30'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('2', $date->SetTimeString('12:30'), $date->SetTimeString('16:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('3', $date->SetTimeString('18:30'), $date->SetTimeString('19:30'), '', $resourceId)),
         ];
 
         $this->presenter->SearchAvailability();
 
         $expectedOpenings = [
-                new AvailableOpeningView($resource, $date->SetTimeString("00:00"), $date->SetTimeString("01:00")),
-                new AvailableOpeningView($resource, $date->SetTimeString("00:15"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("00:30"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("01:00"), $date->SetTimeString("02:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("16:00"), $date->SetTimeString("18:30")),
-                new AvailableOpeningView($resource, $date->SetTimeString("22:00"), $date->AddDays(1)->SetTimeString("00:00")),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:00'), $date->SetTimeString('01:00')),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:15'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('00:30'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('01:00'), $date->SetTimeString('02:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('16:00'), $date->SetTimeString('18:30')),
+            new AvailableOpeningView($resource, $date->SetTimeString('22:00'), $date->AddDays(1)->SetTimeString('00:00')),
         ];
 
         $this->assertEquals(count($expectedOpenings), count($this->page->_Openings));
@@ -298,30 +300,30 @@ class SearchAvailabilityPresenterTest extends TestBase
         $this->page->_EndTime = '10:00';
 
         $scheduleLayout = new ScheduleLayout($tz);
-        $scheduleLayout->AppendBlockedPeriod(Time::Parse("00:00", $tz), Time::Parse("06:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("06:00", $tz), Time::Parse("07:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("07:00", $tz), Time::Parse("08:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("08:00", $tz), Time::Parse("10:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("10:00", $tz), Time::Parse("14:00", $tz));
-        $scheduleLayout->AppendBlockedPeriod(Time::Parse("14:00", $tz), Time::Parse("00:00", $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('00:00', $tz), Time::Parse('06:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('06:00', $tz), Time::Parse('07:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('07:00', $tz), Time::Parse('08:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('08:00', $tz), Time::Parse('10:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('10:00', $tz), Time::Parse('14:00', $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('14:00', $tz), Time::Parse('00:00', $tz));
 
         $this->scheduleService->_Layout = $scheduleLayout;
         $this->reservationService->_ReservationsAndBlackouts = [
-                new ReservationListItem(new TestBlackoutItemView(1, $tue->SetTimeString("06:00"), $tue->SetTimeString("07:30"), $resourceId, 1)),
-                new ReservationListItem(new ReservationItemView("1", $tue->SetTimeString("10:00"), $tue->SetTimeString("00:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("2", $wed->SetTimeString("04:00"), $tue->SetTimeString("07:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("3", $wed->SetTimeString("10:00"), $wed->SetTimeString("00:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("4", $thu->SetTimeString("06:00"), $thu->SetTimeString("07:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("5", $thu->SetTimeString("10:00"), $thu->SetTimeString("00:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("6", $fri->SetTimeString("00:00"), $sat->SetTimeString("00:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("7", $sat->SetTimeString("00:00"), $sun->SetTimeString("00:00"), "", $resourceId)),
+            new ReservationListItem(new TestBlackoutItemView(1, $tue->SetTimeString('06:00'), $tue->SetTimeString('07:30'), $resourceId, 1)),
+            new ReservationListItem(new ReservationItemView('1', $tue->SetTimeString('10:00'), $tue->SetTimeString('00:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('2', $wed->SetTimeString('04:00'), $tue->SetTimeString('07:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('3', $wed->SetTimeString('10:00'), $wed->SetTimeString('00:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('4', $thu->SetTimeString('06:00'), $thu->SetTimeString('07:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('5', $thu->SetTimeString('10:00'), $thu->SetTimeString('00:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('6', $fri->SetTimeString('00:00'), $sat->SetTimeString('00:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('7', $sat->SetTimeString('00:00'), $sun->SetTimeString('00:00'), '', $resourceId)),
         ];
 
         $this->presenter->SearchAvailability();
 
         $expectedOpenings = [
-                new AvailableOpeningView($resource, $wed->SetTimeString('07:00'), $wed->SetTimeString('10:00')),
-                new AvailableOpeningView($resource, $thu->SetTimeString('07:00'), $thu->SetTimeString('10:00')),
+            new AvailableOpeningView($resource, $wed->SetTimeString('07:00'), $wed->SetTimeString('10:00')),
+            new AvailableOpeningView($resource, $thu->SetTimeString('07:00'), $thu->SetTimeString('10:00')),
         ];
 
         $this->assertEquals($expectedOpenings, $this->page->_Openings);
@@ -352,30 +354,30 @@ class SearchAvailabilityPresenterTest extends TestBase
         $this->page->_EndTime = '10:00';
 
         $scheduleLayout = new ScheduleLayout($tz);
-        $scheduleLayout->AppendBlockedPeriod(Time::Parse("00:00", $tz), Time::Parse("06:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("06:00", $tz), Time::Parse("07:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("07:00", $tz), Time::Parse("08:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("08:00", $tz), Time::Parse("10:00", $tz));
-        $scheduleLayout->AppendPeriod(Time::Parse("10:00", $tz), Time::Parse("14:00", $tz));
-        $scheduleLayout->AppendBlockedPeriod(Time::Parse("14:00", $tz), Time::Parse("00:00", $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('00:00', $tz), Time::Parse('06:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('06:00', $tz), Time::Parse('07:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('07:00', $tz), Time::Parse('08:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('08:00', $tz), Time::Parse('10:00', $tz));
+        $scheduleLayout->AppendPeriod(Time::Parse('10:00', $tz), Time::Parse('14:00', $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('14:00', $tz), Time::Parse('00:00', $tz));
 
         $this->scheduleService->_Layout = $scheduleLayout;
         $this->reservationService->_ReservationsAndBlackouts = [
-                new ReservationListItem(new TestBlackoutItemView(1, $sun->SetTimeString("06:00"), $sun->SetTimeString("08:00"), $resourceId, 1)),
-                new ReservationListItem(new ReservationItemView("1", $mon->SetTimeString("06:00"), $mon->SetTimeString("08:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("2", $tue->SetTimeString("06:00"), $tue->SetTimeString("08:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("3", $wed->SetTimeString("08:00"), $wed->SetTimeString("14:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("4", $fri->SetTimeString("06:00"), $fri->SetTimeString("08:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("5", $fri->SetTimeString("07:00"), $sat->SetTimeString("14:00"), "", $resourceId)),
-                new ReservationListItem(new ReservationItemView("6", $sat->SetTimeString("09:00"), $sat->SetTimeString("14:00"), "", $resourceId)),
+            new ReservationListItem(new TestBlackoutItemView(1, $sun->SetTimeString('06:00'), $sun->SetTimeString('08:00'), $resourceId, 1)),
+            new ReservationListItem(new ReservationItemView('1', $mon->SetTimeString('06:00'), $mon->SetTimeString('08:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('2', $tue->SetTimeString('06:00'), $tue->SetTimeString('08:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('3', $wed->SetTimeString('08:00'), $wed->SetTimeString('14:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('4', $fri->SetTimeString('06:00'), $fri->SetTimeString('08:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('5', $fri->SetTimeString('07:00'), $sat->SetTimeString('14:00'), '', $resourceId)),
+            new ReservationListItem(new ReservationItemView('6', $sat->SetTimeString('09:00'), $sat->SetTimeString('14:00'), '', $resourceId)),
         ];
 
         $this->presenter->SearchAvailability();
 
         $expectedOpenings = [
-                new AvailableOpeningView($resource, $tue->SetTimeString('07:00'), $tue->SetTimeString('10:00')),
-                new AvailableOpeningView($resource, $wed->SetTimeString('07:00'), $wed->SetTimeString('10:00')),
-                new AvailableOpeningView($resource, $thu->SetTimeString('07:00'), $thu->SetTimeString('10:00')),
+            new AvailableOpeningView($resource, $tue->SetTimeString('07:00'), $tue->SetTimeString('10:00')),
+            new AvailableOpeningView($resource, $wed->SetTimeString('07:00'), $wed->SetTimeString('10:00')),
+            new AvailableOpeningView($resource, $thu->SetTimeString('07:00'), $thu->SetTimeString('10:00')),
         ];
 
         $this->assertEquals($expectedOpenings, $this->page->_Openings);
@@ -480,7 +482,7 @@ class FakeSearchAvailabilityPage extends SearchAvailabilityPage
     public $_RepeatMonthlyType = RepeatMonthlyType::DayOfMonth;
 
     /**
-     * @var Date[]
+     * @var string[]
      */
     public $_RepeatCustomDates = [];
 
@@ -524,7 +526,7 @@ class FakeSearchAvailabilityPage extends SearchAvailabilityPage
 
     public function GetRepeatInterval()
     {
-        return $this->_RepeatInterval;
+        return $this->_RepeatInterval === null ? null : (string)$this->_RepeatInterval;
     }
 
     public function GetRepeatWeekdays()

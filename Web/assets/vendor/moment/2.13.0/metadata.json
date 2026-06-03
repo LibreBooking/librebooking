@@ -1,0 +1,8 @@
+{
+  "name": "moment",
+  "version": "2.13.0",
+  "description": "Parse, validate, manipulate, and display dates and times in JavaScript.",
+  "homepage": "https://momentjs.com/",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js",
+  "license": "MIT"
+}

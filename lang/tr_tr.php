@@ -14,7 +14,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'İsim';
         $strings['LastName'] = 'Soyisim';
@@ -633,6 +633,7 @@ class tr_tr extends en_gb
         $strings['NoResourcePermission'] = 'You do not have permission to access one or more of the requested resources.';
         $strings['ConflictingReservationDates'] = 'Şu zaman için çakışma mevcut:';
         $strings['StartDateBeforeEndDateRule'] = 'The start date and time must be before the end date and time.';
+        $strings['RecurringWithoutTerminationRule'] = 'Tekrarlayan karartmalar için bir bitiş tarihi gereklidir.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
@@ -801,12 +802,12 @@ class tr_tr extends en_gb
         $strings['PendingApprovalReservations'] = 'Onay bekleyen rezervasyonlar';
         $strings['LaterThisMonth'] = 'Bu ayın ilerisinde';
         $strings['LaterThisYear'] = 'Bu yılın ilerisinde';
-        $strings['Remaining'] = 'Kalan';        
+        $strings['Remaining'] = 'Kalan';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Eksik check-out rezervasyonu yok';
-        $strings['MissingCheckOutReservations'] = 'Eksik Check Out Rezervasyonları';        
+        $strings['MissingCheckOutReservations'] = 'Eksik Check Out Rezervasyonları';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -825,7 +826,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -851,7 +852,7 @@ class tr_tr extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

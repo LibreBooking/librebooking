@@ -47,10 +47,10 @@ interface IConfigurationFile
     public function GetDefaultTimezone();
 
     /**
-     * @param $emailAddress
+     * @param string|null $emailAddress
      * @return bool
      */
-    public function IsAdminEmail($emailAddress);
+    public function IsAdminEmail(?string $emailAddress): bool;
 
     /**
      * @return string[]
@@ -91,7 +91,7 @@ class Configuration implements IConfiguration
     public const DEFAULT_CONFIG_ID = 'librebooking';
     public const CONFIG_FILE_PATH = ROOT_DIR . 'config/config.php';
     public const ENV_FILE_PATH = ROOT_DIR . '.env';
-    public const VERSION = '4.0.0';
+    public const VERSION = '5.0.3';
 
     protected function __construct()
     {
@@ -151,9 +151,9 @@ class Configuration implements IConfiguration
             // directly load new config format
             $conf = $loadedConfig;
         } elseif (isset($conf['settings'])) {
-            error_log("Legacy config format detected in $configFile. Please consider updating to the new format.");
+            error_log("[CONFIG] Legacy config format detected in $configFile. Please consider updating to the new format.");
         } else {
-            throw new Exception("Invalid config file: 'settings' section missing");
+            throw new Exception("[CONFIG] Invalid config file: 'settings' section missing");
         }
 
         $this->AddConfig($configId, $conf, $overwrite, $configKeysClass);
@@ -234,10 +234,10 @@ class Configuration implements IConfiguration
 
     /**
      * Checks if the given email address is an admin email.
-     * @param string $emailAddress The email address to check.
+     * @param string|null $emailAddress The email address to check.
      * @return bool True if the email address is an admin email, false otherwise.
      */
-    public function IsAdminEmail($emailAddress)
+    public function IsAdminEmail(?string $emailAddress): bool
     {
         return $this->File(self::DEFAULT_CONFIG_ID)->IsAdminEmail($emailAddress);
     }
@@ -299,23 +299,58 @@ class Configuration implements IConfiguration
 class ConfigurationFile implements IConfigurationFile
 {
     private $_values = [];
-    private $_configKeysClass = null;
 
-    public function __construct($values, $configKeysClass = null)
+    /**
+     * @var class-string
+     */
+    // Stores the schema class name used for config key lookups, such as
+    // `ConfigKeys::class` for the main config or a `PluginConfigKeys` subclass
+    // for plugin-specific config files.
+    private string $_configKeysClass;
+
+    /**
+     * @param array{settings: array<string, mixed>, ...} $values Full config payload containing the
+     *        `settings` array that will be rewritten, validated, and stored.
+     * @param class-string|null $configKeysClass Schema class name to use for key lookups.
+     *        Must be `ConfigKeys::class` or a `PluginConfigKeys` subclass. Defaults to
+     *        `ConfigKeys::class` for the main application config.
+     */
+    public function __construct(array $values, ?string $configKeysClass = null)
     {
-        $this->_configKeysClass = $configKeysClass ?? ConfigKeys::class;
+        $configKeysClass = $configKeysClass ?? ConfigKeys::class;
+
+        if ($configKeysClass !== ConfigKeys::class && !is_subclass_of($configKeysClass, PluginConfigKeys::class)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid config keys class: %s',
+                $configKeysClass
+            ));
+        }
+
+        $this->_configKeysClass = $configKeysClass;
         $rewriteLegacy = $this->RewriteLegacyKeys($values[Configuration::SETTINGS]);
         $validated = $this->ValidateConfig($rewriteLegacy);
         $this->_values = $validated;
     }
 
     /**
-     * Rewrites legacy configuration keys to their new equivalents based on the definitions
-     * in ConfigKeys. This function preserves the original structure of the config array,
-     * rewriting only keys that are marked as deprecated while leaving known new keys untouched.
+     * Returns the normalized configuration values after legacy-key rewriting and validation.
      *
-     * - If a key is a valid key (via ConfigKeys::findByKey), it is passed through as-is.
-     * - If a key is a known legacy key (via ConfigKeys::findByLegacyKey), it is replaced with its new equivalent.
+     * @return array<string, mixed>
+     */
+    public function GetValues(): array
+    {
+        return $this->_values;
+    }
+
+    /**
+     * Rewrites legacy configuration keys to their new equivalents based on the active
+     * config schema class. This function preserves the original structure of the config
+     * array, rewriting only keys that are marked as deprecated while leaving known new
+     * keys untouched.
+     *
+     * - If a key is a valid key in the configured schema, it is passed through as-is.
+     * - If a key is a known legacy key in the configured schema, it is replaced with its
+     *   new equivalent.
      * - If a sectioned array (e.g. 'upload' => [...]) is encountered, each subkey is resolved as 'section.key'.
      *
      * @param array $config The raw configuration array from config.php (usually $conf['settings']).
@@ -330,66 +365,101 @@ class ConfigurationFile implements IConfigurationFile
                 // Section group, check subkeys as "$key.$subKey"
                 foreach ($value as $subKey => $subValue) {
                     $fullKey = "$key.$subKey";
-                    $entry = call_user_func([$this->_configKeysClass, 'findByKey'], $fullKey) ??
-                        call_user_func([$this->_configKeysClass, 'findByLegacyKey'], $fullKey);
+                    $match = $this->FindConfigEntry($fullKey);
+                    $entry = $match['entry'];
+                    $isLegacyKey = $match['isLegacy'];
 
                     if ($entry && !empty($entry['key'])) {
                         $section = $entry['section'] ?? null;
                         $finalKey = $entry['key'];
 
-                        if ($section === $key) {
-                            // Keep under parent key, rewrite subkey only
+                        if ($section !== null && $section !== '') {
+                            // Always rewrite sectioned keys into the canonical section bucket,
+                            // e.g. legacy 'delete.old.data.years.old.data' -> canonical 'cleanup'.
                             $subKeyNew = str_starts_with($finalKey, $section . '.')
                                 ? substr($finalKey, strlen($section) + 1)
                                 : $finalKey;
 
-                            $rewritten[$key][$subKeyNew] = $subValue;
+                            $rewritten[$section][$subKeyNew] = $subValue;
                         } else {
                             $rewritten[$finalKey] = $subValue;
                         }
 
-                        if (!call_user_func([$this->_configKeysClass, 'findByKey'], $fullKey)) {
+                        if ($isLegacyKey) {
                             error_log("[CONFIG] Deprecated config key '$fullKey' used. It maps to '$finalKey'. Support for legacy keys will be removed in a future release.");
                         }
-
-                        continue;
+                    } else {
+                        $removedReason = DeprecatedConfigKeys::findReason($fullKey);
+                        if ($removedReason !== null) {
+                            error_log("[CONFIG] Config key '$fullKey' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                        } else {
+                            // Unknown subkey - preserve in original structure for validation
+                            $rewritten[$key][$subKey] = $subValue;
+                        }
                     }
                 }
 
                 continue;
             }
 
-            $entry = call_user_func([$this->_configKeysClass, 'findByKey'], $key) ??
-                call_user_func([$this->_configKeysClass, 'findByLegacyKey'], $key);
+            $match = $this->FindConfigEntry($key);
+            $entry = $match['entry'];
+            $isLegacyKey = $match['isLegacy'];
 
             if ($entry && !empty($entry['key'])) {
                 $finalKey = $entry['key'];
                 $section = $entry['section'] ?? null;
 
-                if ($section && str_starts_with($finalKey, $section . '.')) {
+                if ($section !== null && $section !== '' && str_starts_with($finalKey, $section . '.')) {
                     $keyWithinSection = substr($finalKey, strlen($section) + 1);
                     $rewritten[$section][$keyWithinSection] = $value;
                 } else {
                     $rewritten[$finalKey] = $value;
                 }
 
-                if (!call_user_func([$this->_configKeysClass, 'findByKey'], $key)) {
+                if ($isLegacyKey) {
                     error_log("[CONFIG] Deprecated config key '$key' used. It maps to '$finalKey'. Support for legacy keys will be removed in a future release.");
                 }
 
                 continue;
             } else {
-                // Unknown key — pass through (validate will drop)
-                $rewritten[$key] = $value;
+                $removedReason = DeprecatedConfigKeys::findReason($key);
+                if ($removedReason !== null) {
+                    error_log("[CONFIG] Config key '$key' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                } else {
+                    // Unknown key — pass through (validate will log a warning but keep it)
+                    $rewritten[$key] = $value;
+                }
             }
         }
 
         return $rewritten;
     }
 
+    /**
+     * @return array{entry: ?array, isLegacy: bool}
+     */
+    private function FindConfigEntry(string $key): array
+    {
+        // `_configKeysClass` stores a class name string such as `ConfigKeys::class`.
+        // Using `$configKeysClass::...` lets the same parser work with either the
+        // main config schema or a plugin-specific schema class selected at runtime.
+        $configKeysClass = $this->_configKeysClass;
+
+        $entry = $configKeysClass::findByKey($key);
+        if ($entry !== null) {
+            return ['entry' => $entry, 'isLegacy' => false];
+        }
+
+        $entry = $configKeysClass::findByLegacyKey($key);
+
+        return ['entry' => $entry, 'isLegacy' => $entry !== null];
+    }
+
     private function ValidateConfig(array $data, string $path = ''): array
     {
         $validated = [];
+        $configKeysClass = $this->_configKeysClass;
 
         foreach ($data as $key => $value) {
             $fullKey = $path === '' ? $key : "$path.$key";
@@ -399,11 +469,17 @@ class ConfigurationFile implements IConfigurationFile
                 continue;
             }
 
-            $configDef = call_user_func([$this->_configKeysClass, 'findByKey'], $fullKey);
+            $configDef = $configKeysClass::findByKey($fullKey);
 
             if (!$configDef) {
-                error_log("[CONFIG] Unknown config key: '$fullKey'. Skipping.");
-                $validated[$key] = $value; // Keep unknown keys as-is
+                $removedReason = DeprecatedConfigKeys::findReason($fullKey);
+                if ($removedReason !== null) {
+                    // Intentionally not added to $validated — no code reads this key anymore
+                    error_log("[CONFIG] Config key '$fullKey' has been deprecated and removed. Please remove it from your config file. Reason: $removedReason");
+                } else {
+                    error_log("[CONFIG] Unknown config key: '$fullKey'. Skipping.");
+                    $validated[$key] = $value; // Keep unknown keys as-is
+                }
                 continue;
             }
 
@@ -415,8 +491,7 @@ class ConfigurationFile implements IConfigurationFile
             }
 
             if (isset($configDef['choices']) && !array_key_exists($value, $configDef['choices'])) {
-                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', $configDef['choices']) . "]");
-
+                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map(fn ($key, $value) => "{$key} => {$value}", array_keys($configDef['choices']), $configDef['choices'])) . ']');
                 $validated[$key] = $configDef['default'];
                 continue;
             }
@@ -439,7 +514,10 @@ class ConfigurationFile implements IConfigurationFile
     public function GetKey($configDef, $converter = null)
     {
         if (!is_array($configDef) || !isset($configDef['key'])) {
-            throw new InvalidArgumentException('Config definition not found"');
+            throw new InvalidArgumentException(sprintf(
+                'Config definition not found for: %s',
+                json_encode($configDef, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            ));
         }
 
         $value = null;
@@ -447,12 +525,12 @@ class ConfigurationFile implements IConfigurationFile
         $section = $configDef['section'] ?? null;
         $converter = $converter ?? $this->GetDefaultConverter($configDef);
 
-        $envKey = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $configDef['key']));
-        $envValue = env($envKey);
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $configDef);
+        $envValue = $envKey !== null ? env($envKey) : null;
 
         if (!empty($envValue)) {
             $value = $envValue;
-        } elseif ($section !== null) {
+        } elseif ($section !== null && $section !== '') {
             $sectionKey = str_starts_with($fullKey, $section . '.') ? substr($fullKey, strlen($section) + 1) : $fullKey;
             if (isset($this->_values[$section][$sectionKey])) {
                 $value = $this->_values[$section][$sectionKey];
@@ -462,6 +540,15 @@ class ConfigurationFile implements IConfigurationFile
                 $value = $this->_values[$fullKey];
             }
         }
+
+        if ($value === null || $value === '') {
+            if (array_key_exists('default', $configDef)) {
+                $value = $configDef['default'];
+            } else {
+                $value = null;
+            }
+        }
+
         return $this->Convert($value, $converter);
     }
 
@@ -538,15 +625,19 @@ class ConfigurationFile implements IConfigurationFile
 
     /**
      * Checks if the given email address is an admin email.
-     * @param string $emailAddress The email address to check.
+     * @param string|null $emailAddress The email address to check.
      * @return bool True if the email address is an admin email, false otherwise.
      */
-    public function IsAdminEmail($emailAddress)
+    public function IsAdminEmail(?string $emailAddress): bool
     {
+        if ($emailAddress === null || $emailAddress === '') {
+            return false;
+        }
+
         $adminEmails = $this->GetAllAdminEmails();
 
         foreach ($adminEmails as $email) {
-            if (strtolower($emailAddress) == strtolower($email)) {
+            if (strtolower((string) $emailAddress) == strtolower((string) $email)) {
                 return true;
             }
         }

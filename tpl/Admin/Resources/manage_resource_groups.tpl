@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles='scripts/css/jquery.contextMenu.css,scripts/css/jqtree.css'}
+{include file='globalheader.tpl' cssFiles='assets/vendor/jquery-contextmenu/2.9.2/css/jquery.contextMenu.css,assets/vendor/jqtree/1.8.11/css/jqtree.css'}
 
 <div id="page-manage-resource-groups" class="admin-page">
 
@@ -28,12 +28,12 @@
 								<label for="groupName" class="visually-hidden">{translate key=AddNewGroup}</label>
 								<div class="input-group mb-3">
 									<input type="text" name="{FormKeys::GROUP_NAME}"
-										class="form-control new-group inline" size="30" id="groupName"
+										class="form-control form-control-sm new-group inline" size="30" id="groupName"
 										placeholder="{translate key=AddNewGroup}" />
 									<input type="hidden" name="{FormKeys::PARENT_ID}" />
-									<a href="#" class="btn btn-primary" type="button" id="btnAddGroup">
+									<button type="button" class="btn btn-primary btn-sm" id="btnAddGroup">
 										<i class="bi bi-plus-circle-fill icon add inline"></i>
-										{translate key=Add}</a>
+										{translate key=Add}</button>
 								</div>
 							</div>
 						</div>
@@ -42,7 +42,7 @@
 				<div class="d-flex justify-content-center gap-5">
 					<div id="group-tree"></div>
 					<div id="resource-list">
-						<h4>{translate key=Resources}</h4>
+						<div class="fs-4">{translate key=Resources}</div>
 						{foreach from=$Resources item=resource}
 							<div class="resource-draggable" resource-name="{$resource->GetName()|escape:javascript}"
 								resource-id="{$resource->GetId()}">{$resource->GetName()}</div>
@@ -139,10 +139,10 @@
 {include file="javascript-includes.tpl"}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="admin/resource-groups.js"}
-{jsfile src="js/jquery.form-3.09.min.js"}
-{jsfile src="js/tree.jquery.js"}
-{jsfile src="js/jquery.cookie.js"}
-{jsfile src="js/jquery.contextMenu.js"}
+{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
+{vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
+{vendor_js src="jquery-contextmenu/2.9.2/js/jquery.contextMenu.js"}
 
 <script type="text/javascript">
 	$(document).ready(function() {

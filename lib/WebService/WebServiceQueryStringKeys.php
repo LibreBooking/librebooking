@@ -6,6 +6,7 @@ class WebServiceQueryStringKeys
     public const DATE_TIME = 'dateTime';
     public const START_DATE_TIME = 'startDateTime';
     public const END_DATE_TIME = 'endDateTime';
+    public const GROUP_ID = 'groupId';
     public const RESOURCE_ID = 'resourceId';
     public const SCHEDULE_ID = 'scheduleId';
     public const UPDATE_SCOPE = 'updateScope';

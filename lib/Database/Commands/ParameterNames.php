@@ -171,7 +171,7 @@ class ParameterNames
 
     public const REPORT_NAME = '@report_name';
     public const REPORT_DETAILS = '@report_details';
-    public const REPORT_ID = "@report_id";
+    public const REPORT_ID = '@report_id';
 
     public const RESERVATION_INSTANCE_ID = '@reservationid';
     public const RESERVATION_USER_LEVEL_ID = '@levelid';

@@ -1,0 +1,48 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "composer"  # PHP uses composer
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "cron"
+      cronjob: "0 9 * * *"
+      timezone: "America/Los_Angeles"
+    commit-message:
+      prefix: "chore(deps)"
+    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "pip"  # Python uses pip
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    commit-message:
+      prefix: "chore(deps)"
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    commit-message:
+      prefix: "chore(deps)"
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    commit-message:
+      prefix: "chore(deps)"
+    cooldown:
+      default-days: 7

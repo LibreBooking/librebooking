@@ -1,5 +1,5 @@
 #page-reservation {
-    font-size: 12pt;
+  font-size: 12pt;
 }
 
 .navbar,
@@ -7,10 +7,10 @@
 footer,
 #page-view-reservation .buttons,
 #page-reservation .reservationButtons {
-    display: none;
+  display: none;
 }
 
 #page-reservation #accessories {
-    overflow: visible;
-    max-height: none;
+  overflow: visible;
+  max-height: none;
 }

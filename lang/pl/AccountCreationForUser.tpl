@@ -6,7 +6,7 @@ Imię: {$FullName}<br/>
 Numer telefonu: {$Phone}<br/>
 Organizacja: {$Organization}<br/>
 Stanowisko: {$Position}<br/>
-Hasło: {$Password}</p>
+Hasło: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	Utworzono przez: {$CreatedBy}
 {/if}

@@ -83,7 +83,7 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
      */
     public function getStorageType()
     {
-        return "file";
+        return 'file';
     }
 
     /**
@@ -122,7 +122,7 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
             $path = CAS_PGT_STORAGE_FILE_DEFAULT_PATH;
         }
         // check that the path is an absolute path
-        if (getenv("OS")=="Windows_NT" || strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+        if (getenv('OS') == 'Windows_NT' || strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
             if (!preg_match('`^[a-zA-Z]:`', $path)) {
                 phpCAS::error('an absolute path is needed for PGT storage to file');
             }
@@ -177,9 +177,9 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
     public function getPGTIouFilename($pgt_iou)
     {
         phpCAS::traceBegin();
-        $filename = $this->getPath()."phpcas-".hash("sha256", $pgt_iou);
-//        $filename = $this->getPath().$pgt_iou.'.plain';
-        phpCAS::trace("Sha256 filename:" . $filename);
+        $filename = $this->getPath().'phpcas-'.hash('sha256', $pgt_iou);
+        //        $filename = $this->getPath().$pgt_iou.'.plain';
+        phpCAS::trace('Sha256 filename:' . $filename);
         phpCAS::traceEnd();
         return $filename;
     }
@@ -203,7 +203,7 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
             touch($fname);
             // Chmod will fail on windows
             @chmod($fname, 0600);
-            if ($f=fopen($fname, "w")) {
+            if ($f = fopen($fname, 'w')) {
                 if (fputs($f, $pgt) === false) {
                     phpCAS::error('could not write PGT to `'.$fname.'\'');
                 }
@@ -234,10 +234,10 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
         $pgt = false;
         $fname = $this->getPGTIouFilename($pgt_iou);
         if (file_exists($fname)) {
-            if (!($f=fopen($fname, "r"))) {
+            if (!($f = fopen($fname, 'r'))) {
                 phpCAS::error('could not open `'.$fname.'\'');
             } else {
-                if (($pgt=fgets($f)) === false) {
+                if (($pgt = fgets($f)) === false) {
                     phpCAS::error('could not read PGT from `'.$fname.'\'');
                 }
                 phpCAS::trace('Successful read of PGT to `'.$fname.'\'');

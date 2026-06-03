@@ -10,7 +10,7 @@ interface IReservationAttributesPage
     public function GetRequestedUserId();
 
     /**
-     * @return int
+     * @return string
      */
     public function GetRequestedReferenceNumber();
 
@@ -67,7 +67,7 @@ class ReservationAttributesPage extends Page implements IReservationAttributesPa
      */
     public function GetRequestedUserId()
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return (int)$this->GetQuerystring(QueryStringKeys::USER_ID);
     }
 
     /**

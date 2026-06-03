@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakePaymentRepository implements IPaymentRepository
 {
     /**
@@ -7,7 +9,7 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastCost;
     /**
-     * @var CreditCost
+     * @var CreditCost[]
      */
     public $_CreditCost;
     /**
@@ -19,7 +21,7 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastStripe;
     /**
-     * @var FakePayPalGateway
+     * @var PayPalGateway
      */
     public $_PayPal;
     /**
@@ -32,7 +34,7 @@ class FakePaymentRepository implements IPaymentRepository
     public $_LastSavedPayPalResult;
 
     /**
-     * @var PageablePage
+     * @var PageableData|null
      */
     public $_TransactionLogs;
     public $_LastPage;
@@ -48,7 +50,9 @@ class FakePaymentRepository implements IPaymentRepository
         $this->_CreditCost = [new CreditCost()];
     }
 
-    public function DeleteCreditCost($creditCount) { }
+    public function DeleteCreditCost($creditCount)
+    {
+    }
 
     public function GetCreditCosts()
     {
@@ -96,7 +100,7 @@ class FakePaymentRepository implements IPaymentRepository
         $this->_LastPageSize = $pageSize;
         $this->_LastUserId = $userId;
 
-        return $this->_TransactionLogs;
+        return $this->_TransactionLogs ?? new PageableData();
     }
 
     public function GetTransactionLogView($transactionLogId)

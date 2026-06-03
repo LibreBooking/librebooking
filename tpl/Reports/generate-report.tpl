@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles="scripts/js/jqplot/jquery.jqplot.min.css" Select2=true DataTable=true}
+{include file='globalheader.tpl' Select2=true DataTable=true}
 
 <div id="page-generate-report">
 	<div id="customReportInput-container" class="accordion">
@@ -120,14 +120,12 @@
 												class="bi bi-calendar3-range me-1"></i>{translate key=Between}</label>
 
 										<label for="startDate" class="visually-hidden">{translate key=StartDate}</label>
-										<input type="date" class="form-control form-control-sm dateinput inline"
-											id="startDate" autocomplete="off" />
-										-
-										<input type="hidden" id="formattedBeginDate" {formname key=REPORT_START} />
+										<input type="text" class="form-control form-control-sm dateinput w-auto"
+											id="startDate" {formname key=REPORT_START} />
+										<div class='mx-1'>-</div>
 										<label for="endDate" class="visually-hidden">{translate key=EndDate}</label>
-										<input type="date" class="form-control form-control-sm dateinput inline"
-											id="endDate" autocomplete="off" />
-										<input type="hidden" id="formattedEndDate" {formname key=REPORT_END} />
+										<input type="text" class="form-control form-control-sm dateinput w-auto"
+											id="endDate" {formname key=REPORT_END} />
 									</div>
 								</div>
 							</div>
@@ -271,7 +269,6 @@
 </div>
 
 {include file="javascript-includes.tpl" Select2=true DataTable=true}
-{datatable tableId={$tableId}}
 {jsfile src="autocomplete.js"}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="reports/generate-reports.js"}
@@ -317,14 +314,11 @@
 		});
 	});
 
-	//$('#report-filter-panel').showHidePanel();
-
-
 	//$('#user-filter, #participant-filter').clearable();
 </script>
 
-{control type="DatePickerSetupControl" ControlId="startDate" AltId="formattedBeginDate"}
-{control type="DatePickerSetupControl" ControlId="endDate" AltId="formattedEndDate"}
+{control type="DatePickerSetupControl" ControlId="startDate"}
+{control type="DatePickerSetupControl" ControlId="endDate"}
 
 </div>
 {include file='globalfooter.tpl'}

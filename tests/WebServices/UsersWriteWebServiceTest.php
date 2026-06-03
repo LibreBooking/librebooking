@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\MockObject\MockObject;
 
 require_once(ROOT_DIR . 'WebServices/UsersWriteWebService.php');

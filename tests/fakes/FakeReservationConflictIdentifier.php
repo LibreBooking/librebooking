@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeReservationConflictIdentifier implements IReservationConflictIdentifier
 {
     /**
@@ -8,7 +10,7 @@ class FakeReservationConflictIdentifier implements IReservationConflictIdentifie
     public $_Conflicts = null;
 
     /**
-     * @var ReservationConflictResult
+     * @var array|ReservationConflictResult[]
      */
     public $_IndexedConflicts = [];
 

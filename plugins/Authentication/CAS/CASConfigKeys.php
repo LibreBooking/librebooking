@@ -7,7 +7,7 @@ class CASConfigKeys extends PluginConfigKeys
     public const CONFIG_ID = 'CAS';
 
     public const CAS_VERSION = [
-        'key' => 'cas.version',
+        'key' => 'version',
         'type' => 'string',
         'default' => 'S1',
         'label' => 'CAS Version',
@@ -16,12 +16,13 @@ class CASConfigKeys extends PluginConfigKeys
         'choices' => [
             '1.0' => 'CAS_VERSION_1_0',
             '2.0' => 'CAS_VERSION_2_0',
+            '3.0' => 'CAS_VERSION_3_0',
             'S1' => 'SAML_VERSION_1_1'
         ]
     ];
 
     public const CAS_SERVER_HOSTNAME = [
-        'key' => 'cas.server.hostname',
+        'key' => 'server.hostname',
         'type' => 'string',
         'default' => 'localhost',
         'label' => 'CAS Server Hostname',
@@ -30,7 +31,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_PORT = [
-        'key' => 'cas.port',
+        'key' => 'port',
         'type' => 'integer',
         'default' => 443,
         'label' => 'CAS Server Port',
@@ -39,7 +40,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_SERVER_URI = [
-        'key' => 'cas.server.uri',
+        'key' => 'server.uri',
         'type' => 'string',
         'default' => '',
         'label' => 'CAS Server URI',
@@ -48,7 +49,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_CHANGESESSIONID = [
-        'key' => 'cas.change.session.id',
+        'key' => 'change.session.id',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Change Session ID',
@@ -57,7 +58,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_LOGOUT_SERVERS = [
-        'key' => 'cas.logout.servers',
+        'key' => 'logout.servers',
         'type' => 'string',
         'default' => '',
         'label' => 'CAS Logout Servers',
@@ -66,7 +67,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_CERTIFICATES = [
-        'key' => 'cas.certificates',
+        'key' => 'certificates',
         'type' => 'string',
         'default' => '',
         'label' => 'CAS Certificate',
@@ -75,7 +76,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const CAS_DEBUG_ENABLED = [
-        'key' => 'cas.debug.enabled',
+        'key' => 'debug.enabled',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable CAS Debug',
@@ -84,7 +85,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const DEBUG_FILE = [
-        'key' => 'cas.debug.file',
+        'key' => 'debug.file',
         'type' => 'string',
         'default' => '/tmp/cas.log',
         'label' => 'Debug File',
@@ -102,7 +103,7 @@ class CASConfigKeys extends PluginConfigKeys
     ];
 
     public const ATTRIBUTE_MAPPING = [
-        'key' => 'cas.attribute.mapping',
+        'key' => 'attribute.mapping',
         'type' => 'string',
         'default' => 'givenName=givenName,surName=surname,email=mail,groups=Role',
         'label' => 'Attribute Mapping',

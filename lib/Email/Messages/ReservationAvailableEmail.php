@@ -32,9 +32,9 @@ class ReservationAvailableEmail extends EmailMessage
         return $this->Translate(
             'ReservationAvailableSubject',
             [
-                                        $this->resource->GetName(),
-                                        $this->request->StartDate()->ToTimezone($this->user->Timezone())->Format(Resources::GetInstance()
-                                                                                                                          ->ShortDateTimeFormat())]
+                $this->resource->GetName(),
+                $this->request->StartDate()->ToTimezone($this->user->Timezone())->Format(Resources::GetInstance()
+                                                                                                  ->ShortDateTimeFormat())]
         );
     }
 

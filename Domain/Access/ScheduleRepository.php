@@ -240,7 +240,7 @@ class ScheduleRepository implements IScheduleRepository
             $schedule->GetAdminGroupId(),
             $schedule->GetAvailabilityBegin(),
             $schedule->GetAvailabilityEnd(),
-            $schedule->GetDefaultStyle(),
+            $schedule->GetDefaultStyleInt(),
             $schedule->GetTotalConcurrentReservations(),
             $schedule->GetMaxResourcesPerReservation()
         ));
@@ -282,7 +282,6 @@ class ScheduleRepository implements IScheduleRepository
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetLayoutCommand($scheduleId));
 
-        /** @var ScheduleLayout $layout */
         $layout = null;
 
         while ($row = $reader->GetRow()) {
@@ -308,6 +307,10 @@ class ScheduleRepository implements IScheduleRepository
             }
         }
         $reader->Free();
+
+        if ($layout == null) {
+            $layout = $layoutFactory->CreateLayout();
+        }
 
         $reader = ServiceLocator::GetDatabase()->Query(new GetPeakTimesCommand($scheduleId));
         if ($row = $reader->GetRow()) {

@@ -8,13 +8,13 @@
             <form class="form-inline" role="form">
                 <div class="d-flex align-items-center">
                     <label class="fw-bold" for="attributeOption">{translate key=Attribute}</label>
-                    <select class="form-select w-auto mx-2" id="attributeOption">
+                    <select class="form-select form-select-sm w-auto mx-2" id="attributeOption">
                         {foreach from=$Attributes item=attribute}
                             <option value="{$attribute->Id()}">{$attribute->Label()}</option>
                         {/foreach}
                     </select>
 
-                    <button type="button" class="btn btn-primary" id="addRuleButton">
+                    <button type="button" class="btn btn-primary btn-sm" id="addRuleButton">
                         <i class="bi bi-plus-lg"></i> {translate key='AddRule'}
                     </button>
                 </div>
@@ -41,8 +41,9 @@
                             <td>{$rule->RequiredValue}</td>
                             <td style="background-color:{$rule->Color}">&nbsp;</td>
                             <td class="action">
-                                <a href="#" class="update delete" ruleId="{$rule->Id}"><span
-                                        class="bi bi-trash3-fill icon text-danger remove"></span></a>
+                                <a href="#" class="update delete" ruleId="{$rule->Id}" aria-label="{translate key=Delete}">
+                                    <span class="bi bi-trash3-fill icon text-danger remove"></span>
+                                </a>
                             </td>
                         </tr>
                     {/foreach}
@@ -118,7 +119,7 @@
 {include file="javascript-includes.tpl" DataTable=true}
 {datatable tableId=$tableId}
 {jsfile src="ajax-helpers.js"}
-{jsfile src="js/jquery.form-3.09.min.js"}
+{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 {jsfile src="ajax-form-submit.js"}
 {jsfile src="admin/reservation-colors.js"}
 

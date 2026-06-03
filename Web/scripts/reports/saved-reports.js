@@ -1,155 +1,146 @@
 function SavedReports(reportOptions) {
-	var opts = reportOptions;
+  var opts = reportOptions;
 
-	var elements = {
-		indicator: $('#indicator'),
-		resultsDiv: $('#resultsDiv'),
-		emailForm: $('#emailForm'),
-		deleteForm: $('#deleteForm'),
-		sendEmailButton: $('#btnSendEmail'),
-		emailIndicator: $('#sendEmailIndicator'),
-		deleteReportButton: $('#btnDeleteReport')
-	};
+  var elements = {
+    indicator: $('#indicator'),
+    resultsDiv: $('#resultsDiv'),
+    emailForm: $('#emailForm'),
+    deleteForm: $('#deleteForm'),
+    sendEmailButton: $('#btnSendEmail'),
+    emailIndicator: $('#sendEmailIndicator'),
+    deleteReportButton: $('#btnDeleteReport'),
+  };
 
-	var reportId = 0;
+  var reportId = 0;
+  var selectedReportTitle = '';
 
-	this.init = function () {
+  this.init = function () {
+    ConfigureAsyncForm(
+      elements.emailForm,
+      function () {
+        return opts.emailUrl + reportId;
+      },
+      function (data) {
+        $('#emailSent').show().delay(3000).fadeOut(1000);
+        $('#emailDiv').modal('hide');
+      }
+    );
 
-		ConfigureAsyncForm(elements.emailForm,
-			function () { return opts.emailUrl + reportId; },
-			function (data) {
-				$('#emailSent').show().delay(3000).fadeOut(1000);
-				$('#emailDiv').modal('hide');
-			});
+    ConfigureAsyncForm(elements.deleteForm, function () {
+      return opts.deleteUrl + reportId;
+    });
 
-		ConfigureAsyncForm(elements.deleteForm, function () { return opts.deleteUrl + reportId; });
+    wireUpReportLinks();
 
-		wireUpReportLinks();
+    $('.save').on('click', function () {
+      $(this).closest('form').submit();
+    });
+  };
 
-		$(document).on('click', '#btnPrint', function (e) {
-			e.preventDefault();
+  var getSavedReportTitle = function (link) {
+    var title = reportsCleanText(link.closest('tr').find('td:first').text());
+    return title;
+  };
 
-			var url = opts.printUrl + reportId;
-			window.open(url);
-		});
+  var wireUpReportLinks = function () {
+    $('#report-list a.report').on('click', function (e) {
+      e.preventDefault();
+      reportId = $(this).closest('tr').attr('reportId');
+      selectedReportTitle = getSavedReportTitle($(this));
+    });
 
-		$(document).on('click', '#btnCsv', function (e) {
-			e.preventDefault();
+    $('.runNow').on('click', function (e) {
+      selectedReportTitle = getSavedReportTitle($(this));
 
-			var url = opts.csvUrl + reportId;
-			window.open(url);
-		});
-		//
-		// $(document).on('click', '#btnChart', function(e) {
-		// 	e.preventDefault();
-		//
-		// 	var chart = new Chart();
-		// 	chart.generate();
-		// 	$('#report-results').hide();
-		// });
+      var before = function () {
+        elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
+        elements.resultsDiv.html('');
+      };
 
-		$('.save').on('click', function () {
-			$(this).closest('form').submit();
-		});
-	};
+      var after = function (data) {
+        elements.indicator.addClass('d-none');
+        elements.resultsDiv.html(data);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
+      };
 
-	var wireUpReportLinks = function () {
-		$('#report-list a.report').click(function (e) {
-			e.preventDefault();
-			reportId = $(this).closest('tr').attr('reportId');
-		});
+      ajaxGet(opts.generateUrl + reportId, before, after);
+    });
 
-		$('.runNow').click(function (e) {
-			var before = function () {
-				elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
-				elements.resultsDiv.html('');
-			};
+    $('.emailNow').on('click', function (e) {
+      $('#emailDiv').modal('show');
+    });
 
-			var after = function (data) {
-				elements.indicator.addClass('d-none');
-				elements.resultsDiv.html(data)
-			};
+    $('.delete').on('click', function (e) {
+      $('#deleteDiv').modal('show');
+    });
+  };
 
-			ajaxGet(opts.generateUrl + reportId, before, after);
-		});
+  /**
 
-		$('.emailNow').click(function (e) {
-			$('#emailDiv').modal('show');
-		});
+     // TODO: NK 2012-07-17 scheduled reports on hold for now
+     function InitializeRepeatElements() {
+     elements.repeatOptions.change(function () {
+     ChangeRepeatOptions();
+     });
+     }
 
-		$('.delete').click(function (e) {
-			$('#deleteDiv').modal('show');
-		});
+     function InitializeRepeatOptions() {
+     if (options.repeatType) {
+     elements.repeatOptions.val(options.repeatType);
+     $('#repeat_every').val(options.repeatInterval);
+     for (var i = 0; i < options.repeatWeekdays.length; i++) {
+     var id = "#repeatDay" + options.repeatWeekdays[i];
+     $(id).attr('checked', true);
+     }
 
-	};
+     $("#repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").attr('checked', true);
 
+     ChangeRepeatOptions();
+     }
+     }
 
-	/**
+     function ChangeRepeatOptions() {
+     var repeatDropDown = elements.repeatOptions;
+     if (repeatDropDown.val() != 'none') {
+     $('#repeatUntilDiv').show();
+     }
+     else {
+     $('div[id!=repeatOptions]', elements.repeatDiv).hide();
+     }
 
-	 // TODO: NK 2012-07-17 scheduled reports on hold for now
-	 function InitializeRepeatElements() {
-	 elements.repeatOptions.change(function () {
-	 ChangeRepeatOptions();
-	 });
-	 }
+     if (repeatDropDown.val() == 'daily') {
+     $('.weeks', elements.repeatDiv).hide();
+     $('.months', elements.repeatDiv).hide();
+     $('.years', elements.repeatDiv).hide();
 
-	 function InitializeRepeatOptions() {
-	 if (options.repeatType) {
-	 elements.repeatOptions.val(options.repeatType);
-	 $('#repeat_every').val(options.repeatInterval);
-	 for (var i = 0; i < options.repeatWeekdays.length; i++) {
-	 var id = "#repeatDay" + options.repeatWeekdays[i];
-	 $(id).attr('checked', true);
-	 }
+     $('.days', elements.repeatDiv).show();
+     }
 
-	 $("#repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").attr('checked', true);
+     if (repeatDropDown.val() == 'weekly') {
+     $('.days', elements.repeatDiv).hide();
+     $('.months', elements.repeatDiv).hide();
+     $('.years', elements.repeatDiv).hide();
 
-	 ChangeRepeatOptions();
-	 }
-	 }
+     $('.weeks', elements.repeatDiv).show();
+     }
 
-	 function ChangeRepeatOptions() {
-	 var repeatDropDown = elements.repeatOptions;
-	 if (repeatDropDown.val() != 'none') {
-	 $('#repeatUntilDiv').show();
-	 }
-	 else {
-	 $('div[id!=repeatOptions]', elements.repeatDiv).hide();
-	 }
+     if (repeatDropDown.val() == 'monthly') {
+     $('.days', elements.repeatDiv).hide();
+     $('.weeks', elements.repeatDiv).hide();
+     $('.years', elements.repeatDiv).hide();
 
-	 if (repeatDropDown.val() == 'daily') {
-	 $('.weeks', elements.repeatDiv).hide();
-	 $('.months', elements.repeatDiv).hide();
-	 $('.years', elements.repeatDiv).hide();
+     $('.months', elements.repeatDiv).show();
+     }
 
-	 $('.days', elements.repeatDiv).show();
-	 }
+     if (repeatDropDown.val() == 'yearly') {
+     $('.days', elements.repeatDiv).hide();
+     $('.weeks', elements.repeatDiv).hide();
+     $('.months', elements.repeatDiv).hide();
 
-	 if (repeatDropDown.val() == 'weekly') {
-	 $('.days', elements.repeatDiv).hide();
-	 $('.months', elements.repeatDiv).hide();
-	 $('.years', elements.repeatDiv).hide();
+     $('.years', elements.repeatDiv).show();
+     }
+     }
 
-	 $('.weeks', elements.repeatDiv).show();
-	 }
-
-	 if (repeatDropDown.val() == 'monthly') {
-	 $('.days', elements.repeatDiv).hide();
-	 $('.weeks', elements.repeatDiv).hide();
-	 $('.years', elements.repeatDiv).hide();
-
-	 $('.months', elements.repeatDiv).show();
-	 }
-
-	 if (repeatDropDown.val() == 'yearly') {
-	 $('.days', elements.repeatDiv).hide();
-	 $('.weeks', elements.repeatDiv).hide();
-	 $('.months', elements.repeatDiv).hide();
-
-	 $('.years', elements.repeatDiv).show();
-	 }
-	 }
-
-	 */
+     */
 }
-

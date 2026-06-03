@@ -101,6 +101,10 @@ class ManageBlackoutsService implements IManageBlackoutsService
             return new BlackoutDateTimeValidationResult();
         }
 
+        if ($this->HasMissingRequiredTerminationDate($repeatOptions)) {
+            return new BlackoutDateTimeValidationResult('RecurringWithoutTerminationRule');
+        }
+
         $userId = ServiceLocator::GetServer()->GetUserSession()->UserId;
 
         $blackoutSeries = BlackoutSeries::Create($userId, $title, $blackoutDate);
@@ -176,6 +180,21 @@ class ManageBlackoutsService implements IManageBlackoutsService
         return $conflictingBlackouts;
     }
 
+    /**
+     * Interval-based recurrence patterns need a repeat-until date to bound generated instances.
+     * Custom repeats are driven by explicit dates and therefore do not require one.
+     */
+    private function HasMissingRequiredTerminationDate(IRepeatOptions $repeatOptions): bool
+    {
+        $requiresTerminationDate = in_array(
+            $repeatOptions->RepeatType(),
+            [RepeatType::Daily, RepeatType::Weekly, RepeatType::Monthly, RepeatType::Yearly],
+            true
+        );
+
+        return $requiresTerminationDate && $repeatOptions->TerminationDate() instanceof NullDate;
+    }
+
     public function Delete($blackoutId, $updateScope)
     {
         if ($updateScope == SeriesUpdateScope::FullSeries) {
@@ -203,6 +222,10 @@ class ManageBlackoutsService implements IManageBlackoutsService
     {
         if (!$blackoutDate->GetEnd()->GreaterThan($blackoutDate->GetBegin())) {
             return new BlackoutDateTimeValidationResult();
+        }
+
+        if ($this->HasMissingRequiredTerminationDate($repeatOptions)) {
+            return new BlackoutDateTimeValidationResult('RecurringWithoutTerminationRule');
         }
 
         $userId = ServiceLocator::GetServer()->GetUserSession()->UserId;

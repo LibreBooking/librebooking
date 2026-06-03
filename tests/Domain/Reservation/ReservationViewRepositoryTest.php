@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class ReservationViewRepositoryTest extends TestBase
 {
     /**
@@ -21,7 +23,7 @@ class ReservationViewRepositoryTest extends TestBase
 
     public function testBuildsViewObjectFromDatabase()
     {
-        $referenceNumber = "12345";
+        $referenceNumber = '12345';
         $reservationId = 187;
         $resourceId = 12;
         $scheduleId = 73;
@@ -224,7 +226,7 @@ class ReservationViewRepositoryTest extends TestBase
         $expectedView->StartDate = $startDate;
         $expectedView->Title = $title;
         $expectedView->RepeatType = $repeatType;
-        $expectedView->RepeatInterval = '5';
+        $expectedView->RepeatInterval = 5;
         $expectedView->SeriesId = $seriesId;
         $expectedView->OwnerFirstName = $ownerFirst;
         $expectedView->OwnerLastName = $ownerLast;
@@ -320,8 +322,8 @@ class ReservationViewRepositoryTest extends TestBase
         $startDate = Date::Parse('2011-01-01');
         $endDate = Date::Parse('2011-01-01');
 
-        $referenceNumber1 = "ref1";
-        $resource1 = "resource1";
+        $referenceNumber1 = 'ref1';
+        $resource1 = 'resource1';
         $start1 = Date::Parse('2011-08-09', 'UTC');
         $end1 = Date::Parse('2011-08-10', 'UTC');
         $resourceId = 929;
@@ -373,8 +375,8 @@ class ReservationViewRepositoryTest extends TestBase
             $autoReleaseMin
         );
         $rows[] = $this->GetReservationListRow(
-            "2",
-            "resource",
+            '2',
+            'resource',
             Date::Now(),
             Date::Now(),
             1,
@@ -409,10 +411,10 @@ class ReservationViewRepositoryTest extends TestBase
 
     public function testConsolidatesReservationsByReferenceNumber()
     {
-        $refNum = "ref1";
+        $refNum = 'ref1';
 
-        $rows[] = $this->GetReservationListRow($refNum, "1", Date::Now(), Date::Now(), 1, 1, 1, null, null, 1, null, null, null);
-        $rows[] = $this->GetReservationListRow($refNum, "2", Date::Now(), Date::Now(), 2, 1, 1, null, null, 1, null, null, null);
+        $rows[] = $this->GetReservationListRow($refNum, '1', Date::Now(), Date::Now(), 1, 1, 1, null, null, 1, null, null, null);
+        $rows[] = $this->GetReservationListRow($refNum, '2', Date::Now(), Date::Now(), 2, 1, 1, null, null, 1, null, null, null);
 
         $this->db->SetRows($rows);
 
@@ -421,13 +423,13 @@ class ReservationViewRepositoryTest extends TestBase
         $this->assertEquals(1, count($reservations));
 
         $expected = ReservationItemView::Populate($rows[0]);
-        $expected->ResourceNames = ["1", "2"];
+        $expected->ResourceNames = ['1', '2'];
         $this->assertEquals($expected, $reservations[0]);
     }
 
     public function testReturnsNullObjectIfNothingFound()
     {
-        $referenceNumber = "12345";
+        $referenceNumber = '12345';
         $reservationView = $this->repository->GetReservationForEditing($referenceNumber);
 
         $this->assertEquals(NullReservationView::Instance(), $reservationView);
@@ -437,7 +439,7 @@ class ReservationViewRepositoryTest extends TestBase
     {
         $dateRange = new TestDateRange();
 
-        $refNum = "213213213";
+        $refNum = '213213213';
         $start = Date::Now();
         $end = Date::Now();
         $accessoryName = 'accessory';
@@ -445,7 +447,7 @@ class ReservationViewRepositoryTest extends TestBase
         $quantity = 898;
 
         $rows[] = $this->GetAccessoryRow($refNum, $start, $end, $accessoryName, $accessoryId, $quantity);
-        $rows[] = $this->GetAccessoryRow("1", Date::Now(), Date::Now(), "", 1, 1);
+        $rows[] = $this->GetAccessoryRow('1', Date::Now(), Date::Now(), '', 1, 1);
 
         $this->db->SetRows($rows);
 
@@ -496,7 +498,7 @@ class ReservationViewRepositoryTest extends TestBase
             $repeatType,
             $repeatOptions
         );
-        $rows[] = $this->GetBlackoutRow("1", Date::Now(), Date::Now());
+        $rows[] = $this->GetBlackoutRow('1', Date::Now(), Date::Now());
 
         $this->db->SetRows($rows);
 

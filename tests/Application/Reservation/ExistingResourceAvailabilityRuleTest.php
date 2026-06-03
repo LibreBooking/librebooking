@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\MockObject\MockObject;
 
 require_once(ROOT_DIR . 'Domain/namespace.php');
@@ -50,8 +52,8 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->UpdateInstance($updated, new DateRange($now->AddDays(20), $now->AddDays(21)));
 
         $reservations = [
-                new TestReservationItemView($id1, Date::Now(), Date::Now(), $resourceId),
-                new TestReservationItemView($id2, Date::Now(), Date::Now(), $resourceId),
+            new TestReservationItemView($id1, Date::Now(), Date::Now(), $resourceId),
+            new TestReservationItemView($id2, Date::Now(), Date::Now(), $resourceId),
         ];
 
         $this->strategy->expects($this->exactly(2))
@@ -78,7 +80,7 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->WithCurrentInstance($current);
 
         $reservations = [
-                new TestReservationItemView($currentId, Date::Now(), Date::Now(), $resourceId),
+            new TestReservationItemView($currentId, Date::Now(), Date::Now(), $resourceId),
         ];
 
         $this->strategy->expects($this->once())
@@ -106,7 +108,7 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->WithCurrentInstance($current);
 
         $reservations = [
-                new TestReservationItemView($currentId + 1, $currentDate->GetBegin(), $currentDate->GetEnd(), $resourceId),
+            new TestReservationItemView($currentId + 1, $currentDate->GetBegin(), $currentDate->GetEnd(), $resourceId),
         ];
 
         $this->strategy->expects($this->once())
@@ -136,7 +138,7 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->WithCurrentInstance($current);
 
         $reservations = [
-                new TestReservationItemView($currentId + 1, Date::Now(), Date::Now(), $resourceId3),
+            new TestReservationItemView($currentId + 1, Date::Now(), Date::Now(), $resourceId3),
         ];
 
         $this->strategy->expects($this->once())
@@ -212,7 +214,7 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
                  ->with($this->equalTo($startDate->AddMinutes(-60)), $this->equalTo($endDate->AddMinutes(60)))
                  ->willReturn([$scheduleReservation1, $scheduleReservation2, $scheduleReservation3, $scheduleReservation4, $scheduleReservation5]);
 
-        $rule = new ExistingResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), "UTC");
+        $rule = new ExistingResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
         $result = $rule->Validate($reservation, null);
 
         $this->assertTrue($result->IsValid());
@@ -256,7 +258,7 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
                  ->willReturn([$conflict1, $conflict2, $nonConflict1, $nonConflict2, $nonConflict3]);
 
 
-        $rule = new ExistingResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), "UTC");
+        $rule = new ExistingResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
         $result = $rule->Validate($reservation, null);
 
         $this->assertFalse($result->IsValid());
@@ -280,8 +282,8 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->WithCurrentInstance($current);
 
         $reservations = [
-                new TestReservationItemView($currentId + 1, $currentDate->GetBegin(), $currentDate->GetEnd(), $resourceId, "r1"),
-                new TestReservationItemView($currentId + 1, $currentDate->GetEnd(), $currentDate->GetEnd()->AddMinutes(30), $resourceId, "r2"),
+            new TestReservationItemView($currentId + 1, $currentDate->GetBegin(), $currentDate->GetEnd(), $resourceId, 'r1'),
+            new TestReservationItemView($currentId + 1, $currentDate->GetEnd(), $currentDate->GetEnd()->AddMinutes(30), $resourceId, 'r2'),
         ];
 
         $this->strategy->expects($this->once())
@@ -310,9 +312,9 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
 
         $reservationRepository = new FakeReservationViewRepository();
         $reservationRepository->_Reservations = [
-                new TestReservationItemView(100, $start->AddDays(1), $end->AddDays(1), $resourceId, "100"),
-                new TestReservationItemView(200, $start->AddDays(2), $end->AddDays(2), $resourceId, "200"),
-                new TestReservationItemView(300, $start->AddDays(3), $end->AddDays(3), $resourceId, "300"),
+            new TestReservationItemView(100, $start->AddDays(1), $end->AddDays(1), $resourceId, '100'),
+            new TestReservationItemView(200, $start->AddDays(2), $end->AddDays(2), $resourceId, '200'),
+            new TestReservationItemView(300, $start->AddDays(3), $end->AddDays(3), $resourceId, '300'),
         ];
         $strategy = new ResourceAvailability($reservationRepository);
 
@@ -343,12 +345,12 @@ class ExistingResourceAvailabilityRuleTest extends TestBase
         $series->WithInstance($instance);
 
         $reservationsInstance1 = [
-                new TestReservationItemView(++$currentId, $current->StartDate(), $current->EndDate(), $resourceId, "r$currentId"),
+            new TestReservationItemView(++$currentId, $current->StartDate(), $current->EndDate(), $resourceId, "r$currentId"),
         ];
 
         $reservationsInstance2 = [
-                new TestReservationItemView(++$currentId, $instance->StartDate(), $instance->EndDate(), $resourceId, "r$currentId"),
-                new TestReservationItemView(++$currentId, $instance->StartDate(), $instance->EndDate(), $resourceId, "r$currentId"),
+            new TestReservationItemView(++$currentId, $instance->StartDate(), $instance->EndDate(), $resourceId, "r$currentId"),
+            new TestReservationItemView(++$currentId, $instance->StartDate(), $instance->EndDate(), $resourceId, "r$currentId"),
         ];
 
         $this->strategy->expects($this->exactly(2))

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeResources extends Resources
 {
     private $_dateFormats = [ResourceKeys::DATE_GENERAL => 'm/d/y',
-            ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
-            ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
-            ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
+        ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
+        ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
+        ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
 
     public $_SetCurrentLanguageResult = true;
 
@@ -49,6 +51,14 @@ class FakeResources extends Resources
 
     public function SetLanguage($languageCode)
     {
+        if (!empty($languageCode)) {
+            $this->CurrentLanguage = strtolower($languageCode);
+        }
         return $this->_SetCurrentLanguageResult;
+    }
+
+    public function IsLanguageSupported($languageCode)
+    {
+        return !empty($languageCode) && array_key_exists($languageCode, $this->AvailableLanguages);
     }
 }

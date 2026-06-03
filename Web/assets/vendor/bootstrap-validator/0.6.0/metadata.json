@@ -1,0 +1,8 @@
+{
+  "name": "bootstrap-validator",
+  "version": "0.6.0",
+  "description": "The best jQuery plugin to validate form fields. Designed to use with Bootstrap 3.",
+  "homepage": "http://bootstrapvalidator.com/",
+  "source": "https://github.com/nghuuphuoc/bootstrapvalidator/releases/tag/v0.6.0",
+  "license": "MIT"
+}

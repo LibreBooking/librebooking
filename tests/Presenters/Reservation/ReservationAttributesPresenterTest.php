@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttributesPresenter.php');
 
 class ReservationAttributesPresenterTest extends TestBase
 {
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    // Intentionally concrete service in setUp(), not a PHPUnit mock.
+    private IAttributeService $attributeService;
 
     /**
-     * @var FakeReservationAuthorization
+     * @var FakeAuthorizationService
      */
     private $authorizationService;
 
@@ -34,10 +34,7 @@ class ReservationAttributesPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IAttributeRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeRepository;
+    private IAttributeRepository&\PHPUnit\Framework\MockObject\MockObject $attributeRepository;
 
     public function setUp(): void
     {
@@ -76,9 +73,9 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfAnotherUser->WithSecondaryEntities(CustomAttributeCategory::USER, 1212);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser,
-                $attributeWithSecondaryEntityOfAnotherUser,
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser,
+            $attributeWithSecondaryEntityOfAnotherUser,
         ];
 
         $this->authorizationService->_CanReserveFor = true;
@@ -106,8 +103,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfRequestedUser->WithSecondaryEntities(CustomAttributeCategory::USER, $requestedUserId);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser
         ];
 
         $this->authorizationService->_CanReserveFor = false;
@@ -130,8 +127,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $requestedRefNum = '8882';
 
         $attributes = [
-                new FakeCustomAttribute(1),
-                new FakeCustomAttribute(2),
+            new FakeCustomAttribute(1),
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -173,8 +170,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -197,8 +194,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -215,7 +212,7 @@ class ReservationAttributesPresenterTest extends TestBase
 class FakeReservationAttributesPage implements IReservationAttributesPage
 {
     /**
-     * @var Attribute[]
+     * @var LBAttribute[]
      */
     public $_Attributes;
 
@@ -225,7 +222,7 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     public $_RequestedUserId;
 
     /**
-     * @var int
+     * @var string
      */
     public $_RequestedReferenceNumber;
 
@@ -242,11 +239,12 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
      */
     public function SetAttributes($attributes)
     {
+        /** @var LBAttribute[] $attributes */
         $this->_Attributes = $attributes;
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function GetRequestedReferenceNumber()
     {
@@ -258,7 +256,6 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
      */
     public function GetRequestedResourceIds()
     {
-        // TODO: Implement GetRequestedResourceIds() method.
-        return null;
+        return [];
     }
 }

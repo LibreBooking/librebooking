@@ -1,23 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Validators/UserRequestValidator.php');
 
 class UserRequestValidatorTest extends TestBase
 {
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
     /**
      * @var UserRequestValidator
      */
     private $validator;
 
-    /**
-     * @var IUserViewRepository
-     */
-    private $userRepository;
+    private IUserViewRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     public function setUp(): void
     {
@@ -67,10 +63,11 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 1],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 1],
+                        [null, $request->userName, 1]
+                    ]
+                );
 
         $errors = $this->validator->ValidateCreateRequest($request);
         $this->assertTrue(count($errors) == 2);
@@ -128,10 +125,11 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 2],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 2],
+                        [null, $request->userName, 1]
+                    ]
+                );
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
         $this->assertTrue(count($errors) == 1);
@@ -148,7 +146,8 @@ class UserRequestValidatorTest extends TestBase
                     [
                         [$request->emailAddress, null, 1],
                         [null, $request->userName, 2]
-                    ]);
+                    ]
+                );
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
         $this->assertTrue(count($errors) == 1);

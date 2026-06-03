@@ -212,11 +212,7 @@ class AttributeSaveController implements IAttributeSaveController
         return $errors;
     }
 
-    /**
-     * @param CustomAttributeRequest $request
-     * @return string
-     */
-    private function GetPossibleValues($request)
+    private function GetPossibleValues(CustomAttributeRequest $request): ?string
     {
         if (empty($request->possibleValues)) {
             return null;

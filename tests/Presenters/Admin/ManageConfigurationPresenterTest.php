@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/ManageConfigurationPresenter.php');
 
 class ManageConfigurationPresenterTest extends TestBase
@@ -263,8 +265,7 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
      */
     public function GetConfigFileToEdit()
     {
-        // TODO: Implement GetConfigFileToEdit() method.
-        return null;
+        return '';
     }
 
     /**
@@ -362,7 +363,6 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
      */
     public function GetHomePageId()
     {
-        // TODO: Implement GetHomePageId() method.
-        return null;
+        return 0;
     }
 }

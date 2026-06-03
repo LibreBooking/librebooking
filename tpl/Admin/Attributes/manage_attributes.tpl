@@ -278,7 +278,8 @@
 					</div>
 					<div class="modal-body">
 						<div class="alert alert-danger">
-							{translate key=DeleteWarning}
+							{translate key=DeleteWarning}<br>
+							<strong>{translate key=DisplayLabel}: <span id="deleteAttributeLabel"></span></strong>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -305,7 +306,7 @@
 	{include file="javascript-includes.tpl" DataTable=true}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/attributes.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		$(document).ready(function() {

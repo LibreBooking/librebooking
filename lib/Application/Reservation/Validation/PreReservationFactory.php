@@ -139,6 +139,7 @@ class PreReservationFactory implements IPreReservationFactory
 
     private function CreateAddService(ReservationValidationRuleProcessor $ruleProcessor, UserSession $userSession)
     {
+        $ruleProcessor->PushRule(new CurrentUserCanReserveForUserRule($userSession, PluginManager::Instance()->LoadAuthorization()));
         $ruleProcessor->AddRule(new TermsOfServiceRule(new TermsOfServiceRepository()));
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleAdd($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new AdminExcludedRule(new RequiresApprovalRule(PluginManager::Instance()->LoadAuthorization()), $userSession, $this->userRepository));

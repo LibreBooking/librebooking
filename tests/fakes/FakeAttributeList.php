@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAttributeList implements IEntityAttributeList
 {
     private $_attributes = [];
@@ -16,27 +18,25 @@ class FakeAttributeList implements IEntityAttributeList
     /**
      * @return array|string[]
      */
-    public function GetLabels()
+    public function GetLabels(): array
     {
-        // TODO: Implement GetLabels() method.
-        return null;
+        return [];
     }
 
     /**
      * @param null $entityId
      * @return array|CustomAttribute[]
      */
-    public function GetDefinitions($entityId = null)
+    public function GetDefinitions($entityId = null): array
     {
-        // TODO: Implement GetDefinitions() method.
-        return null;
+        return [];
     }
 
     /**
      * @param $entityId int|null
-     * @return array|Attribute[]
+     * @return array|LBAttribute[]
      */
-    public function GetAttributes($entityId = null)
+    public function GetAttributes($entityId = null): array
     {
         if (array_key_exists($entityId, $this->_entityAttributes)) {
             return $this->_entityAttributes[$entityId];

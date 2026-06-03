@@ -86,14 +86,14 @@ interface ISchedulePage extends IActionPage
 
     /**
      * @param int $scheduleId
-     * @return string|ScheduleStyle
+     * @return ScheduleStyle|null
      */
-    public function GetScheduleStyle($scheduleId);
+    public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle;
 
     /**
-     * @param string|ScheduleStyle $direction
+     * @param ScheduleStyle $direction
      */
-    public function SetScheduleStyle($direction);
+    public function SetScheduleStyle(ScheduleStyle $direction): void;
 
     /**
      * @return int
@@ -119,6 +119,8 @@ interface ISchedulePage extends IActionPage
      * @return int|null
      */
     public function GetParticipantId();
+
+    public function GetGroupId(): int|null;
 
     /**
      * @return string
@@ -235,9 +237,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
     protected $_presenter;
 
     private $_styles = [
-        ScheduleStyle::Wide => 'Schedule/schedule-days-horizontal.tpl',
-        ScheduleStyle::Tall => 'Schedule/schedule-flipped.tpl',
-        ScheduleStyle::CondensedWeek => 'Schedule/schedule-week-condensed.tpl',
+        ScheduleStyle::Wide->value => 'Schedule/schedule-days-horizontal.tpl',
+        ScheduleStyle::Tall->value => 'Schedule/schedule-flipped.tpl',
+        ScheduleStyle::CondensedWeek->value => 'Schedule/schedule-week-condensed.tpl',
     ];
 
     /**
@@ -257,7 +259,6 @@ class SchedulePage extends ActionPage implements ISchedulePage
         $this->Set('CanViewUsers', !Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()));
         $this->Set('AllowParticipation', !Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
         $this->Set('AllowCreatePastReservationsButton', ServiceLocator::GetServer()->GetUserSession()->IsAdmin);
-
         $permissionServiceFactory = new PermissionServiceFactory();
         $scheduleRepository = new ScheduleRepository();
         $userRepository = new UserRepository();
@@ -317,8 +318,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
                 $this->Display('Schedule/schedule-mobile.tpl');
             }
         } else {
-            if (array_key_exists($this->ScheduleStyle, $this->_styles)) {
-                $this->Display($this->_styles[$this->ScheduleStyle]);
+            $styleValue = $this->ScheduleStyle->value;
+            if (array_key_exists($styleValue, $this->_styles)) {
+                $this->Display($this->_styles[$styleValue]);
             } else {
                 $this->Display('Schedule/schedule.tpl');
             }
@@ -334,7 +336,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest === "reservations") {
+        if ($dataRequest === 'reservations') {
             $this->_presenter->LoadReservations();
         } else {
             $this->_presenter->GetLayout(ServiceLocator::GetServer()->GetUserSession());
@@ -343,7 +345,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function GetScheduleId()
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::SCHEDULE_ID));
     }
 
     public function SetScheduleId($scheduleId)
@@ -423,9 +425,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function ShowInaccessibleResources()
     {
         return Configuration::Instance()->GetKey(
-                ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
-                new BooleanConverter()
-            );
+            ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
+            new BooleanConverter()
+        );
     }
 
     public function ShowFullWeekToggle($showShowFullWeekToggle)
@@ -455,21 +457,21 @@ class SchedulePage extends ActionPage implements ISchedulePage
         return $this->GetQuerystring(QueryStringKeys::LAYOUT_DATE);
     }
 
-    public function GetScheduleStyle($scheduleId)
+    public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle
     {
         $cookie = $this->server->GetCookie("schedule-style-$scheduleId");
-        if ($cookie != null) {
-            return $cookie;
+        if ($cookie == null || $cookie === '') {
+            return null;
         }
 
-        return null;
+        return ScheduleStyle::tryFrom(intval($cookie));
     }
 
-    public function SetScheduleStyle($style)
+    public function SetScheduleStyle(ScheduleStyle $style): void
     {
         $this->ScheduleStyle = $style;
         $this->Set('CookieName', 'schedule-style-' . $this->GetVar('ScheduleId'));
-        $this->Set("ScheduleStyle", $style);
+        $this->Set('ScheduleStyle', $style->value);
     }
 
     /**
@@ -477,7 +479,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
      */
     public function GetResourceId()
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::RESOURCE_ID));
     }
 
     /**
@@ -526,7 +528,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function GetResourceTypeId()
     {
-        return $this->GetQuerystring(FormKeys::RESOURCE_TYPE_ID);
+        return intval($this->GetQuerystring(FormKeys::RESOURCE_TYPE_ID));
     }
 
     public function GetMaxParticipants()
@@ -659,6 +661,16 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function GetParticipantId()
     {
         $id = $this->GetQuerystring(FormKeys::PARTICIPANT_ID);
+        if (empty($id)) {
+            return null;
+        }
+
+        return intval($id);
+    }
+
+    public function GetGroupId(): int|null
+    {
+        $id = $this->GetQuerystring(QueryStringKeys::GROUP_ID);
         if (empty($id)) {
             return null;
         }

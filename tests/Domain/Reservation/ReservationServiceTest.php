@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 
@@ -61,9 +63,7 @@ class ReservationServiceTest extends TestBase
         $listing = $service->GetReservations($range, $scheduleId, $timezone);
 
         $this->assertEquals($reservationListing, $listing);
-        $this->assertTrue(in_array($res1, $reservationListing->reservations));
-        $this->assertTrue(in_array($res2, $reservationListing->reservations));
-        $this->assertTrue(in_array($res3, $reservationListing->reservations));
+        $this->assertEquals([$res1, $res2, $res3], array_map(fn (ReservationListItem $i) => $i->ReservedItem(), $reservationListing->reservations));
         $this->assertTrue(in_array($blackout1, $reservationListing->blackouts));
         $this->assertTrue(in_array($blackout2, $reservationListing->blackouts));
         $this->assertTrue(in_array($blackout3, $reservationListing->blackouts));
@@ -73,7 +73,7 @@ class ReservationServiceTest extends TestBase
 class TestReservationListing implements IMutableReservationListing
 {
     /**
-     * @var array|ReservationItemView[]
+     * @var array|ReservationListItem[]
      */
     public $reservations = [];
 
@@ -87,27 +87,24 @@ class TestReservationListing implements IMutableReservationListing
      */
     public function Count()
     {
-        // TODO: Implement Count() method.
-        return null;
+        return count($this->Reservations());
     }
 
     /**
-     * @return array|ReservationItemView[]
+     * @return array|ReservationListItem[]
      */
     public function Reservations()
     {
-        // TODO: Implement Reservations() method.
-        return null;
+        return $this->reservations;
     }
 
     /**
      * @param Date $date
-     * @return IDateReservationListing
+     * @return IReservationListing
      */
     public function OnDate($date)
     {
-        // TODO: Implement OnDate() method.
-        return null;
+        return new EmptyReservationListing();
     }
 
     /**
@@ -116,7 +113,7 @@ class TestReservationListing implements IMutableReservationListing
      */
     public function Add($reservation)
     {
-        $this->reservations[] = $reservation;
+        $this->reservations[] = new ReservationListItem($reservation);
     }
 
     /**
@@ -134,8 +131,7 @@ class TestReservationListing implements IMutableReservationListing
      */
     public function ForResource($resourceId)
     {
-        // TODO: Implement ForResource() method.
-        return null;
+        return new EmptyReservationListing();
     }
 
     /**
@@ -145,7 +141,6 @@ class TestReservationListing implements IMutableReservationListing
      */
     public function OnDateForResource(Date $date, $resourceId)
     {
-        // TODO: Implement OnDateForResource() method.
-        return null;
+        return [];
     }
 }

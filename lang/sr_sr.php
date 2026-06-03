@@ -1,4 +1,5 @@
 <?php
+
 /**
 Serbian translation by velisa@velisa.net
  */
@@ -528,6 +529,7 @@ class sr_sr extends en_gb
         $strings['NoResourcePermission'] = 'Nemate prava za pristup resursima.';
         $strings['ConflictingReservationDates'] = 'Postoje rezervacije u konfliktu za sledeći datum:';
         $strings['StartDateBeforeEndDateRule'] = 'Datum i vreme početka mora biti pre datuma i vremena kraja.';
+        $strings['RecurringWithoutTerminationRule'] = 'Datum završetka je obavezan za ponavljajuće blokade.';
         $strings['StartIsInPast'] = 'Datum i vreme početka ne može biti u prošlosti.';
         $strings['EmailDisabled'] = 'Administrator je isključio e-mail obaveštenja.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
@@ -669,12 +671,12 @@ class sr_sr extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervacije koje čekaju odobrenje';
         $strings['LaterThisMonth'] = 'Kasnije ovog meseca';
         $strings['LaterThisYear'] = 'Kasnije ove godine';
-        $strings['Remaining'] = 'Preostalo';        
+        $strings['Remaining'] = 'Preostalo';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nema propuštenih rezervacija za odjavu';
-        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';        
+        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

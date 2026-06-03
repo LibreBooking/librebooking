@@ -1,4 +1,5 @@
 <?php
+
 /**
 File in Authentication plugin package for ver 2.1.4 LibreBooking
 to implement Single Sign On Capability.  Based on code from the

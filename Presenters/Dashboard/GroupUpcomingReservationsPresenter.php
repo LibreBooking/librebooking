@@ -44,26 +44,26 @@ class GroupUpcomingReservationsPresenter
         $now = Date::Now();
         $today = $now->ToTimezone($timezone)->GetDate();
         $dayOfWeek = $today->Weekday();
-        $lastDate = $now->AddDays(13-$dayOfWeek-1);
+        $lastDate = $now->AddDays(13 - $dayOfWeek - 1);
 
         $consolidated = [];
         $resourceIds = $this->GetUserAdminResources($user->UserId);
 
-        if($resourceIds != null){
-            $consolidated = $this->repository->GetReservations($now, $lastDate, $this->searchUserId, $this->searchUserLevel, null, $resourceIds,true);
-        } 
+        if ($resourceIds != null) {
+            $consolidated = $this->repository->GetReservations($now, $lastDate, $this->searchUserId, $this->searchUserLevel, null, $resourceIds, true);
+        }
 
         $tomorrow = $today->AddDays(1);
-        $startOfNextWeek = $today->AddDays(7-$dayOfWeek);
+        $startOfNextWeek = $today->AddDays(7 - $dayOfWeek);
 
         $todays = [];
         $tomorrows = [];
         $thisWeeks = [];
         $nextWeeks = [];
 
-        if ($consolidated != null){
+        if ($consolidated != null) {
             foreach ($consolidated as $reservation) {
-                $start = $reservation->StartDate->ToTimezone($timezone);                
+                $start = $reservation->StartDate->ToTimezone($timezone);
 
                 if ($start->DateEquals($today)) {
                     $todays[] = $reservation;
@@ -99,16 +99,17 @@ class GroupUpcomingReservationsPresenter
     /**
      * Gets the resource ids that are under the responsability of the given resource user groups
      */
-    private function GetUserAdminResources($userId){
+    private function GetUserAdminResources($userId)
+    {
         $resourceIds = [];
 
         $resourceRepo = new ResourceRepository();
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

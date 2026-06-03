@@ -811,6 +811,7 @@ class lt extends en_gb
         $strings['ConflictingReservationDates'] = 'Yra susikertančių rezervacijų šiomis datomis:';
         $strings['InstancesOverlapRule'] = 'Some instances of the reservation series overlap:';
         $strings['StartDateBeforeEndDateRule'] = 'Pradžios laikas turi būti anksčiau už pabaigos laiką';
+        $strings['RecurringWithoutTerminationRule'] = 'Pasikartojančioms blokavimo datos reikalinga pabaigos data.';
         $strings['StartIsInPast'] = 'Pradžios laikas negali būti praeityje';
         $strings['EmailDisabled'] = 'Administratorius išjungęs perspėjimus paštu';
         $strings['ValidLayoutRequired'] = 'Pateiktos nišos turi padengti visą parą nuo 00h iki 24h';
@@ -1005,12 +1006,12 @@ class lt extends en_gb
         $strings['PendingApprovalReservations'] = 'Laukiančios patvirtinimo rezervacijos';
         $strings['LaterThisMonth'] = 'Vėliau šį mėnesį';
         $strings['LaterThisYear'] = 'Vėliau šiais metais';
-        $strings['Remaining'] = 'Liko';        
+        $strings['Remaining'] = 'Liko';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';
-        $strings['MissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';        
+        $strings['MissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

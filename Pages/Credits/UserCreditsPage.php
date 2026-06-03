@@ -36,15 +36,9 @@ interface IUserCreditsPage extends IPage, IActionPage
      */
     public function SetTotalCost($formattedTotal);
 
-    /**
-     * @return string
-     */
-    public function GetPageNumber();
+    public function GetPageNumber(): int;
 
-    /**
-     * @return string
-     */
-    public function GetPageSize();
+    public function GetPageSize(): int;
 
     /**
      * @param PageableData|CreditLogView[] $creditLog
@@ -112,12 +106,12 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
 
     public function GetQuantity()
     {
-        return $this->GetQuerystring(QueryStringKeys::QUANTITY);
+        return floatval($this->GetQuerystring(QueryStringKeys::QUANTITY));
     }
 
     public function GetCount()
     {
-        return $this->GetQuerystring(QueryStringKeys::COUNT);
+        return intval($this->GetQuerystring(QueryStringKeys::COUNT));
     }
 
     public function SetTotalCost($formattedTotal)
@@ -125,14 +119,14 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
         $this->SetJson($formattedTotal);
     }
 
-    public function GetPageNumber()
+    public function GetPageNumber(): int
     {
-        return $this->pageable->GetPageNumber();
+        return intval($this->pageable->GetPageNumber());
     }
 
-    public function GetPageSize()
+    public function GetPageSize(): int
     {
-        return $this->pageable->GetPageSize();
+        return intval($this->pageable->GetPageSize());
     }
 
     public function BindCreditLog($creditLog)

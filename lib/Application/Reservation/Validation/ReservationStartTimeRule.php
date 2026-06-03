@@ -43,7 +43,7 @@ class ReservationStartTimeRule implements IReservationValidationRule
                     ->GetPeriod($currentInstance->EndDate());
             $dateThatShouldBeLessThanNow = $currentPeriod->BeginDate();
         }
-        Log::Debug("Start Time Rule: Comparing %s to %s", $dateThatShouldBeLessThanNow, Date::Now());
+        Log::Debug('Start Time Rule: Comparing %s to %s', $dateThatShouldBeLessThanNow, Date::Now());
 
         $startIsInFuture = $dateThatShouldBeLessThanNow->Compare(Date::Now()) >= 0;
         return new ReservationRuleResult($startIsInFuture, Resources::GetInstance()->GetString('StartIsInPast'));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 
 class FakeReservationService implements IReservationService
@@ -34,7 +36,7 @@ class FakeReservationService implements IReservationService
      */
     public $_Reservation;
     /**
-     * @var ReservationListItem
+     * @var array|ReservationListItem[]
      */
     public $_ReservationsAndBlackouts = [];
 

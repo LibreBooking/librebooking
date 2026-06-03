@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/AnnouncementRepository.php');
 
 class AnnouncementRepositoryTest extends TestBase
@@ -29,8 +31,6 @@ class AnnouncementRepositoryTest extends TestBase
         parent::teardown();
 
         Date::_ResetNow();
-
-        $this->repository = null;
     }
 
     public function testGetFutureCallDBCorrectly()

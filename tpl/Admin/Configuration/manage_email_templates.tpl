@@ -7,7 +7,7 @@
             <h1 class="border-bottom mb-3">{translate key=ManageEmailTemplates}</h1>
 
             <div class="form-group col-sm-8 col-6 mb-3">
-                <select id="templateOpts" title="{translate key=EmailTemplate}" class="form-select">
+                <select id="templateOpts" title="{translate key=EmailTemplate}" class="form-select form-select-sm">
                     <option value="">--- {translate key=SelectEmailTemplate} ---</option>
                     {foreach from=$Templates item=template}
                         <option value="{$template->FileName()}">{$template->Name()}</option>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="form-group col-sm-4 col-6">
-                <select id="languageOpts" title="{translate key=Language}" class="form-select">
+                <select id="languageOpts" title="{translate key=Language}" class="form-select form-select-sm">
                     {foreach from=$Languages item=language}
                         <option value="{$language->LanguageCode}" {if $Language==$language->LanguageCode}selected="selected"
                             {/if}>{$language->DisplayName}</option>
@@ -37,7 +37,7 @@
                         <div class="form-group">
                             {indicator}
                             {update_button submit=true}
-                            <input id="reloadEmailContents" type="button" class="btn btn-outline-secondary"
+                            <input id="reloadEmailContents" type="button" class="btn btn-outline-secondary btn-sm"
                                 value="{translate key=ReloadOriginalContents}" />
                         </div>
 

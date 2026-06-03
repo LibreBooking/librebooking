@@ -90,6 +90,12 @@
 											<label class="form-check-label" for="create_sample_data">
 												{translate key=PopulateExampleData}</label>
 										</div>
+										<div class="form-check ms-4">
+											<input class="form-check-input" type="checkbox" id="create_large_sample_data"
+												name="create_large_sample_data" />
+											<label class="form-check-label" for="create_large_sample_data">
+												{translate key=PopulateLargeExampleData}</label>
+										</div>
 									</div>
 								</li>
 								<div>
@@ -164,4 +170,22 @@
 </div>
 
 {include file="javascript-includes.tpl"}
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const sampleData = document.getElementById('create_sample_data');
+		const largeSampleData = document.getElementById('create_large_sample_data');
+		if (sampleData && largeSampleData) {
+			largeSampleData.addEventListener('change', function () {
+				if (this.checked) {
+					sampleData.checked = true;
+				}
+			});
+			sampleData.addEventListener('change', function () {
+				if (!this.checked) {
+					largeSampleData.checked = false;
+				}
+			});
+		}
+	});
+</script>
 {include file='globalfooter.tpl'}

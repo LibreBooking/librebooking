@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeReservationAuthorization implements IReservationAuthorization
 {
     public $_CanChangeUsers = true;

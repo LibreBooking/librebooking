@@ -27,7 +27,7 @@ class CalendarFilters
         $this->resourceGroupTree = $resourceGroupTree;
 
         if (!empty($resources)) {
-            $this->filters[] = new CalendarFilter(self::FilterSchedule, null, Resources::GetInstance()->GetString("AllReservations"), (empty($selectedResourceId) && empty($selectedScheduleId)));
+            $this->filters[] = new CalendarFilter(self::FilterSchedule, null, Resources::GetInstance()->GetString('AllReservations'), (empty($selectedResourceId) && empty($selectedScheduleId)));
         }
         foreach ($schedules as $schedule) {
             if ($this->ScheduleContainsNoResources($schedule, $resources)) {

@@ -290,7 +290,7 @@ class ManageScheduleService
      */
     public function SwitchLayoutType($scheduleId, $layoutType)
     {
-        Log::Debug("Switching layout type. ScheduleId %s", $scheduleId);
+        Log::Debug('Switching layout type. ScheduleId %s', $scheduleId);
 
         $schedule = $this->scheduleRepository->LoadById($scheduleId);
         $targetTimezone = $schedule->GetTimezone();
@@ -315,7 +315,7 @@ class ManageScheduleService
      */
     public function AddCustomLayoutPeriod($scheduleId, $start, $end)
     {
-        Log::Debug("Adding custom layout period. ScheduleId %s", $scheduleId);
+        Log::Debug('Adding custom layout period. ScheduleId %s', $scheduleId);
 
         $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
         if ($overlappingPeriod == null) {
@@ -331,19 +331,19 @@ class ManageScheduleService
      */
     public function UpdateCustomLayoutPeriod($scheduleId, $start, $end, $originalStart)
     {
-        Log::Debug("Updating custom layout period. ScheduleId %s", $scheduleId);
-//        $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
-//        if ($overlappingPeriod != null) {
-//
-//            if ($overlappingPeriod->BeginDate()->Equals($originalStart))
-//            {
+        Log::Debug('Updating custom layout period. ScheduleId %s', $scheduleId);
+        //        $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
+        //        if ($overlappingPeriod != null) {
+        //
+        //            if ($overlappingPeriod->BeginDate()->Equals($originalStart))
+        //            {
         $this->scheduleRepository->DeleteCustomLayoutPeriod($scheduleId, $originalStart);
         $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
-//            }
-//        }
-//        else {
-//            $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
-//        }
+        //            }
+        //        }
+        //        else {
+        //            $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
+        //        }
     }
 
     /**
@@ -644,11 +644,11 @@ class ManageSchedulesPresenter extends ActionPresenter
             $dateFormat = Resources::GetInstance()->GetDateFormat('fullcalendar');
             foreach ($periods as $period) {
                 $events[] = [
-                        'id' => $period->BeginDate()->Format(Date::SHORT_FORMAT),
-                        'start' => $period->BeginDate()->Format($dateFormat),
-                        'end' => $period->EndDate()->Format($dateFormat),
-                        'allDay' => false,
-                        'startEditable' => true,
+                    'id' => $period->BeginDate()->Format(Date::SHORT_FORMAT),
+                    'start' => $period->BeginDate()->Format($dateFormat),
+                    'end' => $period->EndDate()->Format($dateFormat),
+                    'allDay' => false,
+                    'startEditable' => true,
                 ];
             }
 

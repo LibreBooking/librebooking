@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/EmbeddedCalendarPresenter.php');
 
 class EmbeddedCalendarPresenterTest extends TestBase
@@ -196,8 +198,7 @@ class FakeEmbeddedCalendarPage extends FakePageBase implements IEmbeddedCalendar
      */
     public function GetTitleFormat()
     {
-        // TODO: Implement GetTitleFormat() method.
-        return null;
+        return '';
     }
 
     /**

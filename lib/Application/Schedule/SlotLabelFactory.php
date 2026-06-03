@@ -72,7 +72,7 @@ class SlotLabelFactory
             return '';
         }
 
-        if(!in_array($reservation->ResourceId,$this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)){
+        if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
             return '';
         }
 
@@ -114,7 +114,7 @@ class SlotLabelFactory
         if (count($matches) > 0) {
             for ($m = 0; $m < count($matches); $m++) {
                 $id = filter_var($matches[$m], FILTER_SANITIZE_NUMBER_INT);
-                $value = $reservation->GetAttributeValue($id);
+                $value = $reservation->GetAttributeValue($id) ?? '';
 
                 $label = str_replace($matches[$m], $value, $label);
             }
@@ -144,10 +144,10 @@ class SlotLabelFactory
         return $name->__toString();
     }
 
-     /**
-     * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
-     */
+    /**
+    * Gets the resources the user has permissions (full access and view only permissions)
+    * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+    */
     private function UserResourcePermissions($userId)
     {
         $resourceRepo = new ResourceRepository();
@@ -155,13 +155,13 @@ class SlotLabelFactory
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

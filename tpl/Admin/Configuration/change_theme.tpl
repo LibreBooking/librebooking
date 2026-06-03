@@ -25,8 +25,9 @@
                 <ul class="list-group mb-2">
 
                     <li class="list-group-item">
-                        <h4>{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</h4>
-                        <img src="{$ScriptUrl}/img/{$LogoUrl}" class="d-block mx-auto mw-100" />
+                        <div class="fs-4">{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</div>
+                        <img src="{$ScriptUrl}/img/{$LogoUrl}" class="d-block mx-auto mw-100"
+                            alt="{translate key="Logo"}" />
                         <div class="d-flex align-items-center justify-content-center my-2">
                             <a href="{$ScriptUrl}/img/{$LogoUrl}" download="{$ScriptUrl}/img/{$LogoUrl}"
                                 class="link-primary"><i class="bi bi-download me-1"></i>{$LogoUrl}</a>
@@ -36,7 +37,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=LOGO_FILE} class="form-control" id="logoFile"
-                                accept=".png, .gif, .jpg, .jpeg" />
+                                accept=".png, .gif, .jpg, .jpeg" aria-label="{translate key="Logo"}" />
                             <a href="#" class="clearInput inline input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>
@@ -44,8 +45,8 @@
                     </li>
 
                     <li class="list-group-item">
-                        <h4>Favicon (*.ico, *.png, *.gif, *.jpg - Recommended size 48px x 48px)</h4>
-                        <img src="{$ScriptUrl}/{$FaviconUrl}" class="d-block mx-auto" />
+                        <div class="fs-4">Favicon (*.ico, *.png, *.gif, *.jpg - Recommended size 48px x 48px)</div>
+                        <img src="{$ScriptUrl}/{$FaviconUrl}" class="d-block mx-auto" alt="Favicon" />
                         <div class="d-flex align-items-center justify-content-center my-2">
                             <a href="{$ScriptUrl}/{$FaviconUrl}" download="{$ScriptUrl}/img/{$FaviconUrl}"
                                 class="link-primary"><i class="bi bi-download me-1"></i>{$FaviconUrl}</a>
@@ -55,7 +56,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=FAVICON_FILE} class="form-control" id="faviconFile"
-                                accept=".png, .gif, .jpg, .jpeg, .ico" />
+                                accept=".png, .gif, .jpg, .jpeg, .ico" aria-label="Favicon" />
                             <a href="#" class="clearInput inline input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>
@@ -64,7 +65,7 @@
 
                     <li class="list-group-item">
                         <div>
-                            <h4>{translate key="CssFile"} (*.css)</h4>
+                            <div class="fs-4">{translate key="CssFile"} (*.css)</div>
                             <div class="d-flex align-items-center justify-content-center my-2">
                                 <a href="{$ScriptUrl}/css/{$CssUrl}" download="{$ScriptUrl}/css/{$CssUrl}"
                                     class="link-primary"><i class="bi bi-download me-1"></i>{$CssUrl}</a>
@@ -74,8 +75,8 @@
                             </div>
                         </div>
                         <div class="input-group input-group-sm">
-                            <input type="file" {formname key=CSS_FILE} class="form-control" id="cssFile"
-                                accept=".css" />
+                            <input type="file" {formname key=CSS_FILE} class="form-control" id="cssFile" accept=".css"
+                                aria-label="{translate key="CssFile"}" />
                             <a href="#" class="clearInput input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>
@@ -85,7 +86,7 @@
                 </ul>
 
                 <div class="d-grid">
-                    <button type="button" class="btn btn-primary update" name="{Actions::SAVE}" id="saveButton">
+                    <button type="button" class="btn btn-primary btn-sm update" name="{Actions::SAVE}" id="saveButton">
                         {translate key='Update'}
                     </button>
                 </div>
@@ -104,8 +105,8 @@
     {include file="javascript-includes.tpl"}
 
     {jsfile src="ajax-helpers.js"}
-    {jsfile src="js/jquery.form-3.09.min.js"}
-    {jsfile src="js/ajaxfileupload.js"}
+    {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
+    {vendor_js src="ajaxfileupload/1.0.0/js/ajaxfileupload.js"}
     {jsfile src="ajax-form-submit.js"}
 
     <script type="text/javascript">

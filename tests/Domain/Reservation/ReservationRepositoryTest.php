@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
@@ -21,8 +23,6 @@ class ReservationRepositoryTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->repository = null;
     }
 
     public function testAddReservationWithOneUserAndOneResource()
@@ -502,12 +502,16 @@ class ReservationRepositoryTest extends TestBase
         $this->db->SetRow(0, $reservationRow->Rows());
         $this->db->SetRow(1, $reservationInstanceRow->Rows());
         $this->db->SetRow(2, $reservationResourceRow->Rows());
-        $this->db->SetRow(3, $reservationUserRow->Rows());
-        $this->db->SetRow(4, $reservationAccessoryRow->Rows());
-        $this->db->SetRow(5, $attributeValueRow->Rows());
-        $this->db->SetRow(6, $attachmentRow->Rows());
-        $this->db->SetRow(7, $reminderRow->Rows());
-        $this->db->SetRow(8, $guestRow->Rows());
+        // Rows 3-5: resource attribute value queries (one per resource, empty results)
+        $this->db->SetRow(3, []);
+        $this->db->SetRow(4, []);
+        $this->db->SetRow(5, []);
+        $this->db->SetRow(6, $reservationUserRow->Rows());
+        $this->db->SetRow(7, $reservationAccessoryRow->Rows());
+        $this->db->SetRow(8, $attributeValueRow->Rows());
+        $this->db->SetRow(9, $attachmentRow->Rows());
+        $this->db->SetRow(10, $reminderRow->Rows());
+        $this->db->SetRow(11, $guestRow->Rows());
 
         $actualReservation = $this->repository->LoadById($reservationId);
 
@@ -516,6 +520,9 @@ class ReservationRepositoryTest extends TestBase
         $getReservation = new GetReservationByIdCommand($reservationId);
         $getInstances = new GetReservationSeriesInstances($seriesId);
         $getResources = new GetReservationResourcesCommand($seriesId);
+        $getResourceAttributes1 = new GetAttributeValuesCommand($resourceId, CustomAttributeCategory::RESOURCE);
+        $getResourceAttributes2 = new GetAttributeValuesCommand($resourceId1, CustomAttributeCategory::RESOURCE);
+        $getResourceAttributes3 = new GetAttributeValuesCommand($resourceId2, CustomAttributeCategory::RESOURCE);
         $getParticipants = new GetReservationSeriesParticipantsCommand($seriesId);
         $getAccessories = new GetReservationAccessoriesCommand($seriesId);
         $getAttributeValues = new GetAttributeValuesCommand($seriesId, CustomAttributeCategory::RESERVATION);
@@ -526,6 +533,9 @@ class ReservationRepositoryTest extends TestBase
         $this->assertTrue($this->db->ContainsCommand($getReservation));
         $this->assertTrue($this->db->ContainsCommand($getInstances));
         $this->assertTrue($this->db->ContainsCommand($getResources));
+        $this->assertTrue($this->db->ContainsCommand($getResourceAttributes1));
+        $this->assertTrue($this->db->ContainsCommand($getResourceAttributes2));
+        $this->assertTrue($this->db->ContainsCommand($getResourceAttributes3));
         $this->assertTrue($this->db->ContainsCommand($getParticipants));
         $this->assertTrue($this->db->ContainsCommand($getAccessories));
         $this->assertTrue($this->db->ContainsCommand($getAttributeValues));
@@ -534,11 +544,67 @@ class ReservationRepositoryTest extends TestBase
         $this->assertTrue($this->db->ContainsCommand($getGuests));
     }
 
+    public function testLoadByIdPopulatesResourceCustomAttributeValues()
+    {
+        $seriesId = 10;
+        $reservationId = 1;
+        $referenceNumber = 'refnum';
+        $ownerId = 10;
+        $resourceId = 100;
+        $scheduleId = 1000;
+        $begin = '2010-01-05 12:30:00';
+        $end = '2010-01-05 18:30:00';
+        $duration = DateRange::Create($begin, $end, 'UTC');
+
+        $resourceAttrId = 50;
+        $resourceAttrValue = 'resource-attr-value';
+
+        $reservationRow = new ReservationRow(
+            $reservationId,
+            $begin,
+            $end,
+            'title',
+            'desc',
+            RepeatType::None,
+            '',
+            $referenceNumber,
+            $seriesId,
+            $ownerId,
+            ReservationStatus::Created,
+            true
+        );
+
+        $reservationInstanceRow = new ReservationInstanceRow($seriesId);
+        $reservationInstanceRow->WithInstance($reservationId, $referenceNumber, $duration);
+
+        $reservationResourceRow = new ReservationResourceRow($reservationId, scheduleId: $scheduleId);
+        $reservationResourceRow->WithPrimary($resourceId);
+
+        $resourceAttributeRow = new CustomAttributeValueRow();
+        $resourceAttributeRow->With($resourceAttrId, $resourceAttrValue);
+
+        $this->db->SetRow(0, $reservationRow->Rows());
+        $this->db->SetRow(1, $reservationInstanceRow->Rows());
+        $this->db->SetRow(2, $reservationResourceRow->Rows());
+        $this->db->SetRow(3, $resourceAttributeRow->Rows()); // resource attribute values
+        $this->db->SetRow(4, []); // participants
+        $this->db->SetRow(5, []); // accessories
+        $this->db->SetRow(6, []); // reservation attribute values
+        $this->db->SetRow(7, []); // attachments
+        $this->db->SetRow(8, []); // reminders
+        $this->db->SetRow(9, []); // guests
+
+        $actualReservation = $this->repository->LoadById($reservationId);
+
+        $primaryResource = $actualReservation->Resource();
+        $this->assertEquals($resourceAttrValue, $primaryResource->GetAttributeValue($resourceAttrId));
+    }
+
     public function testChangingOnlySharedInformationForFullSeriesJustUpdatesSeriesTable()
     {
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $builder = new ExistingReservationSeriesBuilder();
@@ -576,8 +642,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -605,8 +671,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -633,8 +699,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -661,8 +727,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -689,8 +755,8 @@ class ReservationRepositoryTest extends TestBase
         $seriesId = 10909;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $expectedRepeat = new RepeatNone();
         $referenceNumber = 'ref number current';
         $allowParticipation = true;
@@ -738,8 +804,8 @@ class ReservationRepositoryTest extends TestBase
         $newInstanceId2 = 2828;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $dateRange = DateRange::Create('2010-01-10 05:30:00', '2010-01-10 08:30:00', 'UTC');
@@ -877,8 +943,8 @@ class ReservationRepositoryTest extends TestBase
     public function testDeleteInstances()
     {
         $seriesId = 981;
-        $instance1 = new TestReservation("ref1");
-        $instance2 = new TestReservation("ref2");
+        $instance1 = new TestReservation('ref1');
+        $instance2 = new TestReservation('ref2');
 
         $builder = new ExistingReservationSeriesBuilder();
         $builder->WithEvent(new InstanceRemovedEvent($instance1, $builder->series));
@@ -1084,7 +1150,7 @@ class ReservationRepositoryTest extends TestBase
         $deleteAccessories = $this->db->GetCommandsOfType('RemoveReservationAccessoryCommand');
 
         $this->assertTrue($this->db->ContainsCommand(new AddReservationUserCommand($instance->ReservationId(), $newUserId, ReservationUserLevel::OWNER)));
-        $this->assertEquals(count($series->AdditionalResources()), count($addResources), "dont want to double add");
+        $this->assertEquals(count($series->AdditionalResources()), count($addResources), 'dont want to double add');
         $this->assertEquals(count($series->Accessories()), count($addAccessories));
         $this->assertEquals(1, count($deleteResources));
         $this->assertEquals(0, count($deleteAccessories));

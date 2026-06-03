@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeAttributeService implements IAttributeService
 {
     /**
@@ -12,7 +14,7 @@ class FakeAttributeService implements IAttributeService
      */
     public $_ValidationResult;
     /**
-     * @var CustomAttribute[]
+     * @var array<int, array<CustomAttribute>>
      */
     public $_ByCategory = [];
     public $_EntityAttributeList;
@@ -46,7 +48,7 @@ class FakeAttributeService implements IAttributeService
      */
     public function GetByCategory($category)
     {
-        return $this->_ByCategory[$category];
+        return $this->_ByCategory[$category] ?? [];
     }
 
     /**
@@ -55,8 +57,7 @@ class FakeAttributeService implements IAttributeService
      */
     public function GetById($attributeId)
     {
-        // TODO: Implement GetById() method.
-        return null;
+        throw new LogicException('GetById() not implemented in FakeAttributeService');
     }
 
     /**

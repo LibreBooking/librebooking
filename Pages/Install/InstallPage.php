@@ -68,16 +68,14 @@ interface IInstallPage
      */
     public function GetShouldCreateUser();
 
-    /**
-     * @return bool
-     */
-    public function GetShouldCreateSampleData();
+    public function GetShouldCreateSampleData(): bool;
+
+    public function GetShouldCreateLargeSampleData(): bool;
 
     /**
      * @param $results array|InstallationResult[]
-     * @return void
      */
-    public function SetInstallResults($results);
+    public function SetInstallResults($results): void;
 
     /**
      * @param $results array|InstallationResult[]
@@ -211,7 +209,7 @@ class InstallPage extends Page implements IInstallPage
 
     public function GetInstallUserPassword()
     {
-        return $this->GetRawForm(FormKeys::INSTALL_DB_PASSWORD);
+        return strval($this->GetRawForm(FormKeys::INSTALL_DB_PASSWORD));
     }
 
     public function GetShouldCreateDatabase()
@@ -226,17 +224,22 @@ class InstallPage extends Page implements IInstallPage
         return isset($x) && $x == true;
     }
 
-    public function GetShouldCreateSampleData()
+    public function GetShouldCreateSampleData(): bool
     {
         $x = $this->GetForm('create_sample_data');
         return isset($x) && $x == true;
     }
 
+    public function GetShouldCreateLargeSampleData(): bool
+    {
+        $x = $this->GetForm('create_large_sample_data');
+        return isset($x) && $x == true;
+    }
+
     /**
      * @param $results array|InstallationResult[]
-     * @return void
      */
-    public function SetInstallResults($results)
+    public function SetInstallResults($results): void
     {
         $failure = false;
         foreach ($results as $result) {

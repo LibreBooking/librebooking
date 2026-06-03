@@ -41,6 +41,7 @@ class ManageConfigurationPresenter extends ActionPresenter
      * @var string[]|array[]
      */
     private $deletedSettings = [
+        'version',
         'password.pattern',
         'use.local.jquery',
         'authentification.allow.social.login',
@@ -110,6 +111,10 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         $settings = $this->configSettings->GetSettings($this->configFilePath);
 
+        // Check if this is a plugin config file
+        $isPluginConfig = $this->IsPluginConfigFile($this->configFilePath);
+        $pluginId = $isPluginConfig ? $this->GetPluginIdFromPath($this->configFilePath) : null;
+
         foreach ($settings as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $subKey => $subValue) {
@@ -117,23 +122,41 @@ class ManageConfigurationPresenter extends ActionPresenter
                     $this->AddSettingFromMeta($fullKey, $key, $subValue);
                 }
             } else {
-                $this->AddSettingFromMeta($key, null, $value);
+                // For plugin configs, add settings under the plugin section
+                if ($isPluginConfig && $pluginId) {
+                    $fullKey = "$pluginId.$key";
+                    $this->AddSettingFromMeta($fullKey, $pluginId, $value);
+                } else {
+                    $this->AddSettingFromMeta($key, null, $value);
+                }
             }
         }
     }
 
     private function AddSettingFromMeta($key, $section, $value)
     {
+        // For plugin configs, the key might not include the section prefix
+        // Check both the full key and the section.key format
         $meta = call_user_func([$this->configKeyClass, 'findByKey'], $key);
-        if ($this->ShouldBeSkipped($key, $meta)) {
+
+        // If not found and we have a section, try without section prefix
+        if (!isset($meta) && $section) {
+            $keyWithoutSection = str_replace("$section.", '', $key);
+            $meta = call_user_func([$this->configKeyClass, 'findByKey'], $keyWithoutSection);
+        }
+
+        if (!isset($meta) || $this->ShouldBeSkipped($key, $meta)) {
             return;
         }
 
         $isPrivate = call_user_func([$this->configKeyClass, 'isPrivate'], $meta) ?? false;
         $hasEnv = call_user_func([$this->configKeyClass, 'hasEnv'], $meta) ?? false;
 
+        // Use the key without section prefix for display
+        $displayKey = $section ? str_replace("$section.", '', $key) : $key;
+
         $setting = new ConfigSetting(
-            $section ? str_replace("$section.", '', $key) : $key,
+            $displayKey,
             $section ?: null,
             $value,
             $meta['type'] ?? 'string',
@@ -170,9 +193,19 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         $newSettings = [];
 
+        // Check if this is a plugin config
+        $isPluginConfig = $this->IsPluginConfigFile($this->configFilePath);
+        $pluginId = $isPluginConfig ? $this->GetPluginIdFromPath($this->configFilePath) : null;
+
         foreach ($configSettings as $setting) {
             if (!empty($setting->Section)) {
-                $newSettings[$setting->Section][$setting->Key] = $setting->Value;
+                // For plugin configs, strip the plugin section wrapper if it matches
+                if ($isPluginConfig && $pluginId && $setting->Section === $pluginId) {
+                    // Flat structure: just use the key
+                    $newSettings[$setting->Key] = $setting->Value;
+                } else {
+                    $newSettings[$setting->Section][$setting->Key] = $setting->Value;
+                }
             } else {
                 $newSettings[$setting->Key] = $setting->Value;
             }
@@ -181,6 +214,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         $existingSettings = $this->configSettings->GetSettings($this->configFilePath);
 
         // Use the Configurator's BuildConfig method which handles env vars and private fields
+        // Both existingSettings and newSettings are now flat structures for plugins
         $mergedSettings = $this->configSettings->BuildConfig($existingSettings, $newSettings, true);
 
         foreach ($this->deletedSettings as $deletedSetting) {
@@ -189,8 +223,9 @@ class ManageConfigurationPresenter extends ActionPresenter
             }
         }
 
-        Log::Debug("Saving %s settings", count($configSettings));
+        Log::Debug('Saving %s settings', count($configSettings));
 
+        // WriteSettings will handle the proper nesting based on file type
         $this->configSettings->WriteSettings($this->configFilePath, $mergedSettings);
 
         Log::Debug('Config file saved by %s', ServiceLocator::GetServer()->GetUserSession()->Email);
@@ -234,14 +269,14 @@ class ManageConfigurationPresenter extends ActionPresenter
         if ($h = opendir($pluginBaseDir)) {
             while (false !== ($entry = readdir($h))) {
                 $pluginDir = $pluginBaseDir . $entry;
-                if (is_dir($pluginDir) && $entry != "." && $entry != "..") {
+                if (is_dir($pluginDir) && $entry != '.' && $entry != '..') {
                     $plugins = scandir($pluginDir);
                     foreach ($plugins as $plugin) {
-                        if (is_dir("$pluginDir/$plugin") && $plugin != "." && $plugin != ".." && strpos($plugin, 'Example') === false) {
+                        if (is_dir("$pluginDir/$plugin") && $plugin != '.' && $plugin != '..' && strpos($plugin, 'Example') === false) {
                             $configFiles = array_merge(glob("$pluginDir/$plugin/*.config.php"), glob("$pluginDir/$plugin/*.config.dist.php"));
                             if (count($configFiles) > 0) {
-                                $configKeysFile = "/" . $plugin . "ConfigKeys.php";
-                                $configKeysClass = $plugin . "ConfigKeys";
+                                $configKeysFile = '/' . $plugin . 'ConfigKeys.php';
+                                $configKeysClass = $plugin . 'ConfigKeys';
                                 $files[] = new ConfigFileOption("$entry-$plugin", "$entry/$plugin", $configKeysClass, $configKeysFile);
                             }
                         }
@@ -285,7 +320,7 @@ class ManageConfigurationPresenter extends ActionPresenter
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));
                         Log::Debug("Created new config file from dist template: {$distFile[0]}");
                     } catch (Exception $e) {
-                        Log::Error("Failed to create config file: " . $e->getMessage());
+                        Log::Error('Failed to create config file: ' . $e->getMessage());
                         return;
                     }
                     $configFile = glob("$rootDir/*config.php");
@@ -336,6 +371,27 @@ class ManageConfigurationPresenter extends ActionPresenter
                 . '/Web';
             $this->page->ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
         }
+    }
+
+    private function IsPluginConfigFile($filePath)
+    {
+        $basename = basename($filePath);
+        return $basename !== 'config.php' && preg_match('/\.config\.php$/', $basename);
+    }
+
+    private function GetPluginIdFromPath($filePath)
+    {
+        $basename = basename($filePath);
+
+        if ($basename === 'config.php') {
+            return null;
+        }
+
+        if (preg_match('/^([A-Z][a-z]+)\.config\.php$/', $basename, $matches)) {
+            return strtolower($matches[1]);
+        }
+
+        return null;
     }
 }
 
@@ -404,5 +460,3 @@ class ConfigSetting
         return str_replace('__', '.', $value);
     }
 }
-
-

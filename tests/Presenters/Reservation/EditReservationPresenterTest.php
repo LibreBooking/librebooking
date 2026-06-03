@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class EditReservationPresenterTest extends TestBase
 {
     /**
@@ -9,30 +11,15 @@ class EditReservationPresenterTest extends TestBase
 
     private $userId;
 
-    /**
-     * @var IExistingReservationPage
-     */
-    private $page;
+    private IExistingReservationPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
-    /**
-     * @var IReservationViewRepository
-     */
-    private $reservationViewRepository;
+    private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationViewRepository;
 
-    /**
-     * @var IReservationPreconditionService
-     */
-    private $preconditionService;
+    private EditReservationPreconditionService&\PHPUnit\Framework\MockObject\MockObject $preconditionService;
 
-    /**
-     * @var IReservationInitializerFactory
-     */
-    private $initializerFactory;
+    private IReservationInitializerFactory&\PHPUnit\Framework\MockObject\MockObject $initializerFactory;
 
-    /**
-     * @var IReservationInitializer
-     */
-    private $initializer;
+    private IReservationInitializer&\PHPUnit\Framework\MockObject\MockObject $initializer;
 
     public function setUp(): void
     {

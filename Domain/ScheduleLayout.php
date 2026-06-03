@@ -427,7 +427,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
 
     protected function SortItems(&$items)
     {
-        usort($items, ["ScheduleLayout", "SortBeginTimes"]);
+        usort($items, ['ScheduleLayout', 'SortBeginTimes']);
     }
 
     public function Timezone()
@@ -979,9 +979,9 @@ class LayoutPeriod
     public $End;
 
     /**
-     * @var PeriodTypes
+     * @var int
      */
-    public $PeriodType;
+    public int $PeriodType;
 
     /**
      * @var string

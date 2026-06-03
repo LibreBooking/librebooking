@@ -1,0 +1,8 @@
+{
+  "name": "jqtree",
+  "version": "1.8.11",
+  "description": "Tree widget for jQuery.",
+  "homepage": "http://mbraak.github.com/jqTree/",
+  "source": "https://github.com/mbraak/jqTree/releases/tag/1.8.11",
+  "license": "Apache-2.0"
+}

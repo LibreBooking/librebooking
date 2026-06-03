@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 
@@ -25,12 +27,12 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
         $this->scheduleRepository->_Schedule = new FakeSchedule();
         $this->reservationViewRepository = new FakeReservationViewRepository();
 
-        $this->rule = new ScheduleTotalConcurrentReservationsRule($this->scheduleRepository, $this->reservationViewRepository, "UTC");
+        $this->rule = new ScheduleTotalConcurrentReservationsRule($this->scheduleRepository, $this->reservationViewRepository, 'UTC');
     }
 
     public function testValidWhenScheduleIsUnlimited()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
 
@@ -46,7 +48,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testValidWhenUpdating()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -64,7 +66,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testValidWhenNotConflicting()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -88,7 +90,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenOverLimitDuringCreate()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
@@ -106,15 +108,15 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenOverLimitDuringUpdate()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
         $refNum = '123';
         $resource = new FakeBookableResource($resourceId);
 
         $this->reservationViewRepository->_Reservations = [
-                new TestReservationItemView(1, $start, $end, $resourceId, $refNum),
-                new TestReservationItemView(2, $start, $end, $resourceId, "another"),
+            new TestReservationItemView(1, $start, $end, $resourceId, $refNum),
+            new TestReservationItemView(2, $start, $end, $resourceId, 'another'),
         ];
         $series = (new ExistingReservationSeriesBuilder())->WithPrimaryResource($resource)
                                                           ->WithCurrentInstance(new TestReservation($refNum, new DateRange($start, $end)))
@@ -129,7 +131,7 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testInvalidWhenSingleReservationContainsMoreResourcesThanLimit()
     {
-        $start = Date::Now()->AddMinutes(30);
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $this->reservationViewRepository->_Reservations = [];
         $series = ReservationSeries::Create($this->fakeUser->UserId, new FakeBookableResource(1), '', '', new DateRange($start, $end), new RepeatNone(), $this->fakeUser);
@@ -144,10 +146,11 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testChecksEachInstanceOfASeries()
     {
-        $start = Date::Now()->AddMinutes(30);
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(30);
         $resourceId = 1;
-        $this->reservationViewRepository->_Reservations = [new TestReservationItemView(1, $start->AddDays(2), $end->AddDays(2), $resourceId, "another res"),];
+        $this->reservationViewRepository->_Reservations = [new TestReservationItemView(1, $start->AddDays(2), $end->AddDays(2), $resourceId, 'another res'),];
         $series = ReservationSeries::Create($this->fakeUser->UserId, new FakeBookableResource($resourceId), '', '', new DateRange($start, $end), new RepeatDaily(1, $end->AddDays(7)), $this->fakeUser);
 
         $this->scheduleRepository->_Schedule->SetTotalConcurrentReservations(1);
@@ -159,10 +162,11 @@ class ScheduleTotalConcurrentReservationsRuleTest extends TestBase
 
     public function testIncludesBufferTime()
     {
-        $start = Date::Now()->AddMinutes(30);
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/Chicago'));
+        $start = TestBase::GetTestDate();
         $end = $start->AddMinutes(90);
         $resourceId = 1;
-        $testReservationItemView = new TestReservationItemView(1, $end, $end->AddMinutes(30), $resourceId, "another res");
+        $testReservationItemView = new TestReservationItemView(1, $end, $end->AddMinutes(30), $resourceId, 'another res');
         $testReservationItemView->WithBufferTime(60);
         $this->reservationViewRepository->_Reservations = [$testReservationItemView,];
         $series = ReservationSeries::Create($this->fakeUser->UserId, new FakeBookableResource($resourceId), '', '', new DateRange($start, $end), new RepeatDaily(1, $end->AddDays(7)), $this->fakeUser);

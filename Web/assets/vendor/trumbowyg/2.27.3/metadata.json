@@ -1,0 +1,8 @@
+{
+  "name": "trumbowyg",
+  "version": "2.27.3",
+  "description": "A lightweight and amazing WYSIWYG JavaScript editor.",
+  "homepage": "https://alex-d.github.io/Trumbowyg/",
+  "source": "https://github.com/Alex-D/Trumbowyg/releases/tag/v2.27.3",
+  "license": "MIT"
+}

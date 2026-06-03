@@ -1,11 +1,20 @@
 <div class="form-group {$class}">
     {if $readonly}
-        <label class="customAttribute readonly" for="{$attributeId}">{$attribute->Label()}</label>
+        {if isset($tooltip) && $tooltip}
+            <span class="customAttribute readonly">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+                    <i class="bi bi-asterisk text-danger align-top text-small"></i>
+                {/if}:</span>
+        {else}
+            <label class="customAttribute fw-bold readonly"
+                for="{$attributeId}">{$attribute->Label()}{if $attribute->Required() && !$searchmode}
+                    <i class="bi bi-asterisk text-danger align-top text-small"></i>
+                {/if}</label>
+        {/if}
         <span
             class="attributeValue {$class}">{if $attribute->Value() == "1"}{translate key='True'}{else}{translate key='False'}{/if}</span>
     {elseif $searchmode}
-        <label class="customAttribute search" for="{$attributeId}">{$attribute->Label()}</label>
-        <select id="{$attributeId}" name="{$attributeName}" class="customAttribute form-select {$inputClass}">
+        <label class="customAttribute fw-bold search" for="{$attributeId}">{$attribute->Label()}</label>
+        <select id="{$attributeId}" name="{$attributeName}" class="customAttribute form-select form-select-sm">
             <option value="">--</option>
             <option value="0" {if $attribute->Value() == "0"}selected="selected" {/if}>{translate key=No}</option>
             <option value="1" {if $attribute->Value() == "1"}selected="selected" {/if}>{translate key=Yes}</option>
@@ -13,7 +22,7 @@
     {else}
         <div class="form-check">
             <input type="checkbox" value="1" id="{$attributeId}" name="{$attributeName}"
-                {if $attribute->Value() == "1"}checked="checked" {/if} class="{$inputClass} form-check-input" />
+                {if $attribute->Value() == "1"}checked="checked" {/if} class="form-check-input" />
             <label class="customAttribute standard form-check-label fw-bold" for="{$attributeId}">{$attribute->Label()}
                 {if $attribute->Required() && !$searchmode}
                     <i class="bi bi-asterisk"></i>

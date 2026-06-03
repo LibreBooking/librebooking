@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 
@@ -28,7 +30,7 @@ class ReservationListingTest extends TestBase
         $res5 = $this->GetReservation('2009-10-13 10:00:00', '2009-10-13 15:00:00', 1);
         // 2009-10-13 05:00:00 - 2009-10-13 10:00:00 CST
 
-        $reservationListing = new ReservationListing("America/Chicago");
+        $reservationListing = new ReservationListing('America/Chicago');
 
         $reservationListing->Add($res4);
         $reservationListing->Add($res1);
@@ -50,8 +52,8 @@ class ReservationListingTest extends TestBase
         $onDate7 = $reservationListing->OnDate(Date::Parse('2009-10-15', 'CST'));
         $onDate8 = $reservationListing->OnDate(Date::Parse('2009-10-16', 'CST'));
 
-        $this->assertEquals(4, $onDate1->Count(), "2 reservations 2 blackouts");
-        $this->assertEquals(3, $onDate2->Count(), "2 reservations 1 blackout");
+        $this->assertEquals(4, $onDate1->Count(), '2 reservations 2 blackouts');
+        $this->assertEquals(3, $onDate2->Count(), '2 reservations 1 blackout');
         $this->assertEquals(1, $onDate3->Count());
         $this->assertEquals(1, $onDate4->Count());
         $this->assertEquals(3, $onDate5->Count());
@@ -81,7 +83,7 @@ class ReservationListingTest extends TestBase
 
     public function testReservationWithBufferSpanningMultipleDaysIsReturnedOnAllOfThem()
     {
-        $tz = "America/Chicago";
+        $tz = 'America/Chicago';
         $builder = new ReservationItemViewBuilder();
         $res = $builder->WithStartDate(Date::Parse('2018-01-22 23:00', $tz))->WithEndDate(Date::Parse('2018-01-23 00:00', $tz))->Build();
         $res->WithBufferTime(3600);
@@ -146,6 +148,19 @@ class ReservationListingTest extends TestBase
         $expectedSlot = new BlackoutSlot($period, $period, $display, $span, $view);
         $actualSlot = $item->BuildSlot($period, $period, $display, $span);
         $this->assertEquals($expectedSlot, $actualSlot);
+    }
+
+    public function testBufferItemIdUsesWrappedReservationId()
+    {
+        $view = new TestReservationItemView(42, Date::Parse('2011-11-22 04:34'), Date::Parse('2011-11-23 14:43'), 123);
+        $view->WithBufferTime(3600);
+        $item = new ReservationListItem($view);
+
+        $beforeBuffer = new BufferItem($item, BufferItem::LOCATION_BEFORE);
+        $afterBuffer = new BufferItem($item, BufferItem::LOCATION_AFTER);
+
+        $this->assertEquals('42buffer_begin', $beforeBuffer->Id());
+        $this->assertEquals('42buffer_end', $afterBuffer->Id());
     }
 
     /**

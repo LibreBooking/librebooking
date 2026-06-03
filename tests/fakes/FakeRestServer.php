@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 
 class FakeRestServer implements IRestServer
@@ -53,7 +55,7 @@ class FakeRestServer implements IRestServer
         if (isset($this->_ServiceUrls[$serviceName])) {
             return $this->_ServiceUrls[$serviceName];
         }
-        return null;
+        return '';
     }
 
     public function SetRequest($request)
@@ -68,8 +70,7 @@ class FakeRestServer implements IRestServer
 
     public function GetFullServiceUrl($serviceName, $params = [])
     {
-        // TODO: Implement GetFullServiceUrl() method.
-        return null;
+        return $this->GetServiceUrl($serviceName, $params);
     }
 
     public function GetHeader($headerName): ?string

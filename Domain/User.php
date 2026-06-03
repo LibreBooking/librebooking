@@ -397,7 +397,7 @@ class User
     /**
      * @return int[]
      */
-    public function GetAllowedResourceIds()
+    public function GetFullAccessResourceIds()
     {
         return $this->allowedResourceIds;
     }
@@ -432,7 +432,7 @@ class User
     /**
      * @return int[]
      */
-    public function GetAllowedViewResourceIds()
+    public function GetViewAccessResourceIds()
     {
         return $this->viewableResourceIds;
     }

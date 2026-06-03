@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
@@ -101,21 +103,21 @@ class CalendarMonthTest extends TestBase
         $r1->ResourceId = 1;
         $r1->StartDate = $start;
         $r1->EndDate = $end;
-        $r1->ReferenceNumber = 1;
+        $r1->ReferenceNumber = '1';
 
         $r2 = new ReservationItemView();
         $r2->SeriesId = 1;
         $r2->ResourceId = 2;
         $r2->StartDate = $start;
         $r2->EndDate = $end;
-        $r2->ReferenceNumber = 1;
+        $r2->ReferenceNumber = '1';
 
         $r3 = new ReservationItemView();
         $r3->SeriesId = 2;
         $r3->ResourceId = 1;
         $r3->StartDate = $start;
         $r3->EndDate = $end;
-        $r3->ReferenceNumber = 2;
+        $r3->ReferenceNumber = '2';
 
         $reservations = [$r1, $r2, $r3];
 

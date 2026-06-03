@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/LoginPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'Pages/LoginPage.php');
@@ -40,6 +42,7 @@ class LoginPresenterTest extends TestBase
         $this->page = new FakeLoginPage();
         $this->captchaService = $this->createMock('ICaptchaService');
         $this->announcementRepository = new FakeAnnouncementRepository();
+        $this->fakeConfig->_ScriptUrl = 'https://booked.example/Web';
 
         $this->page->_EmailAddress = 'nobody@localhost';
         $this->page->_Password = 'somepassword';
@@ -47,15 +50,13 @@ class LoginPresenterTest extends TestBase
 
         $this->fakeServer->SetSession(SessionKeys::USER_SESSION, new UserSession(1));
 
-        $this->presenter = new LoginPresenter($this->page, $this->auth, $this->captchaService, $this->announcementRepository);
+        $loginPage = $this->page;
+        $this->presenter = new LoginPresenter($loginPage, $this->auth, $this->captchaService, $this->announcementRepository);
     }
 
     public function teardown(): void
     {
         parent::teardown();
-
-        $this->auth = null;
-        $this->page = null;
     }
 
     public function testLoginCallsAuthValidate()
@@ -99,6 +100,47 @@ class LoginPresenterTest extends TestBase
         $this->assertEquals($redirect, $this->page->_LastRedirect);
     }
 
+    public function testRedirectsToSameOriginAbsoluteRequestedPage()
+    {
+        $redirect = 'https://booked.example/Web/someurl/something.php';
+        $this->page->_ResumeUrl = $redirect;
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals($redirect, $this->page->_LastRedirect);
+    }
+
+    public function testBlocksAbsoluteExternalUrlRedirect()
+    {
+        $this->page->_ResumeUrl = 'https://evil.com/steal';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
+    }
+
+    public function testBlocksProtocolRelativeExternalUrlRedirect()
+    {
+        $this->page->_ResumeUrl = '//evil.com/steal';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
+    }
+
+    public function testBlocksJavascriptRedirect()
+    {
+        $this->page->_ResumeUrl = 'javascript:alert(1)';
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
+    }
+
     public function testPageLoadSetsVariablesCorrectly()
     {
         $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'true');
@@ -139,21 +181,74 @@ class LoginPresenterTest extends TestBase
         $this->auth->_ValidateResult = false;
         $this->presenter->Login();
 
-        $this->assertEquals("", $this->page->_LastRedirect, "Does not redirect if auth fails");
-        $this->assertTrue($this->page->_ShowLoginError, "Should show login error if auth fails");
+        $this->assertEquals('', $this->page->_LastRedirect, 'Does not redirect if auth fails');
+        $this->assertTrue($this->page->_ShowLoginError, 'Should show login error if auth fails');
+        $this->assertNull($this->page->_LoginErrorMessage);
+    }
+
+    public function testLdapDependencyErrorIsDisplayedIfAuthenticationThrowsRuntimeException()
+    {
+        $this->auth->_ValidateException = new RuntimeException('The LDAP plugin requires pear/net_ldap2. Install it with: composer require pear/net_ldap2');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError, 'Should show login error when validation throws');
+        $this->assertEquals(
+            'LdapDependencyMissingMessage',
+            $this->page->_LoginErrorMessage
+        );
+        $this->assertNull($this->auth->_LastLoginContext, 'Should not call login when validation throws');
+    }
+
+    public function testNetLdap2ClassErrorIsDisplayedAsMissingDependencyMessage()
+    {
+        $this->auth->_ValidateException = new Exception('Class "Net_LDAP2" not found');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertEquals(
+            'LdapDependencyMissingMessage',
+            $this->page->_LoginErrorMessage
+        );
+    }
+
+    public function testLdapConnectionErrorContainingNetLdap2DoesNotLookLikeMissingDependency()
+    {
+        $this->auth->_ValidateException = new Exception(
+            "Could not connect to LDAP server. Check your settings in Ldap.config.php : Bind failed: Can't contact LDAP server: Unknown Net_LDAP2 Error (-1)"
+        );
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertEquals(
+            'LdapConnectionErrorMessage',
+            $this->page->_LoginErrorMessage
+        );
+    }
+
+    public function testNonLdapExceptionFallsBackToGenericLoginErrorPath()
+    {
+        $this->auth->_ValidateException = new Exception('Some unexpected auth error');
+
+        $this->presenter->Login();
+
+        $this->assertTrue($this->page->_ShowLoginError);
+        $this->assertNull($this->page->_LoginErrorMessage);
     }
 
     public function testAutoLoginIfCookieIsSet()
     {
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
-        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, "part1|part2");
+        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, 'part1|part2');
         $this->fakeServer->SetCookie($cookie);
 
         $this->auth->_CookieValidateResult = true;
 
         $this->presenter->PageLoad();
 
-        $this->assertTrue($this->auth->_CookieLoginCalled, "should try to auto login if persist cookie is set");
+        $this->assertTrue($this->auth->_CookieLoginCalled, 'should try to auto login if persist cookie is set');
         $this->assertEquals($cookie->Value, $this->auth->_LastLoginCookie);
         $this->assertEquals($this->page->_ResumeUrl, $this->page->_LastRedirect);
     }
@@ -163,7 +258,7 @@ class LoginPresenterTest extends TestBase
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
         $this->presenter->PageLoad();
 
-        $this->assertFalse($this->auth->_CookieLoginCalled, "should not try to auto login without persist cookie");
+        $this->assertFalse($this->auth->_CookieLoginCalled, 'should not try to auto login without persist cookie');
     }
 
     public function testCanChangeToKnownLanguage()
@@ -211,8 +306,9 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_PageLoadWasCalled = false;
     public $_Languages = [];
     public $_UseLogonName = false;
-    public $_ResumeUrl = "";
+    public $_ResumeUrl = '';
     public $_ShowLoginError = false;
+    public $_LoginErrorMessage = null;
     public $_requestedLanguage;
     public $_selectedLanguage;
     public $_CurrentCode = '';
@@ -317,6 +413,11 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
         $this->_ShowLoginError = true;
     }
 
+    public function SetLoginErrorMessage(?string $message): void
+    {
+        $this->_LoginErrorMessage = $message;
+    }
+
     public function GetRequestedLanguage()
     {
         return $this->_requestedLanguage;
@@ -364,8 +465,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function GetCaptcha()
     {
-        // TODO: Implement GetCaptcha() method.
-        return null;
+        return '';
     }
 
     public function SetAnnouncements($announcements)

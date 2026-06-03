@@ -26,11 +26,9 @@ class cz extends en_us
         $dates['short_reservation_date'] = 'j.n.Y H:i';
         $dates['dashboard'] = 'j.n. H:i';
         $dates['period_time'] = 'H:i';
-        $dates['timepicker'] = 'H:i';
         $dates['mobile_reservation_date'] = 'j.n. H:i';
         $dates['general_date_js'] = 'd.m.yy';
         $dates['general_time_js'] = 'h:mm tt';
-        $dates['timepicker_js'] = 'H:i';
         $dates['momentjs_datetime'] = 'D.M.YY hh:mm';
         $dates['calendar_time'] = 'h:mmt';
         $dates['calendar_dates'] = 'j.n.';
@@ -665,6 +663,7 @@ class cz extends en_us
         $strings['NoResourcePermission'] = 'Nemáte oprávnění pro vstup k jednomu nebo více požadovaným prostředkům';
         $strings['ConflictingReservationDates'] = 'Zde je výpis rezervací, které jsou v konfliktu s Vámi vytvořenou:';
         $strings['StartDateBeforeEndDateRule'] = 'Začátek rezervace musí začínat dříve než její konec.';
+        $strings['RecurringWithoutTerminationRule'] = 'Pro opakované blokace je vyžadováno datum ukončení.';
         $strings['StartIsInPast'] = 'Začátek rezervace nemůže být vytvořen v minulosti';
         $strings['EmailDisabled'] = 'Administrátor zakázal posílání e-mailových upozornění.';
         $strings['ValidLayoutRequired'] = 'Časový úsek musí být vytvořen na celý den - 24hodin';
@@ -839,7 +838,7 @@ class cz extends en_us
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nejsou žádné chybějící rezervace pro odhlášení';
-        $strings['MissingCheckOutReservations'] = 'Chybějící rezervace pro odhlášení';        
+        $strings['MissingCheckOutReservations'] = 'Chybějící rezervace pro odhlášení';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

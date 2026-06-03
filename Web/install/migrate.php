@@ -635,7 +635,7 @@ class MigrationPresenter
         while ($row = $reader->GetRow()) {
             $legacyId = $row['memberid'];
             if (in_array($legacyId, $knownIds)) {
-                Log::Debug("Skipping user %s", $legacyId);
+                Log::Debug('Skipping user %s', $legacyId);
                 continue;
             }
 
@@ -682,7 +682,7 @@ class MigrationPresenter
             }
 
             if (!empty($insertPermissionSqls)) {
-                $insertPermission = "insert ignore into user_resource_permissions (resource_id, user_id) values " . implode(',', $insertPermissionSqls);
+                $insertPermission = 'insert ignore into user_resource_permissions (resource_id, user_id) values ' . implode(',', $insertPermissionSqls);
                 //				die($insertPermission);
                 $currentDatabase->ExecuteInsert(new AdHocCommand($insertPermission));
             }

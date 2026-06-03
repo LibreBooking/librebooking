@@ -21,28 +21,27 @@
 								<label class="fw-bold" for="addAnnouncement">{translate key='Announcement'}<i
 										class="bi bi-asterisk text-danger align-top form-control-feedback"
 										style="font-size: 0.5rem;"></i></label>
-								<textarea class="form-control  has-feedback required" rows="1" style="width:100%"
-									{formname key=ANNOUNCEMENT_TEXT} id="addAnnouncement"></textarea>
+								<textarea class="form-control has-feedback required" {formname key=ANNOUNCEMENT_TEXT}
+									id="addAnnouncement"></textarea>
 							</div>
-							<div class="form-group col-sm-2 col-6">
+							<div class="form-group col-sm-2 col-6 d-flex flex-column">
 								<label class="fw-bold" for="BeginDate">{translate key='BeginDate'}</label>
-								<input type="date" id="BeginDate" class="form-control"
+								<input type="text" id="BeginDate" class="form-control form-control-sm"
 									{formname key=ANNOUNCEMENT_START} />
-								<input type="hidden" id="formattedBeginDate" {formname key=ANNOUNCEMENT_START} />
 							</div>
-							<div class="form-group col-sm-2 col-6">
+							<div class="form-group col-sm-2 col-6 d-flex flex-column">
 								<label class="fw-bold" for="EndDate">{translate key='EndDate'}</label>
-								<input type="date" id="EndDate" class="form-control" {formname key=ANNOUNCEMENT_END} />
-								<input type="hidden" id="formattedEndDate" {formname key=ANNOUNCEMENT_END} />
+								<input type="text" id="EndDate" class="form-control form-control-sm"
+									{formname key=ANNOUNCEMENT_END} />
 							</div>
 							<div class="form-group col-sm-2 col-6">
 								<label class="fw-bold" for="addPriority">{translate key='Priority'}</label>
-								<input type="number" min="0" step="1" class="form-control"
+								<input type="number" min="0" step="1" class="form-control form-control-sm"
 									{formname key=ANNOUNCEMENT_PRIORITY} id="addPriority" />
 							</div>
 							<div class="form-group col-sm-3 col-6">
 								<label class="fw-bold" for="addPage">{translate key='DisplayPage'}</label>
-								<select id="addPage" class="form-select" {formname key=DISPLAY_PAGE}>
+								<select id="addPage" class="form-select form-select-sm" {formname key=DISPLAY_PAGE}>
 									<option value="1">{translate key=Dashboard}</option>
 									<option value="5">{translate key=Login}</option>
 								</select>
@@ -85,8 +84,8 @@
 						</div>
 
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 							{indicator}
 						</div>
 					</div>
@@ -117,10 +116,11 @@
 							<tr data-announcement-id="{$announcement->Id()}">
 								<td class="announcementText">{$announcement->Text()|unescape:'html'}</td>
 								<td class="announcementPriority">{$announcement->Priority()}</td>
-								<td class="announcementStart">
+								<td class="announcementStart" data-order="{$announcement->Start()->Format('Y-m-d H:i')}">
 									{formatdate date=$announcement->Start()->ToTimezone($timezone)}
 								</td>
-								<td class="announcementEnd">{formatdate date=$announcement->End()->ToTimezone($timezone)}
+								<td class="announcementEnd" data-order="{$announcement->End()->Format('Y-m-d H:i')}">
+									{formatdate date=$announcement->End()->ToTimezone($timezone)}
 								</td>
 								<td class="announcementGroups">
 									{foreach from=$announcement->GroupIds() item=groupId}{$Groups[$groupId]->Name}
@@ -134,12 +134,12 @@
 								</td>
 								<td class="action announcementActions">
 									<a href="#" title="{translate key=Edit}" class="update edit link-primary"><span
-											class="bi bi-pencil-square icon"></a>
-									<div class="vr"></div>
+											class="bi bi-pencil-square icon"></span></a>
+									<div class="vr mx-1"></div>
 									{if $announcement->CanEmail()}
 										<a href="#" title="{translate key=Email}" class="update sendEmail link-primary"><span
-												class="bi bi-envelope icon"></a>
-										<div class="vr"></div>
+												class="bi bi-envelope icon"></span></a>
+										<div class="vr mx-1"></div>
 									{/if}
 									<a href="#" title="{translate key=Delete}" class="update delete"><span
 											class="bi bi-trash3-fill text-danger icon remove"></span></a>
@@ -194,24 +194,24 @@
 							<textarea id="editText" class="form-control has-feedback required" rows="5"
 								{formname key='ANNOUNCEMENT_TEXT'}></textarea>
 						</div>
-						<div class="form-group col-md-6 mb-2">
+						<div class="form-group col-md-6 mb-2 d-flex flex-column">
 							<label class="fw-bold" for="editBegin">{translate key='BeginDate'}</label>
-							<input type="date" id="editBegin" class="form-control" />
-							<input type="hidden" id="formattedEditBegin" {formname key=ANNOUNCEMENT_START} />
+							<input type="text" id="editBegin" class="form-control form-control-sm"
+								{formname key=ANNOUNCEMENT_START} />
 						</div>
-						<div class="form-group col-md-6 mb-2">
+						<div class="form-group col-md-6 mb-2 d-flex flex-column">
 							<label class="fw-bold" for="editEnd">{translate key='EndDate'}</label>
-							<input type="date" id="editEnd" class="form-control" />
-							<input type="hidden" id="formattedEditEnd" {formname key=ANNOUNCEMENT_END} />
+							<input type="text" id="editEnd" class="form-control form-control-sm"
+								{formname key=ANNOUNCEMENT_END} />
 						</div>
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="editPriority">{translate key='Priority'}</label>
-							<input type="number" min="0" step="1" id="editPriority" class="form-control"
+							<input type="number" min="0" step="1" id="editPriority" class="form-control form-control-sm"
 								{formname key=ANNOUNCEMENT_PRIORITY} />
 						</div>
 						<div class="form-group mb-2" id="editUserGroupsDiv">
 							<label for="editUserGroups" class="visually-hidden">{translate key=UsersInGroups}</label>
-							<select id="editUserGroups" class="form-select" multiple="multiple"
+							<select id="editUserGroups" class="form-select form-select-sm" multiple="multiple"
 								{formname key=FormKeys::GROUP_ID multi=true} style="width: 100%;">
 								{foreach from=$Groups item=group}
 									<option value="{$group->Id}">{$group->Name}</option>
@@ -221,7 +221,7 @@
 						<div class="form-group mb-2" id="editResourceGroupsDiv">
 							<label for="editResourceGroups"
 								class="visually-hidden">{translate key=UsersWithAccessToResources}</label>
-							<select id="editResourceGroups" class="form-select" multiple="multiple"
+							<select id="editResourceGroups" class="form-select form-select-sm" multiple="multiple"
 								{formname key=RESOURCE_ID multi=true} style="width: 100%;">
 								{foreach from=$Resources item=resource}
 									<option value="{$resource->GetId()}">{$resource->GetName()}</option>
@@ -264,16 +264,16 @@
 
 	{include file="javascript-includes.tpl" Select2=true DataTable=true Trumbowyg=true Resizimg=true}
 	{datatable tableId={$tableId}}
-	{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate"}
-	{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate"}
-	{control type="DatePickerSetupControl" ControlId="editBegin" AltId="formattedEditBegin"}
-	{control type="DatePickerSetupControl" ControlId="editEnd" AltId="formattedEditEnd"}
+	{control type="DatePickerSetupControl" ControlId="BeginDate"}
+	{control type="DatePickerSetupControl" ControlId="EndDate"}
+	{control type="DatePickerSetupControl" ControlId="editBegin"}
+	{control type="DatePickerSetupControl" ControlId="editEnd"}
 
 	{csrf_token}
 
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/announcement.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -332,8 +332,8 @@
 				announcementManagement.addAnnouncement(
 					'{$announcement->Id()}',
 					DOMPurify.sanitize('{$announcement->Text()|escape:"quotes"|regex_replace:"/[\n]/":"\\n"}'),
-					'{formatdate date=$announcement->Start()->ToTimezone($timezone)}',
-					'{formatdate date=$announcement->End()->ToTimezone($timezone)}',
+					'{$announcement->Start()->ToTimezone($timezone)->Format("Y-m-d")}',
+					'{$announcement->End()->ToTimezone($timezone)->Format("Y-m-d")}',
 					'{$announcement->Priority()}',
 					[{foreach from=$announcement->GroupIds() item=id}{$id},{/foreach}],
 					[{foreach from=$announcement->ResourceIds() item=id}{$id},{/foreach}],

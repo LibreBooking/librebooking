@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
@@ -74,10 +76,10 @@ class ResourceAvailabilityRuleTest extends TestBase
         $endNonConflict2 = Date::Parse('2010-04-04', 'UTC');
 
         $reservations = [
-                new TestReservationItemView(2, $startConflict1, $endConflict1, $resourceId),
-                new TestReservationItemView(3, $startConflict2, $endConflict2, 2),
-                new TestReservationItemView(4, $startNonConflict1, $startNonConflict2, $resourceId),
-                new TestReservationItemView(5, $startNonConflict2, $endNonConflict2, $resourceId),
+            new TestReservationItemView(2, $startConflict1, $endConflict1, $resourceId),
+            new TestReservationItemView(3, $startConflict2, $endConflict2, 2),
+            new TestReservationItemView(4, $startNonConflict1, $startNonConflict2, $resourceId),
+            new TestReservationItemView(5, $startNonConflict2, $endNonConflict2, $resourceId),
         ];
 
         $strategy = $this->createMock('IResourceAvailabilityStrategy');
@@ -113,8 +115,8 @@ class ResourceAvailabilityRuleTest extends TestBase
         $endConflict2 = Date::Parse('2010-04-08', 'UTC');
 
         $reservations = [
-                new TestReservationItemView(2, $startConflict1, $endConflict1, 2),
-                new TestReservationItemView(3, $startConflict2, $endConflict2, $additionalResourceId),
+            new TestReservationItemView(2, $startConflict1, $endConflict1, 2),
+            new TestReservationItemView(3, $startConflict2, $endConflict2, $additionalResourceId),
         ];
 
         $strategy = $this->createMock('IResourceAvailabilityStrategy');
@@ -300,7 +302,7 @@ class ResourceAvailabilityRuleTest extends TestBase
                  ->willReturn([$conflict1]);
 
 
-        $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), "UTC");
+        $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
         $result = $rule->Validate($reservation, null);
 
         $this->assertTrue($result->IsValid());
@@ -375,22 +377,23 @@ class ResourceAvailabilityRuleTest extends TestBase
         $endConflict1 = Date::Parse('2010-04-08', 'UTC');
 
         $reservations = [
-                new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
+            new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
         ];
 
         $strategy = $this->createMock('IResourceAvailabilityStrategy');
 
         $strategy->expects($this->exactly(2))
                  ->method('GetItemsBetween')
-                 ->willReturnCallback(function(Date $start, Date $end) use ($startDate, $endDate, $reservations, $instance)
-                 {
-                    if ($start->Equals($startDate) && $end->Equals($endDate))
-                        return $reservations;
+                 ->willReturnCallback(function (Date $start, Date $end) use ($startDate, $endDate, $reservations, $instance) {
+                     if ($start->Equals($startDate) && $end->Equals($endDate)) {
+                         return $reservations;
+                     }
 
-                    if ($start->Equals($instance->GetBegin()) && $end->Equals($instance->GetEnd()))
-                        return [];
+                     if ($start->Equals($instance->GetBegin()) && $end->Equals($instance->GetEnd())) {
+                         return [];
+                     }
 
-                    throw new Exception("Unexpected arguments");
+                     throw new Exception('Unexpected arguments');
                  });
 
         $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
@@ -418,22 +421,23 @@ class ResourceAvailabilityRuleTest extends TestBase
         $endConflict1 = Date::Parse('2010-04-11', 'UTC');
 
         $reservations = [
-                new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
+            new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
         ];
 
         $strategy = $this->createMock('IResourceAvailabilityStrategy');
 
         $strategy->expects($this->exactly(2))
                  ->method('GetItemsBetween')
-                 ->willReturnCallback(function(Date $start, Date $end) use ($startDate, $endDate, $reservations, $instance)
-                 {
-                    if ($start->Equals($startDate) && $end->Equals($endDate))
-                        return [];
+                 ->willReturnCallback(function (Date $start, Date $end) use ($startDate, $endDate, $reservations, $instance) {
+                     if ($start->Equals($startDate) && $end->Equals($endDate)) {
+                         return [];
+                     }
 
-                    if ($start->Equals($instance->GetBegin()) && $end->Equals($instance->GetEnd()))
-                        return $reservations;
+                     if ($start->Equals($instance->GetBegin()) && $end->Equals($instance->GetEnd())) {
+                         return $reservations;
+                     }
 
-                    throw new Exception("Unexpected arguments");
+                     throw new Exception('Unexpected arguments');
                  });
 
         $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
@@ -463,7 +467,7 @@ class ResourceAvailabilityRuleTest extends TestBase
         $endConflict1 = Date::Parse('2010-04-10 08:00', 'UTC');
 
         $reservations = [
-                new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
+            new TestReservationItemView(2, $startConflict1, $endConflict1, 100),
         ];
 
         $strategy = $this->createMock('IResourceAvailabilityStrategy');
@@ -491,10 +495,10 @@ class ResourceAvailabilityRuleTest extends TestBase
 
         $reservationRepository = new FakeReservationViewRepository();
         $reservationRepository->_Reservations = [
-                new TestReservationItemView(100, Date::Parse('2020-09-17 10:00', 'UTC'), Date::Parse('2020-09-17 11:00', 'UTC'), 1, 'r1'),
-                new TestReservationItemView(200, Date::Parse('2020-09-17 11:00', 'UTC'), Date::Parse('2020-09-17 12:00', 'UTC'), 1, 'r2'),
-                new TestReservationItemView(300, Date::Parse('2020-09-17 9:30', 'UTC'), Date::Parse('2020-09-17 11:00', 'UTC'), 1, 'r3'),
-                ];
+            new TestReservationItemView(100, Date::Parse('2020-09-17 10:00', 'UTC'), Date::Parse('2020-09-17 11:00', 'UTC'), 1, 'r1'),
+            new TestReservationItemView(200, Date::Parse('2020-09-17 11:00', 'UTC'), Date::Parse('2020-09-17 12:00', 'UTC'), 1, 'r2'),
+            new TestReservationItemView(300, Date::Parse('2020-09-17 9:30', 'UTC'), Date::Parse('2020-09-17 11:00', 'UTC'), 1, 'r3'),
+        ];
         $strategy = new ResourceAvailability($reservationRepository);
         $rule = new ResourceAvailabilityRule(new ReservationConflictIdentifier($strategy), 'UTC');
 

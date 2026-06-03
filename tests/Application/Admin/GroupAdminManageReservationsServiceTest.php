@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
 
 class GroupAdminManageReservationsServiceTest extends TestBase

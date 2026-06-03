@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/Import/ICalImportPresenter.php');
 
 class ImportICalPresenterTest extends TestBase
@@ -62,9 +64,9 @@ class ImportICalPresenterTest extends TestBase
         //		var_dump($events[1]);
         foreach ($events as $event) {
 
-//			$user = $this->GetOrCreateUser($event['ORGANIZER']);
+            //			$user = $this->GetOrCreateUser($event['ORGANIZER']);
             //			$resource = $this->GetOrCreateResource($event['LOCATION']);
-//
+            //
             //			$reservation = ReservationSeries::Create($user->Id(), $resource, $title, $description, $date, new RepeatNone(), $bookedBy);
             //			$reservation->ChangeParticipants($participantIds);
             if (array_key_exists('ATTENDEE_array', $event)) {

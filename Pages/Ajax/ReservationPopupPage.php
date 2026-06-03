@@ -98,9 +98,9 @@ interface IReservationPopupPage
      */
     public function BindViewableResourceReservations($resourceIds);
 
-     /**
-     * @param $amIParticipating
-     */
+    /**
+    * @param $amIParticipating
+    */
     public function SetCurrentUserParticipating($amIParticipating);
 
     /**
@@ -132,7 +132,7 @@ class PopupFormatter
         $label = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_RESERVATION_POPUP);
 
         if (empty($label)) {
-            $label = "{pending} {name} {email} {dates} {duration} {title} {resources} {participants} {accessories} {description} {attributes}";
+            $label = '{pending} {name} {email} {dates} {duration} {title} {resources} {participants} {accessories} {description} {attributes}';
         }
         $label = str_replace('{name}', $this->GetValue('name'), $label);
         $label = str_replace('{email}', $this->GetValue('email'), $label);
@@ -209,7 +209,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
         $this->Set('ReservationId', $this->GetReservationId());
 
-        $this->Display('Ajax/respopup.tpl');
+        $this->Display('Ajax/reservation_popup.tpl');
     }
 
     /**
@@ -225,7 +225,8 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
         $this->Set('fullName', new FullName($first, $last));
     }
 
-    public function SetId($OwnerId){
+    public function SetId($OwnerId)
+    {
         $this->Set('OwnerId', $OwnerId);
     }
 
@@ -297,7 +298,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
     public function BindViewableResourceReservations($resourceIds)
     {
-        $this->Set('CanViewResourceReservations',$resourceIds);
+        $this->Set('CanViewResourceReservations', $resourceIds);
     }
 
     public function SetCurrentUserParticipating($amIParticipating)
@@ -433,13 +434,13 @@ class ReservationPopupPresenter
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

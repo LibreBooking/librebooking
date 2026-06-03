@@ -42,6 +42,7 @@ class Pages
     public const SCHEDULE = 'schedule.php';
     public const SEARCH_RESERVATIONS = 'search-reservations.php';
     public const VIEW_CALENDAR = 'view-calendar.php';
+    public const VIEW_RESERVATION = 'view-reservation.php';
     public const VIEW_SCHEDULE = 'view-schedule.php';
 
     private static $_pages = [

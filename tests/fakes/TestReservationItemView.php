@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class TestReservationItemView extends ReservationItemView
 {
     public $_RequiresCheckin = false;
@@ -11,11 +13,11 @@ class TestReservationItemView extends ReservationItemView
      * @param int $resourceId
      * @param string|null $referenceNumber
      */
-    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = "referencenumber")
+    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = 'referencenumber')
     {
         parent::__construct();
 
-        $this->ReservationId = $id;
+        $this->ReservationId = (int)($id ?? 0);
         $this->StartDate = $startDate;
         $this->EndDate = $endDate;
         $this->ResourceId = $resourceId;

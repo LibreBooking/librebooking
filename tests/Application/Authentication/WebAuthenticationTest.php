@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'Pages/LoginPage.php');
 
@@ -59,7 +61,7 @@ class WebAuthenticationTest extends TestBase
         $now = mktime(10, 11, 12, 1, 2, 2000);
         LoginTime::$Now = $now;
 
-        $hashedValue = sprintf("%s|%s", $id, $now);
+        $hashedValue = sprintf('%s|%s', $id, $now);
 
         $session = new UserSession($id);
         $session->LoginTime = $now;
@@ -119,6 +121,18 @@ class WebAuthenticationTest extends TestBase
         $this->assertEquals(1, count($this->db->_Commands));
         $this->assertFalse($this->fakeAuth->_LoginCalled);
         $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
+        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
+    }
+
+    public function testDoesNotAutoLoginIfCookieValueIsMalformed()
+    {
+        $valid = $this->webAuth->CookieLogin('malformed-cookie-value', $this->loginContext);
+
+        $this->assertFalse($valid, 'should not be valid if cookie cannot be parsed');
+        $this->assertEquals(0, count($this->db->_Commands));
+        $this->assertFalse($this->fakeAuth->_LoginCalled);
+        $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
+        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
     }
 
     public function testLogsUserOut()

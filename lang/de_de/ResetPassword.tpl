@@ -1,9 +1,13 @@
-Hier ist Ihr vorläufiges Passwort: {$TemporaryPassword}
+<p>
+    Hallo,<br/>
+    das Passwort f&uuml;r Ihr {$AppTitle}-Benutzerkonto wurde zur&uuml;ckgesetzt.
+</p>
 
-<br/>
+<p>
+    Hier ist Ihr vorl&auml;ufiges Passwort: {$TemporaryPassword}<br/>
+    Ihr altes Passwort wurde zur&uuml;ckgesetzt und wird nicht mehr funktionieren.<br/>
+    <br/>
+    Bitte <a href="{$ScriptUrl}"> anmelden </a> und das Passwort &auml;ndern.
+</p>
 
-Ihr altes Passwort wurde zurückgesetzt und wird nicht mehr funktionieren.
-<br/>
-<br/>
-Bitte einmal <a href="{$ScriptUrl}"> anmelden </a> und das Passwort ändern.
-
+<p><a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a></p>

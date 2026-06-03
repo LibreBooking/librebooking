@@ -11,6 +11,32 @@ require_once(ROOT_DIR . 'Presenters/Calendar/CalendarCommon.php');
 
 class CalendarPresenter extends CommonCalendarPresenter
 {
+    private string $reservationPage;
+
+    public function __construct(
+        ICommonCalendarPage $page,
+        IReservationViewRepository $reservationRepository,
+        IScheduleRepository $scheduleRepository,
+        IUserRepository $userRepository,
+        IResourceService $resourceService,
+        ICalendarSubscriptionService $subscriptionService,
+        IPrivacyFilter $privacyFilter,
+        SlotLabelFactory $factory,
+        string $reservationPage = Pages::RESERVATION
+    ) {
+        parent::__construct(
+            page: $page,
+            reservationRepository: $reservationRepository,
+            scheduleRepository: $scheduleRepository,
+            userRepository: $userRepository,
+            resourceService: $resourceService,
+            subscriptionService: $subscriptionService,
+            privacyFilter: $privacyFilter,
+            factory: $factory,
+        );
+        $this->reservationPage = $reservationPage;
+    }
+
     /**
      * @param UserSession $userSession
      * @param int $selectedScheduleId
@@ -65,13 +91,14 @@ class CalendarPresenter extends CommonCalendarPresenter
         }
 
         $this->page->BindEvents(CalendarReservation::FromScheduleReservationList(
-            $reservations,
-            $blackouts,
-            $availableSlots,
-            $resources,
-            $userSession,
-            $this->privacyFilter,
-            $this->slotLabelFactory
+            reservations: $reservations,
+            blackouts: $blackouts,
+            availablePeriods: $availableSlots,
+            resources: $resources,
+            userSession: $userSession,
+            groupSeriesByResource: true,
+            factory: $this->slotLabelFactory,
+            reservationPage: $this->reservationPage,
         ));
     }
 

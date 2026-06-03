@@ -122,7 +122,7 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
 
         $this->Set('Today', Date::Now()->ToTimezone($user->Timezone));
         $this->Set('Tomorrow', Date::Now()->AddDays(1)->ToTimezone($user->Timezone));
-        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('timepicker'));
+        $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
     }
 
     public function ProcessAction()
@@ -189,17 +189,21 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
             return [];
         }
 
-        return $resources;
+        if (!is_array($resources)) {
+            return [intval($resources)];
+        }
+
+        return array_map('intval', $resources);
     }
 
     public function GetResourceType()
     {
-        return $this->GetForm(FormKeys::RESOURCE_TYPE_ID);
+        return intval($this->GetForm(FormKeys::RESOURCE_TYPE_ID));
     }
 
     public function GetMaxParticipants()
     {
-        return $this->GetForm(FormKeys::MAX_PARTICIPANTS);
+        return intval($this->GetForm(FormKeys::MAX_PARTICIPANTS));
     }
 
     public function GetResourceAttributeValues()

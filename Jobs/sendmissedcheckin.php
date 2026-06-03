@@ -1,4 +1,5 @@
 <?php
+
 /**
 *  Cron Example:
 *  This script must be executed every minute for to enable missed checkin email functionality

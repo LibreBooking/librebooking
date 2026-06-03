@@ -21,7 +21,7 @@ class SetAdminFirstRegistrationStrategy implements IFirstRegistrationStrategy
 
             if (file_exists($configFile)) {
                 $str = file_get_contents($configFile);
-                $str = str_replace("admin@example.com", $user->EmailAddress(), $str);
+                $str = str_replace('admin@example.com', $user->EmailAddress(), $str);
                 file_put_contents($configFile, $str);
                 $this->ReloadCachedConfig();
             }

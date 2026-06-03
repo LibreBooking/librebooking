@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/User/ManageUsersService.php');
 
 class ManageUsersServiceTest extends TestBase
@@ -9,25 +11,16 @@ class ManageUsersServiceTest extends TestBase
      */
     private $service;
 
-    /**
-     * @var IRegistration
-     */
-    private $registration;
+    private IRegistration&\PHPUnit\Framework\MockObject\MockObject $registration;
 
     /**
      * @var FakeUserRepository
      */
     private $userRepo;
 
-    /**
-     * @var IGroupRepository
-     */
-    private $groupRepo;
+    private IGroupRepository&\PHPUnit\Framework\MockObject\MockObject $groupRepo;
 
-    /**
-     * @var IUserViewRepository
-     */
-    private $userViewRepo;
+    private IUserViewRepository&\PHPUnit\Framework\MockObject\MockObject $userViewRepo;
 
     /**
      * @var FakePasswordEncryption
@@ -165,11 +158,11 @@ class ManageUsersServiceTest extends TestBase
         $position = 'position';
 
         $extraAttributes = [
-                UserAttribute::Organization => $organization,
-                UserAttribute::Phone => $phone,
-                UserAttribute::Position => $position];
+            UserAttribute::Organization => $organization,
+            UserAttribute::Phone => $phone,
+            UserAttribute::Position => $position];
 
-        $customAttributes = [new AttributeValue(1, "value")];
+        $customAttributes = [new AttributeValue(1, 'value')];
 
         $this->userRepo->_User = $user;
 
@@ -185,7 +178,7 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($phone, $user->GetAttribute(UserAttribute::Phone));
         $this->assertEquals($organization, $user->GetAttribute(UserAttribute::Organization));
         $this->assertEquals($position, $user->GetAttribute(UserAttribute::Position));
-        $this->assertEquals("value", $user->GetAttributeValue(1));
+        $this->assertEquals('value', $user->GetAttributeValue(1));
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
     }
 

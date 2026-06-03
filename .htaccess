@@ -5,8 +5,9 @@ RewriteEngine On
 #RewriteCond %{HTTPS} off
 #RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteCond %{REQUEST_URI} !^/Web/
-RewriteRule ^(.*)$ /Web/$1 [R]
+# Redirect requests that are not already under /Web to /Web.
+RewriteCond %{REQUEST_URI} !^/Web(/|$)
+RewriteRule ^(.*)$ /Web/$1 [R=301,L]
 
 #Header Set Access-Control-Allow-Origin "*"
 #Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"

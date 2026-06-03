@@ -15,7 +15,7 @@ class ar extends en_us
      */
     protected function _LoadDates()
     {
-        $dates = [];
+        $dates = parent::_LoadDates();
 
         $dates['general_date'] = 'm/d/Y';
         $dates['general_datetime'] = 'm/d/Y g:i:s A';
@@ -27,11 +27,9 @@ class ar extends en_us
         $dates['short_reservation_date'] = 'n/j/y g:i A';
         $dates['dashboard'] = 'D, n/d g:i A';
         $dates['period_time'] = 'g:i A';
-        $dates['timepicker'] = 'h:i a';
         $dates['mobile_reservation_date'] = 'n/j g:i A';
         $dates['general_date_js'] = 'mm/dd/yy';
         $dates['general_time_js'] = 'h:mm tt';
-        $dates['timepicker_js'] = 'h:i a';
         $dates['momentjs_datetime'] = 'M/D/YY h:mm A';
         $dates['calendar_time'] = 'h:mmt';
         $dates['calendar_dates'] = 'M d';
@@ -50,7 +48,7 @@ class ar extends en_us
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'الاسم الأول ';
         $strings['LastName'] = 'الاسم الأخير';
@@ -834,6 +832,7 @@ class ar extends en_us
         $strings['ConflictingReservationDates'] = 'توجد حجوزات متضاربة في التواريخ التالية:';
         $strings['InstancesOverlapRule'] = 'تتداخل بعض حالات سلسلة الحجز:';
         $strings['StartDateBeforeEndDateRule'] = 'يجب أن يكون تاريخ ووقت البدء قبل تاريخ ووقت الانتهاء.';
+        $strings['RecurringWithoutTerminationRule'] = 'تاريخ الانتهاء مطلوب لعمليات الحجب المتكررة.';
         $strings['StartIsInPast'] = 'لا يمكن أن يكون تاريخ ووقت البدء في الماضي.';
         $strings['EmailDisabled'] = 'قام المسؤول بتعطيل إشعارات البريد الإلكتروني.';
         $strings['ValidLayoutRequired'] = 'يجب توفير الخانات الزمنية لجميع الـ 24 ساعة من اليوم التي تبدأ وتنتهي في 00:00.';
@@ -1014,13 +1013,13 @@ class ar extends en_us
         //Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'ليس لديكم مجموعة قادمة للحجز';
         $strings['GroupUpcomingReservations'] = 'الحجوزات القادمة لمجموعتي';
-        //End Group Upcoming Reservations 
+        //End Group Upcoming Reservations
 
         //Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'حدث خطأ أثناء تسجيل الدخول باستخدام فيسبوك. يرجى المحاولة مرة أخرى.';
         //End Facebook Login SDK Error
 
-        
+
         //Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'ليس لديك حجوزات في انتظار الموافقة';
         $strings['PendingApprovalReservations'] = 'الحجوزات قيد الموافقة';
@@ -1031,7 +1030,7 @@ class ar extends en_us
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'لا توجد حجوزات للتسجيل الخروج المفقودة';
-        $strings['MissingCheckOutReservations'] = 'الحجوزات المفقودة للتسجيل الخروج';        
+        $strings['MissingCheckOutReservations'] = 'الحجوزات المفقودة للتسجيل الخروج';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -1049,7 +1048,7 @@ class ar extends en_us
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -1075,7 +1074,7 @@ class ar extends en_us
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

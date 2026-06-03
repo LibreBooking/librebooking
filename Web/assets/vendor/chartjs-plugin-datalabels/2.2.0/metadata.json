@@ -1,0 +1,8 @@
+{
+  "name": "chartjs-plugin-datalabels",
+  "version": "2.2.0",
+  "description": "Chart.js plugin to display labels on data points.",
+  "homepage": "https://chartjs-plugin-datalabels.netlify.app/",
+  "source": "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js",
+  "license": "MIT"
+}

@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Timepicker=true DataTable=true}
+{include file='globalheader.tpl' DataTable=true}
 <div id="page-manage-quotas" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=ManageQuotas}</h1>
 
@@ -67,68 +67,74 @@
 						{/capture}
 
 						{capture name="enforceHours" assign="enforceHours"}
-							<div class='form-check form-check-inline'>
+							<div class='form-check form-check-inline ms-2'>
 								<input class='form-check-input' type='checkbox' id='enforce-all-day' checked='checked'
 									value='1' {formname key=ENFORCE_ALL_DAY} />
 								<label class='form-check-label' for='enforce-all-day'>{translate key=AllDay}</label>
 							</div>
-							<div id='enforce-hours-times' class='d-none'>
+							<div id='enforce-hours-times' class='collapse collapse-horizontal'>
 								<div class='form-group form-group-sm d-flex align-items-center'>
 									<span class='me-1'>{translate key=Between}</span>
 									<label for='enforce-time-start'
 										class='visually-hidden'>{translate key=StartTime}</label>
 									<label for='enforce-time-end' class='visually-hidden'>{translate key=EndTime}</label>
-									<input type='text' class='form-control form-control-sm time' id='enforce-time-start'
-										size='6' value='12:00am' {formname key=BEGIN_TIME} />
-									-
-									<input type='text' class='form-control form-control-sm time' id='enforce-time-end'
-										size='6' value='12:00am' {formname key=END_TIME} />
+									<select {formname key=BEGIN_TIME} id='enforce-time-start'
+										class='form-select form-select-sm w-auto timepicker' data-format='{$TimeFormat}'
+										data-step='30' data-default='{Date::Now()->format('H:00')}'>
+									</select>
+									<div class='mx-1'>-</div>
+									<select {formname key=END_TIME} id='enforce-time-end'
+										class='form-select form-select-sm w-auto timepicker' data-format='{$TimeFormat}'
+										data-step='30' data-default='{Date::Now()->AddHours(1)->format('H:00')}'>
+									</select>
 								</div>
 							</div>
 						{/capture}
 
 						{capture name="enforceDays" assign="enforceDays"}
-							<div class='form-check form-check-inline'>
+							<div class='form-check form-check-inline ms-2'>
 								<input class='form-check-input' type='checkbox' id='enforce-every-day' checked='checked'
 									value='1' {formname key=ENFORCE_EVERY_DAY} />
 								<label class='form-check-label' for='enforce-every-day'>{translate key=Everyday}</label>
 							</div>
-							<div id='enforce-days' class='inline d-none'>
-								<div class='btn-group-sm' data-bs-toggle='buttons'>
-									<input type='checkbox' class='btn-check' id='enforce-sun' value='0'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-sun'>{translate key="DaySundayAbbr"}</label>
+							<div class='enforce-days-inner'>
+								<div id='enforce-days' class='collapse collapse-horizontal'>
+									<div class='btn-group-sm' data-bs-toggle='buttons'>
+										<input type='checkbox' class='btn-check' id='enforce-sun' value='0'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-sun'>{translate key="DaySundayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-mon' value='1'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-mon'>{translate key="DayMondayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-mon' value='1'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-mon'>{translate key="DayMondayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-tue' value='2'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-tue'>{translate key="DayTuesdayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-tue' value='2'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-tue'>{translate key="DayTuesdayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-wed' value='3'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-wed'>{translate key="DayWednesdayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-wed' value='3'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-wed'>{translate key="DayWednesdayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-thu' value='4'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-thu'>{translate key="DayThursdayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-thu' value='4'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-thu'>{translate key="DayThursdayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-fri' value='5'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-fri'>{translate key="DayFridayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-fri' value='5'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-fri'>{translate key="DayFridayAbbr"}</label>
 
-									<input type='checkbox' class='btn-check' id='enforce-sat' value='6'
-										{formname key=DAY multi=true} />
-									<label class='btn btn-outline-primary'
-										for='enforce-sat'>{translate key="DaySaturdayAbbr"}</label>
+										<input type='checkbox' class='btn-check' id='enforce-sat' value='6'
+											{formname key=DAY multi=true} />
+										<label class='btn btn-outline-primary'
+											for='enforce-sat'>{translate key="DaySaturdayAbbr"}</label>
+									</div>
 								</div>
 							</div>
 						{/capture}
@@ -158,8 +164,8 @@
 
 
 						<div class="accordion-footer border-top pt-3">
-							{add_button class="btn-sm"}
-							{reset_button class="btn-sm"}
+							{add_button}
+							{reset_button}
 							{indicator}
 						</div>
 					</div>
@@ -253,8 +259,10 @@
 										<span class="fw-bold">{$scope}</span>.
 										{translate key=QuotaEnforcement args="$enforceHours,$enforceDays"}
 									</div>
-									<a href="#" quotaId="{$quota->Id}" class="delete float-end"><span
-											class="bi bi-trash3-fill text-danger icon remove"></span></a>
+									<a href="#" quotaId="{$quota->Id}" class="delete float-end"
+										aria-label="{translate key=Delete}">
+										<span class="bi bi-trash3-fill text-danger icon remove"
+											aria-hidden="true"></span></a>
 								</td>
 							</tr>
 						{foreachelse}
@@ -292,11 +300,12 @@
 	</div>
 
 	{csrf_token}
-	{include file="javascript-includes.tpl" Timepicker=true DataTable=true}
+	{include file="javascript-includes.tpl" DataTable=true}
 	{datatable tableId=$tableId}
 	{jsfile src="ajax-helpers.js"}
+	{jsfile src="date-helper.js"}
 	{jsfile src="admin/quota.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -312,17 +321,13 @@
 				actions: actions
 			};
 
-			$('#enforce-time-start').timepicker({
-				timeFormat: '{$TimeFormat}'
-			});
-			$('#enforce-time-end').timepicker({
-				timeFormat: '{$TimeFormat}'
+			document.querySelectorAll('.timepicker').forEach(el => {
+				dateHelper.initTimePicker(el);
 			});
 
 			var quotaManagement = new QuotaManagement(quotaOptions);
 			quotaManagement.init();
 
-			//$('#add-quota-panel').showHidePanel();
 		});
 	</script>
 </div>

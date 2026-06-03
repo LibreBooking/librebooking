@@ -3,7 +3,7 @@
 class LoginTime
 {
     /**
-     * @var null
+     * @var int|false|null
      * Only for testing
      */
     public static $Now = null;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
 
 class FakeReport implements IReport
@@ -58,9 +60,9 @@ class FakeReportColumns implements IReportColumns
     }
 
     /**
-     * @return string[]
+     * @return AttributeReportColumn[]
      */
-    public function GetCustomAttributes()
+    public function GetCustomAttributes(): array
     {
         return [];
     }

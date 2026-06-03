@@ -15,7 +15,7 @@
     <br />
     Posição: {$Position}
     <br />
-    Senha: {$Password}
+    Senha: {$Password|escape:'html'}
     {if !empty($CreatedBy)}
         <br />
         Criada por: {$CreatedBy}

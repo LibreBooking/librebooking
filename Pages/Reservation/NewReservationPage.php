@@ -15,17 +15,17 @@ interface IRequestedResourcePage
 interface INewReservationPage extends IReservationPage, IRequestedResourcePage
 {
     /**
-     * @return Date
+     * @return Date|null
      */
     public function GetReservationDate();
 
     /**
-     * @return Date
+     * @return Date|null
      */
     public function GetStartDate();
 
     /**
-     * @return Date
+     * @return Date|null
      */
     public function GetEndDate();
 }

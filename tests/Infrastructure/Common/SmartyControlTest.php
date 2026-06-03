@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
 class SmartyControlTest extends TestBase
@@ -12,7 +14,7 @@ class SmartyControlTest extends TestBase
     private $_expectedValue = 'expected___value';
     private $_expectedName;
     private $_expectedStyle;
-    private $_id = "id";
+    private $_id = 'id';
 
     public function setUp(): void
     {

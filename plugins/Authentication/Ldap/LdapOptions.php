@@ -5,25 +5,34 @@ require_once(ROOT_DIR . '/lib/Config/namespace.php');
 class LdapOptions
 {
     private $_options = [];
+    /**
+     * @var array<string, mixed>
+     */
+    private $rawLdapSettings = [];
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/Ldap.config.php');
+        $configPath = dirname(__FILE__) . '/Ldap.config.php';
+        if (!file_exists($configPath) && getenv('APP_ENV') === 'testing') {
+            $configPath = dirname(__FILE__) . '/Ldap.config.dist.php';
+        }
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/Ldap.config.php',
+            $configPath,
             '',
             LdapConfigKeys::CONFIG_ID,
             false,
             LdapConfigKeys::class
         );
+
+        $allValues = Configuration::Instance()->File(LdapConfigKeys::CONFIG_ID)->GetValues();
+        $this->rawLdapSettings = $allValues['ldap'] ?? [];
     }
 
     public function Ldap2Config()
     {
-        $hosts = $this->GetHosts();
+        $hosts = $this->GetUris();
         $this->SetOption('host', $hosts);
-        $this->SetOption('port', $this->GetConfig(LdapConfigKeys::PORT, new IntConverter()));
         $this->SetOption('starttls', $this->GetConfig(LdapConfigKeys::STARTTLS, new BooleanConverter()));
         $this->SetOption('version', $this->GetConfig(LdapConfigKeys::VERSION, new IntConverter()));
         $this->SetOption('binddn', $this->GetConfig(LdapConfigKeys::BINDDN));
@@ -42,7 +51,7 @@ class LdapOptions
 
     public function Controllers()
     {
-        return $this->GetHosts();
+        return $this->GetUris();
     }
 
     private function SetOption($key, $value)
@@ -59,15 +68,35 @@ class LdapOptions
         return Configuration::Instance()->File(LdapConfigKeys::CONFIG_ID)->GetKey($configDef, $converter);
     }
 
-    private function GetHosts()
+    private function GetUris()
     {
-        $hosts = explode(',', $this->GetConfig(LdapConfigKeys::HOST));
+        $this->AssertLegacyHostPortNotConfigured();
 
-        for ($i = 0; $i < count($hosts); $i++) {
-            $hosts[$i] = trim($hosts[$i]);
+        $uriConfig = trim($this->GetConfig(LdapConfigKeys::URI));
+        if (empty($uriConfig)) {
+            throw new RuntimeException("LDAP setting 'uri' is required and must contain at least one ldap:// or ldaps:// URI.");
         }
 
-        return $hosts;
+        $uris = preg_split('/\s+/', $uriConfig) ?: [];
+        foreach ($uris as $uri) {
+            $scheme = parse_url($uri, PHP_URL_SCHEME);
+            $host = parse_url($uri, PHP_URL_HOST);
+
+            if (!in_array($scheme, ['ldap', 'ldaps'], true) || empty($host)) {
+                throw new RuntimeException(
+                    sprintf("Invalid LDAP URI '%s'. Use ldap:// or ldaps:// with a hostname. For multiple servers, separate URIs with spaces.", $uri)
+                );
+            }
+        }
+
+        return $uris;
+    }
+
+    private function AssertLegacyHostPortNotConfigured()
+    {
+        if (array_key_exists('host', $this->rawLdapSettings) || array_key_exists('port', $this->rawLdapSettings)) {
+            throw new RuntimeException("LDAP settings 'host' and 'port' have been removed. Use only the 'uri' setting.");
+        }
     }
 
     public function BaseDn()
@@ -78,7 +107,7 @@ class LdapOptions
 
     public function IsLdapDebugOn()
     {
-        return $this->GetConfig('ldap.debug.enabled', new BooleanConverter());
+        return $this->GetConfig(LdapConfigKeys::DEBUG_ENABLED, new BooleanConverter());
     }
 
     public function Attributes()

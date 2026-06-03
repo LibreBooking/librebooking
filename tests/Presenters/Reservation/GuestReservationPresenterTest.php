@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/GuestReservationPresenter.php');
 
 class GuestReservationPresenterTest extends TestBase
@@ -13,23 +15,14 @@ class GuestReservationPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IReservationInitializerFactory
-     */
-    private $factory;
+    private IReservationInitializerFactory&\PHPUnit\Framework\MockObject\MockObject $factory;
 
-    /**
-     * @var INewReservationPreconditionService
-     */
-    private $preconditionService;
+    private INewReservationPreconditionService&\PHPUnit\Framework\MockObject\MockObject $preconditionService;
     /**
      * @var FakeRegistration
      */
     private $registration;
-    /**
-     * @var IReservationInitializer
-     */
-    private $initializer;
+    private IReservationInitializer&\PHPUnit\Framework\MockObject\MockObject $initializer;
     /**
      * @var FakeWebAuthentication
      */
@@ -155,20 +148,17 @@ class FakeGuestReservationPage implements IGuestReservationPage
 
     public function GetReservationDate()
     {
-        // TODO: Implement GetReservationDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function GetStartDate()
     {
-        // TODO: Implement GetStartDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function GetEndDate()
     {
-        // TODO: Implement GetEndDate() method.
-        return null;
+        return Date::Now();
     }
 
     public function BindPeriods($startPeriods, $endPeriods, $lockPeriods)
@@ -290,8 +280,7 @@ class FakeGuestReservationPage implements IGuestReservationPage
 
     public function IsUnavailable()
     {
-        // TODO: Implement IsUnavailable() method.
-        return null;
+        return false;
     }
 
     public function SetTermsAccepted($accepted)

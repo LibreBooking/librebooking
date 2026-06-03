@@ -75,7 +75,7 @@ foreach (phpCAS::getAttributes() as $key => $value) {
         echo '<li>', $key, ': <strong>', $value, '</strong></li>' . PHP_EOL;
     }
 }
-    ?>
+?>
 </ul>
 <p><a href="?logout=">Logout</a></p>
 </body>

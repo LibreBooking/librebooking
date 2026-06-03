@@ -1,0 +1,8 @@
+{
+  "name": "chart.js",
+  "version": "4.4.9",
+  "description": "Simple yet flexible JavaScript charting library for the modern web.",
+  "homepage": "https://www.chartjs.org/",
+  "source": "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
+  "license": "MIT"
+}

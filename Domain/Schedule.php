@@ -44,10 +44,7 @@ interface ISchedule
      */
     public function HasAvailability();
 
-    /**
-     * @return int
-     */
-    public function GetDefaultStyle();
+    public function GetDefaultStyle(): ScheduleStyle;
 }
 
 class Schedule implements ISchedule
@@ -64,7 +61,7 @@ class Schedule implements ISchedule
     protected $_adminGroupId;
     protected $_availabilityBegin;
     protected $_availabilityEnd;
-    protected $_defaultStyle;
+    protected ScheduleStyle $_defaultStyle;
     protected $_layoutType;
     protected $_totalConcurrentReservations = 0;
     protected $_maxResourcesPerReservation = 0;
@@ -272,20 +269,24 @@ class Schedule implements ISchedule
         return $this->GetAvailabilityBegin()->ToString() != '' && $this->GetAvailabilityEnd()->ToString() != '';
     }
 
-    /**
-     * @return int|ScheduleStyle
-     */
-    public function GetDefaultStyle()
+    public function GetDefaultStyle(): ScheduleStyle
     {
         return $this->_defaultStyle;
     }
 
-    /**
-     * @param $defaultDisplay int|ScheduleStyle
-     */
-    public function SetDefaultStyle($defaultDisplay)
+    public function GetDefaultStyleInt(): int
     {
-        $this->_defaultStyle = $defaultDisplay;
+        return $this->_defaultStyle->value;
+    }
+
+    public function SetDefaultStyle(int|ScheduleStyle $defaultDisplay): void
+    {
+        if ($defaultDisplay instanceof ScheduleStyle) {
+            $this->_defaultStyle = $defaultDisplay;
+            return;
+        }
+
+        $this->_defaultStyle = ScheduleStyle::tryFrom($defaultDisplay) ?? ScheduleStyle::Standard;
     }
 
     /**
@@ -319,7 +320,9 @@ class Schedule implements ISchedule
         $schedule->SetAdminGroupId($row[ColumnNames::SCHEDULE_ADMIN_GROUP_ID]);
         $schedule->SetAvailability(Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_START_DATE]), Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_END_DATE]));
         $schedule->SetDefaultStyle($row[ColumnNames::SCHEDULE_DEFAULT_STYLE]);
-        if (in_array(ColumnNames::LAYOUT_TYPE, $row)) $schedule->SetLayoutType($row[ColumnNames::LAYOUT_TYPE]);
+        if (in_array(ColumnNames::LAYOUT_TYPE, $row)) {
+            $schedule->SetLayoutType($row[ColumnNames::LAYOUT_TYPE]);
+        }
         $schedule->SetTotalConcurrentReservations($row[ColumnNames::TOTAL_CONCURRENT_RESERVATIONS]);
         $schedule->SetMaxResourcesPerReservation($row[ColumnNames::MAX_RESOURCES_PER_RESERVATION]);
         return $schedule;
@@ -432,10 +435,10 @@ class NullSchedule extends Schedule
 }
 
 
-class ScheduleStyle
+enum ScheduleStyle: int
 {
-    public const Standard = 0;
-    public const Wide = 1;
-    public const Tall = 2;
-    public const CondensedWeek = 3;
+    case Standard = 0;
+    case Wide = 1;
+    case Tall = 2;
+    case CondensedWeek = 3;
 }

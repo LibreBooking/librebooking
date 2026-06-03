@@ -203,7 +203,7 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * @return void
      * @throws CAS_OutOfSequenceException If called after the Request has been sent.
      */
-    public function setSslCaCert($caCertPath, $validate_cn=true)
+    public function setSslCaCert($caCertPath, $validate_cn = true)
     {
         if ($this->_sent) {
             throw new CAS_OutOfSequenceException(

@@ -98,7 +98,12 @@ class InstallPresenter
     {
         $install = new Installer($this->page->GetInstallUser(), $this->page->GetInstallUserPassword());
 
-        $results = $install->InstallFresh($this->page->GetShouldCreateDatabase(), $this->page->GetShouldCreateUser(), $this->page->GetShouldCreateSampleData());
+        $results = $install->InstallFresh(
+            should_create_db: $this->page->GetShouldCreateDatabase(),
+            should_create_user: $this->page->GetShouldCreateUser(),
+            should_create_sample_data: $this->page->GetShouldCreateSampleData(),
+            should_create_large_sample_data: $this->page->GetShouldCreateLargeSampleData(),
+        );
         $install->ClearCachedTemplates();
 
         $this->page->SetInstallResults($results);

@@ -11,48 +11,56 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
     public function __construct()
     {
         parent::__construct('CheckResources');
-        $this->presenter = new ViewResourcesPresenter($this,new ResourceRepository(), new ScheduleRepository(), new GroupRepository(), new AttributeService(new AttributeRepository()));
+        $this->presenter = new ViewResourcesPresenter($this, new ResourceRepository(), new ScheduleRepository(), new GroupRepository(), new AttributeService(new AttributeRepository()));
         $this->pageablePage = new PageablePage($this);
 
         $this->Set(
             'YesNoOptions',
             [
-                           '1' => Resources::GetInstance()->GetString('Yes'),
-                           '0' => Resources::GetInstance()->GetString('No')]
+                '1' => Resources::GetInstance()->GetString('Yes'),
+                '0' => Resources::GetInstance()->GetString('No')]
         );
     }
 
-    public function PageLoad(){
+    public function PageLoad()
+    {
         $this->presenter->PageLoad();
         $this->Display(ROOT_DIR.'tpl/Admin/Resources/view_resources.tpl');
     }
 
-    public function BindResources($resources){
-        $this->Set("Resources",$resources);
+    public function BindResources($resources)
+    {
+        $this->Set('Resources', $resources);
     }
 
-    public function BindSchedule($scheduleNames){
-        $this->Set("Schedules",$scheduleNames);
+    public function BindSchedule($scheduleNames)
+    {
+        $this->Set('Schedules', $scheduleNames);
     }
 
-    public function BindResourceAdminGroup($resourceAdminGroupNames){
-        $this->Set("ResourceAdminGroup",$resourceAdminGroupNames);
+    public function BindResourceAdminGroup($resourceAdminGroupNames)
+    {
+        $this->Set('ResourceAdminGroup', $resourceAdminGroupNames);
     }
 
-    public function BindResourceGroups($resourceGroupNames){
-        $this->Set("ResourceGroup",$resourceGroupNames);
+    public function BindResourceGroups($resourceGroupNames)
+    {
+        $this->Set('ResourceGroup', $resourceGroupNames);
     }
 
-    public function BindResourceStatusReasons($resourceStatusReasons){
-        $this->Set("StatusReasons",$resourceStatusReasons);
+    public function BindResourceStatusReasons($resourceStatusReasons)
+    {
+        $this->Set('StatusReasons', $resourceStatusReasons);
     }
 
-    public function BindResourceTypes($resourceTypes){
-        $this->Set("ResourceTypes",$resourceTypes);
+    public function BindResourceTypes($resourceTypes)
+    {
+        $this->Set('ResourceTypes', $resourceTypes);
     }
 
-    public function BindResourcePermissionTypes($resourcePermissionTypes){
-        $this->Set("ResourcePermissionTypes",$resourcePermissionTypes);
+    public function BindResourcePermissionTypes($resourcePermissionTypes)
+    {
+        $this->Set('ResourcePermissionTypes', $resourcePermissionTypes);
     }
 
     public function AllSchedules($schedules)
@@ -74,7 +82,7 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
         $this->pageablePage->BindPageInfo($pageInfo);
     }
 
-        /**
+    /**
      * @return int
      */
     public function GetPageNumber()
@@ -94,7 +102,7 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
         }
         return $pageSize;
     }
-    
+
 
     public function SetFilterValues($values)
     {

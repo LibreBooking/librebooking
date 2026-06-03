@@ -178,7 +178,7 @@ class ReservationResourceBinder implements IReservationComponentBinder
         $resources = $groups->GetAllResources();
         if (empty($requestedResourceId) && count($resources) > 0) {
             $first = reset($resources);
-            $requestedResourceId = $first->Id;
+            $requestedResourceId = $first->GetId();
         }
 
         $bindableResourceData = $this->GetBindableResourceData($resources, $requestedResourceId);
@@ -390,13 +390,13 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/Reports/GenerateReportPage.php');
 
 class GenerateReportPresenterTest extends TestBase
@@ -201,7 +203,7 @@ class FakeGenerateReportPage extends GenerateReportPage
      */
     public $_BoundReport;
     /**
-     * @var Report_Usage
+     * @var string|Report_Usage
      */
     public $_Usage;
 
@@ -273,7 +275,7 @@ class FakeGenerateReportPage extends GenerateReportPage
 
     public function GetResourceIds()
     {
-        return $this->_ResourceId;
+        return is_array($this->_ResourceId) ? $this->_ResourceId : [$this->_ResourceId];
     }
 
     public function GetResourceTypeIds()
@@ -283,7 +285,7 @@ class FakeGenerateReportPage extends GenerateReportPage
 
     public function GetScheduleIds()
     {
-        return $this->_ScheduleId;
+        return is_array($this->_ScheduleId) ? $this->_ScheduleId : [$this->_ScheduleId];
     }
 
     public function GetUserId()
@@ -298,7 +300,7 @@ class FakeGenerateReportPage extends GenerateReportPage
 
     public function GetGroupIds()
     {
-        return $this->_GroupId;
+        return is_array($this->_GroupId) ? $this->_GroupId : [$this->_GroupId];
     }
 
     public function BindReport(IReport $report, IReportDefinition $definition, $selectedColumns)
@@ -314,7 +316,7 @@ class FakeGenerateReportPage extends GenerateReportPage
 
     public function GetAccessoryIds()
     {
-        return $this->_AccessoryId;
+        return is_array($this->_AccessoryId) ? $this->_AccessoryId : [$this->_AccessoryId];
     }
 
     public function GetReportName()

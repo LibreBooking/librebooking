@@ -1623,7 +1623,8 @@ class GetGroupByIdCommand extends SqlCommand
     }
 }
 
-class GetGroupResourcesId extends SqlCommand{
+class GetGroupResourcesId extends SqlCommand
+{
     public function __construct($groupId)
     {
         parent::__construct(Queries::GET_GROUP_RESOURCES_ID);
@@ -1631,7 +1632,8 @@ class GetGroupResourcesId extends SqlCommand{
     }
 }
 
-class GetGroupSchedulesId extends SqlCommand{
+class GetGroupSchedulesId extends SqlCommand
+{
     public function __construct($groupId)
     {
         parent::__construct(Queries::GET_GROUP_SCHEDULES_ID);
@@ -1639,7 +1641,8 @@ class GetGroupSchedulesId extends SqlCommand{
     }
 }
 
-class GetResourceAdminResourcesCommand extends SqlCommand {
+class GetResourceAdminResourcesCommand extends SqlCommand
+{
     public function __construct($userId)
     {
         parent::__construct(Queries::GET_RESOURCE_ADMIN_RESOURCES);
@@ -1647,7 +1650,8 @@ class GetResourceAdminResourcesCommand extends SqlCommand {
     }
 }
 
-class GetScheduleAdminSchedulesCommand extends SqlCommand {
+class GetScheduleAdminSchedulesCommand extends SqlCommand
+{
     public function __construct($userId)
     {
         parent::__construct(Queries::GET_SHCEDULE_ADMIN_SCHEDULES);
@@ -1655,7 +1659,8 @@ class GetScheduleAdminSchedulesCommand extends SqlCommand {
     }
 }
 
-class GetScheduleAdminResourcesCommand extends SqlCommand {
+class GetScheduleAdminResourcesCommand extends SqlCommand
+{
     public function __construct($userId)
     {
         parent::__construct(Queries::GET_SCHEDULE_ADMIN_RESOURCES);
@@ -1836,11 +1841,10 @@ class GetReservationsMissingCheckInCheckOutCommand extends SqlCommand
     public function __construct(?Date $startDate, Date $endDate, $userIds, $userLevelId, $scheduleIds, $resourceIds, $participantIds)
     {
         parent::__construct(QueryBuilder::GET_RESERVATION_MISSING_CHECK_IN_OUT_LIST());
-        if ($startDate !== null){
+        if ($startDate !== null) {
             $this->AddParameter(new Parameter(ParameterNames::START_DATE, $startDate->ToDatabase()));
-        }
-        else {
-            $this->AddParameter(new Parameter(ParameterNames::START_DATE, NULL));
+        } else {
+            $this->AddParameter(new Parameter(ParameterNames::START_DATE, null));
         }
         $this->AddParameter(new Parameter(ParameterNames::END_DATE, $endDate->ToDatabase()));
         $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userIds));

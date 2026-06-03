@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmail.php');
@@ -34,6 +36,7 @@ class OwnerEmailNotificationTest extends TestBase
         $attributeRepo = new FakeAttributeRepository();
 
         $user = $this->LoadsUser($userRepo, $ownerId);
+        $user->SetLanguage('de_de');
 
         $notification = new OwnerEmailCreatedNotification($userRepo, $attributeRepo);
         $notification->Notify($reservation);
@@ -43,6 +46,7 @@ class OwnerEmailNotificationTest extends TestBase
         $lastMessage = $this->fakeEmailService->_LastMessage;
         $body = $lastMessage->Body();
         $this->assertInstanceOf('ReservationCreatedEmail', $lastMessage);
+        $this->assertStringContainsString('Ressourcen-ID:', $body);
         $this->assertNotEmpty($lastMessage->AttachmentContents());
         //		$this->assertEquals($expectedMessage, $lastMessage);
     }

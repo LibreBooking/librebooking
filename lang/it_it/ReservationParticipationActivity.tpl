@@ -1,11 +1,11 @@
 <p>{$UserName},</p>
 <p>{$ParticipantDetails}
     {if ($InvitationAction == InvitationAction::Decline || $InvitationAction == InvitationAction::CancelAll || $InvitationAction == InvitationAction::CancelInstance)}
-        ha declinato l&apos;invito alla sua prenotazione.
+        ha declinato l'invito alla sua prenotazione.
     {elseif ($InvitationAction == InvitationAction::Join || $InvitationAction == InvitationAction::JoinAll)}
-        si &egrave; unito alla sua prenotazione.
+        si è unito alla sua prenotazione.
     {else}
-		    ha accettato l&apos;invito alla sua prenotazione.
+		    ha accettato l'invito alla sua prenotazione.
     {/if}
 </p>
 <p>Dettagli della prenotazione:</p>

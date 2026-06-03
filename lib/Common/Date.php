@@ -17,7 +17,7 @@ class Date
     private $timestring;
     private $timestamp;
 
-    public const SHORT_FORMAT = "Y-m-d H:i:s";
+    public const SHORT_FORMAT = 'Y-m-d H:i:s';
 
     // Only used for testing
     private static $_Now = null;
@@ -335,7 +335,8 @@ class Date
      * @param Time $time
      * @return bool if the current object is greater than the one passed in
      */
-    public function TimeLessThan(Time $time){
+    public function TimeLessThan(Time $time)
+    {
         return $this->GetTime()->Compare($time) < 0;
     }
 
@@ -450,7 +451,7 @@ class Date
 
     private function getOperator(int $number): string
     {
-        return $number < 0 ? " -" : " +";
+        return $number < 0 ? ' -' : ' +';
     }
     /**
      * @param int $days
@@ -459,7 +460,7 @@ class Date
     public function AddDays($days)
     {
         // can also use DateTime->modify()
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($days) . abs($days) . " days", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($days) . abs($days) . ' days', $this->timezone);
     }
 
     /**
@@ -468,7 +469,7 @@ class Date
      */
     public function AddMonths($months)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($months) . abs($months) . " months", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($months) . abs($months) . ' months', $this->timezone);
     }
 
     /**
@@ -477,7 +478,7 @@ class Date
      */
     public function AddYears($years)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($years) . abs($years) . " years", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($years) . abs($years) . ' years', $this->timezone);
     }
 
     /**
@@ -510,7 +511,7 @@ class Date
      */
     public function AddHours($hours)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($hours) . abs($hours) . " hours", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($hours) . abs($hours) . ' hours', $this->timezone);
     }
 
     /**
@@ -519,7 +520,7 @@ class Date
      */
     public function RemoveMinutes($minutes)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . " -" . $minutes . " minutes", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT) . ' -' . $minutes . ' minutes', $this->timezone);
     }
 
     /**
@@ -747,30 +748,28 @@ class Date
     /**
      * Implements bubble sort algorithm to sort dates from array
      */
-    public static function BubbleSort($array, $sortBy = 'StartDate') {
-        for ($i = 0; $i < count($array); $i++){
+    public static function BubbleSort($array, $sortBy = 'StartDate')
+    {
+        for ($i = 0; $i < count($array); $i++) {
             $swapped = false;
-            for ($j = 0; $j < count($array) - $i - 1; $j++)
-            {
+            for ($j = 0; $j < count($array) - $i - 1; $j++) {
 
-                if ($array[$j]->$sortBy->DateCompare($array[$j+1]->$sortBy) == 1) {
+                if ($array[$j]->$sortBy->DateCompare($array[$j + 1]->$sortBy) == 1) {
                     $t = $array[$j];
-                    $array[$j] = $array[$j+1];
-                    $array[$j+1] = $t;
-                    $swapped = True;
-                }
-
-                else if($array[$j]->$sortBy->DateCompare($array[$j+1]->$sortBy) == 0){
-                    if ($array[$j]->$sortBy->CompareTime($array[$j+1]->$sortBy) == 1) {
+                    $array[$j] = $array[$j + 1];
+                    $array[$j + 1] = $t;
+                    $swapped = true;
+                } elseif ($array[$j]->$sortBy->DateCompare($array[$j + 1]->$sortBy) == 0) {
+                    if ($array[$j]->$sortBy->CompareTime($array[$j + 1]->$sortBy) == 1) {
                         $t = $array[$j];
-                        $array[$j] = $array[$j+1];
-                        $array[$j+1] = $t;
-                        $swapped = True;
+                        $array[$j] = $array[$j + 1];
+                        $array[$j + 1] = $t;
+                        $swapped = true;
                     }
                 }
             }
 
-            if ($swapped == false){
+            if ($swapped == false) {
                 break;
             }
         }
@@ -1081,7 +1080,8 @@ class DateDiff
     /**
      * Gets the number of remaining days in the present month
      */
-    public static function getMonthRemainingDays($timezone){
+    public static function getMonthRemainingDays($timezone)
+    {
         date_default_timezone_set($timezone);           //NECESSARY??
         $currentDate = new DateTime();
         $endOfMonth = new DateTime($currentDate->format('Y-m-t 23:59:59'));
@@ -1094,7 +1094,8 @@ class DateDiff
     /**
      * Gets the number of remaining days in the present year
      */
-    public static function getYearRemainingDays($timezone){
+    public static function getYearRemainingDays($timezone)
+    {
         date_default_timezone_set($timezone);           //NECESSARY??
         $currentDate = new DateTime();
         $endOfYear = new DateTime($currentDate->format('Y-12-31 23:59:59'));

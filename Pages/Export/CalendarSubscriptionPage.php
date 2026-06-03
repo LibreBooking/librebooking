@@ -49,8 +49,8 @@ class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
     {
         $this->presenter->PageLoad();
 
-        header("Content-Type: text/Calendar");
-        header("Content-Disposition: inline; filename=calendar.ics");
+        header('Content-Type: text/Calendar');
+        header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
         echo preg_replace('~\R~u', "\r\n", $display->Render($this->reservations));
@@ -73,7 +73,7 @@ class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
 
     public function GetAccessoryIds()
     {
-        return $this->GetQuerystring(QueryStringKeys::ACCESSORY_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::ACCESSORY_ID));
     }
 
     public function GetResourceGroupId()
@@ -83,11 +83,11 @@ class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
 
     public function GetPastNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_PAST));
     }
 
     public function GetFutureNumberOfDays()
     {
-        return $this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE);
+        return intval($this->GetQuerystring(QueryStringKeys::SUBSCRIPTION_DAYS_FUTURE));
     }
 }

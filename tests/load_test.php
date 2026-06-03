@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 define('ROOT_DIR', dirname(__FILE__) . '/../');
 
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 
-echo "<h1>LibreBooking Data Load</h1>";
+echo '<h1>LibreBooking Data Load</h1>';
 
 $stopWatch = new StopWatch();
 $stopWatch->Start();
@@ -24,7 +26,7 @@ $db = ServiceLocator::GetDatabase();
 $db->Execute(new AdHocCommand("delete from users where fname ='load' and lname = 'test'"));
 $userRepo = new UserRepository();
 for ($i = 0; $i < $numberOfUsers; $i++) {
-    $user = User::Create("load$i", "test$i", "email $i", "username $i", "en_us", "America/Chicago", "7b6aec38ff9b7650d64d0374194307bdde711425", "3b3dbb9b");
+    $user = User::Create("load$i", "test$i", "email $i", "username $i", 'en_us', 'America/Chicago', '7b6aec38ff9b7650d64d0374194307bdde711425', '3b3dbb9b');
     $userId = $userRepo->Add($user);
     $users[] = $user;
 }
@@ -94,7 +96,7 @@ while ($i < $numberOfReservations) {
 echo "Loaded $numberOfReservations reservations<br/>";
 $stopWatch->Stop();
 
-echo "<h5>Took " . $stopWatch->GetTotalSeconds() . " seconds</h5>";
+echo '<h5>Took ' . $stopWatch->GetTotalSeconds() . ' seconds</h5>';
 
 /**
  * @param array|User[] $users
@@ -102,7 +104,7 @@ echo "<h5>Took " . $stopWatch->GetTotalSeconds() . " seconds</h5>";
  */
 function getRandomUserId($users)
 {
-    $rand = rand(0, count($users)-1);
+    $rand = rand(0, count($users) - 1);
     return $users[$rand];
 }
 
@@ -112,6 +114,6 @@ function getRandomUserId($users)
  */
 function getRandomResource($resources)
 {
-    $rand = rand(0, count($resources)-1);
+    $rand = rand(0, count($resources) - 1);
     return $resources[$rand];
 }

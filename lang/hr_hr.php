@@ -502,6 +502,7 @@ class hr_hr extends en_gb
         $strings['NoResourcePermission'] = 'Nemate prava za pristup resursima.';
         $strings['ConflictingReservationDates'] = 'Postoje rezervacije u konfliktu za slijedeci datum:';
         $strings['StartDateBeforeEndDateRule'] = 'Datum i vrijeme pocetka mora biti prije datuma i vremena kraja.';
+        $strings['RecurringWithoutTerminationRule'] = 'Datum završetka je obavezan za ponavljajuće blokade.';
         $strings['StartIsInPast'] = 'Datum i vrijeme pocetka ne moďż˝e biti u proďż˝losti.';
         $strings['EmailDisabled'] = 'Administrator je iskljucio email obavijesti.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
@@ -648,7 +649,7 @@ class hr_hr extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nema rezervacija za odjavu';
-        $strings['MissingCheckOutReservations'] = 'Nedostajuće rezervacije za odjavu';         
+        $strings['MissingCheckOutReservations'] = 'Nedostajuće rezervacije za odjavu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

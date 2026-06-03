@@ -11,7 +11,7 @@ interface IReservationUpdatePage extends IReservationSavePage
     public function GetReferenceNumber();
 
     /**
-     * @return SeriesUpdateScope
+     * @return string One of SeriesUpdateScope::ThisInstance, ::FullSeries, ::FutureInstances
      */
     public function GetSeriesUpdateScope();
 
@@ -89,7 +89,19 @@ class ReservationUpdatePage extends ReservationSavePage implements IReservationU
 
     public function GetSeriesUpdateScope()
     {
-        return $this->GetForm(FormKeys::SERIES_UPDATE_SCOPE);
+        $scope = $this->GetForm(FormKeys::SERIES_UPDATE_SCOPE);
+
+        // Missing/non-scalar input falls back to the existing safe default.
+        if (!is_scalar($scope) || $scope === '') {
+            return SeriesUpdateScope::FullSeries;
+        }
+
+        $scope = (string)$scope;
+        if (!SeriesUpdateScope::IsValid($scope)) {
+            throw new InvalidArgumentException('Invalid series update scope');
+        }
+
+        return $scope;
     }
 
     public function GetRemovedAttachmentIds()

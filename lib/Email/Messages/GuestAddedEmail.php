@@ -44,8 +44,8 @@ class GuestAddedEmail extends ReservationEmailMessage
         $currentInstance = $this->reservationSeries->CurrentInstance();
         parent::PopulateTemplate();
 
-        $this->Set('AcceptUrl', sprintf("%s?%s=%s&%s=%s&%s=%s", Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Accept));
-        $this->Set('DeclineUrl', sprintf("%s?%s=%s&%s=%s&%s=%s", Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Decline));
+        $this->Set('AcceptUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Accept));
+        $this->Set('DeclineUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Decline));
     }
 }
 
@@ -59,7 +59,7 @@ class GuestUpdatedEmail extends GuestAddedEmail
     public function PopulateTemplate()
     {
         parent::PopulateTemplate();
-        $this->Set("Deleted", false);
-        $this->Set("Updated", true);
+        $this->Set('Deleted', false);
+        $this->Set('Updated', true);
     }
 }

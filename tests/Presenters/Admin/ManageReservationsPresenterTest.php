@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
 
 class ManageReservationsPresenterTest extends TestBase
@@ -9,40 +11,19 @@ class ManageReservationsPresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IManageReservationsPage|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $page;
+    private IManageReservationsPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
-    /**
-     * @var IManageReservationsService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $reservationsService;
+    private IManageReservationsService&\PHPUnit\Framework\MockObject\MockObject $reservationsService;
 
-    /**
-     * @var IScheduleRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
-    /**
-     * @var IAttributeService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeService;
+    private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
 
-    /**
-     * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
-    /**
-     * @var ITermsOfServiceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $termsOfServiceRepository;
+    private ITermsOfServiceRepository&\PHPUnit\Framework\MockObject\MockObject $termsOfServiceRepository;
 
     public function setUp(): void
     {
@@ -87,7 +68,7 @@ class ManageReservationsPresenterTest extends TestBase
         $searchedResourceStatusReasonId = 4292;
         /** @var TestCustomAttribute[] $customAttributes */
         $customAttributes = [new TestCustomAttribute(1, 'something')];
-        /** @var Attribute[] $attributes */
+        /** @var LBAttribute[] $attributes */
         $attributes = [new LBAttribute($customAttributes[0], 'value')];
 
         $this->resourceRepository->expects($this->once())
@@ -323,10 +304,11 @@ class ManageReservationsPresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(2))
             ->method('LoadById')
             ->willReturnMap(
-            [
-                [1, $resource1],
-                [2, $resource2]
-            ]);
+                [
+                    [1, $resource1],
+                    [2, $resource2]
+                ]
+            );
 
         $this->resourceRepository->expects($this->exactly(2))
             ->method('Update')
@@ -397,7 +379,7 @@ class ManageReservationsPresenterTest extends TestBase
             "u2@e.com,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
             "madeupuser,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
             "u@e.com,makeupresource,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
-            "u@e.com,r2,title2,description2,unparseabledate,1/4/17 22:00,,";
+            'u@e.com,r2,title2,description2,unparseabledate,1/4/17 22:00,,';
 
         $attributes = [new TestCustomAttribute(1, 'att1'), new TestCustomAttribute(2, 'att2'), new TestCustomAttribute(3, 'att3')];
 
@@ -432,10 +414,8 @@ class ManageReservationsPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->reservationsService->expects($matcher)
             ->method('UnsafeAdd')
-            ->willReturnCallback(function ($res) use ($matcher, $res1, $res2)
-            {
-                match ($matcher->numberOfInvocations())
-                {
+            ->willReturnCallback(function ($res) use ($matcher, $res1, $res2) {
+                match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals($res, $res1),
                     2 => $this->assertEquals($res, $res2)
                 };
@@ -459,11 +439,9 @@ class ManageReservationsPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->reservationsService->expects($matcher)
             ->method('UnsafeDelete')
-            ->willReturnCallback(function(int $id, UserSession $session) use ($matcher)
-            {
+            ->willReturnCallback(function (int $id, UserSession $session) use ($matcher) {
                 $this->assertEquals($this->fakeUser, $session);
-                match ($matcher->numberOfInvocations())
-                {
+                match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals(1, $id),
                     2 => $this->assertEquals(2, $id)
                 };

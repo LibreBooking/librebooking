@@ -47,6 +47,7 @@ interface ILoginPage extends IPage, ILoginBasePage
     public function SetResumeUrl($value);
 
     public function SetShowLoginError();
+    public function SetLoginErrorMessage(?string $message): void;
 
     /**
      * @param $languageCode string
@@ -130,9 +131,12 @@ class LoginPage extends Page implements ILoginPage
 
         $this->presenter = new LoginPresenter($this); // $this pseudo variable of class object is Page object
         $resumeUrl = $this->server->GetQuerystring(QueryStringKeys::REDIRECT);
-        if ($resumeUrl !== NULL) $resumeUrl = str_replace('&amp;&amp;', '&amp;', $resumeUrl);
+        if ($resumeUrl !== null) {
+            $resumeUrl = str_replace('&amp;&amp;', '&amp;', $resumeUrl);
+        }
         $this->Set('ResumeUrl', $resumeUrl);
         $this->Set('ShowLoginError', false);
+        $this->Set('LoginErrorMessage', null);
         $this->Set('Languages', Resources::GetInstance()->AvailableLanguages);
 
         $this->SetFacebookErrorMessage();
@@ -164,7 +168,7 @@ class LoginPage extends Page implements ILoginPage
 
     public function GetPassword()
     {
-        return $this->GetRawForm(FormKeys::PASSWORD);
+        return strval($this->GetRawForm(FormKeys::PASSWORD));
     }
 
     public function GetPersistLogin()
@@ -248,6 +252,11 @@ class LoginPage extends Page implements ILoginPage
     public function SetShowLoginError()
     {
         $this->Set('ShowLoginError', true);
+    }
+
+    public function SetLoginErrorMessage(?string $message): void
+    {
+        $this->Set('LoginErrorMessage', $message);
     }
 
     public function GetRequestedLanguage()

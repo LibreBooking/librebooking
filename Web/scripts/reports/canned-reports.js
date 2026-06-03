@@ -1,81 +1,52 @@
 function CannedReports(reportOptions) {
-	var opts = reportOptions;
+  var opts = reportOptions;
+  var reportId = 0;
+  var selectedReportTitle = '';
 
-	var elements = {
-		indicator: $('#indicator'),
-		resultsDiv: $('#resultsDiv')
-	};
+  var elements = {
+    indicator: $('#indicator'),
+    resultsDiv: $('#resultsDiv'),
+  };
 
-	this.init = function () {
+  this.init = function () {
+    wireUpReportLinks();
+  };
 
-		wireUpReportLinks();
-/*
-		$(document).on('click', '#btnPrint', function (e) {
-			e.preventDefault();
+  var getCannedReportTitle = function (link) {
+    var groupTitle = reportsCleanText(link.closest('tr').find('td:first').text());
+    var rangeTitle = reportsCleanText(link.text());
+    if (groupTitle.length && rangeTitle.length) {
+      return groupTitle + ' - ' + rangeTitle;
+    }
+    return groupTitle || rangeTitle;
+  };
 
-			var url = opts.printUrl + reportId;
-			window.open(url);
-		});
+  var wireUpReportLinks = function () {
+    $('#report-list a.report').on('click', function (e) {
+      e.preventDefault();
+      reportId = $(this).attr('reportId');
+    });
 
-		$(document).on('click', '#btnCsv', function (e) {
-			e.preventDefault();
+    $('.runNow').on('click', function (e) {
+      selectedReportTitle = getCannedReportTitle($(this));
 
-			var url = opts.csvUrl + reportId;
-			window.open(url);
-		});
-*/
-		// $(document).on('click', '#btnChart', function(e) {
-		// 	e.preventDefault();
-		//
-		// 	var chart = new Chart();
-		// 	chart.generate();
-		// 	$('#report-results').hide();
-		// });
-/*
-		$('.cancel').click(function (e) {
-			e.preventDefault();
-			$(this).closest('.dialog').dialog('close');
-		});
-*/
-		//		elements.sendEmailButton.click(function (e) {
-		//			e.preventDefault();
-		//			var before = function () {
-		//				elements.sendEmailButton.hide();
-		//				elements.emailIndicator.show()
-		//			};
-		//			var after = function (data) {
-		//				$('#emailSent').show().delay(3000).fadeOut(1000);
-		//				elements.emailIndicator.hide();
-		//				elements.sendEmailButton.show();
-		//				$('#emailDiv').dialog('close');
-		//			};
-		//
-		//			ajaxPost(elements.emailForm, opts.emailUrl + reportId, before, after);
-		//		});
-	};
+      var before = function () {
+        elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
+        elements.resultsDiv.html('');
+      };
 
-	var wireUpReportLinks = function () {
-		$('#report-list a.report').click(function (e) {
-			e.preventDefault();
-			reportId = $(this).attr('reportId');
-		});
+      var after = function (data) {
+        elements.indicator.addClass('d-none');
+        elements.resultsDiv.html(data);
+        elements.resultsDiv.attr('data-report-title', selectedReportTitle);
+      };
 
-		$('.runNow').click(function (e) {
-			var before = function () {
-				elements.indicator.removeClass('d-none').insertBefore(elements.resultsDiv);
-				elements.resultsDiv.html('');
-			};
+      ajaxGet(opts.generateUrl + reportId, before, after);
+    });
 
-			var after = function (data) {
-				elements.indicator.addClass('d-none');
-				elements.resultsDiv.html(data)
-			};
-
-			ajaxGet(opts.generateUrl + reportId, before, after);
-		});
-
-		$('.emailNow').click(function (e) {
-			$('#emailDiv').dialog({ modal: true });
-		});
-	};
+    $('.emailNow').on('click', function (e) {
+      $('#emailDiv').dialog({ modal: true });
+    });
+  };
 }

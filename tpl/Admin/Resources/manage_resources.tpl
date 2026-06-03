@@ -82,15 +82,17 @@
 							<div class="form-group {$groupClass}">
 								<label for="filterResourceName" class="fw-bold">{translate key=Resource}</label>
 								<div class="position-relative">
-									<input id="filterResourceName" class="form-control" {formname key=RESOURCE_NAME}
-										value="{$ResourceNameFilter}" placeholder="{translate key=Name}" />
+									<input id="filterResourceName" class="form-control form-control-sm"
+										{formname key=RESOURCE_NAME} value="{$ResourceNameFilter}"
+										placeholder="{translate key=Name}" />
 									<span class="searchclear searchclear-label bi bi-x-circle-fill"
 										ref="filterResourceName"></span>
 								</div>
 							</div>
 							<div class="form-group {$groupClass}">
 								<label for="filterScheduleId" class="fw-bold">{translate key=Schedule}</label>
-								<select id="filterScheduleId" {formname key=SCHEDULE_ID} class="form-select">
+								<select id="filterScheduleId" {formname key=SCHEDULE_ID}
+									class="form-select form-select-sm">
 									<option value="">{translate key=AllSchedules}</option>
 									{object_html_options options=$AllSchedules key='GetId' label="GetName" selected=$ScheduleIdFilter}
 								</select>
@@ -98,7 +100,8 @@
 
 							<div class="form-group {$groupClass}">
 								<label for="filterResourceType" class="fw-bold">{translate key=ResourceType}</label>
-								<select id="filterResourceType" class="form-select" {formname key=RESOURCE_TYPE_ID}>
+								<select id="filterResourceType" class="form-select form-select-sm"
+									{formname key=RESOURCE_TYPE_ID}>
 									<option value="">{translate key=AllResourceTypes}</option>
 									{object_html_options options=$ResourceTypes key='Id' label="Name" selected=$ResourceTypeFilter}
 								</select>
@@ -107,7 +110,7 @@
 								<label for="resourceStatusIdFilter"
 									class="fw-bold">{translate key=ResourceStatus}</label>
 								<div class="d-flex flex-wrap">
-									<select id="resourceStatusIdFilter" class="form-select inline w-auto"
+									<select id="resourceStatusIdFilter" class="form-select form-select-sm inline w-auto"
 										{formname key=RESOURCE_STATUS_ID}>
 										<option value="">{translate key=AllResourceStatuses}</option>
 										<option value="{ResourceStatus::AVAILABLE}">{translate key=Available}</option>
@@ -117,7 +120,7 @@
 									</select>
 									<label for="resourceReasonIdFilter"
 										class="visually-hidden">{translate key=Reason}</label>
-									<select id="resourceReasonIdFilter" class="form-select w-auto inline"
+									<select id="resourceReasonIdFilter" class="form-select form-select-sm w-auto inline"
 										{formname key=RESOURCE_STATUS_REASON_ID}>
 										<option value="">-</option>
 									</select>
@@ -126,9 +129,9 @@
 							<div class="form-group {$groupClass}">
 								<label for="filterCapacity" class="fw-bold">{translate key=MinimumCapacity}</label>
 								<div class="position-relative">
-									<input type="number" min="0" id="filterCapacity" class="form-control"
-										{formname key=MAX_PARTICIPANTS} value="{$CapacityFilter}"
-										placeholder="{translate key=MinimumCapacity}" />
+									<input type="number" min="0" id="filterCapacity"
+										class="form-control form-control-sm" {formname key=MAX_PARTICIPANTS}
+										value="{$CapacityFilter}" placeholder="{translate key=MinimumCapacity}" />
 									<span class="searchclear searchclear-label bi bi-x-circle-fill me-4"
 										ref="filterCapacity"></span>
 								</div>
@@ -136,8 +139,8 @@
 							<div class="form-group {$groupClass}">
 								<label for="filterRequiresApproval"
 									class="fw-bold">{translate key=ResourceRequiresApproval}</label>
-								<select id="filterRequiresApproval" class="form-select" {formname key=REQUIRES_APPROVAL}
-									title="{translate key='ResourceRequiresApproval'}">
+								<select id="filterRequiresApproval" class="form-select form-select-sm"
+									{formname key=REQUIRES_APPROVAL} title="{translate key='ResourceRequiresApproval'}">
 									<option value="">{translate key='ResourceRequiresApproval'}</option>
 									{html_options options=$YesNoOptions selected=$RequiresApprovalFilter}
 								</select>
@@ -145,8 +148,8 @@
 							<div class="form-group {$groupClass}">
 								<label for="filterAutoAssign"
 									class="fw-bold">{translate key=ResourcePermissionAutoGranted}</label>
-								<select id="filterAutoAssign" class="form-select" {formname key=AUTO_ASSIGN}
-									title="{translate key='ResourcePermissionAutoGranted'}">
+								<select id="filterAutoAssign" class="form-select form-select-sm"
+									{formname key=AUTO_ASSIGN} title="{translate key='ResourcePermissionAutoGranted'}">
 									<option value="">{translate key='ResourcePermissionAutoGranted'}</option>
 									{html_options options=$YesNoOptions selected=$AutoPermissionFilter}
 								</select>
@@ -154,8 +157,8 @@
 							<div class="form-group {$groupClass}">
 								<label for="filterAllowMultiDay"
 									class="fw-bold">{translate key=ResourceAllowMultiDay}</label>
-								<select id="filterAllowMultiDay" class="form-select" {formname key=ALLOW_MULTIDAY}
-									title="{translate key=ResourceAllowMultiDay}">
+								<select id="filterAllowMultiDay" class="form-select form-select-sm"
+									{formname key=ALLOW_MULTIDAY} title="{translate key=ResourceAllowMultiDay}">
 									<option value="">{translate key=ResourceAllowMultiDay}</option>
 									{html_options options=$YesNoOptions selected=$AllowMultiDayFilter}
 								</select>
@@ -169,8 +172,8 @@
 						</div>
 
 						<div class="card-footer border-top pt-3">
-							{filter_button id="filter" class="btn-sm"}
-							{reset_button id="clearFilter" class="btn-sm"}
+							{filter_button id="filter"}
+							{reset_button id="clearFilter"}
 						</div>
 					</div>
 				</form>
@@ -395,10 +398,9 @@
 																	class="inline fw-bold">{translate key='Contact'}</label>
 																{if $ResourceContactIsUser}
 																	<span class="propertyValue contactValue" data-type="select"
-																{else}
-																	<span class="propertyValue contactValue" data-type="text"
-																{/if}
-																	data-pk="{$id}" data-value="{$resource->GetContact()}"
+																	{else} <span class="propertyValue contactValue"
+																	data-type="text" {/if} data-pk="{$id}"
+																	data-value="{$resource->GetContact()}"
 																	data-name="{FormKeys::RESOURCE_CONTACT}">
 																	{if $resource->HasContact()}
 																		{$resource->GetContact()}
@@ -492,7 +494,14 @@
 																	<span class="propertyValue resourceAdminValue"
 																		data-type="select" data-pk="{$id}"
 																		data-value="{$resource->GetAdminGroupId()}"
-																		data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">{$GroupLookup[$resource->GetAdminGroupId()]->Name}</span>
+																		 data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">
+																			{assign var=adminGroupId value=$resource->GetAdminGroupId()}
+																			{if $adminGroupId !== null && isset($GroupLookup[$adminGroupId])}
+																				{$GroupLookup[$adminGroupId]->Name|escape:'html'}
+																			{else}
+																				{translate key='None'}
+																			{/if}
+																		</span>
 																</div>
 															</div>
 															<div class="mt-2">
@@ -582,9 +591,11 @@
 																				class="bi bi-chevron-down"></i>
 																		</a>
 																		<div id="customAttributes{$id}" class="collapse show">
-																			<div class="row">
+																			<div>
 																			{/if}
-																			{include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+																			{include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionChangeAttribute}"
+																			id=$id attribute=$attribute
+																			value=$resource->GetAttributeValue($attribute->Id())}
 																		{/if}
 																	{/foreach}
 																	{if $hasResults}
@@ -635,13 +646,13 @@
 							<label class="fw-bold" for="resourceName">{translate key='Name'}<i
 									class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i>
 							</label>
-							<input type="text" class="form-control required has-feedback " maxlength="85"
-								id="resourceName" {formname key=RESOURCE_NAME} />
+							<input type="text" class="form-control form-control-sm required has-feedback "
+								maxlength="85" id="resourceName" {formname key=RESOURCE_NAME} />
 
 						</div>
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="scheduleId">{translate key='Schedule'}</label>
-							<select class="form-select" {formname key=SCHEDULE_ID} id="scheduleId">
+							<select class="form-select form-select-sm" {formname key=SCHEDULE_ID} id="scheduleId">
 								{foreach from=$Schedules item=scheduleName key=scheduleId}
 									<option value="{$scheduleId}">{$scheduleName}</option>
 								{/foreach}
@@ -649,7 +660,7 @@
 						</div>
 						<div class="form-group mb-2">
 							<label class="fw-bold" for="permissions">{translate key='ResourcePermissions'}</label>
-							<select class="form-select" {formname key=AUTO_ASSIGN} id="permissions">
+							<select class="form-select form-select-sm" {formname key=AUTO_ASSIGN} id="permissions">
 								<option value="0">{translate key="ResourcePermissionNotAutoGranted"}</option>
 								<option value="1">{translate key="ResourcePermissionAutoGranted"}</option>
 							</select>
@@ -657,7 +668,7 @@
 						<div class="form-group mb-2">
 							<label class="fw-bold"
 								for="resourceAdminGroupId">{translate key='ResourceAdministrator'}</label>
-							<select class="form-select" {formname key=RESOURCE_ADMIN_GROUP_ID}
+							<select class="form-select form-select-sm" {formname key=RESOURCE_ADMIN_GROUP_ID}
 								id="resourceAdminGroupId">
 								{if $CanViewAdmin}
 								<option value="">{translate key=None}</option>{/if}
@@ -1869,7 +1880,7 @@
 					<div class="form-group">
 						<label for="userSearch">{translate key=AddUser}</label>
 						<a href="#" id="browseUsers" class="link-primary">{translate key=Browse}</a>
-						<input type="text" id="userSearch" class="form-control" size="60" />
+						<input type="text" id="userSearch" class="form-control form-control-sm" size="60" />
 					</div>
 					<div id="resourceUserList"></div>
 				</div>
@@ -1909,7 +1920,7 @@
 					<div class="form-group">
 						<label for="groupSearch">{translate key=AddGroup}</label>
 						<a href="#" id="browseGroups" class="link-primary">{translate key=AllGroups}</a>
-						<input type="text" id="groupSearch" class="form-control" size="60" />
+						<input type="text" id="groupSearch" class="form-control form-control-sm" size="60" />
 					</div>
 
 					<div id="resourceGroupList"></div>
@@ -2065,9 +2076,9 @@
 {datatable tableId=$tableId}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
-{jsfile src="js/tree.jquery.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 {jsfile src="admin/resource.js"}
-{jsfile src="dropzone.js"}
+{vendor_js src="dropzone/1.0.0/js/dropzone.js"}
 {jsfile src="search-clear.js"}
 
 <script type="text/javascript">
@@ -2184,7 +2195,7 @@
 		};
 
 		var updateUrl = '{$smarty.server.SCRIPT_NAME}?action=';
-        var xUserAutocompleteUrl = "../ajax/autocomplete.php?type={AutoCompleteType::XUser}";
+		var xUserAutocompleteUrl = "../ajax/autocomplete.php?type={AutoCompleteType::XUser}";
 
 		$('.resourceNameField').editable({
 				url: updateUrl + '{ManageResourcesActions::ActionRename}', validate: function (value) {

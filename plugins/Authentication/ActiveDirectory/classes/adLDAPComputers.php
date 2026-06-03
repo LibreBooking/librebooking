@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4
@@ -70,9 +71,9 @@ class adLDAPComputers
             return false;
         }
 
-        $filter = "(&(objectClass=computer)(cn=" . $computerName . "))";
+        $filter = '(&(objectClass=computer)(cn=' . $computerName . '))';
         if ($fields === null) {
-            $fields = ["memberof","cn","displayname","dnshostname","distinguishedname","objectcategory","operatingsystem","operatingsystemservicepack","operatingsystemversion"];
+            $fields = ['memberof','cn','displayname','dnshostname','distinguishedname','objectcategory','operatingsystem','operatingsystemservicepack','operatingsystemversion'];
         }
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
@@ -129,7 +130,7 @@ class adLDAPComputers
         } // use the default option if they haven't set it
 
         //get a list of the groups
-        $groups = $this->groups($computerName, ["memberof"], $recursive);
+        $groups = $this->groups($computerName, ['memberof'], $recursive);
 
         //return true if the specified group is in the group list
         if (in_array($group, $groups)) {
@@ -159,8 +160,8 @@ class adLDAPComputers
         }
 
         //search the directory for their information
-        $info = @$this->info($computerName, ["memberof", "primarygroupid"]);
-        $groups = $this->adldap->utilities()->niceNames($info[0]["memberof"]); //presuming the entry returned is our guy (unique usernames)
+        $info = @$this->info($computerName, ['memberof', 'primarygroupid']);
+        $groups = $this->adldap->utilities()->niceNames($info[0]['memberof']); //presuming the entry returned is our guy (unique usernames)
 
         if ($recursive === true) {
             foreach ($groups as $id => $groupName) {

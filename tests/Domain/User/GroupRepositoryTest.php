@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class GroupRepositoryTest extends TestBase
@@ -23,7 +25,7 @@ class GroupRepositoryTest extends TestBase
 
     public function testCanGetPageableListOfGroups()
     {
-        $filter = new SqlFilterEquals("cn", "cv");
+        $filter = new SqlFilterEquals('cn', 'cv');
         $pageNum = 10;
         $pageSize = 100;
         $count = 1000;
@@ -44,7 +46,7 @@ class GroupRepositoryTest extends TestBase
         $results = $list->Results();
         $this->assertEquals(GroupItemView::Create($rows[0]), $results[0]);
         $this->assertEquals(GroupItemView::Create($rows[1]), $results[1]);
-        $this->assertTrue($this->db->ContainsCommand($expected), "missing select group command");
+        $this->assertTrue($this->db->ContainsCommand($expected), 'missing select group command');
 
         $pageInfo = $list->PageInfo();
         $this->assertEquals($count, $pageInfo->Total);
@@ -278,7 +280,7 @@ class GroupRepositoryTest extends TestBase
         $this->assertEquals(GroupItemView::Create($rows[0]), $groups[0]);
         $this->assertEquals(GroupItemView::Create($rows[1]), $groups[1]);
 
-        $this->assertTrue($this->db->ContainsCommand($getGroupsCommand), "missing select group command");
+        $this->assertTrue($this->db->ContainsCommand($getGroupsCommand), 'missing select group command');
     }
 
     private function GetGroupUserRow($userId, $firstName, $lastName)

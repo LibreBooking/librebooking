@@ -1,1 +1,1 @@
-<p>L&apos;account di {$UserFullName} &egrave; stato cancellato da {$AdminFullName}.</p>
+<p>L'account di {$UserFullName} è stato cancellato da {$AdminFullName}.</p>

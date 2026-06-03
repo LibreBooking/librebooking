@@ -1,13 +1,13 @@
 {if $Layout->HasPeakTimesDefined()}
 	{assign var=p value=$Layout->GetPeakTimes()}
 
-	<div class="peakTimes" data-all-day="{$p->IsAllDay()}" data-start-time="{$p->GetBeginTime()->Format('h:i A')}"
-		data-end-time="{$p->GetEndTime()->Format('h:i A')}">
+	<div class="peakTimes" data-all-day="{$p->IsAllDay()}" data-start-time="{$p->GetBeginTime()}"
+		data-end-time="{$p->GetEndTime()}">
 		{if $p->IsAllDay()}
 			{translate key=AllDay}
 		{else}
 			{translate key=Between}
-			{$p->GetBeginTime()->Format('h:i A')} - {$p->GetEndTime()->Format('h:i A')}
+			{formatdate date=$p->GetBeginTime() key='period_time'} - {formatdate date=$p->GetEndTime() key='period_time'}
 		{/if}
 	</div>
 

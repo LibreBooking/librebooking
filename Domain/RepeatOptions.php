@@ -88,7 +88,7 @@ abstract class RepeatOptionsAbstract implements IRepeatOptions
 
     public function ConfigurationString()
     {
-        return sprintf("interval=%s|termination=%s", $this->_interval, $this->_terminationDate->ToDatabase());
+        return sprintf('interval=%s|termination=%s', $this->_interval, $this->_terminationDate->ToDatabase());
     }
 
     public function Equals(IRepeatOptions $repeatOptions)
@@ -296,11 +296,15 @@ class RepeatWeekly extends RepeatOptionsAbstract
     public function ConfigurationString()
     {
         $config = parent::ConfigurationString();
-        return sprintf("%s|days=%s", $config, implode(',', $this->_daysOfWeek));
+        return sprintf('%s|days=%s', $config, implode(',', $this->_daysOfWeek));
     }
 
     public function HasSameConfigurationAs(IRepeatOptions $repeatOptions)
     {
+        if (!$repeatOptions instanceof self) {
+            return false;
+        }
+
         return parent::HasSameConfigurationAs($repeatOptions) && $this->_daysOfWeek == $repeatOptions->_daysOfWeek;
     }
 }
@@ -350,7 +354,7 @@ class RepeatDayOfMonth extends RepeatOptionsAbstract
     public function ConfigurationString()
     {
         $config = parent::ConfigurationString();
-        return sprintf("%s|type=%s", $config, RepeatMonthlyType::DayOfMonth);
+        return sprintf('%s|type=%s', $config, RepeatMonthlyType::DayOfMonth);
     }
 
     private function DayExistsInNextMonth($date, $monthsFromStart)
@@ -455,7 +459,7 @@ class RepeatWeekDayOfMonth extends RepeatOptionsAbstract
     public function ConfigurationString()
     {
         $config = parent::ConfigurationString();
-        return sprintf("%s|type=%s", $config, RepeatMonthlyType::DayOfWeek);
+        return sprintf('%s|type=%s', $config, RepeatMonthlyType::DayOfWeek);
     }
 
     private function GetWeekNumber(Date $firstDate, $firstWeekdayOfMonth)
@@ -555,7 +559,7 @@ class RepeatCustom implements IRepeatOptions
 
     public function ConfigurationString()
     {
-        return "";
+        return '';
     }
 
     public function RepeatType()
@@ -682,7 +686,7 @@ class RepeatConfiguration
      */
     public static function Create($repeatType, $configurationString)
     {
-        $allparts = explode('|', $configurationString);
+        $allparts = explode('|', (string) ($configurationString ?? ''));
         $configParts = [];
 
         if (!empty($allparts[0])) {

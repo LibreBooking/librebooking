@@ -6,7 +6,7 @@
 电话: {$Phone}<br/>
 单位: {$Organization}<br/>
 职位: {$Position}<br/>
-密码: {$Password}</p>
+密码: {$Password|escape:'html'}</p>
 {if !empty($CreatedBy)}
 	创建者: {$CreatedBy}
 {/if}

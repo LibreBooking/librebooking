@@ -1,3 +1,6 @@
+Hallo,<br/>
+Sie wurden zu einer Reservierung in {$AppTitle} eingeladen.<br/>
+<br/> 
 	Reservierungsdetails:
 	<br/>
 	<br/>
@@ -22,7 +25,7 @@
 
 	{if count($RepeatDates) gt 0}
 		<br/>
-		Die Reservierung gilt für den/die folgenden Tag(e):
+		Die Reservierung gilt f&uuml;r den/die folgenden Tag(e):
 		<br/>
 	{/if}
 
@@ -31,7 +34,7 @@
 	{/foreach}
 
 	{if $Accessories|default:array()|count > 0}
-		<br/>Zubehör:<br/>
+		<br/>Zubeh&ouml;r:<br/>
 		{foreach from=$Accessories item=accessory}
 			({$accessory->QuantityReserved}) {$accessory->Name}<br/>
 		{/foreach}
@@ -39,16 +42,16 @@
 
 	{if $RequiresApproval}
 		<br/>
-		Eine oder mehrere Ressourcen benötigen eine Genehmigung.
-		Diese Reservierung wird zurückgehalten, bis sie genehmigt ist.
+		Eine oder mehrere Ressourcen ben&ouml;tigen eine Genehmigung.
+		Diese Reservierung wird zur&uuml;ckgehalten, bis sie genehmigt ist.
 	{/if}
 
 	<br/>
-	Möchten Sie teilnehmen? <a href="{$ScriptUrl}/{$AcceptUrl}">Ja</a> <a href="{$ScriptUrl}/{$DeclineUrl}">Nein</a>
+	M&ouml;chten Sie teilnehmen? <a href="{$ScriptUrl}/{$AcceptUrl}">Ja</a> <a href="{$ScriptUrl}/{$DeclineUrl}">Nein</a>
 	<br/>
 	<br/>
 
 	<a href="{$ScriptUrl}/{$ReservationUrl}">Reservierung ansehen</a> |
-	<a href="{$ScriptUrl}/{$ICalUrl}">Zum Kalender hinzufügen</a> |
-	<a href="{$ScriptUrl}">Anmelden bei LibreBooking</a>
+	<a href="{$ScriptUrl}/{$ICalUrl}">Zum Kalender hinzuf&uuml;gen</a> |
+	<a href="{$ScriptUrl}">{$AppTitle}-Anmeldung</a>
 

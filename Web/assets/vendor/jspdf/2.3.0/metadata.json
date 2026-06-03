@@ -1,0 +1,8 @@
+{
+  "name": "jspdf",
+  "version": "2.3.0",
+  "description": "Client-side JavaScript PDF generation for everyone.",
+  "homepage": "https://github.com/MrRio/jsPDF",
+  "source": "https://github.com/MrRio/jsPDF/releases/tag/v2.3.0",
+  "license": "MIT"
+}

@@ -6,6 +6,7 @@ require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailTemplateContext.php');
 
 abstract class ReservationEmailMessage extends EmailMessage
 {
@@ -20,14 +21,11 @@ abstract class ReservationEmailMessage extends EmailMessage
     protected $reservationSeries;
 
     /**
-     * @var IResource
+     * @var BookableResource
      */
     protected $primaryResource;
 
-    /**
-     * @var string
-     */
-    protected $timezone;
+    protected ?string $timezone;
 
     /**
      * @var IAttributeRepository
@@ -53,7 +51,8 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $this->reservationOwner = $reservationOwner;
         $this->reservationSeries = $reservationSeries;
-        $this->timezone = $reservationOwner->Timezone();
+        $ownerTimezone = $reservationOwner->Timezone();
+        $this->timezone = !empty($ownerTimezone) ? $ownerTimezone : Configuration::Instance()->GetDefaultTimezone();
         $this->attributeRepository = $attributeRepository;
         $this->primaryResource = $reservationSeries->Resource();
         $this->userRepository = $userRepository;
@@ -92,38 +91,39 @@ abstract class ReservationEmailMessage extends EmailMessage
     protected function PopulateTemplate()
     {
         $currentInstance = $this->reservationSeries->CurrentInstance();
+        $context = new ReservationEmailTemplateContext(
+            reservationSeries: $this->reservationSeries,
+            reservationOwner: $this->reservationOwner,
+            primaryResource: $this->primaryResource,
+            attributeRepository: $this->attributeRepository
+        );
+
         $this->Set('UserName', $this->reservationOwner->FullName());
         $this->Set('StartDate', $currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $currentInstance->EndDate()->ToTimezone($this->timezone));
         $this->Set('ScheduleId', $this->reservationSeries->ScheduleId());
         $this->Set('ResourceName', $this->reservationSeries->Resource()->GetName());
-        $img = $this->reservationSeries->Resource()->GetImage();
-        if (!empty($img)) {
-            $this->Set('ResourceImage', $this->GetFullImagePath($img));
+        $resourceImage = ReservationEmailTemplateContext::BuildResourceImageUrl($this->reservationSeries->Resource()->GetImage());
+        if ($resourceImage != null) {
+            $this->Set('ResourceImage', $resourceImage);
         }
+
         $this->Set('Title', $this->reservationSeries->Title());
         $this->Set('Description', $this->reservationSeries->Description());
 
-        $repeatDates = [];
-        $repeatRanges = [];
-        if ($this->reservationSeries->IsRecurring()) {
-            foreach ($this->reservationSeries->Instances() as $repeated) {
-                $repeatDates[] = $repeated->StartDate()->ToTimezone($this->timezone);
-                $repeatRanges[] = $repeated->Duration()->ToTimezone($this->timezone);
-            }
-        }
-        $this->Set('RepeatDates', $repeatDates);
-        $this->Set('RepeatRanges', $repeatRanges);
+        $repeatVariables = $context->GetRecurrenceInstances($this->timezone);
+        $this->Set('RepeatDates', $repeatVariables['RepeatDates']);
+        $this->Set('RepeatRanges', $repeatVariables['RepeatRanges']);
         $this->Set('RequiresApproval', $this->reservationSeries->RequiresApproval());
 
-        $this->Set('ReservationUrl', sprintf("%s?%s=%s", Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
+        $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
 
-        $icalUrl = sprintf("export/%s?%s=%s", Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
+        $icalUrl = sprintf('export/%s?%s=%s', Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
         $this->Set('ICalUrl', $icalUrl);
 
         $googleDateFormat = Resources::GetInstance()->GetDateFormat('google');
         $googleCalendarUrl = sprintf(
-            "https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:",
+            'https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:',
             urlencode($this->reservationSeries->Title()),
             $currentInstance->StartDate()->ToUtc()->Format($googleDateFormat),
             $currentInstance->EndDate()->ToUtc()->Format($googleDateFormat),
@@ -133,26 +133,16 @@ abstract class ReservationEmailMessage extends EmailMessage
         );
         $this->Set('GoogleCalendarUrl', $googleCalendarUrl);
 
-        $resourceNames = [];
-        foreach ($this->reservationSeries->AllResources() as $resource) {
-            $resourceNames[] = $resource->GetName();
-        }
-        $this->Set('ResourceNames', $resourceNames);
+        $this->Set('ResourceNames', $context->ResourceNames());
+        $this->Set('Resources', $context->Resources());
         $this->Set('Accessories', $this->reservationSeries->Accessories());
 
-        $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
-        $attributeValues = [];
-        foreach ($attributes as $attribute) {
-            if (($attribute->HasSecondaryEntities()) && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
-                $attributeValues[] = new LBAttribute($attribute, $this->reservationSeries->GetAttributeValue($attribute->Id()));
-            }
-        }
-
+        $attributeValues = $context->ReservationAttributes();
         $this->Set('Attributes', $attributeValues);
 
-        $bookedBy = $this->reservationSeries->BookedBy();
-        if ($bookedBy != null && ($bookedBy->UserId != $this->reservationOwner->Id())) {
-            $this->Set('CreatedBy', new FullName($bookedBy->FirstName, $bookedBy->LastName));
+        $createdBy = $context->CreatedBy();
+        if ($createdBy != null) {
+            $this->Set('CreatedBy', $createdBy);
         }
 
         $minimumAutoRelease = null;
@@ -189,11 +179,6 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $this->Set('CreditsCurrent', $currentInstance->GetCreditsRequired());
         $this->Set('CreditsTotal', $this->reservationSeries->GetCreditsRequired());
-    }
-
-    private function GetFullImagePath($img)
-    {
-        return Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL) . '/' . $img;
     }
 
     /**

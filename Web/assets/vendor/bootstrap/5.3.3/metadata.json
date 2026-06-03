@@ -1,0 +1,8 @@
+{
+  "name": "bootstrap",
+  "version": "5.3.3",
+  "description": "Powerful, extensible, and feature-packed frontend toolkit.",
+  "homepage": "https://getbootstrap.com/",
+  "source": "https://github.com/twbs/bootstrap/releases/download/v5.3.3/bootstrap-5.3.3-dist.zip",
+  "license": "MIT"
+}

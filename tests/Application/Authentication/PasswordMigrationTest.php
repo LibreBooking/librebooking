@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
@@ -24,7 +26,7 @@ class PasswordMigrationTest extends TestBase
 
     public function teardown(): void
     {
-        $this->_db = null;
+        parent::teardown();
     }
 
     public function testPasswordValidatesWithNewValidationAndDoesNotMigrate()
@@ -56,6 +58,7 @@ class PasswordMigrationTest extends TestBase
 
         $migration = new PasswordMigration();
         $password = $migration->Create($this->plaintext, $oldpassword, $newpassword);
+        $this->assertInstanceOf(Password::class, $password);
         $password->Encryption = $fakeEncryption;
 
         $isValid = $password->Validate('');
@@ -64,6 +67,6 @@ class PasswordMigrationTest extends TestBase
 
         $password->Migrate($userid);
         $encrypted = $fakeEncryption->Encrypt($this->plaintext, $salt);
-        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), "did not migrate the password");
+        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), 'did not migrate the password');
     }
 }

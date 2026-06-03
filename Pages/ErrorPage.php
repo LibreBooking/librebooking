@@ -14,7 +14,7 @@ class ErrorPage extends Page
         $returnUrl = $this->server->GetQuerystring(QueryStringKeys::REDIRECT);
 
         if (empty($returnUrl)) {
-            $returnUrl = "index.php";
+            $returnUrl = 'index.php';
         }
 
         $errorMessageKey = ErrorMessages::Instance()->GetResourceKey($this->server->GetQuerystring(QueryStringKeys::MESSAGE_ID));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reports/SavedReportsPresenter.php');
 
 class SavedReportsPresenterTest extends TestBase
@@ -136,7 +138,7 @@ class FakeSavedReportsPage extends SavedReportsPage
      */
     public $_BoundReport;
     /**
-     * @var ReportDefinition
+     * @var IReportDefinition
      */
     public $_BoundDefinition;
     /**

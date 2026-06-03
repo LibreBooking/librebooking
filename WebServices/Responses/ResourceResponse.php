@@ -72,7 +72,7 @@ class ResourceResponse extends RestResponse
 
         $attributeValues = $attributes->GetAttributes($resourceId);
 
-        $i=0;
+        $i = 0;
         foreach ($attributeValues as $av) {
             $this->customAttributes[] = new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
             $i++;
@@ -106,7 +106,7 @@ class ExampleResourceResponse extends ResourceResponse
         $this->maxLength = $length;
         $this->minLength = $length;
         $this->maxNotice = $length;
-        $this->minNoticeAdd= $length;
+        $this->minNoticeAdd = $length;
         $this->minNoticeUpdate = $length;
         $this->minNoticeDelete = $length;
         $this->requiresApproval = true;

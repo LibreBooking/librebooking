@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class FakeReservationWaitlistRepository implements IReservationWaitlistRepository
@@ -40,8 +42,7 @@ class FakeReservationWaitlistRepository implements IReservationWaitlistRepositor
      */
     public function LoadById($waitlistId)
     {
-        // TODO: Implement LoadById() method.
-        return null;
+        throw new LogicException('LoadById() not implemented in FakeReservationWaitlistRepository');
     }
 
     /**

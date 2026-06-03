@@ -22,11 +22,9 @@ class da_da extends en_gb
         $dates['short_reservation_date'] = 'j/n-y G.i';
         $dates['dashboard'] = 'l, j/n G.i';
         $dates['period_time'] = 'G.i';
-        $dates['timepicker'] = 'H.i';
         $dates['mobile_reservation_date'] = 'j/n G.i';
         $dates['general_date_js'] = 'dd/mm-yy';
         $dates['general_time_js'] = 'H.mm tt';
-        $dates['timepicker_js'] = 'H.i';
         $dates['momentjs_datetime'] = 'D/M-YY H.mm';
         $dates['calendar_time'] = 'H:mmt';
         $dates['calendar_dates'] = 'j. M';
@@ -829,6 +827,7 @@ class da_da extends en_gb
         $strings['ConflictingReservationDates'] = 'Der er konflikter mellem reservationer på følgende datoer.';
         $strings['InstancesOverlapRule'] = 'I nogle af reservationerne i serien er der overlap.';
         $strings['StartDateBeforeEndDateRule'] = 'Begyndelsestidspunktet skal være før sluttidspunktet.';
+        $strings['RecurringWithoutTerminationRule'] = 'En slutdato er påkrævet for gentagne blokeringer.';
         $strings['StartIsInPast'] = 'Begyndelsestidspunktet kan ikke være i fortiden';
         $strings['EmailDisabled'] = 'Din administrator har fjernet muligheden for at få besked via e-mail.';
         $strings['ValidLayoutRequired'] = 'Tidsintervallerne skal dække alle 24 timer i døgnet og begynde og slutte kl. 00:00.';
@@ -970,7 +969,6 @@ class da_da extends en_gb
         $strings['ReportSubject'] = 'Din efterspurgte rapport (%s)';
         $strings['ReservationStartingSoonSubject'] = 'Reservationen af %s begynder snart';
         $strings['ReservationEndingSoonSubject'] = 'Reservationen af %s slutter snart';
-        ;
         $strings['UserAdded'] = 'En ny bruger er tilføjet';
         $strings['UserDeleted'] = 'Brugerkontoen for %s blev slettet af %s';
         $strings['GuestAccountCreatedSubject'] = 'Din %s kontooplysninger';
@@ -1026,7 +1024,7 @@ class da_da extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Der er ingen manglende check-out reservationer';
-        $strings['MissingCheckOutReservations'] = 'Manglende check-out reservationer';        
+        $strings['MissingCheckOutReservations'] = 'Manglende check-out reservationer';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

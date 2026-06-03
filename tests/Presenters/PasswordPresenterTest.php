@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Pages/PasswordPage.php');
 require_once(ROOT_DIR . 'Presenters/PasswordPresenter.php');
 
@@ -62,7 +64,7 @@ class PasswordPresenterTest extends TestBase
         $passwordEncryption = new PasswordEncryption();
         $salt = $passwordEncryption->Salt();
 
-        $current = "some password";
+        $current = 'some password';
         $user = new User();
 
         $encrypted = $passwordEncryption->Encrypt($current, $salt);

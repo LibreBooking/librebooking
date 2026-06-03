@@ -52,7 +52,7 @@ if (isset($_REQUEST['session'])) {
     session_unset();
     session_destroy();
     unset($_REQUEST['session']);
-    header("Location: ".$_SERVER['PHP_SELF']);
+    header('Location: '.$_SERVER['PHP_SELF']);
 }
 
 // for this test, simply print that the authentication was successfull

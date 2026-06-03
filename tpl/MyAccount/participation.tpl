@@ -27,7 +27,8 @@
 					{foreach from=$Reservations item=reservation name=invitations}
 						{assign var=referenceNumber value=$reservation->ReferenceNumber}
 						<tr>
-							<td>{$reservation->Title|default:{translate key="NoTitleLabel"}}
+							<td><span class="reservationTitle"
+									data-reference-number="{$referenceNumber|escape:'html'}">{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}</span>
 							</td>
 							<td>
 								<a href="{Pages::RESERVATION}?{QueryStringKeys::REFERENCE_NUMBER}={$referenceNumber}"

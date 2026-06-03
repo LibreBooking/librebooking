@@ -1,6 +1,9 @@
 <?php
 
-$conf['settings']['default.timezone'] = 'US/Central';
+declare(strict_types=1);
+
+$conf['settings']['default.timezone'] = 'America/Chicago';
 $conf['settings']['allow.self.registration'] = 'true';
+$conf['settings']['image.upload.directory'] = 'legacy/images';
 $conf['settings']['database']['type'] = 'mysql';
 $conf['settings']['plugins']['Authentication'] = 'ActiveDirectory';

@@ -103,9 +103,9 @@ class AutoCompletePage extends Page
     {
         $users = $this->GetUsers($term);
 
-        $outUsers = [new XAutocompleteUser("", "")];
+        $outUsers = [new XAutocompleteUser('', '')];
         foreach ($users as $user) {
-            $value = $user->Name . " <" . $user->Email . ">";
+            $value = $user->Name . ' <' . $user->Email . '>';
             $outUsers[] = new XAutocompleteUser($value, $value);
         }
         return $outUsers;
@@ -212,7 +212,7 @@ class AutocompleteUser
 
     public function __construct($userId, $firstName, $lastName, $email, $userName, $currentCreditCount = null)
     {
-        $full = new FullName($firstName, $lastName);
+        $full = new FullName(htmlspecialchars_decode($firstName ?? '', ENT_QUOTES), htmlspecialchars_decode($lastName ?? '', ENT_QUOTES));
         $this->Id = $userId;
         $this->First = $firstName;
         $this->Last = $lastName;

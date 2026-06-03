@@ -73,12 +73,12 @@ class ReservationMovePage extends Page implements IReservationMovePage
 
     public function GetResourceId()
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return (int)$this->GetForm(FormKeys::RESOURCE_ID);
     }
 
     public function GetOriginalResourceId()
     {
-        return $this->GetForm(FormKeys::ORIGINAL_RESOURCE_ID);
+        return (int)$this->GetForm(FormKeys::ORIGINAL_RESOURCE_ID);
     }
 
     public function SetSaveSuccessfulMessage($succeeded)

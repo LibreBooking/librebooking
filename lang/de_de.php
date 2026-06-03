@@ -5,6 +5,46 @@ require_once('en_gb.php');
 
 class de_de extends en_gb
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * @return array
+     */
+    protected function _LoadDates()
+    {
+        $dates = parent::_LoadDates();
+
+        // change defaults here
+        $dates['general_date'] = 'd.m.Y';
+        $dates['general_datetime'] = 'd.m.Y H:i:s';
+        $dates['short_datetime'] = 'j.n.y H:i';
+        $dates['schedule_daily'] = 'l, d.m.Y';
+        $dates['reservation_email'] = 'd.m.Y @ H:i (e)';
+        $dates['res_popup'] = 'd.m.Y H:i';
+        $dates['res_popup_time'] = 'H:i';
+        $dates['short_reservation_date'] = 'j.n.y H:i';
+        $dates['dashboard'] = 'l, d.m.Y H:i';
+        $dates['period_time'] = 'H:i';
+        $dates['timepicker'] = 'H:i';
+        $dates['mobile_reservation_date'] = 'd.m. H:i';
+        $dates['general_date_js'] = 'dd.mm.yy';
+        $dates['general_time_js'] = 'H:mm';
+        $dates['timepicker_js'] = 'H:i';
+        $dates['momentjs_datetime'] = 'D.M.YY H:mm';
+        $dates['calendar_time'] = 'H:mm';
+        $dates['calendar_dates'] = 'd M';
+        $dates['embedded_date'] = 'j.n.'; // Numeric day.month without leading zeroes, e.g. 7.3.
+        $dates['embedded_time'] = 'H:i';
+        $dates['embedded_datetime'] = 'j.n. H:i';
+        $dates['report_date'] = '%d.%m.';
+
+        $this->Dates = $dates;
+        return $this->Dates;
+    }
+
     /**
      * @return array
      */
@@ -57,6 +97,8 @@ class de_de extends en_gb
         $strings['Error'] = 'Fehler';
         $strings['ReturnToPreviousPage'] = 'Zurück zur vorigen Seite';
         $strings['UnknownError'] = 'Unbekannter Fehler';
+        $strings['DatabaseConnectionError'] = 'Verbindung zum Datenbankserver konnte nicht hergestellt werden.<br/>Bitten Sie den Website-Administrator, Host, Benutzername und Passwort der Datenbank in <code>config/config.php</code> zu prüfen.';
+        $strings['DatabaseNotFoundError'] = 'Die konfigurierte Datenbank konnte nicht ausgewählt werden.<br/>Bitten Sie den Website-Administrator, den Datenbanknamen in <code>config/config.php</code> zu prüfen und zu bestätigen, dass die Datenbank erstellt/initialisiert wurde.';
         $strings['InsufficientPermissionsError'] = 'Sie haben keinen Zugriff auf diese Ressource.';
         $strings['MissingReservationResourceError'] = 'Keine Ressource ausgewählt';
         $strings['MissingReservationScheduleError'] = 'Kein Terminplan ausgewählt';
@@ -95,6 +137,7 @@ class de_de extends en_gb
         $strings['LaterThisWeek'] = 'Später diese Woche';
         $strings['NextWeek'] = 'Nächste Woche';
         $strings['SignOut'] = 'Abmelden';
+        $strings['JavascriptRequired'] = 'Diese Anwendung benötigt JavaScript, um ordnungsgemäß zu funktionieren. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.';
         $strings['LayoutDescription'] = 'Beginnend %s, zeige %s Tage';
         $strings['AllResources'] = 'Alle Ressourcen';
         $strings['TakeOffline'] = 'Offline gehen';
@@ -542,7 +585,7 @@ class de_de extends en_gb
         $strings['ThisWeek'] = 'Diese Woche';
         $strings['Hours'] = 'Stunden';
         $strings['Minutes'] = 'Minuten';
-        $strings['ImportICS'] = 'Aus ICS_Datei importieren';
+        $strings['ImportICS'] = 'Aus ICS-Datei importieren';
         $strings['ImportQuartzy'] = 'Von Quartzy importieren';
         $strings['OnlyIcs'] = 'Nur ICS-Dateien können hochgeladen werden.';
         $strings['IcsLocationsAsResources'] = 'Positionen werden als Ressourcen importiert.';
@@ -564,8 +607,8 @@ class de_de extends en_gb
         $strings['NameOrEmail'] = 'Name oder E-Mail-Adresse';
         $strings['ImportResources'] = 'Ressourcen importieren';
         $strings['ExportResources'] = 'Ressourcen exportieren';
-        $strings['ResourceImportInstructions'] = '<ul><li>Die Datei muss im CSV Format mit UTF-8 Kodierung vorliegen.</li><li>Name ist ein Pflichtfeld. Sollten andere Felder leer bleiben, werden Standardwerte gesetzt.</li><li>Statusoptionen sind \'Verfügbar\', \'Nicht Verfügbar\' und \'Versteckt\'.</li><li>Farben sollten als Hex-Werte angegeben werden, z.B. #ffffff.</li><li>Die Spalten zur automatischen Zuweisung und Bestätigung können wahr oder falsch sein.</li><li>Die Attribute werden nicht auf Gültigkeit überprüft.</li><li>Trenne mehrere Ressourcengruppen durch Kommata.</li><li>Benutze die beiliegende Vorlage als Beispiel.</li></ul>';
-        $strings['ReservationImportInstructions'] = '<ul><li>Die Datei muss im CSV Format mit UTF-8 Kodierung vorliegen.</li><li>E-Mail, Ressourcennamen, Beginn und Ende sind Pflichtfelder.</li><li>Beginn und Ende müssen vollständig mit Datum und Zeit angegeben werden. Das empfohlene Format ist YYYY-mm-dd HH:mm (2017-12-31 20:30).</li><li>Regeln, Konflikte und zulässige Zeitslots werden nicht überprüft.</li><li>Benachrichtigungen werden nicht verschickt.</li><li>Die Attribute werden nicht auf Gültigkeit überprüft.</li><li>Trenne mehrere Ressourcengruppen durch Kommata.</li><li>Benutze die beiliegende Vorlage als Beispiel.</li></ul>';
+        $strings['ResourceImportInstructions'] = '<ul><li>Die Datei muss im CSV-Format mit UTF-8 Kodierung vorliegen.</li><li>Name ist ein Pflichtfeld. Sollten andere Felder leer bleiben, werden Standardwerte gesetzt.</li><li>Statusoptionen sind \'Verfügbar\', \'Nicht Verfügbar\' und \'Versteckt\'.</li><li>Farben sollten als Hex-Werte angegeben werden, z.B. #ffffff.</li><li>Die Spalten zur automatischen Zuweisung und Bestätigung können wahr oder falsch sein.</li><li>Die Attribute werden nicht auf Gültigkeit überprüft.</li><li>Trenne mehrere Ressourcengruppen durch Kommata.</li><li>Benutze die beiliegende Vorlage als Beispiel.</li></ul>';
+        $strings['ReservationImportInstructions'] = '<ul><li>Die Datei muss im CSV-Format mit UTF-8 Kodierung vorliegen.</li><li>E-Mail, Ressourcennamen, Beginn und Ende sind Pflichtfelder.</li><li>Beginn und Ende müssen vollständig mit Datum und Zeit angegeben werden. Das empfohlene Format ist YYYY-mm-dd HH:mm (2017-12-31 20:30).</li><li>Regeln, Konflikte und zulässige Zeitslots werden nicht überprüft.</li><li>Benachrichtigungen werden nicht verschickt.</li><li>Die Attribute werden nicht auf Gültigkeit überprüft.</li><li>Trenne mehrere Ressourcengruppen durch Kommata.</li><li>Benutze die beiliegende Vorlage als Beispiel.</li></ul>';
         $strings['AutoReleaseMinutes'] = 'Automatische Freigabe Minuten';
         $strings['CreditsPeak'] = 'Punkte (Hauptzeit)';
         $strings['CreditsOffPeak'] = 'Punkte (Nebenzeit)';
@@ -583,7 +626,7 @@ class de_de extends en_gb
         $strings['SelectUser'] = 'Benutzer auswählen';
         $strings['InviteUsers'] = 'Benutzer einladen';
         $strings['InviteUsersLabel'] = 'Geben Sie die E-Mail-Adressen der Personen ein, die eingeladen werden sollen';
-        $strings['ApplyToCurrentUsers'] = 'Auf aktuelle benutzer anwenden';
+        $strings['ApplyToCurrentUsers'] = 'Auf aktuelle Benutzer anwenden';
         $strings['ReasonText'] = 'Begründung Text';
         $strings['NoAvailableMatchingTimes'] = 'Es sind keine Zeiträume verfügbar, die zu Ihrer Suche passen';
         $strings['Schedules'] = 'Terminpläne';
@@ -650,7 +693,7 @@ class de_de extends en_gb
         $strings['ChooseOrDropFile'] = 'Datei auswählen oder hier per Drag-and-Drop ablegen';
         $strings['SlackBookResource'] = 'Jetzt %s buchen';
         $strings['SlackBookNow'] = 'Jetzt buchen';
-        $strings['SlackNotFound'] = 'Wir konnten keine Ressource mit diesem Namen finden. Drücke Jetzt buchen um eine Reservierung anzulegen.';
+        $strings['SlackNotFound'] = 'Wir konnten keine Ressource mit diesem Namen finden. Drücke Jetzt buchen, um eine Reservierung anzulegen.';
         $strings['AutomaticallyAddToGroup'] = 'Füge neue Benutzer automatisch zu dieser Gruppe hinzu';
         $strings['GroupAutomaticallyAdd'] = 'Auto hinzufügen';
         $strings['TermsOfService'] = 'Nutzungsbedingungen';
@@ -667,8 +710,8 @@ class de_de extends en_gb
         $strings['AvailableAllYear'] = 'Ganzjährig verfügbar';
         $strings['Availability'] = 'Verfügbarkeit';
         $strings['AvailableBetween'] = 'Verfügbar zwischen';
-        $strings['ConcurrentYes'] = 'Ressources können gleichzeitg von mehr als einer Person gebucht werden';
-        $strings['ConcurrentNo'] = 'Ressources können nicht gleichzeitg von mehr als einer Person gebucht werden';
+        $strings['ConcurrentYes'] = 'Ressourcen können gleichzeitig von mehr als einer Person gebucht werden';
+        $strings['ConcurrentNo'] = 'Ressourcen können nicht gleichzeitig von mehr als einer Person gebucht werden';
         $strings['ScheduleAvailabilityEarly'] = 'Dieser Terminplan ist noch nicht verfügbar. Er wird verfügbar sein';
         $strings['ScheduleAvailabilityLate'] = 'Dieser Terminplan ist nicht mehr verfügbar. Er war verfügbar';
         $strings['ResourceImages'] = 'Ressourcenbilder';
@@ -683,6 +726,7 @@ class de_de extends en_gb
         $strings['DeleteBlackoutsBefore'] = 'Lösche Sperrzeiten älter als';
         $strings['DeletedReservations'] = 'Gelöschte Reservierungen';
         $strings['DeleteReservationsBefore'] = 'Lösche Reservierungen älter als';
+        $strings['PermanentlyPurgeAllDeletedReservations'] = 'Alle gelöschten Reservierungen endgültig löschen';
         $strings['SwitchToACustomLayout'] = 'Layout zu einem angepassten Layout ändern';
         $strings['SwitchToAStandardLayout'] = 'Layout zu einem Standardlayout ändern';
         $strings['ThisScheduleUsesACustomLayout'] = 'Dieser Terminplan nutzt ein angepasstes Layout';
@@ -698,11 +742,11 @@ class de_de extends en_gb
         $strings['Standard'] = 'Standard';
         $strings['Wide'] = 'Breit';
         $strings['Tall'] = 'Schmal';
-        $strings['EmailTemplate'] = 'E-Mail Vorlage';
-        $strings['SelectEmailTemplate'] = 'E-Mail Vorlage auswählen';
+        $strings['EmailTemplate'] = 'E-Mail-Vorlage';
+        $strings['SelectEmailTemplate'] = 'E-Mail-Vorlage auswählen';
         $strings['ReloadOriginalContents'] = 'Ursprüngliche Inhalte wiederherstellen';
-        $strings['UpdateEmailTemplateSuccess'] = 'E-Mail Vorlage aktualisiert';
-        $strings['UpdateEmailTemplateFailure'] = 'E-Mail Vorlage konnte nicht aktualisiert werden. Überprüfen Sie, ob das Verzeichnis schreibbar ist.';
+        $strings['UpdateEmailTemplateSuccess'] = 'E-Mail-Vorlage aktualisiert';
+        $strings['UpdateEmailTemplateFailure'] = 'E-Mail-Vorlage konnte nicht aktualisiert werden. Überprüfen Sie, ob das Verzeichnis schreibbar ist.';
         $strings['BulkResourceDelete'] = 'Löschen mehrerer Ressourcen';
         $strings['NewVersion'] = 'Neue Version!';
         $strings['WhatsNew'] = 'Was ist neu?';
@@ -737,15 +781,15 @@ class de_de extends en_gb
         $strings['ResourceConcurrentReservations'] = 'Lasse %s gleichzeitige Reservierungen zu';
         $strings['ResourceConcurrentReservationsNone'] = 'Lasse keine gleichzeitigen Reservierungen zu';
         $strings['AllowConcurrentReservations'] = 'Lasse gleichzeitige Reservierungen zu';
-        $strings['ResourceDisplayInstructions'] = 'Keine Ressource ausgewählt. Sie finden die URL um eine Ressource anzuzeigen in Anwendungsverwaltung, Ressourcen. Die Ressource muss öffentlich einsehbar sein.';
+        $strings['ResourceDisplayInstructions'] = 'Keine Ressource ausgewählt. Die URL zum Anzeigen einer Ressource finden Sie unter Anwendungsverwaltung, Ressourcen. Die Ressource muss öffentlich einsehbar sein.';
         $strings['Owner'] = 'Besitzer';
         $strings['MaximumConcurrentReservations'] = 'Maximale gleichzeitige Reservierungen';
         $strings['NotifyUsers'] = 'Benutzer benachrichtigen';
         $strings['Message'] = 'Nachricht';
-        $strings['AllUsersWhoHaveAReservationInTheNext'] = 'Jemand mit einer Reserveriung in den nächsten';
+        $strings['AllUsersWhoHaveAReservationInTheNext'] = 'Jemand mit einer Reservierung in den nächsten';
         $strings['ChangeResourceStatus'] = 'Ressourcenstatus ändern';
         $strings['UpdateGroupsOnImport'] = 'Bestehende Gruppe ändern, wenn sie gefunden wird';
-        $strings['GroupsImportInstructions'] = '<ul><li>Dati muss im CSV-Format sein.</li><li>Name ist obligatorisch.</li><li>Teilnehmerlisten sind kommagetrennte Listen von E-mails.</li><li>Eine leere Teilnehmerliste, lässt diese unverändert wenn Gruppen aktualisiert werden.</li><li>Berchtigungslisten sind eine Kommagetrennte Liste von Ressourcennamen.</li><li>Leere Berechtigungen lassen die bestehenden unverändert beim Aktualisieren von Gruppen.</li><li>Verwenden Sie die Vorlage als Beispiel.</li></ul>';
+        $strings['GroupsImportInstructions'] = '<ul><li>Datei muss im CSV-Format sein.</li><li>Name ist obligatorisch.</li><li>Teilnehmerlisten sind kommagetrennte Listen von E-Mails.</li><li>Eine leere Teilnehmerliste lässt diese unverändert, wenn Gruppen aktualisiert werden.</li><li>Berechtigungslisten sind eine kommagetrennte Liste von Ressourcennamen.</li><li>Leere Berechtigungen lassen die bestehenden unverändert beim Aktualisieren von Gruppen.</li><li>Verwenden Sie die Vorlage als Beispiel.</li></ul>';
         $strings['PhoneRequired'] = 'Telefonnummer wird benötigt.';
         $strings['OrganizationRequired'] = 'Organisation wird benötigt';
         $strings['PositionRequired'] = 'Position wird benötigt';
@@ -767,8 +811,8 @@ class de_de extends en_gb
         $strings['DatabaseName'] = 'Datenbank Name';
         $strings['DatabaseUser'] = 'Datenbank Benutzer';
         $strings['DatabaseHost'] = 'Datenbank Host';
-        $strings['DatabaseCredentials'] = 'Sie müssen Anmeldeinformationen eines MySQL-Benutzer angeben, der Rechte zur Erstellung von Datenbanken hat. Wenn Sie keinen haben, wenden Sie sich an Ihren Datenbank-Administrator. In vielen Fällen wird root funktionieren.';
-        $strings['MySQLUser'] = 'MySQL Benutzer';
+        $strings['DatabaseCredentials'] = 'Sie müssen Anmeldeinformationen eines MySQL-Benutzers angeben, der Rechte zur Erstellung von Datenbanken hat. Wenn Sie keinen haben, wenden Sie sich an Ihren Datenbank-Administrator. In vielen Fällen wird root funktionieren.';
+        $strings['MySQLUser'] = 'MySQL-Benutzer';
         $strings['InstallOptionsWarning'] = 'Die folgenden Optionen werden wahrscheinlich nicht in einer gehosteten Umgebung funktionieren. Wenn Sie in einer gehosteten Umgebung installieren, verwenden Sie MySQL-Assistenz Werkzeuge, um diese Schritte abzuschließen.';
         $strings['CreateDatabase'] = 'Erstelle eine Datenbank';
         $strings['CreateDatabaseUser'] = 'Erstelle einen Datenbank Benutzer';
@@ -796,10 +840,12 @@ class de_de extends en_gb
 
         // Errors
         $strings['LoginError'] = 'Benutzername oder Passwort falsch';
+        $strings['LdapConnectionErrorMessage'] = 'Es konnte keine Verbindung zum LDAP-Server hergestellt werden. Bitte kontaktieren Sie Ihren Administrator.';
+        $strings['LdapDependencyMissingMessage'] = 'Die LDAP-Authentifizierung ist nicht verfügbar, da pear/net_ldap2 fehlt. Installieren Sie es mit: composer require pear/net_ldap2';
         $strings['ReservationFailed'] = 'Ihre Reservierung konnte nicht angelegt werden';
         $strings['MinNoticeError'] = 'Diese Reservierung benötigt eine Vorankündigung. Der früheste zu reservierende Zeitpunkt ist %s.';
         $strings['MinNoticeErrorUpdate'] = 'Ändern dieser Reservierung benötigt eine Vorankündigung. Reservierungen vor %s dürfen nicht verändert werden.';
-        $strings['MinNoticeErrorDelete'] = 'Löschen dieser Reservierung benötigt eine Vorankündigung. Reservierungen vor %s dürfen nicht gelöscht werden.';
+        $strings['MinNoticeErrorDelete'] = 'Das Löschen dieser Reservierung benötigt eine Vorankündigung. Reservierungen vor %s dürfen nicht gelöscht werden.';
         $strings['MaxNoticeError'] = 'Die Reservierung liegt zu weit in der Zukunft. Der späteste Zeitpunkt ist %s.';
         $strings['MinDurationError'] = 'Diese Reservierung muss mindestens %s dauern.';
         $strings['MaxDurationError'] = 'Diese Reservierung kann nicht länger als %s dauern.';
@@ -807,8 +853,9 @@ class de_de extends en_gb
         $strings['NoResourcePermission'] = 'Sie haben keine Berechtigung für eine oder mehrere der angefragten Ressourcen';
         $strings['ConflictingReservationDates'] = 'Es gibt in Konflikt stehende Reservierungen an folgenden Tagen:';
         $strings['StartDateBeforeEndDateRule'] = 'Der Startzeitpunkt muss vor dem Endzeitpunkt liegen';
+        $strings['RecurringWithoutTerminationRule'] = 'Ein Enddatum ist für wiederkehrende Blockierungen erforderlich.';
         $strings['StartIsInPast'] = 'Der Startzeitpunkt darf nicht in der Vergangenheit liegen';
-        $strings['EmailDisabled'] = 'Em-Mail-Benachrichtigungen wurden vom Administrator deaktiviert';
+        $strings['EmailDisabled'] = 'E-Mail-Benachrichtigungen wurden vom Administrator deaktiviert';
         $strings['ValidLayoutRequired'] = 'Zeitfenster müssen für alle 24 Stunden eines Tages vorgegeben werden, von und bis 0 Uhr.';
         $strings['CustomAttributeErrors'] = 'Es gibt Probleme mit den von Ihnen hinzugefügten Attributen:';
         $strings['CustomAttributeRequired'] = '%s ist ein Pflichtfeld';
@@ -818,7 +865,7 @@ class de_de extends en_gb
         $strings['InvalidStartSlot'] = 'Die angeforderte Startzeit ist nicht gültig.';
         $strings['InvalidEndSlot'] = 'Die angeforderte Endzeit ist nicht gültig.';
         $strings['MaxParticipantsError'] = '%s ist für maximal %s Teilnehmer.';
-        $strings['ReservationCriticalError'] = 'Es kam zu einem kritischer Fehler beim Speichern Ihrer Reservierung. Wenn das Problem weiterhin besteht, wenden Sie sich an Ihren Systemadministrator.';
+        $strings['ReservationCriticalError'] = 'Es kam zu einem kritischen Fehler beim Speichern Ihrer Reservierung. Wenn das Problem weiterhin besteht, wenden Sie sich an Ihren Systemadministrator.';
         $strings['InvalidStartReminderTime'] = 'Ungültige Start-Erinnerungszeit.';
         $strings['InvalidEndReminderTime'] = 'Ungültige End-Erinnerungszeit.';
         $strings['QuotaExceeded'] = 'Kontingentgrenze überschritten.';
@@ -826,7 +873,7 @@ class de_de extends en_gb
         $strings['InvalidReservationData'] = 'Es gab Probleme mit Ihrer Reservierungsanfrage.';
         $strings['PasswordError'] = 'Das Passwort muss mindestens %s Buchstaben und mindestens %s Ziffern enthalten.';
         $strings['PasswordErrorRequirements'] = 'Das Passwort muss eine Kombination von mindestens %s Groß- und Kleinbuchstaben und %s Ziffern enthalten.';
-        $strings['NoReservationAccess'] = 'Sie dürffen diese Reservierung nicht verändern.';
+        $strings['NoReservationAccess'] = 'Sie dürfen diese Reservierung nicht verändern.';
         $strings['PasswordControlledExternallyError'] = 'Ihr Passwort wird von einem externen System verwaltet und kann deshalb hier nicht aktualisiert werden.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Zubehör %s kann nur in Zusammenhang mit Ressource %s gebucht werden';
         $strings['AccessoryMinQuantityErrorMessage'] = 'Sie müssen mindestens %s des Zubehörs %s buchen';
@@ -912,7 +959,7 @@ class de_de extends en_gb
         $strings['ManagePayments'] = 'Zahlungen';
         $strings['ViewCalendar'] = 'Kalender anschauen';
         $strings['DataCleanup'] = 'Daten aufräumen';
-        $strings['ManageEmailTemplates'] = 'E-Mail Vorlagen bearbeiten';
+        $strings['ManageEmailTemplates'] = 'E-Mail-Vorlagen bearbeiten';
         // End Page Titles
 
         // Day representations

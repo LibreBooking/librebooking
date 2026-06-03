@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationSavePresenter.php');
 require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -17,7 +19,7 @@ class ReservationSavePresenterTest extends TestBase
     private $userId;
 
     /**
-     * @var IReservationSavePage|FakeReservationSavePage
+     * @var FakeReservationSavePage
      */
     private $page;
 
@@ -26,20 +28,11 @@ class ReservationSavePresenterTest extends TestBase
      */
     private $presenter;
 
-    /**
-     * @var IReservationPersistenceService|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $persistenceService;
+    private IReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
-    /**
-     * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $resourceRepository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
     /**
      * @var FakeScheduleRepository
@@ -127,11 +120,12 @@ class ReservationSavePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$resourceId, $resource],
-                                     [$additionalResources[0], $additionalResource1],
-                                     [$additionalResources[1], $additionalResource2]
-                                 ]);
+                                     [
+                                         [$resourceId, $resource],
+                                         [$additionalResources[0], $additionalResource1],
+                                         [$additionalResources[1], $additionalResource2]
+                                     ]
+                                 );
 
         $fakeScheduleLayout = new FakeScheduleLayout();
         $fakeScheduleLayout->_SlotCount = new SlotCount(1, 2);

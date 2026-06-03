@@ -9,6 +9,7 @@
     <!-- run only a specific testsuite: 'phpunit -_-testsuite <testsuite-name>' -->
     <testsuite name="all">
       <directory>./tests</directory>
+      <exclude>./tests/Integration</exclude>
     </testsuite>
     <testsuite name="application">
       <directory>./tests/Application</directory>
@@ -28,6 +29,9 @@
     <testsuite name="webservices">
       <directory>./tests/WebServices</directory>
     </testsuite>
+    <testsuite name="integration">
+      <directory>./tests/Integration</directory>
+    </testsuite>
   </testsuites>
   <!--  to generate coverage report: phpunit -_-coverage-html ./var/ -->
   <php>
@@ -40,7 +44,7 @@
       <directory suffix=".php">Jobs</directory>
       <directory suffix=".php">lib</directory>
       <directory suffix=".php">Pages</directory>
-      <directory suffix=".php">Plugins</directory>
+      <directory suffix=".php">plugins</directory>
       <directory suffix=".php">Presenters</directory>
       <directory suffix=".php">Web</directory>
       <directory suffix=".php">WebServices</directory>

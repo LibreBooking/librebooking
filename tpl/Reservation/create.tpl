@@ -23,6 +23,12 @@
                 <div class="reservationHeader">
                     <h3 class="mb-0">{block name=reservationHeader}{translate key="CreateReservationHeading"}{/block}
                     </h3>
+                    {if !empty($ReferenceNumber)}
+                        <div class="form-group">
+                            <label class="fw-bold">{translate key=ReferenceNumber}</label>
+                            {$ReferenceNumber}
+                        </div>
+                    {/if}
                 </div>
                 <div class="float-end buttonsEdit">
                     <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -125,11 +131,9 @@
                     <div class="d-flex flex-wrap">
                         <div class="form-group d-flex align-items-center me-2">
                             <label for="BeginDate" class="reservationDate fw-bold">{translate key='BeginDate'}</label>
-                            <input type="date" id="BeginDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
-                                value="{formatdate date=$StartDate key=system}" />
-                            <input type="hidden" id="formattedBeginDate" {formname key=BEGIN_DATE}
-                                value="{formatdate date=$StartDate key=system}" />
+                            <input type="text" id="BeginDate"
+                                class="form-control form-control-sm d-inline-block w-auto{if $LockPeriods} no-show{/if}"
+                                {formname key=BEGIN_DATE} />
                             <select id="BeginPeriod" {formname key=BEGIN_PERIOD}
                                 class="form-select form-select-sm w-auto timeinput{if $LockPeriods} no-show{/if}"
                                 title="Begin time">
@@ -150,11 +154,9 @@
                         <div class="form-group d-flex align-items-center">
                             <label for="EndDate"
                                 class="reservationDate fw-bold text-md-end pe-md-1">{translate key='EndDate'}</label>
-                            <input type="date" id="EndDate"
-                                class="form-control form-control-sm d-inline-block dateinput{if $LockPeriods} no-show{/if}"
-                                value="{formatdate date=$EndDate key=system}" />
-                            <input type="hidden" id="formattedEndDate" {formname key=END_DATE}
-                                value="{formatdate date=$EndDate key=system}" />
+                            <input type="text" id="EndDate"
+                                class="form-control form-control-sm d-inline-block w-auto{if $LockPeriods} no-show{/if}"
+                                {formname key=END_DATE} />
                             <select id="EndPeriod" {formname key=END_PERIOD}
                                 class="form-select form-select-sm w-auto timeinput{if $LockPeriods} no-show{/if}"
                                 title="End time">
@@ -312,20 +314,11 @@
                             {if $DescriptionRequired}required="required" {/if}>{$Description}</textarea>
                     </div>
 
-                    {if !empty($ReferenceNumber)}
-                    <div class="">
-                        <div class="form-group">
-                            <label class="fw-bold">{translate key=ReferenceNumber}</label>
-                            {$ReferenceNumber}
-                        </div>
-                    </div>
-                    {/if}
                 </div>
             </div>
 
-            <div class="order-bottom border-bottom py-2">
-                <div id="custom-attributes-placeholder"></div>
-            </div>
+            <div id="custom-attributes-placeholder"></div>
+
             {if $UploadsEnabled}
             <div class="border-bottom py-2">
                 <div class="reservationAttachments">
@@ -525,14 +518,13 @@
 
 {block name=extras}{/block}
 
-{include file="javascript-includes.tpl" Qtip=false}
+{include file="javascript-includes.tpl"}
 
-{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="EndRepeat" AltId="formattedEndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
-{control type="DatePickerSetupControl" ControlId="RepeatDate" AltId="formattedRepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone)}
+{control type="DatePickerSetupControl" ControlId="BeginDate" DefaultDate=$StartDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="EndDate" DefaultDate=$EndDate MinDate=$AvailabilityStart MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="EndRepeat" DefaultDate=$RepeatTerminationDate MinDate=$StartDate MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday}
+{control type="DatePickerSetupControl" ControlId="RepeatDate" MaxDate=$AvailabilityEnd FirstDay=$FirstWeekday MinDate=Date::Now()->ToTimezone($Timezone) Multiple=false}
 
-{jsfile src="js/moment.min.js"}
 {jsfile src="resourcePopup.js"}
 {jsfile src="userPopup.js"}
 {jsfile src="date-helper.js"}
@@ -542,9 +534,11 @@
 {jsfile src="force-numeric.js"}
 {jsfile src="reservation-reminder.js"}
 {jsfile src="ajax-helpers.js"}
-{jsfile src="js/tree.jquery.js"}
+{jsfile src="reservation-pdf.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
 {include file="Reservation/pdf_libraries.tpl"}
+{include file="Reservation/pdf.tpl"}
 <script type="text/javascript">
     $(function() {
         var scopeOptions = {
@@ -628,7 +622,8 @@
         recurrence.onChange(reservation.repeatOptionsChanged);
 
         {foreach from=$CustomRepeatDates item=date}
-        recurrence.addCustomDate('{format_date date=$date key=system timezone=$Timezone}', '{format_date date=$date timezone=$Timezone}');
+        recurrence.addCustomDate('{format_date date=$date key=system timezone=$Timezone}',
+        '{format_date date=$date key=schedule_daily timezone=$Timezone}');
         {/foreach}
 
         var ajaxOptions = {
@@ -643,10 +638,6 @@
         });
 
         $('#userName').bindUserDetails();
-
-        // jsPDF
-        {include file="Reservation/pdf.tpl"}
-        //
 
         translateTooltips();
 

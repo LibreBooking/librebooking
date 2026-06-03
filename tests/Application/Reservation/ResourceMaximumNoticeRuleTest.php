@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
@@ -17,11 +19,13 @@ class ResourceMaximumNoticeRuleTest extends TestBase
 
     public function testMaxNoticeIsCheckedAgainstEachReservationInstanceForEachResource()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        Date::_SetNow(Date::Create(2026, 1, 15, 12, 0, 0, 'America/New_York'));
+
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMaxNotice(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMaxNotice("23h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMaxNotice('23h00m');
 
         $reservation = new TestReservationSeries();
 
@@ -40,8 +44,8 @@ class ResourceMaximumNoticeRuleTest extends TestBase
 
     public function testOkIfLatestInstanceIsBeforeTheMaximumNoticeTime()
     {
-        $resource = new FakeBookableResource(1, "2");
-        $resource->SetMaxNotice("1h00m");
+        $resource = new FakeBookableResource(1, '2');
+        $resource->SetMaxNotice('1h00m');
 
         $reservation = new TestReservationSeries();
         $reservation->WithResource($resource);

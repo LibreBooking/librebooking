@@ -10,6 +10,6 @@ class ReservationRetryParameterRequestResponse
 
     public static function Example()
     {
-        return new ReservationRetryParameterRequestResponse('name', 'value');
+        return new ReservationRetryParameterRequestResponse('skipconflicts', 'true');
     }
 }

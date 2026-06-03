@@ -4,50 +4,64 @@
     "license": "GPL-3.0-only",
     "autoload": {},
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
         "squizlabs/php_codesniffer": "^3.7.1",
         "phpcompatibility/php-compatibility": "^9.3.5",
-        "kint-php/kint": "^4.2.3",
         "phpunit/phpunit": "^11.3",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require": {
         "php": ">=8.2",
-        "smarty/smarty": "^5.5",
-        "stripe/stripe-php": "^10.2",
-        "monolog/monolog": "^2.9",
-        "google/recaptcha": "1.2.*",
+        "smarty/smarty": "^5.8",
+        "stripe/stripe-php": "^20.1",
+        "monolog/monolog": "^3.10",
+        "google/recaptcha": "1.3.*",
         "gregwar/captcha": "^1.3",
-        "google/apiclient": "^2.0",
-        "microsoft/microsoft-graph": "^2.0",
+        "google/apiclient": "^2.19",
+        "microsoft/microsoft-graph": "^3.2",
         "joelbutcher/facebook-graph-sdk": "^6.1",
-        "mobiledetect/mobiledetectlib": "^4.8",
-        "bacon/bacon-qr-code": "^3.0",
+        "mobiledetect/mobiledetectlib": "^4.10",
+        "bacon/bacon-qr-code": "^3.1",
         "mibe/feedwriter": "^1.1",
         "sabre/vobject": "^4.5",
         "egulias/email-validator": "^4.0",
-        "phpmailer/phpmailer": "^6.10",
+        "phpmailer/phpmailer": "^7.1",
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "pear/net_ldap2": "^2.3",
+        "ext-ldap": "*"
     },
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
-        "fix": "./tools/php-cs-fixer fix -v",
-        "lint": "./tools/php-cs-fixer fix -vv --dry-run",
+        "phpcsfixer:fix": "./vendor/bin/php-cs-fixer fix -v",
+        "phpcsfixer:lint": "./vendor/bin/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
         "phpstan": "./vendor/bin/phpstan analyse",
+        "phpstan_next": "./vendor/bin/phpstan analyse -c phpstan_next.neon",
         "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
         "test": [
             "@phpunit",
-            "@lint"
+            "@phpcsfixer:lint"
         ],
-        "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0"
+        "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
+        "preflight": "php lib/preflight.php",
+        "test:integration": "./vendor/bin/phpunit --testsuite integration --testdox",
+        "config-dist:generate": "php scripts/generate-config-dist.php --write",
+        "config-dist:check": "php scripts/generate-config-dist.php --check",
+        "env-example:generate": "php scripts/generate-env-example.php --write",
+        "env-example:check": "php scripts/generate-env-example.php --check"
     },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
             "tbachert/spi": true
+        },
+        "platform": {
+            "php": "8.2.0"
         }
     }
 }

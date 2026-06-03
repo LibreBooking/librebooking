@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 class RegistrationTest extends TestBase
@@ -14,10 +16,7 @@ class RegistrationTest extends TestBase
      */
     private $fakeEncryption;
 
-    /**
-     * @var IUserRepository
-     */
-    private $userRepository;
+    private IUserRepository&\PHPUnit\Framework\MockObject\MockObject $userRepository;
 
     /**
      * @var FakeGroupViewRepository
@@ -33,7 +32,7 @@ class RegistrationTest extends TestBase
     private $position = 'position';
     private $additionalFields = [];
     private $password = 'password';
-    private $timezone = 'US/Eastern';
+    private $timezone = 'America/New_York';
     private $language = 'en_US';
     private $homepageId = 1;
     private $attributes = [];
@@ -57,7 +56,6 @@ class RegistrationTest extends TestBase
     public function teardown(): void
     {
         parent::teardown();
-        $this->registration = null;
     }
 
     public function testRegistersUserWhenNoManualActivationRequired()
@@ -365,16 +363,16 @@ class RegistrationTest extends TestBase
 
         $user = new AuthenticatedUser($username, $email, $fname, $lname, 'password', $langCode, $timezone, $phone, $inst, $title);
 
-        $this->assertNull($user->FirstName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->LastName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->Phone(), "needs to be null to make sure we do not clear values in the database");
+        $this->assertNull($user->FirstName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->LastName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->Phone(), 'needs to be null to make sure we do not clear values in the database');
         $this->assertEquals($email, $user->Email());
     }
 
     public function testSyncsGroups()
     {
         $userRepository = new FakeUserRepository();
-        $userRepository->_Exists = false;
+        $userRepository->_Exists = null;
 
         $username = 'un';
         $email = 'e';

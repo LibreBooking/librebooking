@@ -14,7 +14,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Eesnimi';
         $strings['LastName'] = 'Perekonnanimi';
@@ -617,6 +617,7 @@ class ee_ee extends en_gb
         $strings['NoResourcePermission'] = 'You do not have permission to access one or more of the requested resources';
         $strings['ConflictingReservationDates'] = 'Järgnevatel kuupäevadel on vastuolulised broneeringud:';
         $strings['StartDateBeforeEndDateRule'] = 'Broneeringu algusaeg peab olema enne lõppemisaega';
+        $strings['RecurringWithoutTerminationRule'] = 'Korduvate blokkide jaoks on lõppkuupäev nõutav.';
         $strings['StartIsInPast'] = 'Alguse kuupäev ja aeg ei tohi olla juba möödunud';
         $strings['EmailDisabled'] = 'Administraator on keelanud emailile teavitamise';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
@@ -788,7 +789,7 @@ class ee_ee extends en_gb
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud puuduvad';
-        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';        
+        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -806,7 +807,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -832,7 +833,7 @@ class ee_ee extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

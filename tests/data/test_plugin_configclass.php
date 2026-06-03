@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Config/PluginConfigKeys.php');
 
 class TestPluginConfigKeys extends PluginConfigKeys
@@ -13,14 +15,14 @@ class TestPluginConfigKeys extends PluginConfigKeys
     ];
 
     public const SERVER1_KEY = [
-        'key' => 'server1.key',
+        'key' => 'key',
         'type' => 'string',
         'default' => 'default2',
         'section' => 'server1'
     ];
 
     public const SERVER2_KEY = [
-        'key' => 'server2.key',
+        'key' => 'key',
         'type' => 'string',
         'default' => 'option1',
         'section' => 'server2',
@@ -30,22 +32,6 @@ class TestPluginConfigKeys extends PluginConfigKeys
             'value3' => 'Option 3'
         ]
     ];
-    public static function findByKey(string $key): ?array
-    {
-        $allKeys = [
-            self::KEY1,
-            self::SERVER1_KEY,
-            self::SERVER2_KEY
-        ];
-
-        foreach ($allKeys as $configKey) {
-            if ($configKey['key'] === $key) {
-                return $configKey;
-            }
-        }
-
-        return null;
-    }
 
     public static function findByLegacyKey(string $legacyKey): ?array
     {

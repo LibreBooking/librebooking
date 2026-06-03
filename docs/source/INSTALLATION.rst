@@ -48,7 +48,7 @@ Alternatively, you can clone the application directly from the official GitHub r
 
 .. code-block:: bash
 
-    git clone https://github.com/LibreBooking/app.git
+    git clone https://github.com/LibreBooking/librebooking.git
 
 After copying or cloning the application to your web server:
 
@@ -56,8 +56,10 @@ Install PHP dependencies using Composer:
 
    .. code-block:: bash
 
-       cd app
-       composer install
+       cd librebooking
+       # Install without the developer dependencies
+       composer install --no-dev
+       # If you will be working on the code then use: `composer install`
 
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
@@ -69,7 +71,8 @@ Important! The web server must have write access to the following directories:
 -  ``/uploads`` - File uploads (if enabled)
 -  Configured log directory (if logging is enabled)
 
-Recommended permissions are 755 for directories and 644 for files, with the web server user having write access.
+Recommended permissions are 0755 for directories and 0644 for files, with the
+web server user having write access.
 
 `Want to know why? <http://www.smarty.net/docs/en/variable.compile.dir.tpl>`__
 
@@ -86,10 +89,10 @@ minimal default settings which should be enough for the application to work.
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
 
-For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION` 
+For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION`
 for essential settings or :doc:`ADVANCED-CONFIGURATION` for comprehensive options.
 
-The admin email address can be set in the ``config/config.php`` file in the 
+The admin email address can be set in the ``config/config.php`` file in the
 settings array as ``'admin.email' => 'admin@example.com'``
 
 When you later register an account with the admin email address, the user will be given
@@ -102,8 +105,9 @@ read/write access to your configurable uploads directory specified by
 By default, LibreBooking uses standard username/password for user
 authentication.
 
-Alternatively, you can use LDAP authentication. See the plugins section of the
-application help page for more details.
+Alternatively, you can use LDAP or Active Directory authentication. See
+:doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for setup
+instructions.
 
 .. note::
    If you try to load the application at this time (eg.
@@ -111,11 +115,15 @@ application help page for more details.
 
 This is because there is no backend database configured yet. So continue on …
 
+If you want you could try running the :ref:`Preflight Check <preflight-check>` now to check your
+work. But make sure to continue on to the next section to setup the database.
+
 Database Setup
 ~~~~~~~~~~~~~~
 Edit the configuration file to set up the database connection.
 
-Open the configuration file (located at `config/config.php`) and ensure the following database settings are properly filled out:
+Open the configuration file (located at `config/config.php`) and ensure the
+following database settings are properly filled out:
 
 .. code-block:: php
 
@@ -131,18 +139,21 @@ Open the configuration file (located at `config/config.php`) and ensure the foll
         ]
     ];
 
-Ensure that the database user has the necessary privileges to create the database (if it does not exist), and to create, read, insert, update, and modify tables within it.
+Ensure that the database user has the necessary privileges to create the
+database (if it does not exist), and to create, read, insert, update, and
+modify tables within it.
 
 You have 2 ways to set up your database for the application to work.
 
-Automatic Database Setup
-^^^^^^^^^^^^^^^^^^^^^^^^
+Automatic Database Setup (Recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must have the application configured correctly before running the
 automated install.
 
 | The automated database setup only supports MySQL at this time.
-| To run the automated database setup, make sure to first set an installation password in the configuration file:
+| To run the automated database setup, make sure to first set an installation
+| password in the configuration file:
 
 .. code-block:: php
 
@@ -171,14 +182,35 @@ Manual Database Setup
   database configuration and set default values.
 | Please edit them to suit your environment before running. The files
   are located in ``librebooking/database_schema/``
-| 
+|
 | The following SQL files are available:
 | - ``create-db.sql`` - Creates the database
 | - ``create-user.sql`` - Creates the database user (optional)
-| - ``create-schema.sql`` - Creates all tables and structure
+| - ``create-schema.sql`` - Creates base table structure
+| - ``database_schema/upgrades/*/schema.sql`` - Database schema upgrades
+| - ``database_schema/upgrades/*/data.sql`` - Database data upgrades
 | - ``create-data.sql`` - Inserts initial application data
 | - ``sample-data-utf8.sql`` - Sample data for testing (optional)
+| - ``sample-data-large-utf8.sql`` - Larger sample dataset with 150 resources,
+|   20 users, 9 groups, etc. (optional, requires ``sample-data-utf8.sql`` first)
 |
+
+.. important::
+   **Correct Import Order**
+
+   The automated installer (Web/install) follows this sequence:
+
+   1. ``create-schema.sql`` - Base table structure
+   2. All upgrade scripts in ``database_schema/upgrades/`` (in version order)
+   3. ``create-data.sql`` - Initial data (depends on upgraded schema)
+   4. ``sample-data-utf8.sql`` (optional) - Sample data for testing
+   5. ``sample-data-large-utf8.sql`` (optional) - Larger sample dataset;
+      must be loaded after ``sample-data-utf8.sql``
+
+   **Warning:** Simply running create-schema.sql followed by create-data.sql will fail
+   because create-data.sql expects the fully upgraded schema including all modifications
+   from the upgrade scripts.
+
 | Import the SQL files in the following order (we recommend
   `phpMyAdmin <https://www.phpmyadmin.net/>`__):
 
@@ -212,16 +244,98 @@ file.
 | Click the SQL tab at the top of the page.
 | Import ``/database_schema/create-schema.sql`` to librebooking (or
   whatever database name was used in the creation process)
+| Import all upgrade scripts from ``/database_schema/upgrades/`` in version order.
+  For each version directory (2.1, 2.2, 2.3, etc.), import first the ``schema.sql``
+  then the ``data.sql`` file if they exist.
 | Import ``/database_schema/create-data.sql`` to librebooking (or
   whatever database name was used in the creation process)
 
 | If you have database creation privileges in MySQL
 | Open ``/database_schema/create-db.sql`` to create the database
 | Import ``/database_schema/create-schema.sql`` to create the table structure
+| Import all upgrade scripts from ``/database_schema/upgrades/`` in version order.
+  For each version directory, import ``schema.sql`` then ``data.sql`` if they exist.
 | Import ``/database_schema/create-data.sql`` to populate initial data
 | Optionally - import ``/database_schema/sample-data-utf8.sql`` to add
   sample application data (this will create 2 test users: admin/password
   and user/password for testing your installation).
+| Optionally - import ``/database_schema/sample-data-large-utf8.sql`` to add
+  a larger sample dataset (150 resources, 20 users, 9 groups). This file
+  must be loaded after ``sample-data-utf8.sql``.
+
+A helper script ``database_schema/setup-database.sh`` is provided that
+automates all of the above steps and optionally loads sample data:
+
+.. code-block:: bash
+
+   ./database_schema/setup-database.sh
+
+Scheduled Jobs (Cron)
+~~~~~~~~~~~~~~~~~~~~~
+
+LibreBooking requires background jobs for features like reminder emails.
+
+For stand-alone (non-container) deployments, set up host cron entries to
+execute the job scripts directly with PHP.
+Example crontab (adjust PHP binary path and LibreBooking path):
+
+.. code-block:: text
+
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/autorelease.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendreminders.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendmissedcheckin.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendwaitlist.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendseriesend.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sessioncleanup.php
+   0 1 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/deleteolddata.php
+
+.. _preflight-check:
+
+Preflight Check
+~~~~~~~~~~~~~~~
+
+At any point during or after installation, you can run the preflight check to
+verify that your server meets all the requirements for LibreBooking:
+
+.. code-block:: bash
+
+    composer preflight
+
+This validates:
+
+- PHP version and required/optional extensions
+- Composer dependencies are installed
+- Configuration file (``config/config.php``) exists and is valid
+- Required directories are writable
+- Database connection and schema
+
+Missing or invalid configuration will be reported as a failure. Database issues
+may also be reported as either failures or warnings, depending on the issue.
+
+To pass options, use ``--`` so Composer forwards them to the script:
+
+.. code-block:: bash
+
+    composer preflight -- --skip-db
+    composer preflight -- --help
+
+You can also run the script directly with PHP:
+
+.. code-block:: bash
+
+    php lib/preflight.php --skip-db
+
+Available options:
+
+``--no-color``
+  Disable colored output
+
+``--skip-db``
+  Skip the database connection check
+
+``--help``
+  Show help
+
 
 You are done. Try to load the application at (eg.
 http://yourhostname/librebooking/Web/).
@@ -229,7 +343,8 @@ http://yourhostname/librebooking/Web/).
 Building from Source
 ---------------------
 
-If you want to build LibreBooking from source code, the project includes a Phing build configuration.
+If you want to build LibreBooking from source code, the project includes a
+Phing build configuration.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -300,7 +415,9 @@ This creates consolidated installation files for easier deployment.
 Docker Installation (Recommended)
 ----------------------------------
 
-LibreBooking can be easily deployed using Docker containers, which provides a consistent environment and simplifies setup. This is the recommended method for new installations.
+LibreBooking can be easily deployed using Docker containers, which provides a
+consistent environment and simplifies setup. This is the recommended method for
+new installations.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -328,9 +445,9 @@ Quick Start with Docker Compose
             - PGID=1000
             - TZ=America/New_York
             - MYSQL_ROOT_PASSWORD=your_secure_root_password
-        
+
         app:
-          image: librebooking/librebooking:develop
+          image: librebooking/librebooking:develop # or use tagged version
           restart: always
           depends_on:
             - db
@@ -393,17 +510,14 @@ Docker Environment Variables
 ``LB_ENV``
   Environment mode: ``production`` (default) or ``dev``
 
-``LB_LOG_FOLDER``
+``LB_LOGGING_FOLDER``
   Log directory (default: ``/var/log/librebooking``)
 
-``LB_LOG_LEVEL``
+``LB_LOGGING_LEVEL``
   Logging level: ``none`` (default), ``debug``, ``error``
 
-``LB_LOG_SQL``
+``LB_LOGGING_SQL``
   Enable SQL logging: ``false`` (default), ``true``
-
-``LB_CRON_ENABLED``
-  Enable background cron jobs: ``false`` (default), ``true``
 
 Docker Image Versions
 ~~~~~~~~~~~~~~~~~~~~~
@@ -435,17 +549,34 @@ To persist data beyond container lifecycle, mount these directories:
 Background Jobs (Cron)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-LibreBooking requires background jobs for features like reminder emails:
+LibreBooking requires background jobs for features like reminder emails.
+
+**Docker/Container deployments**
+
+The recommended approach is to run cron in a dedicated container instance.
+Run the main app container as non-root ``www-data``, and run a second
+container from the same image with ``root`` and
+``/usr/local/bin/cron.sh`` as the entrypoint.
+
+Example docker-compose services:
 
 .. code-block:: yaml
 
-   environment:
-     - LB_CRON_ENABLED=true
+   services:
+     app:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'www-data'
+
+     cron:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'root'
+       entrypoint: /usr/local/bin/cron.sh
 
 Or run them manually:
 
 .. code-block:: bash
 
+   # For example run the sendreminders.php job
    docker exec <container_name> php -f /var/www/html/Jobs/sendreminders.php
 
 Docker Troubleshooting
@@ -471,7 +602,7 @@ Docker Troubleshooting
   -  Check container has write permissions to volumes
   -  Use named volumes instead of bind mounts for easier management
 
-For more detailed Docker configuration options and advanced setups, see the 
+For more detailed Docker configuration options and advanced setups, see the
 `LibreBooking Docker repository <https://github.com/LibreBooking/docker>`__.
 
 Registering the Administrator Account
@@ -480,6 +611,12 @@ Registering the Administrator Account
 After the database has been set up you will need to register the account
 for your application administrator. Navigate to register.php register an
 account with email address set as the ``'admin.email'`` value in your configuration.
+
+Grant administrator permissions only to trusted users. Administrator accounts
+can change configuration, users, groups, resources, schedules, announcements,
+reservations, templates, and other content that may be shown to other users or
+sent by email. Use the smallest administrator role needed for the user's
+responsibilities, and remove administrator access when it is no longer needed.
 
 Upgrading
 ---------
@@ -572,8 +709,9 @@ After registration you will be logged in automatically.
 
 At this time, it is recommended to change your password.
 
--  For LDAP authentication please login with your LDAP
-   username/password.
+-  For LDAP or Active Directory authentication, login with your directory
+   username/password. See :doc:`LDAP-Authentication` or
+   :doc:`ActiveDirectory-Authentication` for configuration details.
 
 Log Files
 ^^^^^^^^^
@@ -591,8 +729,8 @@ application or database logs. To do this:
    in your configuration file to an appropriate level. For example,
    set ``'logging' => ['level' => 'debug']`` within the settings array.
 
-For detailed information on all logging and other configuration options, 
-see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION` 
+For detailed information on all logging and other configuration options,
+see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION`
 for comprehensive options.
 
 

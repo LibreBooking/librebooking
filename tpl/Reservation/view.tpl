@@ -40,8 +40,7 @@
                     <div class="row">
                         <div class="col-md-6 no-padding-left">
                             <label class="fw-bold">{translate key='BeginDate'}</label> {formatdate date=$StartDate}
-                            <input type="hidden" id="formattedBeginDate"
-                                value="{formatdate date=$StartDate key=system}" />
+                            <input type="hidden" id="BeginDate" value="{formatdate date=$StartDate key=system}" />
                             {foreach from=$StartPeriods item=period}
                                 {if $period eq $SelectedStart}
                                     {$period->Label()}
@@ -51,7 +50,7 @@
                         </div>
                         <div class="col-md-6 no-padding-left">
                             <label class="fw-bold">{translate key='EndDate'}</label> {formatdate date=$EndDate}
-                            <input type="hidden" id="formattedEndDate" value="{formatdate date=$EndDate key=system}" />
+                            <input type="hidden" id="EndDate" value="{formatdate date=$EndDate key=system}" />
                             {foreach from=$EndPeriods item=period}
                                 {if $period eq $SelectedEnd}
                                     {$period->LabelEnd()}
@@ -62,7 +61,7 @@
                     </div>
 
                     <div class="col-12">
-                        {*<span class="like-label class="fw-bold"">{translate key=ReservationLength}</span>*}
+                        <span class="fw-bold">{translate key=ReservationLength}</span>
                         <span class="durationText">
                             <span id="durationDays">0</span> {translate key=days}
                             <span id="durationHours">0</span> {translate key=hours}
@@ -378,9 +377,11 @@
 {jsfile src="force-numeric.js"}
 {jsfile src="reservation-reminder.js"}
 {jsfile src="ajax-helpers.js"}
-{jsfile src="js/tree.jquery.js"}
+{jsfile src="reservation-pdf.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
 {include file="Reservation/pdf_libraries.tpl"}
+{include file="Reservation/pdf.tpl"}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -431,9 +432,6 @@
             return false;
         });
 
-        // jsPDF
-        {include file="Reservation/pdf.tpl"}
-        //
     });
 </script>
 {include file='globalfooter.tpl'}

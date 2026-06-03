@@ -77,11 +77,11 @@ class CAS_ProxyChain_AllowedList
     {
         phpCAS::traceBegin();
         if (empty($proxies)) {
-            phpCAS::trace("No proxies were found in the response");
+            phpCAS::trace('No proxies were found in the response');
             phpCAS::traceEnd(true);
             return true;
         } elseif (!$this->isProxyingAllowed()) {
-            phpCAS::trace("Proxies are not allowed");
+            phpCAS::trace('Proxies are not allowed');
             phpCAS::traceEnd(false);
             return false;
         } else {
@@ -104,13 +104,13 @@ class CAS_ProxyChain_AllowedList
         phpCAS::traceBegin();
         $count = 0;
         foreach ($this->_chains as $chain) {
-            phpCAS::trace("Checking chain ". $count++);
+            phpCAS::trace('Checking chain '. $count++);
             if ($chain->matches($list)) {
                 phpCAS::traceEnd(true);
                 return true;
             }
         }
-        phpCAS::trace("No proxy chain matches.");
+        phpCAS::trace('No proxy chain matches.');
         phpCAS::traceEnd(false);
         return false;
     }

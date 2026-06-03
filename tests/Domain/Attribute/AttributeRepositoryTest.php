@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/AttributeRepository.php');
 
 class AttributeRepositoryTest extends TestBase
@@ -77,7 +79,7 @@ class AttributeRepositoryTest extends TestBase
         $required = false;
         $possibleValues = 'val1,val2,val3';
         $sortOrder = '4';
-        $entityId = "12";
+        $entityId = '12';
         $adminOnly = true;
 
         $row1 = $this->GetAttributeRow(
@@ -238,28 +240,28 @@ class AttributeRepositoryTest extends TestBase
         $secondaryEntityDescriptions = null
     ) {
         return [
-                ColumnNames::ATTRIBUTE_ID => $id,
-                ColumnNames::ATTRIBUTE_LABEL => $label,
-                ColumnNames::ATTRIBUTE_TYPE => $type,
-                ColumnNames::ATTRIBUTE_CATEGORY => $category,
-                ColumnNames::ATTRIBUTE_CONSTRAINT => $regex,
-                ColumnNames::ATTRIBUTE_REQUIRED => $required,
-                ColumnNames::ATTRIBUTE_POSSIBLE_VALUES => $possibleValues,
-                ColumnNames::ATTRIBUTE_SORT_ORDER => $sortOrder,
-                ColumnNames::ATTRIBUTE_ENTITY_IDS => $entityId,
-                ColumnNames::ATTRIBUTE_ENTITY_DESCRIPTIONS => $entityDescription,
-                ColumnNames::ATTRIBUTE_ADMIN_ONLY => $adminOnly,
-                ColumnNames::ATTRIBUTE_SECONDARY_CATEGORY => $secondaryCategory,
-                ColumnNames::ATTRIBUTE_SECONDARY_ENTITY_IDS => $secondaryEntityIds,
-                ColumnNames::ATTRIBUTE_SECONDARY_ENTITY_DESCRIPTIONS => $secondaryEntityDescriptions,
+            ColumnNames::ATTRIBUTE_ID => $id,
+            ColumnNames::ATTRIBUTE_LABEL => $label,
+            ColumnNames::ATTRIBUTE_TYPE => $type,
+            ColumnNames::ATTRIBUTE_CATEGORY => $category,
+            ColumnNames::ATTRIBUTE_CONSTRAINT => $regex,
+            ColumnNames::ATTRIBUTE_REQUIRED => $required,
+            ColumnNames::ATTRIBUTE_POSSIBLE_VALUES => $possibleValues,
+            ColumnNames::ATTRIBUTE_SORT_ORDER => $sortOrder,
+            ColumnNames::ATTRIBUTE_ENTITY_IDS => $entityId,
+            ColumnNames::ATTRIBUTE_ENTITY_DESCRIPTIONS => $entityDescription,
+            ColumnNames::ATTRIBUTE_ADMIN_ONLY => $adminOnly,
+            ColumnNames::ATTRIBUTE_SECONDARY_CATEGORY => $secondaryCategory,
+            ColumnNames::ATTRIBUTE_SECONDARY_ENTITY_IDS => $secondaryEntityIds,
+            ColumnNames::ATTRIBUTE_SECONDARY_ENTITY_DESCRIPTIONS => $secondaryEntityDescriptions,
         ];
     }
 
     private function GetAttributeValueRow($attributeid, $entityId, $value)
     {
         return [
-                ColumnNames::ATTRIBUTE_ID => $attributeid,
-                ColumnNames::ATTRIBUTE_ENTITY_ID => $entityId,
-                ColumnNames::ATTRIBUTE_VALUE => $value];
+            ColumnNames::ATTRIBUTE_ID => $attributeid,
+            ColumnNames::ATTRIBUTE_ENTITY_ID => $entityId,
+            ColumnNames::ATTRIBUTE_VALUE => $value];
     }
 }

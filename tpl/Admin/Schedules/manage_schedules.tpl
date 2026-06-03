@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' InlineEdit=true Fullcalendar=true Timepicker=true DataTable=true}
+{include file='globalheader.tpl' InlineEdit=true Fullcalendar=true DataTable=true}
 
 <div id="page-manage-schedules" class="admin-page">
 
@@ -68,7 +68,14 @@
 															<span class="propertyValue scheduleAdmin fw-bold"
 																data-type="select" data-pk="{$id}"
 																data-value="{$schedule->GetAdminGroupId()}"
-																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">{($GroupLookup[$schedule->GetAdminGroupId()]) ? $GroupLookup[$schedule->GetAdminGroupId()]->Name : 'None'}</span>
+																data-name="{FormKeys::SCHEDULE_ADMIN_GROUP_ID}">
+																{assign var=adminGroupId value=$schedule->GetAdminGroupId()}
+																{if $adminGroupId !== null && isset($GroupLookup[$adminGroupId])}
+																	{$GroupLookup[$adminGroupId]->Name|escape:'html'}
+																{else}
+																	{translate key='None'}
+																{/if}
+															</span>
 															{if $AdminGroups|default:array()|count > 0}
 																<a class="link-primary update changeScheduleAdmin"><span
 																		class="visually-hidden">{translate key='ScheduleAdministrator'}</span><span
@@ -78,15 +85,16 @@
 
 														</div>
 
-														<div>
-															<div class="availabilityPlaceHolder d-inline-block">
+														<div class="availabilityPlaceHolder d-flex align-items-center">
+															<div class="availabilityContent">
 																{include file="Admin/Schedules/manage_availability.tpl" schedule=$schedule timezone=$Timezone}
-																<a class="update changeAvailability link-primary" href="#">
-																	<span
-																		class="visually-hidden">{translate key='Availability'}</span>
-																	<span class="bi bi-pencil-square"></span>
-																</a>
 															</div>
+
+															<a class="update changeAvailability link-primary ms-1" href="#">
+																<span
+																	class="visually-hidden">{translate key='Availability'}</span>
+																<span class="bi bi-pencil-square"></span>
+															</a>
 														</div>
 
 														<div class="maximumConcurrentContainer"
@@ -125,7 +133,7 @@
 																class="propertyValue defaultScheduleStyle inlineUpdate fw-bold text-decoration-underline"
 																data-type="select" data-pk="{$id}"
 																data-name="{FormKeys::SCHEDULE_DEFAULT_STYLE}"
-																data-value="{$schedule->GetDefaultStyle()}">{$StyleNames[$schedule->GetDefaultStyle()]}</span>
+																data-value="{$schedule->GetDefaultStyle()->value}">{$StyleNames[$schedule->GetDefaultStyle()->value]}</span>
 														</div>
 
 														{if $CreditsEnabled}
@@ -538,18 +546,18 @@
 								<label class="form-check-label" for="peakAllDay">{translate key=AllDay}</label>
 							</div>
 							<div id="peakTimes" class="d-flex align-items-center flex-wrap gap-1">
-								<label class="fw-bold" for="peakStartTime"> {translate key=Between}</label>
+								<label class="fw-bold" for="peakStartTime">{translate key=Between}</label>
 								<label for="peakStartTime" class="visually-hidden">Peak Begin Time</label>
 								<label for="peakEndTime" class="visually-hidden">Peak End Time</label>
-								<input type="text" id="peakStartTime"
-									class="form-control form-control-sm w-auto timeinput timepicker"
-									value="{formatdate date=$DefaultDate format='h:i A'}"
-									{formname key=PEAK_BEGIN_TIME} />
-								-
-								<input type="text" id="peakEndTime"
-									class="form-control form-control-sm w-auto timeinput timepicker"
-									value="{formatdate date=$DefaultDate->AddHours(9) format='h:i A'}"
-									{formname key=PEAK_END_TIME} />
+								<select {formname key=PEAK_BEGIN_TIME} id="peakStartTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{$DefaultDate->format('H:i')}">
+								</select>
+								<div class='mx-1'>-</div>
+								<select {formname key=PEAK_END_TIME} id="peakEndTime"
+									class="form-select form-select-sm w-auto timepicker" data-format="{$TimeFormat}"
+									data-step="30" data-default="{$DefaultDate->AddHours(9)->format('H:i')}">
+								</select>
 							</div>
 						</div>
 						<div class="form-group mb-2">
@@ -678,13 +686,11 @@
 							<div id="availableDates" class="d-flex align-items-center gap-1">
 								<label for="availabilityStartDate">{translate key=AvailableBetween}</label>
 								<label for="availabilityEndDate" class="visually-hidden">Available End Date</label>
-								<input type="date" id="availabilityStartDate"
-									class="form-control form-control-sm inline-block dateinput" />
-								<input type="hidden" id="formattedBeginDate" {formname key=AVAILABLE_BEGIN_DATE} />
-								-
-								<input type="date" id="availabilityEndDate"
-									class="form-control form-control-sm inline-block dateinput" />
-								<input type="hidden" id="formattedEndDate" {formname key=AVAILABLE_END_DATE} />
+								<input type="text" id="availabilityStartDate" {formname key=AVAILABLE_BEGIN_DATE}
+									class="form-control form-control-sm w-auto" required />
+								<div class='mx-1'>-</div>
+								<input type="text" id="availabilityEndDate" {formname key=AVAILABLE_END_DATE}
+									class="form-control form-control-sm w-auto" />
 							</div>
 						</div>
 					</div>
@@ -726,7 +732,7 @@
 
 	<div id="customLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
 		aria-labelledby="customLayoutDialogLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="customLayoutDialogLabel">{translate key=ChangeLayout}</h5>
@@ -784,8 +790,8 @@
 						</div>
 						<div class="form-group">
 							<label class="fw-bold" for="maximumConcurrent">{translate key=Resources}</label>
-							<input type="number" class="form-control required" min="0" id="maximumConcurrent"
-								{formname key=MAXIMUM_CONCURRENT_RESERVATIONS} />
+							<input type="number" class="form-control form-control-sm required" min="0"
+								id="maximumConcurrent" {formname key=MAXIMUM_CONCURRENT_RESERVATIONS} />
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -819,7 +825,7 @@
 						<div class="form-group">
 							<label class="fw-bold"
 								for="resourcesPerReservationResources">{translate key=Resources}</label>
-							<input type="number" class="form-control required" min="0"
+							<input type="number" class="form-control form-control-sm required" min="0"
 								id="resourcesPerReservationResources"
 								{formname key=MAXIMUM_RESOURCES_PER_RESERVATION} />
 						</div>
@@ -834,15 +840,16 @@
 		</form>
 	</div>
 
-	{control type="DatePickerSetupControl" ControlId="availabilityStartDate" AltId="formattedBeginDate" DefaultDate=$StartDate}
-	{control type="DatePickerSetupControl" ControlId="availabilityEndDate" AltId="formattedEndDate" DefaultDate=$EndDate}
+	{control type="DatePickerSetupControl" ControlId="availabilityStartDate" DefaultDate=$StartDate}
+	{control type="DatePickerSetupControl" ControlId="availabilityEndDate" DefaultDate=$EndDate}
 
 	{csrf_token}
-	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true Timepicker=true DataTable=true}
+	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true DataTable=true}
 	{datatablefilter tableId=$tableIdFilter}
 	{jsfile src="ajax-helpers.js"}
+	{jsfile src="date-helper.js"}
 	{jsfile src="admin/schedule.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		function setUpEditables() {
@@ -857,91 +864,98 @@
 			var updateUrl = '{$smarty.server.SCRIPT_NAME}?action=';
 
 			$('.scheduleName').editable({
-					url: updateUrl + '{ManageSchedules::ActionRename}', validate: function (value) {
-					if ($.trim(value) == '') {
-						return '{translate key=RequiredValue|escape:'javascript'}';
+				url: updateUrl + '{ManageSchedules::ActionRename}',
+				validate: function(value) {
+					if ($.trim(value) === '') {
+						return "{{translate key=RequiredValue}|escape:'javascript'}";
 					}
 				}
 			});
 
-		$('.daysVisible').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeDaysVisible}'
-		});
+			$('.daysVisible').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeDaysVisible}'
+			});
 
-		$('.dayName').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeStartDay}', source: [{
-			value: '{Schedule::Today}', text: '{$Today|escape:'javascript'}'
-		},
-		{foreach from=$DayNames item="dayName" key="dayIndex"}
-			{
-				value:{$dayIndex}, text: '{$dayName|escape:'javascript'}'
-			},
-		{/foreach}
-		]
-		});
+			$('.dayName').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeStartDay}',
+				source: [{
+						value: '{Schedule::Today}',
+						text: "{$Today|escape:'javascript'}"
+					}
+					{foreach from=$DayNames item="dayName" key="dayIndex"}
+						, {
+							value: {$dayIndex},
+							text: "{$dayName|escape:'javascript'}"
+						}
+					{/foreach}
+				]
+			});
 
-		$('.defaultScheduleStyle').editable({
-			url: updateUrl + '{ManageSchedules::ActionChangeDefaultStyle}', source: [
-			{foreach from=$StyleNames item="styleName" key="styleIndex"}
-				{
-					value: '{$styleIndex}', text: '{$styleName|escape:'javascript'}'
-				},
-			{/foreach}
-		]
-		});
+			$('.defaultScheduleStyle').editable({
+				url: updateUrl + '{ManageSchedules::ActionChangeDefaultStyle}',
+				source: [
+					{foreach from=$StyleNames item="styleName" key="styleIndex"}
+						{
+							value: '{$styleIndex}',
+							text: "{$styleName|escape:'javascript'}"
+						},
+					{/foreach}
+				]
+			});
 
-		$('.scheduleAdmin').editable({
-			url: updateUrl + '{ManageSchedules::ChangeAdminGroup}', emptytext: '{{translate key=None}|escape:'javascript'}', source: [{
-			value: '0', text: '{{translate key=None}|escape:'javascript'}'
-		},
-		{foreach from=$AdminGroups item=group}
-			{
-				value:{$group->Id()}, text: '{$group->Name()|escape:'javascript'}'
-			},
-		{/foreach}
-		]
-		});
+			$('.scheduleAdmin').editable({
+				url: updateUrl + '{ManageSchedules::ChangeAdminGroup}',
+				emptytext: "{{translate key=None}|escape:'javascript'}",
+				source: [{
+						value: '0',
+						text: "{{translate key=None}|escape:'javascript'}",
+					}
+					{foreach from=$AdminGroups item=group}
+						, {
+							value: {$group->Id()},
+							text: "{$group->Name()|escape:'javascript'}"
+						}
+					{/foreach}
+				]
+			});
 		}
 
 		$(document).ready(function() {
-					setUpEditables();
+			setUpEditables();
 
-					var opts = {
-						submitUrl: '{$smarty.server.SCRIPT_NAME}',
-						saveRedirect: '{$smarty.server.SCRIPT_NAME}',
-						changeLayoutAction: '{ManageSchedules::ActionChangeLayout}',
-						addAction: '{ManageSchedules::ActionAdd}',
-						peakTimesAction: '{ManageSchedules::ActionChangePeakTimes}',
-						makeDefaultAction: '{ManageSchedules::ActionMakeDefault}',
-						deleteAction: '{ManageSchedules::ActionDelete}',
-						availabilityAction: '{ManageSchedules::ActionChangeAvailability}',
-						enableSubscriptionAction: '{ManageSchedules::ActionEnableSubscription}',
-						disableSubscriptionAction: '{ManageSchedules::ActionDisableSubscription}',
-						switchLayout: '{ManageSchedules::ActionSwitchLayoutType}',
-						addLayoutSlot: '{ManageSchedules::ActionAddLayoutSlot}',
-						updateLayoutSlot: '{ManageSchedules::ActionUpdateLayoutSlot}',
-						deleteLayoutSlot: '{ManageSchedules::ActionDeleteLayoutSlot}',
-						maximumConcurrentAction: '{ManageSchedules::ActionChangeMaximumConcurrent}',
-						maximumResourcesAction: '{ManageSchedules::ActionChangeResourcesPerReservation}',
-						calendarOptions: {
-							buttonText: {
-								today: '{{translate key=Today}|escape:'javascript'}',
-								month: '{{translate key=Month}|escape:'javascript'}',
-								week: '{{translate key=Week}|escape:'javascript'}',
-								day: '{{translate key=Day}|escape:'javascript'}'
-								}, defaultDate: moment('{Date::Now()->ToTimezone({$Timezone})->Format('Y-m-d')}', 'YYYY-MM-DD'), eventsUrl: '{$smarty.server.SCRIPT_NAME}'
-							}
-						};
+			var opts = {
+				submitUrl: '{$smarty.server.SCRIPT_NAME}',
+				saveRedirect: '{$smarty.server.SCRIPT_NAME}',
+				changeLayoutAction: '{ManageSchedules::ActionChangeLayout}',
+				addAction: '{ManageSchedules::ActionAdd}',
+				peakTimesAction: '{ManageSchedules::ActionChangePeakTimes}',
+				makeDefaultAction: '{ManageSchedules::ActionMakeDefault}',
+				deleteAction: '{ManageSchedules::ActionDelete}',
+				availabilityAction: '{ManageSchedules::ActionChangeAvailability}',
+				enableSubscriptionAction: '{ManageSchedules::ActionEnableSubscription}',
+				disableSubscriptionAction: '{ManageSchedules::ActionDisableSubscription}',
+				switchLayout: '{ManageSchedules::ActionSwitchLayoutType}',
+				addLayoutSlot: '{ManageSchedules::ActionAddLayoutSlot}',
+				updateLayoutSlot: '{ManageSchedules::ActionUpdateLayoutSlot}',
+				deleteLayoutSlot: '{ManageSchedules::ActionDeleteLayoutSlot}',
+				maximumConcurrentAction: '{ManageSchedules::ActionChangeMaximumConcurrent}',
+				maximumResourcesAction: '{ManageSchedules::ActionChangeResourcesPerReservation}',
+				calendarOptions: {
+					buttonText: {
+						today: "{{translate key=Today}|escape:'javascript'}",
+						month: "{{translate key=Month}|escape:'javascript'}",
+						week: "{{translate key=Week}|escape:'javascript'}",
+						day: "{{translate key=Day}|escape:'javascript'}",
+						list: "{{translate key=List}|escape:'javascript'}"
+					},
+					defaultDate: '{Date::Now()->ToTimezone({$Timezone})->Format("Y-m-d")}',
+					eventsUrl: '{$smarty.server.SCRIPT_NAME}'
+				}
+			};
 
-						var scheduleManagement = new ScheduleManagement(opts);
-						scheduleManagement.init();
-
-						$('.timepicker').timepicker({
-							timeFormat: '{$TimeFormat}'
-						});
-
-
-					});
+			var scheduleManagement = new ScheduleManagement(opts);
+			scheduleManagement.init();
+		});
 	</script>
 
 </div>

@@ -141,7 +141,7 @@ class ReservationWaitlistPage extends SecurePage implements IReservationWaitlist
 
     public function GetUserId()
     {
-        return $this->GetForm(FormKeys::USER_ID);
+        return (int)$this->GetForm(FormKeys::USER_ID);
     }
 
     public function GetStartDate()
@@ -166,6 +166,6 @@ class ReservationWaitlistPage extends SecurePage implements IReservationWaitlist
 
     public function GetResourceId()
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return (int)$this->GetForm(FormKeys::RESOURCE_ID);
     }
 }

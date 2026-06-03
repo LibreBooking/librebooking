@@ -124,17 +124,17 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
             $id = $this->GetForm(FormKeys::SCHEDULE_ID);
         }
 
-        return $id;
+        return intval($id);
     }
 
     public function GetDaysToView()
     {
-        return $this->GetQuerystring(QueryStringKeys::DAY);
+        return intval($this->GetQuerystring(QueryStringKeys::DAY));
     }
 
     public function GetResourceId()
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::RESOURCE_ID));
     }
 
     public function GetFormat()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
@@ -17,11 +19,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsCheckedAgainstEachReservationInstanceForEachResourceWhenAdding()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeAdd(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeAdd("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeAdd('25h00m');
 
         $reservation = new TestReservationSeries();
 
@@ -40,8 +42,8 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testOkIfLatestInstanceIsBeforeTheMinimumNoticeTimeWhenAdding()
     {
-        $resource = new FakeBookableResource(1, "2");
-        $resource->SetMinNoticeAdd("1h00m");
+        $resource = new FakeBookableResource(1, '2');
+        $resource->SetMinNoticeAdd('1h00m');
 
         $reservation = new TestReservationSeries();
         $reservation->WithResource($resource);
@@ -57,11 +59,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsEnforcedIfOriginalStartDateOfCurrentInstanceIsAfterTheMinimumTime()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeUpdate(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeUpdate("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeUpdate('25h00m');
 
         $originalStartDate = new DateRange(Date::Now()->AddHours(24), Date::Now()->AddHours(25));
         $reservation = new TestHelperExistingReservationSeries();
@@ -81,11 +83,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsEnforcedIfNewStartDateOfCurrentInstanceIsAfterTheMinimumTime()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeUpdate(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeUpdate("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeUpdate('25h00m');
 
         $originalStartDate = new DateRange(Date::Now()->AddHours(26), Date::Now()->AddHours(27));
         $reservation = new TestHelperExistingReservationSeries();
@@ -105,11 +107,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsEnforcedEvenIfDateNotChanged()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeUpdate(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeUpdate("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeUpdate('25h00m');
 
         $originalStartDate = new DateRange(Date::Now()->AddHours(24), Date::Now()->AddHours(25));
         $reservation = new TestHelperExistingReservationSeries();
@@ -126,11 +128,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsNotEnforcedEvenIfDateNotChanged()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeUpdate(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeUpdate("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeUpdate('25h00m');
 
         $originalStartDate = new DateRange(Date::Now()->AddHours(26), Date::Now()->AddHours(27));
         $reservation = new TestHelperExistingReservationSeries();
@@ -147,11 +149,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsOKIfOriginalAndNewStartDateOfCurrentInstanceIsBeforeTheMinimumTime()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeUpdate(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeUpdate("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeUpdate('25h00m');
 
         $originalStartDate = new DateRange(Date::Now()->AddHours(25), Date::Now()->AddHours(26));
         $reservation = new TestHelperExistingReservationSeries();
@@ -171,11 +173,11 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testMinNoticeIsCheckedAgainstEachReservationInstanceForEachResourceWhenDeleting()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinNoticeDelete(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinNoticeDelete("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinNoticeDelete('25h00m');
 
         $reservation = new TestReservationSeries();
 
@@ -194,8 +196,8 @@ class ResourceMinimumNoticeRuleTest extends TestBase
 
     public function testOkIfLatestInstanceIsBeforeTheMinimumNoticeTimeWhenDeleting()
     {
-        $resource = new FakeBookableResource(1, "2");
-        $resource->SetMinNoticeAdd("1h00m");
+        $resource = new FakeBookableResource(1, '2');
+        $resource->SetMinNoticeAdd('1h00m');
 
         $reservation = new TestReservationSeries();
         $reservation->WithResource($resource);

@@ -99,12 +99,11 @@ class Authentication implements IAuthentication
 
         if ($valid) {
             Log::Debug('Successful user authentication for %s', $username);
-          }
-          else {
+        } else {
             Log::Error('Failed user authentication for %s', $username);
-          }
-        
-          return $valid;
+        }
+
+        return $valid;
     }
 
     public function Login($username, $loginContext)

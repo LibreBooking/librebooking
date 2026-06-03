@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 
 class AttributeServiceTest extends TestBase
@@ -65,11 +67,11 @@ class AttributeServiceTest extends TestBase
         $attributeList = $this->attributeService->GetAttributes($category, $entityIds);
 
         $this->assertEquals([
-                                new LBAttribute($attributes[0], 'value1'),
-                                new LBAttribute($attributes[1], 'value2'),
-                                new LBAttribute($attributes[2], 'value3'),
-                                new LBAttribute($attributes[5], null),
-                            ], $attributeList->GetAttributes(1));
+            new LBAttribute($attributes[0], 'value1'),
+            new LBAttribute($attributes[1], 'value2'),
+            new LBAttribute($attributes[2], 'value3'),
+            new LBAttribute($attributes[5], null),
+        ], $attributeList->GetAttributes(1));
         $this->assertEquals([new LBAttribute($attributes[0], null), new LBAttribute($attributes[1], null), new LBAttribute($attributes[3], 'value20')], $attributeList->GetAttributes(20));
         $this->assertEquals(['label1', 'label2', 'label3', 'label4', 'label5', 'label6'], $attributeList->GetLabels());
     }
@@ -92,7 +94,7 @@ class AttributeServiceTest extends TestBase
         ];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, $entityId);
 
@@ -109,7 +111,7 @@ class AttributeServiceTest extends TestBase
         $values = [new AttributeValue(1, 'value1')];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, null, false, $isAdmin);
 
@@ -125,7 +127,7 @@ class AttributeServiceTest extends TestBase
         $values = [new AttributeValue(1, 'value1')];
 
         $this->attributeRepository->_CustomAttributes = $attributes;
-        $this->attributeRepository->_EntityValues = $values;
+        $this->attributeRepository->_EntityValues = [];
 
         $result = $this->attributeService->Validate($category, $values, null, false, $isAdmin);
 
@@ -175,7 +177,7 @@ class AttributeServiceTest extends TestBase
 
         $this->attributeRepository->_CustomAttributes = [$unrestricted, $forUser, $notForUser, $forResource1, $resource2IsNotAllowed, $forOtherResource, $forResourceType1, $forOtherResourceType];
 
-        /** @var Attribute[] $attributes */
+        /** @var LBAttribute[] $attributes */
         $attributes = $this->attributeService->GetReservationAttributes($this->fakeUser, new ReservationView(), $requestedUserId, [$resourceId1, $resourceId2, $resourceId3]);
 
         $this->assertEquals(4, count($attributes));

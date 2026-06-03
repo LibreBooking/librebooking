@@ -74,8 +74,8 @@ phpCAS::forceAuthentication();
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 400 Bad Request');
     print
-        "<h1>I only respond to POST requests. This is a "
-        . $_SERVER['REQUEST_METHOD'] . " request.</h1>";
+        '<h1>I only respond to POST requests. This is a '
+        . $_SERVER['REQUEST_METHOD'] . ' request.</h1>';
     exit;
 }
 if (empty($_POST['favorite_color'])) {

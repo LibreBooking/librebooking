@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' }
+{include file='globalheader.tpl'}
 
 <div id="page-data-cleanup" class="admin-page">
 
@@ -6,55 +6,107 @@
         <div class="card-body">
             <h1 class="border-bottom mb-3">{translate key=DataCleanup}</h1>
 
-            <div class="mb-3 p-3 border rounded bg-light">
-                <h5><span class="badge bg-primary">{$ReservationCount} {translate key=Reservations}</span></h5>
-                <div class="input-group input-group-sm">
-                    <label class="input-group-text fw-bold"
-                        for="reservationDeleteDate">{translate key=DeleteReservationsBefore}</label>
-                    <input type="date" id="reservationDeleteDate" class="form-control dateinput"
-                        value="{formatdate date=$DeleteDate format='Y-m-d'}" />
-                    <input type="hidden" id="formattedReservationDeleteDate"
-                        value="{formatdate date=$DeleteDate key=system}" />
-                    {delete_button id='deleteReservations'}
+            <!-- Reservations Item -->
+            <div class="cleanup-item p-3 border-bottom">
+                <div class="row g-2 align-items-center">
+                    <div class="col-12 col-md-7">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-calendar-check fs-5 link-primary mt-1 me-2"></i>
+                            <div>
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=Reservations}
+                                    <span class="badge bg-primary ms-2">{$ReservationCount}</span>
+                                </div>
+                                <div class="text-muted small">{translate key=DeleteReservationsBefore}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
+                            <div class="flex-grow-1">
+                                <input type="text" id="reservationDeleteDate" class="form-control form-control-sm" />
+                            </div>
+                            <div style="min-width: 120px;">
+                                {delete_button id='deleteReservations' class='btn-sm w-100'}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-3 p-3 border rounded bg-light clearfix">
-                <h5><span class="badge bg-primary">{$DeletedReservationCount} {translate key=DeletedReservations}</span>
-                </h5>
-                <div class="form-group">
-
+            <!-- Purge Deleted Reservations -->
+            <div class="cleanup-item p-3 border-bottom">
+                <div class="row g-2 align-items-center">
+                    <div class="col-12 col-md-7">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-trash fs-5 text-warning mt-1 me-2"></i>
+                            <div>
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=DeletedReservations}
+                                    <span class="badge bg-warning text-dark ms-2">{$DeletedReservationCount}</span>
+                                </div>
+                                <div class="text-muted small">{translate key=PermanentlyPurgeAllDeletedReservations}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5 text-md-end">
+                        <button id="purgeReservations" type="button" class="btn btn-sm btn-warning w-100">
+                            <i class="bi bi-eraser me-1"></i>{translate key=Purge}
+                        </button>
+                    </div>
                 </div>
-                {delete_button id='purgeReservations' key=Purge class='btn-sm float-end'}
             </div>
 
-            <div class="mb-3 p-3 border rounded bg-light">
-                <h5><span class="badge bg-primary">{$BlackoutsCount} {translate key=ManageBlackouts}</span></h5>
-
-                <div class="input-group input-group-sm">
-                    <label class="input-group-text fw-bold"
-                        for="blackoutDeleteDate">{translate key=DeleteBlackoutsBefore}</label>
-                    <input type="date" id="blackoutDeleteDate" class="form-control input-sm inline-block dateinput"
-                        value="{formatdate date=$DeleteDate format='Y-m-d'}" />
-                    <input type="hidden" id="formattedBlackoutDeleteDate"
-                        value="{formatdate date=$DeleteDate key=system}" />
-                    {delete_button id='deleteBlackouts'}
+            <!-- Blackouts Item -->
+            <div class="cleanup-item p-3 border-bottom">
+                <div class="row g-2 align-items-center">
+                    <div class="col-12 col-md-7">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-clock-history fs-5 link-primary mt-1 me-2"></i>
+                            <div>
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=ManageBlackouts}
+                                    <span class="badge bg-primary ms-2">{$BlackoutsCount}</span>
+                                </div>
+                                <div class="text-muted small">{translate key=DeleteBlackoutsBefore}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
+                            <div class="flex-grow-1">
+                                <input type="text" id="blackoutDeleteDate" class="form-control form-control-sm" />
+                            </div>
+                            <div style="min-width: 120px;">
+                                {delete_button id='deleteBlackouts' class='btn-sm w-100'}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
             </div>
 
-            <div class="mb-3 p-3 border rounded bg-light">
-                <h5><span class="badge bg-primary">{$UserCount} {translate key=Users}</span></h5>
-
-                <div class="input-group input-group-sm">
-                    <label class="input-group-text fw-bold"
-                        for="userDeleteDate">{translate key=PermanentlyDeleteUsers}</label>
-                    <input type="date" id="userDeleteDate" class="form-control input-sm inline-block dateinput"
-                        value="{formatdate date=$DeleteDate format='Y-m-d'}" />
-                    <input type="hidden" id="formattedUserDeleteDate"
-                        value="{formatdate date=$DeleteDate key=system}" />
-                    {delete_button id='deleteUsers'}
+            <!-- Users Item -->
+            <div class="cleanup-item p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-12 col-md-7">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-person-x fs-5 link-primary mt-1 me-2"></i>
+                            <div>
+                                <div class="mb-0 d-block fs-6 fw-semibold">{translate key=Users}
+                                    <span class="badge bg-primary ms-2">{$UserCount}</span>
+                                </div>
+                                <div class="text-muted small">{translate key=PermanentlyDeleteUsers}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
+                            <div class="flex-grow-1">
+                                <input type="text" id="userDeleteDate" class="form-control form-control-sm" />
+                            </div>
+                            <div style="min-width: 120px;">
+                                {delete_button id='deleteUsers' class='btn-sm w-100'}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -178,38 +230,37 @@
 </div>
 
 {include file="javascript-includes.tpl"}
-{jsfile src="js/moment.min.js"}
 {jsfile src="ajax-helpers.js"}
 
-{control type="DatePickerSetupControl" ControlId="reservationDeleteDate" AltId="formattedReservationDeleteDate"}
-{control type="DatePickerSetupControl" ControlId="blackoutDeleteDate" AltId="formattedBlackoutDeleteDate"}
-{control type="DatePickerSetupControl" ControlId="userDeleteDate" AltId="formattedUserDeleteDate"}
+{control type="DatePickerSetupControl" ControlId="reservationDeleteDate" DefaultDate=$DeleteDate}
+{control type="DatePickerSetupControl" ControlId="blackoutDeleteDate" DefaultDate=$DeleteDate}
+{control type="DatePickerSetupControl" ControlId="userDeleteDate" DefaultDate=$DeleteDate}
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#deleteReservations').click(function(e) {
-            $('#formDeleteReservationDate').val($('#formattedReservationDeleteDate').val());
-            ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getReservationCount&date=' + $('#formattedReservationDeleteDate').val(), null, function (data) {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('deleteReservations').addEventListener('click', function(e) {
+            $('#formDeleteReservationDate').val($('#reservationDeleteDate').val());
+            ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getReservationCount&date=' + $('#reservationDeleteDate').val(), null, function (data) {
             $('#deleteReservationCount').text(data.count);
             $('#deleteReservationsDialog').modal('show');
         })
     });
 
-    $('#purgeReservations').click(function(e) {
+    document.getElementById('purgeReservations').addEventListener('click', function(e) {
         $('#purgeReservationsDialog').modal('show');
     });
 
-    $('#deleteBlackouts').click(function(e) {
-    $('#formDeleteBlackoutDate').val($('#formattedBlackoutDeleteDate').val());
-    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getBlackoutCount&date=' + $('#formattedBlackoutDeleteDate').val(), null, function (data) {
+    document.getElementById('deleteBlackouts').addEventListener('click', function(e) {
+    $('#formDeleteBlackoutDate').val($('#blackoutDeleteDate').val());
+    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getBlackoutCount&date=' + $('#blackoutDeleteDate').val(), null, function (data) {
     $('#deleteBlackoutCount').text(data.count);
     $('#deleteBlackoutDialog').modal('show');
     })
     });
 
-    $('#deleteUsers').click(function(e) {
-    $('#formDeleteUserDate').val($('#formattedUserDeleteDate').val());
-    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getUserCount&date=' + $('#formattedUserDeleteDate').val(), null, function (data) {
+    document.getElementById('deleteUsers').addEventListener('click', function(e) {
+    $('#formDeleteUserDate').val($('#userDeleteDate').val());
+    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getUserCount&date=' + $('#userDeleteDate').val(), null, function (data) {
     $('#deleteUserCount').text(data.count);
     $('#deleteUsersDialog').modal('show');
     })

@@ -179,7 +179,7 @@ class AttributeService implements IAttributeService
                 continue;
             }
 
-            $value = trim($values[$attribute->Id()]);
+            $value = trim($values[$attribute->Id()] ?? '');
             $label = $attribute->Label();
 
             if (empty($value) && ($ignoreEmpty || $isAdmin)) {

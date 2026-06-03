@@ -116,7 +116,7 @@ abstract class CAS_PGTStorage_AbstractStorage
      * @hideinitializer
      * @deprecated not used.
      */
-    public $_error_message=false;
+    public $_error_message = false;
 
     /**
      * This method sets en error message, which can be read later by

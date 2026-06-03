@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationDeletePresenter.php');
 require_once(ROOT_DIR . 'Pages/Ajax/ReservationDeletePage.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -13,20 +15,11 @@ class ReservationDeletePresenterTest extends TestBase
      */
     private $user;
 
-    /**
-     * @var IReservationDeletePage
-     */
-    private $page;
+    private IReservationDeletePage&\PHPUnit\Framework\MockObject\MockObject $page;
 
-    /**
-     * @var IDeleteReservationPersistenceService
-     */
-    private $persistenceService;
+    private IDeleteReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
 
-    /**
-     * @var IReservationHandler
-     */
-    private $handler;
+    private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
     /**
      * @var ReservationDeletePresenter

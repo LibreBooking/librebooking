@@ -219,7 +219,7 @@ class ReservationRepository implements IReservationRepository
     {
         $database = ServiceLocator::GetDatabase();
 
-//        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
+        //        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
         //		$creditAdjustment = $existingReservationSeries->GetCreditsRequired() - $existingReservationSeries->GetOriginalCreditsConsumed();
         $creditAdjustment = 0 - $existingReservationSeries->GetUnusedCreditBalance();
         if ($creditAdjustment != 0) {
@@ -340,6 +340,7 @@ class ReservationRepository implements IReservationRepository
         // get all reservation resources
         $getResourcesCommand = new GetReservationResourcesCommand($series->SeriesId());
         $reader = ServiceLocator::GetDatabase()->Query($getResourcesCommand);
+
         while ($row = $reader->GetRow()) {
             $resource = BookableResource::Create($row);
             if ($row[ColumnNames::RESOURCE_LEVEL_ID] == ResourceLevel::Primary) {
@@ -347,6 +348,18 @@ class ReservationRepository implements IReservationRepository
             } else {
                 $series->WithResource($resource);
             }
+            $attributeCommand = new GetAttributeValuesCommand(
+                $resource->GetId(),
+                CustomAttributeCategory::RESOURCE
+            );
+            $attributeReader = ServiceLocator::GetDatabase()->Query($attributeCommand);
+            while ($attributeRow = $attributeReader->GetRow()) {
+                $resource->WithAttribute(new AttributeValue(
+                    $attributeRow[ColumnNames::ATTRIBUTE_ID],
+                    $attributeRow[ColumnNames::ATTRIBUTE_VALUE]
+                ));
+            }
+            $attributeReader->Free();
         }
         $reader->Free();
     }
@@ -758,13 +771,13 @@ class InstanceAddedEventCommand extends EventCommand
         );
 
         $reservationId = $database->ExecuteInsert($insertReservation);
-//
-//        if ($reservationId <= 0)
-//        {
-//            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
-//            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
-//            throw new Exception("Could not insert reservation - conflicting times");
-//        }
+        //
+        //        if ($reservationId <= 0)
+        //        {
+        //            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
+        //            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
+        //            throw new Exception("Could not insert reservation - conflicting times");
+        //        }
         $insertReservationUser = new AddReservationUserCommand($reservationId, $this->series->UserId(), ReservationUserLevel::OWNER);
 
         $database->Execute($insertReservationUser);

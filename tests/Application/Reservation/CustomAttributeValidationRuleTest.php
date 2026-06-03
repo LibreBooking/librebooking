@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
@@ -55,8 +57,8 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                              ->method('LoadById')
                              ->willReturnMap([
-                                [$this->reservation->UserId(), $this->user],
-                                [$this->reservation->BookedBy()->UserId, $this->bookedBy]
+                                 [$this->reservation->UserId(), $this->user],
+                                 [$this->reservation->BookedBy()->UserId, $this->bookedBy]
                              ]);
 
         $this->rule = new CustomAttributeValidationRule($this->attributeService, $this->userRepository);
@@ -72,8 +74,8 @@ class CustomAttributeValidationRuleTest extends TestBase
         $errors = ['error1', 'error2'];
 
         $validationResult = new AttributeServiceValidationResult(false, $errors, [
-                new InvalidAttribute(new FakeCustomAttribute(), 'error1'),
-                new InvalidAttribute(new FakeCustomAttribute(), 'error2')]);
+            new InvalidAttribute(new FakeCustomAttribute(), 'error1'),
+            new InvalidAttribute(new FakeCustomAttribute(), 'error2')]);
 
         $this->attributeService->expects($this->once())
                 ->method('Validate')

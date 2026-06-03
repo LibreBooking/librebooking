@@ -1,4 +1,5 @@
 <?php
+
 /**
 Translation: 2014 Slovak Language: Branislav Ďorď <branislav.dord@eurogalaxy.sk>
  */
@@ -17,7 +18,7 @@ class sk extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Meno';
         $strings['LastName'] = 'Priezvisko';
@@ -510,6 +511,7 @@ class sk extends en_gb
         $strings['NoResourcePermission'] = 'Nemáte oprávnenie k jednemu alebo viac požadovaným prostriedkom';
         $strings['ConflictingReservationDates'] = 'Tu je výpis rezervácií, ktoré sú v konflikte s Vami vytvorenou:';
         $strings['StartDateBeforeEndDateRule'] = 'Začiatok rezervácie musí začínať skôr ako jej koniec.';
+        $strings['RecurringWithoutTerminationRule'] = 'Pre opakované blokovania je vyžadovaný dátum ukončenia.';
         $strings['StartIsInPast'] = 'Začiatok rezervácie nemôže být vytvorený v minulosti';
         $strings['EmailDisabled'] = 'Administrátor zakázal odosielanie e-mailových upozornení.';
         $strings['ValidLayoutRequired'] = 'Časový úsek musí byť vytvorený na celý deň - 24 hodín';
@@ -654,12 +656,12 @@ class sk extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezervácie čakajúce na schválenie';
         $strings['LaterThisMonth'] = 'Neskôr tento mesiac';
         $strings['LaterThisYear'] = 'Neskôr tento rok';
-        $strings['Remaining'] = 'Zostáva';        
+        $strings['Remaining'] = 'Zostáva';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Žiadne chýbajúce rezervácie na odchod';
-        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';        
+        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -678,7 +680,7 @@ class sk extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
         DAY NAMES
@@ -704,7 +706,7 @@ class sk extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
         MONTH NAMES

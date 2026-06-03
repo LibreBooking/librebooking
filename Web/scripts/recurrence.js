@@ -1,270 +1,324 @@
 function Recurrence(recurOptions, recurElements, prefix) {
-    prefix = prefix || '';
-    var e = {
-        repeatOptions: $('#' + prefix + 'repeatOptions'),
-        repeatDiv: $('#' + prefix + 'repeatDiv'),
-        repeatInterval: $('#' + prefix + 'repeatInterval'),
-        repeatTermination: $('#' + prefix + 'formattedEndRepeat'),
-        repeatTerminationTextbox: $('#' + prefix + 'EndRepeat'),
-        beginDate: $('#' + prefix + 'formattedBeginDate'),
-        endDate: $('#' + prefix + 'formattedEndDate'),
-        beginTime: $('#' + prefix + 'BeginPeriod'),
-        endTime: $('#' + prefix + 'EndPeriod'),
-        repeatOnWeeklyDiv: $('#' + prefix + 'repeatOnWeeklyDiv'),
-        repeatOnMonthlyDiv: $('#' + prefix + 'repeatOnMonthlyDiv'),
-        addDateBtn: $('#' + prefix + 'AddDate'),
-        repeatDateFormatted: $('#' + prefix + 'formattedRepeatDate'),
-        repeatDate: $('#' + prefix + 'RepeatDate'),
-        customDatesDiv: $('#' + prefix + 'customDatesDiv')
-    };
+  prefix = prefix || '';
+  var e = {
+    repeatOptions: $('#' + prefix + 'repeatOptions'),
+    repeatDiv: $('#' + prefix + 'repeatDiv'),
+    repeatInterval: $('#' + prefix + 'repeatInterval'),
+    repeatTermination: $('#' + prefix + 'EndRepeat'),
+    beginDate: $('#' + prefix + 'BeginDate'),
+    endDate: $('#' + prefix + 'EndDate'),
+    beginTime: $('#' + prefix + 'BeginPeriod'),
+    endTime: $('#' + prefix + 'EndPeriod'),
+    repeatOnWeeklyDiv: $('#' + prefix + 'repeatOnWeeklyDiv'),
+    repeatOnMonthlyDiv: $('#' + prefix + 'repeatOnMonthlyDiv'),
+    addDateBtn: $('#' + prefix + 'AddDate'),
+    repeatDate: document.getElementById(prefix + 'RepeatDate'),
+    customDatesDiv: $('#' + prefix + 'customDatesDiv'),
+  };
 
-    var options = recurOptions;
-    options.customRepeatExclusions = recurOptions.customRepeatExclusions || [];
+  var options = recurOptions;
+  options.customRepeatExclusions = recurOptions.customRepeatExclusions || [];
 
-    var elements = $.extend(e, recurElements);
+  var elements = $.extend(e, recurElements);
 
-    var repeatToggled = false;
-    var terminationDateSetManually = recurOptions.autoSetTerminationDate || false;
-    var changeCallback = null;
-    var repeatDates = [];
+  var repeatToggled = false;
+  var terminationDateSetManually = recurOptions.autoSetTerminationDate || false;
+  var changeCallback = null;
+  var repeatDates = [];
 
-    this.init = function () {
-        InitializeDateElements();
-        InitializeRepeatElements();
-        InitializeRepeatOptions();
-        ToggleRepeatOptions();
-        elements.addDateBtn.on('click', function (e) {
-            e.preventDefault();
-            OnRepeatDateAdded();
-        });
+  this.init = function () {
+    InitializeDateElements();
+    InitializeRepeatElements();
+    InitializeRepeatOptions();
+    ToggleRepeatOptions();
+    elements.addDateBtn.on('click', function (e) {
+      e.preventDefault();
+      OnRepeatDateAdded();
+    });
 
-        elements.customDatesDiv.on('click', '.remove-repeat-date', function (e) {
-            e.preventDefault();
-            OnRepeatDateRemoved($(e.target).data("repeat-date"));
-        });
-    };
+    elements.customDatesDiv.on('click', '.remove-repeat-date', function (e) {
+      e.preventDefault();
+      OnRepeatDateRemoved($(e.target).data('repeat-date'));
+    });
+  };
 
-    this.onChange = function (callback) {
-        changeCallback = callback;
-    };
+  this.onChange = function (callback) {
+    changeCallback = callback;
+  };
 
-    this.addCustomDate = function (systemFormattedDate, userFormattedDate) {
-        AddRepeatDate(systemFormattedDate, userFormattedDate);
-    };
+  this.addCustomDate = function (systemFormattedDate, userFormattedDate) {
+    AddRepeatDate(systemFormattedDate, userFormattedDate);
+  };
 
-    var NotifyChange = function () {
-        if (changeCallback) {
-            changeCallback(elements.repeatOptions.val(),
-                elements.repeatInterval.val(),
-                elements.repeatOnWeeklyDiv.find(':checked').map(function (_, el) {
-                    return $(el).val();
-                }).get(),
-                elements.repeatOnMonthlyDiv.find(':checked').map(function (_, el) {
-                    return $(el).val();
-                }).get(),
-                elements.repeatTermination.val());
-        }
-    };
+  var NotifyChange = function () {
+    if (changeCallback) {
+      changeCallback(
+        elements.repeatOptions.val(),
+        elements.repeatInterval.val(),
+        elements.repeatOnWeeklyDiv
+          .find(':checked')
+          .map(function (_, el) {
+            return $(el).val();
+          })
+          .get(),
+        elements.repeatOnMonthlyDiv
+          .find(':checked')
+          .map(function (_, el) {
+            return $(el).val();
+          })
+          .get(),
+        elements.repeatTermination.val()
+      );
+    }
+  };
 
-    var show = function (element) {
-        element.removeClass('d-none'); //.addClass('d-inline')
-    };
+  var show = function (element) {
+    element.removeClass('d-none'); //.addClass('d-inline')
+  };
 
-    var hide = function (element) {
-        element.addClass('d-none'); //.removeClass('d-inline')
-    };
+  var hide = function (element) {
+    element.addClass('d-none'); //.removeClass('d-inline')
+  };
 
-    var ChangeRepeatOptions = function () {
-        var repeatDropDown = elements.repeatOptions;
-        if (repeatDropDown.val() != 'none' && repeatDropDown.val() != 'custom') {
-            show($('#' + prefix + 'repeatUntilDiv'));
-        }
-        else {
-            hide($('.recur-toggle', elements.repeatDiv));
-        }
+  var RequiresTerminationDate = function (repeatType) {
+    return ['daily', 'weekly', 'monthly', 'yearly'].includes(repeatType);
+  };
 
-        hide($('.days', elements.repeatDiv));
-        hide($('.weeks', elements.repeatDiv));
-        hide($('.months', elements.repeatDiv));
-        hide($('.years', elements.repeatDiv));
-        hide($('.specific-dates', elements.repeatDiv));
+  var UpdateTerminationDateValidation = function () {
+    var isRequired = RequiresTerminationDate(elements.repeatOptions.val());
+    var altInput = elements.repeatTermination[0]?._flatpickr?.altInput
+      ? $(elements.repeatTermination[0]._flatpickr.altInput)
+      : $();
+    var requiredAsterisk = $('#' + prefix + 'repeatUntilDiv').find('.required-asterisk');
 
-        if (repeatDropDown.val() == 'daily') {
-            show($('.days', elements.repeatDiv));
-        }
+    // Ensure the hidden original flatpickr input is never marked as required.
+    // Apply native required validation only to the visible alt input.
+    elements.repeatTermination.prop('required', false);
+    elements.repeatTermination.removeClass('required');
+    altInput.prop('required', isRequired);
+    altInput.toggleClass('required', isRequired);
+    requiredAsterisk.toggleClass('d-none', !isRequired);
 
-        if (repeatDropDown.val() == 'weekly') {
-            show($('.weeks', elements.repeatDiv));
-        }
+    if (!isRequired) {
+      elements.repeatTermination.removeClass('is-invalid');
+      altInput.removeClass('is-invalid');
+    }
+  };
 
-        if (repeatDropDown.val() == 'monthly') {
-            show($('.months', elements.repeatDiv));
-        }
-
-        if (repeatDropDown.val() == 'yearly') {
-            show($('.years', elements.repeatDiv));
-        }
-
-        if (repeatDropDown.val() == 'custom') {
-            show($('.specific-dates', elements.repeatDiv));
-        }
-
-        NotifyChange();
-    };
-
-    function InitializeDateElements() {
-        elements.beginDate.change(function () {
-            ToggleRepeatOptions();
-        });
-
-        elements.endDate.change(function () {
-            ToggleRepeatOptions();
-        });
-
-        elements.beginTime.change(function () {
-            ToggleRepeatOptions();
-        });
-
-        elements.endTime.change(function () {
-            ToggleRepeatOptions();
-        });
+  var ChangeRepeatOptions = function () {
+    var repeatDropDown = elements.repeatOptions;
+    if (RequiresTerminationDate(repeatDropDown.val())) {
+      show($('#' + prefix + 'repeatUntilDiv'));
+    } else {
+      hide($('.recur-toggle', elements.repeatDiv));
     }
 
-    function InitializeRepeatElements() {
-        elements.repeatOptions.change(function () {
-            ChangeRepeatOptions();
-            AdjustTerminationDate();
-            NotifyChange();
-        });
+    hide($('.days', elements.repeatDiv));
+    hide($('.weeks', elements.repeatDiv));
+    hide($('.months', elements.repeatDiv));
+    hide($('.years', elements.repeatDiv));
+    hide($('.specific-dates', elements.repeatDiv));
 
-        elements.repeatInterval.change(function () {
-            AdjustTerminationDate();
-            NotifyChange();
-        });
-
-        elements.beginDate.change(function () {
-            AdjustTerminationDate();
-            NotifyChange();
-        });
-
-        elements.repeatTermination.change(function () {
-            terminationDateSetManually = true;
-            NotifyChange();
-        });
+    if (repeatDropDown.val() == 'daily') {
+      show($('.days', elements.repeatDiv));
     }
 
-    function InitializeRepeatOptions() {
-        if (options.repeatType) {
-            elements.repeatOptions.val(options.repeatType);
-            elements.repeatInterval.val(options.repeatInterval == '' ? 1 : options.repeatInterval);
-            ChangeRepeatOptions();
-
-            for (var i = 0; i < options.repeatWeekdays.length; i++) {
-                var id = '#' + prefix + 'repeatDay' + options.repeatWeekdays[i];
-                if (!$(id).is(':checked')) {
-                    //$(id).closest('label').button('toggle');
-                    $('label[for="' + id.replace(/#/g, '') + '"]').addClass('active');
-                }
-            }
-
-            $("#" + prefix + "repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").prop('checked', true);
-        }
-
-        elements.repeatOnWeeklyDiv.find('label').click(function (e) {
-            NotifyChange();
-        });
-        elements.repeatOnMonthlyDiv.find('label').click(function (e) {
-            NotifyChange();
-        });
+    if (repeatDropDown.val() == 'weekly') {
+      show($('.weeks', elements.repeatDiv));
     }
 
-    var ToggleRepeatOptions = function () {
-        var SetValue = function (value, disabled) {
-            elements.repeatOptions.val(value);
-            elements.repeatOptions.trigger('change');
-            if (disabled) {
-                $('select, input', elements.repeatDiv).prop("disabled", 'disabled');
-            }
-            else {
-                $('select, input', elements.repeatDiv).removeAttr("disabled");
-            }
-        };
+    if (repeatDropDown.val() == 'monthly') {
+      show($('.months', elements.repeatDiv));
+    }
 
-        if (dateHelper.MoreThanOneDayBetweenBeginAndEnd(elements.beginDate, elements.beginTime, elements.endDate, elements.endTime)) {
-            elements.repeatOptions.data["current"] = elements.repeatOptions.val();
-            repeatToggled = true;
-            if (elements.repeatOptions.val() == 'daily') {
-                elements.repeatOptions.val('none');
-                elements.repeatOptions.trigger('change');
-            }
-            elements.repeatOptions.find("option[value='daily']").prop("disabled", "disabled");
-            elements.repeatOnWeeklyDiv.addClass('d-none');
-        }
-        else {
-            if (repeatToggled) {
-                SetValue(elements.repeatOptions.data["current"], false);
-                repeatToggled = false;
-            }
-            elements.repeatOptions.find("option[value='daily']").removeAttr("disabled");
+    if (repeatDropDown.val() == 'yearly') {
+      show($('.years', elements.repeatDiv));
+    }
 
-        }
-    };
+    if (repeatDropDown.val() == 'custom') {
+      show($('.specific-dates', elements.repeatDiv));
+    }
 
-    var AdjustTerminationDate = function () {
-        if (terminationDateSetManually) {
-            return;
-        }
+    UpdateTerminationDateValidation();
+    NotifyChange();
+  };
 
-        var newEndDate = new Date(elements.endDate.val());
-        var interval = parseInt(elements.repeatInterval.val());
-        var currentEnd = new Date(elements.repeatTermination.val());
+  function InitializeDateElements() {
+    elements.beginDate.on('change', function () {
+      ToggleRepeatOptions();
+    });
 
-        var repeatOption = elements.repeatOptions.val();
+    elements.endDate.on('change', function () {
+      ToggleRepeatOptions();
+    });
 
-        if (repeatOption == 'daily') {
-            newEndDate.setDate(newEndDate.getDate() + interval);
-        }
-        else if (repeatOption == 'weekly') {
-            newEndDate.setDate(newEndDate.getDate() + (8 * interval));
-        }
-        else if (repeatOption == 'monthly') {
-            newEndDate.setMonth(newEndDate.getMonth() + interval);
-        }
-        else if (repeatOption = 'yearly') {
-            newEndDate.setFullYear(newEndDate.getFullYear() + interval);
-        }
-        else {
-            newEndDate = currentEnd;
-        }
+    elements.beginTime.on('change', function () {
+      ToggleRepeatOptions();
+    });
 
-        elements.repeatTerminationTextbox.datepicker("setDate", newEndDate);
-    };
+    elements.endTime.on('change', function () {
+      ToggleRepeatOptions();
+    });
+  }
 
-    var OnRepeatDateAdded = function () {
-        AddRepeatDate(elements.repeatDateFormatted.val(), elements.repeatDate.val());
-    };
+  function InitializeRepeatElements() {
+    elements.repeatOptions.on('change', function () {
+      ChangeRepeatOptions();
+      AdjustTerminationDate();
+      NotifyChange();
+    });
 
-    var AddRepeatDate = function (systemFormattedDate, userFormattedDate) {
-        var d = { "system": systemFormattedDate, "user": userFormattedDate };
-        if (systemFormattedDate != "" && userFormattedDate != "" && repeatDates.find(x => x.system === systemFormattedDate) === undefined && options.customRepeatExclusions.find(x => x == systemFormattedDate) === undefined) {
-            repeatDates.push(d);
-        }
+    elements.repeatInterval.on('change', function () {
+      AdjustTerminationDate();
+      NotifyChange();
+    });
 
-        DisplayRepeatDates();
+    elements.beginDate.on('change', function () {
+      AdjustTerminationDate();
+      NotifyChange();
+    });
+
+    elements.repeatTermination.on('change', function () {
+      terminationDateSetManually = true;
+      NotifyChange();
+    });
+  }
+
+  function InitializeRepeatOptions() {
+    if (options.repeatType) {
+      elements.repeatOptions.val(options.repeatType);
+      elements.repeatInterval.val(options.repeatInterval == '' ? 1 : options.repeatInterval);
+      ChangeRepeatOptions();
+
+      for (var i = 0; i < options.repeatWeekdays.length; i++) {
+        var id = prefix + 'repeatDay' + options.repeatWeekdays[i];
+        $('#' + id).prop('checked', true);
+      }
+
+      $('#' + prefix + "repeatOnMonthlyDiv :radio[value='" + options.repeatMonthlyType + "']").prop('checked', true);
+    }
+
+    elements.repeatOnWeeklyDiv
+      .find('input[type="checkbox"]')
+      .off('change')
+      .on('change', function () {
         NotifyChange();
-    };
+      });
 
-    var DisplayRepeatDates = function () {
-        var datediv = elements.customDatesDiv.find(".repeat-date-list");
-        datediv.empty();
-        repeatDates.sort((r1, r2) => r1.system.localeCompare(r2.system)).forEach((v, i) => {
-            datediv.append($("<div data-repeat-date='" + v.system + "'><a class='link-danger' href='#'><i class='bi bi-x-lg icon delete remove-repeat-date' data-repeat-date='" + v.system + "' /></a> <span>" + v.user + "</span> <input type='hidden' name='repeatCustomDates[]' value='" + v.system + "'</div>"));
-        });
-    };
-
-    var OnRepeatDateRemoved = function (systemFormattedDate) {
-        repeatDates = repeatDates.filter(d => d.system !== systemFormattedDate);
-        DisplayRepeatDates();
+    elements.repeatOnMonthlyDiv
+      .find('input[type="radio"]')
+      .off('change')
+      .on('change', function () {
         NotifyChange();
+      });
+  }
+
+  var ToggleRepeatOptions = function () {
+    var SetValue = function (value, disabled) {
+      elements.repeatOptions.val(value);
+      elements.repeatOptions.trigger('change');
+      if (disabled) {
+        $('select, input', elements.repeatDiv).prop('disabled', true);
+      } else {
+        $('select, input', elements.repeatDiv).prop('disabled', false);
+      }
     };
+
+    if (
+      dateHelper.MoreThanOneDayBetweenBeginAndEnd(
+        elements.beginDate,
+        elements.beginTime,
+        elements.endDate,
+        elements.endTime
+      )
+    ) {
+      elements.repeatOptions.data['current'] = elements.repeatOptions.val();
+      repeatToggled = true;
+      if (elements.repeatOptions.val() == 'daily') {
+        elements.repeatOptions.val('none');
+        elements.repeatOptions.trigger('change');
+      }
+      elements.repeatOptions.find("option[value='daily']").prop('disabled', true);
+      elements.repeatOnWeeklyDiv.addClass('d-none');
+    } else {
+      if (repeatToggled) {
+        SetValue(elements.repeatOptions.data['current'], false);
+        repeatToggled = false;
+      }
+      elements.repeatOptions.find("option[value='daily']").prop('disabled', false);
+    }
+  };
+
+  var AdjustTerminationDate = function () {
+    if (terminationDateSetManually) {
+      return;
+    }
+
+    var newEndDate = new Date(elements.endDate.val());
+    var interval = parseInt(elements.repeatInterval.val());
+    var currentEnd = new Date(elements.repeatTermination.val());
+
+    var repeatOption = elements.repeatOptions.val();
+
+    if (repeatOption == 'daily') {
+      newEndDate.setDate(newEndDate.getDate() + interval);
+    } else if (repeatOption == 'weekly') {
+      newEndDate.setDate(newEndDate.getDate() + 8 * interval);
+    } else if (repeatOption == 'monthly') {
+      newEndDate.setMonth(newEndDate.getMonth() + interval);
+    } else if (repeatOption == 'yearly') {
+      newEndDate.setFullYear(newEndDate.getFullYear() + interval);
+    } else {
+      newEndDate = currentEnd;
+    }
+
+    elements.repeatTermination[0]._flatpickr.setDate(newEndDate, false);
+  };
+
+  var OnRepeatDateAdded = function () {
+    AddRepeatDate(elements.repeatDate.value, elements.repeatDate._flatpickr.altInput.value);
+  };
+
+  var AddRepeatDate = function (systemFormattedDate, userFormattedDate) {
+    var d = { system: systemFormattedDate, user: userFormattedDate };
+    if (
+      systemFormattedDate != '' &&
+      userFormattedDate != '' &&
+      repeatDates.find((x) => x.system === systemFormattedDate) === undefined &&
+      options.customRepeatExclusions.find((x) => x == systemFormattedDate) === undefined
+    ) {
+      repeatDates.push(d);
+    }
+
+    DisplayRepeatDates();
+    NotifyChange();
+  };
+
+  var DisplayRepeatDates = function () {
+    var datediv = elements.customDatesDiv.find('.repeat-date-list');
+    datediv.empty();
+    repeatDates
+      .sort((r1, r2) => r1.system.localeCompare(r2.system))
+      .forEach((v, i) => {
+        datediv.append(
+          $(
+            "<div data-repeat-date='" +
+              v.system +
+              "'><a class='link-danger' href='#'><i class='bi bi-x-lg icon delete remove-repeat-date' data-repeat-date='" +
+              v.system +
+              "' /></a> <span>" +
+              v.user +
+              "</span> <input type='hidden' name='repeatCustomDates[]' value='" +
+              v.system +
+              "'</div>"
+          )
+        );
+      });
+  };
+
+  var OnRepeatDateRemoved = function (systemFormattedDate) {
+    repeatDates = repeatDates.filter((d) => d.system !== systemFormattedDate);
+    DisplayRepeatDates();
+    NotifyChange();
+  };
 }

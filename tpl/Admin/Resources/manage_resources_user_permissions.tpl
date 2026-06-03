@@ -10,7 +10,7 @@
             <tr>
                 <td>
                     <div class="form-group clearfix">
-                        <label for="permission{$u->Id}" class="float-start">{fullname first=$u->First last=$u->Last}</label>
+                        <label for="permission{$u->Id}" class="float-start">{fullname first=$u->First|unescape:'html' last=$u->Last|unescape:'html'}</label>
                         <select class="change-permission-type float-end form-select form-select-sm" style="width:auto;"
                             id="permission{$u->Id}" data-user-id="{$u->Id}">
                             <option value="{ResourcePermissionType::None}" class="none"

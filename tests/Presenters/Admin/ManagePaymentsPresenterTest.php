@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Admin/ManagePaymentsPresenter.php');
 
 class ManagePaymentsPresenterTest extends TestBase
@@ -29,12 +31,12 @@ class ManagePaymentsPresenterTest extends TestBase
     public function testPageLoadSetsCurrentCreditValues()
     {
         $creditCost = new CreditCost(44.4, 'USD');
-        $this->paymentRepository->_CreditCost = $creditCost;
+        $this->paymentRepository->_CreditCost = [$creditCost];
 
         $this->presenter->PageLoad();
 
-        $this->assertEquals($creditCost->Cost(), $this->page->_CreditCost->Cost());
-        $this->assertEquals($creditCost->Currency(), $this->page->_CreditCost->Currency());
+        $this->assertEquals($creditCost->Cost(), $this->page->_CreditCost[0]->Cost());
+        $this->assertEquals($creditCost->Currency(), $this->page->_CreditCost[0]->Currency());
     }
 
     public function testPageLoadSetsGatewayValues()
@@ -120,8 +122,9 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->page->_RefundAmount = 100;
         $this->paymentRepository->_TransactionLogView = $this->GetTransactionLogView();
 
+        /** @var FakePayPalGateway $gateway */
         $gateway = $this->paymentRepository->_PayPal;
-        $gateway->_Refund->state = "completed";
+        $gateway->_Refund->state = 'completed';
 
         $this->presenter->IssueRefund();
 

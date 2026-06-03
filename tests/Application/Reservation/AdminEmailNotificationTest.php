@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmailAdmin.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationUpdatedEmailAdmin.php');
 
@@ -28,10 +30,11 @@ class AdminEmailNotificationTest extends TestBase
         $reservation = new TestReservationSeries();
         $reservation->WithOwnerId($ownerId);
         $reservation->WithResource($resource);
+        $reservation->WithCurrentInstance(new TestReservation());
         $reservation->SetStatusId(ReservationStatus::Pending);
 
         $owner = new FakeUser($ownerId);
-        $admin1 = new UserDto(1, 'f', 'l', 'e');
+        $admin1 = new UserDto(1, 'f', 'l', 'e', null, 'de_de');
         $admin2 = new UserDto(2, 'f', 'l', 'e');
         $admin3 = new UserDto(3, 'f', 'l', 'e');
         $admin4 = new UserDto(4, 'f', 'l', 'e');
@@ -43,6 +46,7 @@ class AdminEmailNotificationTest extends TestBase
         $groupAdmins = [$admin5, $admin6, $admin2];
 
         $attributeRepo = $this->createMock('IAttributeRepository');
+        $attributeRepo->method('GetByCategory')->willReturn([]);
         $userRepo = $this->createMock('IUserRepository');
         $userRepo->expects($this->once())
                  ->method('LoadById')
@@ -77,6 +81,8 @@ class AdminEmailNotificationTest extends TestBase
 
         $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
         $this->assertInstanceOf('ReservationCreatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
+        $body = $this->fakeEmailService->_Messages[0]->Body();
+        $this->assertStringContainsString('Ressourcen-ID:', $body);
     }
 
     public function testSendsReservationUpdatedEmailIfAdminWantsIt()
@@ -133,7 +139,7 @@ class AdminEmailNotificationTest extends TestBase
         $expectedMessage1 = new ReservationUpdatedEmailAdmin($admin1, $owner, $reservation, $resource, $attributeRepo, $userRepo);
         $expectedMessage2 = new ReservationUpdatedEmailAdmin($admin2, $owner, $reservation, $resource, $attributeRepo, $userRepo);
 
-        $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
+        $this->assertEquals(6, count($this->fakeEmailService->_Messages), 'send one per person, no duplicates');
 
         $this->assertInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[0]);
         $this->assertInstanceOf('ReservationUpdatedEmailAdmin', $this->fakeEmailService->_Messages[1]);
@@ -280,7 +286,7 @@ class AdminEmailNotificationTest extends TestBase
         $expectedMessage1 = new ReservationRequiresApprovalEmailAdmin($admin1, $owner, $reservation, $resource, $attributeRepo, $userRepo);
         $expectedMessage2 = new ReservationRequiresApprovalEmailAdmin($admin2, $owner, $reservation, $resource, $attributeRepo, $userRepo);
 
-        $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
+        $this->assertEquals(6, count($this->fakeEmailService->_Messages), 'send one per person, no duplicates');
 
         $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[0]);
         $this->assertInstanceOf('ReservationRequiresApprovalEmailAdmin', $this->fakeEmailService->_Messages[1]);
@@ -339,7 +345,7 @@ class AdminEmailNotificationTest extends TestBase
 
         $expectedMessage1 = new ReservationDeletedEmailAdmin($admin1, $owner, $reservation, $resource, $attributeRepo, $userRepo);
 
-        $this->assertEquals(6, count($this->fakeEmailService->_Messages), "send one per person, no duplicates");
+        $this->assertEquals(6, count($this->fakeEmailService->_Messages), 'send one per person, no duplicates');
 
         $this->assertInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[0]);
         $this->assertInstanceOf('ReservationDeletedEmailAdmin', $this->fakeEmailService->_Messages[1]);

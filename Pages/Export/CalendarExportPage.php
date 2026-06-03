@@ -26,10 +26,7 @@ interface ICalendarExportPage
      */
     public function GetResourceId();
 
-    /**
-     * @return int
-     */
-    public function GetAccessoryName();
+    public function GetAccessoryName(): string;
 }
 
 class CalendarExportPage extends Page implements ICalendarExportPage
@@ -60,8 +57,8 @@ class CalendarExportPage extends Page implements ICalendarExportPage
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
 
-        header("Content-Type: text/Calendar");
-        header("Content-Disposition: inline; filename=calendar.ics");
+        header('Content-Type: text/Calendar');
+        header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
         echo $display->Render($this->reservations);
@@ -79,17 +76,17 @@ class CalendarExportPage extends Page implements ICalendarExportPage
 
     public function GetScheduleId()
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::SCHEDULE_ID));
     }
 
     public function GetResourceId()
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return intval($this->GetQuerystring(QueryStringKeys::RESOURCE_ID));
     }
 
-    public function GetAccessoryName()
+    public function GetAccessoryName(): string
     {
-        return $this->GetQuerystring(QueryStringKeys::ACCESSORY_NAME);
+        return strval($this->GetQuerystring(QueryStringKeys::ACCESSORY_NAME));
     }
 }
 

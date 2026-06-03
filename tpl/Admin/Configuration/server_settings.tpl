@@ -19,7 +19,7 @@
                 </li>
             </ul>
 
-            <h3 class="mt-4">Plugins</h3>
+            <h2 class="mt-4 fs-4">Plugins</h2>
             <ul class="indented">
                 {foreach from=$plugins key=category item=items}
                     <li>{$category}

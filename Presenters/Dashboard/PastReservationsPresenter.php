@@ -45,30 +45,30 @@ class PastReservationsPresenter
         $today = $now->ToTimezone($timezone)->GetDate();
         $dayOfWeek = $today->Weekday();
 
-        $firstDate = $now->AddDays(-13+(6-$dayOfWeek)+1);
+        $firstDate = $now->AddDays(-13 + (6 - $dayOfWeek) + 1);
         $consolidated = $this->repository->GetReservations($firstDate, $now, $this->searchUserId, $this->searchUserLevel, null, null, true);
         $yesterday = $today->AddDays(-1);
 
-        $startOfPreviousWeek = $today->AddDays(-(7+$dayOfWeek));
+        $startOfPreviousWeek = $today->AddDays(-(7 + $dayOfWeek));
 
         $todays = [];
         $yesterdays = [];
         $thisWeeks = [];
         $previousWeeks = [];
 
-        //TimeLessThan($now->ToTimezone($timezone)->GetTime()) -> only when the reservations end does it display 
+        //TimeLessThan($now->ToTimezone($timezone)->GetTime()) -> only when the reservations end does it display
         //                                                       (so the reservation doesn't repeat here and in upcoming reservation)
         //!$start->DateEquals($today) -> today is always GreaterThan($startOfPreviousWeek->AddDays(7)) so if a reservation hasn't ended it won't appear on ($todays)
-        //                              but it also can't show in any other section (can't just use an else) 
+        //                              but it also can't show in any other section (can't just use an else)
         foreach ($consolidated as $reservation) {
             $start = $reservation->EndDate->ToTimezone($timezone);
 
             //The reservation gets taken out of the array if it's still ocurring so it doesn't affect the number of reservations in the displayer
-            //Ex: if we have one single past reservation that is happening it won't show on the display but next to the title it will still show 1 
+            //Ex: if we have one single past reservation that is happening it won't show on the display but next to the title it will still show 1
             //(number of reservations in consolidated) and it won't show the message "You have no past reservations"
             //By doing this we solve the issue
             if ($start->DateEquals($today)) {
-                if (!$start->TimeLessThan($now->ToTimezone($timezone)->GetTime())){
+                if (!$start->TimeLessThan($now->ToTimezone($timezone)->GetTime())) {
                     $remove = array_search($reservation, $consolidated);
                     unset($consolidated[$remove]);
                 } else {
@@ -78,7 +78,7 @@ class PastReservationsPresenter
                 $yesterdays[] = $reservation;
             } elseif ($start->GreaterThan($startOfPreviousWeek->AddDays(7)) && !$start->DateEquals($today)) {
                 $thisWeeks[] = $reservation;
-            } else if  (!$start->DateEquals($today)){
+            } elseif (!$start->DateEquals($today)) {
                 $previousWeeks[] = $reservation;
             }
         }

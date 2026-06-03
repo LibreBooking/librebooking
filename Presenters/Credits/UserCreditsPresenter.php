@@ -72,10 +72,10 @@ class UserCreditsPresenter extends ActionPresenter
                 }
             }
             if (!isset($cost)) { // Error if not found
-                echo "ERR|ERR";
+                echo 'ERR|ERR';
                 return;
             }
-            $this->page->SetTotalCost($cost->FormatCurrency($cost->Cost())."|".$cost->GetFormattedTotal($quantity));
+            $this->page->SetTotalCost($cost->FormatCurrency($cost->Cost()).'|'.$cost->GetFormattedTotal($quantity));
         }
     }
 

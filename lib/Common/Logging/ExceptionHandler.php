@@ -42,7 +42,24 @@ class WebExceptionHandler extends ExceptionHandler
         ob_start();
         debug_print_backtrace();
         error_log(ob_get_clean());
-        call_user_func($this->callback);
+
+        // Uncaught exceptions indicate a server-side failure.
+        // Set 500 only while headers are still mutable.
+        if (!headers_sent() && !connection_aborted()) {
+            $currentStatus = http_response_code();
+            if ($currentStatus === false || $currentStatus < 400) {
+                http_response_code(500);
+            }
+        }
+
+        $errorMessageId = ErrorMessages::UNKNOWN_ERROR;
+        if (is_a($exception, 'DatabaseConnectionException')) {
+            $errorMessageId = ErrorMessages::DATABASE_CONNECTION;
+        } elseif (is_a($exception, 'DatabaseNotFoundException')) {
+            $errorMessageId = ErrorMessages::DATABASE_NOT_FOUND;
+        }
+
+        call_user_func($this->callback, $errorMessageId);
     }
 }
 

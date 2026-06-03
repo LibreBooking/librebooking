@@ -19,6 +19,11 @@ config)
 Getting Started With the API
 ----------------------------
 
+.. important::
+
+    Use the URL as specified in the documentation in regards to having or not
+    having a trailing ``/`` character.
+
 Authenticating to LibreBooking
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -37,22 +42,69 @@ For all of the secure service calls it is required to be
    2. ``X-Booked-UserId`` set to the value of ``userId`` returned by the
       `Authenticate <#authenticate>`__ API call.
 
+GET Requests / Query String Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some GET endpoints support optional query string parameters for
+filtering results. To pass a query string parameter, append ``?`` to
+the URL followed by ``key=value``. Multiple parameters can be combined
+using ``&``.
+
+For example, to filter resources by schedule::
+
+    /Web/Services/index.php/Resources/?scheduleId=1
+
+Some parameters accept comma-separated values to match multiple options::
+
+    /Web/Services/index.php/Resources/?scheduleId=1,2,3
+
+To combine multiple parameters::
+
+    /Web/Services/index.php/Reservations/?scheduleId=1&userId=5
+
+To filter resources by group::
+
+    /Web/Services/index.php/Resources/?groupId=1
+
+    /Web/Services/index.php/Resources/?groupId=1,2,3
+
 POST Requests
 ~~~~~~~~~~~~~
 
 When making POST API requests it is required to send the POST data as
 JSON
 
+.. _curl-variables:
+
+curl Variables
+~~~~~~~~~~~~~~
+
+The curl examples throughout this document use the following shell
+variables. Set them after authenticating (see `Authenticate <#authenticate>`__):
+
+.. code:: bash
+
+   # Base URL of your LibreBooking installation
+   BASE_URL="https://librebooking.example.com"
+
+   # Obtained from the Authenticate response
+   SESSION_TOKEN="your-session-token"
+   USER_ID=123
+
 Accessories
 -----------
 
-POST Services
-~~~~~~~~~~~~~
+.. _post-endpoints-accessories:
+
+POST Endpoints
+~~~~~~~~~~~~~~
 
 Not applicable.
 
-GET Services
-~~~~~~~~~~~~
+.. _get-endpoints-accessories:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllAccessories
 ^^^^^^^^^^^^^^^^^
@@ -86,6 +138,14 @@ GetAllAccessories
        "links": [],
        "message": null
    }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Accessories/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetAccessory
 ^^^^^^^^^^^^
@@ -121,13 +181,21 @@ service is secure and requires authentication*
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Accessories/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Accounts
 --------
 
-.. _post-services-1:
+.. _post-endpoints-accounts:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateAccount
 ^^^^^^^^^^^^^
@@ -141,10 +209,6 @@ CreateAccount
 
    It is required for the route to end with the ``/`` character, or it will
    fail.
-
-**Response:**
-
-Unstructured response of type *AccountCreatedResponse*
 
 **Request:**
 
@@ -170,6 +234,42 @@ Unstructured response of type *AccountCreatedResponse*
        ]
    }
 
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Accounts/" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "password": "plaintextpassword",
+       "acceptTermsOfService": true,
+       "firstName": "FirstName",
+       "lastName": "LastName",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "language": "en_us",
+       "timezone": "America/Chicago"
+     }'
+
 UpdateAccount
 ^^^^^^^^^^^^^
 
@@ -179,9 +279,6 @@ UpdateAccount
 **Route:** ``/Web/Services/index.php/Accounts/:userId``
 
 *This service is secure and requires authentication*
-
-| **Response:**
-| Unstructured response of type *AccountUpdatedResponse*
 
 **Request:**
 
@@ -205,6 +302,42 @@ UpdateAccount
        ]
    }
 
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Accounts/1" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "firstName": "FirstName",
+       "lastName": "LastName",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "language": "en_us",
+       "timezone": "America/Chicago"
+     }'
+
 UpdatePassword
 ^^^^^^^^^^^^^^
 
@@ -216,10 +349,6 @@ Updates the password for an existing user
 
 *This service is secure and requires authentication*
 
-**Response:**
-
-Unstructured response of type *AccountUpdatedResponse*
-
 **Request:**
 
 .. code:: json
@@ -229,17 +358,46 @@ Unstructured response of type *AccountUpdatedResponse*
        "newPassword": "plain.text.new.password"
    }
 
-.. _get-services-1:
+**Response:**
 
-GET Services
-~~~~~~~~~~~~
+.. code:: json
+
+   {
+       "userId": 1,
+       "links": [
+           {
+               "href": "http://url/to/account",
+               "title": "get_user_account"
+           },
+           {
+               "href": "http://url/to/update/account",
+               "title": "update_user_account"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Accounts/1/Password" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"currentPassword": "oldpassword", "newPassword": "newpassword"}'
+
+.. _get-endpoints-accounts:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAccount
 ^^^^^^^^^^
 
 **Description:**
 
-Gets the currently authenticated users’s account information
+Gets the currently authenticated user's account information
 
 **Route:** ``/Web/Services/index.php/Accounts/:userId``
 
@@ -274,13 +432,21 @@ Gets the currently authenticated users’s account information
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Accounts/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Attributes
 ----------
 
-.. _post-services-2:
+.. _post-endpoints-attributes:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateCustomAttribute
 ^^^^^^^^^^^^^^^^^^^^^
@@ -308,25 +474,6 @@ CreateCustomAttribute
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-     "attributeId": 1,
-     "links": [
-       {
-         "href": "http://url/to/attribute",
-         "title": "get_custom_attribute"
-       },
-       {
-         "href": "http://url/to/update/attribute",
-         "title": "update_custom_attribute"
-       }
-     ],
-     "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -354,6 +501,41 @@ CreateCustomAttribute
            2
        ]
    }
+
+**Response:**
+
+.. code:: json
+
+   {
+     "attributeId": 1,
+     "links": [
+       {
+         "href": "http://url/to/attribute",
+         "title": "get_custom_attribute"
+       },
+       {
+         "href": "http://url/to/update/attribute",
+         "title": "update_custom_attribute"
+       }
+     ],
+     "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Attributes/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "label": "attribute name",
+       "type": 1,
+       "categoryId": 1,
+       "required": true,
+       "sortOrder": 100
+     }'
 
 UpdateCustomAttribute
 ^^^^^^^^^^^^^^^^^^^^^
@@ -376,25 +558,6 @@ UpdateCustomAttribute
 
 *This service is only available to application administrators*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "attributeId": 1,
-       "links": [
-           {
-               "href": "http://url/to/attribute",
-               "title": "get_custom_attribute"
-           },
-           {
-               "href": "http://url/to/update/attribute",
-               "title": "update_custom_attribute"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -423,10 +586,45 @@ UpdateCustomAttribute
        ]
    }
 
-.. _get-services-2:
+**Response:**
 
-GET Services
-~~~~~~~~~~~~
+.. code:: json
+
+   {
+       "attributeId": 1,
+       "links": [
+           {
+               "href": "http://url/to/attribute",
+               "title": "get_custom_attribute"
+           },
+           {
+               "href": "http://url/to/update/attribute",
+               "title": "update_custom_attribute"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Attributes/1" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "label": "updated name",
+       "type": 1,
+       "categoryId": 1,
+       "required": false,
+       "sortOrder": 200
+     }'
+
+.. _get-endpoints-attributes:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetCategoryAttributes
 ^^^^^^^^^^^^^^^^^^^^^
@@ -476,6 +674,14 @@ GetCategoryAttributes
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Attributes/Category/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 GetAttribute
 ^^^^^^^^^^^^
 
@@ -517,6 +723,14 @@ Gets all custom attribute definitions for the requested attribute
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Attributes/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 DeleteCustomAttribute
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -539,35 +753,51 @@ Deletes an existing custom attribute
        "message": "The item was deleted"
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X DELETE "${BASE_URL}/Web/Services/index.php/Attributes/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Authentication
 --------------
 
-.. _post-services-3:
+.. _post-endpoints-authentication:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 SignOut
 ^^^^^^^
 
 **Description:**
 
-invalidate Authenication Token
+Invalidate Authentication Token
 
 **Route:** ``/Web/Services/index.php/Authentication/SignOut``
-
-**Response:**
-
-No response
 
 **Request:**
 
 .. code:: json
 
    {
-       "userId": null,
-       "sessionToken": null
+       "userId": 123,
+       "sessionToken": "your-session-token"
    }
+
+**Response:**
+
+No response
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Authentication/SignOut" \
+     -H "Content-Type: application/json" \
+     -d "{\"userId\": ${USER_ID}, \"sessionToken\": \"${SESSION_TOKEN}\"}"
 
 Authenticate
 ^^^^^^^^^^^^
@@ -577,6 +807,20 @@ Authenticate
 Authenticates an existing LibreBooking user
 
 **Route:** ``/Web/Services/index.php/Authentication/Authenticate``
+
+.. note::
+
+   It is required for the route to **NOT** have a trailing ``/`` character, or
+   it will fail.
+
+**Request:**
+
+.. code:: json
+
+   {
+       "username": "your-username",
+       "password": "your-password"
+   }
 
 **Response:**
 
@@ -592,29 +836,28 @@ Authenticates an existing LibreBooking user
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-.. code:: json
+.. code:: bash
 
-   {
-       "username":null,
-       "password":null
-   }
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Authentication/Authenticate" \
+     -H "Content-Type: application/json" \
+     -d '{"username": "your-username", "password": "your-password"}'
 
-.. _get-services-3:
+.. _get-endpoints-authentication:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 na.
 
 Groups
 ------
 
-.. _post-services-4:
+.. _post-endpoints-groups:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateGroup
 ^^^^^^^^^^^
@@ -634,30 +877,44 @@ Creates a new group
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "attributeId": 1,
-       "links": [
-           {
-               "href": "http://url/to/attribute",
-               "title": "get_custom_attribute"
-           },
-           {
-               "href": "http://url/to/update/attribute",
-               "title": "update_custom_attribute"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
 
    {"name":"group name","isDefault":true}
+
+**Response:**
+
+.. code:: json
+
+   {
+       "groupId": 1,
+       "links": [
+           {
+               "href": "http://url/to/group",
+               "title": "get_group"
+           },
+           {
+               "href": "http://url/to/update/group",
+               "title": "update_group"
+           },
+           {
+               "href": "http://url/to/delete/group",
+               "title": "delete_group"
+           }
+       ],
+       "message": "The group was created"
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Groups/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"name": "group name", "isDefault": true}'
 
 UpdateGroup
 ^^^^^^^^^^^
@@ -671,6 +928,15 @@ Updates and existing group
 *This service is secure and requires authentication*
 
 *This service is only available to application administrators*
+
+**Request:**
+
+.. code:: json
+
+   {
+       "name": "group name",
+       "isDefault": true
+   }
 
 **Response:**
 
@@ -695,14 +961,15 @@ Updates and existing group
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-.. code:: json
+.. code:: bash
 
-   {
-       "name": "group name",
-       "isDefault": true
-   }
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Groups/1" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"name": "updated group name", "isDefault": false}'
 
 ChangeGroupRoles
 ~~~~~~~~~~~~~~~~
@@ -719,6 +986,10 @@ ChangeGroupRoles
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -742,9 +1013,15 @@ ChangeGroupRoles
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Groups/1/Roles" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"roleIds": [1, 2]}'
 
 ChangeGroupPermissions
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -758,6 +1035,10 @@ service is secure and requires authentication*
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -781,9 +1062,15 @@ service is secure and requires authentication*
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Groups/1/Permissions" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"permissions": [1, 2, 3]}'
 
 ChangeGroupUsers
 ~~~~~~~~~~~~~~~~
@@ -798,6 +1085,10 @@ Updates the permissions for an existing group
 
 *This service is only available to application administrators*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -821,14 +1112,20 @@ Updates the permissions for an existing group
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
 
-.. _get-services-4:
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Groups/1/Users" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"userIds": [1, 2, 3]}'
 
-GET Services
-~~~~~~~~~~~~
+.. _get-endpoints-groups:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllGroups
 ^^^^^^^^^^^^
@@ -858,6 +1155,14 @@ Loads all groups
        "links": [],
        "message": null
    }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Groups/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetGroup
 ^^^^^^^^
@@ -896,6 +1201,14 @@ Loads a specific group by id
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Groups/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 DeleteGroup
 ^^^^^^^^^^^
 
@@ -918,13 +1231,23 @@ Deletes an existing group
        "message": "The item was deleted"
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X DELETE "${BASE_URL}/Web/Services/index.php/Groups/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Reservations
 ------------
 
-.. _post-services-5:
+.. _post-endpoints-reservations:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
+
+.. _CreateReservation:
 
 CreateReservation
 ^^^^^^^^^^^^^^^^^
@@ -942,26 +1265,6 @@ Creates a new reservation
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "referenceNumber": "referenceNumber",
-       "isPendingApproval": true,
-       "links": [
-           {
-               "href": "http://url/to/reservation",
-               "title": "get_reservation"
-           },
-           {
-               "href": "http://url/to/update/reservation",
-               "title": "update_reservation"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1027,12 +1330,98 @@ Creates a new reservation
        "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name",
-               "value": "value"
+               "name": "skipconflicts",
+               "value": "true"
            }
        ],
        "termsAccepted": true
    }
+
+**retryParameters:**
+
+| The ``retryParameters`` field accepts an array of ``{"name": ..., "value": ...}`` objects
+  that modify how reservation conflicts are handled.
+| Currently supported parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Name
+     - Value
+     - Description
+   * - ``skipconflicts``
+     - ``"true"``
+     - When creating or updating a recurring reservation, any instances that
+       conflict with existing reservations or blackouts are silently skipped
+       instead of causing the entire request to fail. This mirrors the
+       "Skip conflicting reservations" option available in the web interface.
+       Non-conflicting instances are created normally.
+
+| **Tip:** You can include ``retryParameters`` in the initial request — there is
+  no need to submit a first request without it and then retry.
+
+**Response:**
+
+.. code:: json
+
+   {
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
+       "links": [
+           {
+               "href": "http://url/to/reservation",
+               "title": "get_reservation"
+           },
+           {
+               "href": "http://url/to/update/reservation",
+               "title": "update_reservation"
+           }
+       ],
+       "message": null
+   }
+
+**curl examples:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "title": "Team Meeting",
+       "description": "Weekly sync",
+       "startDateTime": "2026-03-20T09:00:00+0000",
+       "endDateTime": "2026-03-20T10:00:00+0000",
+       "resourceId": 1,
+       "userId": 1
+     }'
+
+Creating a recurring reservation that skips conflicts:
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "title": "Daily Standup",
+       "startDateTime": "2026-04-01T09:00:00+0000",
+       "endDateTime": "2026-04-01T09:30:00+0000",
+       "resourceId": 1,
+       "userId": 1,
+       "recurrenceRule": {
+         "type": "weekly",
+         "interval": 1,
+         "weekdays": [1, 2, 3, 4, 5],
+         "repeatTerminationDate": "2026-06-01T00:00:00+0000"
+       },
+       "retryParameters": [
+         {"name": "skipconflicts", "value": "true"}
+       ]
+     }'
 
 UpdateReservation
 ^^^^^^^^^^^^^^^^^
@@ -1047,26 +1436,6 @@ UpdateReservation
 
 *This service is secure and requires authentication*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "referenceNumber": "referenceNumber",
-       "isPendingApproval": true,
-       "links": [
-           {
-               "href": "http://url/to/reservation",
-               "title": "get_reservation"
-           },
-           {
-               "href": "http://url/to/update/reservation",
-               "title": "update_reservation"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1132,12 +1501,51 @@ UpdateReservation
        "allowParticipation": true,
        "retryParameters": [
            {
-               "name": "name",
-               "value": "value"
+               "name": "skipconflicts",
+               "value": "true"
            }
        ],
        "termsAccepted": true
    }
+
+| See the ``retryParameters`` documentation under CreateReservation_ for
+  supported parameters.
+
+**Response:**
+
+.. code:: json
+
+   {
+       "referenceNumber": "referenceNumber",
+       "isPendingApproval": true,
+       "links": [
+           {
+               "href": "http://url/to/reservation",
+               "title": "get_reservation"
+           },
+           {
+               "href": "http://url/to/update/reservation",
+               "title": "update_reservation"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/abc123" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "title": "Team Meeting (Updated)",
+       "startDateTime": "2026-03-20T14:00:00+0000",
+       "endDateTime": "2026-03-20T15:00:00+0000",
+       "resourceId": 1,
+       "userId": 1
+     }'
 
 ApproveReservation
 ^^^^^^^^^^^^^^^^^^
@@ -1151,6 +1559,10 @@ Approves a pending reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1171,9 +1583,13 @@ Approves a pending reservation.
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/abc123/Approval" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 CheckinReservation
 ^^^^^^^^^^^^^^^^^^
@@ -1187,6 +1603,10 @@ Checks in to a reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1207,9 +1627,13 @@ Checks in to a reservation.
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/abc123/CheckIn" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 CheckoutReservation
 ^^^^^^^^^^^^^^^^^^^
@@ -1223,6 +1647,10 @@ Checks out of a reservation.
 
 *This service is secure and requires authentication*
 
+**Request:**
+
+No request
+
 **Response:**
 
 .. code:: json
@@ -1243,14 +1671,18 @@ Checks out of a reservation.
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-No request
+.. code:: bash
 
-.. _get-services-5:
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Reservations/abc123/CheckOut" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
-GET Services
-~~~~~~~~~~~~
+.. _get-endpoints-reservations:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetReservations
 ^^^^^^^^^^^^^^^
@@ -1321,6 +1753,21 @@ GetReservations
        "links": [],
        "message": null
    }
+
+**curl examples:**
+
+.. code:: bash
+
+   # Get all reservations (defaults to next two weeks)
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Reservations/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Filter by user, resource, and date range
+   curl -s -X GET \
+     "${BASE_URL}/Web/Services/index.php/Reservations/?userId=5&resourceId=1&startDateTime=2026-03-01&endDateTime=2026-03-31" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetReservation
 ^^^^^^^^^^^^^^
@@ -1443,6 +1890,14 @@ Loads a specific reservation by reference number
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Reservations/abc123" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 DeleteReservation
 ^^^^^^^^^^^^^^^^^
 
@@ -1465,13 +1920,28 @@ DeleteReservation
        "message": "The item was deleted"
    }
 
+**curl examples:**
+
+.. code:: bash
+
+   # Delete this instance only
+   curl -s -X DELETE "${BASE_URL}/Web/Services/index.php/Reservations/abc123" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Delete all future instances of a recurring reservation
+   curl -s -X DELETE \
+     "${BASE_URL}/Web/Services/index.php/Reservations/abc123?updateScope=future" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Resources
 ---------
 
-.. _post-services-6:
+.. _post-endpoints-resources:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateResource
 ^^^^^^^^^^^^^^
@@ -1491,25 +1961,6 @@ Creates a new resource
    It is required for the route to end with the ``/`` character, or it will
    fail.
 
-**Response:**
-
-.. code:: json
-
-   {
-       "resourceId": 1,
-       "links": [
-           {
-               "href": "http://url/to/resource",
-               "title": "get_resource"
-           },
-           {
-               "href": "http://url/to/update/resource",
-               "title": "update_resource"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1547,6 +1998,40 @@ Creates a new resource
        "creditsChargedAllSlots": 1,
        "maxConcurrentReservations": 1
    }
+
+**Response:**
+
+.. code:: json
+
+   {
+       "resourceId": 1,
+       "links": [
+           {
+               "href": "http://url/to/resource",
+               "title": "get_resource"
+           },
+           {
+               "href": "http://url/to/update/resource",
+               "title": "update_resource"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Resources/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "name": "Conference Room A",
+       "scheduleId": 1,
+       "autoAssignPermissions": true,
+       "description": "Main floor conference room"
+     }'
 
 UpdateResource
 ^^^^^^^^^^^^^^
@@ -1561,25 +2046,6 @@ Updates an existing resource
 
 *This service is only available to application administrators*
 
-**Response:**
-
-.. code:: json
-
-   {
-       "resourceId": 1,
-       "links": [
-           {
-               "href": "http://url/to/resource",
-               "title": "get_resource"
-           },
-           {
-               "href": "http://url/to/update/resource",
-               "title": "update_resource"
-           }
-       ],
-       "message": null
-   }
-
 **Request:**
 
 .. code:: json
@@ -1618,10 +2084,43 @@ Updates an existing resource
        "maxConcurrentReservations": 1
    }
 
-.. _get-services-6:
+**Response:**
 
-GET Services
-~~~~~~~~~~~~
+.. code:: json
+
+   {
+       "resourceId": 1,
+       "links": [
+           {
+               "href": "http://url/to/resource",
+               "title": "get_resource"
+           },
+           {
+               "href": "http://url/to/update/resource",
+               "title": "update_resource"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Resources/1" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "name": "Conference Room A (Renamed)",
+       "scheduleId": 1,
+       "description": "Updated description"
+     }'
+
+.. _get-endpoints-resources:
+
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetStatuses
 ^^^^^^^^^^^
@@ -1655,12 +2154,32 @@ Returns all available resource statuses
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/Status"
+
 GetAllResources
 ^^^^^^^^^^^^^^^
 
 **Description:**
 
 Loads all resources
+
+Optional query string parameter: ``scheduleId``. One or more schedule IDs,
+comma-separated (e.g. ``scheduleId=1,2,3``). If provided, only resources
+belonging to those schedules will be returned. Each value must be a positive
+integer (greater than zero); if any value is non-integer or zero, a ``400 Bad
+Request`` is returned. If any schedule ID does not exist, a ``404 Not Found``
+is returned.
+
+Optional query string parameter: ``groupId``. One or more resource group IDs,
+comma-separated (e.g. ``groupId=1,2,3``). If provided, only resources belonging
+to those groups (including resources in sub-groups) will be returned. Each value
+must be a positive integer (greater than zero); if any value is non-integer or
+zero, a ``400 Bad Request`` is returned. If any group ID does not exist, a
+``404 Not Found`` is returned.
 
 **Route:** ``/Web/Services/index.php/Resources/``
 
@@ -1720,6 +2239,20 @@ Loads all resources
        "message": null
    }
 
+**curl examples:**
+
+.. code:: bash
+
+   # Get all resources
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Filter by schedule ID
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/?scheduleId=1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 GetStatusReasons
 ^^^^^^^^^^^^^^^^
 
@@ -1747,16 +2280,24 @@ Returns all available resource status reasons
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/Status/Reasons" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 GetAvailability
 ^^^^^^^^^^^^^^^
 
 **Description:**
 
 | Returns resource availability for the requested resource (optional).
-  “availableAt” and “availableUntil” will include availability through
-  the next 7 days
+| "availableAt" and "availableUntil" will include availability through
+| the next 7 days
 | Optional query string parameter: dateTime. If no dateTime is requested
-  the current datetime will be used.
+| the current datetime will be used.
 
 **Route:** ``/Web/Services/index.php/Resources/Availability``
 
@@ -1806,6 +2347,21 @@ GetAvailability
        "links": [],
        "message": null
    }
+
+**curl examples:**
+
+.. code:: bash
+
+   # Get availability across all visible resources
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/Availability" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Get availability from a specific point in time
+   curl -s -X GET \
+     "${BASE_URL}/Web/Services/index.php/Resources/Availability?dateTime=2026-03-20T09:00:00%2B0000" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetGroups
 ^^^^^^^^^
@@ -1897,6 +2453,14 @@ Returns the full resource group tree
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/Groups" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 GetResourceTypes
 ^^^^^^^^^^^^^^^^
 
@@ -1922,6 +2486,14 @@ Returns all available resource types
             }
         ]
     }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/Types" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetResource
 ^^^^^^^^^^^
@@ -1982,15 +2554,24 @@ Loads a specific resource by id
        "message": null
    }
 
-GetAvailability
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+GetResourceAvailability
+^^^^^^^^^^^^^^^^^^^^^^^
 
 **Description:**
 
 | Returns resource availability for the requested resource (optional).
-  “availableAt” and “availableUntil” will include availability through
-  the next 7 days
+| "availableAt" and "availableUntil" will include availability through
+| the next 7 days
 | Optional query string parameter: dateTime. If no dateTime is requested
-  the current datetime will be used.
+| the current datetime will be used.
 
 **Route:**
 ``/Web/Services/index.php/Resources/:resourceId/Availability``
@@ -2042,6 +2623,21 @@ GetAvailability
        "message": null
    }
 
+**curl examples:**
+
+.. code:: bash
+
+   # Get availability for one resource
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Resources/1/Availability" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Get availability for one resource at a specific datetime
+   curl -s -X GET \
+     "${BASE_URL}/Web/Services/index.php/Resources/1/Availability?dateTime=2026-03-20T09:00:00%2B0000" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 DeleteResource
 ^^^^^^^^^^^^^^
 
@@ -2064,20 +2660,28 @@ Deletes an existing resource
        "message": "The item was deleted"
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X DELETE "${BASE_URL}/Web/Services/index.php/Resources/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Schedules
 ---------
 
-.. _post-services-7:
+.. _post-endpoints-schedules:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 Not applicable.
 
-.. _get-services-7:
+.. _get-endpoints-schedules:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllSchedules
 ^^^^^^^^^^^^^^^
@@ -2114,6 +2718,14 @@ Loads all schedules
        "links": [],
        "message": null
    }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Schedules/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetSchedule
 ^^^^^^^^^^^
@@ -2218,6 +2830,14 @@ Loads a specific schedule by id
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Schedules/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 GetSlots
 ^^^^^^^^
 
@@ -2311,13 +2931,28 @@ GetSlots
        "message": null
    }
 
+**curl examples:**
+
+.. code:: bash
+
+   # Get slots using the schedule's default date range
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Schedules/1/Slots" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Filter slots by resource and date range
+   curl -s -X GET \
+     "${BASE_URL}/Web/Services/index.php/Schedules/1/Slots?resourceId=1&startDateTime=2026-03-20&endDateTime=2026-03-21" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 Users
 -----
 
-.. _post-services-8:
+.. _post-endpoints-users:
 
-POST Services
-~~~~~~~~~~~~~
+POST Endpoints
+~~~~~~~~~~~~~~
 
 CreateUser
 ^^^^^^^^^^
@@ -2336,25 +2971,6 @@ Creates a new user
 
    It is required for the route to end with the ``/`` character, or it will
    fail.
-
-**Response:**
-
-.. code:: json
-
-   {
-       "userId": null,
-       "links": [
-           {
-               "href": "http://url/to/user",
-               "title": "get_user"
-           },
-           {
-               "href": "http://url/to/update/user",
-               "title": "update_user"
-           }
-       ],
-       "message": null
-   }
 
 **Request:**
 
@@ -2384,19 +3000,6 @@ Creates a new user
        ]
    }
 
-UpdateUser
-^^^^^^^^^^
-
-**Description:**
-
-Updates an existing user
-
-**Route:** ``/Web/Services/index.php/Users/:userId``
-
-*This service is secure and requires authentication*
-
-*This service is only available to application administrators*
-
 **Response:**
 
 .. code:: json
@@ -2415,6 +3018,38 @@ Updates an existing user
        ],
        "message": null
    }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Users/" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "password": "unencrypted password",
+       "language": "en_us",
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "timezone": "America/Chicago",
+       "groups": [1, 2]
+     }'
+
+UpdateUser
+^^^^^^^^^^
+
+**Description:**
+
+Updates an existing user
+
+**Route:** ``/Web/Services/index.php/Users/:userId``
+
+*This service is secure and requires authentication*
+
+*This service is only available to application administrators*
 
 **Request:**
 
@@ -2442,6 +3077,42 @@ Updates an existing user
        ]
    }
 
+**Response:**
+
+.. code:: json
+
+   {
+       "userId": null,
+       "links": [
+           {
+               "href": "http://url/to/user",
+               "title": "get_user"
+           },
+           {
+               "href": "http://url/to/update/user",
+               "title": "update_user"
+           }
+       ],
+       "message": null
+   }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Users/1" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{
+       "firstName": "first",
+       "lastName": "last",
+       "emailAddress": "email@address.com",
+       "userName": "username",
+       "timezone": "America/Chicago",
+       "groups": [1, 2]
+     }'
+
 .. _updatepassword-1:
 
 UpdatePassword
@@ -2456,6 +3127,14 @@ Updates the password for an existing user
 *This service is secure and requires authentication*
 
 *This service is only available to application administrators*
+
+**Request:**
+
+.. code:: json
+
+   {
+       "password":"plaintext password"
+   }
 
 **Response:**
 
@@ -2476,18 +3155,20 @@ Updates the password for an existing user
        "message": null
    }
 
-**Request:**
+**curl example:**
 
-.. code:: json
+.. code:: bash
 
-   {
-       "password":"plaintext password"
-   }
+   curl -s -X POST "${BASE_URL}/Web/Services/index.php/Users/1/Password" \
+     -H "Content-Type: application/json" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}" \
+     -d '{"password": "plaintext password"}'
 
-.. _get-services-8:
+.. _get-endpoints-users:
 
-GET Services
-~~~~~~~~~~~~
+GET Endpoints
+~~~~~~~~~~~~~
 
 GetAllUsers
 ^^^^^^^^^^^
@@ -2543,6 +3224,21 @@ GetAllUsers
        "links": [],
        "message": null
    }
+
+**curl examples:**
+
+.. code:: bash
+
+   # Get all users visible to the authenticated user
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Users/" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
+   # Filter by built-in fields and custom attributes
+   curl -s -X GET \
+     "${BASE_URL}/Web/Services/index.php/Users/?firstName=Sam&organization=Engineering&att1=ExpectedAttribute1Value" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
 
 GetUser
 ^^^^^^^
@@ -2609,6 +3305,14 @@ Loads the requested user by Id
        "message": null
    }
 
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X GET "${BASE_URL}/Web/Services/index.php/Users/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"
+
 DeleteUser
 ^^^^^^^^^^
 
@@ -2630,3 +3334,11 @@ Deletes an existing user
        "links": [],
        "message": "The item was deleted"
    }
+
+**curl example:**
+
+.. code:: bash
+
+   curl -s -X DELETE "${BASE_URL}/Web/Services/index.php/Users/1" \
+     -H "X-Booked-SessionToken: ${SESSION_TOKEN}" \
+     -H "X-Booked-UserId: ${USER_ID}"

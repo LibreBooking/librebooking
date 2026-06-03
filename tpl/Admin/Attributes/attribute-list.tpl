@@ -1,4 +1,4 @@
-<h4>{$Attributes|default:array()|count} {translate key=Attributes}</h4>
+<div class="fs-4">{$Attributes|default:array()|count} {translate key=Attributes}</div>
 {if $Attributes|default:array()|count > 0}
 	{assign var=tableId value='attributeListTable'}
 	<div class="table-responsive">

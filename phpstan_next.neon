@@ -1,0 +1,43 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: 3
+    errorFormat: prettyJson
+    tmpDir: var/cache/phpstan/next
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - Controls
+        - Domain
+        - Jobs
+        - Pages
+        - Presenters
+        - Web
+        - WebServices
+        - config
+        - lang
+        - lib
+        - phing-tasks
+        # Keep `plugins` in paths so PHPStan can scan symbols used via dynamic plugin loading.
+        - plugins
+        - tests
+    excludePaths:
+        analyse:
+            - Web/css/
+            - Web/scripts/
+            - build/ (?)
+            - lib/external/
+            # Do not report diagnostics inside `plugins`: The
+            # legacy/third-party code is noisy. This keeps analysis focused on
+            # core app code while still allowing symbol discovery.
+            - plugins/
+            - tpl_c/ (?)
+            - vendor/
+            # Staged "next level" rollout: remove these one-by-one as each
+            # area is fixed for the current target level.
+            - Domain/
+            - Pages/Admin/
+            - Presenters/
+            - lib/
+    bootstrapFiles:
+        - vendor/autoload.php

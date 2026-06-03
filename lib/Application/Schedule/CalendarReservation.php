@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT_DIR . 'Pages/Pages.php');
+
 class CalendarReservation
 {
     /**
@@ -97,6 +99,8 @@ class CalendarReservation
      */
     public $ScheduleId;
 
+    private string $reservationPage = Pages::RESERVATION;
+
     private function __construct(Date $startDate, Date $endDate, $resourceName, $referenceNumber)
     {
         $this->StartDate = $startDate;
@@ -178,8 +182,16 @@ class CalendarReservation
      * @param SlotLabelFactory|null $factory
      * @return CalendarReservation[]
      */
-    public static function FromScheduleReservationList($reservations, $blackouts, $availablePeriods, $resources, UserSession $userSession, $groupSeriesByResource = false, $factory = null)
-    {
+    public static function FromScheduleReservationList(
+        $reservations,
+        $blackouts,
+        $availablePeriods,
+        $resources,
+        UserSession $userSession,
+        $groupSeriesByResource = false,
+        $factory = null,
+        string $reservationPage = Pages::RESERVATION
+    ) {
         if ($factory == null) {
             $factory = new SlotLabelFactory($userSession);
         }
@@ -211,6 +223,7 @@ class CalendarReservation
             $referenceNumber = $reservation->ReferenceNumber;
 
             $cr = new CalendarReservation($start, $end, $resourceMap[$reservation->ResourceId], $referenceNumber);
+            $cr->reservationPage = $reservationPage;
             $cr->Title = $reservation->Title;
             $cr->OwnerName = new FullName($reservation->FirstName, $reservation->LastName);
             $cr->OwnerFirst = $reservation->FirstName;
@@ -304,7 +317,7 @@ class CalendarReservation
     private function GetUrl()
     {
         if (!empty($this->ReferenceNumber)) {
-            return sprintf('%s?rn=%s&redirect=[redirect]', Pages::RESERVATION, $this->ReferenceNumber);
+            return sprintf('%s?rn=%s&redirect=[redirect]', $this->reservationPage, $this->ReferenceNumber);
         }
 
         if (!empty($this->ResourceId)) {

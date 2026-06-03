@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
@@ -50,10 +52,10 @@ class ResourceRepositoryTest extends TestBase
     public function testCanUpdateResource()
     {
         $id = 8383;
-        $name = "name";
-        $location = "location";
-        $contact = "contact";
-        $notes = "notes";
+        $name = 'name';
+        $location = 'location';
+        $contact = 'contact';
+        $notes = 'notes';
         $minLength = 720;
         $maxLength = 727272;
         $autoAssign = 1;
@@ -62,7 +64,7 @@ class ResourceRepositoryTest extends TestBase
         $maxParticipants = 100;
         $minNoticeAdd = 11111;
         $maxNotice = 22222;
-        $description = "description";
+        $description = 'description';
         $scheduleId = 19819;
         $imageName = 'something.png';
         $adminGroupId = 232;
@@ -172,7 +174,7 @@ class ResourceRepositoryTest extends TestBase
 
     public function testCanAddResourceWithMinimumAttributes()
     {
-        $name = "name";
+        $name = 'name';
         $scheduleId = 828;
         $resourceId = 8888;
         $autoAssign = true;
@@ -216,8 +218,8 @@ class ResourceRepositoryTest extends TestBase
     {
         $ar = new ReservationAccessoryRow();
         $ar
-        ->WithAccessory(1, 3, "name", 3)
-        ->WithAccessory(2, 23, "slkjdf", 3);
+        ->WithAccessory(1, 3, 'name', 3)
+        ->WithAccessory(2, 23, 'slkjdf', 3);
 
         $this->db->SetRows($ar->Rows());
 
@@ -229,7 +231,7 @@ class ResourceRepositoryTest extends TestBase
         $this->assertEquals($getAccessoriesCommand, $this->db->_LastCommand);
         $this->assertEquals(2, count($accessories));
         $this->assertEquals(1, $accessories[0]->Id);
-        $this->assertEquals("name", $accessories[0]->Name);
+        $this->assertEquals('name', $accessories[0]->Name);
         $this->assertEquals(3, $accessories[0]->QuantityAvailable);
     }
 
@@ -313,7 +315,7 @@ class ResourceRepositoryTest extends TestBase
         $this->assertEquals(
             $removeUpdated,
             $this->db->_Commands[2],
-            "need to remove before adding to make sure changed values are not immediately deleted"
+            'need to remove before adding to make sure changed values are not immediately deleted'
         );
         $this->assertEquals($addUpdated, $this->db->_Commands[3]);
         $this->assertEquals($addNewCommand, $this->db->_Commands[4]);
@@ -508,7 +510,7 @@ class ResourceRepositoryTest extends TestBase
 
         $this->assertEquals($expectedCommand, $this->db->_Commands[0]);
         $this->assertEquals($removeOldCommand, $this->db->_Commands[1]);
-        $this->assertEquals($removeUpdated, $this->db->_Commands[2], "need to remove before adding to make sure changed values are not immediately deleted");
+        $this->assertEquals($removeUpdated, $this->db->_Commands[2], 'need to remove before adding to make sure changed values are not immediately deleted');
         $this->assertEquals($addUpdated, $this->db->_Commands[3]);
         $this->assertEquals($addNewCommand, $this->db->_Commands[4]);
     }
@@ -573,8 +575,8 @@ class ResourceRepositoryTest extends TestBase
         $resourceId = 123;
 
         $rows = [
-                [ColumnNames::GROUP_ID => 1, ColumnNames::GROUP_NAME => 'g1', ColumnNames::GROUP_ISDEFAULT => 0, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
-                [ColumnNames::GROUP_ID => 2, ColumnNames::GROUP_NAME => 'g2', ColumnNames::GROUP_ISDEFAULT => 0, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::View],
+            [ColumnNames::GROUP_ID => 1, ColumnNames::GROUP_NAME => 'g1', ColumnNames::GROUP_ISDEFAULT => 0, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full],
+            [ColumnNames::GROUP_ID => 2, ColumnNames::GROUP_NAME => 'g2', ColumnNames::GROUP_ISDEFAULT => 0, ColumnNames::PERMISSION_TYPE => ResourcePermissionType::View],
         ];
         $this->db->SetRows($rows);
 

@@ -160,9 +160,9 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      * @param int $attributeId
-     * @return null|Attribute
+     * @return null|LBAttribute
      */
     private function GetAttribute($attributes, $attributeId)
     {
@@ -176,7 +176,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
 
     /**
      * @param AttributeValue $attribute
-     * @param Attribute $value
+     * @param LBAttribute|null $value
      * @return bool
      */
     private function AttributeValueMatches($attribute, $value)
@@ -186,7 +186,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
         }
 
         if ($value->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX || $value->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX) {
-            return strripos($value->Value() ?? "", $attribute->Value) !== false;
+            return strripos($value->Value() ?? '', $attribute->Value) !== false;
         } elseif (is_numeric($value->Value())) {
             return floatval($value->Value()) == $attribute->Value;
         } else {

@@ -107,8 +107,8 @@
                         </div>
 
                         <div class="card-footer border-top pt-3">
-                            {filter_button id="filter" class="btn-sm"}
-                            {reset_button id="clearFilter" class="btn-sm"}
+                            {filter_button id="filter"}
+                            {reset_button id="clearFilter"}
                         </div>
                     </div>
                 </form>
@@ -292,9 +292,15 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <label
-                                                                    class="inline fw-bold">{translate key='ResourceAdministrator'}</label>
-                                                                <span>{$ResourceAdminGroup[$resource->GetAdminGroupId()]->Name}</span>
+                                                                <label class="inline fw-bold">{translate key='ResourceAdministrator'}</label>
+                                                                <span>
+                                                                    {assign var=adminGroupId value=$resource->GetAdminGroupId()}
+                                                                    {if $adminGroupId !== null && isset($ResourceAdminGroup[$adminGroupId])}
+                                                                        {$ResourceAdminGroup[$adminGroupId]->Name|escape:'html'}
+                                                                    {else}
+                                                                        {translate key='None'}
+                                                                    {/if}
+                                                                </span>
                                                             </div>
 
                                                         </div>
@@ -377,7 +383,7 @@
                                                 <div class="customAttributes">
                                                     {if $AttributeList|default:array()|count > 0}
                                                         {foreach from=$AttributeList item=attribute}
-                                                            {include file='Admin/InlineAttributeEdit.tpl' id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
+                                                            {include file='Admin/InlineAttributeEdit.tpl' url="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionChangeAttribute}" id=$id attribute=$attribute value=$resource->GetAttributeValue($attribute->Id())}
                                                         {/foreach}
                                                     {/if}
                                                 </div>

@@ -4,7 +4,8 @@ if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require_once ROOT_DIR . 'vendor/autoload.php';
 }
 
-interface ICaptchaService {
+interface ICaptchaService
+{
     /**
      * @abstract
      * @return string
@@ -56,7 +57,7 @@ class CaptchaService implements ICaptchaService
     {
         $isValid = $captchaValue == $_SESSION['phrase'];
 
-        Log::Debug('Checking captcha value. Value entered: %s. Correct value: %s.  IsValid: %s', $captchaValue,$_SESSION['phrase'] , (int)$isValid);
+        Log::Debug('Checking captcha value. Value entered: %s. Correct value: %s.  IsValid: %s', $captchaValue, $_SESSION['phrase'], (int)$isValid);
 
         return $isValid;
     }
@@ -110,8 +111,7 @@ class ReCaptchaService implements ICaptchaService
 
         $configuredMethod = Configuration::Instance()->GetKey(ConfigKeys::RECAPTCHA_REQUEST_METHOD);
         $method = new \ReCaptcha\RequestMethod\Post();
-        switch ($configuredMethod)
-        {
+        switch ($configuredMethod) {
             case null:
             case '':
             case 'post':
@@ -127,12 +127,13 @@ class ReCaptchaService implements ICaptchaService
         }
 
         $recap = new \ReCaptcha\ReCaptcha($privatekey, $method);
-        $resp = $recap->verify($server->GetForm('g-recaptcha-response'),$server->GetRemoteAddress());
+        $resp = $recap->verify($server->GetForm('g-recaptcha-response'), $server->GetRemoteAddress());
 
         $success = $resp->isSuccess();
         Log::Debug('ReCaptcha IsValid: %s', $success ? 'TRUE' : 'FALSE');
-        if (!$success)
+        if (!$success) {
             Log::Debug('ReCaptcha error codes: %s', join(', ', $resp->getErrorCodes()));
+        }
 
         return $success;
     }

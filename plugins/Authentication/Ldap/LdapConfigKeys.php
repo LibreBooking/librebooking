@@ -6,21 +6,12 @@ class LdapConfigKeys extends PluginConfigKeys
 {
     public const CONFIG_ID = 'ldap';
 
-    public const HOST = [
-        'key' => 'host',
+    public const URI = [
+        'key' => 'uri',
         'type' => 'string',
         'default' => '',
-        'label' => 'LDAP Host',
-        'description' => 'Hostname or IP address of LDAP server',
-        'section' => 'ldap'
-    ];
-
-    public const PORT = [
-        'key' => 'port',
-        'type' => 'integer',
-        'default' => 389,
-        'label' => 'LDAP Port',
-        'description' => 'Port of LDAP server (usually 389 or 636 for SSL)',
+        'label' => 'LDAP server URI(s)',
+        'description' => 'LDAP server URI(s). Use ldap:// or ldaps://. For multiple servers, separate URIs with spaces.',
         'section' => 'ldap'
     ];
 
@@ -73,9 +64,9 @@ class LdapConfigKeys extends PluginConfigKeys
     public const FILTER = [
         'key' => 'filter',
         'type' => 'string',
-        'default' => '(uid=%s)',
+        'default' => '',
         'label' => 'Search Filter',
-        'description' => 'LDAP search filter (use %s for username)',
+        'description' => 'Optional LDAP search filter for additional constraints (leave empty for default)',
         'section' => 'ldap'
     ];
 
@@ -85,12 +76,7 @@ class LdapConfigKeys extends PluginConfigKeys
         'default' => 'sub',
         'label' => 'Search Scope',
         'description' => 'LDAP search scope (base, one, or sub)',
-        'section' => 'ldap',
-        'choices' => [
-            'base' => 'Base',
-            'one' => 'One Level',
-            'sub' => 'Subtree'
-        ]
+        'section' => 'ldap'
     ];
 
     public const RETRY_AGAINST_DATABASE = [
@@ -149,7 +135,7 @@ class LdapConfigKeys extends PluginConfigKeys
 
     // Adding the debug setting that's referenced in LdapOptions::IsLdapDebugOn()
     public const DEBUG_ENABLED = [
-        'key' => 'ldap.debug.enabled',
+        'key' => 'debug.enabled',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable LDAP Debug',

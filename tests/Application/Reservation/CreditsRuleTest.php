@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 
@@ -11,7 +13,7 @@ class CreditsRuleTest extends TestBase
     public $userRepository;
 
     /**
-     * @var AccessoryAvailabilityRule
+     * @var CreditsRule
      */
     public $rule;
 

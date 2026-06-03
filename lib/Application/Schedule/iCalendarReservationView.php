@@ -51,10 +51,11 @@ class iCalendarReservationView
         $privateNotice = 'Private';
 
         $this->Classification = method_exists($this->ExportFactory, 'GetIcalendarClassification') ? $this->ExportFactory->GetIcalendarClassification($res) : 'PUBLIC';
-        if ($res->DateCreated){
-                $this->DateCreated = $res->DateCreated;
+        if ($res->DateCreated) {
+            $this->DateCreated = $res->DateCreated;
+        } else {
+            $this->DateCreated = Date::Now();
         }
-        else $this->DateCreated = Date::Now();
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
@@ -66,7 +67,7 @@ class iCalendarReservationView
         $this->ReferenceNumber = $res->ReferenceNumber;
         $this->Summary = $canViewDetails ? $res->Title : $privateNotice;
         $this->ReservationUrl = sprintf(
-            "%s/%s?%s=%s",
+            '%s/%s?%s=%s',
             Configuration::Instance()->GetScriptUrl(),
             Pages::RESERVATION,
             QueryStringKeys::REFERENCE_NUMBER,

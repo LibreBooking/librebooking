@@ -21,30 +21,30 @@ class SamlUser
         $options = $samlOptions->AdSamlOptions();
         if (count($options) > 0) {
             Log::Debug('Inside construct SamlUser and count options is %d', count($options));
-            $this->username = $this->GetAttributeValue($saml_attributes, $options, "ssphp_username");
+            $this->username = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_username');
             Log::Debug('Value of username is %s', $this->GetUserName());
 
-            $this->fname = $this->GetAttributeValue($saml_attributes, $options, "ssphp_firstname");
+            $this->fname = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_firstname');
             Log::Debug('Value of fname is %s', $this->GetFirstName());
 
-            $this->lname = $this->GetAttributeValue($saml_attributes, $options, "ssphp_lastname");
+            $this->lname = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_lastname');
             Log::Debug('Value of lname is %s', $this->GetLastName());
 
-            $this->mail = $this->GetAttributeValue($saml_attributes, $options, "ssphp_email");
+            $this->mail = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_email');
             Log::Debug('Value of email is %s', $this->GetEmail());
 
-            $this->phone = $this->GetAttributeValue($saml_attributes, $options, "ssphp_phone");
+            $this->phone = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_phone');
             Log::Debug('Value of phone is %s', $this->GetPhone());
 
-            $this->institution = $this->GetAttributeValue($saml_attributes, $options, "ssphp_organization");
+            $this->institution = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_organization');
             Log::Debug('Value of institution is %s', $this->GetInstitution());
 
-            $this->title = $this->GetAttributeValue($saml_attributes, $options, "ssphp_position");
+            $this->title = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_position');
             Log::Debug('Value of title is %s', $this->GetTitle());
 
             $this->groups = [];
             if ($samlOptions->SyncGroups()) {
-                $this->groups = $this->GetAttributeValue($saml_attributes, $options, "ssphp_groups", true);
+                $this->groups = $this->GetAttributeValue($saml_attributes, $options, 'ssphp_groups', true);
             }
         }
     }

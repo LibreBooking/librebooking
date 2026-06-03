@@ -1,19 +1,29 @@
 <?php
 
 require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
+require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once(ROOT_DIR . 'lib/Config/namespace.php');
 
 class LoginRedirector
 {
     public static function Redirect(ILoginBasePage $page)
     {
         $redirect = $page->GetResumeUrl();
+        $defaultId = ServiceLocator::GetServer()->GetUserSession()->HomepageId;
+        $fallback = Pages::UrlFromId($defaultId);
+        if (empty($fallback)) {
+            $fallback = Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID);
+        }
 
         if (!empty($redirect)) {
-            $page->Redirect(html_entity_decode($redirect));
+            $page->Redirect(RedirectUrlSanitizer::Sanitize(
+                url: $redirect,
+                path: '',
+                scriptUrl: Configuration::Instance()->GetScriptUrl(),
+                fallback: $fallback
+            ));
         } else {
-            $defaultId = ServiceLocator::GetServer()->GetUserSession()->HomepageId;
-            $url = Pages::UrlFromId($defaultId);
-            $page->Redirect(empty($url) ? Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID) : $url);
+            $page->Redirect($fallback);
         }
     }
 }

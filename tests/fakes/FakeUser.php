@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeUser extends User
 {
     public $_IsAdminForUser = false;

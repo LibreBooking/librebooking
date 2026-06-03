@@ -23,23 +23,22 @@ class RouteParamsKeys
     ];
 
     public const VIEW_SCHEDULE = [
-        FormKeys::PARTICIPANT_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
-        FormKeys::USER_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
+        FormKeys::PARTICIPANT_ID => ParamsValidatorKeys::OPTIONAL_NUMERIC,
+        FormKeys::USER_ID => ParamsValidatorKeys::OPTIONAL_NUMERIC,
         QueryStringKeys::SCHEDULE_ID => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START_DATE => ParamsValidatorKeys::DATE,
-        "clearFilter" => ParamsValidatorKeys::NUMERICAL,
-        QueryStringKeys::START_DATES => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::SIMPLE_DATE],
-        FormKeys::RESOURCE_TYPE_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
-        FormKeys::MAX_PARTICIPANTS => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
+        'clearFilter' => ParamsValidatorKeys::NUMERICAL,
+        QueryStringKeys::START_DATES => ParamsValidatorKeys::OPTIONAL_SIMPLEDATE,
+        FormKeys::RESOURCE_TYPE_ID => ParamsValidatorKeys::OPTIONAL_NUMERIC,
+        FormKeys::MAX_PARTICIPANTS => ParamsValidatorKeys::OPTIONAL_NUMERIC,
         FormKeys::SUBMIT => ParamsValidatorKeys::BOOLEAN,
         QueryStringKeys::DATA_REQUEST => [ParamsValidatorKeys::MATCH => ['reservations']]
     ];
 
     public const VIEW_CALENDAR = [
-        QueryStringKeys::REPORT_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
-        QueryStringKeys::SCHEDULE_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
+        QueryStringKeys::REPORT_ID => ParamsValidatorKeys::NUMERICAL,
+        QueryStringKeys::SCHEDULE_ID => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START => ParamsValidatorKeys::SIMPLE_DATE,
-        //QueryStringKeys::END => ParamsValidatorKeys::SIMPLE_DATE,
-        QueryStringKeys::GROUP_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL]
+        QueryStringKeys::GROUP_ID => ParamsValidatorKeys::NUMERICAL
     ];
 }

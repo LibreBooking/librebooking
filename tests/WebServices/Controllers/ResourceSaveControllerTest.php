@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'WebServices/Controllers/ResourceSaveController.php');
 
 class ResourceSaveControllerTest extends TestBase
@@ -14,15 +16,9 @@ class ResourceSaveControllerTest extends TestBase
      */
     private $session;
 
-    /**
-     * @var IResourceRepository
-     */
-    private $repository;
+    private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    /**
-     * @var IResourceRequestValidator
-     */
-    private $validator;
+    private IResourceRequestValidator&\PHPUnit\Framework\MockObject\MockObject $validator;
 
     public function setUp(): void
     {
@@ -163,9 +159,10 @@ class ResourceSaveControllerTest extends TestBase
         $this->repository->expects($this->once())
                 ->method('LoadById')
                 ->willReturnMap(
-                [
-                    [$resourceId, $expectedUpdateResource]
-                ]);
+                    [
+                        [$resourceId, $expectedUpdateResource]
+                    ]
+                );
 
         $response = $this->controller->Update($resourceId, $request, $this->session);
 

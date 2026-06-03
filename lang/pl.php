@@ -1,4 +1,5 @@
 <?php
+
 /**
 Translated to Polish by Dariusz Kliszewski
 Corrected and expanded by MBK
@@ -31,11 +32,9 @@ class pl extends en_gb
         $dates['short_reservation_date'] = 'j.m.Y H:i';
         $dates['dashboard'] = 'j.m. H:i';
         $dates['period_time'] = 'H:i';
-        $dates['timepicker'] = 'H:i';
         $dates['mobile_reservation_date'] = 'j.m. H:i';
         $dates['general_date_js'] = 'd.m.yy';
         $dates['general_time_js'] = 'h:mm tt';
-        $dates['timepicker_js'] = 'H:i';
         $dates['momentjs_datetime'] = 'D.M.YY hh:mm';
         $dates['calendar_time'] = 'h:mmt';
         $dates['calendar_dates'] = 'j.m.';
@@ -852,6 +851,7 @@ class pl extends en_gb
         $strings['ConflictingReservationDates'] = 'Istnieją konflikty rezerwacji w podanych dniach:';
         $strings['InstancesOverlapRule'] = 'Rezerwacje nakładają się na siebie:';
         $strings['StartDateBeforeEndDateRule'] = 'Data rozpoczęcia musi być wcześniejsza niż data zakończenia';
+        $strings['RecurringWithoutTerminationRule'] = 'Data zakończenia jest wymagana dla powtarzających się blokad.';
         $strings['StartIsInPast'] = 'Data rozpoczęcia nie może być datą z przeszłości';
         $strings['EmailDisabled'] = 'Administrator wyłączył powiadomienia mailowe';
         $strings['ValidLayoutRequired'] = 'Wpisy muszą być uzupełnione dla wszystkich 24 godzin od rozpoczęcia dnia aż do północy.';
@@ -1046,12 +1046,12 @@ class pl extends en_gb
         $strings['PendingApprovalReservations'] = 'Rezerwacje oczekujące na zatwierdzenie';
         $strings['LaterThisMonth'] = 'Później w tym miesiącu';
         $strings['LaterThisYear'] = 'Później w tym roku';
-        $strings['Remaining'] = 'Pozostałe';        
+        $strings['Remaining'] = 'Pozostałe';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Brak brakujących rezerwacji wymeldowania';
-        $strings['MissingCheckOutReservations'] = 'Brakujące rezerwacje wymeldowania';        
+        $strings['MissingCheckOutReservations'] = 'Brakujące rezerwacje wymeldowania';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

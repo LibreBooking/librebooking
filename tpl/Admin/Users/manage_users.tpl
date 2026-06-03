@@ -5,30 +5,33 @@
     <div class="border-bottom mb-3 clearfix">
         <div class="dropdown admin-header-more float-end">
             <div class="btn-group btn-group-sm">
-                <a role="menuitem" href="#" id="add-user" class="add-link add-user add-group btn btn-primary"><i
-                        class="bi bi-plus-circle-fill me-1 add icon"></i>{translate key="AddUser"}
+                <a href="#" id="add-user" class="add-link add-user add-group btn btn-primary">
+                    <i class="bi bi-plus-circle-fill me-1"></i>
+                    {translate key="AddUser"}
                 </a>
+
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="moreUserActions"
-                    data-bs-toggle="dropdown">
-                    <span class="visually-hidden">{translate key="More"}</span>
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="{translate key='More'}">
                     <i class="bi bi-three-dots"></i>
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="moreUserActions">
-                    <li role="presentation">
-                        <a role="menuitem" href="#" id="invite-users" class="add-link add-user dropdown-item"><i
-                                class="bi bi-send me-1"></i>{translate key="InviteUsers"}
 
+                <ul class="dropdown-menu" aria-labelledby="moreUserActions">
+                    <li>
+                        <a href="#" id="invite-users" class="dropdown-item">
+                            <i class="bi bi-send me-1"></i>
+                            {translate key="InviteUsers"}
                         </a>
                     </li>
-                    <li role="presentation">
-                        <a role="menuitem" href="#" id="import-users" class="add-link add-user dropdown-item"><i
-                                class="bi bi-download me-1"></i>{translate key="Import"}
+                    <li>
+                        <a href="#" id="import-users" class="dropdown-item">
+                            <i class="bi bi-download me-1"></i>
+                            {translate key="Import"}
                         </a>
                     </li>
-                    <li role="presentation">
-                        <a role="menuitem" href="{$ExportUrl}" download="{$ExportUrl}" id="export-users"
-                            class="add-link add-user dropdown-item" target="_blank"><i class="bi bi-upload
-                        me-1"></i>{translate key="Export"}
+                    <li>
+                        <a href="{$ExportUrl}" download id="export-users" class="dropdown-item" target="_blank">
+                            <i class="bi bi-upload me-1"></i>
+                            {translate key="Export"}
                         </a>
                     </li>
                 </ul>
@@ -44,7 +47,7 @@
                     <label class="fw-bold" for="userSearch"><i
                             class="bi bi-person-fill me-1"></i>{translate key=FindUser}
                         | {html_link href=$smarty.server.SCRIPT_NAME key=AllUsers}</label>
-                    <input type="text" id="userSearch" class="form-control" />
+                    <input type="text" id="userSearch" class="form-control form-control-sm" />
                 </div>
                 <div class="form-group col-sm-2">
                     <label class="fw-bold" for="filterStatusId">{translate key=Status}</label>
@@ -100,14 +103,18 @@
                         {foreach from=$users item=user}
                             {assign var=id value=$user->Id}
                             <tr data-userId="{$id}">
-                                <td>{fullname first=$user->First last=$user->Last ignorePrivacy="true"}</td>
+                                <td>{fullname first=$user->First|default:''|unescape:'html' last=$user->Last|default:''|unescape:'html' ignorePrivacy="true"}
+                                </td>
                                 <td>{$user->Username}</td>
                                 <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>
                                 <td>{$user->Phone}</td>
                                 <td>{$user->Organization}</td>
                                 <td>{$user->Position}</td>
-                                <td>{format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
-                                <td>{format_date date=$user->LastLogin key=short_datetime timezone=$Timezone}</td>
+                                <td
+                                    data-order="{format_date date=$user->DateCreated format='Y-m-d H:i' timezone=$Timezone}">
+                                    {format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
+                                <td data-order="{format_date date=$user->LastLogin format='Y-m-d H:i' timezone=$Timezone}">
+                                    {format_date date=$user->LastLogin key=short_datetime timezone=$Timezone}</td>
                                 <td class="action"><a href="#"
                                         class="update changeStatus link-primary">{$statusDescriptions[$user->StatusId]}</a>
                                     {indicator id="userStatusIndicator"}
@@ -648,7 +655,7 @@
     {jsfile src="ajax-helpers.js"}
     {jsfile src="autocomplete.js"}
     {jsfile src="admin/user.js"}
-    {jsfile src="js/jquery.form-3.09.min.js"}
+    {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
     <script type="text/javascript">
         function setUpEditables() {

@@ -225,7 +225,7 @@ class DateRange
      */
     public function ToString()
     {
-        return "\nBegin: " . $this->_begin->ToString() . " End: " . $this->_end->ToString() . "\n";
+        return "\nBegin: " . $this->_begin->ToString() . ' End: ' . $this->_end->ToString() . "\n";
     }
 
     public function __toString()

@@ -8,7 +8,7 @@ Since forking from Booked Scheduler, LibreBooking has evolved significantly:
 
 - Modernized PHP codebase with improved compatibility
 - Enhanced configuration system with comprehensive documentation
-- Improved Docker deployment support  
+- Improved Docker deployment support
 - Updated dependencies and security fixes
 - Enhanced user interface and user experience
 - Expanded API capabilities

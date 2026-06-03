@@ -20,7 +20,7 @@ class AdminPageDecorator extends ActionPage implements IActionPage
         $user = ServiceLocator::GetServer()->GetUserSession();
 
         if (!$this->page->IsAuthenticated() || !$user->IsAdmin) {
-            $this->RedirectResume(sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl())));
+            $this->RedirectResume(sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl())));
             die();
         }
 
@@ -57,7 +57,7 @@ abstract class AdminPage extends SecurePage implements IActionPage
         $user = ServiceLocator::GetServer()->GetUserSession();
 
         if (!$user->IsAdmin) {
-            $this->RedirectResume(sprintf("%s%s?%s=%s", $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl())));
+            $this->RedirectResume(sprintf('%s%s?%s=%s', $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl())));
             die();
         }
     }

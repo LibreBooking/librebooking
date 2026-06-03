@@ -26,10 +26,7 @@ interface IGuestParticipationPage
      */
     public function DisplayResult($results);
 
-    /**
-     * @return int
-     */
-    public function GetEmail();
+    public function GetEmail(): string;
 
     /**
      * @return string
@@ -120,9 +117,9 @@ class GuestParticipationPage extends Page implements IGuestParticipationPage
         return $this->GetQuerystring(QueryStringKeys::REFERENCE_NUMBER);
     }
 
-    public function GetEmail()
+    public function GetEmail(): string
     {
-        return $this->GetQuerystring(QueryStringKeys::EMAIL);
+        return strval($this->GetQuerystring(QueryStringKeys::EMAIL));
     }
 
     public function GetResponseType()

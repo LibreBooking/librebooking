@@ -15,7 +15,7 @@ class th_th extends en_gb
      */
     protected function _LoadDates()
     {
-        $dates = [];
+        $dates = parent::_LoadDates();
 
         /**
             * Additional code to support the Thai and Buddhist calendar year
@@ -25,22 +25,22 @@ class th_th extends en_gb
         */
 
 
-        $dates['general_date'] = 'd/m/'.(date('Y')+543);
-        $dates['general_datetime'] = 'd/m/'.(date('Y')+543).' H:i:s';
-        $dates['short_datetime'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['schedule_daily'] = 'l, d/m/'.(date('Y')+543);
-        $dates['reservation_email'] = 'd/m/'.(date('Y')+543).' @ H:i (e)';
-        $dates['res_popup'] = 'd/m/'.(date('Y')+543).' H:i'; //
+        $dates['general_date'] = 'd/m/'.(date('Y') + 543);
+        $dates['general_datetime'] = 'd/m/'.(date('Y') + 543).' H:i:s';
+        $dates['short_datetime'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['schedule_daily'] = 'l, d/m/'.(date('Y') + 543);
+        $dates['reservation_email'] = 'd/m/'.(date('Y') + 543).' @ H:i (e)';
+        $dates['res_popup'] = 'd/m/'.(date('Y') + 543).' H:i'; //
         $dates['res_popup_time'] = 'H:i';
-        $dates['short_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['dashboard'] = 'd/m/'.(date('Y')+543).' H:i';
+        $dates['short_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['dashboard'] = 'd/m/'.(date('Y') + 543).' H:i';
         //$dates['dashboard'] = $this->_LoadDayThai(date('D')).', d/m/'.(date('Y')+543).' H:i'; // Test Display Thai Day in Dashboard
         $dates['period_time'] = 'H:i';
-        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['general_date_js'] = 'dd/mm/'.(date('Y')+543);
-        $dates['momentjs_datetime'] = 'D/M/'.(date('Y')+543).' h:mm A';
+        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['general_date_js'] = 'dd/mm/'.(date('Y') + 543);
+        $dates['momentjs_datetime'] = 'D/M/'.(date('Y') + 543).' h:mm A';
         $dates['calendar_time'] = 'h:mmt';
-        $dates['calendar_dates'] = 'd/M/'.(date('Y')+543);
+        $dates['calendar_dates'] = 'd/M/'.(date('Y') + 543);
 
         $this->Dates = $dates;
 
@@ -67,7 +67,7 @@ class th_th extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'ชื่อ';
         $strings['LastName'] = 'นามสกุล';
@@ -692,6 +692,7 @@ class th_th extends en_gb
         $strings['NoResourcePermission'] = 'คุณไม่มีสิทธิ์เข้าถึงแหล่งข้อมูลที่ร้องขออย่างน้อยหนึ่งรายการ';
         $strings['ConflictingReservationDates'] = 'มีการจองที่ขัดแย้งกันในวันที่ต่อไปนี้:';
         $strings['StartDateBeforeEndDateRule'] = 'วันที่และเวลาเริ่มต้นต้องอยู่ก่อนวันที่และเวลาสิ้นสุด';
+        $strings['RecurringWithoutTerminationRule'] = 'จำเป็นต้องระบุวันที่สิ้นสุดสำหรับการปิดกั้นที่เกิดซ้ำ';
         $strings['StartIsInPast'] = 'วันที่และเวลาเริ่มต้นไม่สามารถใช้วันที่ผ่านมาแล้วได้';
         $strings['EmailDisabled'] = 'ผู้ดูแลระบบปิดการแจ้งเตือนทางอีเมล';
         $strings['ValidLayoutRequired'] = 'สล็อตต้องมีการให้บริการตลอด 24 ชั่วโมงของวันเริ่มต้นและสิ้นสุดในเวลา 12:00 AM ';
@@ -861,12 +862,12 @@ class th_th extends en_gb
         $strings['PendingApprovalReservations'] = 'การจองรอการอนุมัติ';
         $strings['LaterThisMonth'] = 'ในภายหลังเดือนนี้';
         $strings['LaterThisYear'] = 'ในภายหลังปีนี้';
-        $strings['Remaining'] = 'ที่เหลือ';        
+        $strings['Remaining'] = 'ที่เหลือ';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'ไม่มีการจองเช็คเอาท์ที่ขาดหายไป';
-        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';        
+        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -885,7 +886,7 @@ class th_th extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -911,7 +912,7 @@ class th_th extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

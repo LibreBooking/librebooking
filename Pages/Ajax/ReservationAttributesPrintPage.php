@@ -10,7 +10,7 @@ interface IReservationAttributesPrintPage
     public function GetRequestedUserId();
 
     /**
-     * @return int
+     * @return string
      */
     public function GetRequestedReferenceNumber();
 
@@ -51,6 +51,7 @@ class ReservationAttributesPrintPage extends Page implements IReservationAttribu
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $this->presenter->PageLoad($userSession);
         $this->Set('ReadOnly', BooleanConverter::ConvertValue($this->GetIsReadOnly()));
+        $this->Set('CustomAttributeTypeDateTime', CustomAttributeTypes::DATETIME);
         $this->Display('Ajax/reservation/reservation_attributes_print.tpl');
     }
 
@@ -67,7 +68,7 @@ class ReservationAttributesPrintPage extends Page implements IReservationAttribu
      */
     public function GetRequestedUserId()
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return (int)$this->GetQuerystring(QueryStringKeys::USER_ID);
     }
 
     /**

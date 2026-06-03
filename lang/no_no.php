@@ -512,6 +512,7 @@ class no_no extends en_gb
         $strings['NoResourcePermission'] = 'Du har ikke tilgangsrettigheter til en eller flere av de anmodede enheter.';
         $strings['ConflictingReservationDates'] = 'Det er konflikt i reservasjonene på følgende datoer:';
         $strings['StartDateBeforeEndDateRule'] = 'Starttid må være før sluttid.';
+        $strings['RecurringWithoutTerminationRule'] = 'En sluttdato er påkrevd for gjentakende blokkeringer.';
         $strings['StartIsInPast'] = 'Du må velge en starttid som ikke er passert.';
         $strings['EmailDisabled'] = 'Adiministrator har slått av epostkunngjøringer.';
         $strings['ValidLayoutRequired'] = 'Tidsperioder må angis for alle 24 timer, men begynnelse og slutt kl 12:00 AM.';
@@ -657,12 +658,12 @@ class no_no extends en_gb
         $strings['PendingApprovalReservations'] = 'Reservasjoner venter på godkjenning';
         $strings['LaterThisMonth'] = 'Senere denne måneden';
         $strings['LaterThisYear'] = 'Senere i år';
-        $strings['Remaining'] = 'Gjenstående';        
+        $strings['Remaining'] = 'Gjenstående';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Det er ingen manglende utsjekkingsreservasjoner';
-        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';        
+        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions

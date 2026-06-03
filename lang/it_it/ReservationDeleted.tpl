@@ -1,5 +1,5 @@
 <p>{$UserName},</p>
-<p>la seguente prenotazione &egrave; stata cancellata.</p>
+<p>La seguente prenotazione è stata cancellata.</p>
 <p>Dettagli della prenotazione:</p>
 <p>
     <strong>Inizio:</strong> {formatdate date=$StartDate key=reservation_email}<br />
@@ -39,7 +39,7 @@
         {/foreach}
 		</p>
 {/if}
-{if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+{if !empty($CreatedBy)}
     <p>
 		    <strong>Cancellata da:</strong> {$CreatedBy}
 		    <br />

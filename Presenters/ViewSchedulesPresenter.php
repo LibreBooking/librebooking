@@ -4,10 +4,7 @@ require_once(ROOT_DIR . 'config/timezones.php');        //NEEDED?
 
 class ViewSchedulesPresenter
 {
-    /**
-     * @var ResourceViewerViewResourcesPage
-     */
-    private $page;
+    private ScheduleViewerViewSchedulesPage $page;
 
     /**
      * @var IResourceRepository

@@ -1,9 +1,14 @@
 Basic Configuration
 ===================
 
-This guide covers the essential configuration settings needed to get LibreBooking up and running. All settings are configured in the ``/config/config.php`` file, which should be created by copying ``/config/config.dist.php``.
+This guide covers the essential configuration settings needed to get
+LibreBooking up and running. All settings are configured in the
+``/config/config.php`` file, which should be created by copying
+``/config/config.dist.php``.
 
-The configuration file uses a PHP array format that returns a settings array. Some settings use nested arrays (like database settings), while others use flat dot notation.
+The configuration file uses a PHP array format that returns a settings array.
+Some settings use nested arrays (like database settings), while others use flat
+dot notation.
 
 Getting Started
 ---------------
@@ -19,10 +24,13 @@ Then edit the file with your preferred settings.
 Environment Variable Override
 -----------------------------
 
-LibreBooking supports overriding configuration settings using environment variables. This is especially useful for Docker deployments or when you want to keep sensitive information separate from configuration files.
+LibreBooking supports overriding configuration settings using environment
+variables. This is especially useful for Docker deployments or when you want to
+keep sensitive information separate from configuration files.
 
 **Pattern**
-  Environment variables follow the pattern ``LB_`` + the config key with dots and dashes converted to underscores and converted to uppercase.
+  Environment variables follow the pattern ``LB_`` + the config key with dots
+  and dashes converted to underscores and converted to uppercase.
 
 **Examples**
 
@@ -32,10 +40,13 @@ LibreBooking supports overriding configuration settings using environment variab
 - ``default.timezone`` → ``LB_DEFAULT_TIMEZONE``
 
 **Using .env Files**
-  LibreBooking automatically loads ``.env`` files if present in the root directory. See ``develop/app/.env.example`` for a complete list of available environment variables.
+  LibreBooking automatically loads ``.env`` files if present in the root
+  directory. See ``develop/app/.env.example`` for a complete list of available
+  environment variables.
 
 **Priority**
-  Environment variables take precedence over configuration file settings. The order of precedence is:
+  Environment variables take precedence over configuration file settings. The
+  order of precedence is:
 
   1. Environment variables (highest priority)
   2. Configuration file settings
@@ -49,30 +60,30 @@ Application Identity
 
 **app.title**
   The title of the application displayed in the header and browser tab.
-  
+
   .. code-block:: php
-  
+
      'app.title' => 'LibreBooking',
 
 **admin.email**
   Administrator email address.
-  
+
   .. code-block:: php
-  
+
      'admin.email' => 'admin@example.com',
 
 **company.name**
   Company name to show in the page header.
-  
+
   .. code-block:: php
-  
+
      'company.name' => '',
 
 **company.url**
   URL to the company's website.
-  
+
   .. code-block:: php
-  
+
      'company.url' => '',
 
 Time and Language
@@ -80,17 +91,33 @@ Time and Language
 
 **default.timezone**
   Look up here http://php.net/manual/en/timezones.php.
-  
+
   .. code-block:: php
-  
+
      'default.timezone' => 'Europe/London',
 
 **default.language**
   Default language for the application.
-  
+
   .. code-block:: php
-  
+
      'default.language' => 'en_us',
+
+**enabled.languages**
+  Comma-separated list of language codes to show in the language selector.
+  Languages appear in the order listed. Leave empty to show all supported
+  languages. Language codes must match those defined in
+  ``lang/AvailableLanguages.php``. If the value of ``default.language``
+  is not included in this list, the application will fall back to ``en_us`` and
+  log an error.
+
+  .. code-block:: php
+
+     # Show only English, French, and German
+     'enabled.languages' => 'en_us,fr_fr,de_de',
+
+     # Show all supported languages (default)
+     'enabled.languages' => '',
 
 Database Configuration
 ----------------------
@@ -273,7 +300,8 @@ Frontend Settings
   Public URL to the Web directory of this instance.
 
 **css.theme**
-  Theme to use for the application. Options: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange.
+  Theme to use for the application. Options: default, dimgray, dark_red,
+  dark_green, french_blue, cake_blue, orange.
 
 **cache.templates**
   Enable or disable template caching.
@@ -286,9 +314,9 @@ Installation
 
 **install.password**
   Password required for installation or upgrades.
-  
+
   .. code-block:: php
-  
+
      'install.password' => '',
 
 Basic Privacy Settings
@@ -311,6 +339,22 @@ Basic Privacy Settings
 **privacy.allow.guest.reservations**
   Allow guests to make reservations.
 
+Scheduled Jobs (Cron)
+---------------------
+
+Set up host cron entries to execute the job scripts directly with PHP.
+Example crontab (adjust PHP binary path and LibreBooking path):
+
+.. code-block:: text
+
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/autorelease.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendreminders.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendmissedcheckin.php
+   * * * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendwaitlist.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendseriesend.php
+   0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sessioncleanup.php
+   0 1 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/deleteolddata.php
+
 Next Steps
 ----------
 
@@ -325,7 +369,8 @@ After configuring these basic settings:
 Docker Installation
 ===================
 
-LibreBooking can be easily deployed using Docker containers. This is the recommended method for quick setup and testing.
+LibreBooking can be easily deployed using Docker containers. This is the
+recommended method for quick setup and testing.
 
 Prerequisites
 -------------
@@ -353,9 +398,9 @@ Quick Start with Docker Compose
             - PGID=1000
             - TZ=America/New_York
             - MYSQL_ROOT_PASSWORD=your_secure_root_password
-        
+
         app:
-          image: librebooking/librebooking:develop
+          image: librebooking/librebooking:develop # or use tagged version
           restart: always
           depends_on:
             - db
@@ -418,17 +463,14 @@ Docker Environment Variables
 ``LB_ENV``
   Environment mode: ``production`` (default) or ``dev``
 
-``LB_LOG_FOLDER``
+``LB_LOGGING_FOLDER``
   Log directory (default: ``/var/log/librebooking``)
 
-``LB_LOG_LEVEL``
+``LB_LOGGING_LEVEL``
   Logging level: ``none`` (default), ``debug``, ``error``
 
-``LB_LOG_SQL``
+``LB_LOGGING_SQL``
   Enable SQL logging: ``false`` (default), ``true``
-
-``LB_CRON_ENABLED``
-  Enable background cron jobs: ``false`` (default), ``true``
 
 ``LB_PATH``
   URL path prefix (for reverse proxy setups)
@@ -465,7 +507,7 @@ Example with persistent uploads:
 .. code-block:: yaml
 
    app:
-     image: librebooking/librebooking:develop
+     image: librebooking/librebooking:develop # or use tagged version
      volumes:
        - app_config:/config
        - ./uploads/images:/var/www/html/Web/uploads/images
@@ -474,17 +516,32 @@ Example with persistent uploads:
 Background Jobs (Cron)
 ----------------------
 
-LibreBooking requires background jobs for features like reminder emails. Enable them with:
+LibreBooking requires background jobs for features like reminder emails.
+
+**Docker/Container deployments**
+
+The recommended approach is to run cron in a dedicated container instance.
+Run the main app container as non-root ``www-data``, and run a second
+container from the same image with ``root`` and
+``/usr/local/bin/cron.sh`` as the entrypoint.
 
 .. code-block:: yaml
 
-   environment:
-     - LB_CRON_ENABLED=true
+   services:
+     app:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'www-data'
 
-Or run them manually from the host:
+     cron:
+       image: librebooking/librebooking:develop # or use tagged version
+       user: 'root'
+       entrypoint: /usr/local/bin/cron.sh
+
+Or run them manually:
 
 .. code-block:: bash
 
+   # For example run the sendreminders.php job
    docker exec <container_name> php -f /var/www/html/Jobs/sendreminders.php
 
 Docker Troubleshooting

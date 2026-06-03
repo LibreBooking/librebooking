@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 class ValidatorTest extends TestBase
@@ -13,7 +15,7 @@ class ValidatorTest extends TestBase
         $validators->Register('someid', $validator);
         $validators->Validate();
 
-        $this->assertTrue($validator->_WasValidated, "should have been validated when registered");
+        $this->assertTrue($validator->_WasValidated, 'should have been validated when registered');
         $this->assertTrue($validators->AreAllValid());
     }
 
@@ -37,7 +39,7 @@ class ValidatorTest extends TestBase
         $this->assertTrue($valid1->IsValid());
         $this->assertTrue($valid2->IsValid());
         $this->assertFalse($invalid1->IsValid());
-        $this->assertFalse($invalid2->IsValid(), "spaces are not allowed");
-        $this->assertFalse($invalid3->IsValid(), "password is required are not allowed");
+        $this->assertFalse($invalid2->IsValid(), 'spaces are not allowed');
+        $this->assertFalse($invalid3->IsValid(), 'password is required are not allowed');
     }
 }

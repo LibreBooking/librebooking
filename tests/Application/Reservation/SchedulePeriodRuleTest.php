@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class SchedulePeriodRuleTest extends TestBase
 {
-    /**
-     * @var IScheduleRepository
-     */
-    private $scheduleRepository;
+    private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
-    /**
-     * @var IScheduleLayout
-     */
-    private $layout;
+    private IScheduleLayout&\PHPUnit\Framework\MockObject\MockObject $layout;
 
     /**
      * @var SchedulePeriodRule
@@ -83,16 +79,13 @@ class SchedulePeriodRuleTest extends TestBase
         $this->layout
                 ->expects($matcher)
                 ->method('GetPeriod')
-                ->willReturnCallback(function (Date $d) use ($matcher, $series, $date)
-                {
-                    match ($matcher->numberOfInvocations())
-                    {
+                ->willReturnCallback(function (Date $d) use ($matcher, $series, $date) {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($d, $series->CurrentInstance()->StartDate()),
                         2 => $this->assertEquals($d, $series->CurrentInstance()->EndDate())
                     };
 
-                    return match ($matcher->numberOfInvocations())
-                    {
+                    return match ($matcher->numberOfInvocations()) {
                         1 => new SchedulePeriod($date, $date),
                         2 => new SchedulePeriod($date->AddMinutes(1), $date->AddMinutes(1))
                     };

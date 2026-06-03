@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakePluginManager extends PluginManager implements IPostRegistration
 {
     public function __construct()

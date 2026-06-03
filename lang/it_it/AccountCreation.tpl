@@ -1,4 +1,4 @@
-<p>Si &egrave; registrato un nuovo utente con le seguenti informazioni:</p>
+<p>Si è registrato un nuovo utente con le seguenti informazioni:</p>
 <p>
     <strong>Email:</strong> {$EmailAddress}<br />
     <strong>Nome:</strong> {$FullName}<br />
@@ -7,7 +7,7 @@
     <strong>Posizione:</strong> {$Position}
 </p>
 <p>
-    {if preg_match("/[a-zA-Z]+/",$CreatedBy)}
+    {if !empty($CreatedBy)}
         <strong>Creato da:</strong> {$CreatedBy}
     {/if}
 </p>

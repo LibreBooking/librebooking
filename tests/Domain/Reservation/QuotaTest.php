@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 
 class QuotaTest extends TestBase
@@ -14,10 +16,7 @@ class QuotaTest extends TestBase
      */
     public $schedule;
 
-    /**
-     * @var IReservationViewRepository
-     */
-    public $reservationViewRepository;
+    public IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationViewRepository;
 
     /**
      * @var FakeUser
@@ -882,7 +881,7 @@ class QuotaTest extends TestBase
 
         $series = $this->GetHourLongReservation($startDate, $endDate);
 
-        $quota = new Quota(1, $duration, $limit, $series->ResourceId(), null, null, "00:00", "00:30");
+        $quota = new Quota(1, $duration, $limit, $series->ResourceId(), null, null, '00:00', '00:30');
 
         $res1 = new ReservationItemView('', $startDate->SetTimeString('00:00'), $endDate->SetTimeString('00:31'), '', $series->ResourceId(), 98712);
         $reservations = [$res1];
@@ -964,7 +963,7 @@ class QuotaTest extends TestBase
 
     public function testBugOvernightBookingCausingNewReservationsToExceedQuota()
     {
-        $quota = new Quota(1, new QuotaDurationDay(), new QuotaLimitHours(1), null, null, null, "08:00", "20:00", [], new QuotaScopeIncluded());
+        $quota = new Quota(1, new QuotaDurationDay(), new QuotaLimitHours(1), null, null, null, '08:00', '20:00', [], new QuotaScopeIncluded());
         $overnightReservation = new ReservationItemView('', Date::Parse('2019-08-27 21:00', 'America/Chicago'), Date::Parse('2019-08-28 04:00', 'America/Chicago'), null, 1);
         $reservationDate = DateRange::Create('2019-08-28 12:00', '2019-08-28 13:00', 'America/Chicago');
         $series = ReservationSeries::Create(1, new FakeBookableResource(1), '', '', $reservationDate, new RepeatNone(), $this->fakeUser);

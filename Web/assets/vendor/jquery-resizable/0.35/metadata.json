@@ -1,0 +1,8 @@
+{
+  "name": "jquery-resizable",
+  "version": "0.35",
+  "description": "A simple jQuery resizable plug-in.",
+  "homepage": "https://github.com/RickStrahl/jquery-resizable",
+  "source": "https://rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js",
+  "license": "MIT"
+}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 
 class ReservationTest extends TestBase
@@ -61,7 +63,7 @@ class ReservationTest extends TestBase
 
         $instances = array_values($series->Instances());
 
-        $this->assertEquals(count($repeatDates) + 1, count($instances), "should have original plus instances");
+        $this->assertEquals(count($repeatDates) + 1, count($instances), 'should have original plus instances');
         $this->assertTrue($startDateUtc->Equals($instances[0]->StartDate()));
         $this->assertTrue($endDateUtc->Equals($instances[0]->EndDate()));
 

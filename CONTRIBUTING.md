@@ -49,15 +49,16 @@ about.
 
 ## Getting Started
 
-* *Ensure you have an up-to-date `main` branch:** Fork the repository and make
-sure your `main` branch is synced with the upstream project before creating
+* **Ensure you have an up-to-date `develop` branch:** Fork the repository and make
+sure your `develop` branch is synced with the upstream project before creating
 your feature branch.
 * **Create a new branch** for your changes: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/issue-number-and-fix`.
 * **Make your changes** and **add tests** if applicable.
+* **Keep Composer files in sync:** If you change `composer.json`, regenerate and commit `composer.lock` in the same PR.
 * **Ensure your code lints**
 * **Commit your changes** with a clear and descriptive commit message.
 * **Push your branch** to your fork: `git push origin feature/your-feature-name`.
-* **Open a Pull Request** against our `main` branch.
+* **Open a Pull Request** against our `develop` branch.
 
 ## Reporting Bugs
 
@@ -125,6 +126,32 @@ feat(API): Add new schedules endpoint
 Add a new schedules endpoint which allows getting the resources of a schedule.
 
 Closes: #2222
+```
+
+### AI Attribution
+
+When an AI coding assistant contributed meaningfully to a commit (writing or
+significantly modifying code, suggesting the fix, generating tests, etc.),
+add an `Assisted-by` trailer to the commit footer:
+
+```text
+Assisted-by: <AgentName>:<ModelVersion>
+```
+
+Place it alongside any `Closes:` or `BREAKING CHANGE:` lines. Omit it when
+the AI contribution was trivial (e.g. a one-word suggestion or only
+autocomplete) or purely mechanical (running linters, reformatting).
+
+Example:
+
+```text
+fix(reservations): correct overlap check for multi-day bookings
+
+The start-of-day boundary was calculated in UTC rather than the
+schedule's local timezone, causing false conflicts.
+
+Closes: #1234
+Assisted-by: Claude:claude-sonnet-4-6
 ```
 
 ### Revert

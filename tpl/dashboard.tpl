@@ -9,6 +9,7 @@
 
 	{include file="javascript-includes.tpl"}
 
+	{jsfile src="reservationPopup.js"}
 	{jsfile src="dashboard.js"}
 	{jsfile src="resourcePopup.js"}
 	{jsfile src="ajax-helpers.js"}

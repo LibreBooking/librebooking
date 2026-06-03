@@ -5,6 +5,7 @@ require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/GroupImportCsv.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ResourcePermissionService.php');
 require_once(ROOT_DIR . 'Pages/Admin/ManageGroupsPage.php');
 
 class ManageGroupsActions
@@ -48,6 +49,10 @@ class ManageGroupsPresenter extends ActionPresenter
      * @var IUserRepository
      */
     private $userRepository;
+    /**
+     * @var IResourcePermissionService
+     */
+    private $resourcePermissionService;
 
     /**
      * @param IManageGroupsPage $page
@@ -55,13 +60,15 @@ class ManageGroupsPresenter extends ActionPresenter
      * @param IResourceRepository $resourceRepository
      * @param IScheduleRepository $scheduleRepository
      * @param IUserRepository $userRepository
+     * @param IResourcePermissionService|null $resourcePermissionService
      */
     public function __construct(
         IManageGroupsPage $page,
         IGroupRepository&IGroupViewRepository $groupRepository,
         IResourceRepository $resourceRepository,
         IScheduleRepository $scheduleRepository,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
+        ?IResourcePermissionService $resourcePermissionService = null,
     ) {
         parent::__construct($page);
 
@@ -70,6 +77,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $this->resourceRepository = $resourceRepository;
         $this->scheduleRepository = $scheduleRepository;
         $this->userRepository = $userRepository;
+        $this->resourcePermissionService = $resourcePermissionService ?? new ResourcePermissionService($resourceRepository);
 
         $this->AddAction(ManageGroupsActions::AddUser, 'AddUser');
         $this->AddAction(ManageGroupsActions::RemoveUser, 'RemoveUser');
@@ -124,38 +132,38 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangePermissions()
     {
+        $currentUser = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
+        $managedResourceIds = $this->resourcePermissionService->GetResourceIdsThatUserCanAdminister($currentUser);
+
         $group = $this->groupRepository->LoadById($this->page->GetGroupId());
-        $resources = [];
-        $allowed = [];
-        $view = [];
 
-        if (is_array($this->page->GetAllowedResourceIds())) {
-            $resources = $this->page->GetAllowedResourceIds();
-        }
+        $permissionsByType = $this->resourcePermissionService->ParseSubmittedPermissions(
+            $this->page->GetAllowedResourceIds(),
+            $managedResourceIds,
+        );
 
-        foreach ($resources as $resource) {
-            $split = explode('_', $resource);
-            $resourceId = $split[0];
-            $permissionType = $split[1];
+        $group->ChangeAllowedPermissions(
+            $this->resourcePermissionService->MergeWithPreservedPermissions(
+                existingIds: $group->AllowedResourceIds(),
+                managedResourceIds: $managedResourceIds,
+                submittedIds: $permissionsByType['full'],
+            )
+        );
+        $group->ChangeViewPermissions(
+            $this->resourcePermissionService->MergeWithPreservedPermissions(
+                existingIds: $group->AllowedViewResourceIds(),
+                managedResourceIds: $managedResourceIds,
+                submittedIds: $permissionsByType['view'],
+            )
+        );
 
-            if ($permissionType === ResourcePermissionType::Full . '') {
-                $allowed[] = $resourceId;
-            } else {
-                if ($permissionType === ResourcePermissionType::View . '') {
-                    $view[] = $resourceId;
-                }
-            }
-        }
-
-        $group->ChangeViewPermissions($view);
-        $group->ChangeAllowedPermissions($allowed);
         $this->groupRepository->Update($group);
     }
 
     public function ChangeRoles()
     {
         $groupId = $this->page->GetGroupId();
-        Log::Debug("Changing roles for groupId: %s", $groupId);
+        Log::Debug('Changing roles for groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $roles = [];
@@ -216,7 +224,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $userId = $this->page->GetUserId();
 
-        Log::Debug("Adding userId: %s to groupId: %s", $userId, $groupId);
+        Log::Debug('Adding userId: %s to groupId: %s', $userId, $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $group->AddUser($userId);
@@ -275,7 +283,7 @@ class ManageGroupsPresenter extends ActionPresenter
     {
         $groupId = $this->page->GetGroupId();
 
-        Log::Debug("Deleting groupId: %s", $groupId);
+        Log::Debug('Deleting groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $this->groupRepository->Remove($group);
@@ -286,7 +294,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $adminGroupId = $this->page->GetAdminGroupId();
 
-        Log::Debug("Changing admin for groupId: %s to %s", $groupId, $adminGroupId);
+        Log::Debug('Changing admin for groupId: %s to %s', $groupId, $adminGroupId);
 
         $group = $this->groupRepository->LoadById($groupId);
 

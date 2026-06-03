@@ -2,12 +2,12 @@
 
 class LowerCaseConverter implements IConvert
 {
-    public function Convert($value)
+    public function Convert(mixed $value): string
     {
-        return strtolower($value);
+        return strtolower((string) ($value ?? ''));
     }
 
-    public function IsValid($value): bool
+    public function IsValid(mixed $value): bool
     {
         return is_string($value);
     }

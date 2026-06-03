@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class ScheduleLayoutSerializableTest extends TestBase
 {
     public function setUp(): void

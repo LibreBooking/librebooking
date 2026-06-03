@@ -72,17 +72,17 @@ class adSAML
     {
         // Auto load  libraries and
         // obtain simple SAML SP configuration data
-        $this->samlLib = $options["ssphp_lib"];
-        $this->samlConfig = $options["ssphp_config"];
+        $this->samlLib = $options['ssphp_lib'];
+        $this->samlConfig = $options['ssphp_config'];
         require_once($this->samlLib . '/lib/_autoload.php');
 
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
-            if (array_key_exists("ssphp_sp", $options)) {
-                $this->ssphpSP = $options["ssphp_sp"];
+            if (array_key_exists('ssphp_sp', $options)) {
+                $this->ssphpSP = $options['ssphp_sp'];
             } else {
-                Log::Error("Could not connect to SAML service provider."
-                           . "  Please check your SAML configuration settings");
+                Log::Error('Could not connect to SAML service provider.'
+                           . '  Please check your SAML configuration settings');
             }
         }
 

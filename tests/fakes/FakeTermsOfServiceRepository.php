@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class FakeTermsOfServiceRepository implements ITermsOfServiceRepository
@@ -16,8 +18,7 @@ class FakeTermsOfServiceRepository implements ITermsOfServiceRepository
 
     public function Add(TermsOfService $terms)
     {
-        // TODO: Implement Add() method.
-        return null;
+        return 1;
     }
 
     public function Load()

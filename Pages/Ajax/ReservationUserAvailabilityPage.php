@@ -99,7 +99,7 @@ class ReservationUserAvailabilityPage extends Page implements IReservationUserAv
 
     public function GetScheduleId()
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return (int)$this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
     }
 
     public function Bind($dailyLayout, $resources, $user, $participants, $invitees, $dateRange)

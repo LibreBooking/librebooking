@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 
 class TestBase extends TestCase
@@ -54,6 +56,7 @@ class TestBase extends TestCase
         $this->fakeEmailService = new FakeEmailService();
         $this->fakeConfig = new FakeConfig();
         $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_TIMEZONE, 'America/Chicago');
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_RESERVATIONS, true);
 
         $this->fakeResources = new FakeResources();
         $this->fakeUser = $this->fakeServer->UserSession;
@@ -69,13 +72,109 @@ class TestBase extends TestCase
         PluginManager::SetInstance($this->fakePluginManager);
     }
 
+    /**
+     * Helper method to capture error logs during test execution
+     * @param callable $testFunction The function to execute while capturing logs
+     * @param bool $displayLogs Whether to display captured logs (for debugging)
+     * @return array Array of captured error log entries
+     */
+    protected function captureErrorLog(callable $testFunction, bool $displayLogs = false): array
+    {
+        $errorLogs = [];
+        $originalErrorLog = ini_get('error_log');
+
+        // Create a temporary log file
+        $tempLogFile = tempnam(sys_get_temp_dir(), 'test_error_log');
+        if ($tempLogFile === false) {
+            throw new \RuntimeException('Failed to create a temporary error log file in ' . sys_get_temp_dir());
+        }
+        if (ini_set('error_log', $tempLogFile) === false) {
+            throw new \RuntimeException("Failed to set error_log to temporary file: $tempLogFile");
+        }
+
+        try {
+            // Execute the test function
+            $testFunction();
+        } finally {
+            // Read captured error logs
+            if (file_exists($tempLogFile)) {
+                $errorLogs = file($tempLogFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            }
+
+            // Restore original error log setting
+            ini_set('error_log', $originalErrorLog);
+
+            // Clean up temporary file
+            if (file_exists($tempLogFile)) {
+                unlink($tempLogFile);
+            }
+        }
+
+        // Optionally display logs for debugging
+        if ($displayLogs && !empty($errorLogs)) {
+            echo "\n=== Captured Error Logs ===\n";
+            foreach ($errorLogs as $logEntry) {
+                echo 'ERROR LOG: ' . $logEntry . "\n";
+            }
+            echo "=== End Error Logs ===\n";
+        }
+
+        return $errorLogs;
+    }
+
+    /**
+     * Assert that a specific log message is found in captured error logs
+     *
+     * @param array $logs Array of captured error log messages
+     * @param string $expectedPattern Expected log message pattern to find
+     * @param string $description Description of what should be logged (for assertion message)
+     * @param string $logPrefix Prefix to filter logs by (e.g., '[CONFIG]')
+     */
+    protected function assertLogMessage(array $logs, string $expectedPattern, string $description, string $logPrefix = '[CONFIG]')
+    {
+        $filteredLogs = array_filter($logs, fn ($log) => str_contains($log, $logPrefix));
+        $found = false;
+        foreach ($filteredLogs as $log) {
+            if (str_contains($log, $expectedPattern)) {
+                $found = true;
+                break;
+            }
+        }
+
+        $this->assertTrue($found, "Should log: $description");
+    }
+
     public function teardown(): void
     {
-        $this->db = null;
-        $this->fakeServer = null;
         Configuration::SetInstance(null);
         PluginManager::SetInstance(null);
-        $this->fakeResources = null;
         Date::_ResetNow();
+    }
+
+    /**
+     * Creates a Date safely in the middle of the day to avoid timezone-related
+     * day boundary issues in tests.
+     *
+     * When tests use Date::Now()->AddHours() or similar, the resulting dates can
+     * cross midnight boundaries depending on when the tests run and which timezones
+     * are involved. This causes flaky tests that fail only at certain times of day.
+     *
+     * This helper creates a date at 10:00 AM tomorrow, which is safe from midnight
+     * boundary issues regardless of timezone conversions.
+     *
+     * @return Date A date set to 10:00 AM tomorrow in the server's timezone
+     */
+    public static function GetTestDate(): Date
+    {
+        $tomorrow = Date::Now()->AddDays(1);
+        return Date::Create(
+            year: $tomorrow->Year(),
+            month: $tomorrow->Month(),
+            day: $tomorrow->Day(),
+            hour: 10,
+            minute: 0,
+            second: 0,
+            timezone: $tomorrow->Timezone()
+        );
     }
 }

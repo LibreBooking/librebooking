@@ -17,10 +17,14 @@ LibreBooking documentation
    CONFIGURATION
    BASIC-CONFIGURATION
    ADVANCED-CONFIGURATION
+   FAQ
    DEVELOPER-README
    API
+   LDAP-Authentication
+   ActiveDirectory-Authentication
    Oauth2-Configuration
    SAML-Configuration
+   changelog
    HISTORY
    LICENSE
 

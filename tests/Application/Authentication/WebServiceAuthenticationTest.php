@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 class WebServiceAuthenticationTest extends TestBase
@@ -17,10 +19,7 @@ class WebServiceAuthenticationTest extends TestBase
     private $username = 'LoGInName';
     private $password = 'password';
 
-    /**
-     * @var IUserSessionRepository
-     */
-    private $userSessionRepository;
+    private IUserSessionRepository&\PHPUnit\Framework\MockObject\MockObject $userSessionRepository;
 
     public function setUp(): void
     {

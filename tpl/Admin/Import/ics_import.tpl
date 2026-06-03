@@ -36,12 +36,13 @@
                     </div>
                     <div class="mb-2">
                         <label for="importFile" class="visually-hidden">Import File</label>
-                        <input type="file" {formname key=ICS_IMPORT_FILE} id="importFile" class="form-control"
-                            accept=".ics" />
+                        <input type="file" {formname key=ICS_IMPORT_FILE} id="importFile"
+                            class="form-control form-control-sm" accept=".ics" />
                     </div>
 
                     <div class="admin-update-buttons ">
-                        <button id="btnUpload" type="button" class="btn btn-primary save"><i class="bi bi-upload"></i>
+                        <button id="btnUpload" type="button" class="btn btn-primary btn-sm save"><i
+                                class="bi bi-upload"></i>
                             {translate key=Import}</button>
                         {indicator}
                     </div>
@@ -56,7 +57,7 @@
 
 {include file="javascript-includes.tpl"}
 {jsfile src="ajax-helpers.js"}
-{jsfile src="js/jquery.form-3.09.min.js"}
+{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 <script type="text/javascript">
     $(document).ready(function() {

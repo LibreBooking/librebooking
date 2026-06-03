@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeCustomAttribute extends CustomAttribute
 {
     /**
@@ -41,13 +43,13 @@ class FakeCustomAttribute extends CustomAttribute
         $this->category = CustomAttributeCategory::RESERVATION;
     }
 
-    public function SatisfiesRequired($value)
+    public function SatisfiesRequired(mixed $value): bool
     {
         $this->_RequiredValueChecked = $value;
         return $this->_IsRequiredSatisfied;
     }
 
-    public function SatisfiesConstraint($value)
+    public function SatisfiesConstraint(mixed $value): bool
     {
         $this->_ConstraintValueChecked = $value;
         return $this->_IsConstraintSatisfied;

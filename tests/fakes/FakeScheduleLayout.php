@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class FakeScheduleLayout implements IScheduleLayout
@@ -53,7 +55,7 @@ class FakeScheduleLayout implements IScheduleLayout
     public function GetLayout(Date $layoutDate, $hideBlockedPeriods = false)
     {
         if (!empty($this->_DailyLayout)) {
-            return $this->_DailyLayout[$layoutDate->Timestamp()];
+            return $this->_DailyLayout[$layoutDate->Timestamp()] ?? [];
         }
 
         return $this->_Layout;
@@ -104,8 +106,7 @@ class FakeScheduleLayout implements IScheduleLayout
      */
     public function FitsToHours()
     {
-        // TODO: Implement FitsToHours() method.
-        return null;
+        return true;
     }
 
     /**
@@ -113,8 +114,7 @@ class FakeScheduleLayout implements IScheduleLayout
      */
     public function UsesCustomLayout()
     {
-        // TODO: Implement UsesCustomLayout() method.
-        return null;
+        return false;
     }
 
     /**

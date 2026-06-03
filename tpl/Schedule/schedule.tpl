@@ -40,7 +40,7 @@
 {* End slot display formatting *}
 
 {block name="header"}
-    {include file='globalheader.tpl' Qtip=true Select2=true DatePicker=true cssFiles='scripts/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
+    {include file='globalheader.tpl' Select2=true DatePicker=true cssFiles='assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' printCssFiles='css/schedule.print.css'}
 {/block}
 
 <div id="page-schedule">
@@ -74,8 +74,17 @@
     {/if}
 
     {if $IsAccessible}
-        <div id="defaultSetMessage" class="alert alert-success d-none">
-            {translate key=DefaultScheduleSet}
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="defaultSetToast" class="toast align-items-center bg-primary text-white border-0 d-none" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle-fill me-2"></i>{translate key=DefaultScheduleSet}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="{translate key=Close}"></button>
+                </div>
+            </div>
         </div>
         {block name="schedule_control"}
             <div class="row">
@@ -84,25 +93,44 @@
                     {assign var=titleWidth value="col-sm-6 col-12"}
                     <div id="schedule-actions" class="col-sm-3 col-12">
                         {block name="actions"}
-                            <div class="d-flex align-items-center">
-                                <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}"><span
-                                        class="bi bi-printer"></span></a>
-                                <a href="#" id="make_default" class="link-primary me-2" style="display:none;"><i
-                                        class="bi bi-star-fill"></i></a>
-                                <a href="#" class="schedule-style me-1" id="schedule_standard"
-                                    schedule-display="{ScheduleStyle::Standard}">
-                                    <img src="img/table.png" alt="{translate key='StandardScheduleDisplay'}" />
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="me-4 d-flex align-items-center gap-2">
+                                    <a href="#" id="print_schedule" class="link-primary me-1" title="{translate key=Print}">
+                                        <i class="bi bi-printer schedule_icon"></i>
+                                    </a>
+                                    {if $LoggedIn}
+                                        <a href="#" id="make_default" class="link-primary" title="{translate key='MakeDefaultSchedule'}">
+                                            <i class="bi bi-star-fill schedule_icon"></i>
+                                        </a>
+                                    {/if}
+                                </div>
+                                <a href="#"
+                                    class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Standard->value} active{/if}"
+                                    id="schedule_standard" schedule-display="{ScheduleStyle::Standard->value}"
+                                    title="{translate key='StandardScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/table.png"
+                                        alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style me-1" id="schedule_tall" schedule-display="{ScheduleStyle::Tall}">
-                                    <img src="img/table-tall.png" alt="{translate key='TallScheduleDisplay'}" />
+                                <a href="#"
+                                    class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Tall->value} active{/if}"
+                                    id="schedule_tall" schedule-display="{ScheduleStyle::Tall->value}"
+                                    title="{translate key='TallScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/table-tall.png"
+                                        alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-block me-1" id="schedule_wide"
-                                    schedule-display="{ScheduleStyle::Wide}">
-                                    <img src="img/table-wide.png" alt="{translate key='WideScheduleDisplay'}" />
+                                <a href="#"
+                                    class="schedule-style d-none d-md-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
+                                    id="schedule_wide" schedule-display="{ScheduleStyle::Wide->value}"
+                                    title="{translate key='WideScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/table-wide.png"
+                                        alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
-                                <a href="#" class="schedule-style d-none d-md-block" id="schedule_week"
-                                    schedule-display="{ScheduleStyle::CondensedWeek}">
-                                    <img src="img/table-week.png" alt="{translate key='CondensedWeekScheduleDisplay'}" />
+                                <a href="#"
+                                    class="schedule-style d-none d-md-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
+                                    id="schedule_week" schedule-display="{ScheduleStyle::CondensedWeek->value}"
+                                    title="{translate key='CondensedWeekScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/table-week.png"
+                                        alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
@@ -131,7 +159,7 @@
                         <a class="link-primary" href="#" id="calendar_toggle" title="{translate key=ShowHideNavigation}"
                             data-bs-toggle="collapse" data-bs-target="#individualDates" aria-expanded="false"
                             aria-controls="individualDates">
-                            <span class="bi bi-calendar"></span>
+                            <span class="bi bi-calendar schedule_icon"></span>
                             <span class="visually-hidden">{translate key=ShowHideNavigation}</span>
                         </a>
                     </div>
@@ -149,7 +177,9 @@
                 <button class="btn btn-sm btn-primary mx-auto" href="#" id="individualDatesGo">
                     <i class="bi bi-search me-1"></i>{translate key=SpecificDates}
                 </button>
-                <div type="text" id="datepicker" class="collapse"></div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div id="datepicker" class="collapse"></div>
+                </div>
             </div>
 
 
@@ -159,22 +189,25 @@
                     <div class="schedule-dates d-flex justify-content-center mt-2 fs-5 gap-2">
                         {assign var=TodaysDate value=Date::Now()}
                         <a href="#" class="change-date link-primary" data-year="{$TodaysDate->Year()}"
-                            data-month="{$TodaysDate->Month()}" data-day="{$TodaysDate->Day()}" alt="{translate key=Today}"><i
-                                class="bi bi-house-fill"></i>
-                            <span class="visually-hidden">{translate key=Today}</span>
+                            data-month="{$TodaysDate->Month()}" data-day="{$TodaysDate->Day()}" aria-label="{translate key=Today}">
+                            <i class="bi bi-house-fill" aria-hidden="true"></i>
                         </a>
                         {assign var=FirstDate value=$DisplayDates->GetBegin()}
                         {assign var=LastDate value=$DisplayDates->GetEnd()->AddDays(-1)}
                         <a href="#" class="change-date link-primary" data-year="{$PreviousDate->Year()}"
-                            data-month="{$PreviousDate->Month()}" data-day="{$PreviousDate->Day()}"><i
-                                class="bi bi-arrow-left-circle-fill"></i></a>
+                            data-month="{$PreviousDate->Month()}" data-day="{$PreviousDate->Day()}"
+                            aria-label="{translate key=PreviousWeek}">
+                            <i class="bi bi-arrow-left-circle-fill" aria-hidden="true"></i>
+                        </a>
                         {formatdate date=$FirstDate}
                         {if $ShowWeekNumbers}({$FirstDate->WeekNumber()}){/if}
                         -
                         {formatdate date=$LastDate}
                         {if $ShowWeekNumbers}({$LastDate->WeekNumber()}){/if}
                         <a href="#" class="change-date link-primary" data-year="{$NextDate->Year()}" data-month="{$NextDate->Month()}"
-                            data-day="{$NextDate->Day()}"><i class="bi bi-arrow-right-circle-fill"></i></a>
+                            data-day="{$NextDate->Day()}" aria-label="{translate key=NextWeek}">
+                            <i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i>
+                        </a>
                     </div>
                     {if $ShowFullWeekLink}
                         <div class="d-flex justify-content-center fs-5">
@@ -316,18 +349,18 @@
                                     <div class="form-group mb-2">
                                         <label for="resourceType" class="fw-bold">{translate key=ResourceType}</label>
                                         <select id="resourceType" {formname key=RESOURCE_TYPE_ID}
-                                            {formname key=RESOURCE_TYPE_ID} class="form-select form-control-sm">
+                                            class="form-select form-select-sm">
                                             <option value="">- {translate key=All} -</option>
                                             {object_html_options options=$ResourceTypes label='Name' key='Id' selected=$ResourceTypeIdFilter}
                                         </select>
                                     </div>
 
                                     {foreach from=$ResourceAttributes item=attribute}
-                                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='r' inputClass="form-control-sm" class="customAttribute  mb-2"}
+                                        {control type="AttributeControl" attribute=$attribute searchmode=true namePrefix='r' class="customAttribute mb-2"}
                                     {/foreach}
 
                                     {foreach from=$ResourceTypeAttributes item=attribute}
-                                        {control type="AttributeControl" attribute=$attribute align='vertical' searchmode=true namePrefix='rt' inputClass="form-control-sm" class="customAttribute mb-2"}
+                                        {control type="AttributeControl" attribute=$attribute searchmode=true namePrefix='rt' class="customAttribute mb-2"}
                                     {/foreach}
 
                                     <div class="d-grid gap-2">
@@ -401,20 +434,26 @@
     {csrf_token}
 </form>
 
-<div id="loading-schedule" class="d-none">Loading reservations...</div>
+<div id="loading-schedule" class="d-none d-flex align-items-center gap-2 p-3 border rounded-2 bg-white
+opacity-75">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">{translate key='Working'}</span>
+    </div>
+    <span aria-hidden="true">{translate key='Working'}</span>
+</div>
 
-{include file="javascript-includes.tpl" Qtip=true Select2=true Clear=true DatePicker=true}
+{include file="javascript-includes.tpl" Select2=true Clear=true DatePicker=true}
 
 {block name="scripts-before"}
 
 {/block}
 
-{jsfile src="js/html2canvas.min.js"}
-{jsfile src="js/moment.min.js"}
+{vendor_js src="html2canvas-pro/2.0.2/js/html2canvas-pro.min.js"}
+{jsfile src="reservationPopup.js"}
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}
-{jsfile src="js/tree.jquery.js"}
-{jsfile src="js/jquery.cookie.js"}
+{vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
+{vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
 {jsfile src="autocomplete.js"}
 {jsfile src="ajax-helpers.js"}
 <script type="text/javascript">
@@ -447,6 +486,7 @@
         fastReservationLoad: "{$FastReservationLoad}",
         resourceMaxConcurrentReservations,
         autoScrollToday: {$AutoScrollToday|@json_encode},
+        altFormatDate: "{Resources::GetInstance()->GetDateFormat('schedule_daily')}",
     };
 
     const resourceOrder = [];
@@ -465,6 +505,7 @@
     $(document).ready(function() {
         const schedule = new Schedule(scheduleOpts, {$ResourceGroupsAsJson});
         schedule.init();
+
     });
 
     $('#schedules').select2({
@@ -479,7 +520,7 @@
 
 {control type="DatePickerSetupControl"
 ControlId='datepicker'
-HasTimepicker=false
+AltInput=false
 Inline=true
 DefaultDate=$FirstDate
 NumberOfMonths=$PopupMonths

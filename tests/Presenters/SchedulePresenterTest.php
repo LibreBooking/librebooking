@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
 require_once(ROOT_DIR . 'Pages/SchedulePage.php');
 
@@ -559,7 +561,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedule
                 ->expects($this->once())
@@ -752,7 +754,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedulePage
                 ->expects($this->once())
@@ -908,7 +910,9 @@ class FakeSchedulePage implements ISchedulePage
      */
     public $_ParticipantId;
 
-    public function BindViewableResourceReservations($resourceIds) { }
+    public function BindViewableResourceReservations($resourceIds)
+    {
+    }
 
     public function TakingAction()
     {
@@ -972,7 +976,7 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetScheduleId()
     {
-        return null;
+        return 0;
     }
 
     /**
@@ -1018,7 +1022,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetSelectedDate()
     {
-        return null;
+        return '';
     }
 
     /**
@@ -1039,7 +1043,7 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetShowFullWeek()
     {
-        return null;
+        return false;
     }
 
     /**
@@ -1054,29 +1058,26 @@ class FakeSchedulePage implements ISchedulePage
      */
     public function GetLayoutDate()
     {
-        return null;
+        return '';
     }
 
     /**
      * @param int $scheduleId
-     * @return string|ScheduleStyle
+     * @return ScheduleStyle|null
      */
-    public function GetScheduleStyle($scheduleId)
+    public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle
     {
         return null;
     }
 
     /**
-     * @param string|ScheduleStyle $direction
+     * @param ScheduleStyle $direction
      */
-    public function SetScheduleStyle($direction)
+    public function SetScheduleStyle(ScheduleStyle $direction): void
     {
     }
 
-    /**
-     * @return int
-     */
-    public function GetGroupId()
+    public function GetGroupId(): int|null
     {
         return null;
     }
@@ -1171,12 +1172,12 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetDisplayTimezone(UserSession $user, Schedule $schedule)
     {
-        return null;
+        return '';
     }
 
     public function GetResourceId()
     {
-        return null;
+        return 0;
     }
 
     public function GetSelectedDates()
@@ -1198,7 +1199,7 @@ class FakeSchedulePage implements ISchedulePage
 
     public function FilterCleared()
     {
-        return null;
+        return false;
     }
 
     public function BindScheduleAvailability($availability, $tooEarly)
@@ -1235,13 +1236,11 @@ class FakeSchedulePage implements ISchedulePage
 
     public function GetOwnerText()
     {
-        // TODO: Implement GetOwnerText() method.
-        return null;
+        return '';
     }
 
     public function GetParticipantText()
     {
-        // TODO: Implement GetParticipantText() method.
-        return null;
+        return '';
     }
 }

@@ -16,47 +16,82 @@ require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceGroupsResponse.p
 
 class ResourcesWebService
 {
-    /**
-     * @var IRestServer
-     */
-    private $server;
-
-    /**
-     * @var IResourceRepository
-     */
-    private $resourceRepository;
-
-    /**
-     * @var IAttributeService
-     */
-    private $attributeService;
-
-    /**
-     * @var IReservationViewRepository
-     */
-    private $reservationRepository;
-
     public function __construct(
-        IRestServer $server,
-        IResourceRepository $resourceRepository,
-        IAttributeService $attributeService,
-        IReservationViewRepository $reservationRepository
+        private IRestServer $server,
+        private IResourceRepository $resourceRepository,
+        private IAttributeService $attributeService,
+        private IReservationViewRepository $reservationRepository,
+        private IScheduleRepository $scheduleRepository
     ) {
-        $this->server = $server;
-        $this->resourceRepository = $resourceRepository;
-        $this->attributeService = $attributeService;
-        $this->reservationRepository = $reservationRepository;
     }
 
     /**
      * @name GetAllResources
      * @description Loads all resources
+     * Optional query string parameter: scheduleId. One or more schedule IDs, comma-separated (e.g. scheduleId=1,2,3). If provided, only resources belonging to those schedules will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned. If any schedule ID does not exist, a 404 Not Found is returned.
+     * Optional query string parameter: groupId. One or more resource group IDs, comma-separated (e.g. groupId=1,2,3). If provided, only resources belonging to those groups (including sub-groups) will be returned. Each value must be a positive integer (greater than zero); if any value is non-integer or zero, a 400 Bad Request is returned. If any group ID does not exist, a 404 Not Found is returned.
      * @response ResourcesResponse
      * @return void
      */
     public function GetAll()
     {
+        $scheduleIds = $this->parsePositiveIntegerIds(paramName: WebServiceQueryStringKeys::SCHEDULE_ID);
+        if ($scheduleIds === false) {
+            return;
+        }
+
+        $groupIds = $this->parsePositiveIntegerIds(paramName: WebServiceQueryStringKeys::GROUP_ID);
+        if ($groupIds === false) {
+            return;
+        }
+
+        if ($scheduleIds !== null) {
+            foreach ($scheduleIds as $scheduleId) {
+                if ($this->scheduleRepository->LoadById($scheduleId) === null) {
+                    $this->server->WriteResponse(
+                        restResponse: RestResponse::NotFound(),
+                        statusCode: RestResponse::NOT_FOUND_CODE
+                    );
+                    return;
+                }
+            }
+        }
+
         $resources = $this->resourceRepository->GetUserResourceList();
+
+        if ($scheduleIds !== null) {
+            $filteredResources = [];
+            foreach ($resources as $resource) {
+                if (in_array($resource->GetScheduleId(), $scheduleIds)) {
+                    $filteredResources[] = $resource;
+                }
+            }
+            $resources = $filteredResources;
+        }
+
+        if ($groupIds !== null) {
+            // GetResourceGroups() returns the full tree, used for both existence checks and sub-group traversal.
+            $groupTree = $this->resourceRepository->GetResourceGroups();
+            $groupList = $groupTree->GetGroupList();
+            $groupResourceIds = [];
+            foreach ($groupIds as $groupId) {
+                if (!array_key_exists($groupId, $groupList)) {
+                    $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
+                    return;
+                }
+                // GetResourceIds() recurses into sub-groups.
+                $groupResourceIds = array_merge($groupResourceIds, $groupTree->GetResourceIds($groupId));
+            }
+            $groupResourceIds = array_unique($groupResourceIds);
+            $filteredResources = [];
+            foreach ($resources as $resource) {
+                if (in_array($resource->GetId(), $groupResourceIds)) {
+                    $filteredResources[] = $resource;
+                }
+            }
+            $resources = $filteredResources;
+        }
+
         $resourceIds = [];
         foreach ($resources as $resource) {
             $resourceIds[] = $resource->GetId();
@@ -194,6 +229,34 @@ class ResourcesWebService
         $groups = $this->resourceRepository->GetResourceGroups();
 
         $this->server->WriteResponse(new ResourceGroupsResponse($groups));
+    }
+
+    /**
+     * Parses a comma-separated list of positive integers from a query string parameter.
+     * Duplicate values are removed; the returned array is unique and re-indexed.
+     *
+     * @return int[]|false|null int[] on success, null if param absent/empty, false if invalid
+     *                          (a 400 response has already been written)
+     */
+    private function parsePositiveIntegerIds(string $paramName): array|false|null
+    {
+        $param = $this->server->GetQueryString($paramName);
+        if ($param === null || $param === '') {
+            return null;
+        }
+
+        $rawIds = explode(',', $param);
+        foreach ($rawIds as $id) {
+            if (!ctype_digit($id) || (int)$id === 0) {
+                $this->server->WriteResponse(
+                    RestResponse::BadRequest("Invalid $paramName '$id': must be a positive integer"),
+                    RestResponse::BAD_REQUEST_CODE
+                );
+                return false;
+            }
+        }
+
+        return array_values(array_unique(array_map('intval', $rawIds)));
     }
 
     /**

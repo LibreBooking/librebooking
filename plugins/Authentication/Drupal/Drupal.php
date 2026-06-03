@@ -231,7 +231,7 @@ class Drupal extends Authentication implements IAuthentication
                 $hash = $this->_password_crypt('sha512', $password, $stored_hash);
                 break;
             case '$H$':
-            // phpBB3 uses "$H$" for the same thing as "$P$".
+                // phpBB3 uses "$H$" for the same thing as "$P$".
             case '$P$':
                 // A phpass password generated using md5.  This is an
                 // imported password or from an earlier Drupal version.

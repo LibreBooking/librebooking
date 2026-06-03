@@ -1,25 +1,31 @@
 Advanced Configuration
 ======================
 
-This guide covers all advanced configuration options available in LibreBooking. For basic setup, see :doc:`BASIC-CONFIGURATION` first.
+This guide covers all advanced configuration options available in LibreBooking.
+For basic setup, see :doc:`BASIC-CONFIGURATION` first.
 
-All settings are configured in the ``/config/config.php`` file. The configuration uses a mix of flat dot notation and nested arrays.
+All settings are configured in the ``<INSTALL_DIR>/config/config.php`` file,
+where ``<INSTALL_DIR>`` is the root directory of your LibreBooking
+installation. The configuration uses a mix of flat dot notation and nested
+arrays.
 
 Environment Variable Override
 -----------------------------
 
-LibreBooking supports overriding any configuration setting using environment variables. This provides flexibility for deployment scenarios and keeps sensitive data separate from configuration files.
+LibreBooking supports overriding any configuration setting using environment
+variables. This provides flexibility for deployment scenarios and keeps
+sensitive data separate from configuration files.
 
 **Naming Convention**
   Environment variables follow the pattern: ``LB_`` + config key with special characters converted:
-  
+
   - Dots (``.``) and dashes (``-``) become underscores (``_``)
   - All letters converted to uppercase
-  
+
 **Examples**
-  
+
   .. code-block:: bash
-  
+
      # Configuration key → Environment variable
      app.title → LB_APP_TITLE
      database.hostspec → LB_DATABASE_HOSTSPEC
@@ -28,9 +34,9 @@ LibreBooking supports overriding any configuration setting using environment var
 
 **Using .env Files**
   Create a ``.env`` file in your application root directory:
-  
+
   .. code-block:: bash
-  
+
      LB_APP_TITLE='My Company Booking'
      LB_DATABASE_HOSTSPEC='db.example.com'
      LB_ADMIN_EMAIL='admin@mycompany.com'
@@ -39,9 +45,9 @@ LibreBooking supports overriding any configuration setting using environment var
 
 **Docker Integration**
   Environment variables work seamlessly with Docker:
-  
+
   .. code-block:: yaml
-  
+
      # docker-compose.yml
      services:
        librebooking:
@@ -51,23 +57,123 @@ LibreBooking supports overriding any configuration setting using environment var
            - LB_ADMIN_EMAIL=admin@company.com
 
 **Complete Example**
-  See ``develop/app/.env.example`` for a comprehensive list of all available environment variables with their default values and descriptions.
+  See ``develop/app/.env.example`` for a comprehensive list of all available
+  environment variables with their default values and descriptions.
+
+Custom Footer Version Display
+-----------------------------
+
+LibreBooking can customize the version shown in the page footer using either a
+suffix or a custom version override.
+
+Version Suffix
+~~~~~~~~~~~~~~
+
+LibreBooking can optionally append a suffix to the version shown in the page
+footer.
+
+Create ``<INSTALL_DIR>/config/version-suffix.txt`` with a value such as
+``abc123``. This file is intended for local or deployment-time metadata and
+should not be committed to source control. If the file is present and contains
+a non-empty value, the footer version will be displayed as ``v4.1.0-abc123``.
+If the file is missing or empty, LibreBooking displays the base version only.
+
+This is intended for deployment metadata such as a Docker image build
+identifier or short Git commit SHA. Only the footer display is affected. The
+application base version and asset cache-busting remain unchanged.
+
+The file must contain a single line only. A trailing newline is allowed, but
+additional lines are ignored. After trimming, the suffix must be 40 characters
+or fewer.
+
+Valid characters are letters, numbers, ``.``, ``_``, and ``-``. If the file
+contains multiple lines, exceeds 40 characters, or includes invalid characters,
+LibreBooking ignores the suffix and logs an error.
+
+**Example**
+
+  .. code-block:: bash
+
+     git rev-parse --short HEAD > config/version-suffix.txt
+
+This writes the current short Git commit SHA into
+``<INSTALL_DIR>/config/version-suffix.txt`` so the footer displays a version
+such as ``v4.1.0-a1b2c3d``.
+
+Custom Version
+~~~~~~~~~~~~~~
+
+LibreBooking can optionally replace the footer base version with a custom
+value.
+
+Create ``<INSTALL_DIR>/config/custom-version.txt`` with a value such as
+``v4.2.0-36-ge81f46586``. This file is intended for local or deployment-time
+metadata and should not be committed to source control. If the file is present
+and contains a valid non-empty value, the footer version will be displayed as
+``v4.2.0-36-ge81f46586 (custom)``.
+
+The usual value in this file would be the output of
+``git describe --tags --long``. If ``custom-version.txt`` contains a valid
+value, it takes precedence over ``version-suffix.txt`` and LibreBooking logs
+an error if ``version-suffix.txt`` also exists.
+
+The file must contain a single line only. A trailing newline is allowed, but
+if the file contains additional lines, LibreBooking ignores the custom
+version. After trimming, the custom version must be 40 characters or fewer.
+
+Valid characters are letters, numbers, ``.``, ``_``, and ``-``. If the file
+contains multiple lines, exceeds 40 characters, or includes invalid characters,
+LibreBooking ignores the custom version and logs an error.
+
+**Example**
+
+  .. code-block:: bash
+
+     git describe --tags --long > config/custom-version.txt
+
+Maintenance Mode
+----------------
+
+LibreBooking can be placed into maintenance mode by creating a file named
+``maint.txt`` in the root directory of the installation.
+
+When ``<INSTALL_DIR>/maint.txt`` exists, normal page rendering is replaced
+with a maintenance notice. This is useful during upgrades, database
+migrations, or other planned maintenance windows where users should not use
+the application.
+
+**Enable maintenance mode**
+
+  .. code-block:: bash
+
+     touch maint.txt
+
+**Disable maintenance mode**
+
+  .. code-block:: bash
+
+     rm maint.txt
+
+The contents of ``maint.txt`` are not used. LibreBooking only checks whether
+the file exists. The maintenance notice text comes from the
+``MaintenanceNotice`` language string and can be customized with
+``config/lang-overrides.php``.
 
 Application Advanced Settings
 -----------------------------
 
 **app.debug**
   Enable or disable debug mode for the application.
-  
+
   .. code-block:: php
-  
+
      'app.debug' => false,
 
 **admin.email.name**
   Display name used for outgoing admin emails.
-  
+
   .. code-block:: php
-  
+
      'admin.email.name' => 'LB Administrator',
 
 Frontend Advanced Settings
@@ -75,45 +181,82 @@ Frontend Advanced Settings
 
 **inactivity.timeout**
   Time in minutes before a user is logged out due to inactivity.
-  
+
   .. code-block:: php
-  
+
      'inactivity.timeout' => 30,
 
 **use.local.js.libs**
-  Use local JavaScript libraries instead of CDN.
-  
+  Prefer bundled or self-hosted frontend assets instead of CDN-hosted ones,
+  including supported fonts and JavaScript libraries.
+
   .. code-block:: php
-  
-     'use.local.js.libs' => false,
+
+     'use.local.js.libs' => true,
 
 **home.url**
   URL to redirect users after login.
-  
+
   .. code-block:: php
-  
+
      'home.url' => '',
 
 **logout.url**
   URL to redirect users after logout.
-  
+
   .. code-block:: php
-  
+
      'logout.url' => '',
 
 **css.extension.file**
-  Path to a custom CSS file to extend the default styles.
-  
+  Path of a custom CSS file to extend the default styles. If the value does not
+  contain a slash (``/``) anywhere in the name, it is treated as relative to
+  the ``Web/css/`` directory (for example, ``'css.extension.file' =>
+  'custom.css'``). If the value contains a slash, it is treated as a path
+  relative to the ``Web/`` root (for example, ``'css.extension.file' =>
+  'css/custom.css'``).
+
   .. code-block:: php
-  
+
      'css.extension.file' => '',
 
 **name.format**
   Format for displaying user names.
-  
+
   .. code-block:: php
-  
+
      'name.format' => '{first} {last}',
+
+Language Selector
+~~~~~~~~~~~~~~~~~
+
+When logged in, users see a globe icon in the navigation bar that lets them
+switch the UI language. The dropdown lists all languages defined in
+``lang/AvailableLanguages.php``.
+
+**Limiting available languages**
+  Use the ``enabled.languages`` setting in ``config/config.php`` to restrict
+  which languages appear in the selector. Provide a comma-separated list of
+  language codes. Languages appear in the selector in the order listed:
+
+  .. code-block:: php
+
+     # Show only English, Spanish, and French
+     'enabled.languages' => 'en_us,es,fr_fr',
+
+  Leave the value empty (the default) to show all supported languages.
+  Language codes must match those defined in ``lang/AvailableLanguages.php``.
+  Any unrecognized codes will be logged as errors and ignored.
+
+.. important::
+
+   The ``default.language`` value in ``config/config.php`` must be included in
+   the ``enabled.languages`` list. If it is not, the application will fall back
+   to ``en_us`` and log an error.
+
+**Hiding the language selector entirely**
+  If only one language remains in the list, the language selector is
+  automatically hidden from the navigation bar.
 
 Page Control
 ~~~~~~~~~~~~
@@ -129,9 +272,10 @@ Page Control
 
 **default.page.size**
   Default number of items per page in listings.
-  
+  Use a positive integer; ``-1`` is not supported for performance reasons.
+
   .. code-block:: php
-  
+
      'default.page.size' => 50,
 
 Advanced Email Configuration
@@ -139,9 +283,9 @@ Advanced Email Configuration
 
 **email.enforce.custom.template**
   Force the use of a custom email template for all emails.
-  
+
   .. code-block:: php
-  
+
      'email' => [
          'enforce.custom.template' => false,
      ],
@@ -154,6 +298,7 @@ Advanced PHPMailer Settings
    'phpmailer' => [
        'sendmail.path' => '/usr/sbin/sendmail',
        'smtp.debug' => false,
+       'smtp.autotls' => true,
    ],
 
 **phpmailer.sendmail.path**
@@ -161,6 +306,10 @@ Advanced PHPMailer Settings
 
 **phpmailer.smtp.debug**
   Enable SMTP debug output (true/false).
+
+**phpmailer.smtp.autotls**
+  Set PHPMailer's SMTPAutoTLS setting (true/false). Determines if an
+  unencrypted SMTP connection should attempt to use STARTTLS.
 
 Logging Configuration
 ---------------------
@@ -262,7 +411,10 @@ Schedule Display Settings
   Show resources that users cannot book (grayed out).
 
 **schedule.reservation.label**
-  Template for reservation labels. Available tokens: {name}, {title}, {description}, {email}, {phone}, {organization}, {position}, {startdate}, {enddate}, {resourcename}, {participants}, {invitees}, {reservationAttributes}, and custom attributes like {att1}.
+  Template for reservation labels. Available tokens: {name}, {title},
+  {description}, {email}, {phone}, {organization}, {position}, {startdate},
+  {enddate}, {resourcename}, {participants}, {invitees},
+  {reservationAttributes}, and custom attributes like {att1}.
 
 **schedule.use.per.user.colors**
   Use different colors for each user's reservations.
@@ -271,7 +423,9 @@ Schedule Display Settings
   Minutes to highlight recently updated reservations (0 = disabled).
 
 **schedule.fast.reservation.load**
-  Enable faster loading with reduced detail.
+  (EXPERIMENTAL): Use a faster client-side reservation rendering algorithm in
+  the standard desktop schedule view. This can improve performance on busy
+  schedules, but it may incorrectly render some layouts or slot configurations.
 
 **schedule.load.mobile.views**
   Use simplified views on mobile devices.
@@ -299,7 +453,8 @@ Reservation Behavior
    ],
 
 **reservation.prevent.participation**
-  Disable the ability to add participants to reservations.
+  Disable reservation participation/invitations and hide participant/invitee
+  lists in the reservation UI.
 
 **reservation.prevent.recurrence**
   Disable recurring/repeating reservations.
@@ -311,7 +466,11 @@ Reservation Behavior
   Enable waitlist when resources are fully booked.
 
 **reservation.start.time.constraint**
-  When reservations can be made: 'future', 'any', 'same_day'.
+  Restrictions on when reservations can be made: 'none', 'current', 'future'.
+  Note: In the standard reservation create/update flow, application admins are
+  always exempt from this constraint. Group admins are exempt when they
+  administer the reservation owner (user), while resource and schedule admins
+  are exempt only when they administer all resources in the reservation.
 
 **reservation.updates.require.approval**
   Require approval when editing existing approved reservations.
@@ -335,7 +494,7 @@ Reservation Behavior
   Enable email reminders before reservations start/end.
 
 **reservation.default.start.reminder**
-  Default reminder time before start (e.g., '15 minutes', '1 hour').
+  Default reminder time before start (e.g., '15 minutes', '1 hours', '1 days').
 
 **reservation.default.end.reminder**
   Default reminder time before end.
@@ -354,7 +513,8 @@ Reservation Label Templates
        'reservation.popup' => '',
    ],
 
-These templates control how reservations appear in different contexts using the same tokens as schedule.reservation.label.
+These templates control how reservations appear in different contexts using the
+same tokens as schedule.reservation.label.
 
 Reports Settings
 ----------------
@@ -484,10 +644,14 @@ Advanced Privacy Settings
 .. code-block:: php
 
    'privacy' => [
+       'view.schedules' => true,
        'hide.user.details' => false,
        'hide.reservation.details' => false,
        'public.future.days' => 30,
    ],
+
+**privacy.view.schedules**
+  Hide schedule and calendar from unauthenticated users.
 
 **privacy.hide.user.details**
   Hide user details from other users.
@@ -507,7 +671,6 @@ Advanced Security Settings
        'headers' => false,
        'strict-transport' => 'max-age=31536000',
        'x-frame' => 'deny',
-       'x-xss' => '1, mode=block',
        'x-content-type' => 'nosniff',
        'content-security-policy' => '',
    ],
@@ -520,9 +683,6 @@ Advanced Security Settings
 
 **security.x-frame**
   X-Frame-Options header (prevents clickjacking).
-
-**security.x-xss**
-  X-XSS-Protection header.
 
 **security.x-content-type**
   X-Content-Type-Options header.
@@ -563,9 +723,9 @@ Analytics Integration
 
 **google.analytics.tracking.id**
   Google Analytics tracking ID.
-  
+
   .. code-block:: php
-  
+
      'google.analytics.tracking.id' => '',
 
 Third-Party Integrations
@@ -573,9 +733,9 @@ Third-Party Integrations
 
 **slack.token**
   Slack webhook token for notifications.
-  
+
   .. code-block:: php
-  
+
      'slack.token' => '',
 
 Authentication Providers
@@ -724,7 +884,15 @@ Plugin System
        'styling' => '',
    ],
 
-Available authentication plugins: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress.
+Available authentication plugins: ActiveDirectory, Apache, CAS, Drupal, Krb5,
+Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress.
+
+For authentication plugin configuration, see:
+
+- LDAP: :doc:`LDAP-Authentication`
+- Active Directory: :doc:`ActiveDirectory-Authentication`
+- OAuth2: :doc:`Oauth2-Configuration`
+- SAML: :doc:`SAML-Configuration`
 
 API Configuration
 -----------------
@@ -768,7 +936,8 @@ Performance Tuning
 For high-traffic installations:
 
 - Set ``cache.templates`` to ``true``
-- Use ``use.local.js.libs`` = ``false`` (CDN is faster)
+- Use ``use.local.js.libs`` = ``true`` to avoid third-party asset requests, or
+  ``false`` to keep CDN-hosted assets.
 - Enable ``schedule.fast.reservation.load`` for busy schedules
 - Configure proper logging levels (avoid DEBUG in production)
 - Consider database optimization and caching

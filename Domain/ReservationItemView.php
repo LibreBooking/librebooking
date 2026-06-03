@@ -120,6 +120,8 @@ interface IReservedItemView
      * @return int
      */
     public function GetScheduleId();
+
+    public function IsUserParticipating(int $userId): bool;
 }
 
 class ReservationItemView implements IReservedItemView
@@ -533,7 +535,7 @@ class ReservationItemView implements IReservedItemView
         $this->Attributes = CustomAttributes::Parse($attribute_list);
         $this->UserPreferences = UserPreferences::Parse($preferences);
 
-        $this->StylingFactory= PluginManager::Instance()->LoadStyling();
+        $this->StylingFactory = PluginManager::Instance()->LoadStyling();
     }
 
     /**
@@ -785,7 +787,7 @@ class ReservationItemView implements IReservedItemView
      * @param $userId int
      * @return bool
      */
-    public function IsUserParticipating($userId)
+    public function IsUserParticipating(int $userId): bool
     {
         return in_array($userId, $this->ParticipantIds);
     }
@@ -941,7 +943,7 @@ class ReservationItemView implements IReservedItemView
             return '';
         }
         if ($this->_color == null) {
-            $this->_color = "";
+            $this->_color = '';
             // cache the color after the first call to prevent multiple iterations of this logic
             $userColor = $this->UserPreferences->Get(UserPreferences::RESERVATION_COLOR);
             $resourceColor = $this->ResourceColor;

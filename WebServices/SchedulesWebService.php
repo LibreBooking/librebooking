@@ -270,7 +270,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetSelectedDate()
     {
-        return empty($this->startDate) ? null : $this->startDate->Format("Y-m-d");
+        return empty($this->startDate) ? null : $this->startDate->Format('Y-m-d');
     }
 
     public function GetSelectedDates()
@@ -307,24 +307,24 @@ class ScheduleWebServiceView implements ISchedulePage
         return '';
     }
 
-    public function GetScheduleStyle($scheduleId)
+    public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle
     {
         return ScheduleStyle::Standard;
     }
 
-    public function SetScheduleStyle($direction)
+    public function SetScheduleStyle(ScheduleStyle $direction): void
     {
         // no op
     }
 
-    public function GetGroupId()
+    public function GetGroupId(): int|null
     {
         return null;
     }
 
     public function GetResourceId()
     {
-        return null;
+        return empty($this->resourceId) ? 0 : intval($this->resourceId);
     }
 
     /**
@@ -366,12 +366,12 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetResourceTypeId()
     {
-        return null;
+        return 0;
     }
 
     public function GetMaxParticipants()
     {
-        return null;
+        return 0;
     }
 
     public function GetResourceAttributes()
@@ -530,8 +530,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetReservationRequest()
     {
-        // no-op
-        return null;
+        throw new LogicException('ScheduleWebServiceView::GetReservationRequest() is not implemented for web service slot loading.');
     }
 
     public function BindReservations($items)
@@ -551,11 +550,11 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetOwnerText()
     {
-        return null;
+        return '';
     }
 
     public function GetParticipantText()
     {
-        return null;
+        return '';
     }
 }

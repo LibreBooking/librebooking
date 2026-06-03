@@ -32,7 +32,7 @@
 				</h2>
 				<div id="panelAvailable" class="accordion-collapse collapse">
 					<div class="accordion-body add-contents">
-						<a href="#" add-to="{ResourceStatus::AVAILABLE}" class="add-link btn btn-primary mb-2">
+						<a href="#" add-to="{ResourceStatus::AVAILABLE}" class="add-link btn btn-primary btn-sm mb-2">
 							<i class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="Add"}
 						</a>
 						<div class="list-group">
@@ -55,7 +55,8 @@
 				</h2>
 				<div id="panelUnavailable" class="accordion-collapse collapse">
 					<div class="accordion-body add-contents">
-						<a href="#" add-to="{ResourceStatus::UNAVAILABLE}" class="add-link btn btn-primary mb-2"><i
+						<a href="#" add-to="{ResourceStatus::UNAVAILABLE}"
+							class="add-link btn btn-primary btn-sm mb-2"><i
 								class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="Add"}
 						</a>
 						<div class="list-group">
@@ -78,7 +79,7 @@
 				</h2>
 				<div id="panelHidden" class="accordion-collapse collapse">
 					<div class="accordion-body add-contents">
-						<a href="#" add-to="{ResourceStatus::HIDDEN}" class="add-link btn btn-primary mb-2">
+						<a href="#" add-to="{ResourceStatus::HIDDEN}" class="add-link btn btn-primary btn-sm mb-2">
 							<i class="bi bi-plus-circle-fill me-1 icon add"></i>{translate key="Add"}
 						</a>
 						<div class="list-group">
@@ -106,8 +107,8 @@
 					<div class="modal-body">
 						<div class="form-group has-feedback">
 							<label class="fw-bold" for="add-reason-description">{translate key=Name}</label><br />
-							<input type="text" class="form-control required" required id="add-reason-description"
-								{formname key=RESOURCE_STATUS_REASON} />
+							<input type="text" class="form-control form-control-sm required" required
+								id="add-reason-description" {formname key=RESOURCE_STATUS_REASON} />
 							<input type="hidden" id="add-reason-status" {formname key=RESOURCE_STATUS_ID} />
 						</div>
 					</div>
@@ -176,7 +177,7 @@
 	{include file="javascript-includes.tpl"}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/resource-status.js"}
-	{jsfile src="js/jquery.form-3.09.min.js"}
+	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		$(document).ready(function() {

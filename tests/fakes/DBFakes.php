@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Database/namespace.php');
 //require_once(ROOT_DIR . 'lib/pear/MDB2.php');
 
@@ -135,7 +137,7 @@ class FakeReader implements IReader
         if (sizeof($this->rows) > $this->idx) {
             return $this->rows[$this->idx++];
         }
-        return false;
+        return [];
     }
 
     public function NumRows()
@@ -177,7 +179,7 @@ class FakeDBConnection implements IDbConnection
     public function Query(ISqlCommand $command)
     {
         $this->_LastSqlCommand = $command;
-        return null;
+        return new FakeReader([]);
     }
 
     public function Execute(ISqlCommand $command)
@@ -200,7 +202,7 @@ class FakeDBConnection implements IDbConnection
     public function LimitQuery(ISqlCommand $command, $limit, $offset = null)
     {
         $this->_LimitQueryCalled = true;
-        return null;
+        return new FakeReader([]);
     }
 }
 

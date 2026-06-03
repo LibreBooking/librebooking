@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class FakeConfig extends Configuration implements IConfiguration
 {
     public $_RegisteredFiles = [];
@@ -12,7 +14,7 @@ class FakeConfig extends Configuration implements IConfiguration
 
     public function __construct()
     {
-        $this->_configs[self::DEFAULT_CONFIG_ID] = new FakeConfigFile();
+        $this->SetFile(self::DEFAULT_CONFIG_ID, new FakeConfigFile());
     }
 
     public function SetFile($configId, $file)
@@ -22,7 +24,9 @@ class FakeConfig extends Configuration implements IConfiguration
 
     public function SetKey($configDef, $value)
     {
-        $this->File(self::DEFAULT_CONFIG_ID)->SetKey($configDef, $value);
+        /** @var FakeConfigFile $file */
+        $file = $this->_configs[self::DEFAULT_CONFIG_ID];
+        $file->SetKey($configDef, $value);
     }
 
     public function SetTimezone($timezone)
@@ -36,17 +40,9 @@ class FakeConfig extends Configuration implements IConfiguration
     }
 
     public function EnableSubscription()
-    { }
-
-    /**
-     * @param string $configId
-     * @return FakeConfigFile
-     */
-
-    public function File($configId)
     {
-        return $this->_configs[$configId];
     }
+
 }
 
 class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
@@ -87,7 +83,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function GetSectionKey($section, $keyName, $converter = null)
     {
-        return $this->GetKey( $keyName, $converter);
+        return $this->GetKey($keyName, $converter);
     }
 
     private function GetDefaultConverter(array $config): ?IConvert
@@ -143,6 +139,11 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
         } else {
             $this->_values[$configDef] = $value;
         }
+    }
+
+    public function GetValues(): array
+    {
+        return $this->_values;
     }
 
     public function EnableSubscription()

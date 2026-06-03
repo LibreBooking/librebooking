@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Select2=true Fullcalendar=true cssFiles='scripts/css/jqtree.css,css/schedule.css' printCssFiles='css/calendar.print.css'}
+{include file='globalheader.tpl' Select2=true Fullcalendar=true cssFiles='assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' printCssFiles='css/calendar.print.css'}
 
 <div id="page-{$pageIdSuffix}">
     {include file='Calendar/calendar.filter.tpl'}
@@ -56,19 +56,21 @@
     {jsfile src="reservationPopup.js"}
     {jsfile src="calendar.js"}
     {jsfile src="ajax-helpers.js"}
+    {jsfile src="date-helper.js"}
     {jsfile src="autocomplete.js"}
-    {jsfile src="js/tree.jquery.js"}
+    {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 
     <script type="text/javascript">
         $(document).ready(function() {
 
             var options = {
                 view: '{$CalendarType|escape:javascript}',
-                defaultDate: moment('{$DisplayDate->Format('Y-m-d')}', 'YYYY-MM-DD'),
+                defaultDate: '{$DisplayDate->Format('Y-m-d')}',
                 todayText: '{{translate key=Today}|escape:'javascript'}',
                 dayText: '{{translate key=Day}|escape:'javascript'}',
                 monthText: '{{translate key=Month}|escape:'javascript'}',
                 weekText: '{{translate key=Week}|escape:'javascript'}',
+                listText: '{{translate key=List}|escape:'javascript'}',
                 dayClickUrl: '{$pageUrl}?ct={CalendarTypes::Day}&sid={$ScheduleId|escape:'javascript'}&rid={$ResourceId|escape:'javascript'}&gid={if isset($GroupId)}{$GroupId|escape:'javascript'}{/if}',
                 dayClickUrlTemplate: '{$pageUrl}?ct={CalendarTypes::Day}&sid=[sid]&rid=[rid]&gid=[gid]',
                 dayNames: {js_array array=$DayNames},

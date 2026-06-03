@@ -4,7 +4,7 @@
 <head>
 	<title>{if $TitleKey neq ''}{translate key=$TitleKey args=$TitleArgs}{else}{$Title}{/if}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset={$Charset}" />
-	{jsfile src="js/jquery-3.3.1.min.js"}
+	{vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
 </head>
 
 <body>

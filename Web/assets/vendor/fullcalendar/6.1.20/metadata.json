@@ -1,0 +1,8 @@
+{
+  "name": "fullcalendar",
+  "version": "6.1.20",
+  "description": "Full-sized drag & drop event calendar in JavaScript.",
+  "homepage": "https://fullcalendar.io/",
+  "source": "https://github.com/fullcalendar/fullcalendar/releases/tag/v6.1.20",
+  "license": "MIT"
+}

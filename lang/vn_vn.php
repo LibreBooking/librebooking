@@ -14,7 +14,7 @@ class vn_vn extends en_gb
      */
     protected function _LoadStrings()
     {
-        $strings = [];
+        $strings = parent::_LoadStrings();
 
         $strings['FirstName'] = 'Họ';
         $strings['LastName'] = 'Tên';
@@ -99,6 +99,7 @@ class vn_vn extends en_gb
         $strings['LaterThisWeek'] = 'Later This Week';
         $strings['NextWeek'] = 'Tuần tới';
         $strings['SignOut'] = 'Đăng xuất';
+        $strings['JavascriptRequired'] = 'Ứng dụng này yêu cầu JavaScript để hoạt động bình thường. Vui lòng bật JavaScript trong cài đặt trình duyệt của bạn.';
         $strings['LayoutDescription'] = 'Starts on %s, showing %s days at a time';
         $strings['AllResources'] = 'Tất cả lịch họp';
         $strings['TakeOffline'] = 'Take Offline';
@@ -604,6 +605,7 @@ class vn_vn extends en_gb
         $strings['NoResourcePermission'] = 'You do not have permission to access one or more of the requested resources.';
         $strings['ConflictingReservationDates'] = 'There are conflicting reservations on the following dates:';
         $strings['StartDateBeforeEndDateRule'] = 'The start date and time must be before the end date and time.';
+        $strings['RecurringWithoutTerminationRule'] = 'Ngày kết thúc là bắt buộc đối với các lần chặn định kỳ.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
         $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
@@ -758,12 +760,12 @@ class vn_vn extends en_gb
         $strings['PendingApprovalReservations'] = 'Đặt phòng đang chờ duyệt';
         $strings['LaterThisMonth'] = 'Sau này trong tháng này';
         $strings['LaterThisYear'] = 'Sau này trong năm nay';
-        $strings['Remaining'] = 'Còn lại';        
+        $strings['Remaining'] = 'Còn lại';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Không có đặt phòng check out nào bị thiếu';
-        $strings['MissingCheckOutReservations'] = 'Đặt phòng Check Out bị thiếu';        
+        $strings['MissingCheckOutReservations'] = 'Đặt phòng Check Out bị thiếu';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
@@ -782,7 +784,7 @@ class vn_vn extends en_gb
      */
     protected function _LoadDays()
     {
-        $days = [];
+        $days = parent::_LoadDays();
 
         /***
          * DAY NAMES
@@ -808,7 +810,7 @@ class vn_vn extends en_gb
      */
     protected function _LoadMonths()
     {
-        $months = [];
+        $months = parent::_LoadMonths();
 
         /***
          * MONTH NAMES

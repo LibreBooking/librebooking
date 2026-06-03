@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
@@ -78,7 +80,7 @@ class AuthenticationTest extends TestBase
         $this->lname = 'Name';
         $this->email = 'my@email.com';
         $this->isAdmin = true;
-        $this->timezone = "US/Central";
+        $this->timezone = 'America/Chicago';
         $this->lastLogin = time();
         $this->homepageId = 2;
         $this->languageCode = 'en_us';
@@ -135,37 +137,37 @@ class AuthenticationTest extends TestBase
         $language = 'en_gb';
 
         $this->userRepository->expects($this->once())
-                ->method('LoadByUsername')
-                ->with($this->equalTo($this->username))
-                ->willReturn($this->user);
+            ->method('LoadByUsername')
+            ->with($this->equalTo($this->username))
+            ->willReturn($this->user);
 
         LoginTime::$Now = time();
 
         $this->user->Login(LoginTime::Now(), $language);
 
         $this->userRepository->expects($this->once())
-                ->method('Update')
-                ->with($this->equalTo($this->user));
+            ->method('Update')
+            ->with($this->equalTo($this->user));
 
         $this->authorization->expects($this->once())
-                ->method('IsApplicationAdministrator')
-                ->with($this->equalTo($this->user))
-                ->willReturn(true);
+            ->method('IsApplicationAdministrator')
+            ->with($this->equalTo($this->user))
+            ->willReturn(true);
 
         $this->authorization->expects($this->once())
-                ->method('IsGroupAdministrator')
-                ->with($this->equalTo($this->user))
-                ->willReturn(true);
+            ->method('IsGroupAdministrator')
+            ->with($this->equalTo($this->user))
+            ->willReturn(true);
 
         $this->authorization->expects($this->once())
-                ->method('IsResourceAdministrator')
-                ->with($this->equalTo($this->user))
-                ->willReturn(true);
+            ->method('IsResourceAdministrator')
+            ->with($this->equalTo($this->user))
+            ->willReturn(true);
 
         $this->authorization->expects($this->once())
-                ->method('IsScheduleAdministrator')
-                ->with($this->equalTo($this->user))
-                ->willReturn(true);
+            ->method('IsScheduleAdministrator')
+            ->with($this->equalTo($this->user))
+            ->willReturn(true);
 
         $context = new WebLoginContext(new LoginData(false, $language));
         $actualSession = $this->auth->Login($this->username, $context);

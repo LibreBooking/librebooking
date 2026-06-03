@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP LDAP CLASS FOR MANIPULATING ACTIVE DIRECTORY
  * Version 4.0.4
@@ -65,38 +66,38 @@ class adLDAPContacts
     public function create($attributes)
     {
         // Check for compulsory fields
-        if (!array_key_exists("display_name", $attributes)) {
-            return "Missing compulsory field [display_name]";
+        if (!array_key_exists('display_name', $attributes)) {
+            return 'Missing compulsory field [display_name]';
         }
-        if (!array_key_exists("email", $attributes)) {
-            return "Missing compulsory field [email]";
+        if (!array_key_exists('email', $attributes)) {
+            return 'Missing compulsory field [email]';
         }
-        if (!array_key_exists("container", $attributes)) {
-            return "Missing compulsory field [container]";
+        if (!array_key_exists('container', $attributes)) {
+            return 'Missing compulsory field [container]';
         }
-        if (!is_array($attributes["container"])) {
-            return "Container attribute must be an array.";
+        if (!is_array($attributes['container'])) {
+            return 'Container attribute must be an array.';
         }
 
         // Translate the schema
         $add = $this->adldap->adldap_schema($attributes);
 
         // Additional stuff only used for adding contacts
-        $add["cn"][0] = $attributes["display_name"];
-        $add["objectclass"][0] = "top";
-        $add["objectclass"][1] = "person";
-        $add["objectclass"][2] = "organizationalPerson";
-        $add["objectclass"][3] = "contact";
+        $add['cn'][0] = $attributes['display_name'];
+        $add['objectclass'][0] = 'top';
+        $add['objectclass'][1] = 'person';
+        $add['objectclass'][2] = 'organizationalPerson';
+        $add['objectclass'][3] = 'contact';
         if (!isset($attributes['exchange_hidefromlists'])) {
-            $add["msExchHideFromAddressLists"][0] = "TRUE";
+            $add['msExchHideFromAddressLists'][0] = 'TRUE';
         }
 
         // Determine the container
-        $attributes["container"] = array_reverse($attributes["container"]);
-        $container= "OU=" . implode(",OU=", $attributes["container"]);
+        $attributes['container'] = array_reverse($attributes['container']);
+        $container = 'OU=' . implode(',OU=', $attributes['container']);
 
         // Add the entry
-        $result = @ldap_add($this->adldap->getLdapConnection(), "CN=" . $this->adldap->utilities()->escapeCharacters($add["cn"][0]) . ", " . $container . "," . $this->adldap->getBaseDn(), $add);
+        $result = @ldap_add($this->adldap->getLdapConnection(), 'CN=' . $this->adldap->utilities()->escapeCharacters($add['cn'][0]) . ', ' . $container . ',' . $this->adldap->getBaseDn(), $add);
         if ($result != true) {
             return false;
         }
@@ -124,8 +125,8 @@ class adLDAPContacts
         }
 
         // Search the directory for their information
-        $info = @$this->info($distinguishedName, ["memberof", "primarygroupid"]);
-        $groups = $this->adldap->utilities()->niceNames($info[0]["memberof"]); //presuming the entry returned is our contact
+        $info = @$this->info($distinguishedName, ['memberof', 'primarygroupid']);
+        $groups = $this->adldap->utilities()->niceNames($info[0]['memberof']); //presuming the entry returned is our contact
 
         if ($recursive === true) {
             foreach ($groups as $id => $groupName) {
@@ -153,24 +154,24 @@ class adLDAPContacts
             return false;
         }
 
-        $filter = "distinguishedName=" . $distinguishedName;
+        $filter = 'distinguishedName=' . $distinguishedName;
         if ($fields === null) {
-            $fields = ["distinguishedname", "mail", "memberof", "department", "displayname", "telephonenumber", "primarygroupid", "objectsid"];
+            $fields = ['distinguishedname', 'mail', 'memberof', 'department', 'displayname', 'telephonenumber', 'primarygroupid', 'objectsid'];
         }
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
         if ($entries[0]['count'] >= 1) {
             // AD does not return the primary group in the ldap query, we may need to fudge it
-            if ($this->adldap->getRealPrimaryGroup() && isset($entries[0]["primarygroupid"][0]) && isset($entries[0]["primarygroupid"][0])) {
+            if ($this->adldap->getRealPrimaryGroup() && isset($entries[0]['primarygroupid'][0]) && isset($entries[0]['primarygroupid'][0])) {
                 //$entries[0]["memberof"][]=$this->group_cn($entries[0]["primarygroupid"][0]);
-                $entries[0]["memberof"][] = $this->adldap->group()->getPrimaryGroup($entries[0]["primarygroupid"][0], $entries[0]["objectsid"][0]);
+                $entries[0]['memberof'][] = $this->adldap->group()->getPrimaryGroup($entries[0]['primarygroupid'][0], $entries[0]['objectsid'][0]);
             } else {
-                $entries[0]["memberof"][] = "CN=Domain Users,CN=Users," . $this->adldap->getBaseDn();
+                $entries[0]['memberof'][] = 'CN=Domain Users,CN=Users,' . $this->adldap->getBaseDn();
             }
         }
 
-        $entries[0]["memberof"]["count"]++;
+        $entries[0]['memberof']['count']++;
         return $entries;
     }
 
@@ -223,7 +224,7 @@ class adLDAPContacts
         } //use the default option if they haven't set it
 
         // Get a list of the groups
-        $groups = $this->groups($distinguisedName, ["memberof"], $recursive);
+        $groups = $this->groups($distinguisedName, ['memberof'], $recursive);
 
         // Return true if the specified group is in the group list
         if (in_array($group, $groups)) {
@@ -243,7 +244,7 @@ class adLDAPContacts
     public function modify($distinguishedName, $attributes)
     {
         if ($distinguishedName === null) {
-            return "Missing compulsory field [distinguishedname]";
+            return 'Missing compulsory field [distinguishedname]';
         }
 
         // Translate the update to the LDAP schema
@@ -286,26 +287,26 @@ class adLDAPContacts
     * @param bool $sorted Whether to sort the results
     * @return array
     */
-    public function all($includeDescription = false, $search = "*", $sorted = true)
+    public function all($includeDescription = false, $search = '*', $sorted = true)
     {
         if (!$this->adldap->getLdapBind()) {
             return false;
         }
 
         // Perform the search and grab all their details
-        $filter = "(&(objectClass=contact)(cn=" . $search . "))";
-        $fields = ["displayname","distinguishedname"];
+        $filter = '(&(objectClass=contact)(cn=' . $search . '))';
+        $fields = ['displayname','distinguishedname'];
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
         $usersArray = [];
-        for ($i=0; $i<$entries["count"]; $i++) {
-            if ($includeDescription && strlen($entries[$i]["displayname"][0])>0) {
-                $usersArray[$entries[$i]["distinguishedname"][0]] = $entries[$i]["displayname"][0];
+        for ($i = 0; $i < $entries['count']; $i++) {
+            if ($includeDescription && strlen($entries[$i]['displayname'][0]) > 0) {
+                $usersArray[$entries[$i]['distinguishedname'][0]] = $entries[$i]['displayname'][0];
             } elseif ($includeDescription) {
-                $usersArray[$entries[$i]["distinguishedname"][0]] = $entries[$i]["distinguishedname"][0];
+                $usersArray[$entries[$i]['distinguishedname'][0]] = $entries[$i]['distinguishedname'][0];
             } else {
-                array_push($usersArray, $entries[$i]["distinguishedname"][0]);
+                array_push($usersArray, $entries[$i]['distinguishedname'][0]);
             }
         }
         if ($sorted) {

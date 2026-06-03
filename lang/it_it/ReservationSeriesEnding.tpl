@@ -1,4 +1,4 @@
-<p>La sua serie di prenotazioni per {$ResourceName} terminer&agrave; il {formatdate date=$StartDate key=reservation_email}.</p>
+<p>La sua serie di prenotazioni per {$ResourceName} terminerà il {formatdate date=$StartDate key=reservation_email}.</p>
 <p>Dettagli della prenotazione:</p>
 <p>
 	<strong>Inizio:</strong> {formatdate date=$StartDate key=reservation_email}<br />
