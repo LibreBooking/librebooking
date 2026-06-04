@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c60cfd850a7549a9c8c4882b435a4e0",
+    "content-hash": "31ef9c94cbe735e0f5f057180734aeb8",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2049,16 +2049,16 @@
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "4.10.0",
+            "version": "4.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "1473bd9d6aa40158f75f1e05116e6dd081148b2c"
+                "reference": "ab39168b7556f44c11c80be1222b44b239f5c2e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/1473bd9d6aa40158f75f1e05116e6dd081148b2c",
-                "reference": "1473bd9d6aa40158f75f1e05116e6dd081148b2c",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/ab39168b7556f44c11c80be1222b44b239f5c2e4",
+                "reference": "ab39168b7556f44c11c80be1222b44b239f5c2e4",
                 "shasum": ""
             },
             "require": {
@@ -2101,7 +2101,7 @@
             ],
             "support": {
                 "issues": "https://github.com/serbanghita/Mobile-Detect/issues",
-                "source": "https://github.com/serbanghita/Mobile-Detect/tree/4.10.0"
+                "source": "https://github.com/serbanghita/Mobile-Detect/tree/4.11.0"
             },
             "funding": [
                 {
@@ -2109,7 +2109,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-23T13:05:57+00:00"
+            "time": "2026-05-24T12:32:40+00:00"
         },
         {
             "name": "monolog/monolog",
