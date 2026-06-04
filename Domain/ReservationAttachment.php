@@ -110,7 +110,7 @@ class ReservationAttachment
     public static function Create($fileName, $fileType, $fileSize, $fileContent, $fileExtension, $seriesId)
     {
         $file = new ReservationAttachment();
-        $file->fileName = $fileName;
+        $file->fileName = self::NormalizeFileName($fileName);
         $file->fileType = $fileType;
         $file->fileSize = $fileSize;
         $file->fileContent = $fileContent;
@@ -118,6 +118,19 @@ class ReservationAttachment
         $file->seriesId = $seriesId;
 
         return $file;
+    }
+
+    public static function NormalizeFileName(string $fileName): string
+    {
+        $normalized = trim((string)$fileName);
+        $normalized = str_replace(['/', '\\'], '_', $normalized);
+        $normalized = preg_replace('/[[:cntrl:]<>:"|?*]+/', '_', $normalized) ?? '';
+
+        if ($normalized === '' || trim($normalized, '._ ') === '') {
+            return 'attachment';
+        }
+
+        return $normalized;
     }
 
     /**

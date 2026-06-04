@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT_DIR . 'Domain/ReservationAttachment.php');
+
 class ReservationAttachmentView
 {
     private int $fileId;
@@ -15,7 +17,7 @@ class ReservationAttachmentView
     {
         $this->fileId = $fileId;
         $this->seriesId = $seriesId;
-        $this->fileName = $fileName;
+        $this->fileName = ReservationAttachment::NormalizeFileName($fileName);
     }
 
     /**

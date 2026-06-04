@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'Pages/SecurePage.php');
+require_once(ROOT_DIR . 'Domain/ReservationAttachment.php');
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttachmentPresenter.php');
 
 interface IReservationAttachmentPage
@@ -81,12 +82,25 @@ class ReservationAttachmentPage extends SecurePage implements IReservationAttach
     {
         ob_start();
         $contents = $attachment->FileContents();
+        $fileName = $this->GetHeaderFileName($attachment->FileName());
         header('Content-Type: ' . $attachment->FileType());
-        header('Content-Disposition: attachment; filename="' . $attachment->FileName() . '"');
+        header(
+            "Content-Disposition: attachment; filename=\"{$fileName}\"; filename*=UTF-8''"
+            . rawurlencode($attachment->FileName())
+        );
         header('Content-Length: ' . strlen($contents));
         while (ob_get_level()) {
             ob_end_clean();
         }
         echo $contents;
+    }
+
+    private function GetHeaderFileName(string $fileName): string
+    {
+        $headerFileName = ReservationAttachment::NormalizeFileName($fileName);
+        $headerFileName = preg_replace('/[^\x20-\x7E]/', '_', $headerFileName) ?? 'attachment';
+        $headerFileName = str_replace(['"', '\\'], '_', $headerFileName);
+
+        return $headerFileName;
     }
 }

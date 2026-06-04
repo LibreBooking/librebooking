@@ -171,8 +171,8 @@
                 <br />
                 {foreach from=$Attachments item=attachment}
                     {assign var=attachmentUrl value="attachments/{Pages::RESERVATION_FILE}?{QueryStringKeys::ATTACHMENT_FILE_ID}={$attachment->FileId()}&{QueryStringKeys::REFERENCE_NUMBER}={$ReferenceNumber}"}
-                    <a href="{$attachmentUrl}" download="{$attachmentUrl}" target="_blank"
-                        class="link-primary">{$attachment->FileName()}</a>
+                    <a href="{$attachmentUrl|escape:'html'}" download="{$attachmentUrl|escape:'html'}" target="_blank"
+                        class="link-primary">{$attachment->FileName()|escape:'html'}</a>
                     <input style='display: none;' type="checkbox" name="{FormKeys::REMOVED_FILE_IDS}[{$attachment->FileId()}]" />
                 {/foreach}
             </div>
