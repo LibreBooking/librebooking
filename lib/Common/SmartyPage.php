@@ -214,6 +214,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'add_querystring', $this->AddQueryString(...));
         $this->registerPlugin('function', 'resource_image', $this->GetResourceImage(...));
         $this->registerPlugin('modifier', 'escapequotes', $this->EscapeQuotes(...));
+        $this->registerPlugin('modifier', 'sanitize_rich_text', $this->SanitizeRichText(...));
         $this->registerPlugin('function', 'flush', $this->Flush(...));
         $this->registerPlugin('function', 'jsfile', $this->IncludeJavascriptFile(...));
         $this->registerPlugin('function', 'cssfile', $this->IncludeCssFile(...));
@@ -810,6 +811,11 @@ class SmartyPage extends Smarty
     {
         $str = str_replace('\'', '&#39;', $var);
         return str_replace('"', '&quot;', $str);
+    }
+
+    public function SanitizeRichText(?string $html): string
+    {
+        return RichTextHtmlSanitizer::Sanitize($html);
     }
 
     public function Flush($params, $smarty)
