@@ -15,5 +15,6 @@ require_once(ROOT_DIR . 'lib/Common/ErrorMessages.php');
 require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
 require_once(ROOT_DIR . 'lib/Common/Logging/ExceptionHandler.php');
 require_once(ROOT_DIR . 'lib/Common/ContrastingColor.php');
+require_once(ROOT_DIR . 'lib/Common/Security/RichTextHtmlSanitizer.php');
 require_once(ROOT_DIR . 'lib/Common/RedirectUrlSanitizer.php');
 require_once(ROOT_DIR . 'lib/Common/VersionDisplayResolver.php');
