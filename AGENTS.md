@@ -467,6 +467,28 @@ Templates use Smarty syntax:
 
 Templates are cached in `/tpl_c/` - this directory is auto-generated.
 
+### Rich Text Rendering
+
+- For stored rich-text HTML such as announcements and resource
+  descriptions/notes, use the Smarty modifier `sanitize_rich_text` before
+  rendering live HTML. The modifier is backed by `RichTextHtmlSanitizer` in
+  `lib/Common/Security/`.
+- Do not use `html_entity_decode` directly for rich-text display paths. The
+  rich-text sanitizer already decodes legacy entity-encoded HTML before applying
+  the allowlist.
+- Existing rich-text paths that auto-link plain URLs use
+  `sanitize_rich_text|url2link|nl2br`.
+- Keep sanitization display-only unless requirements explicitly say otherwise.
+  Do not sanitize on write or migrate stored rich-text content without
+  discussion.
+- Preserve editor round-trips: when adding or changing rich-text render paths,
+  keep raw stored values available to editors, and ensure any values placed in
+  HTML attributes or JavaScript are escaped for that context. Do not assume
+  `sanitize_rich_text` makes non-HTML contexts safe.
+- `url2link` only auto-links safe `http`/`https` URLs and valid email
+  addresses. Avoid broadening schemes without updating tests and the sanitizer
+  policy.
+
 ### Database Changes
 
 1. Never modify `/database_schema/create-schema.sql` directly
@@ -637,6 +659,12 @@ Output: `docs/build/html/`
 4. **CSRF protection** - Use built-in token system
 5. **Input validation** - Validate all user input
 6. **File uploads** - Validate file types and sizes
+7. **Admin-authored content** - Treat administrator-authored content according
+   to the trust model in `SECURITY.md`, but still harden rich-text/template
+   output as defense in depth where practical
+8. **Email template files** - Validate template filenames before using them in
+   filesystem paths; follow the existing `ManageEmailTemplatesPresenter`
+   validation pattern
 
 ## Performance Considerations
 
