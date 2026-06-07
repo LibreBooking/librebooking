@@ -74,13 +74,25 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
         return preg_replace('/\{\*.+\*\}/', '', $contents);
     }
 
+    private function IsValidTemplateName($templateName)
+    {
+        if (!is_string($templateName)) {
+            return false;
+        }
+        // Require an exact lowercase .tpl extension so validation matches the
+        // case-sensitive replacement used to build the saved filename.
+        return BookedStringHelper::EndsWith($templateName, '.tpl')
+            && !BookedStringHelper::Contains($templateName, '..')
+            && !BookedStringHelper::Contains($templateName, '\\')
+            && !BookedStringHelper::Contains($templateName, '/')
+            // Reject control characters (e.g. newlines) so a crafted name cannot
+            // forge log entries or produce a control-character filename on save.
+            && !preg_match('/[\x00-\x1f\x7f]/', $templateName);
+    }
+
     public function LoadTemplate()
     {
-        $templateName = strtolower($this->page->GetTemplateName());
-        if (!BookedStringHelper::EndsWith($templateName, '.tpl')
-            || BookedStringHelper::Contains($templateName, '..')
-            || BookedStringHelper::Contains($templateName, '\\')
-            || BookedStringHelper::Contains($templateName, '/')) {
+        if (!$this->IsValidTemplateName($this->page->GetTemplateName())) {
             return '';
         }
         $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()) . $this->page->GetTemplateName();
@@ -98,11 +110,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
 
     public function LoadOriginalTemplate()
     {
-        $templateName = strtolower($this->page->GetTemplateName());
-        if (!BookedStringHelper::EndsWith($templateName, '.tpl')
-            || BookedStringHelper::Contains($templateName, '..')
-            || BookedStringHelper::Contains($templateName, '\\')
-            || BookedStringHelper::Contains($templateName, '/')) {
+        if (!$this->IsValidTemplateName($this->page->GetTemplateName())) {
             return '';
         }
         $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()) . $this->page->GetTemplateName();
@@ -113,6 +121,12 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
     public function UpdateEmailTemplate()
     {
         $templateName = $this->page->GetUpdatedTemplateName();
+
+        if (!$this->IsValidTemplateName($templateName)) {
+            Log::Error('Rejected email template update with invalid template name. Template=%s', json_encode($templateName));
+            $this->page->SetSaveResult(false);
+            return;
+        }
 
         try {
             Log::Debug('Updating email template. Template=%s', $templateName);

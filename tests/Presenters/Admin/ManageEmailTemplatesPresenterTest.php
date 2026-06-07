@@ -84,6 +84,97 @@ class ManageEmailTemplatesPresenterTest extends TestBase
         $this->assertEquals(Paths::EmailTemplates('cz'), $this->fileSystem->_AddedFilePath);
         $this->assertEquals('template-custom.tpl', $this->fileSystem->_AddedFileName);
     }
+
+    public function testRejectsUpdateWithPathTraversalTemplateName()
+    {
+        // PoC vector: the file name traverses out of the lang directory.
+        $this->page->_UpdatedTemplateName = '../../Web/lb_shell.php';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertNull($this->fileSystem->_AddedFileContents);
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithTraversalEndingInTpl()
+    {
+        // Ends in .tpl, so this is blocked specifically by the traversal checks.
+        $this->page->_UpdatedTemplateName = '../../Web/shell.tpl';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithControlCharactersInTemplateName()
+    {
+        // Ends in .tpl with no traversal, but the embedded newline must be rejected
+        // (log forging / control-character filename).
+        $this->page->_UpdatedTemplateName = "welcome\ninjected.tpl";
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithUppercaseTplExtension()
+    {
+        // Uppercase extension would not be rewritten to -custom.tpl by the
+        // case-sensitive save path, so it must be rejected outright.
+        $this->page->_UpdatedTemplateName = 'WELCOME.TPL';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithoutTplExtension()
+    {
+        $this->page->_UpdatedTemplateName = 'shell.php';
+        $this->page->_TemplateContents = '<?php ?>';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithSlashInTemplateName()
+    {
+        $this->page->_UpdatedTemplateName = 'subdir/template.tpl';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithBackslashInTemplateName()
+    {
+        $this->page->_UpdatedTemplateName = '..\\..\\Web\\shell.php.tpl';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'en_us';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
 }
 
 class FakeManageEmailTemplatesPage extends ManageEmailTemplatesPage
