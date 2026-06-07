@@ -190,6 +190,26 @@ Run both tests and linting:
 composer test
 ```
 
+### Frontend Linting
+
+Frontend JavaScript and CSS linting uses npm tooling. Node.js >=20.19.0 is
+required.
+
+```bash
+# Install frontend dev dependencies
+npm ci
+
+# Check frontend JavaScript, CSS, and formatting
+npm run lint:frontend
+
+# Auto-fix frontend formatting/lint issues
+npm run fix:frontend
+```
+
+Individual commands are also available: `npm run lint:js`, `npm run lint:css`,
+`npm run lint:format`, `npm run fix:js`, `npm run fix:css`, and
+`npm run fix:format`.
+
 ### Documentation
 
 Generate API documentation with PHPDocumentor:
@@ -467,6 +487,14 @@ Templates use Smarty syntax:
 
 Templates are cached in `/tpl_c/` - this directory is auto-generated.
 
+Use `{vendor_js ...}` and `{vendor_css ...}` for bundled frontend assets under
+`Web/assets/vendor/`. Prefer local bundled assets over adding CDN references
+unless a feature explicitly requires remote loading.
+
+Use `DatePickerSetupControl` for date/date-time inputs. Client-side date and
+time helpers live in `Web/scripts/date-helper.js`; prefer those helpers over
+adding new Moment.js usage or ad hoc date parsing.
+
 ### Rich Text Rendering
 
 - For stored rich-text HTML such as announcements and resource
@@ -496,12 +524,27 @@ Templates are cached in `/tpl_c/` - this directory is auto-generated.
 3. Follow naming convention: `X.Y.Z.sql` (version number)
 4. Use Phing tasks to apply upgrades: `composer build` or phing targets
 
+### Configuration Changes
+
+- Add and update application config definitions in `lib/Config/ConfigKeys.php`
+  and related metadata in `lib/Config/ConfigKeysMeta.php`.
+- Keep generated config artifacts in sync by running
+  `composer config-dist:generate` and `composer env-example:generate` after
+  changing config definitions.
+- Use `composer config-dist:check` and `composer env-example:check` to verify
+  generated files before committing.
+- For renamed or removed settings, update the legacy/deprecated key handling
+  instead of silently dropping existing user configuration.
+
 ### Localization
 
 - Translation files in `/lang/{language_code}/`
 - Each language has separate files for different sections
 - Use `translate` function in templates
 - Keys use dot notation: `section.subsection.key`
+- Per-language string overrides are supported via
+  `config/lang-overrides.example.php`; prefer that path for deployment-specific
+  wording instead of editing tracked language files.
 
 ## Known Issues and Workarounds
 
