@@ -1,1 +1,1 @@
-{$AnnouncementText|html_entity_decode|url2link|nl2br}
+{$AnnouncementText|sanitize_rich_text|url2link|nl2br}
