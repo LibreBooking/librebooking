@@ -432,7 +432,7 @@
 																		data-pk="{$id}" data-value="{$description}"
 																		data-name="{FormKeys::RESOURCE_DESCRIPTION}">
 																		{if $resource->HasDescription()}
-																			{$description|unescape:'html'}
+																			{$description|sanitize_rich_text}
 																		{else}
 																			{translate key='NoDescriptionLabel'}
 																		{/if}
@@ -458,7 +458,7 @@
 																		data-pk="{$id}" data-value="{$notes}"
 																		data-name="{FormKeys::RESOURCE_NOTES}">
 																		{if $resource->HasNotes()}
-																			{$notes|unescape:'html'}
+																			{$notes|sanitize_rich_text}
 																		{else}
 																			{translate key='NoNotesLabel'}
 																		{/if}

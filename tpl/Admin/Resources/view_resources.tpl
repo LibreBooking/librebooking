@@ -274,7 +274,7 @@
                                                                 {strip}
                                                                     <div class="descriptionValue">
                                                                         {if $resource->HasDescription()}
-                                                                            {$description|unescape:'html'}
+                                                                            {$description|sanitize_rich_text}
                                                                         {else}
                                                                             {translate key='NoDescriptionLabel'}
                                                                         {/if}
@@ -285,7 +285,7 @@
                                                                 <label class="inline fw-bold">{translate key='Notes'}</label>
                                                                 <div class="notesValue">
                                                                     {if $resource->HasNotes()}
-                                                                        {$resource->GetNotes()|unescape:'html'}
+                                                                        {$resource->GetNotes()|sanitize_rich_text}
                                                                     {else}
                                                                         {translate key='NoNotesLabel'}
                                                                     {/if}

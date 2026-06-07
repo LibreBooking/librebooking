@@ -114,7 +114,7 @@
 					<tbody>
 						{foreach from=$announcements item=announcement}
 							<tr data-announcement-id="{$announcement->Id()}">
-								<td class="announcementText">{$announcement->Text()|unescape:'html'}</td>
+								<td class="announcementText">{$announcement->Text()|sanitize_rich_text}</td>
 								<td class="announcementPriority">{$announcement->Priority()}</td>
 								<td class="announcementStart" data-order="{$announcement->Start()->Format('Y-m-d H:i')}">
 									{formatdate date=$announcement->Start()->ToTimezone($timezone)}
