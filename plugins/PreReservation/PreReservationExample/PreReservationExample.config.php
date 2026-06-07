@@ -1,4 +1,10 @@
 <?php
 
-$conf['settings']['custom.attribute.max.value'] = '100';
-$conf['settings']['custom.attribute.id'] = '3';
+return [
+    'settings' => [
+        'prereservationexample' => [
+            'custom.attribute.max.value' => 100,
+            'custom.attribute.id' => 3,
+        ],
+    ],
+];

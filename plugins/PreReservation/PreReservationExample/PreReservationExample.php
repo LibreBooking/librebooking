@@ -1,5 +1,6 @@
 <?php
 
+require_once(dirname(__FILE__) . '/PreReservationExampleConfigKeys.php');
 require_once(dirname(__FILE__) . '/PreReservationExampleValidation.php');
 
 class PreReservationExample implements IPreReservationFactory
@@ -13,11 +14,12 @@ class PreReservationExample implements IPreReservationFactory
     {
         $this->factoryToDecorate = $factoryToDecorate;
 
-        require_once(dirname(__FILE__) . '/PreReservationExample.config.php');
-
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/PreReservationExample.config.php',
-            'PreReservationExample'
+            __DIR__ . '/.env',
+            PreReservationExampleConfigKeys::CONFIG_ID,
+            false,
+            PreReservationExampleConfigKeys::class
         );
     }
 

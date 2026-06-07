@@ -894,6 +894,9 @@ For authentication plugin configuration, see:
 - OAuth2: :doc:`Oauth2-Configuration`
 - SAML: :doc:`SAML-Configuration`
 
+For custom plugin development, including pre-reservation and post-reservation
+plugins, see :doc:`CUSTOM-PLUGINS`.
+
 API Configuration
 -----------------
 

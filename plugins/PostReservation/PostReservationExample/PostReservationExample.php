@@ -40,7 +40,7 @@ class PostReservationExample implements IPostReservationFactory
     public function CreatePostDeleteService(UserSession $userSession)
     {
         // showing how to not add custom behavior during the post deletion stage
-        return $this->factoryToDecorate->CreatePostAddService($userSession);
+        return $this->factoryToDecorate->CreatePostDeleteService($userSession);
     }
 
     /**
@@ -50,7 +50,7 @@ class PostReservationExample implements IPostReservationFactory
     public function CreatePostApproveService(UserSession $userSession)
     {
         // showing how to not add custom behavior during the post approval stage
-        return $this->factoryToDecorate->CreatePostAddService($userSession);
+        return $this->factoryToDecorate->CreatePostApproveService($userSession);
     }
 
     /**

@@ -19,6 +19,7 @@ LibreBooking documentation
    ADVANCED-CONFIGURATION
    FAQ
    DEVELOPER-README
+   CUSTOM-PLUGINS
    API
    LDAP-Authentication
    ActiveDirectory-Authentication

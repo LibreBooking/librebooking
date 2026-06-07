@@ -1,8 +1,9 @@
 <?php
 
+require_once(dirname(__FILE__) . '/AdminCheckOnlyConfigKeys.php');
 require_once(dirname(__FILE__) . '/AdminCheckInOnlyValidation.php');
 require_once(dirname(__FILE__) . '/AdminCheckOutOnlyValidation.php');
-require_once(dirname(__FILE__) . '/AdminCheckOnlyConfigKeys.php');
+
 class AdminCheckOnly implements IPreReservationFactory
 {
     /**
@@ -14,12 +15,10 @@ class AdminCheckOnly implements IPreReservationFactory
     {
         $this->factoryToDecorate = $factoryToDecorate;
 
-        require_once(dirname(__FILE__) . '/AdminCheckOnly.config.php');
-
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/AdminCheckOnly.config.php',
-            '',
-            'AdminCheckOnly',
+            __DIR__ . '/.env',
+            AdminCheckOnlyConfigKeys::CONFIG_ID,
             false,
             AdminCheckOnlyConfigKeys::class
         );

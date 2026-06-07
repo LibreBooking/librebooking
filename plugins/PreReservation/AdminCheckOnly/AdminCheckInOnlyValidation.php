@@ -1,6 +1,6 @@
 <?php
 
-
+require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 
 class AdminCheckInOnlyValidation implements IReservationValidationService
@@ -39,7 +39,7 @@ class AdminCheckInOnlyValidation implements IReservationValidationService
 
     private function EvaluateCustomRule($series)
     {
-        $configFile = Configuration::Instance()->File('AdminCheckOnly'); // Gets config file
+        $configFile = Configuration::Instance()->File(AdminCheckOnlyConfigKeys::CONFIG_ID); // Gets config file
         $customAttributeId = $configFile->GetKey(AdminCheckOnlyConfigKeys::ATTRIBUTE_CHECKIN_ID); //Gets ID from AdminCheckInOnly
         $resources = $series->AllResources();
         $adminChecks = 0; //Number of resources with AdminCheckInOnly

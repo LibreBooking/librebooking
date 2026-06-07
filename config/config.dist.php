@@ -711,31 +711,31 @@ return [
         ######################
 
         'plugins' => [
-            # Comma-separated list of plugin class names to use for authentication
+            # Plugin class name to use for authentication
             # Options: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress
             'authentication' => '',
 
-            # Comma-separated list of plugin class names to use for authorization
+            # Plugin class name to use for authorization
             'authorization' => '',
 
-            # Comma-separated list of plugin class names to handle data export
+            # Plugin class name to handle data export
             'export' => '',
 
-            # Comma-separated list of plugin class names for permission management
+            # Plugin class name for permission management
             'permission' => '',
 
-            # Comma-separated list of plugin class names to run after user registration
+            # Plugin class name to run after user registration
             'postregistration' => '',
 
-            # Comma-separated list of plugin class names to run before reservation creation
+            # Plugin class name to run before reservation creation
             # Options: AdminCheckOnly, PreReservationExample
             'prereservation' => '',
 
-            # Comma-separated list of plugin class names to run after reservation is created/updated
-            # Options: PostReservation
+            # Plugin class name to run after reservation is created/updated
+            # Options: PostReservationExample
             'postreservation' => '',
 
-            # Comma-separated list of plugin class names to apply custom styling logic
+            # Plugin class name to apply custom styling logic
             'styling' => '',
         ],
 

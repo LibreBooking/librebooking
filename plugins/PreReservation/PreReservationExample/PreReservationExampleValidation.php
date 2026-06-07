@@ -28,9 +28,9 @@ class PreReservationExampleValidation implements IReservationValidationService
     {
         Log::Debug('Evaluating custom pre reservation rule');
         // make your custom checks here
-        $configFile = Configuration::Instance()->File('PreReservationExample');
-        $maxValue = $configFile->GetKey('custom.attribute.max.value');
-        $customAttributeId = $configFile->GetKey('custom.attribute.id');
+        $configFile = Configuration::Instance()->File(PreReservationExampleConfigKeys::CONFIG_ID);
+        $maxValue = $configFile->GetKey(PreReservationExampleConfigKeys::CUSTOM_ATTRIBUTE_MAX_VALUE);
+        $customAttributeId = $configFile->GetKey(PreReservationExampleConfigKeys::CUSTOM_ATTRIBUTE_ID);
 
         $attributeValue = $series->GetAttributeValue($customAttributeId);
 

@@ -1694,7 +1694,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Authentication Plugin',
         'description' => 'Plugin used for authentication',
-        'config_file_comment' => 'Comma-separated list of plugin class names to use for authentication',
+        'config_file_comment' => 'Plugin class name to use for authentication',
         'section' => 'plugins'
     ];
     public const PLUGIN_AUTHORIZATION = [
@@ -1706,7 +1706,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Authorization Plugin',
         'description' => 'Plugin used for authorization',
-        'config_file_comment' => 'Comma-separated list of plugin class names to use for authorization',
+        'config_file_comment' => 'Plugin class name to use for authorization',
         'section' => 'plugins'
     ];
     public const PLUGIN_EXPORT = [
@@ -1718,7 +1718,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Export Plugin',
         'description' => 'Plugin used for exporting data',
-        'config_file_comment' => 'Comma-separated list of plugin class names to handle data export',
+        'config_file_comment' => 'Plugin class name to handle data export',
         'section' => 'plugins'
     ];
     public const PLUGIN_PERMISSION = [
@@ -1730,7 +1730,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Permission Plugin',
         'description' => 'Plugin used for permission management',
-        'config_file_comment' => 'Comma-separated list of plugin class names for permission management',
+        'config_file_comment' => 'Plugin class name for permission management',
         'section' => 'plugins'
     ];
     public const PLUGIN_POSTREGISTRATION = [
@@ -1742,7 +1742,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Post-Registration Plugin',
         'description' => 'Plugin used after user registration',
-        'config_file_comment' => 'Comma-separated list of plugin class names to run after user registration',
+        'config_file_comment' => 'Plugin class name to run after user registration',
         'section' => 'plugins'
     ];
     public const PLUGIN_PRERESERVATION = [
@@ -1756,7 +1756,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Pre-Reservation Plugin',
         'description' => 'Plugin used before making a reservation',
-        'config_file_comment' => 'Comma-separated list of plugin class names to run before reservation creation',
+        'config_file_comment' => 'Plugin class name to run before reservation creation',
         'section' => 'plugins'
     ];
     public const PLUGIN_POSTRESERVATION = [
@@ -1765,11 +1765,11 @@ class ConfigKeys extends AbstractConfigKeys
         'default' => '',
         'choices' => [
             '' => 'None',
-            'PostReservation' => 'PostReservation',
+            'PostReservationExample' => 'PostReservationExample',
         ],
         'label' => 'Post-Reservation Plugin',
         'description' => 'Plugin used after making a reservation',
-        'config_file_comment' => 'Comma-separated list of plugin class names to run after reservation is created/updated',
+        'config_file_comment' => 'Plugin class name to run after reservation is created/updated',
         'section' => 'plugins'
     ];
     public const PLUGIN_STYLING = [
@@ -1781,7 +1781,7 @@ class ConfigKeys extends AbstractConfigKeys
         ],
         'label' => 'Styling Plugin',
         'description' => 'Plugin used for custom styling',
-        'config_file_comment' => 'Comma-separated list of plugin class names to apply custom styling logic',
+        'config_file_comment' => 'Plugin class name to apply custom styling logic',
         'section' => 'plugins'
     ];
 
