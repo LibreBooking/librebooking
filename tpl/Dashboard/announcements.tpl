@@ -10,7 +10,7 @@
 		<div class="accordion-body">
 			<div class="announcementContent">
 				{foreach from=$Announcements item=each}
-					<div class="border-bottom py-2">{$each->Text()|html_entity_decode|url2link|nl2br}</div>
+					<div class="border-bottom py-2">{$each->Text()|sanitize_rich_text|url2link|nl2br}</div>
 				{foreachelse}
 					<p class="noresults text-center fst-italic fs-5">{translate key="NoAnnouncements"}</p>
 				{/foreach}

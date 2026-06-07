@@ -13,7 +13,7 @@
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     {foreach from=$Announcements item=each}
-                        <li class="announcement list-group-item">{$each->Text()|html_entity_decode}</li>
+                        <li class="announcement list-group-item">{$each->Text()|sanitize_rich_text}</li>
                     {/foreach}
                 </ul>
             </div>

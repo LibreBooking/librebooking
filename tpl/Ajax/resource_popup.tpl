@@ -155,7 +155,7 @@
                 <span class="fw-bold mt-2">{translate key=Description}</span>
                 <div class="descriptionContent px-2">
                 {if $description neq ''}
-                    {$description|html_entity_decode|url2link|nl2br}
+                    {$description|sanitize_rich_text|url2link|nl2br}
                 {else}
                     {translate key=NoDescriptionLabel}
                 {/if}
@@ -163,7 +163,7 @@
                 <span class="fw-bold mt-2">{translate key=Notes}</span>                
                 <div class="noteContent px-2">
                 {if $notes neq ''}
-                    {$notes|html_entity_decode|url2link|nl2br}
+                    {$notes|sanitize_rich_text|url2link|nl2br}
                 {else}
                     {translate key=NoNotesLabel}
                 {/if}
