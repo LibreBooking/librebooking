@@ -55,8 +55,20 @@
                         {elseif $setting->IsPrivate}
                             <input id="{$name}" type="password" size="50" name="{$name}" {$disabled}
                                 value="{$setting->Value|escape}" class="form-control form-control-sm" />
+                        {elseif $setting->AllowCustom && is_array($setting->Choices)}
+                            <input type="text" id="{$name}" name="{$name}" {$disabled}
+                                   class="form-control form-control-sm"
+                                   value="{$setting->Value|escape}"
+                                   list="{$name}-list" />
+                            <datalist id="{$name}-list">
+                                {foreach $setting->Choices as $choiceKey => $choiceLabel}
+                                    {if $choiceKey !== ''}
+                                        <option value="{$choiceKey|escape}" label="{$choiceLabel|escape}"></option>
+                                    {/if}
+                                {/foreach}
+                            </datalist>
                         {elseif is_array($setting->Choices)}
-                            <select id="{$name}" name="{$name}" class="form-select form-select-sm">
+                            <select id="{$name}" name="{$name}" {$disabled} class="form-select form-select-sm">
                                 {html_options options=$setting->Choices  selected=$setting->Value}
                             </select>
                         {elseif $setting->Type == ConfigSettingType::String}

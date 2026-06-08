@@ -156,15 +156,16 @@ class ManageConfigurationPresenter extends ActionPresenter
         $displayKey = $section ? str_replace("$section.", '', $key) : $key;
 
         $setting = new ConfigSetting(
-            $displayKey,
-            $section ?: null,
-            $value,
-            $meta['type'] ?? 'string',
-            $meta['choices'] ?? '',
-            $meta['label'] ?? '',
-            $meta['description'] ?? '',
-            $isPrivate,
-            $hasEnv
+            Key: $displayKey,
+            Section: $section ?: null,
+            Value: (string)$value,
+            Type: $meta['type'] ?? 'string',
+            Choices: $meta['choices'] ?? '',
+            Label: $meta['label'] ?? '',
+            Description: $meta['description'] ?? '',
+            IsPrivate: $isPrivate,
+            hasEnv: $hasEnv,
+            AllowCustom: $meta['allow_custom'] ?? false
         );
 
         if ($section) {
@@ -413,34 +414,24 @@ class ConfigFileOption
 
 class ConfigSetting
 {
-    public $Key;
-    public $Section;
-    public $Value;
-    public $Type;
-    public $Choices;
-    public $Name;
-    public $Label;
-    public $Description;
-    public $IsPrivate;
-    public $hasEnv;
+    public string $Name;
 
-
-    public function __construct($key, $section, $value, $type = 'string', $choices = '', $label = '', $description = '', $isPrivate = false, $hasEnv = false)
-    {
-        $key = trim($key ?? '');
-        $section = trim($section ?? '');
-        $value = trim($value ?? '');
-
-        $this->Name = $this->encode($key) . '|' . $this->encode($section);
-        $this->Key = $key;
-        $this->Section = $section;
-        $this->Value = $value . '';
-        $this->Type = $type;
-        $this->Choices = $choices;
-        $this->Label = $label;
-        $this->Description = $description;
-        $this->IsPrivate = $isPrivate;
-        $this->hasEnv = $hasEnv;
+    public function __construct(
+        public string $Key,
+        public ?string $Section,
+        public string $Value,
+        public string $Type = 'string',
+        public array|string $Choices = '',
+        public string $Label = '',
+        public string $Description = '',
+        public bool $IsPrivate = false,
+        public bool $hasEnv = false,
+        public bool $AllowCustom = false,
+    ) {
+        $this->Key = trim($Key);
+        $this->Section = trim($Section ?? '');
+        $this->Value = trim($Value);
+        $this->Name = $this->encode($this->Key) . '|' . $this->encode($this->Section);
     }
 
     public static function ParseForm($key, $value)

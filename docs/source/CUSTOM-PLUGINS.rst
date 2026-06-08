@@ -126,23 +126,9 @@ name.
 
 Only enable plugins that exist in the matching plugin type directory.
 
-.. warning::
-
-   Some plugin configuration keys currently have fixed choices for built-in
-   plugins. This may prevent custom plugin class names from being accepted by
-   configuration validation or the web admin configuration page. This is tracked
-   in `issue 1461 <https://github.com/LibreBooking/librebooking/issues/1461>`__
-   and should be fixed in a future change.
-
-   Until this is fixed, add the custom plugin class name to the matching
-   ``choices`` array in ``lib/Config/ConfigKeys.php`` before enabling it. For
-   example, a custom pre-reservation plugin named ``MyRule`` needs a
-   ``'MyRule' => 'MyRule'`` entry in ``ConfigKeys::PLUGIN_PRERESERVATION``.
-   This is a local workaround and may need to be repeated after upgrading
-   LibreBooking.
-
 You can also enable plugins through the web admin interface at **Application
-Configuration** (``/Web/admin/manage_configuration.php``).
+Configuration** (``/Web/admin/manage_configuration.php``). The plugin fields
+accept any plugin class name; built-in plugin names appear as suggestions.
 
 Manual Installation
 -------------------

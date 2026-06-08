@@ -46,6 +46,14 @@ abstract class AbstractConfigKeys
         $configsWithIds = [];
         foreach ($constants as $name => $value) {
             if (is_array($value) && isset($value['key'])) {
+                if (array_key_exists('allow_custom', $value) && !is_bool($value['allow_custom'])) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Config key "%s" in %s has an invalid "allow_custom" value: must be true or false (boolean), got %s',
+                        $value['key'],
+                        static::class,
+                        gettype($value['allow_custom'])
+                    ));
+                }
                 // Preserve the constant name so collision detection can distinguish
                 // between different schema entries that may share the same key text,
                 // e.g. SERVER1_KEY and SERVER1_KEY_DUPLICATE_SECTION_CASE both using

@@ -1677,6 +1677,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.authentication',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
             'ActiveDirectory' => 'ActiveDirectory',
@@ -1701,6 +1702,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.authorization',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
         ],
@@ -1713,6 +1715,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.export',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
         ],
@@ -1725,6 +1728,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.permission',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
         ],
@@ -1737,6 +1741,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.postregistration',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
         ],
@@ -1749,6 +1754,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.prereservation',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
             'AdminCheckOnly' => 'AdminCheckOnly',
@@ -1763,6 +1769,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.postreservation',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
             'PostReservationExample' => 'PostReservationExample',
@@ -1776,6 +1783,7 @@ class ConfigKeys extends AbstractConfigKeys
         'key' => 'plugins.styling',
         'type' => 'string',
         'default' => '',
+        'allow_custom' => true,
         'choices' => [
             '' => 'None',
         ],

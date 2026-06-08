@@ -154,7 +154,7 @@ class ManageConfigurationPresenterTest extends TestBase
             $expectedValue = $configValues[$key];
         }
 
-        $expectedConfig = new ConfigSetting($key, $configKey['section'], $expectedValue, $type, $configKey['choices'] ?? '', $configKey['label'], $configKey['description'], $configKey['is_private']);
+        $expectedConfig = new ConfigSetting($key, $section, (string)$expectedValue, $type, $configKey['choices'] ?? '', $configKey['label'] ?? '', $configKey['description'] ?? '', $configKey['is_private'] ?? false);
 
         if ($section) {
             $this->assertTrue(
