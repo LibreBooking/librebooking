@@ -3,14 +3,51 @@
 /**
  * Typed definition of a single application configuration entry.
  *
- * ConfigKey instances are declared as class constants on ConfigKeys and
- * plugin *ConfigKeys classes. Once the migration from associative arrays
- * is complete they will be passed directly to Configuration::GetKey() to
- * retrieve the live value from config.php or the matching environment variable.
+ * Config keys are defined as associative-array class constants on ConfigKeys and
+ * the plugin *ConfigKeys classes. Those arrays are converted to ConfigKey
+ * instances at runtime via ConfigKey::fromArray() at the read boundary
+ * (AbstractConfigKeys::all()/findByKey() and Configuration::GetKey()) rather than
+ * being declared as `new ConfigKey(...)` constants directly, because `new` in a
+ * class constant is only supported from PHP 8.5 and the project floor is PHP 8.2.
+ * Consumers receive a typed ConfigKey; the constructor and fromArray() validate the
+ * definition.
  */
 readonly class ConfigKey
 {
     private const VALID_TYPES = ['string', 'boolean', 'integer'];
+
+    /** Array keys that every config definition must provide. */
+    private const REQUIRED_KEYS = ['key', 'type', 'default'];
+
+    /** Array keys a config definition may provide but is not required to. */
+    private const OPTIONAL_KEYS = [
+        'section',
+        'label',
+        'description',
+        'choices',
+        'config_file_comment',
+        'legacy',
+        'is_private',
+        'is_hidden',
+        'allow_custom',
+        'is_protected',
+    ];
+
+    /**
+     * Top-level field names allowed in an array config definition (required plus
+     * optional). Anything outside this set passed to fromArray() is a typo and is
+     * rejected.
+     */
+    private const KNOWN_KEYS = [...self::REQUIRED_KEYS, ...self::OPTIONAL_KEYS];
+
+    /** Array keys whose values must be booleans when present. */
+    private const BOOLEAN_KEYS = ['is_private', 'is_hidden', 'allow_custom', 'is_protected'];
+
+    /** Array keys whose values must be strings when present. */
+    private const STRING_KEYS = ['key', 'type'];
+
+    /** Array keys whose values must be a string or null when present. */
+    private const NULLABLE_STRING_KEYS = ['section', 'label', 'description', 'config_file_comment', 'legacy'];
 
     public function __construct(
         /** Dot-separated config file key, e.g. 'app.title' or 'database.name'. */
@@ -53,5 +90,115 @@ readonly class ConfigKey
                 "Invalid config type '{$this->type}' for key '{$this->key}'"
             );
         }
+    }
+
+    /**
+     * Build a ConfigKey from a legacy associative-array definition.
+     *
+     * Maps the snake_case array keys to the camelCase constructor parameters and
+     * validates the definition at this single conversion point: unknown keys and
+     * non-boolean flag values are rejected, so definition typos surface the first
+     * time the config registry is built (the constructor additionally validates
+     * key/type).
+     *
+     * @param array<string, mixed> $def
+     */
+    public static function fromArray(array $def): self
+    {
+        // Build a descriptor used only for error messages. The section is included
+        // when present because plugin definitions can share the same bare 'key' in
+        // different sections (e.g. SERVER1_KEY and SERVER2_KEY both 'key' => 'key'),
+        // so the key alone would not identify which definition is invalid.
+        $configKey = is_string($def['key'] ?? null) ? $def['key'] : '';
+        $section = (isset($def['section']) && is_string($def['section']) && $def['section'] !== '')
+            ? $def['section']
+            : null;
+        $keyDescriptor = $section !== null
+            ? sprintf('"%s" (section "%s")', $configKey, $section)
+            : sprintf('"%s"', $configKey);
+
+        $unknownKeys = array_diff(array_keys($def), self::KNOWN_KEYS);
+        if ($unknownKeys !== []) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown config definition key(s) [%s] for config key %s',
+                implode(', ', $unknownKeys),
+                $keyDescriptor
+            ));
+        }
+
+        // Every definition must provide the required keys. 'default' in particular
+        // is indexed without guarding by consumers such as
+        // ConfigurationFile::ValidateConfig() and ConfigDistGenerator, so an omitted
+        // value (an explicit null is allowed) must not pass this gate.
+        foreach (self::REQUIRED_KEYS as $requiredKey) {
+            if (!array_key_exists($requiredKey, $def)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Config key %s is missing a required "%s" value',
+                    $keyDescriptor,
+                    $requiredKey
+                ));
+            }
+        }
+
+        foreach (self::BOOLEAN_KEYS as $booleanKey) {
+            if (array_key_exists($booleanKey, $def) && !is_bool($def[$booleanKey])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Config key %s has an invalid "%s" value: must be true or false (boolean), got %s',
+                    $keyDescriptor,
+                    $booleanKey,
+                    gettype($def[$booleanKey])
+                ));
+            }
+        }
+
+        // Validate scalar field types explicitly: ConfigKey.php is not strict_types,
+        // so without these checks PHP would silently coerce e.g. 'key' => 123 to "123".
+        foreach (self::STRING_KEYS as $stringKey) {
+            if (array_key_exists($stringKey, $def) && !is_string($def[$stringKey])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Config key %s has an invalid "%s" value: must be a string, got %s',
+                    $keyDescriptor,
+                    $stringKey,
+                    gettype($def[$stringKey])
+                ));
+            }
+        }
+
+        foreach (self::NULLABLE_STRING_KEYS as $nullableStringKey) {
+            if (array_key_exists($nullableStringKey, $def)
+                && $def[$nullableStringKey] !== null
+                && !is_string($def[$nullableStringKey])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Config key %s has an invalid "%s" value: must be a string or null, got %s',
+                    $keyDescriptor,
+                    $nullableStringKey,
+                    gettype($def[$nullableStringKey])
+                ));
+            }
+        }
+
+        if (array_key_exists('choices', $def) && $def['choices'] !== null && !is_array($def['choices'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Config key %s has an invalid "choices" value: must be an array or null, got %s',
+                $keyDescriptor,
+                gettype($def['choices'])
+            ));
+        }
+
+        return new self(
+            key: $def['key'],
+            type: $def['type'],
+            default: $def['default'],
+            section: $def['section'] ?? null,
+            label: $def['label'] ?? null,
+            description: $def['description'] ?? null,
+            choices: $def['choices'] ?? null,
+            configFileComment: $def['config_file_comment'] ?? null,
+            legacy: $def['legacy'] ?? null,
+            isPrivate: $def['is_private'] ?? false,
+            isHidden: $def['is_hidden'] ?? false,
+            allowCustom: $def['allow_custom'] ?? false,
+            isProtected: $def['is_protected'] ?? false,
+        );
     }
 }
