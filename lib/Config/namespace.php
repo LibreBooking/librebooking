@@ -1,5 +1,6 @@
 <?php
 
+require_once(ROOT_DIR . 'lib/Config/ConfigKey.php');
 require_once(ROOT_DIR . 'lib/Config/AbstractConfigKeys.php');
 require_once(ROOT_DIR . 'lib/Config/ConfigKeysMeta.php');
 require_once(ROOT_DIR . 'lib/Config/ConfigKeys.php');
