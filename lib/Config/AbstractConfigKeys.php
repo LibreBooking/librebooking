@@ -4,14 +4,14 @@ require_once(ROOT_DIR . 'lib/Config/ConfigKeysMeta.php');
 
 abstract class AbstractConfigKeys
 {
-    /** @var array<class-string, array> */
+    /** @var array<class-string, list<ConfigKey|array<string, mixed>>> */
     private static array $allCache = [];
-    /** @var array<class-string, array> */
+    /** @var array<class-string, array<string, ConfigKey|array<string, mixed>>> */
     private static array $allWithEntryIdsCache = [];
 
     /**
      * Returns all configuration entries defined in the class.
-     * @return array
+     * @return list<ConfigKey|array<string, mixed>>
      */
     public static function all(): array
     {
@@ -20,11 +20,7 @@ abstract class AbstractConfigKeys
             return self::$allCache[$class];
         }
 
-        $entries = [];
-        foreach (self::allWithEntryIds() as $value) {
-            unset($value['_entry_id']);
-            $entries[] = $value;
-        }
+        $entries = array_values(self::allWithEntryIds());
 
         self::$allCache[$class] = $entries;
 
@@ -32,7 +28,13 @@ abstract class AbstractConfigKeys
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * Returns all configuration entries keyed by their constant name.
+     *
+     * The constant name (entry id) lets collision detection distinguish between
+     * different schema entries that may share the same key text, e.g. SERVER1_KEY
+     * and SERVER2_KEY both using 'key' => 'key' in different sections.
+     *
+     * @return array<string, ConfigKey|array<string, mixed>>
      */
     private static function allWithEntryIds(): array
     {
@@ -45,7 +47,9 @@ abstract class AbstractConfigKeys
 
         $configsWithIds = [];
         foreach ($constants as $name => $value) {
-            if (is_array($value) && isset($value['key'])) {
+            if ($value instanceof ConfigKey) {
+                $configsWithIds[$name] = $value;
+            } elseif (is_array($value) && isset($value['key'])) {
                 if (array_key_exists('allow_custom', $value) && !is_bool($value['allow_custom'])) {
                     throw new \InvalidArgumentException(sprintf(
                         'Config key "%s" in %s has an invalid "allow_custom" value: must be true or false (boolean), got %s',
@@ -54,12 +58,7 @@ abstract class AbstractConfigKeys
                         gettype($value['allow_custom'])
                     ));
                 }
-                // Preserve the constant name so collision detection can distinguish
-                // between different schema entries that may share the same key text,
-                // e.g. SERVER1_KEY and SERVER1_KEY_DUPLICATE_SECTION_CASE both using
-                // 'key' => 'key'.
-                $value['_entry_id'] = $name;
-                $configsWithIds[] = $value;
+                $configsWithIds[$name] = $value;
             }
         }
 
@@ -71,10 +70,9 @@ abstract class AbstractConfigKeys
 
     /**
      * Finds a configuration entry by its key.
-     * @param string $key
-     * @return array|null
+     * @return ConfigKey|array<string, mixed>|null
      */
-    public static function findByKey(string $key): ?array
+    public static function findByKey(string $key): ConfigKey|array|null
     {
         $normalizedKey = strtolower($key);
 
@@ -90,10 +88,9 @@ abstract class AbstractConfigKeys
 
     /**
      * Finds a configuration entry by its legacy key.
-     * @param string $legacyKey
-     * @return array|null
+     * @return ConfigKey|array<string, mixed>|null
      */
-    public static function findByLegacyKey(string $legacyKey): ?array
+    public static function findByLegacyKey(string $legacyKey): ConfigKey|array|null
     {
         if ($legacyKey === '') {
             return null;
@@ -102,7 +99,7 @@ abstract class AbstractConfigKeys
         $normalizedLegacyKey = strtolower($legacyKey);
 
         foreach (static::all() as $config) {
-            $legacy = $config['legacy'] ?? null;
+            $legacy = $config instanceof ConfigKey ? $config->legacy : ($config['legacy'] ?? null);
             if (!is_string($legacy) || $legacy === '') {
                 continue;
             }
@@ -117,20 +114,27 @@ abstract class AbstractConfigKeys
 
     /**
      * Checks if a configuration entry is private (should not be displayed in UI).
-     * @param array $config
-     * @return bool
+     * @param ConfigKey|array<string, mixed> $config
      */
-    public static function isPrivate($config): bool
+    public static function isPrivate(ConfigKey|array $config): bool
     {
+        if ($config instanceof ConfigKey) {
+            return $config->isPrivate;
+        }
         if (empty($config)) {
             return false;
         }
         return $config['is_private'] ?? false;
     }
 
-    public static function hasEnv($config): bool
+    /** @param ConfigKey|array<string, mixed> $config */
+    public static function hasEnv(ConfigKey|array $config): bool
     {
-        $envKey = ConfigKeysMeta::envKeyForConfig(config: $config);
+        if ($config instanceof ConfigKey) {
+            $envKey = ConfigKeysMeta::envKeyForConfig(config: ['key' => $config->key, 'section' => $config->section]);
+        } else {
+            $envKey = ConfigKeysMeta::envKeyForConfig(config: $config);
+        }
         if ($envKey === null) {
             return false;
         }
@@ -138,48 +142,67 @@ abstract class AbstractConfigKeys
         return getenv($envKey) !== false;
     }
 
-    protected static function getCanonicalLookupKey(array $config): ?string
+    /** @param ConfigKey|array<string, mixed> $config */
+    protected static function getCanonicalLookupKey(ConfigKey|array $config): ?string
     {
+        if ($config instanceof ConfigKey) {
+            return $config->key !== '' ? $config->key : null;
+        }
         $key = $config['key'] ?? null;
 
         return is_string($key) && $key !== '' ? $key : null;
     }
 
+    /**
+     * @param array<string, ConfigKey|array<string, mixed>> $configsWithIds
+     */
     private static function assertNoCaseInsensitiveLookupCollisions(array $configsWithIds): void
     {
         $seen = [];
 
-        foreach ($configsWithIds as $configWithId) {
+        foreach ($configsWithIds as $entryId => $configWithId) {
+            $legacyKey = $configWithId instanceof ConfigKey
+                ? $configWithId->legacy
+                : ($configWithId['legacy'] ?? null);
+
             // Validate both the canonical lookup key and any legacy alias because
             // either one can collide once lookups become case-insensitive.
             self::assertUniqueCaseInsensitiveKey(
                 seen: $seen,
                 rawKey: static::getCanonicalLookupKey(config: $configWithId),
+                entryId: $entryId,
                 configWithId: $configWithId,
                 source: 'key'
             );
             self::assertUniqueCaseInsensitiveKey(
                 seen: $seen,
-                rawKey: $configWithId['legacy'] ?? null,
+                rawKey: $legacyKey,
+                entryId: $entryId,
                 configWithId: $configWithId,
                 source: 'legacy'
             );
         }
     }
 
-    private static function assertUniqueCaseInsensitiveKey(array &$seen, ?string $rawKey, array $configWithId, string $source): void
+    /**
+     * @param array<string, mixed> $seen
+     * @param ConfigKey|array<string, mixed> $configWithId
+     */
+    private static function assertUniqueCaseInsensitiveKey(array &$seen, ?string $rawKey, string $entryId, ConfigKey|array $configWithId, string $source): void
     {
         if (!is_string($rawKey) || $rawKey === '') {
             return;
         }
+
+        $configKey = $configWithId instanceof ConfigKey ? $configWithId->key : $configWithId['key'];
 
         $normalizedKey = strtolower($rawKey);
         if (!isset($seen[$normalizedKey])) {
             // Remember the first schema entry that claims this normalized lookup key.
             $seen[$normalizedKey] = [
                 'rawKey' => $rawKey,
-                'entryId' => $configWithId['_entry_id'],
-                'key' => $configWithId['key'],
+                'entryId' => $entryId,
+                'key' => $configKey,
                 'source' => $source,
             ];
             return;
@@ -188,7 +211,7 @@ abstract class AbstractConfigKeys
         $existing = $seen[$normalizedKey];
         // Allow the same schema entry to contribute both a canonical key and a
         // legacy alias that normalize to the same lookup string.
-        if ($existing['entryId'] === $configWithId['_entry_id']) {
+        if ($existing['entryId'] === $entryId) {
             return;
         }
 
@@ -202,8 +225,8 @@ abstract class AbstractConfigKeys
             $existing['entryId'],
             $source,
             $rawKey,
-            $configWithId['key'],
-            $configWithId['_entry_id']
+            $configKey,
+            $entryId
         ));
     }
 }
