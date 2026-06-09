@@ -4,20 +4,15 @@ require_once(ROOT_DIR . 'lib/Config/AbstractConfigKeys.php');
 
 abstract class PluginConfigKeys extends AbstractConfigKeys
 {
-    protected static function getCanonicalLookupKey(ConfigKey|array $config): ?string
+    protected static function getCanonicalLookupKey(ConfigKey $config): ?string
     {
-        if ($config instanceof ConfigKey) {
-            $configKey = $config->key;
-            $section = $config->section;
-        } else {
-            $configKey = $config['key'] ?? null;
-            $section = $config['section'] ?? null;
-        }
+        $configKey = $config->key;
+        $section = $config->section;
 
-        if (is_string($section) && $section !== '' && is_string($configKey) && $configKey !== '') {
+        if (is_string($section) && $section !== '' && $configKey !== '') {
             return "{$section}.{$configKey}";
         }
 
-        return is_string($configKey) && $configKey !== '' ? $configKey : null;
+        return $configKey !== '' ? $configKey : null;
     }
 }

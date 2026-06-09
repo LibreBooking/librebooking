@@ -340,24 +340,6 @@ PHP
         TestPluginConfigKeysCollisionLegacyVsLegacy::findByKey('server1.key1');
     }
 
-    public function testConfigKeyRejectsNonBooleanAllowCustom()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('"allow_custom" value: must be true or false (boolean)');
-
-        $invalidClass = new class () extends \PluginConfigKeys {
-            public const CONFIG_ID = 'invalid-allow-custom-test';
-            public const KEY1 = [
-                'key' => 'key1',
-                'type' => 'string',
-                'default' => '',
-                'allow_custom' => 'yes',
-            ];
-        };
-
-        $invalidClass::all();
-    }
-
     public function testPluginConfigValidation()
     {
         $errorLogs = $this->captureErrorLog(function () {

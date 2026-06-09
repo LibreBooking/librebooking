@@ -132,28 +132,20 @@ abstract class AbstractConfigKeys
         return getenv($envKey) !== false;
     }
 
-    /** @param ConfigKey|array<string, mixed> $config */
-    protected static function getCanonicalLookupKey(ConfigKey|array $config): ?string
+    protected static function getCanonicalLookupKey(ConfigKey $config): ?string
     {
-        if ($config instanceof ConfigKey) {
-            return $config->key !== '' ? $config->key : null;
-        }
-        $key = $config['key'] ?? null;
-
-        return is_string($key) && $key !== '' ? $key : null;
+        return $config->key !== '' ? $config->key : null;
     }
 
     /**
-     * @param array<string, ConfigKey|array<string, mixed>> $configsWithIds
+     * @param array<string, ConfigKey> $configsWithIds
      */
     private static function assertNoCaseInsensitiveLookupCollisions(array $configsWithIds): void
     {
         $seen = [];
 
         foreach ($configsWithIds as $entryId => $configWithId) {
-            $legacyKey = $configWithId instanceof ConfigKey
-                ? $configWithId->legacy
-                : ($configWithId['legacy'] ?? null);
+            $legacyKey = $configWithId->legacy;
 
             // Validate both the canonical lookup key and any legacy alias because
             // either one can collide once lookups become case-insensitive.
@@ -176,15 +168,14 @@ abstract class AbstractConfigKeys
 
     /**
      * @param array<string, mixed> $seen
-     * @param ConfigKey|array<string, mixed> $configWithId
      */
-    private static function assertUniqueCaseInsensitiveKey(array &$seen, ?string $rawKey, string $entryId, ConfigKey|array $configWithId, string $source): void
+    private static function assertUniqueCaseInsensitiveKey(array &$seen, ?string $rawKey, string $entryId, ConfigKey $configWithId, string $source): void
     {
         if (!is_string($rawKey) || $rawKey === '') {
             return;
         }
 
-        $configKey = $configWithId instanceof ConfigKey ? $configWithId->key : $configWithId['key'];
+        $configKey = $configWithId->key;
 
         $normalizedKey = strtolower($rawKey);
         if (!isset($seen[$normalizedKey])) {
