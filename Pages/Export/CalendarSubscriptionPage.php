@@ -45,9 +45,12 @@ class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
         return $this->GetQuerystring(QueryStringKeys::USER_ID);
     }
 
-    public function PageLoad()
+    public function PageLoad(): void
     {
-        $this->presenter->PageLoad();
+        if (!$this->presenter->PageLoad()) {
+            http_response_code(404);
+            return;
+        }
 
         header('Content-Type: text/Calendar');
         header('Content-Disposition: inline; filename=calendar.ics');

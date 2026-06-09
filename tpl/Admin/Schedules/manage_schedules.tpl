@@ -263,21 +263,23 @@
 																	href="#">{translate key=Delete}</a>
 																<div class="vr"></div>
 															{/if}
-															{if $schedule->GetIsCalendarSubscriptionAllowed()}
-																<a class="update disableSubscription link-primary"
-																	href="#">{translate key=TurnOffSubscription}</a>
-																<div class="vr"></div>
-															{else}
-																<a class="update enableSubscription link-primary"
-																	href="#">{translate key=TurnOnSubscription}</a>
-															{/if}
-															{if $schedule->GetIsCalendarSubscriptionAllowed()}
-																<a target="_blank" class="link-primary"
-																	href="{$schedule->GetSubscriptionUrl()->GetAtomUrl()}"> <i
-																		class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
-																<div class="vr"></div>
-																<a target="_blank" class="link-primary"
-																	href="{$schedule->GetSubscriptionUrl()->GetWebcalUrl()}">iCalendar</a>
+															{if $IcsEnabled}
+																{if $schedule->GetIsCalendarSubscriptionAllowed()}
+																	<a class="update disableSubscription link-primary"
+																		href="#">{translate key=TurnOffSubscription}</a>
+																	<div class="vr"></div>
+																{else}
+																	<a class="update enableSubscription link-primary"
+																		href="#">{translate key=TurnOnSubscription}</a>
+																{/if}
+																{if $schedule->GetIsCalendarSubscriptionAllowed()}
+																	<a target="_blank" class="link-primary"
+																		href="{$schedule->GetSubscriptionUrl()->GetAtomUrl()}"> <i
+																			class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
+																	<div class="vr"></div>
+																	<a target="_blank" class="link-primary"
+																		href="{$schedule->GetSubscriptionUrl()->GetWebcalUrl()}">iCalendar</a>
+																{/if}
 															{/if}
 															{indicator id="action-indicator"}
 														</div>

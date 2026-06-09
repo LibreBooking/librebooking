@@ -47,7 +47,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->service = $this->createMock('ICalendarSubscriptionService');
         $this->privacyFilter = new FakePrivacyFilter();
 
-        $this->validator->expects($this->atLeastOnce())
+        $this->validator
                 ->method('IsValid')
                 ->willReturn(true);
 
@@ -172,6 +172,30 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+    }
+
+    public function testPageLoadReturnsFalseAndDoesNotLoadReservationsWhenValidationFails()
+    {
+        $validator = $this->createMock('ICalendarExportValidator');
+        $validator->expects($this->once())
+                ->method('IsValid')
+                ->willReturn(false);
+
+        $this->repo->expects($this->never())->method('GetReservations');
+        $this->service->expects($this->never())->method('GetSchedule');
+        $this->service->expects($this->never())->method('GetResource');
+        $this->service->expects($this->never())->method('GetUser');
+
+        $presenter = new CalendarSubscriptionPresenter(
+            $this->page,
+            $this->repo,
+            $validator,
+            $this->service,
+            $this->privacyFilter
+        );
+
+        $this->assertFalse($presenter->PageLoad());
+        $this->assertNull($this->page->Reservations);
     }
 }
 

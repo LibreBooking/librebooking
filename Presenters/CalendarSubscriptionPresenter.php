@@ -45,10 +45,10 @@ class CalendarSubscriptionPresenter
         $this->privacyFilter = $filter;
     }
 
-    public function PageLoad()
+    public function PageLoad(): bool
     {
         if (!$this->validator->IsValid()) {
-            return;
+            return false;
         }
 
         $userId = $this->page->GetUserId();
@@ -136,5 +136,7 @@ class CalendarSubscriptionPresenter
         }
 
         $this->page->SetReservations($reservations);
+
+        return true;
     }
 }

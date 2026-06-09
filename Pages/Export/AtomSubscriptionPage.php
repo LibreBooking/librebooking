@@ -45,10 +45,13 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
         return $this->GetQuerystring(QueryStringKeys::USER_ID);
     }
 
-    public function PageLoad()
+    public function PageLoad(): void
     {
         ob_clean();
-        $this->presenter->PageLoad();
+        if (!$this->presenter->PageLoad()) {
+            http_response_code(404);
+            return;
+        }
 
         $config = Configuration::Instance();
 

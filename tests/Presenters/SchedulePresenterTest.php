@@ -27,6 +27,7 @@ class SchedulePresenterTest extends TestBase
             ConfigKeys::SCHEDULE_SHOW_INACCESSIBLE_RESOURCES,
             $this->showInaccessibleResources
         );
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, true);
     }
 
     public function teardown(): void
@@ -208,6 +209,33 @@ class SchedulePresenterTest extends TestBase
 
         $pageBuilder = new SchedulePageBuilder();
         $pageBuilder->BindSchedules($page, $this->schedules, $schedule);
+    }
+
+    public function testScheduleBuilderBindsSubscriptionUrlWhenIcsFeatureIsEnabled()
+    {
+        $schedule = new FakeSchedule();
+        $schedule->EnableSubscription();
+
+        $page = new FakeSchedulePage();
+        $pageBuilder = new SchedulePageBuilder();
+
+        $pageBuilder->BindSchedules($page, $this->schedules, $schedule);
+
+        $this->assertNotNull($page->_SubscriptionUrl);
+    }
+
+    public function testScheduleBuilderDoesNotBindSubscriptionUrlWhenIcsFeatureIsDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, false);
+        $schedule = new FakeSchedule();
+        $schedule->EnableSubscription();
+
+        $page = new FakeSchedulePage();
+        $pageBuilder = new SchedulePageBuilder();
+
+        $pageBuilder->BindSchedules($page, $this->schedules, $schedule);
+
+        $this->assertNull($page->_SubscriptionUrl);
     }
 
     public function testScheduleBuilderGetCurrentScheduleReturnsSelectedScheduleOnPostBack()
@@ -892,6 +920,7 @@ class FakeSchedulePage implements ISchedulePage
     public $_ScheduleAvailability;
     public $_ScheduleTooEarly;
     public $_ScheduleTooLate;
+    public $_SubscriptionUrl;
     /**
      * @var LoadReservationRequest
      */
@@ -1164,6 +1193,7 @@ class FakeSchedulePage implements ISchedulePage
 
     public function SetSubscriptionUrl(CalendarSubscriptionUrl $subscriptionUrl)
     {
+        $this->_SubscriptionUrl = $subscriptionUrl;
     }
 
     public function ShowPermissionError($shouldShow)

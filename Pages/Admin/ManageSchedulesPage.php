@@ -274,6 +274,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         );
 
         $this->Set('CreditsEnabled', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('IcsEnabled', Configuration::Instance()->GetKey(ConfigKeys::ICS_ENABLED, new BooleanConverter()));
     }
 
     public function ProcessPageLoad()

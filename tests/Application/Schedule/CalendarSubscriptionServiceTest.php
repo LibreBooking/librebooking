@@ -81,4 +81,24 @@ class CalendarSubscriptionServiceTest extends TestBase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testSubscriptionDetailsAreNotEnabledWhenIcsFeatureIsDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, false);
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY, '123');
+
+        $details = new CalendarSubscriptionDetails(true);
+
+        $this->assertFalse($details->IsEnabled());
+    }
+
+    public function testSubscriptionDetailsAreEnabledWhenIcsFeatureAndSubscriptionKeyAreConfigured()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, true);
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY, '123');
+
+        $details = new CalendarSubscriptionDetails(true);
+
+        $this->assertTrue($details->IsEnabled());
+    }
 }

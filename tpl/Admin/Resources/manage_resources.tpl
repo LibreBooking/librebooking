@@ -610,11 +610,11 @@
 														<div class="publicSettingsPlaceHolder">
 															{include file="Admin/Resources/manage_resources_public.tpl" resource=$resource}
 														</div>
-													</div>
-													<div class="">
-														<a href="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionPrintQR}&rid={$id}"
-															target="_blank" class="link-primary">{translate key=PrintQRCode}
-															<i class="bi bi-qr-code"></i></a>
+														<div class="">
+															<a href="{$smarty.server.SCRIPT_NAME}?action={ManageResourcesActions::ActionPrintQR}&rid={$id}"
+																target="_blank" class="link-primary">{translate key=PrintQRCode}
+																<i class="bi bi-qr-code"></i></a>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -1741,14 +1741,16 @@
 											</div>
 										</div>
 
-										<div class="form-group">
-											<label for="bulkEditAllowSubscriptions"
-												class="fw-bold">{translate key='TurnOnSubscription'}</label>
-											<select id="bulkEditAllowSubscriptions" class="form-select form-select-sm"
-												{formname key=ALLOW_CALENDAR_SUBSCRIPTIONS}>
-												{html_options options=$YesNoUnchangedOptions}
-											</select>
-										</div>
+										{if $IcsEnabled}
+											<div class="form-group">
+												<label for="bulkEditAllowSubscriptions"
+													class="fw-bold">{translate key='TurnOnSubscription'}</label>
+												<select id="bulkEditAllowSubscriptions" class="form-select form-select-sm"
+													{formname key=ALLOW_CALENDAR_SUBSCRIPTIONS}>
+													{html_options options=$YesNoUnchangedOptions}
+												</select>
+											</div>
+										{/if}
 									</div>
 								</div>
 							</div>

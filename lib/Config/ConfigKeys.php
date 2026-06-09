@@ -1081,6 +1081,15 @@ class ConfigKeys extends AbstractConfigKeys
 
     // ICS Settings
 
+    public const ICS_ENABLED = [
+        'key' => 'ics.enabled',
+        'type' => 'boolean',
+        'default' => true,
+        'label' => 'ICS Enabled',
+        'description' => 'Enable ICS/Atom calendar subscription feeds. When disabled, all ICS/Atom subscription requests return 404 and the subscription link is hidden in the UI.',
+        'config_file_comment' => 'Enable or disable ICS calendar subscription feeds entirely',
+        'section' => 'ics'
+    ];
     public const ICS_SUBSCRIPTION_KEY = [
         'key' => 'ics.subscription.key',
         'type' => 'string',

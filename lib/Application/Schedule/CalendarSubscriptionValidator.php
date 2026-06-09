@@ -29,6 +29,12 @@ class CalendarSubscriptionValidator implements ICalendarExportValidator
 
     public function IsValid()
     {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::ICS_ENABLED, new BooleanConverter())) {
+            Log::Debug('ICS calendar subscriptions are disabled via config (ics.enabled).');
+
+            return false;
+        }
+
         $key = Configuration::Instance()->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
         $providedKey = $this->page->GetSubscriptionKey();
 

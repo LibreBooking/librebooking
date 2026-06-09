@@ -480,6 +480,9 @@ return [
         ##############
 
         'ics' => [
+            # Enable or disable ICS calendar subscription feeds entirely (true/false)
+            'enabled' => true,
+
             # Subscription key secret used for ICS calendar feeds
             'subscription.key' => '',
 

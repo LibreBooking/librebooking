@@ -102,6 +102,7 @@ class CalendarSubscriptionValidatorTest extends TestBase
 
     public function testIsNotValidWhenSubscriptionKeyDoesNotMatch()
     {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, true);
         $this->page->expects($this->once())
             ->method('GetSubscriptionKey')
             ->willReturn('12');
@@ -115,7 +116,23 @@ class CalendarSubscriptionValidatorTest extends TestBase
 
     public function testIsNotValidWhenSubscriptionKeyIsNotConfigured()
     {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, true);
         $this->fakeConfig->SetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY, '');
+
+        $isValid = $this->validator->IsValid();
+
+        $this->assertFalse($isValid);
+    }
+
+    public function testIsNotValidWhenIcsFeatureIsDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, false);
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY, '123');
+
+        $this->page->expects($this->never())->method('GetSubscriptionKey');
+        $this->subscriptionService->expects($this->never())->method('GetResource');
+        $this->subscriptionService->expects($this->never())->method('GetSchedule');
+        $this->subscriptionService->expects($this->never())->method('GetUser');
 
         $isValid = $this->validator->IsValid();
 
@@ -124,6 +141,7 @@ class CalendarSubscriptionValidatorTest extends TestBase
 
     private function StubSubscriptionKey()
     {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, true);
         $this->page->expects($this->once())
             ->method('GetSubscriptionKey')
             ->willReturn('123');
