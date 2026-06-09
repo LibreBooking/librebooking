@@ -133,18 +133,18 @@ class EnvExampleGenerator
         $lines[] = $border;
     }
 
-    private static function appendEntry(array &$lines, array $entry): void
+    private static function appendEntry(array &$lines, ConfigKey $entry): void
     {
         $comment = ConfigKeysMeta::getComment(entry: $entry);
-        $choices = $entry['choices'] ?? null;
-        $type = $entry['type'] ?? 'string';
+        $choices = $entry->choices;
+        $type = $entry->type;
         $envKey = ConfigKeysMeta::envKeyForConfig(config: $entry);
         if ($envKey === null) {
             throw new \LogicException('Env example entry is missing a canonical config key name.');
         }
 
         if ($comment !== '') {
-            $hasExplicitComment = isset($entry['config_file_comment']) && $entry['config_file_comment'] !== '';
+            $hasExplicitComment = $entry->configFileComment !== null && $entry->configFileComment !== '';
             foreach (explode(separator: "\n", string: $comment) as $paragraph) {
                 if ($hasExplicitComment) {
                     $lines[] = "# {$paragraph}";
@@ -170,7 +170,7 @@ class EnvExampleGenerator
             }
         }
 
-        $rendered = self::renderValue(value: $entry['default'], type: $type);
+        $rendered = self::renderValue(value: $entry->default, type: $type);
         $lines[] = "{$envKey}={$rendered}";
         $lines[] = '';
     }

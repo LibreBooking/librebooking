@@ -7,14 +7,20 @@ class ConfigKeysMeta
      *
      * Plugin entries with a section use the fully qualified section.key name.
      */
-    public static function canonicalKeyName(array $config): ?string
+    public static function canonicalKeyName(ConfigKey|array $config): ?string
     {
-        $key = $config['key'] ?? null;
+        if ($config instanceof ConfigKey) {
+            $key = $config->key;
+            $section = $config->section;
+        } else {
+            $key = $config['key'] ?? null;
+            $section = $config['section'] ?? null;
+        }
+
         if (!is_string($key) || $key === '') {
             return null;
         }
 
-        $section = $config['section'] ?? null;
         if (is_string($section) && $section !== '') {
             // Main config entries already store fully qualified keys like
             // "reservation.start.time.constraint" and use "section" only for grouping.
@@ -35,14 +41,21 @@ class ConfigKeysMeta
      *
      * Prefers 'config_file_comment' field, falls back to 'description'.
      */
-    public static function getComment(array $entry): string
+    public static function getComment(ConfigKey|array $entry): string
     {
-        $comment = $entry['config_file_comment'] ?? null;
+        if ($entry instanceof ConfigKey) {
+            $comment = $entry->configFileComment;
+            $description = $entry->description;
+        } else {
+            $comment = $entry['config_file_comment'] ?? null;
+            $description = $entry['description'] ?? null;
+        }
+
         if (is_string($comment) && $comment !== '') {
             return $comment;
         }
 
-        return $entry['description'] ?? '';
+        return is_string($description) ? $description : '';
     }
 
     /**
@@ -57,8 +70,8 @@ class ConfigKeysMeta
     /**
      * Group flat config entries according to TOP_LEVEL_GROUPS ordering.
      *
-     * @param array<string, array> $flatEntries
-     * @return array<string, array<string, array>>
+     * @param array<string, ConfigKey> $flatEntries
+     * @return array<string, array<string, ConfigKey>>
      *
      * @throws \LogicException if a group references an unknown key, a key is in multiple groups,
      *                         or flat keys are not covered by any group
@@ -99,7 +112,7 @@ class ConfigKeysMeta
     /**
      * Derive the environment variable name for a config entry definition.
      */
-    public static function envKeyForConfig(array $config): ?string
+    public static function envKeyForConfig(ConfigKey|array $config): ?string
     {
         $canonicalKey = self::canonicalKeyName(config: $config);
         if ($canonicalKey === null) {

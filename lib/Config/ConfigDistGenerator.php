@@ -31,7 +31,7 @@ PHP;
      * Flat keys (no section) and sectioned keys are separated
      * but maintain their relative declaration order within each group.
      *
-     * @return array{flat: array<string, array>, sections: array<string, array<string, array>>}
+     * @return array{flat: array<string, ConfigKey>, sections: array<string, array<string, ConfigKey>>}
      */
     public static function generateSettingsArray(): array
     {
@@ -39,8 +39,8 @@ PHP;
         $sections = [];
 
         foreach (ConfigKeys::all() as $entry) {
-            $key = $entry['key'];
-            $section = $entry['section'] ?? null;
+            $key = $entry->key;
+            $section = $entry->section;
 
             if ($section === null || $section === '') {
                 $flat[$key] = $entry;
@@ -190,15 +190,15 @@ PHP;
         $lines[] = "{$pad}{$border}";
     }
 
-    private static function appendEntry(array &$lines, string $key, array $entry, int $indent): void
+    private static function appendEntry(array &$lines, string $key, ConfigKey $entry, int $indent): void
     {
         $pad = str_repeat(string: '    ', times: $indent);
         $comment = ConfigKeysMeta::getComment(entry: $entry);
-        $choices = $entry['choices'] ?? null;
-        $type = $entry['type'] ?? 'string';
+        $choices = $entry->choices;
+        $type = $entry->type;
 
         if ($comment !== '') {
-            $hasExplicitComment = isset($entry['config_file_comment']) && $entry['config_file_comment'] !== '';
+            $hasExplicitComment = $entry->configFileComment !== null && $entry->configFileComment !== '';
             foreach (explode(separator: "\n", string: $comment) as $paragraph) {
                 if ($hasExplicitComment) {
                     // config_file_comment is pre-formatted, don't re-wrap
@@ -226,7 +226,7 @@ PHP;
             }
         }
 
-        $rendered = self::renderValue(value: $entry['default'], type: $type);
+        $rendered = self::renderValue(value: $entry->default, type: $type);
         $lines[] = "{$pad}'{$key}' => {$rendered},";
         $lines[] = '';
     }

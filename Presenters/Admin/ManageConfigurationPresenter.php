@@ -159,13 +159,13 @@ class ManageConfigurationPresenter extends ActionPresenter
             Key: $displayKey,
             Section: $section ?: null,
             Value: (string)$value,
-            Type: $meta['type'] ?? 'string',
-            Choices: $meta['choices'] ?? '',
-            Label: $meta['label'] ?? '',
-            Description: $meta['description'] ?? '',
+            Type: $meta->type,
+            Choices: $meta->choices ?? '',
+            Label: $meta->label ?? '',
+            Description: $meta->description ?? '',
             IsPrivate: $isPrivate,
             hasEnv: $hasEnv,
-            AllowCustom: $meta['allow_custom'] ?? false
+            AllowCustom: $meta->allowCustom
         );
 
         if ($section) {
@@ -242,14 +242,14 @@ class ManageConfigurationPresenter extends ActionPresenter
         ServiceLocator::GetDatabase()->Execute($command);
     }
 
-    private function ShouldBeSkipped(string $key, ?array $meta): bool
+    private function ShouldBeSkipped(string $key, ?ConfigKey $meta): bool
     {
         if ($meta === null) {
             Log::Debug("[CONFIG] No metadata found for key '%s'. Not skipped.", $key);
             return false;
         }
 
-        if ($meta['is_hidden'] ?? false) {
+        if ($meta->isHidden) {
             Log::Debug("[CONFIG] Skipping hidden config key '%s'.", $key);
             return true;
         }

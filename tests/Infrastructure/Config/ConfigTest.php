@@ -303,14 +303,15 @@ PHP
 
     public function testPluginConfigAllowsTheSameKeyNameInDifferentSections()
     {
-        $this->assertSame(
-            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER1_KEY,
-            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server1.key')
-        );
-        $this->assertSame(
-            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::SERVER2_KEY,
-            TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server2.key')
-        );
+        $server1 = TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server1.key');
+        $this->assertNotNull($server1);
+        $this->assertSame('key', $server1->key);
+        $this->assertSame('server1', $server1->section);
+
+        $server2 = TestPluginConfigKeysNoCollisionSameKeyDifferentSections::findByKey('server2.key');
+        $this->assertNotNull($server2);
+        $this->assertSame('key', $server2->key);
+        $this->assertSame('server2', $server2->section);
     }
 
     public function testPluginConfigRejectsCaseInsensitiveLegacyToCanonicalCollisions()

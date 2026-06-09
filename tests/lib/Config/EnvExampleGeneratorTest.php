@@ -27,7 +27,7 @@ class EnvExampleGeneratorTest extends TestBase
             $this->assertStringContainsString(
                 $envKey . '=',
                 $content,
-                "Missing env key: {$envKey} (from config key: {$entry['key']})"
+                "Missing env key: {$envKey} (from config key: {$entry->key})"
             );
         }
     }
@@ -36,7 +36,7 @@ class EnvExampleGeneratorTest extends TestBase
     {
         // Verify canonical env keys follow the expected LB_* naming convention
         foreach (ConfigKeys::all() as $entry) {
-            $key = $entry['key'];
+            $key = $entry->key;
             $expected = strtoupper('LB_' . preg_replace('/[.\-]+/', '_', $key));
             $actual = ConfigKeysMeta::envKeyForConfig(config: $entry);
 

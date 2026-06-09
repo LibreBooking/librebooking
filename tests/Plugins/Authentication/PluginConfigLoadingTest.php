@@ -134,11 +134,11 @@ class PluginConfigLoadingTest extends TestBase
             $this->assertNotEmpty($allKeys, "{$configKeysClass} should have config key definitions");
 
             foreach ($allKeys as $keyDef) {
-                $this->assertArrayHasKey('section', $keyDef, "Config key in {$configKeysClass} must have 'section'");
+                $this->assertNotNull($keyDef->section, "Config key in {$configKeysClass} must have 'section'");
                 $this->assertEquals(
                     $expectedSection,
-                    $keyDef['section'],
-                    "Config key in {$configKeysClass} must have section '{$expectedSection}', got '{$keyDef['section']}'"
+                    $keyDef->section,
+                    "Config key in {$configKeysClass} must have section '{$expectedSection}', got '{$keyDef->section}'"
                 );
             }
         }
@@ -201,7 +201,7 @@ class PluginConfigLoadingTest extends TestBase
             $allKeys = $configKeysClass::all();
 
             foreach ($allKeys as $keyDef) {
-                $bareKey = $keyDef['key'];
+                $bareKey = $keyDef->key;
                 $fullKey = $expectedSection . '.' . $bareKey;
 
                 // Test that findByKey with bare key returns null (because it has a section)
@@ -221,12 +221,12 @@ class PluginConfigLoadingTest extends TestBase
                 // Verify it's the same config definition
                 $this->assertEquals(
                     $bareKey,
-                    $foundWithFullKey['key'],
+                    $foundWithFullKey->key,
                     "Found config should have bare key '{$bareKey}'"
                 );
                 $this->assertEquals(
                     $expectedSection,
-                    $foundWithFullKey['section'],
+                    $foundWithFullKey->section,
                     "Found config should have section '{$expectedSection}'"
                 );
             }
@@ -323,8 +323,8 @@ class PluginConfigLoadingTest extends TestBase
             $expectedSection = strtolower($plugin['name']);
 
             foreach ($allKeys as $keyDef) {
-                $keyName = $keyDef['key'];
-                $section = $keyDef['section'] ?? null;
+                $keyName = $keyDef->key;
+                $section = $keyDef->section;
 
                 // Test that the value can be retrieved
                 try {
@@ -432,7 +432,7 @@ class PluginConfigLoadingTest extends TestBase
             // Build list of expected keys from ConfigKeys
             $expectedKeys = [];
             foreach ($definedKeys as $keyDef) {
-                $expectedKeys[] = $keyDef['key'];
+                $expectedKeys[] = $keyDef->key;
             }
 
             // Check for extra keys in config file that aren't in ConfigKeys
@@ -453,12 +453,12 @@ class PluginConfigLoadingTest extends TestBase
                 // Filter out keys that have defaults - those are optional
                 $criticalMissing = [];
                 foreach ($missingKeys as $missingKey) {
-                    $keyDef = array_filter($definedKeys, function ($k) use ($missingKey) {
-                        return $k['key'] === $missingKey;
+                    $keyDef = array_filter($definedKeys, function (ConfigKey $k) use ($missingKey) {
+                        return $k->key === $missingKey;
                     });
                     $keyDef = reset($keyDef);
                     // If no default is set, it's critical
-                    if (!isset($keyDef['default']) || $keyDef['default'] === null) {
+                    if (!$keyDef instanceof ConfigKey || $keyDef->default === null) {
                         $criticalMissing[] = $missingKey;
                     }
                 }

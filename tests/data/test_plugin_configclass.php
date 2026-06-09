@@ -33,7 +33,7 @@ class TestPluginConfigKeys extends PluginConfigKeys
         ]
     ];
 
-    public static function findByLegacyKey(string $legacyKey): ?array
+    public static function findByLegacyKey(string $legacyKey): ?ConfigKey
     {
         return null;
     }

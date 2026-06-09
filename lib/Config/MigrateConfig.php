@@ -17,9 +17,9 @@ class MigrateConfig
         self::WriteStderr('If output.php is omitted, a sibling file ending in .migrated.php is written.');
     }
 
-    public static function ExportValue(mixed $value, ?array $configDef = null): string
+    public static function ExportValue(mixed $value, ?ConfigKey $configDef = null): string
     {
-        $configType = is_array($configDef) ? ($configDef['type'] ?? null) : null;
+        $configType = $configDef?->type;
 
         if (is_bool($value)) {
             return $value ? 'true' : 'false';

@@ -369,9 +369,9 @@ class ConfigurationFile implements IConfigurationFile
                     $entry = $match['entry'];
                     $isLegacyKey = $match['isLegacy'];
 
-                    if ($entry && !empty($entry['key'])) {
-                        $section = $entry['section'] ?? null;
-                        $finalKey = $entry['key'];
+                    if ($entry !== null) {
+                        $section = $entry->section;
+                        $finalKey = $entry->key;
 
                         if ($section !== null && $section !== '') {
                             // Always rewrite sectioned keys into the canonical section bucket,
@@ -406,9 +406,9 @@ class ConfigurationFile implements IConfigurationFile
             $entry = $match['entry'];
             $isLegacyKey = $match['isLegacy'];
 
-            if ($entry && !empty($entry['key'])) {
-                $finalKey = $entry['key'];
-                $section = $entry['section'] ?? null;
+            if ($entry !== null) {
+                $finalKey = $entry->key;
+                $section = $entry->section;
 
                 if ($section !== null && $section !== '' && str_starts_with($finalKey, $section . '.')) {
                     $keyWithinSection = substr($finalKey, strlen($section) + 1);
@@ -437,7 +437,7 @@ class ConfigurationFile implements IConfigurationFile
     }
 
     /**
-     * @return array{entry: ?array, isLegacy: bool}
+     * @return array{entry: ?ConfigKey, isLegacy: bool}
      */
     private function FindConfigEntry(string $key): array
     {
@@ -485,16 +485,16 @@ class ConfigurationFile implements IConfigurationFile
 
             $converter = $this->GetDefaultConverter($configDef);
             if (!$converter->IsValid($value)) {
-                error_log("[CONFIG] Invalid type for '{$fullKey}'. Should be '{$configDef['type']}', using default.");
-                $validated[$key] = $configDef['default'];
+                error_log("[CONFIG] Invalid type for '{$fullKey}'. Should be '{$configDef->type}', using default.");
+                $validated[$key] = $configDef->default;
                 continue;
             }
 
-            if (isset($configDef['choices'])
-                && !($configDef['allow_custom'] ?? false)
-                && !array_key_exists($value, $configDef['choices'])) {
-                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map(fn ($key, $value) => "{$key} => {$value}", array_keys($configDef['choices']), $configDef['choices'])) . ']');
-                $validated[$key] = $configDef['default'];
+            if ($configDef->choices !== null
+                && !$configDef->allowCustom
+                && !array_key_exists($value, $configDef->choices)) {
+                error_log("[CONFIG] Invalid value '$value' for '{$fullKey}'. Should be one of the following options: [" . implode(', ', array_map(fn ($key, $value) => "{$key} => {$value}", array_keys($configDef->choices), $configDef->choices)) . ']');
+                $validated[$key] = $configDef->default;
                 continue;
             }
 
@@ -515,19 +515,14 @@ class ConfigurationFile implements IConfigurationFile
      */
     public function GetKey($configDef, $converter = null)
     {
-        if (!is_array($configDef) || !isset($configDef['key'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Config definition not found for: %s',
-                json_encode($configDef, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
-            ));
-        }
+        $configKey = $this->NormalizeConfigDef($configDef);
 
         $value = null;
-        $fullKey = $configDef['key'];
-        $section = $configDef['section'] ?? null;
-        $converter = $converter ?? $this->GetDefaultConverter($configDef);
+        $fullKey = $configKey->key;
+        $section = $configKey->section;
+        $converter = $converter ?? $this->GetDefaultConverter($configKey);
 
-        $envKey = ConfigKeysMeta::envKeyForConfig(config: $configDef);
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $configKey);
         $envValue = $envKey !== null ? env($envKey) : null;
 
         if (!empty($envValue)) {
@@ -544,19 +539,40 @@ class ConfigurationFile implements IConfigurationFile
         }
 
         if ($value === null || $value === '') {
-            if (array_key_exists('default', $configDef)) {
-                $value = $configDef['default'];
-            } else {
-                $value = null;
-            }
+            $value = $configKey->default;
         }
 
         return $this->Convert($value, $converter);
     }
 
-    private function GetDefaultConverter(array $config): ?IConvert
+    /**
+     * Normalizes a config definition into a typed ConfigKey.
+     *
+     * Accepts either a ConfigKey or a legacy associative-array definition such as
+     * ConfigKeys::APP_TITLE. Left untyped so anything else falls through to the
+     * descriptive InvalidArgumentException rather than a raw TypeError.
+     *
+     * @param ConfigKey|array<string, mixed>|mixed $configDef
+     */
+    protected function NormalizeConfigDef($configDef): ConfigKey
     {
-        return match ($config['type'] ?? ConfigSettingType::String) {
+        if ($configDef instanceof ConfigKey) {
+            return $configDef;
+        }
+
+        if (is_array($configDef) && array_key_exists('key', $configDef)) {
+            return ConfigKey::fromArray($configDef);
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Config definition not found for: %s',
+            json_encode($configDef, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+        ));
+    }
+
+    private function GetDefaultConverter(ConfigKey $config): ?IConvert
+    {
+        return match ($config->type) {
             ConfigSettingType::Integer => new IntConverter(),
             ConfigSettingType::Boolean => new BooleanConverter(),
             ConfigSettingType::String => new StringConverter(),

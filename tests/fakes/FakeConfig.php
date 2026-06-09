@@ -58,16 +58,14 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function GetKey($configDef, $converter = null)
     {
-        if (!is_array($configDef) || !isset($configDef['key'])) {
-            throw new InvalidArgumentException('Config definition not found');
-        }
+        $configKey = $this->NormalizeConfigDef($configDef);
 
         $value = null;
-        $fullKey = $configDef['key'];
-        $section = $configDef['section'] ?? null;
-        $converter = $converter ?? $this->GetDefaultConverter($configDef);
+        $fullKey = $configKey->key;
+        $section = $configKey->section;
+        $converter = $converter ?? $this->GetDefaultConverter($configKey);
 
-        if ($section !== null) {
+        if ($section !== null && $section !== '') {
             $sectionKey = str_starts_with($fullKey, $section . '.') ? substr($fullKey, strlen($section) + 1) : $fullKey;
             if (isset($this->_values[$section][$sectionKey])) {
                 $value = $this->_values[$section][$sectionKey];
@@ -86,9 +84,9 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
         return $this->GetKey($keyName, $converter);
     }
 
-    private function GetDefaultConverter(array $config): ?IConvert
+    private function GetDefaultConverter(ConfigKey $config): ?IConvert
     {
-        return match ($config['type'] ?? ConfigSettingType::String) {
+        return match ($config->type) {
             ConfigSettingType::Integer => new IntConverter(),
             ConfigSettingType::Boolean => new BooleanConverter(),
             ConfigSettingType::String => new StringConverter(),
@@ -120,24 +118,28 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
 
     public function SetKey($configDef, $value)
     {
-        if (is_array($configDef) && isset($configDef['key'])) {
+        if ($configDef instanceof ConfigKey) {
+            $fullKey = $configDef->key;
+            $section = $configDef->section;
+        } elseif (is_array($configDef) && array_key_exists('key', $configDef)) {
             $fullKey = $configDef['key'];
             $section = $configDef['section'] ?? null;
-
-            if ($section !== null) {
-                $sectionKey = str_starts_with($fullKey, $section . '.') ?
-                    substr($fullKey, strlen($section) + 1) :
-                    $fullKey;
-
-                if (!isset($this->_values[$section])) {
-                    $this->_values[$section] = [];
-                }
-                $this->_values[$section][$sectionKey] = $value;
-            } else {
-                $this->_values[$fullKey] = $value;
-            }
         } else {
             $this->_values[$configDef] = $value;
+            return;
+        }
+
+        if ($section !== null && $section !== '') {
+            $sectionKey = str_starts_with($fullKey, $section . '.') ?
+                substr($fullKey, strlen($section) + 1) :
+                $fullKey;
+
+            if (!isset($this->_values[$section])) {
+                $this->_values[$section] = [];
+            }
+            $this->_values[$section][$sectionKey] = $value;
+        } else {
+            $this->_values[$fullKey] = $value;
         }
     }
 

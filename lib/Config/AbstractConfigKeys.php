@@ -1,17 +1,18 @@
 <?php
 
+require_once(ROOT_DIR . 'lib/Config/ConfigKey.php');
 require_once(ROOT_DIR . 'lib/Config/ConfigKeysMeta.php');
 
 abstract class AbstractConfigKeys
 {
-    /** @var array<class-string, list<ConfigKey|array<string, mixed>>> */
+    /** @var array<class-string, list<ConfigKey>> */
     private static array $allCache = [];
-    /** @var array<class-string, array<string, ConfigKey|array<string, mixed>>> */
+    /** @var array<class-string, array<string, ConfigKey>> */
     private static array $allWithEntryIdsCache = [];
 
     /**
      * Returns all configuration entries defined in the class.
-     * @return list<ConfigKey|array<string, mixed>>
+     * @return list<ConfigKey>
      */
     public static function all(): array
     {
@@ -34,7 +35,7 @@ abstract class AbstractConfigKeys
      * different schema entries that may share the same key text, e.g. SERVER1_KEY
      * and SERVER2_KEY both using 'key' => 'key' in different sections.
      *
-     * @return array<string, ConfigKey|array<string, mixed>>
+     * @return array<string, ConfigKey>
      */
     private static function allWithEntryIds(): array
     {
@@ -49,16 +50,11 @@ abstract class AbstractConfigKeys
         foreach ($constants as $name => $value) {
             if ($value instanceof ConfigKey) {
                 $configsWithIds[$name] = $value;
-            } elseif (is_array($value) && isset($value['key'])) {
-                if (array_key_exists('allow_custom', $value) && !is_bool($value['allow_custom'])) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Config key "%s" in %s has an invalid "allow_custom" value: must be true or false (boolean), got %s',
-                        $value['key'],
-                        static::class,
-                        gettype($value['allow_custom'])
-                    ));
-                }
-                $configsWithIds[$name] = $value;
+            } elseif (is_array($value) && array_key_exists('key', $value)) {
+                // Build the typed ConfigKey at this single read boundary. fromArray()
+                // validates the definition (unknown keys, missing required fields,
+                // non-boolean flags, mistyped scalars) and fails with the offending key.
+                $configsWithIds[$name] = ConfigKey::fromArray($value);
             }
         }
 
@@ -70,9 +66,8 @@ abstract class AbstractConfigKeys
 
     /**
      * Finds a configuration entry by its key.
-     * @return ConfigKey|array<string, mixed>|null
      */
-    public static function findByKey(string $key): ConfigKey|array|null
+    public static function findByKey(string $key): ?ConfigKey
     {
         $normalizedKey = strtolower($key);
 
@@ -88,9 +83,8 @@ abstract class AbstractConfigKeys
 
     /**
      * Finds a configuration entry by its legacy key.
-     * @return ConfigKey|array<string, mixed>|null
      */
-    public static function findByLegacyKey(string $legacyKey): ConfigKey|array|null
+    public static function findByLegacyKey(string $legacyKey): ?ConfigKey
     {
         if ($legacyKey === '') {
             return null;
@@ -99,7 +93,7 @@ abstract class AbstractConfigKeys
         $normalizedLegacyKey = strtolower($legacyKey);
 
         foreach (static::all() as $config) {
-            $legacy = $config instanceof ConfigKey ? $config->legacy : ($config['legacy'] ?? null);
+            $legacy = $config->legacy;
             if (!is_string($legacy) || $legacy === '') {
                 continue;
             }
@@ -130,11 +124,7 @@ abstract class AbstractConfigKeys
     /** @param ConfigKey|array<string, mixed> $config */
     public static function hasEnv(ConfigKey|array $config): bool
     {
-        if ($config instanceof ConfigKey) {
-            $envKey = ConfigKeysMeta::envKeyForConfig(config: ['key' => $config->key, 'section' => $config->section]);
-        } else {
-            $envKey = ConfigKeysMeta::envKeyForConfig(config: $config);
-        }
+        $envKey = ConfigKeysMeta::envKeyForConfig(config: $config);
         if ($envKey === null) {
             return false;
         }
