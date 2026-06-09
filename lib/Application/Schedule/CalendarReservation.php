@@ -20,8 +20,8 @@ class CalendarReservation
     public $ResourceName;
 
     /**
-    * @var int
-    */
+     * @var int
+     */
     public $ResourceId;
 
     /**
@@ -161,8 +161,8 @@ class CalendarReservation
 
         $color = $reservation->GetColor();
         if (!empty($color)) {
-            $res->Color = $reservation->GetColor() . ' !important';
-            $res->TextColor = $reservation->GetTextColor() . ' !important';
+            $res->Color = $reservation->GetColor();
+            $res->TextColor = $reservation->GetTextColor();
         }
         $res->IsEditable = $user->IsAdmin || $user->UserId == $reservation->OwnerId;
 
@@ -231,8 +231,8 @@ class CalendarReservation
             $cr->DisplayTitle = $factory->Format($reservation, Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_RESOURCE_CALENDAR));
             $color = $reservation->GetColor();
             if (!empty($color)) {
-                $cr->Color = $reservation->GetColor() . ' !important';
-                $cr->TextColor = $reservation->GetTextColor() . ' !important';
+                $cr->Color = $reservation->GetColor();
+                $cr->TextColor = $reservation->GetTextColor();
             }
 
             $cr->IsEditable = $userSession->IsAdmin || $userSession->UserId == $reservation->OwnerId;
@@ -304,7 +304,7 @@ class CalendarReservation
             'end' => $this->EndDate->Format($dateFormat),
             'url' => $this->GetUrl(),
             'allDay' => false,
-            'backgroundColor' => $this->Color,
+            'color' => $this->Color,
             'textColor' => $this->TextColor,
             'className' => $this->Class,
             'startEditable' => $this->IsEditable

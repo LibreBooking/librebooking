@@ -61,4 +61,36 @@ class CalendarReservationTest extends TestBase
 
         $this->assertStringStartsWith('view-reservation.php?rn=' . $referenceNumber, $event['url']);
     }
+
+    public function testFullCalendarColorPayloadUsesCleanColorValuesWithoutImportantSuffix(): void
+    {
+        $resourceColor = '#24ae26';
+
+        $res = new TestReservationItemView(
+            id: 1,
+            startDate: Date::Now(),
+            endDate: Date::Now()->AddHours(1),
+            resourceId: 1,
+            referenceNumber: 'color-ref-1',
+        );
+        $res->ResourceColor = $resourceColor;
+
+        $resource = new FakeBookableResource(1, 'Room A');
+
+        $calendarReservations = CalendarReservation::FromScheduleReservationList(
+            reservations: [$res],
+            blackouts: [],
+            availablePeriods: [],
+            resources: [$resource],
+            userSession: $this->fakeUser,
+        );
+
+        $event = $calendarReservations[0]->AsFullCalendarEvent();
+
+        $this->assertSame($resourceColor, $event['color']);
+        $this->assertSame($res->GetTextColor(), $event['textColor']);
+
+        $this->assertStringNotContainsString('!important', $event['color']);
+        $this->assertStringNotContainsString('!important', $event['textColor']);
+    }
 }

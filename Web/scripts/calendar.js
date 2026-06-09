@@ -104,6 +104,10 @@ function Calendar(opts) {
         if (!_.isEmpty(info.event.id) && !$(info.el).hasClass('unreservable')) {
           $(info.el).attachReservationPopup(info.event.id);
         }
+
+        var eventBackgroundColor = info.event.backgroundColor;
+        var eventTextColor = info.event.textColor;
+
         var startStr;
         // Use currentStart to maintain a stable URL across all main views
         switch (info.view.type) {
@@ -123,6 +127,30 @@ function Calendar(opts) {
         var finalUrl = info.event.url ? info.event.url.replace('[redirect]', redirect) : null;
         if (finalUrl) {
           info.el.setAttribute('href', finalUrl);
+        }
+
+        var styleTargets = [info.el];
+        var innerAnchor = info.el.querySelector('a.fc-event, a.fc-daygrid-event, a.fc-timegrid-event, a.fc-list-event');
+        if (innerAnchor) {
+          styleTargets.push(innerAnchor);
+        }
+
+        if (eventBackgroundColor) {
+          styleTargets.forEach(function (target) {
+            target.style.setProperty('background-color', eventBackgroundColor);
+            target.style.setProperty('border-color', eventBackgroundColor);
+          });
+        }
+        if (eventTextColor) {
+          styleTargets.forEach(function (target) {
+            target.style.setProperty('color', eventTextColor);
+          });
+
+          info.el
+            .querySelectorAll('.fc-event-main, .fc-event-title, .fc-event-time, .fc-list-event-title a')
+            .forEach(function (el) {
+              el.style.setProperty('color', eventTextColor, 'important');
+            });
         }
       },
       eventClick: function (info) {
@@ -407,9 +435,9 @@ function Calendar(opts) {
       handleTimeClick();
     } else {
       dayDialog.removeClass('d-none');
-      // Hide the create button if the filter is schedule
+      // Hide the create button only when the filter is exactly the schedule root option
       var calendarFilterVal = $('#calendarFilter').val();
-      if (calendarFilterVal && calendarFilterVal.startsWith('s')) {
+      if (calendarFilterVal === 's') {
         $('#dayDialogCreate').hide();
       } else {
         $('#dayDialogCreate').show();
