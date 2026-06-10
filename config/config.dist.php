@@ -532,13 +532,14 @@ return [
         #########
 
         'privacy' => [
-            # Allow unauthenticated users to view schedules (true/false)
+            # Allow public (not logged-in) users to view schedule and calendar pages (true/false)
             'view.schedules' => true,
 
-            # Allow users to view reservation details (true/false)
+            # When true, public (unauthenticated) views show reservation details.
+            # When false (default), public views show only that a slot is occupied with no content. (true/false)
             'view.reservations' => false,
 
-            # Hide user details from general users (true/false)
+            # When true, non-owner/non-admin users see "Private" instead of the organizer name and email (true/false)
             'hide.user.details' => false,
 
             # Hide reservation details from general users (true/false)
