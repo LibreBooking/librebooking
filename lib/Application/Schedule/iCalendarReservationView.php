@@ -46,6 +46,17 @@ class iCalendarReservationView
         $canViewUser = $privacyFilter->CanViewUser($currentUser, $res, $res->OwnerId);
         $canViewDetails = $privacyFilter->CanViewDetails($currentUser, $res, $res->OwnerId);
 
+        // PrivacyFilter only gates on privacy.hide.reservation.details and privacy.hide.user.details.
+        // For anonymous (not logged-in) callers, also enforce privacy.view.reservations, which is the
+        // site-wide switch that controls whether unauthenticated visitors may see reservation details at all.
+        if (!$currentUser->IsLoggedIn()) {
+            $publicViewAllowed = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
+            if (!$publicViewAllowed) {
+                $canViewUser = false;
+                $canViewDetails = false;
+            }
+        }
+
         $this->ExportFactory = PluginManager::Instance()->LoadExport();
 
         $privateNotice = 'Private';
@@ -59,13 +70,13 @@ class iCalendarReservationView
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
-        $this->Description =  $canViewDetails ? self::toRfc5545Text($factory->Format($res, $summaryFormat)) : $privateNotice;
+        $this->Summary = $canViewDetails ? self::toRfc5545Text($factory->Format($res, $summaryFormat)) : $privateNotice;
+        $this->Description = $canViewDetails ? self::toRfc5545Text($res->Description ?? '') : $privateNotice;
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
         $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateNotice;
         $this->RecurRule = $this->CreateRecurRule($res);
         $this->ReferenceNumber = $res->ReferenceNumber;
-        $this->Summary = $canViewDetails ? self::toRfc5545Text($res->Title ?? '') : $privateNotice;
         $this->ReservationUrl = sprintf(
             '%s/%s?%s=%s',
             Configuration::Instance()->GetScriptUrl(),
@@ -80,7 +91,7 @@ class iCalendarReservationView
         $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $this->DateCreated : $res->ModifiedDate;
         $this->IsPending = $res->RequiresApproval;
 
-        if ($res->OwnerId == $currentUser->UserId) {
+        if ($canViewUser && $res->OwnerId == $currentUser->UserId) {
             $this->OrganizerEmail = str_replace('@', '-noreply@', $res->OwnerEmailAddress);
         }
 

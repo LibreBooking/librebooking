@@ -148,6 +148,67 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->Description);
     }
 
+    public function testViewShowsFormattedSummaryWhenDetailsVisible()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'My Booking Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Test';
+        $res->OwnerLastName = 'User';
+        $res->OwnerEmailAddress = 'test@example.com';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+
+        $this->assertEquals('My Booking Title', $reservationView->Summary);
+    }
+
+    public function testViewShowsDescriptionFromReservationNotesWhenDetailsVisible()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->Description = 'Booking notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('Booking notes', $reservationView->Description);
+    }
+
+    public function testAnonymousUserSeesPrivateWhenPublicReservationViewingIsDisabled()
+    {
+        $user = new NullUserSession();
+        $res = new ReservationItemView();
+        $res->OwnerId = 42;
+        $res->OwnerFirstName = 'Alice';
+        $res->OwnerLastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+        $res->Title = 'Secret title';
+        $res->Description = 'Secret notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        // privacy.view.reservations=false (default) means anonymous users must not see any details
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+        $this->privacyFilter->_CanViewDetails = true;
+        $this->privacyFilter->_CanViewUser = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('Private', $reservationView->Summary);
+        $this->assertEquals('Private', $reservationView->Description);
+        $this->assertEquals('Private', $reservationView->Organizer);
+        $this->assertEquals('Private', $reservationView->OrganizerEmail);
+    }
+
     public function testViewEscapesNewlinesInTextPropertiesForICalCompliance()
     {
         $user = new FakeUserSession();
@@ -161,7 +222,7 @@ class CalendarExportPresenterTest extends TestBase
 
         $this->privacyFilter->_CanViewDetails = true;
 
-        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{description}');
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
         $this->assertEquals('First line\\nSecond line\\nThird line', $reservationView->Summary);
         $this->assertEquals('Alpha\\nBeta\\nGamma', $reservationView->Description);
@@ -180,7 +241,7 @@ class CalendarExportPresenterTest extends TestBase
 
         $this->privacyFilter->_CanViewDetails = true;
 
-        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{description}');
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
         $this->assertEquals('x\\\\y\\;z\\,w', $reservationView->Summary);
         $this->assertEquals('a\\\\b\\;c\\,d', $reservationView->Description);
