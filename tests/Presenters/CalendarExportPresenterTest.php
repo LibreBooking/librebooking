@@ -247,6 +247,70 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('a\\\\b\\;c\\,d', $reservationView->Description);
     }
 
+    public function testSlotLabelFormatCanExplicitlySkipVisibilityChecks()
+    {
+        $user = new NullUserSession();
+        $res = new ReservationItemView();
+        $res->Title = 'Public Meeting';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+
+        $factory = new SlotLabelFactory($user, new FakeAuthorizationService());
+
+        $this->assertEquals('', $factory->Format($res, '{title}'));
+        $this->assertEquals('Public Meeting', $factory->Format($res, '{title}', skipVisibilityChecks: true));
+    }
+
+    public function testSlotLabelFormatStillRedactsUserTokensWhenSkippingVisibilityChecks()
+    {
+        $user = new FakeUserSession(false, 'America/New_York', 7);
+        $auth = new FakeAuthorizationService();
+        $auth->_CanEditForResource = false;
+
+        $res = new ReservationItemView();
+        $res->OwnerId = 42;
+        $res->FirstName = 'Alice';
+        $res->LastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+        $res->OwnerPhone = '555-1234';
+        $res->OwnerOrganization = 'Engineering';
+        $res->OwnerPosition = 'Manager';
+        $res->ParticipantNames = ['Participant One'];
+        $res->InviteeNames = ['Invitee One'];
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, true);
+
+        $factory = new SlotLabelFactory($user, $auth);
+        $label = $factory->Format(
+            $res,
+            '{name} {email} {phone} {organization} {position} {participants} {invitees}',
+            skipVisibilityChecks: true
+        );
+
+        $this->assertStringContainsString('Private', $label);
+        $this->assertStringNotContainsString('Alice', $label);
+        $this->assertStringNotContainsString('alice@example.com', $label);
+        $this->assertStringNotContainsString('555-1234', $label);
+        $this->assertStringNotContainsString('Engineering', $label);
+        $this->assertStringNotContainsString('Manager', $label);
+        $this->assertStringNotContainsString('Participant One', $label);
+        $this->assertStringNotContainsString('Invitee One', $label);
+    }
+
+    public function testNullSlotLabelFactoryRemainsFailClosedWhenSkippingVisibilityChecks()
+    {
+        $res = new ReservationItemView();
+        $res->Title = 'Public Meeting';
+
+        $factory = new NullSlotLabelFactory();
+
+        $this->assertEquals('', $factory->Format($res, '{title}', skipVisibilityChecks: true));
+    }
+
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
     {
         $this->fakeConfig->SetKey('version', '9.9.9-user-config');
