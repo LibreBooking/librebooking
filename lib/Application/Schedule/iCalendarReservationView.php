@@ -1,5 +1,70 @@
 <?php
 
+class iCalendarReservationViewOptions
+{
+    private ?bool $canViewUser = null;
+    private ?bool $canViewDetails = null;
+    private ?UserSession $formattingUser = null;
+    private bool $formatWithoutVisibilityChecks = false;
+    private bool $respectPublicReservationVisibility = true;
+
+    public static function Default(): static
+    {
+        return new iCalendarReservationViewOptions();
+    }
+
+    public static function ForAnonymousSubscription(): static
+    {
+        $options = new iCalendarReservationViewOptions();
+        $options->formatWithoutVisibilityChecks = true;
+        return $options;
+    }
+
+    public static function ForUserSubscription(UserSession $subscribedUser): static
+    {
+        $options = new iCalendarReservationViewOptions();
+        $options->canViewUser = true;
+        $options->canViewDetails = true;
+        $options->formattingUser = $subscribedUser;
+        $options->formatWithoutVisibilityChecks = true;
+        $options->respectPublicReservationVisibility = false;
+        return $options;
+    }
+
+    public function CanViewUser(UserSession $currentUser, IPrivacyFilter $privacyFilter, ReservationItemView $reservation): bool
+    {
+        if ($this->canViewUser !== null) {
+            return $this->canViewUser;
+        }
+
+        return $privacyFilter->CanViewUser($currentUser, $reservation, $reservation->OwnerId);
+    }
+
+    public function CanViewDetails(UserSession $currentUser, IPrivacyFilter $privacyFilter, ReservationItemView $reservation): bool
+    {
+        if ($this->canViewDetails !== null) {
+            return $this->canViewDetails;
+        }
+
+        return $privacyFilter->CanViewDetails($currentUser, $reservation, $reservation->OwnerId);
+    }
+
+    public function FormattingUser(UserSession $currentUser): UserSession
+    {
+        return $this->formattingUser ?? $currentUser;
+    }
+
+    public function FormatWithoutVisibilityChecks(): bool
+    {
+        return $this->formatWithoutVisibilityChecks;
+    }
+
+    public function RespectPublicReservationVisibility(): bool
+    {
+        return $this->respectPublicReservationVisibility;
+    }
+}
+
 class iCalendarReservationView
 {
     public $Classification;
@@ -35,26 +100,23 @@ class iCalendarReservationView
      * @param UserSession $currentUser
      * @param IPrivacyFilter $privacyFilter
      * @param string|null $summaryFormat
+     * @param iCalendarReservationViewOptions|null $options
      */
-    public function __construct($res, UserSession $currentUser, IPrivacyFilter $privacyFilter, $summaryFormat = null)
+    public function __construct($res, UserSession $currentUser, IPrivacyFilter $privacyFilter, $summaryFormat = null, $options = null)
     {
         if ($summaryFormat == null) {
             $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
         }
-        $factory = new SlotLabelFactory($currentUser);
+        $options = $options ?? iCalendarReservationViewOptions::Default();
+        $formattingUser = $options->FormattingUser($currentUser);
+        $factory = new SlotLabelFactory($formattingUser);
         $this->ReservationItemView = $res;
-        $canViewUser = $privacyFilter->CanViewUser($currentUser, $res, $res->OwnerId);
-        $canViewDetails = $privacyFilter->CanViewDetails($currentUser, $res, $res->OwnerId);
+        $canViewUser = $options->CanViewUser($currentUser, $privacyFilter, $res);
+        $canViewDetails = $options->CanViewDetails($currentUser, $privacyFilter, $res);
 
-        // PrivacyFilter only gates on privacy.hide.reservation.details and privacy.hide.user.details.
-        // For anonymous (not logged-in) callers, also enforce privacy.view.reservations, which is the
-        // site-wide switch that controls whether unauthenticated visitors may see reservation details at all.
-        if (!$currentUser->IsLoggedIn()) {
-            $publicViewAllowed = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
-            if (!$publicViewAllowed) {
-                $canViewUser = false;
-                $canViewDetails = false;
-            }
+        if ($options->RespectPublicReservationVisibility() && !$this->CanViewPublicReservations($currentUser)) {
+            $canViewUser = false;
+            $canViewDetails = false;
         }
 
         $this->ExportFactory = PluginManager::Instance()->LoadExport();
@@ -70,7 +132,7 @@ class iCalendarReservationView
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
-        $this->Summary = $canViewDetails ? self::toRfc5545Text($factory->Format($res, $summaryFormat)) : $privateNotice;
+        $this->Summary = $canViewDetails ? self::toRfc5545Text($factory->Format($res, $summaryFormat, skipVisibilityChecks: $options->FormatWithoutVisibilityChecks())) : $privateNotice;
         $this->Description = $canViewDetails ? self::toRfc5545Text($res->Description ?? '') : $privateNotice;
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
@@ -91,11 +153,20 @@ class iCalendarReservationView
         $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $this->DateCreated : $res->ModifiedDate;
         $this->IsPending = $res->RequiresApproval;
 
-        if ($canViewUser && $res->OwnerId == $currentUser->UserId) {
+        if ($canViewUser && !empty($res->OwnerId) && $res->OwnerId == $currentUser->UserId) {
             $this->OrganizerEmail = str_replace('@', '-noreply@', $res->OwnerEmailAddress);
         }
 
         $this->ExtraIcalLines = method_exists($this->ExportFactory, 'GetIcalendarExtraLines') ? $this->ExportFactory->GetIcalendarExtraLines($res) : null;
+    }
+
+    private function CanViewPublicReservations(UserSession $currentUser)
+    {
+        if ($currentUser->IsLoggedIn()) {
+            return true;
+        }
+
+        return Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, new BooleanConverter());
     }
 
     /**

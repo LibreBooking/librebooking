@@ -209,6 +209,141 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->OrganizerEmail);
     }
 
+    public function testUserSubscriptionViewShowsDetailsWithAnonymousRequest()
+    {
+        $session = new NullUserSession();
+        $subscribedUser = new UserSession(999);
+        $subscribedUser->Timezone = 'America/Chicago';
+        $res = new ReservationItemView();
+        $res->UserId = 999;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Team Meeting';
+        $res->Description = 'Planning notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Alice';
+        $res->OwnerLastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+        $this->privacyFilter->_CanViewDetails = false;
+        $this->privacyFilter->_CanViewUser = false;
+
+        $view = new iCalendarReservationView(
+            $res,
+            $session,
+            $this->privacyFilter,
+            '{title}',
+            iCalendarReservationViewOptions::ForUserSubscription($subscribedUser)
+        );
+
+        $this->assertEquals('Team Meeting', $view->Summary);
+        $this->assertEquals('Planning notes', $view->Description);
+        $this->assertEquals('Alice Smith', $view->Organizer);
+        $this->assertEquals('alice@example.com', $view->OrganizerEmail);
+    }
+
+    public function testAnonymousSubscriptionViewHidesDetailsWhenPublicReservationVisibilityDisabled()
+    {
+        $session = new NullUserSession();
+        $res = new ReservationItemView();
+        $res->Title = 'Public Meeting';
+        $res->Description = 'Public notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Alice';
+        $res->OwnerLastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+        $this->privacyFilter->_CanViewDetails = true;
+        $this->privacyFilter->_CanViewUser = true;
+
+        $view = new iCalendarReservationView(
+            $res,
+            $session,
+            $this->privacyFilter,
+            '{title}',
+            iCalendarReservationViewOptions::ForAnonymousSubscription()
+        );
+
+        $this->assertEquals('Private', $view->Summary);
+        $this->assertEquals('Private', $view->Description);
+        $this->assertEquals('Private', $view->Organizer);
+        $this->assertEquals('Private', $view->OrganizerEmail);
+    }
+
+    public function testAnonymousSubscriptionViewShowsDetailsWhenPublicReservationVisibilityEnabled()
+    {
+        $session = new NullUserSession();
+        $res = new ReservationItemView();
+        $res->Title = 'Public Meeting';
+        $res->Description = 'Public notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Alice';
+        $res->OwnerLastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, true);
+        $this->privacyFilter->_CanViewDetails = true;
+        $this->privacyFilter->_CanViewUser = true;
+
+        $view = new iCalendarReservationView(
+            $res,
+            $session,
+            $this->privacyFilter,
+            '{title}',
+            iCalendarReservationViewOptions::ForAnonymousSubscription()
+        );
+
+        $this->assertEquals('Public Meeting', $view->Summary);
+        $this->assertEquals('Public notes', $view->Description);
+    }
+
+    public function testAnonymousSubscriptionSummaryHidesUserTokensWhenUserPrivacyDenied()
+    {
+        $session = new NullUserSession();
+        $res = new ReservationItemView();
+        $res->OwnerId = 42;
+        $res->Title = 'Public Meeting';
+        $res->Description = 'Public notes';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerFirstName = 'Alice';
+        $res->OwnerLastName = 'Smith';
+        $res->OwnerEmailAddress = 'alice@example.com';
+        $res->OwnerPhone = '555-1234';
+        $res->OwnerOrganization = 'Engineering';
+        $res->OwnerPosition = 'Manager';
+        $res->ParticipantNames = ['Participant One'];
+        $res->InviteeNames = ['Invitee One'];
+
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, true);
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, true);
+        $this->privacyFilter->_CanViewDetails = true;
+        $this->privacyFilter->_CanViewUser = false;
+
+        $view = new iCalendarReservationView(
+            $res,
+            $session,
+            $this->privacyFilter,
+            '{name} {email} {phone} {organization} {position} {participants} {invitees}',
+            iCalendarReservationViewOptions::ForAnonymousSubscription()
+        );
+
+        $this->assertStringContainsString('Private', $view->Summary);
+        $this->assertStringNotContainsString('Alice', $view->Summary);
+        $this->assertStringNotContainsString('alice@example.com', $view->Summary);
+        $this->assertStringNotContainsString('555-1234', $view->Summary);
+        $this->assertStringNotContainsString('Engineering', $view->Summary);
+        $this->assertStringNotContainsString('Manager', $view->Summary);
+        $this->assertStringNotContainsString('Participant One', $view->Summary);
+        $this->assertStringNotContainsString('Invitee One', $view->Summary);
+        $this->assertEquals('Private', $view->Organizer);
+        $this->assertEquals('Private', $view->OrganizerEmail);
+    }
+
     public function testViewEscapesNewlinesInTextPropertiesForICalCompliance()
     {
         $user = new FakeUserSession();

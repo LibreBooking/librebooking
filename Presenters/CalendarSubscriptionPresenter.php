@@ -76,6 +76,7 @@ class CalendarSubscriptionPresenter
         $rid = null;
         $uid = null;
         $aid = null;
+        $user = null;
         $resourceIds = [];
 
         $reservations = [];
@@ -123,6 +124,14 @@ class CalendarSubscriptionPresenter
         );
 
         $session = ServiceLocator::GetServer()->GetUserSession();
+        $viewOptions = iCalendarReservationViewOptions::Default();
+        if ($uid !== null) {
+            // The full icskey+uid URL is bearer authorization for this user's feed.
+            // It identifies the subscribed user, but it is not a logged-in session.
+            $viewOptions = iCalendarReservationViewOptions::ForUserSubscription($this->CreateSubscriptionUserSession($user));
+        } elseif (!$session->IsLoggedIn()) {
+            $viewOptions = iCalendarReservationViewOptions::ForAnonymousSubscription();
+        }
 
         foreach ($res as $r) {
             if (empty($resourceIds) || in_array($r->ResourceId, $resourceIds)) {
@@ -130,7 +139,8 @@ class CalendarSubscriptionPresenter
                     $r,
                     $session,
                     $this->privacyFilter,
-                    $summaryFormat
+                    $summaryFormat,
+                    $viewOptions
                 );
             }
         }
@@ -138,5 +148,17 @@ class CalendarSubscriptionPresenter
         $this->page->SetReservations($reservations);
 
         return true;
+    }
+
+    private function CreateSubscriptionUserSession(User $user): UserSession
+    {
+        $session = new UserSession($user->Id());
+        $session->FirstName = $user->FirstName();
+        $session->LastName = $user->LastName();
+        $session->Email = $user->EmailAddress();
+        $session->Timezone = $user->Timezone();
+        $session->PublicId = $user->GetPublicId();
+
+        return $session;
     }
 }
