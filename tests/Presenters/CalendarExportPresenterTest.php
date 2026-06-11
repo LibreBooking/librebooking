@@ -148,6 +148,44 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->Description);
     }
 
+    public function testViewEscapesNewlinesInTextPropertiesForICalCompliance()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = "First line\r\nSecond line\nThird line";
+        $res->Description = "Alpha\r\nBeta\nGamma";
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{description}');
+
+        $this->assertEquals('First line\\nSecond line\\nThird line', $reservationView->Summary);
+        $this->assertEquals('Alpha\\nBeta\\nGamma', $reservationView->Description);
+    }
+
+    public function testViewEscapesBackslashSemicolonAndCommaInTextPropertiesForICalCompliance()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'x\\y;z,w';
+        $res->Description = 'a\\b;c,d';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{description}');
+
+        $this->assertEquals('x\\\\y\\;z\\,w', $reservationView->Summary);
+        $this->assertEquals('a\\\\b\\;c\\,d', $reservationView->Description);
+    }
+
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
     {
         $this->fakeConfig->SetKey('version', '9.9.9-user-config');
