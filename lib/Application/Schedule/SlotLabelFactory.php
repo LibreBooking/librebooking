@@ -48,10 +48,15 @@ class SlotLabelFactory
 
     /**
      * @param ReservationItemView $reservation
-     * @param string $format
+     * @param string|null $format
+     * @param bool $skipVisibilityChecks When true, the privacy and permission gates
+     *        that normally suppress the label are not applied. The caller takes full
+     *        responsibility for having verified the viewer may see this reservation
+     *        (e.g. an ICS feed authorized by the user's secret subscription URL).
+     *        User-detail redaction from privacy.hide.user.details still applies.
      * @return string
      */
-    public function Format(ReservationItemView $reservation, $format = null)
+    public function Format(ReservationItemView $reservation, ?string $format = null, bool $skipVisibilityChecks = false)
     {
         $shouldHideUser = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter());
         $shouldHideDetails = ReservationDetailsFilter::HideReservationDetails($reservation->StartDate, $reservation->EndDate);
@@ -64,16 +69,18 @@ class SlotLabelFactory
             $shouldHideDetails = $shouldHideDetails && !$canEditResource && !$canSeeUserDetails;
         }
 
-        if ($shouldHideDetails) {
-            return '';
-        }
+        if (!$skipVisibilityChecks) {
+            if ($shouldHideDetails) {
+                return '';
+            }
 
-        if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
-            return '';
-        }
+            if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
+                return '';
+            }
 
-        if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
-            return '';
+            if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
+                return '';
+            }
         }
 
         if (empty($format)) {
@@ -84,7 +91,12 @@ class SlotLabelFactory
             return '';
         }
 
-        $name = $shouldHideUser ? Resources::GetInstance()->GetString('Private') : $this->GetFullName($reservation);
+        $privateNotice = Resources::GetInstance()->GetString('Private');
+        $name = $shouldHideUser ? $privateNotice : $this->GetFullName($reservation);
+        $email = $shouldHideUser ? $privateNotice : ($reservation->OwnerEmailAddress ?? '');
+        $organization = $shouldHideUser ? $privateNotice : ($reservation->OwnerOrganization ?? '');
+        $phone = $shouldHideUser ? $privateNotice : ($reservation->OwnerPhone ?? '');
+        $position = $shouldHideUser ? $privateNotice : ($reservation->OwnerPosition ?? '');
 
         $timezone = 'UTC';
         $dateFormat = Resources::GetInstance()->GetDateFormat('res_popup');
@@ -95,16 +107,19 @@ class SlotLabelFactory
         $label = str_replace('{name}', $name ?? '', $label);
         $label = str_replace('{title}', $reservation->Title ?? '', $label);
         $label = str_replace('{description}', $reservation->Description ?? '', $label);
-        $label = str_replace('{email}', $reservation->OwnerEmailAddress, $label);
-        $label = str_replace('{organization}', $reservation->OwnerOrganization ?? '', $label);
-        $label = str_replace('{phone}', $reservation->OwnerPhone ?? '', $label);
-        $label = str_replace('{position}', $reservation->OwnerPosition ?? '', $label);
+        $label = str_replace('{email}', $email, $label);
+        $label = str_replace('{organization}', $organization, $label);
+        $label = str_replace('{phone}', $phone, $label);
+        $label = str_replace('{position}', $position, $label);
         $label = str_replace('{startdate}', $reservation->StartDate->ToTimezone($timezone)->Format($dateFormat), $label);
         $label = str_replace('{enddate}', $reservation->EndDate->ToTimezone($timezone)->Format($dateFormat), $label);
         $label = str_replace('{resourcename}', implode(', ', $reservation->ResourceNames), $label);
         if (!$shouldHideUser) {
             $label = str_replace('{participants}', trim(implode(', ', $reservation->ParticipantNames)), $label);
             $label = str_replace('{invitees}', trim(implode(', ', $reservation->InviteeNames)), $label);
+        } else {
+            $label = str_replace('{participants}', '', $label);
+            $label = str_replace('{invitees}', '', $label);
         }
 
         $matches = [];
@@ -171,7 +186,7 @@ class SlotLabelFactory
 
 class NullSlotLabelFactory extends SlotLabelFactory
 {
-    public function Format(ReservationItemView $reservation, $format = null)
+    public function Format(ReservationItemView $reservation, ?string $format = null, bool $skipVisibilityChecks = false)
     {
         return '';
     }
