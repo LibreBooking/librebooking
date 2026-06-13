@@ -1,8 +1,11 @@
 name: Rebase Dependabot PRs
 
 on:
+  push:
+    branches:
+      - develop
   schedule:
-    - cron: '17 * * * *'  # Hourly, offset from the top-of-hour rush
+    - cron: '17 17 * * *'  # Daily at 17:17 UTC (10:17 AM Pacific during daylight saving time)
   workflow_dispatch:
 
 permissions:
@@ -23,6 +26,8 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
+          export PS4='+ ${BASH_SOURCE:-}:${FUNCNAME[0]:-}:L${LINENO:-}:   '
+          set -x
 
           behind_prs=$(gh pr list \
             --repo "$REPO" \
@@ -42,9 +47,9 @@ jobs:
             marker="dependabot-hourly-rebase:${head_sha}"
 
             # Skip if we already requested a rebase for this exact head SHA.
-            # --slurp gives array-of-arrays (one per page); .[][] flattens before filtering.
-            existing=$(gh api --paginate --slurp "repos/$REPO/issues/${pr_number}/comments" \
-              --jq "[.[][] | select(.body | contains(\"$marker\"))] | length")
+            # gh api emits one JSON array per page; jq --slurp collects pages and .[][] flattens.
+            existing=$(gh api --paginate "repos/$REPO/issues/${pr_number}/comments" \
+              | jq --slurp --arg marker "$marker" '[.[][] | select(.body | contains($marker))] | length')
 
             if [ "$existing" -gt 0 ]; then
               echo "PR #${pr_number}: already requested rebase for SHA ${head_sha}, skipping."
@@ -54,7 +59,8 @@ jobs:
             echo "PR #${pr_number}: requesting rebase (SHA ${head_sha})..."
             body=$(printf '@dependabot rebase\n\n<!-- %s -->' "$marker")
 
-            gh pr comment "$pr_number" \
-              --repo "$REPO" \
-              --body "$body"
+            gh api \
+              --method POST \
+              "repos/$REPO/issues/${pr_number}/comments" \
+              -f body="$body"
           done <<< "$behind_prs"
