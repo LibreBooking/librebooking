@@ -1,0 +1,60 @@
+name: Rebase Dependabot PRs
+
+on:
+  schedule:
+    - cron: '17 * * * *'  # Hourly, offset from the top-of-hour rush
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read
+  issues: write  # PR comments use the Issues API
+
+concurrency:
+  group: dependabot-rebase
+  cancel-in-progress: false
+
+jobs:
+  rebase-dependabot-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rebase out-of-date Dependabot PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          behind_prs=$(gh pr list \
+            --repo "$REPO" \
+            --app dependabot \
+            --base develop \
+            --state open \
+            --limit 100 \
+            --json number,mergeStateStatus,headRefOid \
+            --jq '.[] | select(.mergeStateStatus == "BEHIND") | [.number, .headRefOid] | @tsv')
+
+          if [ -z "$behind_prs" ]; then
+            echo "No out-of-date Dependabot PRs found."
+            exit 0
+          fi
+
+          while IFS=$'\t' read -r pr_number head_sha; do
+            marker="dependabot-hourly-rebase:${head_sha}"
+
+            # Skip if we already requested a rebase for this exact head SHA.
+            # --slurp gives array-of-arrays (one per page); .[][] flattens before filtering.
+            existing=$(gh api --paginate --slurp "repos/$REPO/issues/${pr_number}/comments" \
+              --jq "[.[][] | select(.body | contains(\"$marker\"))] | length")
+
+            if [ "$existing" -gt 0 ]; then
+              echo "PR #${pr_number}: already requested rebase for SHA ${head_sha}, skipping."
+              continue
+            fi
+
+            echo "PR #${pr_number}: requesting rebase (SHA ${head_sha})..."
+            body=$(printf '@dependabot rebase\n\n<!-- %s -->' "$marker")
+
+            gh pr comment "$pr_number" \
+              --repo "$REPO" \
+              --body "$body"
+          done <<< "$behind_prs"
