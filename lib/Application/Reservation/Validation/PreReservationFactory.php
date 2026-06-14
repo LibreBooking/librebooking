@@ -149,6 +149,7 @@ class PreReservationFactory implements IPreReservationFactory
 
     private function CreateUpdateService(ReservationValidationRuleProcessor $ruleProcessor, UserSession $userSession)
     {
+        $ruleProcessor->AddRule(new ReservationInstancesRule());
         if (Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_UPDATES_REQUIRE_APPROVAL, new BooleanConverter())) {
             $ruleProcessor->AddRule(new AdminExcludedRule(new RequiresApprovalRule(PluginManager::Instance()->LoadAuthorization()), $userSession, $this->userRepository));
         }
@@ -160,6 +161,7 @@ class PreReservationFactory implements IPreReservationFactory
 
     private function CreateDeleteService(ReservationValidationRuleProcessor $ruleProcessor, UserSession $userSession)
     {
+        $ruleProcessor->AddRule(new ReservationInstancesRule());
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleDelete($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new AdminExcludedRule(new CurrentUserIsReservationUserRule($userSession), $userSession, $this->userRepository));
         return new DeleteReservationValidationService($ruleProcessor);
