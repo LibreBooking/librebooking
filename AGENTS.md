@@ -48,7 +48,7 @@ This file contains essential information for AI coding agents working on the Lib
 
 ### Prerequisites
 
-- PHP >= 8.2 with extensions: ctype, curl, fileinfo, json, ldap, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
+- PHP >= 8.2 with extensions: ctype, curl, fileinfo, intl, json, ldap, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
 - Optional PHP extensions: bcmath, gd
 - Composer for dependency management
 - MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021) for database

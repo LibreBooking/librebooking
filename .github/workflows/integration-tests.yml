@@ -39,7 +39,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          extensions: mysqli, pdo_mysql
+          extensions: intl, mysqli, pdo_mysql
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v4

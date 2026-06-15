@@ -43,6 +43,7 @@ class PreflightRunner
         'ctype',
         'curl',
         'fileinfo',
+        'intl',
         'json',
         'ldap',
         'mbstring',
