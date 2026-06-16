@@ -70,4 +70,4 @@ php8-report.log
 .phpunit.cache/
 .env
 
-playwright/.auth
+tests/playwright/.auth/
