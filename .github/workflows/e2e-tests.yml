@@ -19,7 +19,7 @@ jobs:
 
     services:
       mariadb:
-        image: mirror.gcr.io/library/mariadb:11.4
+        image: mirror.gcr.io/library/mariadb:lts
         env:
           MARIADB_ROOT_PASSWORD: root
           MARIADB_DATABASE: librebooking_test
@@ -27,9 +27,9 @@ jobs:
           - 3306:3306
         options: >-
           --health-cmd="mariadb-admin ping -h 127.0.0.1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
 
     steps:
       - name: Checkout code
@@ -41,8 +41,16 @@ jobs:
           php-version: '8.5'
           extensions: intl, mysqli, pdo_mysql
 
+      - name: Cache Composer vendor
+        uses: actions/cache@v4
+        with:
+          path: vendor/
+          key: composer-${{ hashFiles('composer.lock') }}
+
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v4
+        with:
+          composer-options: '--no-dev'
 
       - name: Load database schema
         run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-schema.sql
@@ -93,6 +101,14 @@ jobs:
 
       - name: Install npm dependencies
         run: npm ci
+
+
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
