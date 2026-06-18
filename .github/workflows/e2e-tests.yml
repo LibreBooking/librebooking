@@ -6,6 +6,7 @@ on:
     branches:
       - develop
       - e2e
+  push:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
