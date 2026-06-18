@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - develop
+      - e2e
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
@@ -12,6 +13,7 @@ concurrency:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   e2e:
@@ -19,10 +21,10 @@ jobs:
 
     services:
       mariadb:
-        image: mirror.gcr.io/library/mariadb:lts
-        env:
-          MARIADB_ROOT_PASSWORD: root
-          MARIADB_DATABASE: librebooking_test
+        image: ghcr.io/barakiva/librebooking-test-db:latest
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         ports:
           - 3306:3306
         options: >-
@@ -62,29 +64,6 @@ jobs:
         uses: ramsey/composer-install@v4
         with:
           composer-options: '--no-dev'
-
-      - name: Load database schema
-        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-schema.sql
-
-      - name: Apply database upgrades
-        run: php phing-tasks/UpgradeDbTask.php root root 127.0.0.1 librebooking_test database_schema
-
-      - name: Load base data
-        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/create-data.sql
-
-      - name: Load sample data
-        run: mysql -h 127.0.0.1 -u root -proot librebooking_test < database_schema/sample-data-utf8.sql
-
-      - name: Generate test config
-        env:
-          CI: 'true'
-          LB_TEST_DB_HOST: '127.0.0.1'
-          LB_TEST_DB_PORT: '3306'
-          LB_TEST_DB_NAME: 'librebooking_test'
-          LB_TEST_DB_USER: 'root'
-          LB_TEST_DB_PASSWORD: 'root'
-          LB_TEST_BASE_URL: 'http://localhost:8080'
-        run: php tests/Integration/create-test-config.php
 
       - name: Create template cache directory
         run: mkdir -p tpl_c
