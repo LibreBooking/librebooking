@@ -30,8 +30,10 @@ jobs:
       - name: Start base MariaDB container
         run: |
           docker run -d --name dbbuild \
-            -e MARIADB_ROOT_PASSWORD=root \
-            -e MARIADB_DATABASE=librebooking_test \
+            -e MARIADB_DATABASE=librebooking \
+            -e MARIADB_ROOT_PASSWORD=devpass \
+            -e MARIADB_USER=lb_user \
+            -e MARIADB_PASSWORD=password \
             -p 3306:3306 \
             mirror.gcr.io/library/mariadb:lts
           for i in $(seq 1 30); do
@@ -40,22 +42,7 @@ jobs:
           done
 
       - name: Load schema
-        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/create-schema.sql
-
-      - name: Set up PHP for upgrade task
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          extensions: intl, mysqli, pdo_mysql
-
-      - name: Apply database upgrades
-        run: php phing-tasks/UpgradeDbTask.php root root 127.0.0.1 librebooking_test database_schema
-
-      - name: Load base data
-        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/create-data.sql
-
-      - name: Load sample data
-        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/sample-data-utf8.sql
+        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < init.sql
 
       - name: Stop container cleanly
         run: |
