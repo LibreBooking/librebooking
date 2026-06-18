@@ -3,9 +3,6 @@ name: Build Test DB Image
 on:
   push:
     branches: [develop,e2e]
-    paths:
-      - 'database_schema/**'
-      - 'phing-tasks/UpgradeDbTask.php'
   workflow_dispatch: {}
 
 permissions:
