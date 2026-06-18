@@ -81,17 +81,28 @@ jobs:
         run: mkdir -p tpl_c
 
       - name: Start PHP development server
-        run: php -S localhost:8080 -t Web > /tmp/php-server.log 2>&1 &
+        run: |
+          nohup php -S localhost:8080 -t Web > /tmp/php-server.log 2>&1 &
+          sleep 2
+          if ! ps aux | grep -v grep | grep "php -S"; then
+            echo "PHP server failed to start"
+            cat /tmp/php-server.log
+            exit 1
+          fi
 
       - name: Wait for PHP server to be ready
         run: |
-          for i in $(seq 1 15); do
-            STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/ || true)
-            if [ "$STATUS" != "000" ]; then
-              echo "Server ready (HTTP $STATUS)"
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/ > /dev/null 2>&1; then
+              echo "Server ready after $i attempts"
               break
             fi
-            echo "Waiting for server... ($i/15)"
+            echo "Waiting for server... ($i/30)"
+            if [ $i -eq 30 ]; then
+              echo "Server failed to respond"
+              cat /tmp/php-server.log
+              exit 1
+            fi
             sleep 1
           done
 
