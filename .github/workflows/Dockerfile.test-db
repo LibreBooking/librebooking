@@ -1,0 +1,10 @@
+# Dockerfile.test-db
+FROM mirror.gcr.io/library/mariadb:lts
+
+ENV MARIADB_DATABASE=librebooking
+ENV MARIADB_ROOT_PASSWORD=devpass
+ENV MARIADB_USER=lb_user
+ENV MARIADB_PASSWORD=password
+
+COPY database_schema/init.sql /docker-entrypoint-initdb.d/init.sql
+

@@ -44,7 +44,7 @@
                             <div class="input-group mb-2">
                                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                                 <input type="text" required="" class="form-control" id="email" {formname key=EMAIL}
-                                    placeholder="{translate key=UsernameOrEmail}" />
+                                    placeholder="{translate key=UsernameOrEmail}" data-testid="login-username" />
                             </div>
                         {/if}
 
@@ -52,7 +52,7 @@
                             <div class="input-group mb-2">
                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                                 <input type="password" required="" id="password" {formname key=PASSWORD}
-                                    class="form-control" value="" placeholder="{translate key=Password}" />
+                                    class="form-control" value="" placeholder="{translate key=Password}" data-testid="login-password" />
                             </div>
                         {/if}
 
@@ -67,7 +67,7 @@
                         {if $ShowUsernamePrompt &&  $ShowPasswordPrompt}
                             <div class="d-grid mb-2 mt-3">
                                 <button type="submit" class="btn btn-primary btn-block" name="{Actions::LOGIN}"
-                                    value="submit">{translate key='LogIn'}</button>
+                                    value="submit" data-testid="login-submit">{translate key='LogIn'}</button>
                                 <input type="hidden" {formname key=RESUME} value="{$ResumeUrl}" />
                             </div>
                         {/if}

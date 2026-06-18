@@ -69,3 +69,10 @@ php8-report.log
 # phpunit cache
 .phpunit.cache/
 .env
+
+# Playwright
+tests/playwright/.auth/
+/test-results/
+playwright-report/
+blob-report/
+tests/**/user.json

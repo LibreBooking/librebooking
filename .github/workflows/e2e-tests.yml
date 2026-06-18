@@ -1,0 +1,150 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - develop
+      - e2e
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: ghcr.io/barakiva/librebooking-test-db:latest
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping -h 127.0.0.1 -ulb_user -ppassword"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6.0.3
+      - name: Install MySQL client
+        run: which mysql || (sudo apt-get update -qq && sudo apt-get install -y default-mysql-client)
+
+      - name: Cache PHP extensions
+        id: cache-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: '8.5'
+          extensions: intl, mysqli, pdo_mysql
+          key: php-ext-v1
+
+      - name: Set up PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: intl, mysqli, pdo_mysql
+          extensions-cache-key: ${{ steps.cache-extensions.outputs.key }}
+
+      - name: Cache Composer vendor
+        uses: actions/cache@v4
+        with:
+          path: vendor/
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v4
+        with:
+          composer-options: '--no-dev'
+
+      - name: Generate test config
+        env:
+          CI: 'true'
+          LB_TEST_DB_HOST: '127.0.0.1'
+          LB_TEST_DB_PORT: '3306'
+          LB_TEST_DB_NAME: 'librebooking'
+          LB_TEST_DB_USER: 'lb_user'
+          LB_TEST_DB_PASSWORD: 'password'
+          LB_TEST_BASE_URL: 'http://localhost:8080'
+        run: php tests/Integration/create-test-config.php
+
+      - name: Create template cache directory
+        run: mkdir -p tpl_c
+
+      - name: Start PHP development server
+        run: |
+          nohup php -S localhost:8080 -t Web > /tmp/php-server.log 2>&1 &
+          sleep 2
+          if ! ps aux | grep -v grep | grep "php -S"; then
+            echo "PHP server failed to start"
+            cat /tmp/php-server.log
+            exit 1
+          fi
+
+      - name: Wait for PHP server to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/ > /dev/null 2>&1; then
+              echo "Server ready after $i attempts"
+              break
+            fi
+            echo "Waiting for server... ($i/30)"
+            if [ $i -eq 30 ]; then
+              echo "Server failed to respond"
+              cat /tmp/php-server.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Create Playwright auth directory
+        run: mkdir -p tests/playwright/.auth
+
+      - name: Smoke-check server response
+        run: |
+          echo "=== PHP server log ==="
+          cat /tmp/php-server.log || true
+          echo "=== HTTP status ==="
+          curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/
+          echo "=== Response body ==="
+          curl -sL http://localhost:8080/ | grep -v '^\s*$' | tail -n +50 | head -40
+
+      - name: Run E2E tests
+        run: npx playwright test
+
+      - name: Dump PHP server log
+        if: failure()
+        run: cat /tmp/php-server.log || true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

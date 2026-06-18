@@ -1,0 +1,40 @@
+name: Build Test DB Image
+
+on:
+  push:
+    branches: [develop,e2e]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-db-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6.0.3
+
+      - name: Compute lowercase image name
+        id: vars
+        run: echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push test-db image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/workflows/Dockerfile.test-db
+          push: true
+          tags: |
+            ghcr.io/${{ steps.vars.outputs.owner }}/librebooking-test-db:latest
+            ghcr.io/${{ steps.vars.outputs.owner }}/librebooking-test-db:${{ github.sha }}
+
