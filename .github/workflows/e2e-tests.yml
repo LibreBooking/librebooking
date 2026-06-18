@@ -29,7 +29,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mariadb-admin ping -h 127.0.0.1"
+          --health-cmd="mariadb-admin ping -h 127.0.0.1 -ulb_user -ppassword"
           --health-interval=5s
           --health-timeout=3s
           --health-retries=10
@@ -66,6 +66,17 @@ jobs:
         with:
           composer-options: '--no-dev'
 
+      - name: Generate test config
+        env:
+          CI: 'true'
+          LB_TEST_DB_HOST: '127.0.0.1'
+          LB_TEST_DB_PORT: '3306'
+          LB_TEST_DB_NAME: 'librebooking'
+          LB_TEST_DB_USER: 'lb_user'
+          LB_TEST_DB_PASSWORD: 'password'
+          LB_TEST_BASE_URL: 'http://localhost:8080'
+        run: php tests/Integration/create-test-config.php
+
       - name: Create template cache directory
         run: mkdir -p tpl_c
 
@@ -87,14 +98,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
-
       - name: Install npm dependencies
         run: npm ci
-
-
-
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
