@@ -1,0 +1,74 @@
+name: Build Test DB Image
+
+on:
+  push:
+    branches: [develop,e2e]
+    paths:
+      - 'database_schema/**'
+      - 'phing-tasks/UpgradeDbTask.php'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-db-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6.0.3
+
+      - name: Compute lowercase image name
+        id: vars
+        run: echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start base MariaDB container
+        run: |
+          docker run -d --name dbbuild \
+            -e MARIADB_ROOT_PASSWORD=root \
+            -e MARIADB_DATABASE=librebooking_test \
+            -p 3306:3306 \
+            mirror.gcr.io/library/mariadb:lts
+          for i in $(seq 1 30); do
+            docker exec dbbuild mariadb-admin ping -h 127.0.0.1 -uroot -proot --silent && break
+            sleep 2
+          done
+
+      - name: Load schema
+        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/create-schema.sql
+
+      - name: Set up PHP for upgrade task
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: intl, mysqli, pdo_mysql
+
+      - name: Apply database upgrades
+        run: php phing-tasks/UpgradeDbTask.php root root 127.0.0.1 librebooking_test database_schema
+
+      - name: Load base data
+        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/create-data.sql
+
+      - name: Load sample data
+        run: docker exec -i dbbuild mariadb -uroot -proot librebooking_test < database_schema/sample-data-utf8.sql
+
+      - name: Stop container cleanly
+        run: |
+          docker exec dbbuild mariadb-admin shutdown -uroot -proot
+          sleep 3
+
+      - name: Commit and push image
+        run: |
+          IMAGE="ghcr.io/${{ steps.vars.outputs.owner }}/librebooking-test-db"
+          docker commit dbbuild "$IMAGE:latest"
+          docker commit dbbuild "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:${{ github.sha }}"

@@ -34,12 +34,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.3
+      - name: Install MySQL client
+        run: which mysql || (sudo apt-get update -qq && sudo apt-get install -y default-mysql-client)
+
+      - name: Cache PHP extensions
+        id: cache-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: '8.5'
+          extensions: intl, mysqli, pdo_mysql
+          key: php-ext-v1
 
       - name: Set up PHP 8.5
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
           extensions: intl, mysqli, pdo_mysql
+          extensions-cache-key: ${{ steps.cache-extensions.outputs.key }}
 
       - name: Cache Composer vendor
         uses: actions/cache@v4
@@ -79,7 +90,7 @@ jobs:
         run: mkdir -p tpl_c
 
       - name: Start PHP development server
-        run: php -S localhost:8080 -t Web &
+        run: php -S localhost:8080 -t Web > /tmp/php-server.log 2>&1 &
 
       - name: Wait for PHP server to be ready
         run: |
@@ -116,8 +127,21 @@ jobs:
       - name: Create Playwright auth directory
         run: mkdir -p tests/playwright/.auth
 
+      - name: Smoke-check server response
+        run: |
+          echo "=== PHP server log ==="
+          cat /tmp/php-server.log || true
+          echo "=== HTTP status ==="
+          curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/
+          echo "=== Response body ==="
+          curl -sL http://localhost:8080/ | grep -v '^\s*$' | tail -n +50 | head -40
+
       - name: Run E2E tests
         run: npx playwright test
+
+      - name: Dump PHP server log
+        if: failure()
+        run: cat /tmp/php-server.log || true
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
