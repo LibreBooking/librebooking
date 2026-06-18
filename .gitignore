@@ -75,4 +75,4 @@ tests/playwright/.auth/
 /test-results/
 playwright-report/
 blob-report/
-
+tests/**/user.json
