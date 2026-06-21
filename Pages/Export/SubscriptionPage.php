@@ -35,6 +35,8 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
      */
     protected ?UserSession $feedUserSession = null;
 
+    protected ?string $calendarName = null;
+
     protected function __construct()
     {
         $authorization = new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization());
@@ -58,6 +60,11 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
     public function SetReservations($reservations): void
     {
         $this->reservations = $reservations;
+    }
+
+    public function SetCalendarName(?string $name): void
+    {
+        $this->calendarName = $name;
     }
 
     /**
@@ -194,9 +201,9 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
             return;
         }
 
-        $this->presenter->PageLoad();
-        if ($this->notFound) {
+        if (!$this->presenter->PageLoad()) {
             http_response_code(404);
+            $this->notFound = true;
             return;
         }
 

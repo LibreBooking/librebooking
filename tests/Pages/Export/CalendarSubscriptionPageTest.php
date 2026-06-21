@@ -119,6 +119,35 @@ class CalendarSubscriptionPageTest extends TestBase
         $this->assertSame('admin', $this->page->fakeAuth->_LastLogin, 'LoginForFeed must receive the authenticated username');
         $this->assertNotNull($this->page->GetFeedUserSession(), 'feedUserSession must be captured for the presenter');
     }
+
+    public function testPageLoadSets404WhenPresenterReportsInvalid(): void
+    {
+        // e.g. wrong (but non-empty) subscription key, or a resource/schedule
+        // with subscriptions disabled — CalendarSubscriptionValidator::IsValid()
+        // returns false, so presenter->PageLoad() returns false without ever
+        // calling SetIsNotFound(). PageLoad() must still treat that as not-found
+        // rather than falling through to renderFeed() with an empty result.
+        $presenter = $this->createMock(CalendarSubscriptionPresenter::class);
+        $presenter->method('PageLoad')->willReturn(false);
+        $this->page->setPresenter($presenter);
+
+        $this->page->PageLoad();
+
+        $this->assertTrue($this->page->isNotFound(), 'notFound must be set when the presenter reports an invalid request');
+        $this->assertFalse($this->page->renderFeedCalled, 'renderFeed must not run when the presenter reports an invalid request');
+    }
+
+    public function testPageLoadRendersFeedWhenPresenterSucceeds(): void
+    {
+        $presenter = $this->createMock(CalendarSubscriptionPresenter::class);
+        $presenter->method('PageLoad')->willReturn(true);
+        $this->page->setPresenter($presenter);
+
+        $this->page->PageLoad();
+
+        $this->assertFalse($this->page->isNotFound());
+        $this->assertTrue($this->page->renderFeedCalled, 'renderFeed must run when the presenter reports a valid request');
+    }
 }
 
 /**
@@ -132,6 +161,7 @@ class TestableSubscriptionPage extends CalendarSubscriptionPage
 {
     public FakeWebAuthentication $fakeAuth;
     public string $SubscriptionKey = '';
+    public bool $renderFeedCalled = false;
 
     public function __construct()
     {
@@ -160,5 +190,15 @@ class TestableSubscriptionPage extends CalendarSubscriptionPage
     public function isNotFound(): bool
     {
         return $this->notFound;
+    }
+
+    public function setPresenter(CalendarSubscriptionPresenter $presenter): void
+    {
+        $this->presenter = $presenter;
+    }
+
+    protected function renderFeed(): void
+    {
+        $this->renderFeedCalled = true;
     }
 }

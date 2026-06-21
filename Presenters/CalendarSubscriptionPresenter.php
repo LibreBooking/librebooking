@@ -84,13 +84,16 @@ class CalendarSubscriptionPresenter
         $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
 
         $reservationUserLevel = ReservationUserLevel::OWNER;
+        $calendarName = null;
         if (!empty($scheduleId)) {
             $schedule = $this->subscriptionService->GetSchedule($scheduleId);
             $sid = $schedule->GetId();
+            $calendarName = $schedule->GetName();
         }
         if (!empty($resourceId)) {
             $resource = $this->subscriptionService->GetResource($resourceId);
             $rid = $resource->GetId();
+            $calendarName = $resource->GetName();
         }
         if (!empty($accessoryIds)) {
             ## No transformation is implemented. It is assumed the accessoryIds is provided as AccessoryName
@@ -102,6 +105,11 @@ class CalendarSubscriptionPresenter
             $uid = $user->Id();
             $reservationUserLevel = ReservationUserLevel::ALL;
             $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY);
+            $calendarName = Resources::GetInstance()->GetString('MyCalendar');
+        }
+
+        if (!empty($calendarName)) {
+            $this->page->SetCalendarName($calendarName);
         }
         if (!empty($resourceGroupId)) {
             $resourceIds = $this->subscriptionService->GetResourcesInGroup($resourceGroupId);

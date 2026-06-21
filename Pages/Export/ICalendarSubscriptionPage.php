@@ -18,10 +18,10 @@ interface ICalendarSubscriptionPage
     public function SetReservations($reservations);
 
     /**
-     * Signal that the current request should be aborted. Implementations set a
-     * flag that PageLoad() checks after each step; the HTTP status code (404 for
-     * an invalid subscription key, 401 for a Basic Auth failure) is set by the
-     * caller before invoking this method.
+     * Signal that the current request should be aborted. Used by tryBasicAuth()
+     * for its fail-closed gates and credential checks (404/401, set by the
+     * caller before invoking this method). An invalid subscription key is
+     * signaled separately, via a false return from the presenter's PageLoad().
      */
     public function SetIsNotFound(): void;
 
@@ -62,4 +62,11 @@ interface ICalendarSubscriptionPage
      * the feed session is intentionally NOT persisted to $_SESSION.
      */
     public function GetFeedUserSession(): ?UserSession;
+
+    /**
+     * Display name emitted as X-WR-CALNAME in the ICS body so calendar clients
+     * (Thunderbird, Apple Calendar, etc.) label the feed in their UI.
+     * Null means no X-WR-CALNAME line is written.
+     */
+    public function SetCalendarName(?string $name): void;
 }

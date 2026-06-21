@@ -16,6 +16,6 @@ class CalendarSubscriptionPage extends SubscriptionPage
         header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
-        echo preg_replace('~\R~u', "\r\n", $display->Render($this->reservations));
+        echo $display->Render($this->reservations, $this->calendarName);
     }
 }
