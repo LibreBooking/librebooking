@@ -26,7 +26,7 @@ class AuthenticationTest extends TestBase
     private $groups;
 
     /**
-     * @var TestableAuthentication
+     * @var Authentication
      */
     private $auth;
 
