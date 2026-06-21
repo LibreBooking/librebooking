@@ -209,7 +209,7 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->OrganizerEmail);
     }
 
-    public function testViewEscapesNewlinesInTextPropertiesForICalCompliance()
+    public function testViewStoresRawTextInSummaryAndDescription()
     {
         $user = new FakeUserSession();
         $res = new ReservationItemView();
@@ -224,11 +224,12 @@ class CalendarExportPresenterTest extends TestBase
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
-        $this->assertEquals('First line\\nSecond line\\nThird line', $reservationView->Summary);
-        $this->assertEquals('Alpha\\nBeta\\nGamma', $reservationView->Description);
+        // View stores raw values; RFC 5545 escaping is handled by Sabre at serialization time.
+        $this->assertEquals("First line\r\nSecond line\nThird line", $reservationView->Summary);
+        $this->assertEquals("Alpha\r\nBeta\nGamma", $reservationView->Description);
     }
 
-    public function testViewEscapesBackslashSemicolonAndCommaInTextPropertiesForICalCompliance()
+    public function testViewStoresRawSpecialCharactersInSummaryAndDescription()
     {
         $user = new FakeUserSession();
         $res = new ReservationItemView();
@@ -243,8 +244,34 @@ class CalendarExportPresenterTest extends TestBase
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
-        $this->assertEquals('x\\\\y\\;z\\,w', $reservationView->Summary);
-        $this->assertEquals('a\\\\b\\;c\\,d', $reservationView->Description);
+        // View stores raw values; Sabre escapes backslash, semicolon, and comma during serialization.
+        $this->assertEquals('x\\y;z,w', $reservationView->Summary);
+        $this->assertEquals('a\\b;c,d', $reservationView->Description);
+    }
+
+    public function testSerializedOutputEscapesRFC5545ReservedCharactersInDescriptionAndSummary()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title; with, reserved\\ chars';
+        $res->Description = 'Desc; with, reserved\\ chars';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerId = $user->UserId + 1;
+        $res->OwnerEmailAddress = 'owner@example.com';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        // RFC 5545 §3.3.11: backslash, comma, semicolon are reserved in TEXT values.
+        $this->assertStringContainsString('SUMMARY:Title\; with\, reserved\\\\ chars', $ics);
+        $this->assertStringContainsString('DESCRIPTION:Desc\; with\, reserved\\\\ chars', $ics);
     }
 
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()

@@ -66,7 +66,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $reservationResult = [new TestReservationItemView(1, Date::Now(), Date::Now())];
 
         $scheduleId = 999;
-        $schedule = new FakeSchedule($scheduleId);
+        $schedule = new FakeSchedule($scheduleId, 'Engineering Schedule');
 
         $weekAgo = Date::Now()->AddDays(0);
         $nextYear = Date::Now()->AddDays(30);
@@ -86,6 +86,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('Engineering Schedule', $this->page->CalendarName);
     }
 
     public function testGetsScheduleReservationsForTheNextYearByResourceId()
@@ -94,7 +95,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $reservationResult = [new TestReservationItemView(1, Date::Now(), Date::Now())];
 
         $resourceId = 999;
-        $resource = new FakeBookableResource($resourceId);
+        $resource = new FakeBookableResource($resourceId, 'Meeting Room 3');
 
         $weekAgo = Date::Now()->AddDays(0);
         $nextYear = Date::Now()->AddDays(30);
@@ -114,6 +115,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('Meeting Room 3', $this->page->CalendarName);
     }
 
     public function testGetsUserReservationsForTheNextYearByResourceId()
@@ -142,6 +144,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('MyCalendar', $this->page->CalendarName);
     }
 
     public function testGetsResourceGroupReservationsForTheNextYearByGroupId()
@@ -273,5 +276,12 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
     public function GetFeedUserSession(): ?UserSession
     {
         return $this->FeedUserSession;
+    }
+
+    public ?string $CalendarName = null;
+
+    public function SetCalendarName(?string $name): void
+    {
+        $this->CalendarName = $name;
     }
 }
