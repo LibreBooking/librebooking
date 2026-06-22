@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace lib\Application\Authentication;
+
 /**
  * Classification of a Microsoft OAuth callback request.
  */
@@ -11,6 +13,7 @@ enum MicrosoftOAuthCallbackOutcome
     case OAUTH_ERROR;
     case MALFORMED_REQUEST;
 }
+
 
 /**
  * Microsoft's OAuth callback outcome — either a redirect to external-auth or a redirect to home on error.

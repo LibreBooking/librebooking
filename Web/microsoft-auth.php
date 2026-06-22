@@ -2,8 +2,10 @@
 
 define('ROOT_DIR', '../');
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/MicrosoftOAuthCallback.php');
+require_once(ROOT_DIR . 'vendor/autoload.php');
+require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
+
+use Lib\Application\Authentication\MicrosoftOAuthCallback;
 
 $result = (new MicrosoftOAuthCallback())->handle(
     params: $_GET,

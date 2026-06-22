@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/MicrosoftOAuthCallback.php');
+use lib\Application\Authentication\MicrosoftOAuthCallback;
 
 class MicrosoftOAuthCallbackTest extends TestBase
 {
