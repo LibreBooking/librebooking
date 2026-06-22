@@ -11,10 +11,14 @@
     <div>
         {if $IcsEnabled}
             <i class="bi bi-calendar link-primary"></i>
-            <a target="_blank" href="{$resource->GetSubscriptionUrl()->GetWebcalUrl()}" class="link-primary">{translate key=SubscribeToCalendar}</a>
+            <button type="button" id="copy-ical-{$resource->GetId()}" class="btn btn-link link-primary p-0"
+                title="{$resource->GetSubscriptionUrl()->GetWebcalUrl()|escape:'html'}"
+                onclick="copyUrlToClipboard('{$resource->GetSubscriptionUrl()->GetWebcalUrl()|escape:'javascript'}')">{translate key=SubscribeToCalendar}</button>
             <div class="vr mx-1"></div>
             <i class="bi bi-rss-fill link-primary"></i>
-            <a target="_blank" href="{$resource->GetSubscriptionUrl()->GetAtomUrl()}" class="link-primary">Atom</a>
+            <button type="button" id="copy-atom-{$resource->GetId()}" class="btn btn-link link-primary p-0"
+                title="{$resource->GetSubscriptionUrl()->GetAtomUrl()|escape:'html'}"
+                onclick="copyUrlToClipboard('{$resource->GetSubscriptionUrl()->GetAtomUrl()|escape:'javascript'}')">Atom</button>
             <div class="vr mx-1"></div>
         {/if}
         <i class="bi bi-display link-primary"></i>

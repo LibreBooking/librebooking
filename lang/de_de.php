@@ -359,6 +359,7 @@ class de_de extends en_gb
         $strings['TurnOffSubscription'] = 'Kalender-Abonnement abschalten';
         $strings['TurnOnSubscription'] = 'Kalender-Abonnement erlauben';
         $strings['SubscribeToCalendar'] = 'Kalender abonnieren';
+        $strings['UrlCopiedToClipboard'] = 'URL in die Zwischenablage kopiert';
         $strings['SubscriptionsAreDisabled'] = 'Das Abonnieren des Kalenders wurde vom Administrator deaktiviert';
         $strings['NoResourceAdministratorLabel'] = '(Kein Ressourcen-Administrator)';
         $strings['WhoCanManageThisResource'] = 'Wer darf diese Ressource verwalten?';

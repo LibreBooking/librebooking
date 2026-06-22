@@ -273,12 +273,13 @@
 																		href="#">{translate key=TurnOnSubscription}</a>
 																{/if}
 																{if $schedule->GetIsCalendarSubscriptionAllowed()}
-																	<a target="_blank" class="link-primary"
-																		href="{$schedule->GetSubscriptionUrl()->GetAtomUrl()}"> <i
-																			class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
+																	<button type="button" id="copy-atom-{$schedule->GetId()}" class="btn btn-link link-primary p-0"
+																		title="{$schedule->GetSubscriptionUrl()->GetAtomUrl()|escape:'html'}"
+																		onclick="copyUrlToClipboard('{$schedule->GetSubscriptionUrl()->GetAtomUrl()|escape:'javascript'}')"><i class="bi bi-rss-fill link-primary me-1"></i>Atom</button>
 																	<div class="vr"></div>
-																	<a target="_blank" class="link-primary"
-																		href="{$schedule->GetSubscriptionUrl()->GetWebcalUrl()}">iCalendar</a>
+																	<button type="button" id="copy-ical-{$schedule->GetId()}" class="btn btn-link link-primary p-0"
+																		title="{$schedule->GetSubscriptionUrl()->GetWebcalUrl()|escape:'html'}"
+																		onclick="copyUrlToClipboard('{$schedule->GetSubscriptionUrl()->GetWebcalUrl()|escape:'javascript'}')">iCalendar</button>
 																{/if}
 															{/if}
 															{indicator id="action-indicator"}

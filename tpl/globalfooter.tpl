@@ -10,6 +10,29 @@
 				{$DisplayVersion}</a></div>
 	</footer>
 
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		<div id="clipboardCopyToast" class="toast align-items-center bg-primary text-white border-0 d-none" role="alert"
+			aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					<i class="bi bi-check-circle-fill me-2"></i>{translate key=UrlCopiedToClipboard}
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+					aria-label="{translate key=Close}"></button>
+			</div>
+		</div>
+		<div id="defaultSetToast" class="toast align-items-center bg-primary text-white border-0 d-none" role="alert"
+			aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					<i class="bi bi-check-circle-fill me-2"></i>{translate key=DefaultScheduleSet}
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+					aria-label="{translate key=Close}"></button>
+			</div>
+		</div>
+	</div>
+
 	<script type="text/javascript">
 		init();
 

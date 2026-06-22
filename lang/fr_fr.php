@@ -321,6 +321,7 @@ class fr_fr extends en_gb
         $strings['TurnOffSubscription'] = 'Bloquer les inscriptions au Calendrier';
         $strings['TurnOnSubscription'] = 'Permettre les inscriptions au Calendrier';
         $strings['SubscribeToCalendar'] = 'S\'inscrire au Calendrier';
+        $strings['UrlCopiedToClipboard'] = 'URL copiée dans le presse-papiers';
         $strings['SubscriptionsAreDisabled'] = 'L\'administrateur a bloqué les inscriptions à ce calendrier';
         $strings['NoResourceAdministratorLabel'] = '(Pas d\'Administrateur de ressources)';
         $strings['WhoCanManageThisResource'] = 'Qui peut gérer cette ressource ?';

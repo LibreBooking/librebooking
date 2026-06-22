@@ -4,12 +4,12 @@
             {translate key=TurnOffSubscription}
         </a>
         {if $IsSubscriptionEnabled}
-            <a id="subscribeToCalendar" href="{$SubscriptionUrl}" class="link-primary"><i class="bi bi-calendar-heart"></i>
+            <button id="subscribeToCalendar" type="button" class="btn btn-link link-primary p-0"
+                title="{$SubscriptionUrl|escape:'html'}"
+                onclick="copyUrlToClipboard('{$SubscriptionUrl|escape:'javascript'}')">
+                <i class="bi bi-calendar-heart"></i>
                 {translate key=SubscribeToCalendar}
-            </a>
-            <br />
-            URL:
-            <span class="note fst-italic text-secondary">{$SubscriptionUrl}</span>
+            </button>
         {/if}
     {elseif $IsSubscriptionEnabled}
         <a href="#" id="turnOnSubscription" class="link-primary"><i class="bi bi-toggle-on"></i>
