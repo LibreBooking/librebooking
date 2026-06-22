@@ -220,3 +220,54 @@ $('.accordion-collapse').on('shown.bs.collapse', function () {
 document.addEventListener('DOMContentLoaded', function () {
   initializeAccordions();
 });
+
+// Exposed on window because it's invoked from inline onclick="" handlers in
+// Smarty templates, which ESLint has no visibility into for usage checks.
+window.showToastById = function (id) {
+  var toastEl = document.getElementById(id);
+  if (toastEl && window.bootstrap && window.bootstrap.Toast) {
+    toastEl.classList.remove('d-none');
+    window.bootstrap.Toast.getOrCreateInstance(toastEl).show();
+  }
+};
+
+window.copyUrlToClipboard = function (url) {
+  if (!url || url === '#') {
+    return;
+  }
+  var showToast = function () {
+    window.showToastById('clipboardCopyToast');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(url)
+      .then(showToast)
+      .catch(function () {
+        if (fallbackCopyToClipboard(url)) {
+          showToast();
+        }
+      });
+  } else {
+    if (fallbackCopyToClipboard(url)) {
+      showToast();
+    }
+  }
+};
+
+function fallbackCopyToClipboard(url) {
+  var textarea = document.createElement('textarea');
+  textarea.value = url;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  var succeeded = false;
+  try {
+    succeeded = document.execCommand('copy');
+  } catch {
+    succeeded = false;
+  } finally {
+    document.body.removeChild(textarea);
+  }
+  return succeeded;
+}

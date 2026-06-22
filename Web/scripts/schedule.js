@@ -872,12 +872,7 @@ function Schedule(opts, resourceGroups) {
           return response.json().catch(() => null);
         })
         .then(() => {
-          // Toast to display a success message when changing the default schedule
-          const toastEl = document.getElementById('defaultSetToast');
-          if (toastEl && window.bootstrap && window.bootstrap.Toast) {
-            toastEl.classList.remove('d-none');
-            window.bootstrap.Toast.getOrCreateInstance(toastEl).show();
-          }
+          window.showToastById('defaultSetToast');
         })
         .catch((err) => {
           console.error(err);

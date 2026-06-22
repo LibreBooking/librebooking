@@ -273,12 +273,18 @@
 																		href="#">{translate key=TurnOnSubscription}</a>
 																{/if}
 																{if $schedule->GetIsCalendarSubscriptionAllowed()}
+																	{assign var="atomUrl" value=$schedule->GetSubscriptionUrl()->GetAtomUrl()}
+																	{assign var="icalUrl" value=$schedule->GetSubscriptionUrl()->GetWebcalUrl()}
 																	<a target="_blank" class="link-primary"
-																		href="{$schedule->GetSubscriptionUrl()->GetAtomUrl()}"> <i
+																		title="{translate key=UrlCopiedToClipboard}"
+																		onclick="copyUrlToClipboard('{$atomUrl|escape:'javascript'|escape:'html'}'); return false;"
+																		href="{$atomUrl|escape:'html'}"> <i
 																			class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
 																	<div class="vr"></div>
 																	<a target="_blank" class="link-primary"
-																		href="{$schedule->GetSubscriptionUrl()->GetWebcalUrl()}">iCalendar</a>
+																		title="{translate key=UrlCopiedToClipboard}"
+																		onclick="copyUrlToClipboard('{$icalUrl|escape:'javascript'|escape:'html'}'); return false;"
+																		href="{$icalUrl|escape:'html'}">iCalendar</a>
 																{/if}
 															{/if}
 															{indicator id="action-indicator"}

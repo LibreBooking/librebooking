@@ -74,18 +74,6 @@
     {/if}
 
     {if $IsAccessible}
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="defaultSetToast" class="toast align-items-center bg-primary text-white border-0 d-none" role="alert"
-                aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <i class="bi bi-check-circle-fill me-2"></i>{translate key=DefaultScheduleSet}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="{translate key=Close}"></button>
-                </div>
-            </div>
-        </div>
         {block name="schedule_control"}
             <div class="row">
                 {assign var=titleWidth value="col-sm-12 col-12"}
@@ -134,10 +122,16 @@
                                 </a>
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
+                                {assign var="atomUrl" value=$SubscriptionUrl->GetAtomUrl()}
+                                {assign var="icalUrl" value=$SubscriptionUrl->GetWebcalUrl()}
                                 <div class="d-flex align-items-center"><i class="bi bi-rss-fill link-primary me-1"></i>
-                                    <a class="link-primary me-1" target="_blank" href="{$SubscriptionUrl->GetAtomUrl()}">Atom</a>
+                                    <a class="link-primary me-1" target="_blank" href="{$atomUrl|escape:'html'}"
+                                        title="{translate key=UrlCopiedToClipboard}"
+                                        onclick="copyUrlToClipboard('{$atomUrl|escape:'javascript'|escape:'html'}'); return false;">Atom</a>
                                     <div class="vr me-1"></div>
-                                    <a class="link-primary" target="_blank" href="{$SubscriptionUrl->GetWebcalUrl()}">iCalendar</a>
+                                    <a class="link-primary" target="_blank" href="{$icalUrl|escape:'html'}"
+                                        title="{translate key=UrlCopiedToClipboard}"
+                                        onclick="copyUrlToClipboard('{$icalUrl|escape:'javascript'|escape:'html'}'); return false;">iCalendar</a>
                                 </div>
                             {/if}
                         {/block}

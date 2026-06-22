@@ -323,6 +323,7 @@ class pt_br extends en_gb
         $strings['TurnOffSubscription'] = 'Ocultar do público';
         $strings['TurnOnSubscription'] = 'Mostrar ao público (RSS, iCalendar, Tablet, Monitor)';
         $strings['SubscribeToCalendar'] = 'Assinar este calendário';
+        $strings['UrlCopiedToClipboard'] = 'URL copiada para a área de transferência';
         $strings['SubscriptionsAreDisabled'] = 'O administrador desativou as assinaturas de calendário';
         $strings['NoResourceAdministratorLabel'] = '(Nenhum administrador de recurso)';
         $strings['WhoCanManageThisResource'] = 'Quem pode gerenciar este recurso?';
