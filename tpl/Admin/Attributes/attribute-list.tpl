@@ -5,9 +5,9 @@
 		<table class="table table-striped table-hover border-top w-100" id="{$tableId}">
 			<thead>
 				<tr>
-					<th class="d-none">ID</th>
-					<th>{translate key=SortOrder}</th>
 					<th>{translate key=DisplayLabel}</th>
+					<th>ID</th>
+					<th>{translate key=SortOrder}</th>
 					<th>{translate key=Type}</th>
 					<th>{translate key=Required}</th>
 					{if $Category != CustomAttributeCategory::RESERVATION}
@@ -27,9 +27,9 @@
 			<tbody>
 				{foreach from=$Attributes item=attribute}
 					<tr attributeId="{$attribute->Id()}">
-						<td class="d-none">{$attribute->Id()}</td>
-						<td>{$attribute->SortOrder()}</td>
 						<td>{$attribute->Label()}</td>
+						<td data-order="{$attribute->Id()}">att{$attribute->Id()}</td>
+						<td>{$attribute->SortOrder()}</td>
 						<td>{translate key=$Types[$attribute->Type()]}</td>
 						<td>{if $attribute->Required()}
 								{translate key=Yes}
