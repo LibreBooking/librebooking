@@ -31,14 +31,10 @@
 
 		<span class="{$inlineClass} update" id="{$attributeId}" data-type="{$datatype}" data-pk="{$id}"
 			data-value="{$pickerValue|escape:'html'}" data-name="{FormKeys::ATTRIBUTE_PREFIX}{$attribute->Id()}"
-			{if $type == CustomAttributeTypes::SELECT_LIST} data-source='[
-					{if !$attribute->Required()}
-						{ldelim}"value":"","text":""{rdelim},
-					{/if}
-					{foreach from=$attribute->PossibleValueList() item=v name=vals}
-						{ldelim}"value":{$v|@json_encode|escape:'html'},"text":{$v|@json_encode|escape:'html'}{rdelim}{if not $smarty.foreach.vals.last},{/if}
-					{/foreach}
-				]' {/if} {if $type == CustomAttributeTypes::CHECKBOX}
+			{if $type == CustomAttributeTypes::SELECT_LIST}
+				{assign var=possibleValuesCount value=$attribute->PossibleValueList()|@count}
+				data-source='[{if !$attribute->Required()}{ldelim}"value":"","text":""{rdelim}{if $possibleValuesCount > 0},{/if}{/if}{foreach from=$attribute->PossibleValueList() item=v name=vals}{ldelim}"value":"{$v|escape:'javascript'}","text":"{$v|escape:'javascript'}"{rdelim}{if not $smarty.foreach.vals.last},{/if}{/foreach}]'
+			{/if} {if $type == CustomAttributeTypes::CHECKBOX}
 		data-source='[{ldelim}value:"1",text:"{translate key=Yes}"{rdelim}]' {/if}>
 		{if $type == CustomAttributeTypes::DATETIME}
 			{if $value != ''}{formatdate date=$value key=$AltFormat}{else}-{/if}
