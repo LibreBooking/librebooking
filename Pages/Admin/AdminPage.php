@@ -27,6 +27,11 @@ class AdminPageDecorator extends ActionPage implements IActionPage
         $this->page->PageLoad();
     }
 
+    public function RedirectResume($url)
+    {
+        $this->page->RedirectResume($url);
+    }
+
     public function IsValid()
     {
         return $this->page->IsValid();

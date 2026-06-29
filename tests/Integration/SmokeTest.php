@@ -323,6 +323,51 @@ class SmokeTest extends TestCase
         $this->assertPhpErrorFree(body: $body);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('unauthenticatedSecurePagesProvider')]
+    public function testUnauthenticatedSecurePageRedirectsToLogin(string $path, string $label): void
+    {
+        $client = self::createClient(new CookieJar());
+
+        $response = $client->get($path);
+
+        $this->assertSame(
+            200,
+            $response->getStatusCode(),
+            "Unauthenticated request to $label ($path) did not return HTTP 200 (expected redirect to login)"
+        );
+
+        $redirectHistory = implode(' ', $response->getHeader('X-Guzzle-Redirect-History'));
+        $this->assertNotEmpty(
+            $redirectHistory,
+            "Unauthenticated request to $label ($path) did not issue an HTTP redirect (expected redirect to login)"
+        );
+        $this->assertStringContainsString(
+            '/Web/index.php',
+            $redirectHistory,
+            "Unauthenticated request to $label ($path) did not redirect to the login page"
+        );
+
+        $body = (string) $response->getBody();
+        $this->assertPhpErrorFree(body: $body);
+        $this->assertStringContainsString(
+            'name="login"',
+            $body,
+            "Unauthenticated request to $label ($path) did not redirect to the login form"
+        );
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function unauthenticatedSecurePagesProvider(): array
+    {
+        return [
+            'schedule (SecurePageDecorator)' => ['/Web/schedule.php', 'Schedule'],
+            'profile (SecureActionPageDecorator)' => ['/Web/profile.php', 'Profile'],
+            'manage-groups admin (AdminPageDecorator)' => ['/Web/admin/manage_groups.php', 'Manage Groups'],
+        ];
+    }
+
     /**
      * @return array<string, array{string, string}>
      */

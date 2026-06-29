@@ -89,6 +89,11 @@ class SecureActionPageDecorator extends ActionPage
         $this->page->Redirect($url);
     }
 
+    public function RedirectResume($url)
+    {
+        $this->page->RedirectResume($url);
+    }
+
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
     {
         $this->page->RedirectToError($errorMessageId, $lastPage);
@@ -174,6 +179,11 @@ class SecurePageDecorator extends Page implements IPage
     public function Redirect($url)
     {
         $this->page->Redirect($url);
+    }
+
+    public function RedirectResume($url)
+    {
+        $this->page->RedirectResume($url);
     }
 
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
