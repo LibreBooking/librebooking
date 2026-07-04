@@ -260,4 +260,18 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
     {
         return $this->FutureDays;
     }
+
+    public bool $NotFound = false;
+
+    public function SetIsNotFound(): void
+    {
+        $this->NotFound = true;
+    }
+
+    public ?UserSession $FeedUserSession = null;
+
+    public function GetFeedUserSession(): ?UserSession
+    {
+        return $this->FeedUserSession;
+    }
 }

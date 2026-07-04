@@ -62,6 +62,22 @@ interface IWebAuthentication extends IAuthenticationPromptOptions
      * @return string
      */
     public function GetPasswordResetUrl();
+
+    /**
+     * Build a request-scoped UserSession for the given username without recording
+     * the login event AND without writing to $_SESSION. Intended for machine
+     * clients polling feed endpoints (e.g. ICS subscriptions) where a normal
+     * Login() would (a) update the user's last-login timestamp on every poll and
+     * (b) emit a PHPSESSID cookie that would silently log the caller into the
+     * rest of the application.
+     *
+     * The returned session is the caller's responsibility — it must be passed to
+     * downstream services for this request only and discarded at the end of it.
+     *
+     * @param string $username
+     * @return UserSession
+     */
+    public function LoginForFeed(string $username): UserSession;
 }
 
 class WebAuthentication implements IWebAuthentication
@@ -109,6 +125,11 @@ class WebAuthentication implements IWebAuthentication
         if ($loginContext->GetData()->Persist) {
             $this->SetLoginCookie($userSession->UserId, $userSession->LoginTime);
         }
+    }
+
+    public function LoginForFeed(string $username): UserSession
+    {
+        return $this->authentication->BuildSession($username);
     }
 
     /**

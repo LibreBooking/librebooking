@@ -52,6 +52,17 @@ interface IAuthentication extends IAuthenticationPromptOptions, IAuthenticationA
      * @return void
      */
     public function HandleLoginFailure(IAuthenticationPage $loginPage);
+
+    /**
+     * Build a UserSession for the given username without recording the login event.
+     * Unlike Login(), this does NOT update the user's last-login timestamp in the
+     * database. Use this for machine-client endpoints (e.g. calendar feed pollers)
+     * that authenticate on every request.
+     *
+     * @param string $username
+     * @return UserSession
+     */
+    public function BuildSession(string $username): UserSession;
 }
 
 interface IAuthenticationPromptOptions

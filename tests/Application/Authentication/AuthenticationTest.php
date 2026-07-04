@@ -25,10 +25,7 @@ class AuthenticationTest extends TestBase
     private $scheduleId;
     private $groups;
 
-    /**
-     * @var Authentication
-     */
-    private $auth;
+    private Authentication $auth;
 
     /**
      * @var FakePassword

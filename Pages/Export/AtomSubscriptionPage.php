@@ -11,13 +11,9 @@ class AtomSubscriptionPage extends SubscriptionPage
         parent::__construct();
     }
 
-    public function PageLoad(): void
+    protected function renderFeed(): void
     {
         ob_clean();
-        if (!$this->presenter->PageLoad()) {
-            http_response_code(404);
-            return;
-        }
 
         $config = Configuration::Instance();
 

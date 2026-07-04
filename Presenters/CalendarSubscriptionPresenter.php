@@ -122,7 +122,13 @@ class CalendarSubscriptionPresenter
             count($res)
         );
 
-        $session = ServiceLocator::GetServer()->GetUserSession();
+        // Prefer the feed-scoped session built by Basic Auth (request-only,
+        // never persisted to $_SESSION). Falls back to the server session,
+        // which is NullUserSession for icskey-only requests — in that case
+        // SlotLabelFactory and PrivacyFilter apply the unauthenticated-viewer
+        // rules (PRIVACY_VIEW_RESERVATIONS / privacy hide-flags), which is the
+        // correct privacy posture when we cannot identify the caller.
+        $session = $this->page->GetFeedUserSession() ?? ServiceLocator::GetServer()->GetUserSession();
 
         foreach ($res as $r) {
             if (empty($resourceIds) || in_array($r->ResourceId, $resourceIds)) {

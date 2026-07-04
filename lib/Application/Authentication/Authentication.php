@@ -146,12 +146,21 @@ class Authentication implements IAuthentication
         $loginPage->SetShowLoginError();
     }
 
+    public function BuildSession(string $username): UserSession
+    {
+        $user = $this->userRepository->LoadByUsername($username);
+        if ($user->StatusId() == AccountStatus::ACTIVE) {
+            return $this->GetUserSession($user, LoginTime::Now());
+        }
+        return new NullUserSession();
+    }
+
     /**
      * @param User $user
      * @param string $loginTime
      * @return UserSession
      */
-    private function GetUserSession(User $user, $loginTime)
+    protected function GetUserSession(User $user, $loginTime)
     {
         $userSession = new UserSession($user->Id());
         $userSession->Email = $user->EmailAddress();

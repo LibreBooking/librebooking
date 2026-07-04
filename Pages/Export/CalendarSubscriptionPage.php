@@ -10,13 +10,8 @@ class CalendarSubscriptionPage extends SubscriptionPage
         parent::__construct();
     }
 
-    public function PageLoad(): void
+    protected function renderFeed(): void
     {
-        if (!$this->presenter->PageLoad()) {
-            http_response_code(404);
-            return;
-        }
-
         header('Content-Type: text/Calendar');
         header('Content-Disposition: inline; filename=calendar.ics');
 
