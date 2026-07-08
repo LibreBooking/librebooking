@@ -419,9 +419,10 @@
             waitlistUrl: 'ajax/reservation_waitlist.php',
         };
         var reservation = new Reservation(reservationOpts);
-        var startStr = $('#BeginDate').val() + ' ' + $('#BeginPeriod').val();
-        var endStr = $('#EndDate').val() + ' ' + $('#EndPeriod').val();
-        reservation.init('{$UserId}', startStr, endStr);
+        reservation.init('{$UserId}',
+            '{format_date date=$StartDate key=system_datetime timezone=$Timezone}',
+            '{format_date date=$EndDate key=system_datetime timezone=$Timezone}'
+        );
 
         var ajaxOptions = {
             target: '#result', // target element(s) to be updated with server response
