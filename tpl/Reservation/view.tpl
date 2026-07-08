@@ -419,7 +419,9 @@
             waitlistUrl: 'ajax/reservation_waitlist.php',
         };
         var reservation = new Reservation(reservationOpts);
-        reservation.init('{$UserId}');
+        var startStr = $('#BeginDate').val() + ' ' + $('#BeginPeriod').val();
+        var endStr = $('#EndDate').val() + ' ' + $('#EndPeriod').val();
+        reservation.init('{$UserId}', startStr, endStr);
 
         var ajaxOptions = {
             target: '#result', // target element(s) to be updated with server response
