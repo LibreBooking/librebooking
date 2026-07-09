@@ -17,21 +17,21 @@
                     'data' => $Available,
                     'dateField' => 'NextTime',
                     'label' => 'AvailableUntil',
-                    'urlDate' => false
+                    'urlDate' => true
                 ],
                 [
                     'title' => 'Unavailable',
                     'data' => $Unavailable,
                     'dateField' => 'ReservationEnds',
                     'label' => 'AvailableBeginningAt',
-                    'urlDate' => true
+                    'urlDate' => false
                 ],
                 [
                     'title' => 'UnavailableAllDay',
                     'data' => $UnavailableAllDay,
                     'dateField' => 'ReservationEnds',
                     'label' => 'AvailableAt',
-                    'urlDate' => true
+                    'urlDate' => false
                 ]
             ]}
 
@@ -61,6 +61,21 @@
                                 {assign var=date value=$i->ReservationEnds()}
                             {/if}
 
+                            {* Determine date to display considering schedule availability *}
+                            {assign var=dateToDisplay value=$date}
+                            {if $s->HasAvailability()}
+                                {assign var=scheduleBegin value=$s->GetAvailabilityBegin()}
+                                {if $date == null || $date->LessThan($scheduleBegin)}
+                                    {assign var=dateToDisplay value=$scheduleBegin}
+                                {/if}
+                            {/if}
+
+                            {assign var=reservationHref value="{$Path}{Pages::RESERVATION}?{QueryStringKeys::RESOURCE_ID}={$i->ResourceId()|escape:'url'}"}
+                            {if $section.urlDate && $dateToDisplay}
+                                {assign var=formattedUrlDate value={formatdate date=$dateToDisplay timezone=$Timezone format='Y-m-d'}}
+                                {assign var=reservationHref value="{$reservationHref}&{QueryStringKeys::START_DATE}={$formattedUrlDate|escape:'url'}&{QueryStringKeys::END_DATE}={$formattedUrlDate|escape:'url'}"}
+                            {/if}
+
                             <div class="availabilityItem row gy-2 p-2 border-bottom align-items-center">
 
                                 {* Resource name *}
@@ -71,7 +86,7 @@
                                         <i resource-id="{$i->ResourceId()}" class="resourceNameSelector bi bi-info-circle-fill"></i>
                                         <a resource-id="{$i->ResourceId()}" class="resourceNameSelector"
                                             {if $i->GetColor()}style="color:{$i->GetTextColor()};" {/if}
-                                            href="{$Path}{Pages::RESERVATION}?{QueryStringKeys::RESOURCE_ID}={$i->ResourceId()}">
+                                            href="{$reservationHref}">
                                             {$i->ResourceName()}
                                         </a>
                                     </span>
@@ -92,7 +107,7 @@
                                 {* Button *}
                                 <div class="reserveButton col-12 col-sm-3 d-grid">
                                     <button class="btn btn-sm btn-primary"
-                                        onclick="window.location.href='{$Path}{Pages::RESERVATION}?{QueryStringKeys::RESOURCE_ID}={$i->ResourceId()}{if $section.urlDate && $date}&{QueryStringKeys::START_DATE}={format_date date=$date timezone=$Timezone key=url_full}{/if}'">
+                                        onclick="window.location.href='{$reservationHref}'">
                                         {translate key=Reserve}
                                     </button>
                                 </div>
