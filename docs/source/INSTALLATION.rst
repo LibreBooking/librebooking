@@ -544,7 +544,7 @@ To persist data beyond container lifecycle, mount these directories:
 
 **File Uploads:**
   Mount ``/var/www/html/Web/uploads/images`` for uploaded images
-  Mount ``/var/www/html/Web/uploads/reservation`` for reservation attachments
+  Mount ``/var/www/html/uploads/reservation`` for reservation attachments
 
 Background Jobs (Cron)
 ~~~~~~~~~~~~~~~~~~~~~~

@@ -500,7 +500,7 @@ To persist data beyond container lifecycle, mount these directories:
 
 **File Uploads:**
   Mount ``/var/www/html/Web/uploads/images`` for uploaded images
-  Mount ``/var/www/html/Web/uploads/reservation`` for reservation attachments
+  Mount ``/var/www/html/uploads/reservation`` for reservation attachments
 
 Example with persistent uploads:
 
@@ -511,7 +511,7 @@ Example with persistent uploads:
      volumes:
        - app_config:/config
        - ./uploads/images:/var/www/html/Web/uploads/images
-       - ./uploads/reservation:/var/www/html/Web/uploads/reservation
+       - ./uploads/reservation:/var/www/html/uploads/reservation
 
 Background Jobs (Cron)
 ----------------------

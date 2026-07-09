@@ -338,10 +338,10 @@ File Upload Settings
 
    'uploads' => [
        'image.upload.directory' => 'Web/uploads/images',
-       'image.upload.url' => 'Web/uploads/attachments',
+       'image.upload.url' => 'uploads/images',
        'reservation.attachments.enabled' => false,
-       'reservation.attachment.path' => 'Web/uploads/attachments',
-       'reservation.attachment.extensions' => 'pdf,doc,docx,xls,xlsx,png,jpg,jpeg,gif',
+       'reservation.attachment.path' => 'uploads/reservation',
+       'reservation.attachment.extensions' => 'csv,doc,docx,gif,jpeg,jpg,pdf,png,ppt,pptx,txt,xls,xlsx',
    ],
 
 **uploads.image.upload.directory**
