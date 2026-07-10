@@ -414,10 +414,6 @@ img.schedule_icon {
   display: inline-block;
 }
 
-#page-schedule a {
-  text-decoration: none;
-}
-
 .reservations.mobile .reserved {
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;

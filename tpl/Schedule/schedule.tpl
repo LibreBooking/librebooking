@@ -166,7 +166,7 @@
                 </div>
             </div>
 
-            <div id="individualDates" class="collapse">
+            <div id="individualDates" class="collapse mb-3">
                 <div class="d-flex justify-content-center align-items-center mt-2">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type='checkbox' id='multidateselect' />
