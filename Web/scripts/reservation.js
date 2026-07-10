@@ -617,12 +617,16 @@ function Reservation(opts) {
   };
 
   var AdjustEndDate = function () {
-    var firstDate = new Date(elements.beginDate.data['beginPreviousVal'] + 'T' + elements.beginTime.val());
+    var firstDate = new Date(elements.beginDate.data('previousVal') + 'T' + elements.beginTime.val());
     var secondDate = new Date(elements.beginDate.val() + 'T' + elements.beginTime.val());
+    var currentEndDate = new Date(elements.endDate.val() + 'T' + elements.endTime.val());
+
+    // If any date or time field is blank then no adjustment can be made
+    if (isNaN(firstDate.getTime()) || isNaN(secondDate.getTime()) || isNaN(currentEndDate.getTime())) {
+      return;
+    }
 
     var diffDays = (secondDate.getTime() - firstDate.getTime()) / oneDay;
-
-    var currentEndDate = new Date(elements.endDate.val() + 'T' + elements.endTime.val());
     currentEndDate.setDate(currentEndDate.getDate() + diffDays);
 
     elements.endDate[0]._flatpickr.setDate(currentEndDate, true);
@@ -790,9 +794,9 @@ function Reservation(opts) {
     periodsCache['end'] = [];
     var layoutCache = [];
 
-    elements.beginDate.data['beginPreviousVal'] = elements.beginDate.val();
-    elements.endDate.data['endPreviousVal'] = elements.endDate.val();
-    elements.beginTime.data['beginTimePreviousVal'] = elements.beginTime.val();
+    elements.beginDate.data('previousVal', elements.beginDate.val());
+    elements.endDate.data('previousVal', elements.endDate.val());
+    elements.beginTime.data('previousVal', elements.beginTime.val());
 
     function BeginDateChanged() {
       PopulatePeriodDropDown(elements.beginDate, elements.beginTime, 'begin');
@@ -800,14 +804,14 @@ function Reservation(opts) {
       DisplayDuration();
       SelectRepeatWeekday();
 
-      elements.beginDate.data['beginPreviousVal'] = elements.beginDate.val();
+      elements.beginDate.data('previousVal', elements.beginDate.val());
     }
 
     function EndDateChanged() {
       PopulatePeriodDropDown(elements.endDate, elements.endTime, 'end');
       DisplayDuration();
       CalculateCredits();
-      elements.endDate.data['endPreviousVal'] = elements.endDate.val();
+      elements.endDate.data('previousVal', elements.endDate.val());
     }
 
     elements.beginDate.change(function () {
@@ -819,15 +823,12 @@ function Reservation(opts) {
     });
 
     elements.beginTime.change(function () {
-      var diff = dateHelper.GetTimeDifference(
-        elements.beginTime.data['beginTimePreviousVal'],
-        elements.beginTime.val()
-      );
+      var diff = dateHelper.GetTimeDifference(elements.beginTime.data('previousVal'), elements.beginTime.val());
 
       var newTime = dateHelper.AddTimeDiff(diff, elements.endTime.val());
 
       elements.endTime.val(newTime);
-      elements.beginTime.data['beginTimePreviousVal'] = elements.beginTime.val();
+      elements.beginTime.data('previousVal', elements.beginTime.val());
 
       DisplayDuration();
       CalculateCredits();
@@ -876,11 +877,22 @@ function Reservation(opts) {
       return layoutCache[weekday];
     };
 
-    var PopulatePeriodDropDown = function (dateElement, periodElement, type) {
-      var prevDate = new Date(dateElement.data('previousVal'));
-      var currDate = new Date(dateElement.val());
+    // Layouts are fetched per weekday, so skipping 7 days visits every
+    // possible layout; more skips can never find a reservable period.
+    var maxSkippedDays = 7;
 
-      if (prevDate.getTime() === currDate.getTime()) {
+    var PopulatePeriodDropDown = function (dateElement, periodElement, type) {
+      var prevDate = dateHelper.parseYMDDate(dateElement.data('previousVal'));
+      var currDate = dateHelper.parseYMDDate(dateElement.val());
+
+      if (!currDate) {
+        dateElement.data('skippedDays', 0);
+        periodElement.empty();
+        return;
+      }
+
+      if (prevDate && prevDate.getTime() === currDate.getTime()) {
+        dateElement.data('skippedDays', 0);
         return;
       }
 
@@ -889,6 +901,7 @@ function Reservation(opts) {
       var weekday = currDate.getDay();
 
       if (periodsCache[type][weekday] != null) {
+        dateElement.data('skippedDays', 0);
         periodElement.empty();
         periodElement.html(periodsCache[type][weekday]);
         if (selectedPeriod) {
@@ -900,7 +913,7 @@ function Reservation(opts) {
         return;
       }
 
-      var layoutItems = getLayoutItems(scheduleId, dateElement.val());
+      var layoutItems = getLayoutItems(scheduleId, dateElement.val()) || [];
       var items = [];
       periodElement.empty();
       $.map(layoutItems, function (item) {
@@ -923,11 +936,33 @@ function Reservation(opts) {
       });
 
       if (items.length === 0) {
-        var nextDate = new Date(dateElement.val());
-        nextDate.setDate(nextDate.getDate() + 1);
-        dateElement[0]._flatpickr.setDate(nextDate, true);
+        var picker = dateElement[0]._flatpickr;
+        var skippedDays = dateElement.data('skippedDays') || 0;
+
+        if (!picker || skippedDays >= maxSkippedDays) {
+          dateElement.data('skippedDays', 0);
+          return;
+        }
+
+        var nextDate;
+        if (picker.config.minDate && currDate.getTime() < picker.config.minDate.getTime()) {
+          // Before the schedule opens: jump straight to the first selectable day.
+          nextDate = new Date(picker.config.minDate.getTime());
+        } else {
+          nextDate = new Date(currDate.getTime());
+          nextDate.setDate(nextDate.getDate() + 1);
+        }
+
+        if (picker.config.maxDate && nextDate.getTime() > picker.config.maxDate.getTime()) {
+          dateElement.data('skippedDays', 0);
+          return;
+        }
+
+        dateElement.data('skippedDays', skippedDays + 1);
+        picker.setDate(nextDate, true);
         dateElement.trigger('change');
       } else {
+        dateElement.data('skippedDays', 0);
         var html = items.join('');
         periodsCache[type][weekday] = html;
         periodElement.html(html);
