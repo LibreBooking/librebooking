@@ -7,10 +7,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches:
-      - develop
-      - master
   pull_request:
     branches:
       - develop

@@ -7,9 +7,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
@@ -20,7 +17,6 @@ permissions:
 
 jobs:
   lint:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.0
@@ -74,7 +70,6 @@ jobs:
           fi
 
   markdownlint:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
