@@ -11,7 +11,7 @@ $result = (new MicrosoftOAuthCallback())->handle(
     failureRedirectURL: ROOT_DIR . 'Web',
 );
 
-if ($result->isError()) {
+if ($result->hasOAuthErrorResponse()) {
     Log::Error('Microsoft OAuth error: %s - %s', $result->error, $result->getErrorDescription());
 }
 
