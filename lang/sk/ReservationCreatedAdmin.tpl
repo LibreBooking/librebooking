@@ -19,8 +19,8 @@
 		<strong>ID zdroja:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Umiestnenie:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Kontakt:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Popis:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Poznámky:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Popis:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Poznámky:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Správca zdroja:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

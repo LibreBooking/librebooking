@@ -33,8 +33,8 @@
         <strong>Αναγνωριστικό πόρου:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>Τοποθεσία:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>Επικοινωνία:</strong> {$resource.contact|escape}<br/>{/if}
-        {if $resource.description}<strong>Περιγραφή:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-        {if $resource.notes}<strong>Σημειώσεις:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.description}<strong>Περιγραφή:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Σημειώσεις:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
         {if $resource.resourceAdministrator}<strong>Διαχειριστής πόρου:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
         {if $resource.attributeRows|default:array()|count > 0}

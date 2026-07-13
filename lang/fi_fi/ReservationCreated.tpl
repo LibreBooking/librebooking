@@ -16,8 +16,8 @@
 		<strong>Resurssin tunnus:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Sijainti:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Yhteystieto:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Kuvaus:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Huomautukset:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Kuvaus:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Huomautukset:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Resurssin ylläpitäjä:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

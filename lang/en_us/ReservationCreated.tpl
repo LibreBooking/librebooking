@@ -25,8 +25,8 @@
         <strong>Resource ID:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>Location:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>Contact:</strong> {$resource.contact|escape}<br/>{/if}
-        {if $resource.description}<strong>Description:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-        {if $resource.notes}<strong>Notes:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.description}<strong>Description:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Notes:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
         {if $resource.resourceAdministrator}<strong>Resource Administrator:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
         {if $resource.attributeRows|default:array()|count > 0}

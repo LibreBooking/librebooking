@@ -16,8 +16,8 @@ Befejezés: {formatdate date=$EndDate key=reservation_email}<br/>
         <strong>Erőforrás azonosító:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>Helyszín:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>Kapcsolat:</strong> {$resource.contact|escape}<br/>{/if}
-        {if $resource.description}<strong>Leírás:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-        {if $resource.notes}<strong>Megjegyzések:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.description}<strong>Leírás:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Megjegyzések:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
         {if $resource.resourceAdministrator}<strong>Erőforrás rendszergazda:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
         {if $resource.attributeRows|default:array()|count > 0}

@@ -16,8 +16,8 @@
 		<strong>リソースID:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>場所:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>連絡先:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>説明:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>備考:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>説明:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>備考:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>リソース管理者:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

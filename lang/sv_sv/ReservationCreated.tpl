@@ -18,8 +18,8 @@
 		<strong>Resurs-ID:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Plats:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Kontakt:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Beskrivning:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Anteckningar:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Beskrivning:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Anteckningar:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Resursadministratör:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

@@ -16,8 +16,8 @@
 		<strong>Resource-ID:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Locatie:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Contactpersoon:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Beschrijving:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Notities:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Beschrijving:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Notities:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Resourcebeheerder:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

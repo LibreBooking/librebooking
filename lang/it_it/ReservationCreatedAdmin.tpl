@@ -30,8 +30,8 @@
         <strong>ID risorsa:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>Posizione:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>Contatto:</strong> {$resource.contact|escape}<br/>{/if}
-        {if $resource.description}<strong>Descrizione:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-        {if $resource.notes}<strong>Note:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.description}<strong>Descrizione:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>Note:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
         {if $resource.resourceAdministrator}<strong>Amministratore della risorsa:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
         {if $resource.attributeRows|default:array()|count > 0}

@@ -16,8 +16,8 @@
 		<strong>Идентификатор на ресурс:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Местоположение:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Контакт:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Описание:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Бележки:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Описание:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Бележки:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Администратор на ресурса:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}

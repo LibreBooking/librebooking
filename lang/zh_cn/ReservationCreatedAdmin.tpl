@@ -22,8 +22,8 @@
         <strong>资源 ID:</strong> {$resource.id}<br/>
         {if $resource.location}<strong>位置:</strong> {$resource.location|escape}<br/>{/if}
         {if $resource.contact}<strong>联系人:</strong> {$resource.contact|escape}<br/>{/if}
-        {if $resource.description}<strong>说明:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-        {if $resource.notes}<strong>备注:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+        {if $resource.description}<strong>说明:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+        {if $resource.notes}<strong>备注:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
         {if $resource.resourceAdministrator}<strong>资源管理员:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
         {if $resource.attributeRows|default:array()|count > 0}

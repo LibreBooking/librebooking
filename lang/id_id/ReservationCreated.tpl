@@ -16,8 +16,8 @@
 		<strong>ID Sumber Daya:</strong> {$resource.id}<br/>
 		{if $resource.location}<strong>Lokasi:</strong> {$resource.location|escape}<br/>{/if}
 		{if $resource.contact}<strong>Kontak:</strong> {$resource.contact|escape}<br/>{/if}
-		{if $resource.description}<strong>Deskripsi:</strong> {$resource.description|escape|nl2br}<br/>{/if}
-		{if $resource.notes}<strong>Catatan:</strong> {$resource.notes|escape|nl2br}<br/>{/if}
+		{if $resource.description}<strong>Deskripsi:</strong> {$resource.description|sanitize_rich_text|url2link|nl2br}<br/>{/if}
+		{if $resource.notes}<strong>Catatan:</strong> {$resource.notes|sanitize_rich_text|url2link|nl2br}<br/>{/if}
 		{if $resource.resourceAdministrator}<strong>Administrator Sumber Daya:</strong> {$resource.resourceAdministrator|escape}<br/>{/if}
 
 		{if $resource.attributeRows|default:array()|count > 0}
