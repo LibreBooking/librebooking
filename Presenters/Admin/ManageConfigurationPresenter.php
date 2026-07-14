@@ -358,18 +358,9 @@ class ManageConfigurationPresenter extends ActionPresenter
     private function CheckIfScriptUrlMayBeWrong()
     {
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
-        $server = ServiceLocator::GetServer();
-        $currentUrl = $server->GetUrl();
+        $suggestedUrl = ScriptUrlSuggestion::Get($scriptUrl, ServiceLocator::GetServer());
 
-        $maybeWrong = !BookedStringHelper::Contains($scriptUrl, '/Web') && BookedStringHelper::Contains($currentUrl, '/Web');
-        if ($maybeWrong) {
-            $parts = explode('/Web', $currentUrl);
-            $port = $server->GetHeader('SERVER_PORT');
-            $suggestedUrl = ($server->GetIsHttps() ? 'https://' : 'http://')
-                . $server->GetHeader('SERVER_NAME')
-                . ($port == '80' ? '' : $port)
-                . $parts[0]
-                . '/Web';
+        if ($suggestedUrl !== null) {
             $this->page->ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
         }
     }
