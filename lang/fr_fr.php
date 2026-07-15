@@ -1035,7 +1035,7 @@ class fr_fr extends en_gb
         //Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Impossible de voir les détails de la réservation car vous n\'avez pas les autorisations pour l\'un des ressources dans cette réservation';
         //End Schedule Resource Permissions
-        
+
         //View Resource
         $strings['Check'] = 'Vérification';
         $strings['PermissionType'] = 'Type d\'autorisation';
@@ -1046,11 +1046,11 @@ class fr_fr extends en_gb
         $strings['Info'] = 'Affichage de la page _PAGE_ sur _PAGES_ (_MAX_ enregistrements au total)';
         $strings['LengthMenu'] = 'Afficher _MENU_ enregistrements par page';
         //End Datatables
-        
-        
+
+
         //END NEEDS CHECKING
 
-        
+
 
         $this->Strings = $strings;
         return $this->Strings;
