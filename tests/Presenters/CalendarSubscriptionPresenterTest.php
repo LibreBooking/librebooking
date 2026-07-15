@@ -144,6 +144,54 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->assertCount(1, $this->page->Reservations);
     }
 
+    public function testAnonymousUserSubscriptionUsesBearerUrlVisibility()
+    {
+        $publicId = 'user-public-id';
+        $userId = 999;
+        $user = new FakeUser($userId);
+        $user->SetTimezone('America/Chicago');
+        $user->WithPublicId($publicId);
+
+        $reservation = new TestReservationItemView(1, Date::Now(), Date::Now()->AddHours(1));
+        $reservation->UserId = $userId;
+        $reservation->UserLevelId = ReservationUserLevel::OWNER;
+        $reservation->OwnerId = $userId;
+        $reservation->Title = 'Team Meeting';
+        $reservation->Description = 'Planning notes';
+        $reservation->OwnerFirstName = 'Alice';
+        $reservation->OwnerLastName = 'Smith';
+        $reservation->OwnerEmailAddress = 'alice@example.com';
+
+        $this->fakeServer->SetUserSession(new NullUserSession());
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY, '{title}');
+        $this->privacyFilter->_CanViewDetails = false;
+        $this->privacyFilter->_CanViewUser = false;
+
+        $weekAgo = Date::Now()->AddDays(0);
+        $nextYear = Date::Now()->AddDays(30);
+
+        $this->page->UserId = $publicId;
+
+        $this->service->expects($this->once())
+                ->method('GetUser')
+                ->with($this->equalTo($publicId))
+                ->willReturn($user);
+
+        $this->repo->expects($this->once())
+                ->method('GetReservations')
+                ->with($this->equalTo($weekAgo), $this->equalTo($nextYear), $this->equalTo($userId), ReservationUserLevel::ALL, $this->isNull(), $this->isNull())
+                ->willReturn([$reservation]);
+
+        $this->presenter->PageLoad();
+
+        $this->assertFalse($this->fakeServer->GetUserSession()->IsLoggedIn());
+        $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('Team Meeting', $this->page->Reservations[0]->Summary);
+        $this->assertEquals('Planning notes', $this->page->Reservations[0]->Description);
+        $this->assertEquals('Alice Smith', $this->page->Reservations[0]->Organizer);
+    }
+
     public function testGetsResourceGroupReservationsForTheNextYearByGroupId()
     {
         $publicId = '1';
