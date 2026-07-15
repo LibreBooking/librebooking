@@ -164,7 +164,7 @@ class fr_fr extends en_gb
         $strings['QuickSlotCreation'] = 'Créer des créneaux toutes les %s minutes entre %s et %s';
         $strings['ApplyUpdatesTo'] = 'Appliquer les Mises à jour à';
         $strings['CancelParticipation'] = 'Annuler la Participation';
-        $strings['Attending'] = 'Attending';//
+        $strings['Attending'] = 'Présent';//
         $strings['QuotaConfiguration'] = 'Sur %s pour %s les utilisateurs de %s sont limités à %s %s par %s';
         $strings['QuotaEnforcement'] = 'Contrainte %s %s';
         $strings['reservations'] = 'réservations';
@@ -230,7 +230,7 @@ class fr_fr extends en_gb
         $strings['Optional'] = 'optionnel';
         $strings['YourProfileWasUpdated'] = 'Votre compte à été mis à jour';
         $strings['YourSettingsWereUpdated'] = 'Vos préférences ont été mises à jour';
-        $strings['Register'] = 'Enregistrer';
+        $strings['Register'] = 'S\'inscrire';
         $strings['SecurityCode'] = 'Code de Sécurité';
         $strings['ReservationCreatedPreference'] = 'Quand je crée une réservation ou qu\'on la crée en mon nom';
         $strings['ReservationUpdatedPreference'] = 'Quand je mets à jour une réservation ou que quelqu\'un le fait en mon nom';
@@ -244,7 +244,7 @@ class fr_fr extends en_gb
         $strings['ReservationRequiresApproval'] = 'Une ou plusieurs ressources réservées nécessitent une approbation. Cette réservation est donc mise en attente jusqu\'à ce qu\'elle soit approuvée';
         $strings['YourReferenceNumber'] = 'Votre numéro de référence est le %s';
         $strings['ChangeUser'] = 'Changer d\'Utilisateur';
-        $strings['MoreResources'] = '+ de  Resources';
+        $strings['MoreResources'] = '+ de ressources';
         $strings['ReservationLength'] = 'Durée de la réservation :';
         $strings['ParticipantList'] = 'Liste des participants';
         $strings['AddParticipants'] = 'Ajouter des Participants';
@@ -276,7 +276,8 @@ class fr_fr extends en_gb
         $strings['Browse'] = 'Parcourir';
         $strings['DeleteGroupWarning'] = 'Effacer ce groupe supprimera toutes les permissions de ressources associées. Les utilisateurs concernés pourraient perdre l\'acces à ces ressources.';
         $strings['WhatRolesApplyToThisGroup'] = 'Quel rôles appliquer à ce groupe?';
-        $strings['WhoCanManageThisGroup'] = 'Qui gère ce groupe?';
+        $strings['WhoCanManageThisGroup'] = 'Qui peut gérer ce groupe?';
+        $strings['WhoCanManageThisSchedule'] = 'Qui peut gérer cet horaire ?';
         $strings['AddGroup'] = 'Ajouter un Groupe';
         $strings['AllQuotas'] = 'Tous les Quotas';
         $strings['QuotaReminder'] = 'Attention: les Quotas sont forcément basés sur le fuseau horaire du planning.';
@@ -468,7 +469,8 @@ class fr_fr extends en_gb
         $strings['AddReservationColorRule'] = 'Ajouter une Règle de Couleur pour les Réservations';
         $strings['LimitAttributeScope'] = 'Afficher dans des Cas Spécifiques';
         $strings['CollectFor'] = 'Afficher pour';
-        $strings['SignIn'] = 'Connexion';
+        $strings['SignIn'] = 'Se connecter';
+        $strings['SignInWith'] = 'Se connecter avec';
         $strings['AllParticipants'] = 'Tous les Participants';
         $strings['RegisterANewAccount'] = 'Enregistrer un Nouveau Compte';
         $strings['Dates'] = 'Dates';
@@ -509,15 +511,15 @@ class fr_fr extends en_gb
         $strings['RequiresApproval'] = 'Nécessite un accord';
         $strings['CheckingIn'] = 'Check In';
         $strings['CheckingOut'] = 'Check Out';
-        $strings['CheckIn'] = 'Check In';
-        $strings['CheckOut'] = 'Check Out';
+        $strings['CheckIn'] = 'Arrivée';
+        $strings['CheckOut'] = 'Départ';
         $strings['ReleasedIn'] = 'Libéré en';
-        $strings['CheckedInSuccess'] = 'Check in réussi';
-        $strings['CheckedOutSuccess'] = 'Check out réussi';
-        $strings['CheckInFailed'] = 'Echec de check in';
-        $strings['CheckOutFailed'] = 'Echec de check out';
-        $strings['CheckInTime'] = 'Heure de Check In';
-        $strings['CheckOutTime'] = 'Heure de Check Out';
+        $strings['CheckedInSuccess'] = 'Arrivée confirmée';
+        $strings['CheckedOutSuccess'] = 'Départ confirmé';
+        $strings['CheckInFailed'] = 'Arrivée manquée';
+        $strings['CheckOutFailed'] = 'Départ manqué';
+        $strings['CheckInTime'] = 'Heure d\'arrivée';
+        $strings['CheckOutTime'] = 'Heure de départ';
         $strings['OriginalEndDate'] = 'Date de fin d\'origine';
         $strings['SpecificDates'] = 'Montres Dates Spécifiques';
         $strings['Users'] = 'Utilisateurs';
@@ -568,20 +570,20 @@ class fr_fr extends en_gb
         $strings['NameOrEmail'] = 'nom ou email';
         $strings['ImportResources'] = 'Importer Ressources';
         $strings['ExportResources'] = 'Exporter Ressources';
-        $strings['ResourceImportInstructions'] = '<ul><li>Le fichier doit être au format CSV avec un encodage UTF-8.</li><li>Le nom est un champ obligatoire. Les champs non remplis auront des valeurs par défaut.</li><li>Les options de Statut sont \'Disponible\', \'Undisponible\' et \'Masqué\'.</li><li>Le code couleur devrait être une valeur hex. ex) #ffffff.</li><li>Les colonnes Auto-affectation et validation peuvent prendre les valeur vrai ou faux.</li><li>La validation des attributs ne sera pas appliquée.</li><li>La virgule sépare les groupes de ressources.</li><li>Les durées peuvent être saisies au format #d#h#m ou HH:mm (1d3h30m ou 27:30 pour 1 jour, 3 heures, 30 minutes)</li><li>Utiliser le modèle fourni comme exemple.</li></ul>';
+        $strings['ResourceImportInstructions'] = '<ul><li>Le fichier doit être au format CSV avec un encodage UTF-8.</li><li>Le nom est un champ obligatoire. Les champs non remplis auront des valeurs par défaut.</li><li>Les options de Statut sont \'Disponible\', \'Indisponible\' et \'Masqué\'.</li><li>Le code couleur devrait être une valeur hex. ex) #ffffff.</li><li>Les colonnes Auto-affectation et validation peuvent prendre les valeur vrai ou faux.</li><li>La validation des attributs ne sera pas appliquée.</li><li>La virgule sépare les groupes de ressources.</li><li>Les durées peuvent être saisies au format #d#h#m ou HH:mm (1d3h30m ou 27:30 pour 1 jour, 3 heures, 30 minutes)</li><li>Utiliser le modèle fourni comme exemple.</li></ul>';
         $strings['ReservationImportInstructions'] = '<ul><li>Le fichier doit être au format CSV avec un encodage UTF-8.</li><li>Les champs email, noms de ressources, début et fin sont obligatoires.</li><li>Début et fin requèrent une date complète. Le format recommandé est AAAA-mm-jj HH:mm (2017-12-31 20:30).</li><li>Les règles, conflits, et périodes de temps valides ne seront pas vérifiés.</li><li>Les notifications ne seront pas envoyées.</li><li>La validation des attributs ne sera pas appliquée.</li><li>La virgule sépare les groupes de ressources.</li><li>Utiliser le modèle fourni comme exemple.</li></ul>';
-        $strings['AutoReleaseMinutes'] = 'Autorelease Minutes';
+        $strings['AutoReleaseMinutes'] = 'Minutes avant libération automatique';
         $strings['CreditsPeak'] = 'Crédits (affluence)';
         $strings['CreditsOffPeak'] = 'Crédits (hors affluence)';
         $strings['ResourceMinLengthCsv'] = 'Durée Minimum de Réservation';
         $strings['ResourceMaxLengthCsv'] = 'Durée Maximum de Réservation';
-        $strings['ResourceBufferTimeCsv'] = 'Buffer Time';
-        $strings['ResourceMinNoticeAddCsv'] = 'Reservation Add Minimum Notice';
-        $strings['ResourceMinNoticeUpdateCsv'] = 'Reservation Update Minimum Notice';
-        $strings['ResourceMinNoticeDeleteCsv'] = 'Reservation Delete Minimum Notice';
+        $strings['ResourceBufferTimeCsv'] = 'Temps tampon';
+        $strings['ResourceMinNoticeAddCsv'] = 'Préavis minimum d\'ajout de réservation';
+        $strings['ResourceMinNoticeUpdateCsv'] = 'Préavis minimum de modification de réservation';
+        $strings['ResourceMinNoticeDeleteCsv'] = 'Préavis minimum de suppression de réservation';
         $strings['ResourceMaxNoticeCsv'] = 'Fin de Réservation Maximum';
         $strings['Export'] = 'Exporter';
-        $strings['DeleteMultipleUserWarning'] = 'La suppression de ces utilisateurs entraînera la suppression  de toutes leurs réservations présentes, futures et passées. Aucun email ne sera envoyé.';
+        $strings['DeleteMultipleUserWarning'] = 'La suppression de ces utilisateurs entraînera la suppression de toutes leurs réservations présentes, futures et passées. Aucun email ne sera envoyé.';
         $strings['DeleteMultipleReservationsWarning'] = 'Aucun emailne sera envoyé.';
         $strings['ErrorMovingReservation'] = 'Erreur de déplacement de Réservation';
         $strings['SelectUser'] = 'Selectionner Utilisateur';
@@ -606,14 +608,14 @@ class fr_fr extends en_gb
         $strings['PayPalSecret'] = 'Secret';
         $strings['PayPalEnvironment'] = 'Environnement';
         $strings['Sandbox'] = 'Bac à sable';
-        $strings['Live'] = 'Live';
+        $strings['Live'] = 'Production';
         $strings['StripePublishableKey'] = 'Clef Publiable';
         $strings['StripeSecretKey'] = 'Clef Secrète';
         $strings['CreditsUpdated'] = 'Le coût du crédit a été mis à jour';
         $strings['GatewaysUpdated'] = 'Les passerelles de paiement ont été mises-à-jour';
         $strings['PurchaseSummary'] = 'Résumé des Achats';
         $strings['EachCreditCosts'] = 'Chaque crédit coûte';
-        $strings['Checkout'] = 'Checkout';
+        $strings['Checkout'] = 'Paiement';
         $strings['Quantity'] = 'Quantité';
         $strings['CreditPurchase'] = 'Achat de Crédit';
         $strings['EmptyCart'] = 'Votre charriot est vide.';
@@ -662,18 +664,18 @@ class fr_fr extends en_gb
         $strings['GroupAutomaticallyAdd'] = 'Ajout Automatique';
         $strings['TermsOfService'] = 'Termes du Service';
         $strings['EnterTermsManually'] = 'Saisir Manuellement les Termes';
-        $strings['LinkToTerms'] = 'Lien Vers les Termes';
-        $strings['UploadTerms'] = 'Télécharger les Termes';
-        $strings['RequireTermsOfServiceAcknowledgement'] = 'Requérir l\'acceptation des Termes du Service';
-        $strings['UponReservation'] = 'A la Reservation';
-        $strings['UponRegistration'] = 'A l\'Enregistrement';
-        $strings['ViewTerms'] = 'Voir les Termes du Service';
-        $strings['IAccept'] = 'J\'Accepte';
-        $strings['TheTermsOfService'] = 'les Termes du Service';
-        $strings['DisplayPage'] = 'Afficher la Page';
+        $strings['LinkToTerms'] = 'Lien vers les termes';
+        $strings['UploadTerms'] = 'Télécharger les termes';
+        $strings['RequireTermsOfServiceAcknowledgement'] = 'Requérir l\'acceptation des Termes du service';
+        $strings['UponReservation'] = 'A la réservation';
+        $strings['UponRegistration'] = 'A l\'inscription';
+        $strings['ViewTerms'] = 'Voir les Termes du service';
+        $strings['IAccept'] = 'J\'accepte';
+        $strings['TheTermsOfService'] = 'les Termes du service';
+        $strings['DisplayPage'] = 'Afficher la page';
         $strings['AvailableAllYear'] = 'Toute l\'année';
         $strings['Availability'] = 'Disponibilité';
-        $strings['AvailableBetween'] = 'Disponible Entre';
+        $strings['AvailableBetween'] = 'Disponible entre';
         $strings['ConcurrentYes'] = 'Les ressources peuvent être réservées par plusieurs personnes simultanément';
         $strings['ConcurrentNo'] = 'Les ressources ne peuvent pas être réservées par plusieurs personnes simultanément';
         $strings['ScheduleAvailabilityEarly'] = ' Ce planning n\'est pas encore disponible. Il est disponible';
@@ -706,9 +708,9 @@ class fr_fr extends en_gb
         $strings['Standard'] = 'Standard';
         $strings['Wide'] = 'Large';
         $strings['Tall'] = 'Long';
-        $strings['EmailTemplate'] = 'Modèle d\'Email';
-        $strings['SelectEmailTemplate'] = 'Selectionner un Modèle d\'Email';
-        $strings['ReloadOriginalContents'] = 'Recharger le Contenu Initial';
+        $strings['EmailTemplate'] = 'Modèle d\'email';
+        $strings['SelectEmailTemplate'] = 'Selectionner un modèle d\'email';
+        $strings['ReloadOriginalContents'] = 'Recharger le contenu initial';
         $strings['UpdateEmailTemplateSuccess'] = 'Modèle d\'email mis à jour';
         $strings['UpdateEmailTemplateFailure'] = 'Mise à jour de modèle d\'email impossible. Vérifier que le dossier est accessible en écriture.';
         $strings['BulkResourceDelete'] = 'Suppression en masse de Ressources';
@@ -722,8 +724,8 @@ class fr_fr extends en_gb
         $strings['AdHocMeeting'] = 'Meeting Impromptu';
         $strings['NextReservation'] = 'Réservation suivante';
         $strings['CurrentReservation'] = 'Réservation actuelle';
-        $strings['MissedCheckin'] = 'Check-in Raté';
-        $strings['MissedCheckout'] = 'Check-out Raté';
+        $strings['MissedCheckin'] = 'Arrivée manquée';
+        $strings['MissedCheckout'] = 'Départ manqué';
         $strings['Utilization'] = 'Utilisation';
         $strings['SpecificTime'] = 'Heure Spécifique';
         $strings['ReservationSeriesEndingPreference'] = 'quand ma série de réservations récurrentes s\'achève';
@@ -735,8 +737,8 @@ class fr_fr extends en_gb
         $strings['New'] = 'Nouveau';
         $strings['Updated'] = 'Mis à jour';
         $strings['Custom'] = 'Personalisé';
-        $strings['AddDate'] = 'Ajouter Date';
-        $strings['RepeatOn'] = 'Répéter Le';
+        $strings['AddDate'] = 'Ajouter une date';
+        $strings['RepeatOn'] = 'Répéter le';
         $strings['ScheduleConcurrentMaximum'] = 'Un total de <b>%s</b> ressources peuvent être réservées simultanément';
         $strings['ScheduleConcurrentMaximumNone'] = 'Il n\'y a pas de limite au nombre de réservations simultanées de ressources';
         $strings['ScheduleMaximumConcurrent'] = 'Nombre maximum de réservations simultanées de ressources';
@@ -785,6 +787,7 @@ class fr_fr extends en_gb
         $strings['CreateDatabase'] = 'Créer la base de données';
         $strings['CreateDatabaseUser'] = 'Créer le compte utilisateur de la base';
         $strings['PopulateExampleData'] = 'Importer des exemples de données. Cela va créer le compte administrateur: admin/password et le compte utilisateur: user/password';
+        $strings['PopulateLargeExampleData'] = 'Importer également un grand jeu de données d\'exemple. Ajoute plus d\'utilisateurs, de ressources, de groupes et de réservations pour des tests réalistes';
         $strings['DataWipeWarning'] = 'Attention: cela va effacer toutes les données existantes';
         $strings['RunInstallation'] = 'Effectuer l\'installation';
         $strings['UpgradeNotice'] = 'Vous effectuez une mise à jour de la version <b>%s</b> vers la version <b>%s</b>';
@@ -862,10 +865,10 @@ class fr_fr extends en_gb
         $strings['DescriptionRequiredRule'] = 'La description de la réservation est requise';
         $strings['WhatCanThisGroupManage'] = 'Que peut gérer ce groupe?';
         $strings['ReservationParticipationActivityPreference'] = 'quand quelqu\'un rejoint ou quitte ma réservation';
-        $strings['RegisteredAccountRequired'] = 'Seuls les utilisateurs enregistrés peuvent effectuer des réservations';
+        $strings['RegisteredAccountRequired'] = 'Seuls les utilisateurs inscrits peuvent effectuer des réservations';
         $strings['InvalidNumberOfResourcesError'] = 'Le nombre maximum de ressources qui peuvent être allouées dans une réservation est %s';
         $strings['ScheduleTotalReservationsError'] = 'Ce planning autorise uniquement %s ressources simultanées. Cette réservation violerait cette limite aux dates suivantes:';
-        $strings['SelfRegistrationDisabled'] = 'Utilisateur non enregistré et l\'auto-inscription est désactivée. Veuillez contacter un administrateur pour créer votre compte.';
+        $strings['SelfRegistrationDisabled'] = 'Utilisateur non inscrit et auto-inscription est désactivée. Veuillez contacter un administrateur pour créer votre compte.';
         // End Errors
 
         // Page Titles
@@ -928,6 +931,8 @@ class fr_fr extends en_gb
         $strings['ViewCalendar'] = 'Voir le Calendrier';
         $strings['DataCleanup'] = 'Nettoyage des données';
         $strings['ManageEmailTemplates'] = 'Gérer les Modèles de Email';
+        $strings['CheckResources'] = 'Vérifier les ressources';
+        $strings['CheckSchedules'] = 'Vérifier les horaires';
         // End Page Titles
 
         // Day representations
@@ -956,6 +961,7 @@ class fr_fr extends en_gb
         $strings['ReservationCreatedAdminSubject'] = 'Notification: Une réservation a été créée';
         $strings['ReservationUpdatedAdminSubject'] = 'Notification: Une réservation a été mise à jour';
         $strings['ReservationDeleteAdminSubject'] = 'Notification: Une réservation a été effacée';
+        $strings['ReservationApprovalAdminSubject'] = 'Notification : une réservation nécessite votre approbation';
         $strings['ParticipantAddedSubject'] = 'Notication de Participation à une Réservation';
         $strings['ParticipantDeletedSubject'] = 'Réservation Effacée';
         $strings['InviteeAddedSubject'] = 'Invitation à une Réservation';
@@ -971,7 +977,7 @@ class fr_fr extends en_gb
         $strings['AccountCreatedSubject'] = 'Détail de votre compte %s';
         $strings['InviteUserSubject'] = '%s vous a invité à rejoindre %s';
 
-        $strings['ReservationApprovedSubjectWithResource'] = 'Réservation  approuvé pour %s';
+        $strings['ReservationApprovedSubjectWithResource'] = 'Réservation approuvée pour %s';
         $strings['ReservationCreatedSubjectWithResource'] = 'Réservation créée pour %s';
         $strings['ReservationUpdatedSubjectWithResource'] = 'Réservation mise à jour pour %s';
         $strings['ReservationDeletedSubjectWithResource'] = 'Réservation supprimée pour %s';
@@ -1018,19 +1024,33 @@ class fr_fr extends en_gb
         $strings['PendingApprovalReservations'] = 'Réservations en attente d\'approbation';
         $strings['LaterThisMonth'] = 'Plus tard ce mois-ci';
         $strings['LaterThisYear'] = 'Plus tard cette année';
-        $strings['Remaining'] = 'Restant';
+        $strings['Other'] = 'Autre';
         //End Pending Approval Reservations in Dashboard
 
         //Missing Check In/Out Reservations in Dashboard
-        $strings['NoMissingCheckOutReservations'] = 'Il n\'y a pas de réservations de départ manquantes';
-        $strings['MissingCheckOutReservations'] = 'Réservations de départ manquantes';
+        $strings['NoMissingCheckOutReservations'] = 'Il n\'y a pas de réservations avec départ manquant';
+        $strings['MissingCheckOutReservations'] = 'Réservations avec départ manquant';
         //End Missing Check In/Out Reservations in Dashboard
 
         //Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Impossible de voir les détails de la réservation car vous n\'avez pas les autorisations pour l\'un des ressources dans cette réservation';
         //End Schedule Resource Permissions
+        
+        //View Resource
+        $strings['Check'] = 'Vérification';
+        $strings['PermissionType'] = 'Type d\'autorisation';
+        $strings['NoResourcesToView'] = 'Aucune ressource disponible';
+        //End View Resource
+
+        //Datatables
+        $strings['Info'] = 'Affichage de la page _PAGE_ sur _PAGES_ (_MAX_ enregistrements au total)';
+        $strings['LengthMenu'] = 'Afficher _MENU_ enregistrements par page';
+        //End Datatables
+        
+        
         //END NEEDS CHECKING
 
+        
 
         $this->Strings = $strings;
         return $this->Strings;
