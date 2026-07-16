@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Lib\Application\Authentication\MicrosoftOAuthCallback;
+use lib\Application\Authentication\MicrosoftOAuthCallback;
 
 class MicrosoftOAuthCallbackTest extends TestBase
 {
