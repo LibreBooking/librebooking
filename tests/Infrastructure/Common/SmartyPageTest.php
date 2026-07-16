@@ -6,6 +6,28 @@ require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 class SmartyPageTest extends TestBase
 {
+    public function testGlobalHeaderDisplaysWarningWhenScriptUrlIsEmpty(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('ScriptUrl', '');
+
+        $output = $page->fetch('globalheader.tpl');
+
+        $this->assertStringContainsString('id="script-url-warning"', $output);
+        $this->assertStringContainsString('ScriptUrlNotConfigured', $output);
+    }
+
+    public function testGlobalHeaderDoesNotDisplayWarningWhenScriptUrlIsConfigured(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('ScriptUrl', 'https://librebooking.example/Web');
+
+        $output = $page->fetch('globalheader.tpl');
+
+        $this->assertStringNotContainsString('id="script-url-warning"', $output);
+        $this->assertStringNotContainsString('ScriptUrlNotConfigured', $output);
+    }
+
     public function testCreateUrlLinkifiesHttpAndHttpsUrls(): void
     {
         $page = new SmartyPage();

@@ -117,6 +117,13 @@
         </div>
     </noscript>
 
+    {* Alert everyone if `script.url` is unset as it will cause issues. *}
+    {if !isset($ScriptUrl) || $ScriptUrl eq ''}
+        <div id="script-url-warning" class="alert alert-danger text-center m-2" role="alert">
+            {translate key="ScriptUrlNotConfigured"}
+        </div>
+    {/if}
+
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
