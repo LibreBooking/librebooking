@@ -451,7 +451,7 @@ class fr_fr extends en_gb
         $strings['Available'] = 'Disponible';
         $strings['Unavailable'] = 'Indisponible';
         $strings['Hidden'] = 'Caché';
-        $strings['ResourceStatus'] = 'Statut de la resource';
+        $strings['ResourceStatus'] = 'Statut de la ressource';
         $strings['CurrentStatus'] = 'Statut Actuel';
         $strings['AllReservationResources'] = 'Toutes les ressources de la réservation';
         $strings['File'] = 'Fichier';
@@ -473,7 +473,7 @@ class fr_fr extends en_gb
         $strings['SignIn'] = 'Se connecter';
         $strings['SignInWith'] = 'Se connecter avec';
         $strings['AllParticipants'] = 'Tous les participants';
-        $strings['RegisterANewAccount'] = 'Enregistrer un nouveau Compte';
+        $strings['RegisterANewAccount'] = 'Enregistrer un nouveau compte';
         $strings['Dates'] = 'Dates';
         $strings['More'] = 'Plus';
         $strings['ResourceAvailability'] = 'Disponibilité des ressources';
@@ -508,7 +508,7 @@ class fr_fr extends en_gb
         $strings['DateTime'] = 'Date Heure';
         $strings['AutoReleaseNotification'] = 'Libéré automatiquement dans %s minutes sans confirmation';
         $strings['RequiresCheckInNotification'] = 'Nécessite une notification d\'arrivée';
-        $strings['NoCheckInRequiredNotification'] = 'Ne nécessite pas une notification d\'arrivée';
+        $strings['NoCheckInRequiredNotification'] = 'Ne nécessite pas de notification d\'arrivée';
         $strings['RequiresApproval'] = 'Nécessite un accord';
         $strings['CheckingIn'] = 'Valider l\'arrivée';
         $strings['CheckingOut'] = 'Valider le départ';
@@ -522,15 +522,15 @@ class fr_fr extends en_gb
         $strings['CheckInTime'] = 'Heure d\'arrivée';
         $strings['CheckOutTime'] = 'Heure de départ';
         $strings['OriginalEndDate'] = 'Date de fin d\'origine';
-        $strings['SpecificDates'] = 'Afficher des Dates Spécifiques';
+        $strings['SpecificDates'] = 'Afficher des dates spécifiques';
         $strings['Users'] = 'Utilisateurs';
         $strings['Guest'] = 'Invité';
         $strings['ResourceDisplayPrompt'] = 'Ressource à afficher';
         $strings['Credits'] = 'Crédits';
-        $strings['AvailableCredits'] = 'Crédits Disponibles';
+        $strings['AvailableCredits'] = 'Crédits disponibles';
         $strings['CreditUsagePerSlot'] = 'Nécessite %s crédits par créneau (hors affluence)';
         $strings['PeakCreditUsagePerSlot'] = 'Nécessite %s crédits par créneau (affluence)';
-        $strings['CreditsRule'] = 'Vous n\'avez pas suffisamment de crédits. Crédits requis: %s. Crédits comptabilisés: %s';
+        $strings['CreditsRule'] = 'Vous n\'avez pas suffisamment de crédits. Crédits requis : %s. Crédits comptabilisés : %s';
         $strings['PeakTimes'] = 'Heures d\'affluence';
         $strings['AllYear'] = 'Toute l\'année';
         $strings['MoreOptions'] = 'Plus d\'options';
