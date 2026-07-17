@@ -142,15 +142,15 @@ class fr_fr extends en_gb
         $strings['ResourceNotAllowMultiDay'] = 'Les réservations ne peuvent pas être à cheval sur plusieurs jours';
         $strings['ResourceCapacity'] = 'Cette ressource a une capacité de %s personne(s)';
         $strings['ResourceCapacityNone'] = 'Cette ressource a une capacité non limitée';
-        $strings['AddNewResource'] = 'Ajouter une nouvelle Ressource';
-        $strings['AddNewUser'] = 'Ajouter un nouvel Utilisateur';
+        $strings['AddNewResource'] = 'Ajouter une nouvelle ressource';
+        $strings['AddNewUser'] = 'Ajouter un nouvel utilisateur';
         $strings['AddResource'] = 'Ajouter une ressource';
         $strings['Capacity'] = 'Capacité';
         $strings['Access'] = 'Accès';
         $strings['Duration'] = 'Durée';
         $strings['Active'] = 'Actif';
         $strings['Inactive'] = 'Inactif';
-        $strings['ResetPassword'] = 'Réinitialiser le mot de Passe';
+        $strings['ResetPassword'] = 'Réinitialiser le mot de passe';
         $strings['LastLogin'] = 'Dernière connexion';
         $strings['Search'] = 'Chercher';
         $strings['ResourcePermissions'] = 'Permissions de la ressource';
@@ -160,7 +160,7 @@ class fr_fr extends en_gb
         $strings['AllUsers'] = 'Tous les utilisateurs';
         $strings['AllGroups'] = 'Tous les groupes';
         $strings['AllSchedules'] = 'Tous les plannings';
-        $strings['UsernameOrEmail'] = 'Nom d\'utilisateur ou Email';
+        $strings['UsernameOrEmail'] = 'Nom d\'utilisateur ou email';
         $strings['Members'] = 'Membres';
         $strings['QuickSlotCreation'] = 'Créer des créneaux toutes les %s minutes entre %s et %s';
         $strings['ApplyUpdatesTo'] = 'Appliquer les mises à jour à';
