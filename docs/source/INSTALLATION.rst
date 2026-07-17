@@ -89,6 +89,18 @@ minimal default settings which should be enough for the application to work.
 Copy ``/config/config.dist.php`` to ``/config/config.php`` and adjust
 the settings for your environment.
 
+Set ``script.url`` to the public URL of LibreBooking's ``Web`` directory. For
+example:
+
+.. code-block:: php
+
+    'script.url' => 'https://example.com/librebooking/Web',
+
+If ``script.url`` is empty, LibreBooking displays a persistent configuration
+warning to all users because some application features will not work
+correctly. Docker and other environment-based deployments can set the same
+value with ``LB_SCRIPT_URL``.
+
 For detailed information on all configuration options, see :doc:`BASIC-CONFIGURATION`
 for essential settings or :doc:`ADVANCED-CONFIGURATION` for comprehensive options.
 

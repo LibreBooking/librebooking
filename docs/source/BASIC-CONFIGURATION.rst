@@ -291,13 +291,21 @@ Frontend Settings
 
 .. code-block:: php
 
-   'script.url' => '',
+   'script.url' => 'https://example.com/librebooking/Web',
    'css.theme' => 'default',
    'cache.templates' => true,
    'default.homepage' => 1,
 
 **script.url**
-  Public URL to the Web directory of this instance.
+  Public URL to the ``Web`` directory of this instance. For example, if
+  LibreBooking is accessed at ``https://example.com/librebooking/Web/``, set
+  this value to ``https://example.com/librebooking/Web``. The equivalent
+  environment variable is ``LB_SCRIPT_URL``.
+
+  This setting must not be empty. When it is empty, LibreBooking displays a
+  persistent configuration warning to authenticated and anonymous users
+  because application links and other features may not work correctly. Set
+  ``script.url`` (or ``LB_SCRIPT_URL``) to dismiss the warning.
 
 **css.theme**
   Theme to use for the application. Options: default, dimgray, dark_red,
