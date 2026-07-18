@@ -141,6 +141,47 @@ class LoginPresenterTest extends TestBase
         $this->assertEquals(Pages::UrlFromId(Pages::DEFAULT_HOMEPAGE_ID), $this->page->_LastRedirect);
     }
 
+    public function testMicrosoftUrlIncludesResumeUrlAsState()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID, 'tenant');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI, 'https://booked.example/Web/external-auth.php');
+
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertStringContainsString(
+            'state=' . rawurlencode('/Web/reservation.php?rn=123'),
+            $this->page->_MicrosoftUrl
+        );
+    }
+
+    public function testMicrosoftUrlOmitsStateWhenNoResumeUrl()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID, 'tenant');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI, 'https://booked.example/Web/external-auth.php');
+
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        $this->assertStringNotContainsString('state=', $this->page->_MicrosoftUrl);
+    }
+
+    public function testMicrosoftUrlNotSetWhenMicrosoftLoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_MicrosoftUrl);
+    }
+
     public function testPageLoadSetsVariablesCorrectly()
     {
         $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'true');
@@ -307,6 +348,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_Languages = [];
     public $_UseLogonName = false;
     public $_ResumeUrl = '';
+    public $_MicrosoftUrl;
     public $_ShowLoginError = false;
     public $_LoginErrorMessage = null;
     public $_requestedLanguage;
@@ -325,6 +367,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function SetMicrosoftUrl($URL)
     {
+        $this->_MicrosoftUrl = $URL;
     }
 
     public function SetFacebookUrl($URL)

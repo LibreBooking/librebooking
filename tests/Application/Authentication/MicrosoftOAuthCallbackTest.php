@@ -19,7 +19,7 @@ class MicrosoftOAuthCallbackTest extends TestBase
     public function testSuccessRedirectsToExternalAuthWithCode(): void
     {
         $result = $this->msAuthHandler->handle(
-            ['code' => 'abc123', 'state' => 'xyz'],
+            ['code' => 'abc123'],
             $this->externalAuthUrl,
             $this->failureRedirectURL,
         );
@@ -30,6 +30,50 @@ class MicrosoftOAuthCallbackTest extends TestBase
             'http://localhost/external-auth.php?type=microsoft&code=abc123',
             $result->redirectURL,
         );
+    }
+
+    public function testSuccessWithStateAppendsRedirectParam(): void
+    {
+        $result = $this->msAuthHandler->handle(
+            ['code' => 'abc123', 'state' => '/Web/reservation.php?rn=123'],
+            $this->externalAuthUrl,
+            $this->failureRedirectURL,
+        );
+
+        $this->assertFalse($result->hasOAuthErrorResponse());
+        $this->assertFalse($result->isMalformedRequest());
+        $this->assertEquals(
+            'http://localhost/external-auth.php?type=microsoft&code=abc123'
+                . '&redirect=' . urlencode('/Web/reservation.php?rn=123'),
+            $result->redirectURL,
+        );
+    }
+
+    public function testSuccessWithEmptyStateOmitsRedirectParam(): void
+    {
+        $result = $this->msAuthHandler->handle(
+            ['code' => 'abc123', 'state' => ''],
+            $this->externalAuthUrl,
+            $this->failureRedirectURL,
+        );
+
+        $this->assertEquals(
+            'http://localhost/external-auth.php?type=microsoft&code=abc123',
+            $result->redirectURL,
+        );
+    }
+
+    public function testNonStringStateIsMalformedRequest(): void
+    {
+        $result = $this->msAuthHandler->handle(
+            ['code' => 'abc123', 'state' => ['x']],
+            $this->externalAuthUrl,
+            $this->failureRedirectURL,
+        );
+
+        $this->assertTrue($result->isMalformedRequest());
+        $this->assertFalse($result->hasOAuthErrorResponse());
+        $this->assertEquals($this->failureRedirectURL, $result->redirectURL);
     }
 
     public function testSuccessUrlEncodesCode(): void

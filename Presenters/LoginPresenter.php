@@ -138,7 +138,7 @@ class LoginPresenter
         $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
         $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
-        $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl() : null);
+        $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
         $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
         $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
@@ -309,7 +309,7 @@ class LoginPresenter
      * Checks in the config files if microsoft authentication is active creating the url if true with the respective keys
      * Returns the created microsoft url for the authentication
      */
-    public function GetMicrosoftUrl()
+    public function GetMicrosoftUrl(?string $state = null)
     {
 
         $tenantId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID);
@@ -325,8 +325,12 @@ class LoginPresenter
             'prompt' => 'select_account'
         ];
 
-        $MicrosoftUrl = $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-        return $MicrosoftUrl;
+        if (!empty($state)) {
+            $params['state'] = $state;
+        }
+
+        return $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
     }
 
     /**

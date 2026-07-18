@@ -89,11 +89,12 @@ class MicrosoftOAuthCallback
     {
         $error = $params['error'] ?? null;
         $code = $params['code'] ?? null;
+        $state = $params['state'] ?? null;
 
         // A non-string value for a recognized parameter (e.g. ?error[]=x) is
         // not a shape Azure sends; treat the whole request as malformed
         // instead of interpreting the remaining parameters.
-        if (($error !== null && !is_string($error)) || ($code !== null && !is_string($code))) {
+        if (($error !== null && !is_string($error)) || ($code !== null && !is_string($code)) || ($state !== null && !is_string($state))) {
             return MicrosoftOAuthCallbackResult::malformedRequest($failureRedirectURL);
         }
 
@@ -108,6 +109,9 @@ class MicrosoftOAuthCallback
 
         if (is_string($code) && $code !== '') {
             $url = $externalAuthUrl . '?type=microsoft&code=' . urlencode($code);
+            if (is_string($state) && $state !== '') {
+                $url .= '&redirect=' . urlencode($state);
+            }
             return MicrosoftOAuthCallbackResult::success($url);
         }
 
