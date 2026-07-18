@@ -202,6 +202,33 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
+    public function testImportUsersIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $this->manageUsersService->expects($this->never())
+                                 ->method('AddUser');
+        $this->manageUsersService->expects($this->never())
+                                 ->method('LoadUser');
+
+        $this->presenter->ImportUsers();
+
+        $this->assertEquals(0, $this->page->_ImportResult->importCount);
+        $this->assertEquals(['User is not an admin'], $this->page->_ImportResult->messages);
+    }
+
+    public function testInviteUsersIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_InvitedEmails = 'invitee@email.com';
+
+        $this->presenter->InviteUsers();
+
+        $this->assertEquals(0, count($this->fakeEmailService->_Messages));
+    }
+
     public function testResetPasswordDelegatesToService()
     {
         $password = 'password';
@@ -477,6 +504,14 @@ class ManageUsersPresenterTest extends TestBase
 class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 {
     /**
+     * @var CsvImportResult
+     */
+    public $_ImportResult;
+    /**
+     * @var string
+     */
+    public $_InvitedEmails = '';
+    /**
      * @var int
      */
     public $_UserId;
@@ -726,12 +761,12 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function SetImportResult($importResult)
     {
-        // TODO: Implement SetImportResult() method.
+        $this->_ImportResult = $importResult;
     }
 
     public function GetInvitedEmails()
     {
-        return '';
+        return $this->_InvitedEmails;
     }
 
     public function ShowExportCsv()

@@ -17,7 +17,7 @@ interface IManageUsersService
      * @param $homePageId int
      * @param $extraAttributes array|string[]
      * @param $customAttributes array|AttributeValue[]
-     * @return User
+     * @return User|null null when the current session is not an application administrator
      */
     public function AddUser(
         $username,
@@ -41,7 +41,7 @@ interface IManageUsersService
      * @param $timezone string
      * @param $extraAttributes string[]|array
      * @param $customAttributes AttributeValue[]
-     * @return User
+     * @return User|null null when the current session is not an application administrator
      */
     public function UpdateUser($userId, $username, $email, $firstName, $lastName, $timezone, $extraAttributes, $customAttributes);
 
@@ -134,6 +134,13 @@ class ManageUsersService implements IManageUsersService
         $extraAttributes,
         $customAttributes
     ) {
+        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may create accounts
+            Log::Error('AddUser denied. UserId=%s is not an application administrator', $currentUser->UserId);
+            return null;
+        }
+
         $user = $this->registration->Register(
             $username,
             $email,

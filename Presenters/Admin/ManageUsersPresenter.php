@@ -257,6 +257,10 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             $this->GetAttributeValues()
         );
 
+        if ($user == null) {
+            return;
+        }
+
         $userId = $user->Id();
         $groupId = $this->page->GetUserGroup();
 
@@ -532,6 +536,12 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ImportUsers()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            $this->page->SetImportResult(new CsvImportResult(0, [], 'User is not an admin'));
+            return;
+        }
+
         ini_set('max_execution_time', 600);
 
         $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::USER);
@@ -684,6 +694,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function InviteUsers()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may invite new accounts
+            Log::Error('InviteUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $emailList = $this->page->GetInvitedEmails();
         $emails = preg_split('/[,;\s\n]+/', $emailList);
         foreach ($emails as $email) {

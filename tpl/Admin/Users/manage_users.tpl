@@ -5,10 +5,12 @@
     <div class="border-bottom mb-3 clearfix">
         <div class="dropdown admin-header-more float-end">
             <div class="btn-group btn-group-sm">
-                <a href="#" id="add-user" class="add-link add-user add-group btn btn-primary">
-                    <i class="bi bi-plus-circle-fill me-1"></i>
-                    {translate key="AddUser"}
-                </a>
+                {if $CanCreateUsers}
+                    <a href="#" id="add-user" class="add-link add-user add-group btn btn-primary">
+                        <i class="bi bi-plus-circle-fill me-1"></i>
+                        {translate key="AddUser"}
+                    </a>
+                {/if}
 
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="moreUserActions"
                     data-bs-toggle="dropdown" aria-expanded="false" aria-label="{translate key='More'}">
@@ -16,18 +18,20 @@
                 </button>
 
                 <ul class="dropdown-menu" aria-labelledby="moreUserActions">
-                    <li>
-                        <a href="#" id="invite-users" class="dropdown-item">
-                            <i class="bi bi-send me-1"></i>
-                            {translate key="InviteUsers"}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" id="import-users" class="dropdown-item">
-                            <i class="bi bi-download me-1"></i>
-                            {translate key="Import"}
-                        </a>
-                    </li>
+                    {if $CanCreateUsers}
+                        <li>
+                            <a href="#" id="invite-users" class="dropdown-item">
+                                <i class="bi bi-send me-1"></i>
+                                {translate key="InviteUsers"}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="import-users" class="dropdown-item">
+                                <i class="bi bi-download me-1"></i>
+                                {translate key="Import"}
+                            </a>
+                        </li>
+                    {/if}
                     <li>
                         <a href="{$ExportUrl}" download id="export-users" class="dropdown-item" target="_blank">
                             <i class="bi bi-upload me-1"></i>
@@ -216,6 +220,7 @@
         </div>
     </div>
 
+    {if $CanCreateUsers}
     <div id="addUserDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
         aria-hidden="true">
         <form id="addUserForm" class="form" role="form" method="post" ajaxAction="{ManageUsersActions::AddUser}">
@@ -408,6 +413,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     <input type="hidden" id="activeId" />
 
@@ -489,6 +495,7 @@
     </div>
     {/if}
 
+    {if $CanCreateUsers}
     <div id="invitationDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="invitationModalLabel"
         aria-hidden="true">
         <form id="invitationForm" method="post" ajaxAction="{ManageUsersActions::InviteUsers}">
@@ -515,6 +522,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     {if $CanEditUsers}
     <div id="userDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"

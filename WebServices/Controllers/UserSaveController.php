@@ -79,6 +79,10 @@ class UserSaveController implements IUserSaveController
             $customAttributes
         );
 
+        if ($user == null) {
+            return new UserControllerResult(null, ['Only application administrators may create users']);
+        }
+
         $userService->ChangeGroups($user, $request->groups);
 
         return new UserControllerResult($user->Id());
@@ -110,6 +114,10 @@ class UserSaveController implements IUserSaveController
             $extraAttributes,
             $customAttributes
         );
+
+        if ($user == null) {
+            return new UserControllerResult(null, ['Only application administrators may update users']);
+        }
 
         //		$userService->ChangeAttributes($userId, $customAttributes);
 

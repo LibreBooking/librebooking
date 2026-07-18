@@ -48,6 +48,8 @@ class ManageUsersServiceTest extends TestBase
 
     public function testAddsUser()
     {
+        $this->fakeUser->IsAdmin = true;
+
         $fname = 'f';
         $lname = 'l';
         $username = 'un';
@@ -197,6 +199,19 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($position, $user->GetAttribute(UserAttribute::Position));
         $this->assertEquals('value', $user->GetAttributeValue(1));
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testAddUserIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $this->registration->expects($this->never())
+                           ->method('Register');
+
+        $actualUser = $this->service->AddUser('un', 'e@mail.com', 'f', 'l', 'pw', 'America/Chicago', 'en_us', 1, [], []);
+
+        $this->assertNull($actualUser);
     }
 
     public function testChangeGroupsIgnoresNullUser()
