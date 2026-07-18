@@ -147,17 +147,21 @@
 
                                 <td width="100">
                                     <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-primary update edit">
-                                            <span class="visually-hidden">{translate key=Update}</span>
-                                            <i class="bi bi-pencil-square"></i></button>
+                                        {if $CanEditUsers}
+                                            <button type="button" class="btn btn-primary update edit">
+                                                <span class="visually-hidden">{translate key=Update}</span>
+                                                <i class="bi bi-pencil-square"></i></button>
+                                        {/if}
                                         <button type="button" class="btn btn-primary dropdown-toggle"
                                             data-bs-toggle="dropdown">
                                             <span class="visually-hidden">{translate key=More}</span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li role="presentation"><a role="menuitem" href="#"
-                                                    class="dropdown-item update edit">{translate key="Edit"}</a>
-                                            </li>
+                                            {if $CanEditUsers}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update edit">{translate key="Edit"}</a>
+                                                </li>
+                                            {/if}
                                             <li role="presentation"><a role="menuitem" href="#"
                                                     class="dropdown-item update changePermissions">{translate key="Permissions"}</a>
                                             </li>
@@ -512,6 +516,7 @@
         </form>
     </div>
 
+    {if $CanEditUsers}
     <div id="userDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
         aria-hidden="true">
         <form id="userForm" method="post" ajaxAction="{ManageUsersActions::UpdateUser}">
@@ -533,6 +538,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     {if $CanDeleteUsers}
     <div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"

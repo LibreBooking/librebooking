@@ -199,6 +199,13 @@ class ManageUsersService implements IManageUsersService
 
     public function UpdateUser($userId, $username, $email, $firstName, $lastName, $timezone, $extraAttributes, $customAttributes)
     {
+        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may update accounts
+            Log::Error('UpdateUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            return null;
+        }
+
         $attributes = new UserAttribute($extraAttributes);
         $user = $this->userRepository->LoadById($userId);
         $user->ChangeName($firstName, $lastName);
@@ -221,7 +228,7 @@ class ManageUsersService implements IManageUsersService
 
     public function ChangeGroups($user, $groupIds)
     {
-        if (is_null($groupIds)) {
+        if (is_null($user) || is_null($groupIds)) {
             return;
         }
 

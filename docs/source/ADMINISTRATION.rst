@@ -385,11 +385,11 @@ This role has nearly zero restrictions on what resources can be booked. It
 can manage all aspects of the application.
 
 Group Administrator: Users that belong to a group that is given the Group
-Administrator role are able to manage their groups and reserve on behalf of
-and manage users within that group. Group Administrators cannot delete user
-accounts or change user passwords; only Application Administrators can. A group
-administrator must first be assigned the Group Administrator role. This
-group will then be available in the Group Administrators list.
+Administrator role are able to manage their groups and reserve on behalf of and
+manage users within that group. Group Administrators cannot edit user details,
+delete user accounts, or change user passwords; only Application Administrators
+can. A group administrator must first be assigned the Group Administrator role.
+This group will then be available in the Group Administrators list.
 
 Resource Administrator: Users that belong to a group that is given the
 Resource Administrators role have the same capabilities as Application

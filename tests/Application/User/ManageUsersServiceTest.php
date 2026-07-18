@@ -161,6 +161,8 @@ class ManageUsersServiceTest extends TestBase
 
     public function testUpdatesUser()
     {
+        $this->fakeUser->IsAdmin = true;
+
         $user = new User();
         $userId = 1029380;
         $fname = 'f';
@@ -195,6 +197,31 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($position, $user->GetAttribute(UserAttribute::Position));
         $this->assertEquals('value', $user->GetAttributeValue(1));
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangeGroupsIgnoresNullUser()
+    {
+        $this->groupRepo->expects($this->never())
+                        ->method('LoadById');
+
+        $this->service->ChangeGroups(null, [1, 2]);
+    }
+
+    public function testUpdateUserIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $user = new User();
+        $user->ChangeEmailAddress('original@email.com');
+
+        $this->userRepo->_User = $user;
+
+        $updatedUser = $this->service->UpdateUser(1029380, 'un', 'attacker@email.com', 'f', 'l', 'America/Chicago', [], []);
+
+        $this->assertNull($updatedUser);
+        $this->assertNull($this->userRepo->_UpdatedUser);
+        $this->assertEquals('original@email.com', $user->EmailAddress());
     }
 
     public function testAddsAndRemovesUserFromGroups()
