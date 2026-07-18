@@ -220,6 +220,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('FilterStatusId', $this->GetFilterStatusId());
         $this->Set('PerUserColors', $config->GetKey(ConfigKeys::SCHEDULE_USE_PER_USER_COLORS, new BooleanConverter()));
         $this->Set('CreditsEnabled', $config->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set('CanDeleteUsers', $this->server->GetUserSession()->IsAdmin);
         $url = $this->server->GetUrl();
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);

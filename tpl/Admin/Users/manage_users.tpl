@@ -82,16 +82,18 @@
                                 <th class="action">{translate key='Color'}</th>
                             {/if}
                             <th>{translate key='Actions'}</th>
-                            <th class="action-delete">
-                                <div class="form-check checkbox-single">
-                                    <input class="form-check-input" type="checkbox" id="delete-all"
-                                        aria-label="{translate key=All}" title="{translate key=All}" />
-                                </div>
-                                <a href="#" id="delete-selected" class="d-none" title="{translate key=Delete}">
-                                    <span class="visually-hidden">{translate key=Delete}</span>
-                                    <span class="bi bi-trash3-fill text-danger icon remove"></span>
-                                </a>
-                            </th>
+                            {if $CanDeleteUsers}
+                                <th class="action-delete">
+                                    <div class="form-check checkbox-single">
+                                        <input class="form-check-input" type="checkbox" id="delete-all"
+                                            aria-label="{translate key=All}" title="{translate key=All}" />
+                                    </div>
+                                    <a href="#" id="delete-selected" class="d-none" title="{translate key=Delete}">
+                                        <span class="visually-hidden">{translate key=Delete}</span>
+                                        <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                                    </a>
+                                </th>
+                            {/if}
                             {assign var=attributes value=$AttributeList}
                             {if $attributes|default:array()|count > 0}
                                 <th>{translate key='More'}
@@ -171,21 +173,25 @@
 
                                         </ul>
                                     </div>
-                                    |
-                                    <span class="inline">
-                                        <a href="#" class="update delete">
-                                            <span class="visually-hidden">{translate key=Delete}</span>
-                                            <span class="bi bi-trash3-fill text-danger icon remove"></span>
-                                        </a>
-                                    </span>
+                                    {if $CanDeleteUsers}
+                                        |
+                                        <span class="inline">
+                                            <a href="#" class="update delete">
+                                                <span class="visually-hidden">{translate key=Delete}</span>
+                                                <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                                            </a>
+                                        </span>
+                                    {/if}
                                 </td>
-                                <td class="action-delete">
-                                    <div class="form-check checkbox-single">
-                                        <input {formname key=USER_ID multi=true} class="delete-multiple form-check-input"
-                                            type="checkbox" id="delete{$id}" value="{$id}"
-                                            aria-label="{translate key=Delete}" title="{translate key=Delete}" />
-                                    </div>
-                                </td>
+                                {if $CanDeleteUsers}
+                                    <td class="action-delete">
+                                        <div class="form-check checkbox-single">
+                                            <input {formname key=USER_ID multi=true} class="delete-multiple form-check-input"
+                                                type="checkbox" id="delete{$id}" value="{$id}"
+                                                aria-label="{translate key=Delete}" title="{translate key=Delete}" />
+                                        </div>
+                                    </td>
+                                {/if}
 
                                 {if $attributes|default:array()|count > 0}
                                     <td class="customAttributes" userId="{$id}">
@@ -524,6 +530,7 @@
         </form>
     </div>
 
+    {if $CanDeleteUsers}
     <div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
         aria-hidden="true">
         <form id="deleteUserForm" method="post" ajaxAction="{ManageUsersActions::DeleteUser}">
@@ -579,6 +586,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     <div id="groupsDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groupsModalLabel"
         aria-hidden="true">

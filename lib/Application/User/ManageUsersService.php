@@ -169,6 +169,12 @@ class ManageUsersService implements IManageUsersService
     public function DeleteUser($userId, $notify = true)
     {
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may delete accounts
+            Log::Error('DeleteUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            return;
+        }
+
         if ($currentUser->UserId == $userId) {
             // don't delete own account
             return;

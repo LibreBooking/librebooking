@@ -120,6 +120,7 @@ class ManageUsersServiceTest extends TestBase
     public function testDeleteDelegatesToRepositoryAndSendsEmails()
     {
         $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_NOTIFY_ADMIN, 'true');
+        $this->fakeUser->IsAdmin = true;
 
         $userId = 809;
         $user = new FakeUser($userId);
@@ -142,6 +143,20 @@ class ManageUsersServiceTest extends TestBase
 
         $this->assertEquals(2, count($this->fakeEmailService->_Messages));
         $this->assertEquals($userId, $this->userRepo->_DeletedUserId);
+    }
+
+    public function testDeleteIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_NOTIFY_ADMIN, 'true');
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $userId = 809;
+
+        $this->service->DeleteUser($userId);
+
+        $this->assertNull($this->userRepo->_DeletedUserId);
+        $this->assertEquals(0, count($this->fakeEmailService->_Messages));
     }
 
     public function testUpdatesUser()
