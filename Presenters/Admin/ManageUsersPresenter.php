@@ -531,6 +531,10 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         Log::Debug('Changing reservation color for userId: %s', $userId);
 
         $color = $this->page->GetReservationColor();
+        if (!$this->IsValidReservationColor($color)) {
+            Log::Error('ChangeColor denied. Invalid reservation color. UserId=%s, Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
 
         $user = $this->userRepository->LoadById($userId);
         $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $color);
@@ -707,7 +711,11 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                     }
 
                     if ($row->color != null) {
-                        $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
+                        if ($this->IsValidReservationColor($row->color)) {
+                            $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
+                        } else {
+                            Log::Error('Ignoring invalid reservation color during user import. Username=%s', $row->username);
+                        }
                     }
 
                     foreach ($row->attributes as $label => $value) {
@@ -778,6 +786,11 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         }
 
         return AccountStatus::ACTIVE;
+    }
+
+    private function IsValidReservationColor($color): bool
+    {
+        return is_string($color) && ($color === '' || preg_match('/^#[0-9a-fA-F]{6}\z/', $color) === 1);
     }
 
     public function ShowUpdate()

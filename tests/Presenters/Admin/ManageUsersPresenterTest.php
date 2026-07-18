@@ -290,6 +290,23 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertSame($user, $this->userRepo->_UpdatedUser);
     }
 
+    public function testChangeColorRejectsInvalidColor()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_USE_PER_USER_COLORS, 'true');
+        $userId = 809;
+        $user = new FakeUser($userId);
+
+        $this->page->_UserId = $userId;
+        $this->page->_ReservationColor = '#123456\" onmouseover=\"alert(1)';
+        $this->userRepo->_User = $user;
+
+        $this->presenter->ChangeColor();
+
+        $this->assertNull($user->GetPreferences()->Get(UserPreferences::RESERVATION_COLOR));
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
     public function testChangeCreditsIsDeniedWhenNotApplicationAdmin()
     {
         $this->fakeUser->IsAdmin = false;
