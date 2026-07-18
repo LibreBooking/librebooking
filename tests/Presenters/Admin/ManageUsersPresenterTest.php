@@ -202,6 +202,16 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
+    public function testExportUsersIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $this->presenter->ExportUsers();
+
+        $this->assertFalse($this->page->_ShowedExportCsv);
+    }
+
     public function testImportUsersIsDeniedWhenNotApplicationAdmin()
     {
         $this->fakeUser->IsAdmin = false;
@@ -508,6 +518,10 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
      */
     public $_ImportResult;
     /**
+     * @var bool
+     */
+    public $_ShowedExportCsv = false;
+    /**
      * @var string
      */
     public $_InvitedEmails = '';
@@ -771,7 +785,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function ShowExportCsv()
     {
-        // TODO: Implement ShowExportCsv() method.
+        $this->_ShowedExportCsv = true;
     }
 
     public function BindStatusDescriptions()

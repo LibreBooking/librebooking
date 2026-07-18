@@ -8,6 +8,7 @@
                     <i class="bi bi-plus-circle-fill me-1"></i>
                     {translate key="AddGroup"}
                 </a>
+                {if $CanImportGroups or $CanExportGroups}
                 <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
                     data-bs-toggle="dropdown" aria-expanded="false" aria-label="{translate key='More'}">
                     <i class="bi bi-three-dots"></i>
@@ -21,13 +22,16 @@
                             </a>
                         </li>
                     {/if}
-                    <li>
-                        <a href="{$smarty.server.SCRIPT_NAME}?dr=export" download class="export-groups dropdown-item"
-                            id="export-groups" target="_blank">
-                            <i class="bi bi-upload me-1"></i>{translate key="Export"}
-                        </a>
-                    </li>
+                    {if $CanExportGroups}
+                        <li>
+                            <a href="{$smarty.server.SCRIPT_NAME}?dr=export" download class="export-groups dropdown-item"
+                                id="export-groups" target="_blank" rel="noopener noreferrer">
+                                <i class="bi bi-upload me-1"></i>{translate key="Export"}
+                            </a>
+                        </li>
+                    {/if}
                 </ul>
+                {/if}
             </div>
         </div>
 

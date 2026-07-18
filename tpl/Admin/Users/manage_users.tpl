@@ -12,6 +12,7 @@
                     </a>
                 {/if}
 
+                {if $CanCreateUsers or $CanExportUsers}
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="moreUserActions"
                     data-bs-toggle="dropdown" aria-expanded="false" aria-label="{translate key='More'}">
                     <i class="bi bi-three-dots"></i>
@@ -32,13 +33,17 @@
                             </a>
                         </li>
                     {/if}
-                    <li>
-                        <a href="{$ExportUrl}" download id="export-users" class="dropdown-item" target="_blank">
-                            <i class="bi bi-upload me-1"></i>
-                            {translate key="Export"}
-                        </a>
-                    </li>
+                    {if $CanExportUsers}
+                        <li>
+                            <a href="{$ExportUrl}" download id="export-users" class="dropdown-item" target="_blank"
+                                rel="noopener noreferrer">
+                                <i class="bi bi-upload me-1"></i>
+                                {translate key="Export"}
+                            </a>
+                        </li>
+                    {/if}
                 </ul>
+                {/if}
             </div>
         </div>
         <h1 class="float-start">{translate key=ManageUsers}</h1>

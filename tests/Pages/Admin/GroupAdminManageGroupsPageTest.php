@@ -13,9 +13,11 @@ class GroupAdminManageGroupsPageTest extends TestBase
 
         $canChangeRoles = new ReflectionProperty(ManageGroupsPage::class, 'CanChangeRoles');
         $canImportGroups = new ReflectionProperty(ManageGroupsPage::class, 'CanImportGroups');
+        $canExportGroups = new ReflectionProperty(ManageGroupsPage::class, 'CanExportGroups');
 
         $this->assertFalse($canChangeRoles->getValue($page));
         $this->assertFalse($canImportGroups->getValue($page));
+        $this->assertFalse($canExportGroups->getValue($page));
     }
 
     public function testEnablesRoleAndImportControlsForApplicationAdmins(): void
@@ -24,8 +26,10 @@ class GroupAdminManageGroupsPageTest extends TestBase
 
         $canChangeRoles = new ReflectionProperty(ManageGroupsPage::class, 'CanChangeRoles');
         $canImportGroups = new ReflectionProperty(ManageGroupsPage::class, 'CanImportGroups');
+        $canExportGroups = new ReflectionProperty(ManageGroupsPage::class, 'CanExportGroups');
 
         $this->assertTrue($canChangeRoles->getValue($page));
         $this->assertTrue($canImportGroups->getValue($page));
+        $this->assertTrue($canExportGroups->getValue($page));
     }
 }

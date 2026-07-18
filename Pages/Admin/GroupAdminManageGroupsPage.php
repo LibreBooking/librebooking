@@ -11,6 +11,7 @@ class GroupAdminManageGroupsPage extends ManageGroupsPage
 
         $this->CanChangeRoles = false;
         $this->CanImportGroups = false;
+        $this->CanExportGroups = false;
         $this->presenter = new ManageGroupsPresenter(
             $this,
             new GroupAdminGroupRepository(new UserRepository(), ServiceLocator::GetServer()->GetUserSession()),

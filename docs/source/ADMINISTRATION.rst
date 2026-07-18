@@ -379,8 +379,8 @@ Roles
 
 Roles give a group of users the authorization to perform certain actions.
 Only Application Administrators can assign roles to a group, change which
-groups, resources, and schedules a group administers, or import groups from
-a CSV file.
+groups, resources, and schedules a group administers, or import and export
+users and groups as CSV files.
 
 Application Administrator: Users that belong to a group that is given the
 Application Administrator role are open to full administrative privileges.

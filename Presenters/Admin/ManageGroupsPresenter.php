@@ -491,6 +491,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function Export()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may export groups
+            Log::Error('Export denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         /** @var GroupItemView[] $groups */
         $groups = $this->groupRepository->GetList()->Results();
         /** @var UserItemView[] $userGroups */

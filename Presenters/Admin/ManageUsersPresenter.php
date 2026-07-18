@@ -350,6 +350,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ExportUsers()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may export users
+            Log::Error('ExportUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $this->PageLoad();
         $this->page->ShowExportCsv();
     }

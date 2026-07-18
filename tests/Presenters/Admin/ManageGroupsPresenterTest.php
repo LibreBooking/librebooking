@@ -219,6 +219,19 @@ class ManageGroupsPresenterTest extends TestBase
         $this->presenter->ChangeScheduleGroups();
     }
 
+    public function testExportIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $this->groupRepository->expects($this->never())->method('GetList');
+        $this->groupRepository->expects($this->never())->method('GetPermissionList');
+
+        $this->presenter->Export();
+
+        $this->assertFalse($this->page->_Exported);
+    }
+
     public function testImportIsDeniedWhenNotApplicationAdmin()
     {
         $this->fakeUser->IsAdmin = false;
@@ -242,6 +255,11 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
      * @var CsvImportResult
      */
     public $_ImportResult;
+
+    /**
+     * @var bool
+     */
+    public $_Exported = false;
     /** @var string[]|null */
     public ?array $_AllowedResourceIds = null;
 
@@ -340,6 +358,7 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
 
     public function Export($groups, $users, $permissionsWrite, $permissionsRead)
     {
+        $this->_Exported = true;
     }
 
     public function GetImportFile()
