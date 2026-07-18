@@ -116,6 +116,8 @@ class ManageUsersPresenterTest extends TestBase
 
     public function testGetsSelectedResourcesFromPageAndAssignsPermission()
     {
+        $this->fakeUser->IsAdmin = true;
+
         $resourcesThatShouldRemainUnchanged = [5, 10];
         $adminManageableIds = [1, 2, 4, 20, 30];
         $submittedResourceIds = ['1_0', '4_0'];
@@ -159,6 +161,8 @@ class ManageUsersPresenterTest extends TestBase
 
     public function testViewPermissionsPreservedSeparatelyFromFullPermissions()
     {
+        $this->fakeUser->IsAdmin = true;
+
         // Admin can manage resources [1, 2, 3]
         // User has full=[1, 5], view=[2, 6]
         // Admin submits full=[1], view=[3]
@@ -200,6 +204,129 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals([1, 5], $actualFull);
         $this->assertEquals([3, 6], $actualView);
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
+    }
+
+    public function testActivateIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_UserId = 809;
+
+        $this->presenter->Activate();
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
+    public function testActivatesUserWhenApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $userId = 809;
+        $user = new FakeUser($userId);
+        $user->SetStatus(AccountStatus::INACTIVE);
+
+        $this->page->_UserId = $userId;
+        $this->userRepo->_User = $user;
+
+        $this->presenter->Activate();
+
+        $this->assertEquals(AccountStatus::ACTIVE, $user->StatusId());
+        $this->assertSame($user, $this->userRepo->_UpdatedUser);
+        $this->assertEquals(Resources::GetInstance()->GetString('Active'), $this->page->_JsonResponse);
+    }
+
+    public function testDeactivateIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_UserId = 809;
+
+        $this->presenter->Deactivate();
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
+    public function testDeactivatesUserWhenApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $userId = 809;
+        $user = new FakeUser($userId);
+
+        $this->page->_UserId = $userId;
+        $this->userRepo->_User = $user;
+
+        $this->presenter->Deactivate();
+
+        $this->assertEquals(AccountStatus::INACTIVE, $user->StatusId());
+        $this->assertSame($user, $this->userRepo->_UpdatedUser);
+        $this->assertEquals(Resources::GetInstance()->GetString('Inactive'), $this->page->_JsonResponse);
+    }
+
+    public function testChangeColorIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_UserId = 809;
+
+        $this->presenter->ChangeColor();
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangesColorWhenApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_USE_PER_USER_COLORS, 'true');
+        $userId = 809;
+        $color = '#123456';
+        $user = new FakeUser($userId);
+
+        $this->page->_UserId = $userId;
+        $this->page->_ReservationColor = $color;
+        $this->userRepo->_User = $user;
+
+        $this->presenter->ChangeColor();
+
+        $this->assertEquals($color, $user->GetPreferences()->Get(UserPreferences::RESERVATION_COLOR));
+        $this->assertSame($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangeCreditsIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_UserId = 809;
+
+        $this->presenter->ChangeCredits();
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangesCreditsWhenApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $userId = 809;
+        $creditCount = 25;
+        $user = new FakeUser($userId);
+
+        $this->page->_UserId = $userId;
+        $this->page->_Value = $creditCount;
+        $this->userRepo->_User = $user;
+
+        $this->presenter->ChangeCredits();
+
+        $this->assertEquals($creditCount, $user->GetCurrentCredits());
+        $this->assertSame($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangePermissionsIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_UserId = 809;
+
+        $this->presenter->ChangePermissions();
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
     }
 
     public function testExportUsersIsDeniedWhenNotApplicationAdmin()
@@ -615,6 +742,8 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
      */
     public $_UserGroup;
     public $_JsonResponse;
+    public $_ReservationColor = '';
+    public $_Value = '';
     /**
      * @var User
      */
@@ -744,12 +873,12 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function GetReservationColor()
     {
-        return '';
+        return $this->_ReservationColor;
     }
 
     public function GetValue()
     {
-        return '';
+        return $this->_Value;
     }
 
     public function GetName()

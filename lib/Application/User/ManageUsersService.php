@@ -159,6 +159,13 @@ class ManageUsersService implements IManageUsersService
 
     public function ChangeAttribute($userId, $attributeValue)
     {
+        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may change user attributes
+            Log::Error('ChangeAttribute denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            return;
+        }
+
         $user = $this->userRepository->LoadById($userId);
         $user->ChangeCustomAttribute($attributeValue);
         $this->userRepository->Update($user);
@@ -166,6 +173,13 @@ class ManageUsersService implements IManageUsersService
 
     public function ChangeAttributes($userId, $attributes)
     {
+        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may change user attributes
+            Log::Error('ChangeAttributes denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            return;
+        }
+
         $user = $this->userRepository->LoadById($userId);
         foreach ($attributes as $attribute) {
             $user->ChangeCustomAttribute($attribute);

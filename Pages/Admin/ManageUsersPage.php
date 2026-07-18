@@ -226,6 +226,11 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('CanEditUsers', $isApplicationAdmin);
         $this->Set('CanCreateUsers', $isApplicationAdmin);
         $this->Set('CanExportUsers', $isApplicationAdmin);
+        $this->Set('CanChangeUserStatus', $isApplicationAdmin);
+        $this->Set('CanChangeCredits', $isApplicationAdmin);
+        $this->Set('CanChangeColors', $isApplicationAdmin);
+        $this->Set('CanChangePermissions', $isApplicationAdmin);
+        $this->Set('CanChangeAttributes', $isApplicationAdmin);
         $url = $this->server->GetUrl();
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);

@@ -102,8 +102,29 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($userId, $actualUser->Id());
     }
 
+    public function testUpdatesAttribute()
+    {
+        $this->fakeUser->IsAdmin = true;
+
+        $attributeId = 1;
+        $attributeValue = 'value';
+        $userId = 111;
+        $attribute = new AttributeValue($attributeId, $attributeValue);
+
+        $user = new FakeUser($userId);
+
+        $this->userRepo->_User = $user;
+        $this->service->ChangeAttribute($userId, $attribute);
+
+        $this->assertCount(1, $user->GetAddedAttributes());
+        $this->assertEquals($attributeValue, $user->GetAttributeValue($attributeId));
+        $this->assertSame($user, $this->userRepo->_UpdatedUser);
+    }
+
     public function testUpdatesAttributes()
     {
+        $this->fakeUser->IsAdmin = true;
+
         $attributeId = 1;
         $attributeValue = 'value';
         $userId = 111;
@@ -199,6 +220,32 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($position, $user->GetAttribute(UserAttribute::Position));
         $this->assertEquals('value', $user->GetAttributeValue(1));
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangeAttributeIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $user = new FakeUser(111);
+        $this->userRepo->_User = $user;
+
+        $this->service->ChangeAttribute(111, new AttributeValue(1, 'value'));
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
+    }
+
+    public function testChangeAttributesIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $user = new FakeUser(111);
+        $this->userRepo->_User = $user;
+
+        $this->service->ChangeAttributes(111, [new AttributeValue(1, 'value')]);
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
     }
 
     public function testAddUserIsDeniedWhenNotApplicationAdmin()

@@ -126,15 +126,24 @@
                                     {format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
                                 <td data-order="{format_date date=$user->LastLogin format='Y-m-d H:i' timezone=$Timezone}">
                                     {format_date date=$user->LastLogin key=short_datetime timezone=$Timezone}</td>
-                                <td class="action"><a href="#"
-                                        class="update changeStatus link-primary">{$statusDescriptions[$user->StatusId]}</a>
-                                    {indicator id="userStatusIndicator"}
+                                <td class="action">
+                                    {if $CanChangeUserStatus}
+                                        <a href="#"
+                                            class="update changeStatus link-primary">{$statusDescriptions[$user->StatusId]}</a>
+                                        {indicator id="userStatusIndicator"}
+                                    {else}
+                                        {$statusDescriptions[$user->StatusId]}
+                                    {/if}
                                 </td>
                                 {if $CreditsEnabled}
                                     <td class="text-end">
-                                        <span class="propertyValue inlineUpdate changeCredits fw-bold text-decoration-underline"
-                                            data-type="number" data-pk="{$id}" data-value="{$user->CurrentCreditCount}"
-                                            data-name="{FormKeys::CREDITS}">{$user->CurrentCreditCount}</span>
+                                        {if $CanChangeCredits}
+                                            <span class="propertyValue inlineUpdate changeCredits fw-bold text-decoration-underline"
+                                                data-type="number" data-pk="{$id}" data-value="{$user->CurrentCreditCount}"
+                                                data-name="{FormKeys::CREDITS}">{$user->CurrentCreditCount}</span>
+                                        {else}
+                                            <span class="fw-bold">{$user->CurrentCreditCount}</span>
+                                        {/if}
                                         <a href="credit_log.php?{QueryStringKeys::USER_ID}={$id}"
                                             title="{translate key=CreditHistory}" class="link-primary">
                                             <span class="no-color">{translate key=CreditHistory}</span>
@@ -144,12 +153,21 @@
                                 {/if}
                                 {if $PerUserColors}
                                     <td class="action">
-                                        <a href="#" class="update changeColor link-primary">{translate key='Edit'}</a>
-                                        {if !empty($user->ReservationColor)}
-                                            <div class="user-color update changeColor rounded"
-                                                style="background-color:{$user->ReservationColor}">
-                                                &nbsp;
-                                            </div>
+                                        {if $CanChangeColors}
+                                            <a href="#" class="update changeColor link-primary">{translate key='Edit'}</a>
+                                            {if !empty($user->ReservationColor)}
+                                                <div class="user-color update changeColor rounded"
+                                                    style="background-color:{$user->ReservationColor|escape:'html'}">
+                                                    &nbsp;
+                                                </div>
+                                            {/if}
+                                        {else}
+                                            {if !empty($user->ReservationColor)}
+                                                <div class="user-color rounded"
+                                                    style="background-color:{$user->ReservationColor|escape:'html'}">
+                                                    &nbsp;
+                                                </div>
+                                            {/if}
                                         {/if}
                                     </td>
                                 {/if}
@@ -171,9 +189,11 @@
                                                         class="dropdown-item update edit">{translate key="Edit"}</a>
                                                 </li>
                                             {/if}
-                                            <li role="presentation"><a role="menuitem" href="#"
-                                                    class="dropdown-item update changePermissions">{translate key="Permissions"}</a>
-                                            </li>
+                                            {if $CanChangePermissions}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update changePermissions">{translate key="Permissions"}</a>
+                                                </li>
+                                            {/if}
                                             <li role="presentation"><a role="menuitem" href="#"
                                                     class="dropdown-item update changeGroups">{translate key="Groups"}</a>
                                             </li>
@@ -213,7 +233,14 @@
                                         {assign var=changeAttributeAction value=ManageUsersActions::ChangeAttribute}
                                         {assign var=attributeUrl value="`$smarty.server.SCRIPT_NAME`?action=`$changeAttributeAction`"}
                                         {foreach from=$AttributeList item=attribute}
-                                            {include file='Admin/InlineAttributeEdit.tpl' url=$attributeUrl id=$id attribute=$attribute value=$user->GetAttributeValue($attribute->Id())}
+                                            {if $CanChangeAttributes}
+                                                {include file='Admin/InlineAttributeEdit.tpl' url=$attributeUrl id=$id attribute=$attribute value=$user->GetAttributeValue($attribute->Id())}
+                                            {elseif $attribute->AppliesToEntity($id)}
+                                                <div class="mb-0 d-inline-block">
+                                                    <label class="inline fw-bold">{$attribute->Label()}</label>
+                                                    {$user->GetAttributeValue($attribute->Id())|escape}
+                                                </div>
+                                            {/if}
                                         {/foreach}
                                     </td>
                                 {/if}
@@ -422,6 +449,7 @@
 
     <input type="hidden" id="activeId" />
 
+    {if $CanChangePermissions}
     <div id="permissionsDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permissionsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -472,6 +500,7 @@
             </div>
         </div>
     </div>
+    {/if}
 
     {if $CanChangePasswords}
     <div id="passwordDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"

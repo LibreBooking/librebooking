@@ -218,6 +218,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function Deactivate()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may deactivate accounts
+            Log::Error('Deactivate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
+
         if ($this->page->GetUserId() != ServiceLocator::GetServer()->GetUserSession()->UserId) {
             $user = $this->userRepository->LoadById($this->page->GetUserId());
             $user->Deactivate();
@@ -230,6 +237,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function Activate()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may activate accounts
+            Log::Error('Activate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
+
         $user = $this->userRepository->LoadById($this->page->GetUserId());
         $user->Activate();
         $this->userRepository->Update($user);
@@ -310,6 +324,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ChangePermissions()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change resource permissions
+            Log::Error('ChangePermissions denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
+
         $currentUser = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
         $managedResourceIds = $this->resourcePermissionService->GetResourceIdsThatUserCanAdminister($currentUser);
 
@@ -499,6 +520,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ChangeColor()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change reservation colors
+            Log::Error('ChangeColor denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
+
         $userId = $this->page->GetUserId();
         Log::Debug('Changing reservation color for userId: %s', $userId);
 
@@ -512,6 +540,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ChangeCredits()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change credits
+            Log::Error('ChangeCredits denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            return;
+        }
+
         $userId = $this->page->GetUserId();
         $creditCount = $this->page->GetValue();
 
