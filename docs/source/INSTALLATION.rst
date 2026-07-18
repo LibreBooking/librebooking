@@ -282,6 +282,8 @@ automates all of the above steps and optionally loads sample data:
 
    ./database_schema/setup-database.sh
 
+.. _background-jobs:
+
 Scheduled Jobs (Cron)
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -300,6 +302,43 @@ Example crontab (adjust PHP binary path and LibreBooking path):
    0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sendseriesend.php
    0 0 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/sessioncleanup.php
    0 1 * * * /usr/bin/env php -f /var/www/librebooking/Jobs/deleteolddata.php
+
+What each job does, and the configuration settings that control it:
+
+**Jobs/autorelease.php**
+  Releases reservations on resources that require check-in when the owner
+  has not checked in within the resource's configured auto-release time.
+  Only affects resources with an auto-release value set in Manage
+  Resources.
+
+**Jobs/sendreminders.php**
+  Sends the reservation start and end reminder emails that users request.
+  Requires ``email.enabled``; users can only configure reminders when
+  ``reservation.reminders.enabled`` is true.
+
+**Jobs/sendmissedcheckin.php**
+  Emails the reservation owner when they miss the check-in time for a
+  reservation that requires check-in. Requires ``email.enabled``.
+
+**Jobs/sendwaitlist.php**
+  Notifies users on a waitlist when the resource and time they requested
+  become available. Requires ``email.enabled``; the waitlist feature is
+  enabled with ``reservation.allow.wait.list``.
+
+**Jobs/sendseriesend.php**
+  Emails owners of recurring reservation series one week before the last
+  occurrence, for users who opted in to this notification. Requires
+  ``email.enabled``.
+
+**Jobs/sessioncleanup.php**
+  Removes stale user session records from the database.
+
+**Jobs/deleteolddata.php**
+  Permanently deletes announcements, blackouts, and reservations older
+  than ``cleanup.years.old.data`` years. Each data type is only deleted
+  if its setting is enabled: ``cleanup.delete.old.announcements``,
+  ``cleanup.delete.old.blackouts``, or
+  ``cleanup.delete.old.reservations``.
 
 .. _preflight-check:
 
@@ -562,6 +601,8 @@ Background Jobs (Cron)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 LibreBooking requires background jobs for features like reminder emails.
+See :ref:`background-jobs` for a description of each job and the
+configuration settings that control it.
 
 **Docker/Container deployments**
 
