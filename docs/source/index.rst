@@ -10,22 +10,47 @@ LibreBooking documentation
 ==========================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Table of Contents:
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Getting Started:
 
    INSTALLATION
    CONFIGURATION
    BASIC-CONFIGURATION
    ADVANCED-CONFIGURATION
-   ADMINISTRATION
-   FAQ
-   DEVELOPER-README
-   CUSTOM-PLUGINS
-   API
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Authentication:
+
    LDAP-Authentication
    ActiveDirectory-Authentication
    Oauth2-Configuration
    SAML-Configuration
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Using LibreBooking:
+
+   ADMINISTRATION
+   FAQ
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Developer:
+
+   DEVELOPER-README
+   CUSTOM-PLUGINS
+   API
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Project:
+
    changelog
    HISTORY
    LICENSE
