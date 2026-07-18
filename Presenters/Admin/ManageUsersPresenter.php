@@ -336,12 +336,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ResetPassword()
     {
-        $salt = $this->passwordEncryption->Salt();
-        $encryptedPassword = $this->passwordEncryption->Encrypt($this->page->GetPassword(), $salt);
-
-        $user = $this->userRepository->LoadById($this->page->GetUserId());
-        $user->ChangePassword($encryptedPassword, $salt);
-        $this->userRepository->Update($user);
+        $this->manageUsersService->UpdatePassword($this->page->GetUserId(), $this->page->GetPassword());
     }
 
     public function ChangeAttribute()

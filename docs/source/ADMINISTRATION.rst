@@ -387,7 +387,7 @@ can manage all aspects of the application.
 Group Administrator: Users that belong to a group that is given the Group
 Administrator role are able to manage their groups and reserve on behalf of
 and manage users within that group. Group Administrators cannot delete user
-accounts; only Application Administrators can delete users. A group
+accounts or change user passwords; only Application Administrators can. A group
 administrator must first be assigned the Group Administrator role. This
 group will then be available in the Group Administrators list.
 

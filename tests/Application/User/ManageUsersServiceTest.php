@@ -228,6 +228,8 @@ class ManageUsersServiceTest extends TestBase
 
     public function testEncryptsAndSavesPassword()
     {
+        $this->fakeUser->IsAdmin = true;
+
         $userId = 1;
         $password = 'password';
         $user = new FakeUser($userId);
@@ -239,5 +241,20 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($this->passwordEncryption->_Encrypted, $user->_Password);
         $this->assertEquals($this->passwordEncryption->_Salt, $user->_Salt);
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
+    }
+
+    public function testUpdatePasswordIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $userId = 1;
+        $user = new FakeUser($userId);
+
+        $this->userRepo->_User = $user;
+
+        $this->service->UpdatePassword($userId, 'password');
+
+        $this->assertNull($this->userRepo->_UpdatedUser);
     }
 }

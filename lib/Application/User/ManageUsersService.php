@@ -251,6 +251,13 @@ class ManageUsersService implements IManageUsersService
 
     public function UpdatePassword($userId, $password)
     {
+        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        if (!$currentUser->IsAdmin) {
+            // only application administrators may change passwords
+            Log::Error('UpdatePassword denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            return;
+        }
+
         $user = $this->userRepository->LoadById($userId);
 
         $encrypted = $this->passwordEncryption->EncryptPassword($password);

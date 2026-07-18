@@ -202,35 +202,19 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
-    public function testResetPasswordEncryptsAndUpdates()
+    public function testResetPasswordDelegatesToService()
     {
         $password = 'password';
-        $salt = 'salt';
-        $encrypted = 'encrypted';
         $userId = 123;
 
         $this->page->_UserId = $userId;
-
         $this->page->_Password = $password;
 
-        $this->encryption->expects($this->once())
-                         ->method('Salt')
-                         ->willReturn($salt);
-
-        $this->encryption->expects($this->once())
-                         ->method('Encrypt')
-                         ->with($this->equalTo($password), $this->equalTo($salt))
-                         ->willReturn($encrypted);
-
-        $user = new User();
-
-        $this->userRepo->_User = $user;
+        $this->manageUsersService->expects($this->once())
+                                 ->method('UpdatePassword')
+                                 ->with($this->equalTo($userId), $this->equalTo($password));
 
         $this->presenter->ResetPassword();
-
-        $this->assertEquals($encrypted, $user->encryptedPassword);
-        $this->assertEquals($salt, $user->passwordSalt);
-        $this->assertEquals($this->userRepo->_UpdatedUser, $user);
     }
 
     public function testCanUpdateUser()

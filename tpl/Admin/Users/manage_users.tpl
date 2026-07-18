@@ -167,9 +167,11 @@
                                             <li role="presentation"><a role="menuitem" href="#"
                                                     class="dropdown-item update viewReservations">{translate key="Reservations"}</a>
                                             </li>
-                                            <li role="presentation"><a role="menuitem" href="#"
-                                                    class="dropdown-item update resetPassword">{translate key="ChangePassword"}</a>
-                                            </li>
+                                            {if $CanChangePasswords}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update resetPassword">{translate key="ChangePassword"}</a>
+                                                </li>
+                                            {/if}
 
                                         </ul>
                                     </div>
@@ -456,6 +458,7 @@
         </div>
     </div>
 
+    {if $CanChangePasswords}
     <div id="passwordDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"
         aria-hidden="true">
         <form id="passwordForm" method="post" ajaxAction="{ManageUsersActions::Password}" class="was-validated">
@@ -480,6 +483,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     <div id="invitationDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="invitationModalLabel"
         aria-hidden="true">
