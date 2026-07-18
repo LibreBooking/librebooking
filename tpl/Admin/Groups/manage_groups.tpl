@@ -13,12 +13,14 @@
                     <i class="bi bi-three-dots"></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="moreResourceActions">
-                    <li>
-                        <a href="#" class="import-groups dropdown-item" id="import-groups" data-bs-toggle="modal"
-                            data-bs-target="#importGroupsDialog">
-                            <i class="bi bi-download me-1"></i>{translate key="Import"}
-                        </a>
-                    </li>
+                    {if $CanImportGroups}
+                        <li>
+                            <a href="#" class="import-groups dropdown-item" id="import-groups" data-bs-toggle="modal"
+                                data-bs-target="#importGroupsDialog">
+                                <i class="bi bi-download me-1"></i>{translate key="Import"}
+                            </a>
+                        </li>
+                    {/if}
                     <li>
                         <a href="{$smarty.server.SCRIPT_NAME}?dr=export" download class="export-groups dropdown-item"
                             id="export-groups" target="_blank">
@@ -103,8 +105,12 @@
                                     {/if}
                                 </td>
                             {/if}
-                            <td><a href="#"
-                                    class="update groupAdmin link-primary">{$group->AdminGroupName|default:$chooseText}</a>
+                            <td>{if $CanChangeRoles}
+                                    <a href="#"
+                                        class="update groupAdmin link-primary">{$group->AdminGroupName|default:$chooseText}</a>
+                                {else}
+                                    {$group->AdminGroupName|default:$chooseText}
+                                {/if}
                             </td>
                             <td>{if $group->IsDefault}
                                     <i class="bi bi-check-circle text-success"></i>
@@ -451,6 +457,7 @@
     </div>
     {/if}
 
+    {if $CanChangeRoles}
     <div class="modal fade" id="groupAdminDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminDialogLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -481,7 +488,9 @@
             </form>
         </div>
     </div>
+    {/if}
 
+    {if $CanImportGroups}
     <div id="importGroupsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importGroupsModalLabel"
         aria-hidden="true">
         <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data"
@@ -535,6 +544,7 @@
             </div>
         </form>
     </div>
+    {/if}
 
     {csrf_token}
 

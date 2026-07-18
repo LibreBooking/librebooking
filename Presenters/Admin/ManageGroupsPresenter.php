@@ -162,6 +162,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangeRoles()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change group roles
+            Log::Error('ChangeRoles denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $groupId = $this->page->GetGroupId();
         Log::Debug('Changing roles for groupId: %s', $groupId);
 
@@ -291,6 +298,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangeGroupAdmin()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change group administrators
+            Log::Error('ChangeGroupAdmin denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $groupId = $this->page->GetGroupId();
         $adminGroupId = $this->page->GetAdminGroupId();
 
@@ -387,6 +401,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangeAdminGroups()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change administered groups
+            Log::Error('ChangeAdminGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $groupId = $this->page->GetGroupId();
         $groupIds = $this->page->GetGroupAdminIds();
         if (empty($groupIds)) {
@@ -410,6 +431,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangeResourceGroups()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change administered resources
+            Log::Error('ChangeResourceGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $groupId = $this->page->GetGroupId();
         $resourceIds = $this->page->GetResourceAdminIds();
         if (empty($resourceIds)) {
@@ -433,6 +461,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function ChangeScheduleGroups()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            // only application administrators may change administered schedules
+            Log::Error('ChangeScheduleGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            return;
+        }
+
         $groupId = $this->page->GetGroupId();
         $scheduleIds = $this->page->GetScheduleAdminIds();
         if (empty($scheduleIds)) {
@@ -491,6 +526,12 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function Import()
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        if (!$userSession->IsAdmin) {
+            $this->page->SetImportResult(new CsvImportResult(0, [], 'User is not an admin'));
+            return;
+        }
+
         Log::Debug('Importing groups');
 
         ini_set('max_execution_time', 600);

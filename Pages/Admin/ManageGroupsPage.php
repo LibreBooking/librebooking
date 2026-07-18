@@ -136,6 +136,7 @@ interface IManageGroupsPage extends IActionPage
 class ManageGroupsPage extends ActionPage implements IManageGroupsPage
 {
     protected $CanChangeRoles = true;
+    protected $CanImportGroups = true;
     /**
      * @var ManageGroupsPresenter
      */
@@ -169,6 +170,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->presenter->PageLoad();
         $this->Set('chooseText', Resources::GetInstance()->GetString('Choose') . '...');
         $this->Set('CanChangeRoles', $this->CanChangeRoles);
+        $this->Set('CanImportGroups', $this->CanImportGroups);
         $this->Display('Admin/Groups/manage_groups.tpl');
     }
 

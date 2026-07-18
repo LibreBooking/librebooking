@@ -136,11 +136,112 @@ class ManageGroupsPresenterTest extends TestBase
         $this->assertEquals([], $group->AllowedResourceIds());
         $this->assertEquals([], $group->AllowedViewResourceIds());
     }
+
+    public function testChangeRolesUpdatesGroupWhenApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = true;
+
+        $groupId = 100;
+        $group = new Group(0, 'test group');
+        $group->WithId($groupId);
+
+        $this->page->_GroupId = $groupId;
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('LoadById')
+            ->with($groupId)
+            ->willReturn($group);
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('Update')
+            ->with($group);
+
+        $this->presenter->ChangeRoles();
+    }
+
+    public function testChangeRolesIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_GroupId = 100;
+
+        $this->groupRepository->expects($this->never())->method('LoadById');
+        $this->groupRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeRoles();
+    }
+
+    public function testChangeGroupAdminIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_GroupId = 100;
+
+        $this->groupRepository->expects($this->never())->method('LoadById');
+        $this->groupRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeGroupAdmin();
+    }
+
+    public function testChangeAdminGroupsIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_GroupId = 100;
+
+        $this->groupRepository->expects($this->never())->method('LoadById');
+        $this->groupRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeAdminGroups();
+    }
+
+    public function testChangeResourceGroupsIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_GroupId = 100;
+
+        $this->presenter->ChangeResourceGroups();
+
+        $this->assertNull($this->resourceRepo->_UpdatedResource);
+    }
+
+    public function testChangeScheduleGroupsIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+        $this->page->_GroupId = 100;
+
+        $this->scheduleRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeScheduleGroups();
+    }
+
+    public function testImportIsDeniedWhenNotApplicationAdmin()
+    {
+        $this->fakeUser->IsAdmin = false;
+        $this->fakeUser->IsGroupAdmin = true;
+
+        $this->groupRepository->expects($this->never())->method('Add');
+        $this->groupRepository->expects($this->never())->method('Update');
+
+        $this->presenter->Import();
+
+        $this->assertEquals(0, $this->page->_ImportResult->importCount);
+        $this->assertEquals(['User is not an admin'], $this->page->_ImportResult->messages);
+    }
 }
 
 class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPage
 {
     public ?int $_GroupId = null;
+
+    /**
+     * @var CsvImportResult
+     */
+    public $_ImportResult;
     /** @var string[]|null */
     public ?array $_AllowedResourceIds = null;
 
@@ -252,6 +353,7 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
 
     public function SetImportResult($importResult)
     {
+        $this->_ImportResult = $importResult;
     }
 
     public function GetUpdateOnImport()
