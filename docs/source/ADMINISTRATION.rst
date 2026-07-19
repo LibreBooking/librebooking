@@ -131,14 +131,14 @@ By default only logged in users can view schedules, but this can be changed
 with some configuration updates.
 
 In Application Configuration the privacy section contains two settings –
-view.schedules and view.reservations.
+``view.schedules`` and ``view.reservations``.
 
-view.schedules will allow unauthenticated users to browse your schedules,
+``view.schedules`` will allow unauthenticated users to browse your schedules,
 though they will need to log in to book any resources. A new menu option on
 the login page will be displayed to let users open the schedule in a
 read-only mode.
 
-view.reservations lets you control whether or not unauthenticated users will
+``view.reservations`` lets you control whether or not unauthenticated users will
 be able to see reservation details from the read-only schedule. By default,
 only available and unavailable times are shown. Setting this to true will
 show full reservation details to unauthenticated users.
@@ -329,21 +329,21 @@ Quotas restrict reservations from being booked based on a configurable limit.
 The quota system is very flexible, allowing you to build limits based on
 reservation length and number of reservations.
 
-Quota limits “stack”. For example, if a quota exists limiting a resource to 5
+Quota limits "stack". For example, if a quota exists limiting a resource to 5
 hours per day and another quota exists limiting to 4 reservations per day, a
 user would be able to make 4 one-hour-long reservations but would be
 restricted from making 3 two-hour-long reservations. This allows powerful
 quota combinations to be built.
 
 Quotas applied to a group are enforced for each user in the group
-individually. It does not apply to the group’s aggregated reservations.
+individually. It does not apply to the group's aggregated reservations.
 
 If you choose to not include past reservations in the quota rules, the quota
 rule will only include current and future reservations in its calculation.
 
 It is important to remember that quota limits are enforced based on the
-schedule’s timezone. For example, a daily limit would begin and end at
-midnight of the schedule’s timezone; not the user’s timezone.
+schedule's timezone. For example, a daily limit would begin and end at
+midnight of the schedule's timezone; not the user's timezone.
 
 Application Administrators are exempt from quota limits.
 
@@ -428,10 +428,10 @@ From the Reservations admin tool an administrator will be able to view and
 approve pending reservations. Pending reservations will be highlighted.
 
 Administrators can be notified of approval requests by setting
-application.admin.approval to true in the reservation.notify section of
+``application.admin.approval`` to true in the ``reservation.notify`` section of
 Application Configuration.
 
-Setting updates.require.approval to true in the reservation section of
+Setting ``updates.require.approval`` to true in the reservation section of
 Application Configuration will put all reservation update requests back into
 a pending state.
 
@@ -490,8 +490,8 @@ There are two ways to add additional administrators. Both require an existing
 administrator to add the new one. The new administrator must also already
 have an account in LibreBooking.
 
-Option 1) Open Application Configuration, find the admin.email section, and
-add the other user’s email address. You can separate multiple email addresses
+Option 1) Open Application Configuration, find the ``admin.email`` section, and
+add the other user's email address. You can separate multiple email addresses
 with a space, a comma, or a semicolon.
 
 Option 2) Open Application Management > Groups, and add the person to the
@@ -526,7 +526,7 @@ collect an attribute value only for specific users or resources, check the
 Collect In Specific Cases option and pick the cases when the attribute should
 be shown.
 
-User attributes are collected when registering and updating a user’s profile.
+User attributes are collected when registering and updating a user's profile.
 
 Resources attributes are collected when managing resources and will be
 displayed when viewing resource details.
@@ -565,10 +565,10 @@ be emailed.
 Credits
 -------
 
-Credits allow control over a person’s usage of resources and accessories.
+Credits allow control over a person's usage of resources and accessories.
 
 Credits must first be enabled in the Application Configuration before they
-can be used in LibreBooking. This is done by setting enabled to true in the
+can be used in LibreBooking. This is done by setting ``enabled`` to true in the
 credits section.
 
 Once enabled, administrators will have the ability to set the credit
@@ -579,7 +579,7 @@ Credits can have different redemption rates for peak and off peak times of a
 schedule. Peak times are defined per schedule in the Schedules section.
 
 Credits can be charged based on the number of slots booked or a set amount
-per reservation. LibreBooking allows reservations to be created “over”
+per reservation. LibreBooking allows reservations to be created "over"
 blocked slots. You can choose whether or not to charge credits for all slots
 in a reservation or just the available slots.
 
@@ -593,7 +593,7 @@ Paying for Reservation Usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To charge for reservation usage, users can purchase credits. This can be
-enabled by setting allow.purchase to true in the credits section of
+enabled by setting ``allow.purchase`` to true in the credits section of
 Application Configuration.
 
 From the Payments section of Application Management administrators are able
@@ -630,7 +630,7 @@ the Live credentials to charge users and collect payments.
 Reservation Tablet View
 -----------------------
 
-LibreBooking provides a tablet-friendly view of a resource’s current
+LibreBooking provides a tablet-friendly view of a resource's current
 availability.
 
 A good use of this feature is mounting a tablet next to a resource to show
@@ -645,7 +645,7 @@ reservation, and book new reservations.
 Reservation Monitor View
 ------------------------
 
-LibreBooking provides a monitor-friendly view of a schedule’s current
+LibreBooking provides a monitor-friendly view of a schedule's current
 availability.
 
 A good use of this feature is mounting a large monitor in a public area to
@@ -654,7 +654,7 @@ show real-time availability of resources reservations.
 To launch this view, open https://yourhost/Web/monitor-display.php then
 configure the reservations to display.
 
-The privacy configuration setting for view.schedules must be set to true in
+The privacy configuration setting for ``view.schedules`` must be set to true in
 Application Configuration for this functionality.
 
 Slack Integration
