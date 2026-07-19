@@ -12,7 +12,7 @@ if (is_string($code) && $code !== '') {
 
     $state = filter_input(INPUT_GET, 'state', FILTER_UNSAFE_RAW);
     if (is_string($state) && $state !== '') {
-        $params['state'] = $state;
+        $params['redirect'] = $state;
     }
 
     header('Location: ' . ROOT_DIR . 'Web/external-auth.php?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986));
