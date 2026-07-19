@@ -58,6 +58,26 @@ class LoginPresenterTest extends TestBase
         parent::teardown();
     }
 
+    private function enableGoogleLogin(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET, 'secret');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI, 'https://booked.example/Web/google-auth.php');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getQueryParams(string $url): array
+    {
+        $query = parse_url(url: $url, component: PHP_URL_QUERY);
+        $this->assertIsString($query);
+        parse_str(string: $query, result: $params);
+
+        return $params;
+    }
+
     public function testLoginCallsAuthValidate()
     {
         $this->presenter->Login();
@@ -181,6 +201,39 @@ class LoginPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertNull($this->page->_MicrosoftUrl);
+    }
+
+    public function testGoogleUrlIncludesResumeUrlAsState()
+    {
+        $this->enableGoogleLogin();
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_GoogleUrl);
+        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+    }
+
+    public function testGoogleUrlHasEmptyStateWhenNoResumeUrl()
+    {
+        $this->enableGoogleLogin();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        // Google\Client always emits a bare "state" key; it must carry no value.
+        $params = $this->getQueryParams(url: $this->page->_GoogleUrl);
+        $this->assertEmpty($params['state'] ?? null);
+    }
+
+    public function testGoogleUrlNotSetWhenGoogleLoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_GoogleUrl);
     }
 
     public function testPageLoadSetsVariablesCorrectly()
@@ -324,6 +377,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_UseLogonName = false;
     public $_ResumeUrl = '';
     public $_MicrosoftUrl;
+    public $_GoogleUrl;
     public $_ShowLoginError = false;
     public $_LoginErrorMessage = null;
     public $_requestedLanguage;
@@ -337,6 +391,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function SetGoogleUrl($URL)
     {
+        $this->_GoogleUrl = $URL;
     }
 
     public function SetMicrosoftUrl($URL)
