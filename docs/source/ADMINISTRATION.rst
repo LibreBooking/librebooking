@@ -31,9 +31,9 @@ There is no restriction on the slot times, but you must provide slot values
 for all 24 hours of the day, one per line. The time format must be in 24 hour
 time. You can optionally provide a display label for any or all slots.
 
-A slot without a label should be formatted like this: 10:25 – 16:50
+A slot without a label should be formatted like this: 10:25-16:50
 
-A slot with a label should be formatted like this: 10:25 – 16:50 Schedule
+A slot with a label should be formatted like this: 10:25-16:50 Schedule
 Period 4
 
 Below the slot configuration windows is a slot creation wizard. This will set
@@ -130,7 +130,7 @@ Public Schedule Visibility
 By default only logged in users can view schedules, but this can be changed
 with some configuration updates.
 
-In Application Configuration the ``privacy`` section contains two settings –
+In Application Configuration the ``privacy`` section contains two settings -
 ``view.schedules`` and ``view.reservations``.
 
 ``view.schedules`` will allow unauthenticated users to browse your
@@ -519,7 +519,7 @@ User, Resource, and Resource Type attributes can be limited to a single
 entity, meaning a specific user, resource, or resource type. These attributes
 have an Applies To property. If an attribute is configured to apply to a
 single entity then it will only be collected for that entity. By default all
-custom attributes will apply to everything in that category – so all users,
+custom attributes will apply to everything in that category - so all users,
 resources, or resource types.
 
 Reservation attributes are collected during the reservation process. To
@@ -666,7 +666,7 @@ will need to create a Slack App in your Slack workspace for this integration
 to work.
 
 When creating your App, choose Slash Commands in the Add features and
-functionality section. Give your command a name you will remember – we
+functionality section. Give your command a name you will remember - we
 recommend /book. Set the Request URL to
 https://yourhost/Web/integrate/slack.php and the Usage Hint to resource-name
 
@@ -678,7 +678,7 @@ Terms of Service
 ----------------
 
 It is common to require users to agree to terms of service before a
-reservation can be made. LibreBooking supplies two options for this – showing
+reservation can be made. LibreBooking supplies two options for this - showing
 terms upon registration or before each reservation.
 
 Terms of service can be set from Application Management > Reservations, then
