@@ -16,7 +16,7 @@ the box settings. From the Schedules menu option you can view and edit
 attributes of the current schedules.
 
 Standard Layouts
-----------------
+~~~~~~~~~~~~~~~~
 
 Schedules can be displayed starting on any day of the week and for any number
 of days. For a schedule to display starting on the current day, set the
@@ -46,7 +46,7 @@ schedule. This is helpful if you have people working at a facility past your
 standard closing time. Reservations still cannot start during a blocked slot.
 
 Custom Layouts
---------------
+~~~~~~~~~~~~~~
 
 Custom layouts are best used for appointment bookings, for example, by only
 making very specific dates and times available instead of an interval-based
@@ -59,7 +59,7 @@ reservable.
 Switching to a custom layout will remove all standard layout slots.
 
 Schedule Administrators
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 A group of users may be set up with permission to manage schedules and all
 resources on those schedules.
@@ -77,7 +77,7 @@ Once that role has been added, the group will be an available schedule
 administrator option in the Manage Schedules tool.
 
 Schedule Availability
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 If a schedule should only be available for a limited period of time, such as
 a season or semester, you can set the schedule availability. No reservations
@@ -86,7 +86,7 @@ will be allowed outside of the availability date range.
 By default a schedule is available all year round.
 
 Multiple Bookings at the Same Time
-----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, resources cannot be double booked.
 
@@ -98,7 +98,7 @@ This will no longer allow anyone to access the Schedule View for this
 schedule.
 
 Limiting the Total Number of Concurrent Reservations
-----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default there is no limit to the total number of reservations occurring at
 the same time on a schedule.
@@ -113,7 +113,7 @@ only allow a certain number of people in at a time.
 This setting does not apply to application administrators.
 
 Limiting the Number of Resources per Reservation
-------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default there is no limit to the number of resources that can be booked on
 a single reservation.
@@ -125,7 +125,7 @@ per reservation.
 This setting does not apply to application administrators.
 
 Public Schedule Visibility
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default only logged in users can view schedules, but this can be changed
 with some configuration updates.
@@ -159,7 +159,7 @@ Application Administrators and applicable Schedule and Resource
 Administrators are exempt from usage constraints.
 
 Resource Configuration
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Setting a minimum reservation duration will prevent booking from lasting
 shorter than the set amount. The default is no minimum.
@@ -203,7 +203,7 @@ given amount of time. To automatically release reservations you must
 configure the autorelease job.
 
 Resource Administrators
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 A group of users may be set up with permission to manage resources. In order
 for a group to be set as the resource administrator the group must first be
@@ -216,7 +216,7 @@ Administrators for any resource which the group is assigned to. They can
 change resource details, black out times, manage and approve reservations.
 
 Resource Images
----------------
+~~~~~~~~~~~~~~~
 
 You can upload an unlimited number of resource images. These will be
 displayed when viewing resource details from the reservation page.
@@ -225,7 +225,7 @@ This functionality requires php_gd2 to be installed and enabled in your
 php.ini file.
 
 Resource Statuses
------------------
+~~~~~~~~~~~~~~~~~
 
 Setting a resource to the Available status will allow users with permission
 to book the reservation. The Unavailable status will show the resource on the
@@ -237,7 +237,7 @@ Resource statuses can be added, updated, and removed by clicking the Resource
 Status option from the top right menu within Manage Resources.
 
 Resource Groups
----------------
+~~~~~~~~~~~~~~~
 
 Resource Groups are a simple way to organize and filter resources. When a
 booking is being created, the user will have an option to book all resources
@@ -258,7 +258,7 @@ Resource groups can be added, updated, and removed by clicking the Resource
 Groups option from the top right menu within Manage Resources.
 
 Resource Types
---------------
+~~~~~~~~~~~~~~
 
 Resource types allow resources that share a common set of attributes to be
 managed together. Custom attributes for a resource type will apply to all
@@ -268,7 +268,7 @@ Resource types can be added, updated, and removed by clicking the Resource
 Types option from the top right menu within Manage Resources.
 
 Resource Public Access
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 By default, resources can not be used in RSS or iCalendar feeds, shown on the
 resource tablet display, or embedded in external websites.
@@ -280,7 +280,7 @@ for embedding the resource calendar in external websites will be available to
 copy.
 
 Forcing Resources to be Booked Together
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resource Relationships can be used to define resources that must be booked
 together. To configure this, add a resource within the Must Be Booked With
@@ -288,7 +288,7 @@ section. Once set, all non-administrative users will be required to book all
 related resources as part of a single reservation.
 
 Preventing Resources From Being Booked Together
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resource Relationships can be used to define resources that cannot be booked
 as part of a single reservation. To configure this, add a resource within the
@@ -296,7 +296,7 @@ Cannot Be Booked With section. Once set, all non-administrative users will be
 prevented from booking all related resources as part of a single reservation.
 
 Preventing Resources From Being Booked at the Same Time
--------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resource Relationships can be used to define resources that cannot be booked
 at the same time. To configure this, add a resource within the Cannot Be
@@ -375,7 +375,7 @@ Setting resource permissions for a group will grant access to all members of
 that group. Users can individually be granted additional resource permission.
 
 Roles
------
+~~~~~
 
 Roles give a group of users the authorization to perform certain actions.
 Only Application Administrators can assign roles to a group, change which
@@ -419,7 +419,7 @@ an act on a reservation. You can also export the list of filtered
 reservations to CSV format for further reporting.
 
 Reservation Approval
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 Resources can be set to require approval before a reservation is confirmed.
 The reservation becomes active only after an administrator approves it.
@@ -436,7 +436,7 @@ Application Configuration will put all reservation update requests back into
 a pending state.
 
 Reservation Colors
-------------------
+~~~~~~~~~~~~~~~~~~
 
 Reservation colors can be set for individual users, resources, or dynamically
 based on a custom attribute value. The slot background color of a reservation
@@ -451,7 +451,7 @@ Reservation colors based on the value of custom attributes can be set from
 the drop down menu in the Reservation management section.
 
 Blackout Times
---------------
+~~~~~~~~~~~~~~
 
 Blackout Times can be used to prevent reservations from being booked at
 certain times.
@@ -483,7 +483,7 @@ If using credits, this section is where user credit quantities can be
 managed.
 
 Adding Administrators
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 It is common to have multiple administrative users within an organization.
 There are two ways to add additional administrators. Both require an existing
@@ -590,7 +590,7 @@ Administrators can manage the number of credits allocated to a person in
 Users section.
 
 Paying for Reservation Usage
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To charge for reservation usage, users can purchase credits. This can be
 enabled by setting allow.purchase to true in the credits section of
@@ -604,7 +604,7 @@ LibreBooking supports two payment gateways: Stripe and PayPal. At least one
 must be enabled in order to allow purchasing credits.
 
 Configuring Stripe
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 Within the Payments management screen, click the Payment Gateways tab and
 enable Stripe. LibreBooking integrates with Stripe using Stripe Checkout,
@@ -615,7 +615,7 @@ configuration. Use the test API keys if you want to simulate purchasing
 credits. Use the live API keys to charge users and collect payments.
 
 Configuring PayPal
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 Within the Payments management screen, click the Payment Gateways tab and
 enable PayPal. LibreBooking integrates with PayPal using Express Checkout,
