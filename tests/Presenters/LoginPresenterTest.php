@@ -66,6 +66,23 @@ class LoginPresenterTest extends TestBase
         $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI, 'https://booked.example/Web/google-auth.php');
     }
 
+    private function enableKeycloakLogin(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL, 'https://keycloak.example');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM, 'realm');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI, '/Web/keycloak-auth.php');
+    }
+
+    private function enableOauth2Login(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE, 'https://oauth2.example/authorize');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI, '/Web/oauth2-auth.php');
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -236,6 +253,70 @@ class LoginPresenterTest extends TestBase
         $this->assertNull($this->page->_GoogleUrl);
     }
 
+    public function testKeycloakUrlIncludesResumeUrlAsState()
+    {
+        $this->enableKeycloakLogin();
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_KeycloakUrl);
+        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+    }
+
+    public function testKeycloakUrlOmitsStateWhenNoResumeUrl()
+    {
+        $this->enableKeycloakLogin();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_KeycloakUrl);
+        $this->assertArrayNotHasKey('state', $params);
+    }
+
+    public function testKeycloakUrlNotSetWhenKeycloakLoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_KeycloakUrl);
+    }
+
+    public function testOauth2UrlIncludesResumeUrlAsState()
+    {
+        $this->enableOauth2Login();
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_Oauth2Url);
+        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+    }
+
+    public function testOauth2UrlOmitsStateWhenNoResumeUrl()
+    {
+        $this->enableOauth2Login();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_Oauth2Url);
+        $this->assertArrayNotHasKey('state', $params);
+    }
+
+    public function testOauth2UrlNotSetWhenOauth2LoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_Oauth2Url);
+    }
+
     public function testPageLoadSetsVariablesCorrectly()
     {
         $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'true');
@@ -378,6 +459,8 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_ResumeUrl = '';
     public $_MicrosoftUrl;
     public $_GoogleUrl;
+    public $_KeycloakUrl;
+    public $_Oauth2Url;
     public $_ShowLoginError = false;
     public $_LoginErrorMessage = null;
     public $_requestedLanguage;
@@ -405,10 +488,12 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function SetKeycloakUrl($URL)
     {
+        $this->_KeycloakUrl = $URL;
     }
 
     public function SetOauth2Url($URL)
     {
+        $this->_Oauth2Url = $URL;
     }
 
     public function SetOauth2Name($Name)
