@@ -708,6 +708,11 @@ Output: `docs/build/html/`
 8. **Email template files** - Validate template filenames before using them in
    filesystem paths; follow the existing `ManageEmailTemplatesPresenter`
    validation pattern
+9. **External links opening in a new tab** - Any `target="_blank"` link to an
+   external, third-party-controlled origin must include
+   `rel="noopener noreferrer"` to prevent tabnabbing (the opened page gaining
+   access to `window.opener`). Internal/same-origin links (downloads,
+   exports, self-hosted URLs) don't need it.
 
 ## Performance Considerations
 
@@ -741,7 +746,7 @@ Plugins extend LibreBooking functionality:
 - **Main Repository**: <https://github.com/LibreBooking/librebooking>
 - **Live Demo**: <https://librebooking-demo.fly.dev/>
 - **Discord Community**: <https://discord.gg/4TGThPtmX8>
-- **Wiki**: <https://github.com/LibreBooking/librebooking/wiki>
+- **Documentation**: <https://librebooking.readthedocs.io/en/latest/>
 - **Docker Image**: <https://github.com/LibreBooking/docker>
 - **Issue Tracker**: <https://github.com/LibreBooking/librebooking/issues>
 

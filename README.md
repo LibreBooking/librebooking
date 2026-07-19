@@ -18,7 +18,7 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/librebooking/librebooking)](https://github.com/LibreBooking/docker)
 
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/4TGThPtmX8)
-[![Wiki](https://img.shields.io/badge/Wiki-Available-lightgrey?logo=read-the-docs)](https://github.com/LibreBooking/librebooking/wiki)
+[![Docs](https://img.shields.io/badge/Docs-Available-lightgrey?logo=read-the-docs)](https://librebooking.readthedocs.io/en/latest/)
 
 ⭐ Star us on GitHub — it motivates us a lot!
 
@@ -151,7 +151,7 @@ As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for yo
 ## 💬 Community & Support
 
 - [Discord](https://discord.gg/4TGThPtmX8)
-- [Wiki](https://github.com/LibreBooking/librebooking/wiki)
+- [Docs](https://librebooking.readthedocs.io/en/latest/)
 - [Issues](https://github.com/LibreBooking/librebooking/issues)
 - [Discussions](https://github.com/LibreBooking/librebooking/discussions)
 

@@ -6,6 +6,11 @@
             <div class="card-body">
                 <h1 class="text-center border-bottom">About LibreBooking</h1>
 
+                <h2>Documentation</h2>
+
+                <p><a class="link-primary" href="https://librebooking.readthedocs.io/en/latest/">LibreBooking
+                        Documentation</a></p>
+
                 <h2>Support</h2>
 
                 <p><a class="link-primary" href="https://github.com/LibreBooking/librebooking">LibreBooking Support</a></p>
