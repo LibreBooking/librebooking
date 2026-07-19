@@ -135,11 +135,11 @@ view.schedules and view.reservations.
 
 view.schedules will allow unauthenticated users to browse your schedules,
 though they will need to log in to book any resources. A new menu option on
-the login page will be displayed to let users open the schedule in a read
-only mode.
+the login page will be displayed to let users open the schedule in a
+read-only mode.
 
 view.reservations lets you control whether or not unauthenticated users will
-be able to see reservation details from the read only schedule. By default,
+be able to see reservation details from the read-only schedule. By default,
 only available and unavailable times are shown. Setting this to true will
 show full reservation details to unauthenticated users.
 
@@ -326,8 +326,8 @@ Quotas
 ------
 
 Quotas restrict reservations from being booked based on a configurable limit.
-The quota system in is very flexible, allowing you to build limits based on
-reservation length and number reservations.
+The quota system is very flexible, allowing you to build limits based on
+reservation length and number of reservations.
 
 Quota limits “stack”. For example, if a quota exists limiting a resource to 5
 hours per day and another quota exists limiting to 4 reservations per day, a
@@ -339,7 +339,7 @@ Quotas applied to a group are enforced for each user in the group
 individually. It does not apply to the group’s aggregated reservations.
 
 If you choose to not include past reservations in the quota rules, the quota
-rule will only include current and future reservations in it’s calculation.
+rule will only include current and future reservations in its calculation.
 
 It is important to remember that quota limits are enforced based on the
 schedule’s timezone. For example, a daily limit would begin and end at
@@ -354,7 +354,7 @@ Announcements are a very simple way to display and, optionally, email
 notifications to users.
 
 From the Announcements menu item you can view and manage the announcements
-that are displayed on users dashboards. An announcement can be configured
+that are displayed on users' dashboards. An announcement can be configured
 with an optional start and end date. An optional priority level is also
 available, which sorts announcements from 1 to 10.
 
@@ -383,7 +383,7 @@ groups, resources, and schedules a group administers, or import and export
 users and groups as CSV files.
 
 Application Administrator: Users that belong to a group that is given the
-Application Administrator role are open to full administrative privileges.
+Application Administrator role are granted full administrative privileges.
 This role has nearly zero restrictions on what resources can be booked. It
 can manage all aspects of the application.
 
@@ -415,7 +415,7 @@ You can view and manage reservations from the Reservations menu item. By
 default you will see the last 14 days and the next 14 days worth of
 reservations for all users. This can be filtered more or less granular
 depending on what you are looking for. This tool allows you to quickly find
-an act on a reservation. You can also export the list of filtered
+and act on a reservation. You can also export the list of filtered
 reservations to CSV format for further reporting.
 
 Reservation Approval
