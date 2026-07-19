@@ -130,18 +130,19 @@ Public Schedule Visibility
 By default only logged in users can view schedules, but this can be changed
 with some configuration updates.
 
-In Application Configuration the privacy section contains two settings –
+In Application Configuration the ``privacy`` section contains two settings –
 ``view.schedules`` and ``view.reservations``.
 
-``view.schedules`` will allow unauthenticated users to browse your schedules,
-though they will need to log in to book any resources. A new menu option on
-the login page will be displayed to let users open the schedule in a
-read-only mode.
+``view.schedules`` will allow unauthenticated users to browse your
+schedules, though they will need to log in to book any resources. A new menu
+option on the login page will be displayed to let users open the schedule in
+a read-only mode.
 
-``view.reservations`` lets you control whether or not unauthenticated users will
-be able to see reservation details from the read-only schedule. By default,
-only available and unavailable times are shown. Setting this to true will
-show full reservation details to unauthenticated users.
+``view.reservations`` lets you control whether or not
+unauthenticated users will be able to see reservation details from the
+read-only schedule. By default, only available and unavailable times are
+shown. Setting this to ``true`` will show full reservation details to
+unauthenticated users.
 
 Resources
 ---------
@@ -428,12 +429,12 @@ From the Reservations admin tool an administrator will be able to view and
 approve pending reservations. Pending reservations will be highlighted.
 
 Administrators can be notified of approval requests by setting
-``application.admin.approval`` to true in the ``reservation.notify`` section of
-Application Configuration.
+``application.admin.approval`` to ``true`` in the ``reservation.notify``
+section of Application Configuration.
 
-Setting ``updates.require.approval`` to true in the reservation section of
-Application Configuration will put all reservation update requests back into
-a pending state.
+Setting ``updates.require.approval`` to ``true`` in the ``reservation``
+section of Application Configuration will put all reservation update
+requests back into a pending state.
 
 Reservation Colors
 ~~~~~~~~~~~~~~~~~~
@@ -568,8 +569,8 @@ Credits
 Credits allow control over a person's usage of resources and accessories.
 
 Credits must first be enabled in the Application Configuration before they
-can be used in LibreBooking. This is done by setting ``enabled`` to true in the
-credits section.
+can be used in LibreBooking. This is done by setting ``enabled`` to ``true``
+in the ``credits`` section.
 
 Once enabled, administrators will have the ability to set the credit
 redemption rates resources in the Resources Management and Accessories
@@ -593,8 +594,8 @@ Paying for Reservation Usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To charge for reservation usage, users can purchase credits. This can be
-enabled by setting ``allow.purchase`` to true in the credits section of
-Application Configuration.
+enabled by setting ``allow.purchase`` to ``true`` in the ``credits`` section
+of Application Configuration.
 
 From the Payments section of Application Management administrators are able
 to set the cost per credit, configure payment gateways, and view purchase
@@ -654,8 +655,8 @@ show real-time availability of resources reservations.
 To launch this view, open https://yourhost/Web/monitor-display.php then
 configure the reservations to display.
 
-The privacy configuration setting for ``view.schedules`` must be set to true in
-Application Configuration for this functionality.
+The ``view.schedules`` setting in the ``privacy`` section must be set to
+``true`` in Application Configuration for this functionality.
 
 Slack Integration
 -----------------
