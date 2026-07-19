@@ -5,18 +5,19 @@ define('ROOT_DIR', '../');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 //Checks if the user was authenticated by google and redirects to external authentication page
-if (isset($_GET['code'])) {
-    $code = filter_input(INPUT_GET, 'code');
-    $url = ROOT_DIR . 'Web/external-auth.php?type=google&code=' . urlencode($code);
+$code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
 
-    $state = filter_input(INPUT_GET, 'state');
-    if (!empty($state)) {
-        $url .= '&redirect=' . urlencode($state);
+if (is_string($code) && $code !== '') {
+    $params = ['type' => 'google', 'code' => $code];
+
+    $state = filter_input(INPUT_GET, 'state', FILTER_UNSAFE_RAW);
+    if (is_string($state) && $state !== '') {
+        $params['state'] = $state;
     }
 
-    header('Location: ' . $url);
+    header('Location: ' . ROOT_DIR . 'Web/external-auth.php?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986));
     exit;
-} else {
-    header('Location:' . ROOT_DIR . 'Web');
-    exit();
 }
+
+header('Location:' . ROOT_DIR . 'Web');
+exit();
