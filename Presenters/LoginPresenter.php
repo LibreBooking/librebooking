@@ -137,7 +137,7 @@ class LoginPresenter
         $keycloakEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter());
         $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
-        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
+        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
         $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
@@ -291,7 +291,7 @@ class LoginPresenter
      * Checks in the config files if google authentication is active creating a new client if true and setting it's config keys.
      * Returns the created google url for the authentication
      */
-    public function GetGoogleUrl()
+    public function GetGoogleUrl(?string $state = null)
     {
         $client = new Google\Client();
         $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
@@ -300,9 +300,11 @@ class LoginPresenter
         $client->addScope('email');
         $client->addScope('profile');
         $client->setPrompt('select_account');
-        $GoogleUrl = $client->createAuthUrl();
+        if (!empty($state)) {
+            $client->setState($state);
+        }
 
-        return $GoogleUrl;
+        return $client->createAuthUrl();
     }
 
     /**
