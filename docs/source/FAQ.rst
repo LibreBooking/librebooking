@@ -261,3 +261,25 @@ Related threads:
 
 - `<https://github.com/LibreBooking/librebooking/discussions/752>`__
 - `<https://github.com/LibreBooking/librebooking/issues/13>`__
+
+Can I set the document root directly to the ``Web`` directory and drop ``/Web`` from the URL?
+------------------------------------------------------------------------------------------------
+
+No. LibreBooking can be installed at the document root or in a
+subdirectory/subsite underneath it, but the public URL must always include
+``/Web/`` (e.g. ``https://example.com/Web/`` or
+``https://example.com/librebooking/Web/``), and ``script.url`` must be set
+accordingly.
+
+Pointing the document root directly at the ``Web`` directory so that URLs
+omit ``/Web`` (e.g. ``https://example.com/schedule.php``) is not supported.
+Several parts of the application assume ``/Web`` is present in the request
+path, including navigation-link validation and login/SSO redirect
+construction, so omitting it breaks Schedule/Calendar navigation and can
+break external authentication redirects.
+
+See :doc:`INSTALLATION` and :doc:`BASIC-CONFIGURATION`.
+
+Related threads:
+
+- `<https://github.com/LibreBooking/librebooking/issues/1590>`__

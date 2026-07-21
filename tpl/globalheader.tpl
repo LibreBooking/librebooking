@@ -117,10 +117,14 @@
         </div>
     </noscript>
 
-    {* Alert everyone if `script.url` is unset as it will cause issues. *}
+    {* Alert everyone if `script.url` is unset or missing the required `/Web` suffix, as either will cause issues. *}
     {if !isset($ScriptUrl) || $ScriptUrl eq ''}
         <div id="script-url-warning" class="alert alert-danger text-center m-2" role="alert">
             {translate key="ScriptUrlNotConfigured"}
+        </div>
+    {elseif !empty($ScriptUrlMissingWebSuffix)}
+        <div id="script-url-web-suffix-warning" class="alert alert-danger text-center m-2" role="alert">
+            {translate key="ScriptUrlMissingWebSuffix"}
         </div>
     {/if}
 

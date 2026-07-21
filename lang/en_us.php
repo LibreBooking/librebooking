@@ -136,6 +136,7 @@ class en_us extends Language
         $strings['SignOut'] = 'Sign Out';
         $strings['JavascriptRequired'] = 'This application requires JavaScript to function properly. Please enable JavaScript in your browser settings.';
         $strings['ScriptUrlNotConfigured'] = 'LibreBooking is not configured correctly. The <code>script.url</code> setting is empty, so some application features will not work. Please contact the administrator.';
+        $strings['ScriptUrlMissingWebSuffix'] = 'LibreBooking is not configured correctly. The <code>script.url</code> setting must end with <code>/Web</code>, or navigation links and login redirects will not work correctly. Please contact the administrator.';
         $strings['LayoutDescription'] = 'Starts on %s, showing %s days at a time';
         $strings['AllResources'] = 'All Resources';
         $strings['TakeOffline'] = 'Take Offline';

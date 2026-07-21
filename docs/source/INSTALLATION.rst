@@ -50,6 +50,16 @@ Alternatively, you can clone the application directly from the official GitHub r
 
     git clone https://github.com/LibreBooking/librebooking.git
 
+.. important::
+   The document root (or subsite) must point at the LibreBooking project
+   directory itself, **not** at its ``Web`` subdirectory. LibreBooking can be
+   installed directly at the document root or in a subdirectory/subsite
+   underneath it (e.g. ``https://example.com/librebooking/``), but the public
+   URL must always include ``/Web/`` (e.g. ``https://example.com/Web/`` or
+   ``https://example.com/librebooking/Web/``). Pointing the document root
+   directly at ``Web`` and omitting ``/Web/`` from the URL is not supported —
+   it breaks navigation links and login/SSO redirects.
+
 After copying or cloning the application to your web server:
 
 Install PHP dependencies using Composer:

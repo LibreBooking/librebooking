@@ -65,7 +65,9 @@ abstract class Page implements IPage
         $this->smarty->assign('Version', Configuration::VERSION);
         $this->smarty->assign('DisplayVersion', $this->GetDisplayVersion());
         $this->smarty->assign('Path', $this->path);
-        $this->smarty->assign('ScriptUrl', Configuration::Instance()->GetScriptUrl());
+        $scriptUrl = Configuration::Instance()->GetScriptUrl();
+        $this->smarty->assign('ScriptUrl', $scriptUrl);
+        $this->smarty->assign('ScriptUrlMissingWebSuffix', $scriptUrl !== '' && !str_ends_with(rtrim($scriptUrl, '/'), '/Web'));
         $this->smarty->assign('UserName', !is_null($userSession) ? $userSession->FirstName : '');
         $this->smarty->assign('DisplayWelcome', $this->DisplayWelcome());
         $this->smarty->assign('UserId', $userSession->UserId);

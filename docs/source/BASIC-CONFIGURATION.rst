@@ -307,6 +307,13 @@ Frontend Settings
   because application links and other features may not work correctly. Set
   ``script.url`` (or ``LB_SCRIPT_URL``) to dismiss the warning.
 
+  ``script.url`` must always end with ``/Web``. The webserver document root
+  must not be set directly to the ``Web`` directory with ``/Web`` omitted
+  from the URL — that configuration is not supported and breaks navigation
+  links and login/SSO redirects. LibreBooking can still be installed in a
+  subdirectory/subsite under the document root, as long as ``/Web`` remains
+  the final path segment (e.g. ``https://example.com/librebooking/Web``).
+
 **css.theme**
   Theme to use for the application. Options: default, dimgray, dark_red,
   dark_green, french_blue, cake_blue, orange.
