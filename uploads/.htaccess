@@ -1,5 +1,1 @@
-deny from all
-
-<Files ~ "^.*">
-Deny from all
-</Files>
+Require all denied

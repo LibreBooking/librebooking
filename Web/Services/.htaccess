@@ -1,5 +1,5 @@
 <Limit GET POST PUT DELETE OPTIONS>
-  Allow from all
+  Require all granted
 </Limit>
 
 
