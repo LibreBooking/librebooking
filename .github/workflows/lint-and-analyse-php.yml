@@ -103,6 +103,10 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
+      - name: Validate optimized Composer autoloading
+        if: matrix.php-version == '8.2'
+        run: composer dump-autoload --optimize --strict-psr
+
       - name: Lint PHP files
         run: ./ci/ci-phplint
 
