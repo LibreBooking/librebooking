@@ -7,6 +7,7 @@
     "node": ">=20.19.0"
   },
   "scripts": {
+    "lint:commits": "commitlint",
     "lint:js": "eslint --max-warnings 0 Web/scripts/",
     "lint:css": "stylelint 'Web/css/**/*.css'",
     "lint:format": "prettier --check 'Web/scripts/**/*.js' 'Web/css/**/*.css'",
@@ -17,6 +18,8 @@
     "fix:frontend": "npm run fix:format && npm run fix:js && npm run fix:css"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",

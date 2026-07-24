@@ -70,6 +70,34 @@ jobs:
             exit 1
           fi
 
+  lint-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Lint pull request commits
+        if: github.event_name == 'pull_request'
+        run: >-
+          npm run lint:commits --
+          --from "${{ github.event.pull_request.base.sha }}"
+          --to "${{ github.event.pull_request.head.sha }}"
+
+      - name: Lint selected commit
+        if: github.event_name == 'workflow_dispatch'
+        run: npm run lint:commits -- --last
+
   markdownlint:
     runs-on: ubuntu-latest
     steps:
