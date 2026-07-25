@@ -23,7 +23,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: develop
           fetch-depth: 0
