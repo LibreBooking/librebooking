@@ -69,7 +69,7 @@ significantly and diverged from the original project.
 
 A live demo instance of LibreBooking is available for testing:
 
-[Try the demo](https://librebooking-demo.fly.dev/Web/)
+[Try the demo](https://librebooking.readthedocs.io/en/latest/demo.html)
 
 | Role  | Username | Password    |
 | ----- | -------- | ----------- |
@@ -166,7 +166,7 @@ As of 09-Mar-2023, ReCaptcha integration updated to v3. Generate new keys for yo
 
 ## 💡 Roadmap
 
-_Work in progress – roadmap to be defined._  
+_Work in progress – roadmap to be defined._
 Want to suggest a feature? [Open an issue](https://github.com/LibreBooking/librebooking/issues) or join the [Discord discussion channel](https://discord.gg/4TGThPtmX8).
 
 ## 📜 License

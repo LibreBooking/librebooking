@@ -12,6 +12,13 @@ LibreBooking documentation
 .. toctree::
    :maxdepth: 1
    :titlesonly:
+   :caption: Demo:
+
+   demo
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
    :caption: Getting Started:
 
    INSTALLATION
