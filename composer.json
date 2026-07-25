@@ -25,7 +25,7 @@
         "mobiledetect/mobiledetectlib": "^4.11",
         "bacon/bacon-qr-code": "^3.1",
         "mibe/feedwriter": "^1.1",
-        "sabre/vobject": "^4.6",
+        "sabre/vobject": "^5.0",
         "egulias/email-validator": "^4.0",
         "phpmailer/phpmailer": "^7.1",
         "claviska/simpleimage": "^4.2",
