@@ -23,6 +23,9 @@
     <testsuite name="presenters">
       <directory>./tests/Presenters</directory>
     </testsuite>
+    <testsuite name="src">
+      <directory>./tests/src</directory>
+    </testsuite>
     <testsuite name="webservice">
       <directory>./tests/WebService</directory>
     </testsuite>
@@ -46,6 +49,7 @@
       <directory suffix=".php">Pages</directory>
       <directory suffix=".php">plugins</directory>
       <directory suffix=".php">Presenters</directory>
+      <directory suffix=".php">src</directory>
       <directory suffix=".php">Web</directory>
       <directory suffix=".php">WebServices</directory>
     </include>

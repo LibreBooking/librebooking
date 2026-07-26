@@ -1,9 +1,11 @@
 <?php
 
+use LibreBooking\Application\Authentication\MicrosoftOAuthCallback;
+
 define('ROOT_DIR', '../');
 
+require_once(ROOT_DIR . 'vendor/autoload.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/MicrosoftOAuthCallback.php');
 
 $result = (new MicrosoftOAuthCallback())->handle(
     params: $_GET,

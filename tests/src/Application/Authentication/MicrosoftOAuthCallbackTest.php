@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/MicrosoftOAuthCallback.php');
+namespace LibreBooking\Tests\Application\Authentication;
+
+use LibreBooking\Application\Authentication\MicrosoftOAuthCallback;
+use TestBase;
 
 class MicrosoftOAuthCallbackTest extends TestBase
 {

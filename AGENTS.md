@@ -35,6 +35,7 @@ This file contains essential information for AI coding agents working on the Lib
 /Pages                   Page binding and workflow logic
 /Presenters              Application logic and page population
 /plugins                 Plugin architecture (various types)
+/src                     PSR-4 autoloaded code, namespace LibreBooking\ (migration in progress)
 /tests                   PHPUnit test suite
 /tpl                     Smarty templates
 /tpl_c                   Template cache (auto-generated, not tracked)
@@ -177,6 +178,7 @@ Test suites available:
 - `domain` - Domain layer tests
 - `plugins` - Plugin tests
 - `presenters` - Presenter tests
+- `src` - Tests for PSR-4 code under `src/`
 - `webservice` / `webservices` - API tests
 - `integration` - Integration tests (requires database setup)
 
@@ -264,6 +266,64 @@ Configuration: `build.xml`
 - Each page should have a class in `/Pages`
 - Each page class should have a presenter in `/Presenters`
 - Related code grouped in directories with `namespace.php` for easy inclusion
+  (legacy pattern; new self-contained code uses PSR-4 in `/src` — see
+  "PSR-4 Migration" below)
+
+### PSR-4 Migration (`src/` directory)
+
+The project is gradually migrating from `require_once` include chains to
+Composer PSR-4 autoloading. `composer.json` maps the `LibreBooking\` namespace
+to `src/`, and CI runs `composer dump-autoload --optimize --strict-psr`, so
+everything under `src/` must be strictly PSR-4 compliant.
+
+**Where new code goes**:
+
+- **New self-contained classes** (value objects, helpers, services that do not
+  extend or implement anything from the legacy include system) go in `src/`
+  under the `LibreBooking\` namespace.
+- **Code extending an existing legacy subsystem** (a new Presenter, Page, or a
+  class implementing a legacy global interface) stays in the existing
+  directory layout for now. The legacy `namespace.php` include chains
+  reference global class names and cannot see namespaced classes.
+
+**Rules for code in `src/`**:
+
+- Exactly one class, enum, interface, or trait per file; the filename must
+  match the type name.
+- The namespace mirrors the path: `src/Application/Authentication/Foo.php`
+  declares `LibreBooking\Application\Authentication\Foo`.
+- Start every file with `declare(strict_types=1);`.
+- Never add the legacy trees (`lib/`, `Domain/`, `Pages/`, etc.) to the PSR-4
+  autoload mapping in `composer.json` — they are not PSR-4 compliant and the
+  strict CI check will fail.
+- Run `composer dump-autoload` after adding or moving files (never commit
+  anything under `vendor/`).
+- Tests live in `tests/src/`, mirroring the source path, and are namespaced
+  `LibreBooking\Tests\...` (mapped via `autoload-dev`). The strict CI autoload
+  check enforces that test namespaces and class names match their paths. Run
+  them alone with `composer phpunit -- --testsuite src`.
+
+**Migrating a legacy file to `src/`**:
+
+1. Split multi-type files so each class/enum gets its own file.
+2. Add the namespace and update every call site with `use` imports.
+3. Delete the old file from the legacy tree.
+4. Move the class's tests to `tests/src/` and namespace them
+   `LibreBooking\Tests\...` (see Testing Strategy).
+5. Web entry points (`Web/*.php`) must keep
+   `require_once ROOT_DIR . 'lib/Common/namespace.php';` in addition to
+   `require_once ROOT_DIR . 'vendor/autoload.php';`. The Composer autoloader
+   cannot load legacy global classes such as `Configuration` and `Log`, and
+   the legacy bootstrap also registers the global exception handler. Dropping
+   it causes fatals that only appear at runtime (see the OAuth regression in
+   PR #1552).
+6. When changing an entry point's bootstrap, add an entry-point-level
+   regression test that executes the script in a subprocess (see
+   `tests/Web/MicrosoftAuthEntryPointTest.php` for the pattern).
+
+`src/` is already covered by php-cs-fixer, PHPStan (`phpstan.neon` and
+`phpstan_next.neon` list it in `paths`), release packaging, and phplint, so no
+per-PR tooling changes are needed when adding files there.
 
 ### Naming Conventions
 
@@ -447,7 +507,8 @@ composer preflight
    - Create page class in `/Pages/`
    - Create presenter in `/Presenters/`
    - Create template in `/tpl/`
-   - Add domain logic in `/Domain/` or `/lib/Application/`
+   - Add domain logic in `/Domain/` or `/lib/Application/`; prefer `/src/`
+     for new self-contained classes (see "PSR-4 Migration" above)
 
 3. Add tests in `/tests/` matching the directory structure
 
@@ -630,6 +691,7 @@ chmod 755 tpl_c tpl uploads
 - Keep tests fast and isolated
 - Test file location should mirror source file structure
 - Name test files and test classes after the class under test with a `Test` suffix (for example, `Pages/Admin/ManageUsersPage.php` -> `tests/Pages/Admin/ManageUsersPageTest.php`)
+- Tests for PSR-4 code under `src/` go in `tests/src/` mirroring the source path, and are namespaced `LibreBooking\Tests\...` via the `autoload-dev` mapping (for example, `src/Application/Authentication/MicrosoftOAuthCallback.php` -> `tests/src/Application/Authentication/MicrosoftOAuthCallbackTest.php` declaring `LibreBooking\Tests\Application\Authentication\MicrosoftOAuthCallbackTest`)
 - Prefer one primary test file per source class; add extra files only when a clear separation is needed
 
 ### Integration Tests

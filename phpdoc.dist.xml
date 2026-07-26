@@ -25,6 +25,7 @@
                 <path>Pages/*</path>
                 <path>plugins/*</path>
                 <path>Presenters/*</path>
+                <path>src/*</path>
                 <path>Web/*</path>
                 <path>WebServices/*</path>
             </source>

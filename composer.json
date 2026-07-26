@@ -2,7 +2,16 @@
     "name": "librebooking/librebooking",
     "description": "LibreBooking",
     "license": "GPL-3.0-only",
-    "autoload": {},
+    "autoload": {
+        "psr-4": {
+            "LibreBooking\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LibreBooking\\Tests\\": "tests/src/"
+        }
+    },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
         "squizlabs/php_codesniffer": "^3.7.1",
