@@ -24,6 +24,8 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
     /** @var iCalendarReservationView[] */
     protected array $reservations = [];
 
+    protected ?string $calendarName = null;
+
     protected function __construct()
     {
         $authorization = new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization());
@@ -42,6 +44,11 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
     public function SetReservations($reservations): void
     {
         $this->reservations = $reservations;
+    }
+
+    public function SetCalendarName(string $calendarName): void
+    {
+        $this->calendarName = $calendarName;
     }
 
     public function GetSubscriptionKey()

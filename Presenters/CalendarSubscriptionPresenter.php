@@ -84,27 +84,34 @@ class CalendarSubscriptionPresenter
         $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
 
         $reservationUserLevel = ReservationUserLevel::OWNER;
+
         if (!empty($scheduleId)) {
-            $schedule = $this->subscriptionService->GetSchedule($scheduleId);
-            $sid = $schedule->GetId();
+            $sid = $this->subscriptionService->GetSchedule($scheduleId)->GetId();
         }
         if (!empty($resourceId)) {
-            $resource = $this->subscriptionService->GetResource($resourceId);
-            $rid = $resource->GetId();
+            $rid = $this->subscriptionService->GetResource($resourceId)->GetId();
         }
         if (!empty($accessoryIds)) {
             ## No transformation is implemented. It is assumed the accessoryIds is provided as AccessoryName
             ## filter is defined by LIKE "PATTERN%"
             $aid = $accessoryIds;
         }
+
+        $calendarName = $this->subscriptionService->ResolveCalendarName($scheduleId, $resourceId, $resourceGroupId, $userId);
+
         if (!empty($userId)) {
             $user = $this->subscriptionService->GetUser($userId);
             $uid = $user->Id();
             $reservationUserLevel = ReservationUserLevel::ALL;
             $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY);
         }
+
         if (!empty($resourceGroupId)) {
             $resourceIds = $this->subscriptionService->GetResourcesInGroup($resourceGroupId);
+        }
+
+        if ($calendarName !== null && $calendarName !== '') {
+            $this->page->SetCalendarName($calendarName);
         }
 
         if (!empty($uid) || !empty($sid) || !empty($rid) || !empty($resourceIds)) {

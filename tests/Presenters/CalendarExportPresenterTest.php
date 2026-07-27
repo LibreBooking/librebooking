@@ -291,6 +291,29 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
     }
 
+    public function testCalendarNameIsRenderedAsNameAndXWrCalname()
+    {
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+
+        $display = new CalendarExportDisplay();
+        $calendar = $display->Render([], 'Engineering Schedule');
+
+        // NAME: is checked with line boundaries since X-WR-CALNAME: also contains "NAME:" as a substring.
+        $this->assertStringContainsString("\r\nNAME:Engineering Schedule\r\n", $calendar);
+        $this->assertStringContainsString('X-WR-CALNAME:Engineering Schedule', $calendar);
+    }
+
+    public function testCalendarNameIsOmittedWhenNotProvided()
+    {
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+
+        $display = new CalendarExportDisplay();
+        $calendar = $display->Render([]);
+
+        $this->assertStringNotContainsString('NAME:', $calendar);
+        $this->assertStringNotContainsString('X-WR-CALNAME:', $calendar);
+    }
+
     public function testExtraIcalLinesPreservesPropertyParametersAndNestedComponents()
     {
         $user = new FakeUserSession();

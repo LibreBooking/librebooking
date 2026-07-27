@@ -17,6 +17,8 @@ interface ICalendarSubscriptionPage
      */
     public function SetReservations($reservations);
 
+    public function SetCalendarName(string $calendarName): void;
+
     /**
      * @return string
      */

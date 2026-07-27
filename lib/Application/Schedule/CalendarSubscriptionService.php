@@ -47,6 +47,15 @@ interface ICalendarSubscriptionService
      * @return int[]
      */
     public function GetResourcesInGroup($publicResourceGroupId);
+
+    public function GetResourceGroup(string $publicResourceGroupId): ?ResourceGroup;
+
+    public function ResolveCalendarName(
+        ?string $publicScheduleId,
+        ?string $publicResourceId,
+        ?string $publicResourceGroupId,
+        ?string $publicUserId = null
+    ): ?string;
 }
 
 class CalendarSubscriptionDetails
@@ -106,6 +115,7 @@ class CalendarSubscriptionDetails
 class CalendarSubscriptionService implements ICalendarSubscriptionService
 {
     private $cache = [];
+    private $groupCache = [];
 
     /**
      * @var IUserRepository
@@ -177,7 +187,7 @@ class CalendarSubscriptionService implements ICalendarSubscriptionService
     public function GetResourcesInGroup($publicResourceGroupId)
     {
         if (!array_key_exists($publicResourceGroupId, $this->cache)) {
-            $group = $this->resourceRepository->LoadResourceGroupByPublicId($publicResourceGroupId);
+            $group = $this->LoadResourceGroup($publicResourceGroupId);
 
             if ($group == null) {
                 return [];
@@ -188,6 +198,51 @@ class CalendarSubscriptionService implements ICalendarSubscriptionService
         }
 
         return $this->cache[$publicResourceGroupId];
+    }
+
+    public function GetResourceGroup(string $publicResourceGroupId): ?ResourceGroup
+    {
+        return $this->LoadResourceGroup($publicResourceGroupId);
+    }
+
+    public function ResolveCalendarName(
+        ?string $publicScheduleId,
+        ?string $publicResourceId,
+        ?string $publicResourceGroupId,
+        ?string $publicUserId = null
+    ): ?string {
+        $calendarName = null;
+
+        if (!empty($publicScheduleId)) {
+            $calendarName = $this->GetSchedule($publicScheduleId)->GetName();
+        }
+
+        if (!empty($publicResourceId)) {
+            $calendarName = $this->GetResource($publicResourceId)->GetName();
+        }
+
+        if (!empty($publicResourceGroupId)) {
+            $resourceGroup = $this->GetResourceGroup($publicResourceGroupId);
+            if ($resourceGroup !== null && $resourceGroup->name !== null && $resourceGroup->name !== '') {
+                $calendarName = $resourceGroup->name;
+            }
+        }
+
+        if (!empty($publicUserId)) {
+            $myCalendarName = Resources::GetInstance()->GetString('MyCalendar');
+            $calendarName = empty($calendarName) ? $myCalendarName : sprintf('%s - %s', $myCalendarName, $calendarName);
+        }
+
+        return $calendarName;
+    }
+
+    private function LoadResourceGroup(string $publicResourceGroupId): ?ResourceGroup
+    {
+        if (!array_key_exists($publicResourceGroupId, $this->groupCache)) {
+            $this->groupCache[$publicResourceGroupId] = $this->resourceRepository->LoadResourceGroupByPublicId($publicResourceGroupId);
+        }
+
+        return $this->groupCache[$publicResourceGroupId];
     }
 
     public function ForUser($userId, $resourceId = null, $scheduleId = null)
