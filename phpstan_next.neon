@@ -40,5 +40,11 @@ parameters:
             - Pages/Admin/
             - Presenters/
             - lib/
+    universalObjectCratesClasses:
+        # sabre/vobject uses __get/__set magic for all ICS property access
+        # (UID, DTSTAMP, PRODID, …). Declaring Node as a universal object crate
+        # suppresses property.notFound across the whole Component/VCalendar/
+        # VEvent/VAlarm hierarchy.
+        - Sabre\VObject\Node
     bootstrapFiles:
         - vendor/autoload.php

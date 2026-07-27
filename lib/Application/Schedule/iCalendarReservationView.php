@@ -70,8 +70,8 @@ class iCalendarReservationView
 
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
-        $this->Summary = $canViewDetails ? self::toRfc5545Text($factory->Format($res, $summaryFormat)) : $privateNotice;
-        $this->Description = $canViewDetails ? self::toRfc5545Text($res->Description ?? '') : $privateNotice;
+        $this->Summary = $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
+        $this->Description = $canViewDetails ? ($res->Description ?? '') : $privateNotice;
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
         $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateNotice;
@@ -96,19 +96,6 @@ class iCalendarReservationView
         }
 
         $this->ExtraIcalLines = method_exists($this->ExportFactory, 'GetIcalendarExtraLines') ? $this->ExportFactory->GetIcalendarExtraLines($res) : null;
-    }
-
-    /**
-     * Escapes a plain-text value for use in an iCalendar TEXT property (RFC 5545 §3.3.11).
-     * Backslashes, semicolons, and commas are escaped first; then newline sequences
-     * (\r\n, \n, \r) are replaced with the literal two-character escape \n so that
-     * calendar clients parse SUMMARY, DESCRIPTION, and any other TEXT property correctly.
-     */
-    private static function toRfc5545Text(string $value): string
-    {
-        // addcslashes prefixes each of '\', ',', and ';' with a backslash in a single pass.
-        $value = addcslashes($value, '\\,;');
-        return str_replace(["\r\n", "\n", "\r"], '\\n', $value);
     }
 
     /**
