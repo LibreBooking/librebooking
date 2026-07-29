@@ -133,6 +133,7 @@ class CalendarExportPresenterTest extends TestBase
 
         $this->privacyFilter->_CanViewDetails = false;
         $this->privacyFilter->_CanViewUser = false;
+        $this->fakeConfig->SetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS, 'noreply@example.com');
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
 
@@ -143,7 +144,7 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals($res, $this->privacyFilter->_LastViewUserReservation);
 
         $this->assertEquals('Private', $reservationView->Organizer);
-        $this->assertEquals('Private', $reservationView->OrganizerEmail);
+        $this->assertEquals('noreply@example.com', $reservationView->OrganizerEmail);
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
     }
@@ -198,6 +199,7 @@ class CalendarExportPresenterTest extends TestBase
 
         // privacy.view.reservations=false (default) means anonymous users must not see any details
         $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
+        $this->fakeConfig->SetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS, 'noreply@example.com');
         $this->privacyFilter->_CanViewDetails = true;
         $this->privacyFilter->_CanViewUser = true;
 
@@ -206,10 +208,10 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
         $this->assertEquals('Private', $reservationView->Organizer);
-        $this->assertEquals('Private', $reservationView->OrganizerEmail);
+        $this->assertEquals('noreply@example.com', $reservationView->OrganizerEmail);
     }
 
-    public function testViewEscapesNewlinesInTextPropertiesForICalCompliance()
+    public function testViewStoresRawTextInSummaryAndDescription()
     {
         $user = new FakeUserSession();
         $res = new ReservationItemView();
@@ -224,11 +226,12 @@ class CalendarExportPresenterTest extends TestBase
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
-        $this->assertEquals('First line\\nSecond line\\nThird line', $reservationView->Summary);
-        $this->assertEquals('Alpha\\nBeta\\nGamma', $reservationView->Description);
+        // View stores raw values; RFC 5545 escaping is handled by Sabre at serialization time.
+        $this->assertEquals("First line\r\nSecond line\nThird line", $reservationView->Summary);
+        $this->assertEquals("Alpha\r\nBeta\nGamma", $reservationView->Description);
     }
 
-    public function testViewEscapesBackslashSemicolonAndCommaInTextPropertiesForICalCompliance()
+    public function testViewStoresRawSpecialCharactersInSummaryAndDescription()
     {
         $user = new FakeUserSession();
         $res = new ReservationItemView();
@@ -243,8 +246,34 @@ class CalendarExportPresenterTest extends TestBase
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
 
-        $this->assertEquals('x\\\\y\\;z\\,w', $reservationView->Summary);
-        $this->assertEquals('a\\\\b\\;c\\,d', $reservationView->Description);
+        // View stores raw values; Sabre escapes backslash, semicolon, and comma during serialization.
+        $this->assertEquals('x\\y;z,w', $reservationView->Summary);
+        $this->assertEquals('a\\b;c,d', $reservationView->Description);
+    }
+
+    public function testSerializedOutputEscapesRFC5545ReservedCharactersInDescriptionAndSummary()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title; with, reserved\\ chars';
+        $res->Description = 'Desc; with, reserved\\ chars';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerId = $user->UserId + 1;
+        $res->OwnerEmailAddress = 'owner@example.com';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        // RFC 5545 §3.3.11: backslash, comma, semicolon are reserved in TEXT values.
+        $this->assertStringContainsString('SUMMARY:Title\; with\, reserved\\\\ chars', $ics);
+        $this->assertStringContainsString('DESCRIPTION:Desc\; with\, reserved\\\\ chars', $ics);
     }
 
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
@@ -260,5 +289,93 @@ class CalendarExportPresenterTest extends TestBase
             $calendar
         );
         $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
+    }
+
+    public function testExtraIcalLinesPreservesPropertyParametersAndNestedComponents()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // ATTENDEE carries parameters; VALARM is a nested component. Both must round-trip
+        // through Reader::read() rather than becoming malformed flat text.
+        $reservationView->ExtraIcalLines = "ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com\r\n"
+            . "BEGIN:VALARM\r\nACTION:AUDIO\r\nTRIGGER:-PT15M\r\nEND:VALARM";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com', $ics);
+        $this->assertStringContainsString('BEGIN:VALARM', $ics);
+        $this->assertStringContainsString('ACTION:AUDIO', $ics);
+    }
+
+    public function testExtraIcalLinesSupportsRfc5545FoldedContinuationLines()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // RFC 5545 §3.1: a line starting with a single space is a folded continuation
+        // of the previous line, joined without the leading space.
+        $reservationView->ExtraIcalLines = "X-CUSTOM-FIELD:Hello\r\n World";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('X-CUSTOM-FIELD:HelloWorld', $ics);
+    }
+
+    public function testMalformedExtraIcalLinesIsSkippedWithoutBreakingTheExport()
+    {
+        $user = new FakeUserSession();
+
+        $goodRes = new ReservationItemView();
+        $goodRes->UserId = $user->UserId;
+        $goodRes->UserLevelId = ReservationUserLevel::OWNER;
+        $goodRes->ReferenceNumber = 'good-ref';
+        $goodRes->Title = 'Good reservation';
+        $goodRes->StartDate = Date::Now();
+        $goodRes->EndDate = Date::Now()->AddHours(1);
+
+        $badRes = new ReservationItemView();
+        $badRes->UserId = $user->UserId;
+        $badRes->UserLevelId = ReservationUserLevel::OWNER;
+        $badRes->ReferenceNumber = 'bad-ref';
+        $badRes->Title = 'Bad reservation';
+        $badRes->StartDate = Date::Now();
+        $badRes->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $goodView = new iCalendarReservationView($goodRes, $user, $this->privacyFilter, '{title}');
+        $badView = new iCalendarReservationView($badRes, $user, $this->privacyFilter, '{title}');
+        // Not valid iCalendar syntax: no property name/value separator.
+        $badView->ExtraIcalLines = 'this is not a valid ical line';
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$goodView, $badView]);
+
+        // The malformed fragment on one reservation must not prevent the other
+        // reservation (or the rest of the malformed one's own properties) from rendering.
+        $this->assertStringContainsString('good-ref', $ics);
+        $this->assertStringContainsString('bad-ref', $ics);
     }
 }

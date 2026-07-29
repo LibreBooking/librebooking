@@ -7,7 +7,10 @@ class FakeResources extends Resources
     private $_dateFormats = [ResourceKeys::DATE_GENERAL => 'm/d/y',
         ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
         ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
-        ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
+        ResourceKeys::DATETIME_SHORT => 'Y-m-d',
+        // Mirrors the systemDateKeys entry in Resources; without it GetDateFormat()
+        // falls through to returning the key itself and callers format garbage dates.
+        'ical' => 'Ymd\THis\Z'];
 
     public $_SetCurrentLanguageResult = true;
 
