@@ -209,7 +209,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
         $this->Set('ReservationId', $this->GetReservationId());
 
-        $this->Display('Ajax/reservation_popup.tpl');
+        $this->Display('Ajax/respopup.tpl');
     }
 
     /**
@@ -403,7 +403,7 @@ class ReservationPopupPresenter
         $user = $this->_userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
         $owner = $this->_userRepository->LoadById($reservation->OwnerId);
 
-        $this->UserResourcePermissions(ServiceLocator::GetServer()->GetUserSession()->UserId);
+        $this->UserResourcePermissions(ServiceLocator::GetServer()->GetUserSession()->UserId, $reservation);
         $this->_page->SetCurrentUserParticipating($this->IsCurrentUserParticipating(ServiceLocator::GetServer()->GetUserSession()->UserId));
         $this->_page->SetCurrentUserInvited($this->IsCurrentUserInvited(ServiceLocator::GetServer()->GetUserSession()->UserId));
 
@@ -424,23 +424,40 @@ class ReservationPopupPresenter
     }
 
     /**
-     * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * Gets the resources the user has permissions (full access and view only permissions).
+     * For anonymous users: if view.reservations=true, grant access to all resources
+     * of the requested reservation directly (no DB permission lookup needed).
+     * This is used to block a user from seeing reservation details if he has no permissions to its resources.
      */
-    private function UserResourcePermissions($userId)
+    private function UserResourcePermissions($userId, $reservation = null)
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+
+        // For anonymous users with view.reservations=true, use the resource IDs
+        // of the current reservation directly - no DB permission lookup needed
+        $allowGuestView = Configuration::Instance()->GetKey(
+            ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
+            new BooleanConverter()
+        );
+
+        if (!$userSession->IsLoggedIn() && $allowGuestView && $reservation !== null) {
+            $resourceIds = array_map(fn ($r) => $r->GetResourceId(), $reservation->Resources);
+            $this->_page->BindViewableResourceReservations($resourceIds);
+            return;
+        }
+
+        // Logged-in users: keep existing logic unchanged
         $resourceRepo = new ResourceRepository();
         $resourceIds = [];
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
-
         $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
+        if ($userSession->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
+        if ($userSession->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

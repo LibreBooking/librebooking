@@ -68,12 +68,29 @@ class SlotLabelFactory
             return '';
         }
 
-        if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
-            return '';
-        }
+        // Anonymous users may see details if view.reservations=true
+        $isAnonymousUser = !$this->user->IsLoggedIn();
 
-        if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
-            return '';
+        if ($isAnonymousUser) {
+            // Anonymous user and view.reservations=false: show nothing
+            if (!$shouldHideReservations) {
+                return '';
+            }
+            // Anonymous user and view.reservations=true: skip the DB resource
+            // permission check (UserId=0 has no DB entries) and proceed to build the label
+        } else {
+            // Logged-in users: keep existing logic unchanged
+            if (!$shouldHideReservations && !$this->user->IsLoggedIn()) {
+                return '';
+            }
+
+            // Resource permission check only for logged-in users
+            if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId))
+                && !$reservation->IsUserOwner($this->user->UserId)
+                && !$reservation->IsUserInvited($this->user->UserId)
+                && !$reservation->IsUserParticipating($this->user->UserId)) {
+                return '';
+            }
         }
 
         if (empty($format)) {
@@ -145,9 +162,9 @@ class SlotLabelFactory
     }
 
     /**
-    * Gets the resources the user has permissions (full access and view only permissions)
-    * This is used to block a user from seeing reservation details if he has no permissions to it's resources
-    */
+     * Gets the resources the user has permissions (full access and view only permissions)
+     * This is used to block a user from seeing reservation details if he has no permissions to its resources
+     */
     private function UserResourcePermissions($userId)
     {
         $resourceRepo = new ResourceRepository();

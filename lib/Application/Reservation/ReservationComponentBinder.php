@@ -381,10 +381,31 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * This is used to block a user from seeing reservation details if he has no permissions to it's resources.
+     * For anonymous users: if view.reservations=true, grant access to all resources
+     * of the current reservation directly (no DB permission lookup needed).
      */
     private function UserResourcePermissions($userId)
     {
+        $userSession = ServiceLocator::GetServer()->GetUserSession();
+
+        // For anonymous users with view.reservations=true, use the resource IDs
+        // of the current reservation directly - no DB permission lookup needed
+        $allowGuestView = Configuration::Instance()->GetKey(
+            ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
+            new BooleanConverter()
+        );
+
+        if (!$userSession->IsLoggedIn() && $allowGuestView) {
+            $resourceIds = array_merge(
+                [$this->reservationView->ResourceId],
+                $this->reservationView->AdditionalResourceIds
+            );
+            $this->page->BindViewableResourceReservations($resourceIds);
+            return;
+        }
+
+        // Logged-in users: keep existing logic unchanged
         $resourceRepo = new ResourceRepository();
         $resourceIds = [];
 
@@ -392,11 +413,11 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
         $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
+        if ($userSession->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
+        if ($userSession->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 
