@@ -416,7 +416,7 @@ class ConfigKeys extends AbstractConfigKeys
     public const EMAIL_DEFAULT_FROM_ADDRESS = [
         'key' => 'email.default.from.address',
         'type' => 'string',
-        'default' => '',
+        'default' => 'no-reply@example.com',
         'label' => 'Default From Address',
         'description' => 'Default email address for outgoing emails',
         'config_file_comment' => 'Default email address to use for outgoing emails',
@@ -427,7 +427,7 @@ class ConfigKeys extends AbstractConfigKeys
     public const EMAIL_DEFAULT_FROM_NAME = [
         'key' => 'email.default.from.name',
         'type' => 'string',
-        'default' => '',
+        'default' => 'LB',
         'label' => 'Default From Name',
         'description' => 'Default display name for outgoing emails',
         'config_file_comment' => 'Default name to use for outgoing emails',

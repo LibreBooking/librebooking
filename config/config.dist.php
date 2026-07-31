@@ -196,10 +196,10 @@ return [
             'enforce.custom.template' => false,
 
             # Default email address to use for outgoing emails
-            'default.from.address' => '',
+            'default.from.address' => 'no-reply@example.com',
 
             # Default name to use for outgoing emails
-            'default.from.name' => '',
+            'default.from.name' => 'LB',
         ],
 
         #########

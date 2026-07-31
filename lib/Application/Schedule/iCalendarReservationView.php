@@ -61,6 +61,11 @@ class iCalendarReservationView
 
         $privateNotice = 'Private';
         $privateEmail = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
+        static $missingPrivateOrganizerEmailLogged = false;
+        if (!$canViewUser && $privateEmail === '' && !$missingPrivateOrganizerEmailLogged) {
+            Log::Error('ICS private organizer email is not configured. Set the email.default.from.address setting.');
+            $missingPrivateOrganizerEmailLogged = true;
+        }
 
         $this->Classification = method_exists($this->ExportFactory, 'GetIcalendarClassification') ? $this->ExportFactory->GetIcalendarClassification($res) : 'PUBLIC';
         if ($res->DateCreated) {
