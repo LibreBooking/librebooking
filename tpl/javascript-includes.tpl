@@ -64,9 +64,9 @@
 {/if}
 {if isset($Select2) && $Select2}
     {if isset($UseLocalJquery) && $UseLocalJquery}
-        {vendor_js src="select2/4.1.0-rc.0/js/select2.min.js"}
+        {vendor_js src="select2/4.1.0/js/select2.min.js"}
     {else}
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
     {/if}
 {/if}
 {if isset($Fullcalendar) && $Fullcalendar}

@@ -69,9 +69,9 @@
     {/if}
     {if isset($Select2) && $Select2}
         {if isset($UseLocalJquery) && $UseLocalJquery}
-            {vendor_css src="select2/4.1.0-rc.0/css/select2.min.css"}
+            {vendor_css src="select2/4.1.0/css/select2.min.css"}
         {else}
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
         {/if}
     {/if}
 
