@@ -75,13 +75,67 @@ class ResourceAvailabilityControlPresenterTest extends TestBase
             $this->control->_AvailableNow[1][0]
         );
         $this->assertEquals(
-            new UnavailableDashboardItem($this->unavailableResource, $this->reservationRepo->_Reservations[1]),
+            new UnavailableDashboardItem(
+                resource: $this->unavailableResource,
+                currentReservation: $this->reservationRepo->_Reservations[1],
+                isFutureScheduleAvailability: false
+            ),
             $this->control->_UnavailableNow[1][0]
         );
         $this->assertEquals(
-            new UnavailableDashboardItem($this->unavailableAllDayResource, $this->reservationRepo->_Reservations[2]),
+            new UnavailableDashboardItem(
+                resource: $this->unavailableAllDayResource,
+                currentReservation: $this->reservationRepo->_Reservations[2],
+                isFutureScheduleAvailability: false
+            ),
             $this->control->_UnavailableAllDay[1][0]
         );
+
+        $this->assertFalse($this->control->_UnavailableNow[1][0]->IsFutureScheduleAvailability());
+        $this->assertFalse($this->control->_UnavailableAllDay[1][0]->IsFutureScheduleAvailability());
+    }
+
+    public function testFutureScheduleResourceAppearsAsUnavailable()
+    {
+        Date::_SetNow(Date::Parse('2026-07-29 10:00', 'UTC'));
+
+        $futureSchedule = new FakeSchedule(1);
+        $futureSchedule->SetAvailability(Date::Now()->AddDays(5), Date::Now()->AddDays(35));
+        $this->scheduleRepo->_Schedules = [$futureSchedule];
+
+        $futureResource = new TestResourceDto(1, '1');
+        $this->resourceService->_AllResources = [$futureResource];
+        $this->reservationRepo->_Reservations = [];
+
+        $this->presenter->PageLoad($this->fakeUser);
+
+        $this->assertNotEmpty($this->control->_UnavailableNow);
+        $this->assertNotEmpty($this->control->_UnavailableNow[1]);
+        $unavailableItem = $this->control->_UnavailableNow[1][0];
+        $this->assertInstanceOf('UnavailableDashboardItem', $unavailableItem);
+        $this->assertEquals($futureResource->GetId(), $unavailableItem->ResourceId());
+        $this->assertTrue($unavailableItem->IsFutureScheduleAvailability());
+        // Verify that the availability begin date is set as the end date of the synthetic reservation
+        $this->assertTrue($unavailableItem->ReservationEnds()->Equals(Date::Now()->AddDays(5)));
+    }
+
+    public function testPastScheduleResourceIsHidden()
+    {
+        Date::_SetNow(Date::Parse('2026-07-29 10:00', 'UTC'));
+
+        $pastSchedule = new FakeSchedule(1);
+        $pastSchedule->SetAvailability(Date::Now()->AddDays(-30), Date::Now()->AddDays(-1));
+        $this->scheduleRepo->_Schedules = [$pastSchedule];
+
+        $pastResource = new TestResourceDto(1, '1');
+        $this->resourceService->_AllResources = [$pastResource];
+        $this->reservationRepo->_Reservations = [];
+
+        $this->presenter->PageLoad($this->fakeUser);
+
+        $this->assertEmpty($this->control->_AvailableNow);
+        $this->assertEmpty($this->control->_UnavailableNow);
+        $this->assertEmpty($this->control->_UnavailableAllDay);
     }
 
     private function PopulateResources()
@@ -105,7 +159,11 @@ class ResourceAvailabilityControlPresenterTest extends TestBase
 
     private function PopulateSchedules()
     {
-        $this->scheduleRepo->_Schedules = [new FakeSchedule(1), new FakeSchedule(2)];
+        $schedule1 = new FakeSchedule(1);
+        $schedule1->SetAvailability(Date::Now()->AddDays(-30), Date::Now()->AddDays(30));
+        $schedule2 = new FakeSchedule(2);
+        $schedule2->SetAvailability(Date::Now()->AddDays(-30), Date::Now()->AddDays(30));
+        $this->scheduleRepo->_Schedules = [$schedule1, $schedule2];
     }
 }
 

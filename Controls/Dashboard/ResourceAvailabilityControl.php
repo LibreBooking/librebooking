@@ -123,8 +123,18 @@ class UnavailableDashboardItem
      */
     private $currentReservation;
 
-    public function __construct(ResourceDto $resource, ReservationItemView $currentReservation)
-    {
+    /**
+     * @param bool $isFutureScheduleAvailability true when this item stands in for a resource whose schedule's
+     *                                           availability window has not opened yet, rather than a resource
+     *                                           blocked by a real reservation. In that case $currentReservation
+     *                                           is a synthetic placeholder and ReservationEnds() returns the
+     *                                           date the schedule becomes available.
+     */
+    public function __construct(
+        ResourceDto $resource,
+        ReservationItemView $currentReservation,
+        private bool $isFutureScheduleAvailability
+    ) {
         $this->resource = $resource;
         $this->currentReservation = $currentReservation;
     }
@@ -161,6 +171,11 @@ class UnavailableDashboardItem
     public function GetTextColor()
     {
         return $this->currentReservation->GetTextColor();
+    }
+
+    public function IsFutureScheduleAvailability(): bool
+    {
+        return $this->isFutureScheduleAvailability;
     }
 }
 

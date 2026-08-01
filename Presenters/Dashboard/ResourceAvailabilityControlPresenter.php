@@ -42,6 +42,13 @@ class ResourceAvailabilityControlPresenter
         $resources = $this->resourceService->GetAllResources(false, $user);
         $reservations = $this->GetReservations($this->reservationViewRepository->GetReservations($now, $now->AddDays(30)));
 
+        // Build schedule lookup table
+        $schedules = $this->scheduleRepository->GetAll();
+        $schedulesById = [];
+        foreach ($schedules as $schedule) {
+            $schedulesById[$schedule->GetId()] = $schedule;
+        }
+
         $available = [];
         $unavailable = [];
         $allday = [];
@@ -50,6 +57,38 @@ class ResourceAvailabilityControlPresenter
             if ($resource->StatusId == ResourceStatus::HIDDEN) {
                 continue;
             }
+
+            // Check schedule availability
+            if (isset($schedulesById[$resource->ScheduleId])) {
+                $schedule = $schedulesById[$resource->ScheduleId];
+                if ($schedule->HasAvailability()) {
+                    $begin = $schedule->GetAvailabilityBegin();
+                    $end = $schedule->GetAvailabilityEnd();
+
+                    // If schedule is past, don't show this resource
+                    if ($now->GreaterThanOrEqual($end)) {
+                        continue;
+                    }
+
+                    // If schedule is future, add to unavailable with availability begin date
+                    if ($now->LessThan($begin)) {
+                        $futureReservation = new ReservationItemView(
+                            startDate: $begin,
+                            endDate: $begin,
+                            resourceName: $resource->GetName(),
+                            resourceId: $resource->GetId()
+                        );
+                        $futureReservation->ResourceColor = $resource->GetColor();
+                        $unavailable[$resource->ScheduleId][] = new UnavailableDashboardItem(
+                            resource: $resource,
+                            currentReservation: $futureReservation,
+                            isFutureScheduleAvailability: true
+                        );
+                        continue;
+                    }
+                }
+            }
+
             $reservation = $this->GetOngoingReservation($resource, $reservations);
 
             if ($reservation != null) {
@@ -60,9 +99,17 @@ class ResourceAvailabilityControlPresenter
                 }
 
                 if (!$reservation->EndDate->DateEquals($now)) {
-                    $allday[$resource->ScheduleId][] = new UnavailableDashboardItem($resource, $lastReservationBeforeOpening);
+                    $allday[$resource->ScheduleId][] = new UnavailableDashboardItem(
+                        resource: $resource,
+                        currentReservation: $lastReservationBeforeOpening,
+                        isFutureScheduleAvailability: false
+                    );
                 } else {
-                    $unavailable[$resource->ScheduleId][] = new UnavailableDashboardItem($resource, $lastReservationBeforeOpening);
+                    $unavailable[$resource->ScheduleId][] = new UnavailableDashboardItem(
+                        resource: $resource,
+                        currentReservation: $lastReservationBeforeOpening,
+                        isFutureScheduleAvailability: false
+                    );
                 }
             } else {
                 $resourceId = $resource->GetId();
@@ -77,7 +124,7 @@ class ResourceAvailabilityControlPresenter
         $this->control->SetAvailable($available);
         $this->control->SetUnavailable($unavailable);
         $this->control->SetUnavailableAllDay($allday);
-        $this->control->SetSchedules($this->scheduleRepository->GetAll());
+        $this->control->SetSchedules($schedules);
     }
 
     /**
