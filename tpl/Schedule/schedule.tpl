@@ -95,9 +95,9 @@
                                 <a href="#"
                                     class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Standard->value} active{/if}"
                                     id="schedule_standard" schedule-display="{ScheduleStyle::Standard->value}"
-                                    title="{translate key='StandardScheduleDisplay'}">
-                                    <img class="schedule_icon shadow-sm" src="img/table.png"
-                                        alt="{translate key='StandardScheduleDisplay'}" />
+                                    title="{if $IsMobile && !$IsTablet}{translate key='CondensedWeekScheduleDisplay'}{else}{translate key='StandardScheduleDisplay'}{/if}">
+                                    <img class="schedule_icon shadow-sm" src="{if $IsMobile && !$IsTablet}img/table-week.png{else}img/table.png{/if}"
+                                        alt="{if $IsMobile && !$IsTablet}{translate key='CondensedWeekScheduleDisplay'}{else}{translate key='StandardScheduleDisplay'}{/if}" />
                                 </a>
                                 <a href="#"
                                     class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Tall->value} active{/if}"
@@ -107,14 +107,14 @@
                                         alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
                                 <a href="#"
-                                    class="schedule-style d-none d-md-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
+                                    class="schedule-style d-none d-sm-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
                                     id="schedule_wide" schedule-display="{ScheduleStyle::Wide->value}"
                                     title="{translate key='WideScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-wide.png"
                                         alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#"
-                                    class="schedule-style d-none d-md-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
+                                    class="schedule-style d-none d-sm-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
                                     id="schedule_week" schedule-display="{ScheduleStyle::CondensedWeek->value}"
                                     title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-week.png"
