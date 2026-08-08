@@ -469,6 +469,16 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function SetScheduleStyle(ScheduleStyle $style): void
     {
+        // Phones render schedule-mobile.tpl for every style except Tall, and that
+        // template is the Standard layout. Keep the effective style aligned with
+        // the template that is actually rendered so that the active style control
+        // and the scheduleStyle passed to schedule.js both describe it. The stored
+        // cookie is deliberately left alone so a style chosen on a desktop is
+        // still there when the user returns in desktop mode.
+        if ($this->IsMobile && !$this->IsTablet && $style !== ScheduleStyle::Tall) {
+            $style = ScheduleStyle::Standard;
+        }
+
         $this->ScheduleStyle = $style;
         $this->Set('CookieName', 'schedule-style-' . $this->GetVar('ScheduleId'));
         $this->Set('ScheduleStyle', $style->value);
