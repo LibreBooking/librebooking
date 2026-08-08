@@ -106,20 +106,22 @@
                                     <img class="schedule_icon shadow-sm" src="img/table-tall.png"
                                         alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
+                                {if !$IsMobile || $IsTablet}
                                 <a href="#"
-                                    class="schedule-style d-none d-sm-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
+                                    class="schedule-style d-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
                                     id="schedule_wide" schedule-display="{ScheduleStyle::Wide->value}"
                                     title="{translate key='WideScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-wide.png"
                                         alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#"
-                                    class="schedule-style d-none d-sm-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
+                                    class="schedule-style d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
                                     id="schedule_week" schedule-display="{ScheduleStyle::CondensedWeek->value}"
                                     title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-week.png"
                                         alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
+                                {/if}
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
                                 {assign var="atomUrl" value=$SubscriptionUrl->GetAtomUrl()}
