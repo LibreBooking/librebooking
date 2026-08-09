@@ -23,9 +23,15 @@ class CalendarSubscriptionUrl
         $scriptUrl .= '/export/' . self::PAGE_TOKEN;
         $url = new Url($scriptUrl);
 
-        $url->AddQueryString(QueryStringKeys::USER_ID, $userPublicId);
-        $url->AddQueryString(QueryStringKeys::SCHEDULE_ID, $schedulePublicId);
-        $url->AddQueryString(QueryStringKeys::RESOURCE_ID, $resourcePublicId);
+        if (!empty($userPublicId)) {
+            $url->AddQueryString(QueryStringKeys::USER_ID, $userPublicId);
+        }
+        if (!empty($schedulePublicId)) {
+            $url->AddQueryString(QueryStringKeys::SCHEDULE_ID, $schedulePublicId);
+        }
+        if (!empty($resourcePublicId)) {
+            $url->AddQueryString(QueryStringKeys::RESOURCE_ID, $resourcePublicId);
+        }
         $url->AddQueryString(QueryStringKeys::SUBSCRIPTION_KEY, $subscriptionKey);
         $this->url = $url;
     }
