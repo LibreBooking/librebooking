@@ -12,6 +12,7 @@ class ViewSchedulePage extends SchedulePage
         ScheduleStyle::Wide->value => 'Schedule/schedule-days-horizontal.tpl',
         ScheduleStyle::Tall->value => 'Schedule/schedule-flipped.tpl',
         ScheduleStyle::CondensedWeek->value => 'Schedule/schedule-week-condensed.tpl',
+        ScheduleStyle::Mobile->value => 'Schedule/schedule-mobile.tpl',
     ];
 
     public function __construct()

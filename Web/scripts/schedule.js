@@ -12,6 +12,14 @@ function Schedule(opts, resourceGroups) {
   const ScheduleWide = '1';
   const ScheduleTall = '2';
   const ScheduleCondensed = '3';
+  const ScheduleMobile = '4';
+
+  function usesMobileReservationLayout() {
+    return (
+      opts.scheduleStyle === ScheduleMobile ||
+      (opts.isMobileView === '1' && opts.scheduleStyle === ScheduleStandard)
+    );
+  }
 
   function autoScrollToToday() {
     if (!scheduleOpts.autoScrollToday || hasAutoScrolledToday) {
@@ -477,10 +485,7 @@ function Schedule(opts, resourceGroups) {
             let color =
               res.BackgroundColor !== '' ? `background-color:${res.BackgroundColor};color:${res.TextColor};` : '';
 
-            if (
-              opts.scheduleStyle === ScheduleCondensed ||
-              (opts.isMobileView === '1' && opts.scheduleStyle === ScheduleStandard)
-            ) {
+            if (opts.scheduleStyle === ScheduleCondensed || usesMobileReservationLayout()) {
               if (Number.parseInt(t.data('resourceid')) !== Number.parseInt(res.ResourceId)) {
                 return;
               }

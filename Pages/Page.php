@@ -142,7 +142,7 @@ abstract class Page implements IPage
         }
         $this->smarty->assign('HomeUrl', $logoUrl);
 
-        $loadMobileViews = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_LOAD_MOBILE_VIEWS, new BooleanConverter()) ?? true;
+        /*$loadMobileViews = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_LOAD_MOBILE_VIEWS, new BooleanConverter()) ?? true;
 
         if ($loadMobileViews) {
             $detect = new MobileDetect();
@@ -153,7 +153,7 @@ abstract class Page implements IPage
         $this->IsDesktop = !$this->IsMobile && !$this->IsTablet;
         $this->Set('IsMobile', (bool) $this->IsMobile);
         $this->Set('IsTablet', (bool) $this->IsTablet);
-        $this->Set('IsDesktop', (bool) $this->IsDesktop);
+        $this->Set('IsDesktop', (bool) $this->IsDesktop);*/
         $this->Set('GoogleAnalyticsTrackingId', Configuration::Instance()->GetKey(ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
 

@@ -441,4 +441,5 @@ enum ScheduleStyle: int
     case Wide = 1;
     case Tall = 2;
     case CondensedWeek = 3;
+    case Mobile = 4;
 }

@@ -72,6 +72,7 @@ class SchedulePageTest extends TestBase
             'standard is left alone' => [ScheduleStyle::Standard, ScheduleStyle::Standard],
             'wide becomes standard' => [ScheduleStyle::Wide, ScheduleStyle::Standard],
             'condensed week becomes standard' => [ScheduleStyle::CondensedWeek, ScheduleStyle::Standard],
+            'mobile becomes standard' => [ScheduleStyle::Mobile, ScheduleStyle::Standard],
             'tall is preserved' => [ScheduleStyle::Tall, ScheduleStyle::Tall],
         ];
     }
@@ -86,6 +87,7 @@ class SchedulePageTest extends TestBase
             'wide' => [ScheduleStyle::Wide],
             'tall' => [ScheduleStyle::Tall],
             'condensed week' => [ScheduleStyle::CondensedWeek],
+            'mobile' => [ScheduleStyle::Mobile],
         ];
     }
 }

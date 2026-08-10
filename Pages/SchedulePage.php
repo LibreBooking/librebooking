@@ -240,6 +240,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
         ScheduleStyle::Wide->value => 'Schedule/schedule-days-horizontal.tpl',
         ScheduleStyle::Tall->value => 'Schedule/schedule-flipped.tpl',
         ScheduleStyle::CondensedWeek->value => 'Schedule/schedule-week-condensed.tpl',
+        ScheduleStyle::Mobile->value => 'Schedule/schedule-mobile.tpl',
     ];
 
     /**
@@ -311,20 +312,20 @@ class SchedulePage extends ActionPage implements ISchedulePage
         $this->Set('ShowWeekNumbers', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_SHOW_WEEK_NUMBERS, new BooleanConverter()));
         $this->Set('FastReservationLoad', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_FAST_RESERVATION_LOAD, new BooleanConverter()) ?? false);
 
-        if ($this->IsMobile && !$this->IsTablet) {
+        /*if ($this->IsMobile && !$this->IsTablet) {
             if ($this->ScheduleStyle == ScheduleStyle::Tall) {
                 $this->Display('Schedule/schedule-flipped.tpl');
             } else {
                 $this->Display('Schedule/schedule-mobile.tpl');
             }
-        } else {
+        } else {*/
             $styleValue = $this->ScheduleStyle->value;
             if (array_key_exists($styleValue, $this->_styles)) {
                 $this->Display($this->_styles[$styleValue]);
             } else {
                 $this->Display('Schedule/schedule.tpl');
             }
-        }
+        //}
 
         $endDisplay = microtime(true);
 

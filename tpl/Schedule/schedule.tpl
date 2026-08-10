@@ -75,11 +75,9 @@
 
     {if $IsAccessible}
         {block name="schedule_control"}
-            <div class="row">
-                {assign var=titleWidth value="col-sm-12 col-12"}
+            <div class="schedule_control">
                 {if !isset($HideSchedule) || !$HideSchedule}
-                    {assign var=titleWidth value="col-sm-6 col-12"}
-                    <div id="schedule-actions" class="col-sm-3 col-12">
+                    <div id="schedule-actions" class="">
                         {block name="actions"}
                             <div class="d-flex align-items-center mb-2">
                                 <div class="me-4 d-flex align-items-center gap-2">
@@ -95,9 +93,9 @@
                                 <a href="#"
                                     class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Standard->value} active{/if}"
                                     id="schedule_standard" schedule-display="{ScheduleStyle::Standard->value}"
-                                    title="{if $IsMobile && !$IsTablet}{translate key='CondensedWeekScheduleDisplay'}{else}{translate key='StandardScheduleDisplay'}{/if}">
-                                    <img class="schedule_icon shadow-sm" src="{if $IsMobile && !$IsTablet}img/table-week.png{else}img/table.png{/if}"
-                                        alt="{if $IsMobile && !$IsTablet}{translate key='CondensedWeekScheduleDisplay'}{else}{translate key='StandardScheduleDisplay'}{/if}" />
+                                    title="{translate key='StandardScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/table.png"
+                                        alt="{translate key='StandardScheduleDisplay'}" />
                                 </a>
                                 <a href="#"
                                     class="schedule-style me-2 d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::Tall->value} active{/if}"
@@ -106,7 +104,6 @@
                                     <img class="schedule_icon shadow-sm" src="img/table-tall.png"
                                         alt="{translate key='TallScheduleDisplay'}" />
                                 </a>
-                                {if !$IsMobile || $IsTablet}
                                 <a href="#"
                                     class="schedule-style d-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Wide->value} active{/if}"
                                     id="schedule_wide" schedule-display="{ScheduleStyle::Wide->value}"
@@ -115,13 +112,19 @@
                                         alt="{translate key='WideScheduleDisplay'}" />
                                 </a>
                                 <a href="#"
-                                    class="schedule-style d-inline-flex align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
+                                    class="schedule-style d-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::CondensedWeek->value} active{/if}"
                                     id="schedule_week" schedule-display="{ScheduleStyle::CondensedWeek->value}"
                                     title="{translate key='CondensedWeekScheduleDisplay'}">
                                     <img class="schedule_icon shadow-sm" src="img/table-week.png"
                                         alt="{translate key='CondensedWeekScheduleDisplay'}" />
                                 </a>
-                                {/if}
+                                <a href="#"
+                                    class="schedule-style d-inline-flex me-2 align-items-center{if $ScheduleStyle == ScheduleStyle::Mobile->value} active{/if}"
+                                    id="schedule_mobile" schedule-display="{ScheduleStyle::Mobile->value}"
+                                    title="{translate key='MobileScheduleDisplay'}">
+                                    <img class="schedule_icon shadow-sm" src="img/mobile.png"
+                                        alt="{translate key='MobileScheduleDisplay'}" />
+                                </a>
                             </div>
                             {if isset($SubscriptionUrl) && $SubscriptionUrl != null && $ShowSubscription && $LoggedIn}
                                 {assign var="atomUrl" value=$SubscriptionUrl->GetAtomUrl()}
@@ -140,7 +143,7 @@
                     </div>
                 {/if}
 
-                <div id="schedule-title" class="schedule_title {$titleWidth}">
+                <div id="schedule-title" class="schedule_title">
                     <div class="d-flex justify-content-center">
                         {if count($Schedules) > 1}
                             <label for="schedules" class="visually-hidden">{translate key='Schedules'}</label>
