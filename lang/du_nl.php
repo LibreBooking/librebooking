@@ -1084,6 +1084,6 @@ class du_nl extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'du_nl';
+        return 'nl-NL';
     }
 }

@@ -186,7 +186,6 @@ class ee_ee extends en_gb
         $strings['ReservationDescription'] = 'Broneeringu kirjeldus';
         $strings['ResourceList'] = 'Broneeritavad väljakud';
         $strings['Accessories'] = 'Lisavarustus';
-        ;
         $strings['InvitationList'] = 'Kutsutud inimesed';
         $strings['AccessoryName'] = 'Lisavarustuse nimi';
         $strings['QuantityAvailable'] = 'Kogus saadaval';
@@ -862,6 +861,6 @@ class ee_ee extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'ee';
+        return 'et';
     }
 }

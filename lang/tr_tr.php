@@ -881,6 +881,6 @@ class tr_tr extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'en';
+        return 'tr';
     }
 }

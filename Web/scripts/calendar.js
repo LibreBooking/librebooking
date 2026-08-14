@@ -16,9 +16,6 @@ function Calendar(opts) {
   };
 
   // Helper functions for FullCalendar v6
-  function normalizeLocale(locale) {
-    return (locale || document.documentElement.lang || 'en').replace('_', '-');
-  }
 
   function mapCurrentViewToLegacy(viewType) {
     switch (viewType) {
@@ -93,7 +90,7 @@ function Calendar(opts) {
       weekNumbers: _options.showWeekNumbers,
       initialView: mapLegacyViewToCurrent(_options.view),
       initialDate: _options.defaultDate,
-      locale: normalizeLocale(_options.locale),
+      locale: document.documentElement.lang.slice(0, 2) || 'en',
       events: {
         url: _options.eventsUrl,
         extraParams: function () {

@@ -1103,6 +1103,6 @@ class ar extends en_us
 
     protected function _GetHtmlLangCode()
     {
-        return 'en';
+        return 'ar';
     }
 }

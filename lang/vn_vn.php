@@ -839,6 +839,6 @@ class vn_vn extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'en';
+        return 'vi';
     }
 }

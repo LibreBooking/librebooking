@@ -728,6 +728,6 @@ class no_no extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'no_no';
+        return 'nb-NO';
     }
 }

@@ -911,6 +911,6 @@ class cz extends en_us
 
     protected function _GetHtmlLangCode()
     {
-        return 'cz';
+        return 'cs';
     }
 }

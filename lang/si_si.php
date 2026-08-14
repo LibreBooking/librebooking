@@ -3,7 +3,7 @@
 /**
 Modified by Alenka Kavčič (alenka.kavcic@fri.uni-lj.si), UL FRI, July 2015
 Translated and adapted for Slovenian language
-*/
+ */
 
 require_once('Language.php');
 require_once('en_gb.php');
@@ -749,6 +749,6 @@ class si_si extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'si-si';
+        return 'sl-SI';
     }
 }
