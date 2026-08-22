@@ -1,0 +1,8 @@
+{
+  "name": "datatables",
+  "version": "3.0.1",
+  "description": "DataTables - The Javascript Table Library.",
+  "homepage": "https://datatables.net/",
+  "source": "https://cdn.datatables.net/3.0.1/",
+  "license": "MIT"
+}

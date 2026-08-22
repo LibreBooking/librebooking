@@ -1,8 +1,8 @@
 {
   "name": "pdfmake",
-  "version": "0.1.53",
+  "version": "0.2.7",
   "description": "Client/server side PDF printing in pure JavaScript.",
   "homepage": "http://pdfmake.org/",
-  "source": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js",
+  "source": "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js",
   "license": "MIT"
 }
