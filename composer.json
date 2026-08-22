@@ -29,7 +29,7 @@
         "google/recaptcha": "1.3.*",
         "gregwar/captcha": "^2.1",
         "google/apiclient": "^2.19",
-        "microsoft/microsoft-graph": "^3.3",
+        "microsoft/microsoft-graph": "^3.5",
         "joelbutcher/facebook-graph-sdk": "^6.1",
         "mobiledetect/mobiledetectlib": "^4.11",
         "bacon/bacon-qr-code": "^3.1",
