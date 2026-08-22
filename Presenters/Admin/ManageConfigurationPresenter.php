@@ -224,6 +224,10 @@ class ManageConfigurationPresenter extends ActionPresenter
             }
         }
 
+        if (!$isPluginConfig) {
+            $mergedSettings = $this->EnableIcsSubscriptionIfNeeded($mergedSettings);
+        }
+
         Log::Debug('Saving %s settings', count($configSettings));
 
         // WriteSettings will handle the proper nesting based on file type
@@ -240,6 +244,42 @@ class ManageConfigurationPresenter extends ActionPresenter
         $command = new AdHocCommand('update users set homepageid = @homepageid');
         $command->AddParameter(new Parameter(ParameterNames::HOMEPAGE_ID, $homepageId));
         ServiceLocator::GetDatabase()->Execute($command);
+    }
+
+    /**
+     * Generates and stores an ICS subscription key when the admin enables ICS
+     * through this settings page without setting a key, so subscription links
+     * do not remain broken until an unrelated schedule/resource/user toggle
+     * triggers key generation.
+     *
+     * @param array $mergedSettings
+     * @return array
+     */
+    private function EnableIcsSubscriptionIfNeeded(array $mergedSettings): array
+    {
+        if (!isset($mergedSettings['ics']) || !is_array($mergedSettings['ics'])) {
+            return $mergedSettings;
+        }
+
+        if (ConfigKeys::hasEnv(ConfigKeys::ICS_SUBSCRIPTION_KEY)) {
+            return $mergedSettings;
+        }
+
+        $icsEnabled = filter_var(
+            $mergedSettings['ics']['enabled'] ?? ConfigKeys::ICS_ENABLED['default'],
+            FILTER_VALIDATE_BOOLEAN
+        );
+
+        $newKey = ConfigurationFile::GenerateSubscriptionKeyIfNeeded(
+            $icsEnabled,
+            $mergedSettings['ics']['subscription.key'] ?? ''
+        );
+
+        if ($newKey !== null) {
+            $mergedSettings['ics']['subscription.key'] = $newKey;
+        }
+
+        return $mergedSettings;
     }
 
     private function ShouldBeSkipped(string $key, ?ConfigKey $meta): bool

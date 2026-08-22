@@ -63,10 +63,11 @@ interface IConfigurationFile
     public function GetAdminEmail();
 
     /**
-     * Enables ics subscriptionwith a random key if no key is set.
+     * Enables ics subscription with a random key if no key is set.
+     * @param string|null $configFilePath Path to rewrite; defaults to the live config file.
      * @return void
      */
-    public function EnableSubscription();
+    public function EnableSubscription(?string $configFilePath = null);
 }
 
 /**
@@ -262,11 +263,12 @@ class Configuration implements IConfiguration
 
     /**
      * Enables ICS subscription with a random key if no key is set.
+     * @param string|null $configFilePath Path to rewrite; defaults to the live config file.
      * @return void
      */
-    public function EnableSubscription()
+    public function EnableSubscription(?string $configFilePath = null)
     {
-        $this->File(self::DEFAULT_CONFIG_ID)->EnableSubscription();
+        $this->File(self::DEFAULT_CONFIG_ID)->EnableSubscription($configFilePath);
     }
 
     /**
@@ -679,23 +681,72 @@ class ConfigurationFile implements IConfigurationFile
      * This method updates the configuration file to include a new ICS subscription key.
      * If the key already exists, it does nothing.
      *
+     * @param string|null $configFilePath Path to rewrite; defaults to the live config file.
      * @return void
      */
-    public function EnableSubscription()
+    public function EnableSubscription(?string $configFilePath = null)
     {
-        $icsKey = $this->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
-        if (!empty($icsKey)) {
+        $newKey = self::GenerateSubscriptionKeyIfNeeded(
+            $this->GetKey(ConfigKeys::ICS_ENABLED, new BooleanConverter()),
+            $this->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY)
+        );
+
+        if ($newKey === null) {
             return;
         }
 
-        $configFile = ROOT_DIR . 'config/config.php';
+        $configFilePath ??= ROOT_DIR . 'config/config.php';
 
-        if (file_exists($configFile)) {
-            $newKey = '$conf[\'settings\'][\'ics\'][\'subscription.key\'] = \'' . BookedStringHelper::Random(20) . '\';';
-            $str = file_get_contents($configFile);
-            $str = str_replace('$conf[\'settings\'][\'ics\'][\'subscription.key\'] = \'\';', $newKey, $str);
-            file_put_contents($configFile, $str);
-            Configuration::SetInstance(null);
+        if (!is_readable($configFilePath)) {
+            return;
         }
+
+        $contents = file_get_contents($configFilePath);
+
+        if ($contents === false) {
+            return;
+        }
+
+        // Matches the current `'subscription.key' => '',` nested-array entry.
+        $updated = preg_replace(
+            '/([\'"]subscription\.key[\'"]\s*=>\s*)([\'"])\2/',
+            '${1}${2}' . $newKey . '${2}',
+            $contents,
+            1,
+            $count
+        );
+
+        if ($updated === null || $count === 0) {
+            return;
+        }
+
+        // Checking is_writable() first keeps the common read-only-config case from
+        // emitting a warning, but the return value still has to be checked because
+        // the write can fail for reasons the check cannot see.
+        if (!is_writable($configFilePath) || file_put_contents($configFilePath, $updated) === false) {
+            Log::Error('Could not write the generated ICS subscription key to %s', $configFilePath);
+            return;
+        }
+
+        Configuration::SetInstance(null);
+    }
+
+    /**
+     * Shared gate for ICS subscription key generation: returns a freshly generated
+     * key when ICS is enabled and no key is set yet, or null when nothing should change.
+     * Used both here (patching the live config file) and by ManageConfigurationPresenter
+     * (patching the in-memory settings array before it writes the config file).
+     *
+     * @param bool $icsEnabled
+     * @param string|null $existingKey
+     * @return string|null
+     */
+    public static function GenerateSubscriptionKeyIfNeeded(bool $icsEnabled, ?string $existingKey): ?string
+    {
+        if (!$icsEnabled || !empty($existingKey)) {
+            return null;
+        }
+
+        return BookedStringHelper::Random(32);
     }
 }
