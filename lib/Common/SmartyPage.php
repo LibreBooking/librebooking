@@ -240,6 +240,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('modifier', 'strtolower', $this->Strtolower(...));
         $this->registerPlugin('function', 'datatable', $this->CreateDataTable(...));
         $this->registerPlugin('function', 'datatablefilter', $this->CreateDataTableFilter(...));
+        $this->registerPlugin('function', 'pagination', $this->CreatePagination(...));
         $this->registerPlugin('modifier', 'microtime', $this->Microtime(...));
         $this->registerPlugin('modifier', 'array_key_exists', $this->ArrayKeyExists(...));
         $this->registerPlugin('modifier', 'count', $this->Count(...));
@@ -656,7 +657,6 @@ class SmartyPage extends Smarty
     {
         $tableId = $params['tableId'];
         $searchText = $this->Resources->GetString('Filter');
-        $AllText = $this->Resources->GetString('All');
         $NoResultsFoundText = $this->Resources->GetString('NoResultsFound');
         $copyText = $this->Resources->GetString('Copy');
         $exportText = $this->Resources->GetString('Export');
@@ -664,8 +664,6 @@ class SmartyPage extends Smarty
         $showHideText = $this->Resources->GetString('ShowHide');
         $infoText = $this->Resources->GetString('Info');
         $lengthMenuText = $this->Resources->GetString('LengthMenu');
-        $defaultPageSize = $this->GetDefaultDataTablePageSize();
-        $lengthMenu = $this->BuildDataTableLengthMenu($AllText);
 
         if ($tableId == 'report-results') {
             $pagination = '"paging": false,
@@ -674,12 +672,12 @@ class SmartyPage extends Smarty
                 "info": false,
                 "ordering": false,';
         } else {
-            $pagination = '"pageLength": ' . $defaultPageSize . ', "lengthMenu": ' . $lengthMenu . ',';
+            $pagination = '"paging": false, "info": false,';
         }
 
         return sprintf(
             '<script>
-           var table =  $("#' . $tableId . '").DataTable({
+           var table =  new DataTable("#' . $tableId . '", {
                 "searching": false,
                 "dom": \'<"d-flex justify-content-center flex-wrap"B><"d-flex justify-content-between flex-wrap mt-2"fil>rt<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
                 ' . $pagination . '
@@ -714,12 +712,9 @@ class SmartyPage extends Smarty
                     }
                 ],
                 "initComplete": function(settings, json) {
-                    var table = this.api();
-                    table.on("init.dt", function () {
-                        $(".dt-buttons .btn-secondary").removeClass("btn-secondary").addClass("btn-primary");
-                        $(".dt-buttons").addClass("btn-group-sm");
-                        $(".buttons-collection").addClass("btn-sm");
-                    });
+                    $(".dt-buttons .btn-secondary").removeClass("btn-secondary").addClass("btn-primary");
+                    $(".dt-buttons").addClass("btn-group-sm");
+                    $(".buttons-collection").addClass("btn-sm");
                 },
                 "drawCallback": function (settings) {
                     if (typeof setUpEditables !== "undefined") {
@@ -744,7 +739,7 @@ class SmartyPage extends Smarty
 
         return sprintf(
             '<script>
-           var table =  $("#' . $tableId . '").DataTable({
+           const tableFilter =  new DataTable("#' . $tableId . '", {
                 "dom": \'<"d-flex justify-content-between my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
                 "pageLength": ' . $defaultPageSize . ',
                 "lengthMenu": ' . $lengthMenu . ',
@@ -767,6 +762,89 @@ class SmartyPage extends Smarty
         '
         );
     }
+
+    /**
+     * Create pagination links
+     * @param array $params Contains 'pageInfo' (PageInfo object)
+     * @param $smarty
+     * @return string HTML pagination markup
+     */
+    public function CreatePagination($params, $smarty)
+    {
+        /** @var PageInfo $pageInfo */
+        $pageInfo = $params['pageInfo'];
+        $hideCount = isset($params['showCount']) && $params['showCount'] == false;
+
+        if (empty($pageInfo->Total)) {
+            return '';
+        }
+
+        $sb = new StringBuilder();
+
+        $viewAllText = $this->Resources->GetString('ViewAll');
+        if (!$hideCount) {
+            $sb->Append('<div class="pagination-rows text-center mt-2">');
+            $sb->Append($this->Resources->GetString('Rows'));
+            $sb->Append(": {$pageInfo->ResultsStart} - {$pageInfo->ResultsEnd} ({$pageInfo->Total})");
+            $sb->Append('<span>&nbsp;</span>');
+            if ($pageInfo->TotalPages != 1) {
+                $sb->Append($this->CreatePageLink(['class' => 'link-primary', 'page' => 1, 'size' => -1, 'text' => $viewAllText], $smarty));
+            }
+            $sb->Append('</div>');
+        }
+        $size = $pageInfo->PageSize;
+        $currentPage = $pageInfo->CurrentPage;
+
+        $sb->Append('<ul class="pagination justify-content-center flex-wrap">');
+        $sb->Append('<li class="page-item">');
+        $sb->Append($this->CreatePageLink(
+            ['page' => max(1, $currentPage - 1), 'size' => $size, 'text' => '&laquo;', 'class' => 'page-link'],
+            $smarty
+        ));
+        $sb->Append('</li>');
+
+        for ($i = 1; $i <= $pageInfo->TotalPages; $i++) {
+            $isCurrent = ($i == $currentPage);
+            if ($isCurrent) {
+                $sb->Append('<li class="active page-item">');
+            } else {
+                $sb->Append('<li class="page-item">');
+            }
+            $sb->Append($this->CreatePageLink(['page' => $i, 'size' => $size], $smarty));
+            $sb->Append('</li>');
+        }
+        $sb->Append('<li class="page-item">');
+        $sb->Append($this->CreatePageLink(
+            ['page' => min($pageInfo->TotalPages, $currentPage + 1), 'size' => $size, 'text' => '&raquo;'],
+            $smarty
+        ));
+        $sb->Append('</li>');
+        $sb->Append('</ul>');
+
+        return $sb->ToString();
+    }
+
+    /**
+     * Create a single pagination link
+     * @param array $params Contains 'page', 'size', optional 'text'
+     * @param $smarty
+     * @return string HTML link
+     */
+    private function CreatePageLink($params, $smarty)
+    {
+        $url = ServiceLocator::GetServer()->GetUrl();
+        $page = $params['page'];
+        $pageSize = $params['size'];
+        $text = isset($params['text']) ? $params['text'] : $page;
+
+        $newUrl = $this->ReplaceQueryString($url, QueryStringKeys::PAGE, $page);
+        $newUrl = $this->ReplaceQueryString($newUrl, QueryStringKeys::PAGE_SIZE, $pageSize);
+
+        $class = isset($params['class']) ? $params['class'] : 'page-link';
+
+        return sprintf('<a class="%s" href="%s" data-page="%s" data-page-size="%s">%s</a>', $class, $newUrl, $page, $pageSize, $text);
+    }
+
     public function ReplaceQueryString($url, $key, $value)
     {
         $newUrl = $url;
