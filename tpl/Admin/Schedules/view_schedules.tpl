@@ -187,13 +187,14 @@
 						{/foreach}
 					</tbody>
 				</table>
+				{pagination pageInfo=$PageInfo}
 			</div>
 		</div>
 	</div>
 
 
 	{include file="javascript-includes.tpl" DataTable=true}
-	{datatablefilter tableId=$tableIdFilter}
+	{datatable tableId=$tableIdFilter}
 </div>
 
 {include file='globalfooter.tpl'}

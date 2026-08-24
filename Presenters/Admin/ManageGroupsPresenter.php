@@ -109,7 +109,7 @@ class ManageGroupsPresenter extends ActionPresenter
         } else {
             $groupList = $this->groupRepository->GetList(
                 $this->page->GetPageNumber(),
-                null,
+                $this->page->GetPageSize(),
                 $this->page->GetSortField(),
                 $this->page->GetSortDirection()
             );

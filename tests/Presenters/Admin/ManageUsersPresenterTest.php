@@ -359,19 +359,21 @@ class ManageUsersPresenterTest extends TestBase
     public function testPageLoadRequestsCurrentPage()
     {
         $this->page->_PageNumber = 3;
+        $this->page->_PageSize = 20;
         $this->userRepo->_UserList = new PageableData([]);
         $this->userRepo->_User = new FakeUser();
         $this->groupViewRepository->method('GetList')->willReturn(new PageableData([]));
 
         $this->presenter->PageLoad();
 
-        $this->assertSame([3, null], $this->userRepo->_GetListPaging);
+        $this->assertSame([3, 20], $this->userRepo->_GetListPaging);
     }
 
     public function testExportUsersLoadsAllUsers()
     {
         $this->fakeUser->IsAdmin = true;
         $this->page->_PageNumber = 3;
+        $this->page->_PageSize = 20;
         $this->userRepo->_UserList = new PageableData([]);
         $this->userRepo->_User = new FakeUser();
         $this->groupViewRepository->method('GetList')->willReturn(new PageableData([]));
