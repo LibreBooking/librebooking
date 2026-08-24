@@ -299,6 +299,7 @@
 						{/foreach}
 					</tbody>
 				</table>
+				{pagination pageInfo=$PageInfo}
 			</div>
 		</div>
 	</div>
@@ -853,7 +854,7 @@
 
 	{csrf_token}
 	{include file="javascript-includes.tpl" InlineEdit=true Fullcalendar=true DataTable=true}
-	{datatablefilter tableId=$tableIdFilter}
+	{datatable tableId=$tableIdFilter}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="date-helper.js"}
 	{jsfile src="admin/schedule.js"}
