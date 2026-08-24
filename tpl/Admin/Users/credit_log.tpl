@@ -29,7 +29,7 @@
                 {/foreach}
             </tbody>
         </table>
-
+        {pagination pageInfo=$PageInfo}
     {/if}
 
 </div>

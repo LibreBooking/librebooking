@@ -145,7 +145,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function PageLoad()
     {
-        $this->LoadResources(pageNumber: $this->page->GetPageNumber(), pageSize: null);
+        $this->LoadResources(pageNumber: $this->page->GetPageNumber(), pageSize: $this->page->GetPageSize());
     }
 
     /**
