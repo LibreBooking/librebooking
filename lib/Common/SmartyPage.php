@@ -760,7 +760,7 @@ class SmartyPage extends Smarty
      * Server::GetUrl(). The result is a raw URL and must be escaped before
      * being placed in HTML.
      */
-    public function ReplaceQueryString(string $url, string $key, string|int $value): string
+    public static function ReplaceQueryString(string $url, string $key, string|int $value): string
     {
         $uri = Uri::new($url);
         $pairs = [];
