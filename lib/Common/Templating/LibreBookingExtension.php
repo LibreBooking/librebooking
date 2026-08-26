@@ -2,7 +2,6 @@
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class LibreBookingExtension extends AbstractExtension
 {
