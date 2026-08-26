@@ -217,6 +217,298 @@ class LibreBookingExtensionTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
+    // Group A: buttons & icons — parity tests vs SmartyPage
+    // -------------------------------------------------------------------------
+
+    /**
+     * Helper: capture echoed output from a SmartyPage method.
+     *
+     * @param callable $callback
+     */
+    private function captureSmartyCb(callable $callback): string
+    {
+        ob_start();
+        $callback();
+        return ob_get_clean();
+    }
+
+    // --- cancel_button -------------------------------------------------------
+
+    public function testCancelButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ cancel_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->CancelButton(['key' => 'Cancel', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testCancelButtonWithKeyAndClassMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ cancel_button(key='Close', class='my-class') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->CancelButton(['key' => 'Close', 'class' => 'my-class'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testCancelButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ cancel_button(key='Cancel', attributes={'id': 'mycancel'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->CancelButton(['key' => 'Cancel', 'class' => '', 'id' => 'mycancel'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- update_button -------------------------------------------------------
+
+    public function testUpdateButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ update_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->UpdateButton(['key' => 'Update'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testUpdateButtonSubmitTypeMatchesSmartyPage(): void
+    {
+        // When submit is truthy the type changes to "submit" and the "save" class is omitted.
+        $env = $this->makeEnv("{{ update_button(key='Save', submit=true) }}");
+        $page = new SmartyPage();
+
+        // Match SmartyPage: when submit key is present (truthy), type=submit; class is empty so class str is ''
+        $expected = $this->captureSmartyCb(fn () => $page->UpdateButton(['key' => 'Save', 'submit' => true], null));
+        $actual = $env->render('t');
+
+        // Both should produce type="submit" and no "save" class (Smarty leaks submit="1" attribute — Twig omits it intentionally)
+        $this->assertStringContainsString('type="submit"', $actual);
+        $this->assertStringNotContainsString('save', $actual);
+        $this->assertStringContainsString('type="submit"', $expected);
+    }
+
+    public function testUpdateButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ update_button(key='Update', attributes={'data-foo': 'bar'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->UpdateButton(['key' => 'Update', 'data-foo' => 'bar'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- add_button ----------------------------------------------------------
+
+    public function testAddButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ add_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->AddButton(['key' => 'Add', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testAddButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ add_button(key='Add', attributes={'data-id': '42'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->AddButton(['key' => 'Add', 'class' => '', 'data-id' => '42'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- delete_button -------------------------------------------------------
+
+    public function testDeleteButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ delete_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DeleteButton(['key' => 'Delete', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testDeleteButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ delete_button(key='Delete', attributes={'data-confirm': 'sure'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DeleteButton(['key' => 'Delete', 'class' => '', 'data-confirm' => 'sure'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- reset_button --------------------------------------------------------
+
+    public function testResetButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ reset_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->ResetButton(['key' => 'Reset', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testResetButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ reset_button(key='Reset', attributes={'id': 'reset-btn'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->ResetButton(['key' => 'Reset', 'class' => '', 'id' => 'reset-btn'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- filter_button -------------------------------------------------------
+
+    public function testFilterButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ filter_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->FilterButton(['key' => 'Filter', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testFilterButtonWithClassMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ filter_button(key='Filter', class='extra') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->FilterButton(['key' => 'Filter', 'class' => 'extra'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testFilterButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ filter_button(attributes={'data-filter': 'true'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->FilterButton(['key' => 'Filter', 'class' => '', 'data-filter' => 'true'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- ok_button -----------------------------------------------------------
+
+    public function testOkButtonDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ ok_button() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->OkButton(['key' => 'OK', 'class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testOkButtonWithPassthroughAttributesMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ ok_button(key='OK', attributes={'data-action': 'confirm'}) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->OkButton(['key' => 'OK', 'class' => '', 'data-action' => 'confirm'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- showhide_icon -------------------------------------------------------
+
+    public function testShowhideIconDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv('{{ showhide_icon() }}');
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->ShowHideIcon(['class' => ''], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testShowhideIconWithClassMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ showhide_icon(class='bi-eye') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->ShowHideIcon(['class' => 'bi-eye'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- indicator -----------------------------------------------------------
+
+    public function testIndicatorDefaultMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ indicator(id='loading') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DisplayIndicator(['id' => 'loading'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testIndicatorWithShowMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ indicator(id='loading', show=true) }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DisplayIndicator(['id' => 'loading', 'show' => true], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testIndicatorWithSizeMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ indicator(id='loading', size='lg') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DisplayIndicator(['id' => 'loading', 'size' => 'lg'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testIndicatorWithCustomClassMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ indicator(id='spinner', class='my-spinner') }}");
+        $page = new SmartyPage();
+
+        $expected = $this->captureSmartyCb(fn () => $page->DisplayIndicator(['id' => 'spinner', 'class' => 'my-spinner'], null));
+        $actual = $env->render('t');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // -------------------------------------------------------------------------
     // Native-filter confirmation (behaviour verified, not custom filter added)
     // -------------------------------------------------------------------------
 
@@ -266,5 +558,14 @@ class LibreBookingExtensionTest extends TestCase
         $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), ''));
 
         $this->assertSame('3', $env->render('t', ['v' => [1, 2, 3]]));
+    }
+
+    public function testButtonAttributesAreEscaped(): void
+    {
+        $env = $this->makeEnv("{{ cancel_button(attributes={'data-x': v}) }}");
+
+        $actual = $env->render('t', ['v' => '" onclick="alert(1)']);
+
+        $this->assertStringContainsString('data-x="&quot; onclick=&quot;alert(1)"', $actual);
     }
 }
