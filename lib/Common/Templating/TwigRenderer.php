@@ -19,10 +19,14 @@ class TwigRenderer implements TemplateRenderer
     private array $vars = [];
 
     private PageValidators $validators;
+    private Resources $resources;
+    private string $rootPath;
 
-    public function __construct(?Resources $resources = null)
+    public function __construct(?Resources $resources = null, ?string $rootPath = null)
     {
         $resources ??= Resources::GetInstance();
+        $this->resources = $resources;
+        $this->rootPath = $rootPath ?? '';
         $config = Configuration::Instance();
 
         // ?debug only counts in debug mode, otherwise any visitor could switch off the template cache
@@ -38,6 +42,8 @@ class TwigRenderer implements TemplateRenderer
             cacheDir: ROOT_DIR . 'tpl_c/twig',
             debug: $debugRequested || !$cacheTemplates
         );
+
+        $this->twig->addExtension(new LibreBookingExtension($this->resources, $this->rootPath));
 
         $this->validators = new PageValidators();
     }
