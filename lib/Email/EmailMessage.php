@@ -6,6 +6,8 @@ abstract class EmailMessage implements IEmailMessage
      * @var SmartyPage
      */
     protected $email;
+
+    protected \LibreBooking\Common\Templating\TemplateRenderer $renderer;
     /**
      * @var string|null
      */
@@ -25,7 +27,9 @@ abstract class EmailMessage implements IEmailMessage
         if (!empty($languageCode)) {
             $resources->SetLanguage($languageCode); // switch BEFORE SmartyPage is created
         }
-        $this->email = new SmartyPage($resources); // now picks up correct language directory
+        $smartyRenderer = new SmartyRenderer($resources);
+        $this->renderer = $smartyRenderer;
+        $this->email = $smartyRenderer->smarty(); // BC alias
         if (!empty($languageCode)) {
             $this->Set('CurrentLanguage', $resources->CurrentLanguage);
         }
