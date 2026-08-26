@@ -70,10 +70,17 @@ class LibreBookingExtension extends AbstractExtension
                 return intval($s);
             }),
 
+            // Encodes a value using PHP urlencode() (space → '+').
+            // Equivalent to SmartyPage::UrlEncode.
+            // Named 'urlencode' (not 'url_encode') so it coexists with Twig's
+            // native |url_encode which uses rawurlencode (space → '%20').
+            new TwigFilter('urlencode', static function (mixed $value): string {
+                return urlencode((string) $value);
+            }),
+
             // NOTE: The following Smarty modifiers are intentionally NOT added
             // as custom Twig filters because Twig provides equivalent built-ins:
             //   strtolower  → Twig native |lower
-            //   urlencode   → Twig native |url_encode
             //   count       → Twig native |length
         ];
     }

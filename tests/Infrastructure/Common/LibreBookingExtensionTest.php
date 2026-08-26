@@ -188,6 +188,34 @@ class LibreBookingExtensionTest extends TestCase
         $this->assertSame('0', $env->render('t', ['v' => 'abc']));
     }
 
+    public function testUrlencodeFilterEncodesSpaceAsPlus(): void
+    {
+        $env = $this->makeEnv('{{ v|urlencode }}');
+
+        // PHP urlencode: space → '+' (not '%20' as rawurlencode/url_encode would produce)
+        $this->assertSame('a+b', $env->render('t', ['v' => 'a b']));
+    }
+
+    public function testUrlencodeFilterOutputMatchesSmartyPageUrlEncode(): void
+    {
+        $input = 'hello world&foo=bar+baz';
+        $env = $this->makeEnv('{{ v|urlencode }}');
+
+        $smartyResult = (new SmartyPage())->UrlEncode($input);
+        $twigResult = $env->render('t', ['v' => $input]);
+
+        $this->assertSame($smartyResult, $twigResult);
+    }
+
+    public function testUrlencodeFilterDiffersFromNativeUrlEncode(): void
+    {
+        $env = $this->makeEnv('{{ v|urlencode }}');
+
+        // Custom |urlencode produces '+' for space; native |url_encode produces '%20'
+        $this->assertSame('hello+world', $env->render('t', ['v' => 'hello world']));
+        $this->assertNotSame('hello%20world', $env->render('t', ['v' => 'hello world']));
+    }
+
     // -------------------------------------------------------------------------
     // Native-filter confirmation (behaviour verified, not custom filter added)
     // -------------------------------------------------------------------------
