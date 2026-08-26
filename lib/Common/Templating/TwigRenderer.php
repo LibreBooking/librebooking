@@ -34,6 +34,8 @@ class TwigRenderer implements TemplateRenderer
             debug: $debug,
         );
 
+        $this->twig->addExtension(new LibreBookingExtension($this->resources, $this->rootPath));
+
         // Populated fully in Task 1.x
         $this->Validators = new PageValidators($this);
     }
