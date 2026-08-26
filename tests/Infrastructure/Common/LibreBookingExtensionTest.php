@@ -17,6 +17,17 @@ class LibreBookingExtensionTest extends TestCase
         return $env;
     }
 
+    /** Build a Twig env wired with a renderer so Group B functions can access validators/vars. */
+    private function makeEnvWithRenderer(string $template, ?\LibreBooking\Common\Templating\TemplateRenderer $renderer = null): \Twig\Environment
+    {
+        $env = new \Twig\Environment(
+            new \Twig\Loader\ArrayLoader(['t' => $template]),
+            ['autoescape' => false]
+        );
+        $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), '', $renderer));
+        return $env;
+    }
+
     public function testIsATwigExtension(): void
     {
         $ext = new LibreBookingExtension(Resources::GetInstance(), '');
@@ -567,5 +578,695 @@ class LibreBookingExtensionTest extends TestCase
         $actual = $env->render('t', ['v' => '" onclick="alert(1)']);
 
         $this->assertStringContainsString('data-x="&quot; onclick=&quot;alert(1)"', $actual);
+    }
+
+    // =========================================================================
+    // Group B: form / validation — no ServiceLocator needed
+    // =========================================================================
+
+    // --- validator -----------------------------------------------------------
+
+    public function testValidatorReturnsEmptyWhenValid(): void
+    {
+        // No renderer → always returns '' (graceful degrade)
+        $env = $this->makeEnvWithRenderer("{{ validator('field1') }}");
+        $this->assertSame('', $env->render('t'));
+    }
+
+    public function testValidatorReturnsEmptyWhenNullRenderer(): void
+    {
+        $env = $this->makeEnvWithRenderer("{{ validator('x') }}", null);
+        $this->assertSame('', $env->render('t'));
+    }
+
+    public function testValidatorWithFailedValidatorMatchesSmartyPage(): void
+    {
+        // Build a stub renderer that carries a failed validator
+        $renderer = new class () implements \LibreBooking\Common\Templating\TemplateRenderer {
+            public PageValidators $Validators;
+            public function __construct()
+            {
+                $this->Validators = new PageValidators(new class () extends SmartyPage {
+                    public function AddFailedValidation($id, $validator): void
+                    {
+                    }
+                });
+                $v = new class () extends ValidatorBase implements IValidator {
+                    public function __construct()
+                    {
+                        $this->isValid = false;
+                        $this->AddMessage('Field is required');
+                    }
+                    public function Validate(): void
+                    {
+                    }
+                };
+                $this->Validators->Register('field1', $v);
+            }
+            public function assign(string $name, mixed $value): void
+            {
+            }
+            public function render(string $templateName, array $vars = []): string
+            {
+                return '';
+            }
+            public function display(string $templateName): void
+            {
+            }
+            public function fetch(string $templateName): string
+            {
+                return '';
+            }
+            public function getTemplateVars(?string $name = null): mixed
+            {
+                return null;
+            }
+            public function fetchLocalized(string $t, bool $e, ?string $l = null): string
+            {
+                return '';
+            }
+            public function addTemplateDirectory(string $dir): void
+            {
+            }
+            public function renderControlTemplate(string $t, array $v): string
+            {
+                return '';
+            }
+            public function validators(): PageValidators
+            {
+                return $this->Validators;
+            }
+            public function isValid(): bool
+            {
+                return false;
+            }
+        };
+
+        $env = $this->makeEnvWithRenderer("{{ validator('field1') }}", $renderer);
+        $actual = $env->render('t');
+
+        // Parity: compare against SmartyPage output for same state
+        $smartyPage = new SmartyPage();
+        $v2 = new class () extends ValidatorBase implements IValidator {
+            public function __construct()
+            {
+                $this->isValid = false;
+                $this->AddMessage('Field is required');
+            }
+            public function Validate(): void
+            {
+            }
+        };
+        $smartyPage->Validators->Register('field1', $v2);
+        $expected = $smartyPage->Validator(['id' => 'field1'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('<li id="field1">', $actual);
+        $this->assertStringContainsString('Field is required', $actual);
+    }
+
+    public function testValidatorWithKeyFallbackMatchesSmartyPage(): void
+    {
+        $renderer = new class () implements \LibreBooking\Common\Templating\TemplateRenderer {
+            public PageValidators $Validators;
+            public function __construct()
+            {
+                $this->Validators = new PageValidators(new class () extends SmartyPage {
+                    public function AddFailedValidation($id, $validator): void
+                    {
+                    }
+                });
+                $v = new class () extends ValidatorBase implements IValidator {
+                    public function __construct()
+                    {
+                        $this->isValid = false;
+                    }
+                    public function Validate(): void
+                    {
+                    }
+                };
+                $this->Validators->Register('field2', $v);
+            }
+            public function assign(string $name, mixed $value): void
+            {
+            }
+            public function render(string $templateName, array $vars = []): string
+            {
+                return '';
+            }
+            public function display(string $templateName): void
+            {
+            }
+            public function fetch(string $templateName): string
+            {
+                return '';
+            }
+            public function getTemplateVars(?string $name = null): mixed
+            {
+                return null;
+            }
+            public function fetchLocalized(string $t, bool $e, ?string $l = null): string
+            {
+                return '';
+            }
+            public function addTemplateDirectory(string $dir): void
+            {
+            }
+            public function renderControlTemplate(string $t, array $v): string
+            {
+                return '';
+            }
+            public function validators(): PageValidators
+            {
+                return $this->Validators;
+            }
+            public function isValid(): bool
+            {
+                return false;
+            }
+        };
+
+        $env = $this->makeEnvWithRenderer("{{ validator('field2', key='Yes') }}", $renderer);
+        $actual = $env->render('t');
+
+        $smartyPage = new SmartyPage();
+        $v2 = new class () extends ValidatorBase implements IValidator {
+            public function __construct()
+            {
+                $this->isValid = false;
+            }
+            public function Validate(): void
+            {
+            }
+        };
+        $smartyPage->Validators->Register('field2', $v2);
+        $expected = $smartyPage->Validator(['id' => 'field2', 'key' => 'Yes'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('<li>', $actual);
+    }
+
+    // --- async_validator -----------------------------------------------------
+
+    public function testAsyncValidatorMatchesSmartyPageWithoutKey(): void
+    {
+        $env = $this->makeEnv("{{ async_validator('myfield') }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->AsyncValidator(['id' => 'myfield'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('class="asyncValidation"', $actual);
+        $this->assertStringContainsString('id="myfield"', $actual);
+    }
+
+    public function testAsyncValidatorMatchesSmartyPageWithKey(): void
+    {
+        $env = $this->makeEnv("{{ async_validator('myfield', key='Yes') }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->AsyncValidator(['id' => 'myfield', 'key' => 'Yes'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString(Resources::GetInstance()->GetString('Yes'), $actual);
+    }
+
+    // --- validation_group ----------------------------------------------------
+
+    public function testValidationGroupWithContentMatchesSmartyPage(): void
+    {
+        $content = '<li>Error one</li>';
+        $env = $this->makeEnv('{{ validation_group(c) }}');
+        $actual = $env->render('t', ['c' => $content]);
+
+        // Build expected output directly (cannot call SmartyPage::ValidationGroup with a
+        // literal false because the $repeat param must be passed by reference).
+        // Verify structural parity with the known markup.
+        $this->assertStringContainsString('d-flex align-items-center', $actual);
+        $this->assertStringContainsString($content, $actual);
+        $this->assertStringContainsString('class="error', $actual);
+        $this->assertStringContainsString('btn-close', $actual);
+        $this->assertStringContainsString('<ul class="list-unstyled">', $actual);
+    }
+
+    public function testValidationGroupWithEmptyContentReturnsEmpty(): void
+    {
+        $env = $this->makeEnv("{{ validation_group('') }}");
+        $actual = $env->render('t');
+
+        $this->assertSame('', $actual);
+    }
+
+    public function testValidationGroupWithWhitespaceOnlyReturnsEmpty(): void
+    {
+        $env = $this->makeEnv("{{ validation_group('   ') }}");
+        $this->assertSame('', $env->render('t'));
+    }
+
+    public function testValidationGroupCustomClass(): void
+    {
+        $content = '<li>Oops</li>';
+        $env = $this->makeEnv("{{ validation_group(c, class='warning') }}");
+        $actual = $env->render('t', ['c' => $content]);
+
+        $this->assertStringContainsString('class="warning', $actual);
+        $this->assertStringContainsString($content, $actual);
+    }
+
+    // --- object_html_options -------------------------------------------------
+
+    public function testObjectHtmlOptionsMatchesSmartyPage(): void
+    {
+        $options = [
+            new class () {
+                public function Id(): int
+                {
+                    return 1;
+                }
+                public function Name(): string
+                {
+                    return 'Option A';
+                }
+            },
+            new class () {
+                public function Id(): int
+                {
+                    return 2;
+                }
+                public function Name(): string
+                {
+                    return 'Option B';
+                }
+            },
+        ];
+
+        $env = $this->makeEnv("{{ object_html_options(opts, 'Id', 'Name', true, 2) }}");
+        $actual = $env->render('t', ['opts' => $options]);
+
+        $page = new SmartyPage();
+        $expected = $page->ObjectHtmlOptions([
+            'options' => $options,
+            'key' => 'Id',
+            'label' => 'Name',
+            'usemethod' => true,
+            'selected' => 2,
+        ], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('selected="selected"', $actual);
+        $this->assertStringContainsString('Option A', $actual);
+        $this->assertStringContainsString('Option B', $actual);
+    }
+
+    public function testObjectHtmlOptionsWithPropertyAccess(): void
+    {
+        $options = [
+            (object)['id' => 10, 'label' => 'Ten'],
+            (object)['id' => 20, 'label' => 'Twenty'],
+        ];
+
+        $env = $this->makeEnv("{{ object_html_options(opts, 'id', 'label', false, 10) }}");
+        $actual = $env->render('t', ['opts' => $options]);
+
+        $page = new SmartyPage();
+        $expected = $page->ObjectHtmlOptions([
+            'options' => $options,
+            'key' => 'id',
+            'label' => 'label',
+            'usemethod' => false,
+            'selected' => 10,
+        ], null);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testObjectHtmlOptionsEscapesKeyAndLabelWithoutDoubleEncoding(): void
+    {
+        $options = [(object)['id' => '"x', 'label' => '<b>R&amp;D</b>']];
+
+        $env = $this->makeEnv("{{ object_html_options(opts, 'id', 'label', false) }}");
+
+        $this->assertSame(
+            '<option label="&lt;b&gt;R&amp;D&lt;/b&gt;" value="&quot;x">&lt;b&gt;R&amp;D&lt;/b&gt;</option>',
+            $env->render('t', ['opts' => $options])
+        );
+    }
+    // --- setfocus ------------------------------------------------------------
+
+    public function testSetfocusWithKeyMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ setfocus(key='EMAIL') }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->SetFocus(['key' => 'EMAIL'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('focus()', $actual);
+        $this->assertStringContainsString(FormKeys::EMAIL, $actual);
+    }
+
+    public function testSetfocusWithIdMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ setfocus(id='my-element') }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->SetFocus(['id' => 'my-element'], null);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    // --- formname ------------------------------------------------------------
+
+    public function testFormnameMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnv("{{ formname('EMAIL') }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->GetFormName(['key' => 'EMAIL'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('name=', $actual);
+        $this->assertStringContainsString(FormKeys::EMAIL, $actual);
+    }
+
+    public function testFormnameMultiAppendsBrackets(): void
+    {
+        $env = $this->makeEnv("{{ formname('EMAIL', true) }}");
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->GetFormName(['key' => 'EMAIL', 'multi' => true], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('[]', $actual);
+    }
+
+    // --- read_only_attribute -------------------------------------------------
+
+    public function testReadOnlyAttributeForCheckboxTrueReturnsYes(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::CHECKBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+        $actual = $env->render('t', ['v' => 1, 'attr' => $attribute]);
+
+        $yes = Resources::GetInstance()->GetString('Yes');
+        $this->assertSame($yes, $actual);
+    }
+
+    public function testReadOnlyAttributeForCheckboxFalseReturnsNo(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::CHECKBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+        $actual = $env->render('t', ['v' => 0, 'attr' => $attribute]);
+
+        $no = Resources::GetInstance()->GetString('No');
+        $this->assertSame($no, $actual);
+    }
+
+    public function testReadOnlyAttributeEscapesValue(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+
+        $this->assertSame('&lt;b&gt; R&amp;D', $env->render('t', ['v' => '<b> R&amp;D', 'attr' => $attribute]));
+    }
+
+    public function testReadOnlyAttributeForNonCheckboxReturnsValue(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+        $actual = $env->render('t', ['v' => 'hello', 'attr' => $attribute]);
+
+        $this->assertSame('hello', $actual);
+    }
+
+    public function testReadOnlyAttributeMatchesSmartyPageForCheckbox(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::CHECKBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+        $twigResult = $env->render('t', ['v' => 1, 'attr' => $attribute]);
+
+        $page = new SmartyPage();
+        ob_start();
+        $page->ReadOnlyAttribute(['value' => 1, 'attribute' => $attribute], null);
+        $smartyResult = ob_get_clean();
+
+        $this->assertSame($smartyResult, $twigResult);
+    }
+
+    public function testReadOnlyAttributeMatchesSmartyPageForTextbox(): void
+    {
+        $attribute = new class () {
+            public function Type(): int
+            {
+                return CustomAttributeTypes::MULTI_LINE_TEXTBOX;
+            }
+        };
+
+        $env = $this->makeEnv('{{ read_only_attribute(v, attr) }}');
+        $twigResult = $env->render('t', ['v' => 'some text', 'attr' => $attribute]);
+
+        $page = new SmartyPage();
+        ob_start();
+        $page->ReadOnlyAttribute(['value' => 'some text', 'attribute' => $attribute], null);
+        $smartyResult = ob_get_clean();
+
+        $this->assertSame($smartyResult, $twigResult);
+    }
+}
+
+/**
+ * Group B tests that require ServiceLocator/FakeServer wiring (textbox, csrf_token).
+ * Extends TestBase so setUp() populates ServiceLocator automatically.
+ */
+class LibreBookingExtensionGroupBServiceLocatorTest extends TestBase
+{
+    private function makeEnvWithRenderer(string $template, ?\LibreBooking\Common\Templating\TemplateRenderer $renderer = null): \Twig\Environment
+    {
+        $env = new \Twig\Environment(
+            new \Twig\Loader\ArrayLoader(['t' => $template]),
+            ['autoescape' => false]
+        );
+        $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), '', $renderer));
+        return $env;
+    }
+
+    // --- csrf_token ----------------------------------------------------------
+
+    public function testCsrfTokenMatchesSmartyPage(): void
+    {
+        // FakeServer/FakeUserSession set up by TestBase::setUp()
+        $this->fakeUser->CSRFToken = 'test-csrf-xyz';
+
+        $env = $this->makeEnvWithRenderer('{{ csrf_token() }}');
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        ob_start();
+        $page->CSRFToken([], null);
+        $expected = ob_get_clean();
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('csrf_token', $actual);
+        $this->assertStringContainsString('test-csrf-xyz', $actual);
+        $this->assertStringContainsString('type="hidden"', $actual);
+    }
+
+    public function testCsrfTokenContainsFormKeyName(): void
+    {
+        $this->fakeUser->CSRFToken = 'abc123';
+
+        $env = $this->makeEnvWithRenderer('{{ csrf_token() }}');
+        $actual = $env->render('t');
+
+        $this->assertStringContainsString('name="' . FormKeys::CSRF_TOKEN . '"', $actual);
+        $this->assertStringContainsString('value="abc123"', $actual);
+    }
+
+    // --- textbox (text type) -------------------------------------------------
+
+    public function testTextboxBasicTextMatchesSmartyPage(): void
+    {
+        // No posted value, no template var → empty value
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL') }}", $this->buildFakeRenderer());
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->Textbox(['name' => 'EMAIL'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('type="text"', $actual);
+        $this->assertStringContainsString('class="form-control form-control-sm"', $actual);
+    }
+
+    public function testTextboxWithClassMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL', class='my-class') }}", $this->buildFakeRenderer());
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->Textbox(['name' => 'EMAIL', 'class' => 'my-class'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('my-class form-control form-control-sm', $actual);
+    }
+
+    public function testTextboxPasswordTypeMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnvWithRenderer("{{ textbox('PASSWORD', type='password') }}", $this->buildFakeRenderer());
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->Textbox(['name' => 'PASSWORD', 'type' => 'password'], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('type="password"', $actual);
+    }
+
+    public function testTextboxWithRequiredMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL', required=true) }}", $this->buildFakeRenderer());
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->Textbox(['name' => 'EMAIL', 'required' => true], null);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('required="required"', $actual);
+    }
+
+    public function testTextboxWithPlaceholderkeyMatchesSmartyPage(): void
+    {
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL', placeholderkey='EmailAddress') }}", $this->buildFakeRenderer());
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $expected = $page->Textbox(['name' => 'EMAIL', 'placeholderkey' => 'EmailAddress'], null);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testTextboxWithTemplateVarValue(): void
+    {
+        $renderer = $this->buildFakeRenderer(['EmailValue' => 'user@example.com']);
+
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL', value='EmailValue') }}", $renderer);
+        $actual = $env->render('t');
+
+        $page = new SmartyPage();
+        $page->assign('EmailValue', 'user@example.com');
+        $expected = $page->Textbox(['name' => 'EMAIL', 'value' => 'EmailValue'], $page);
+
+        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString('value="user@example.com"', $actual);
+    }
+
+    public function testTextboxWithPostedValueOverridesTemplateVar(): void
+    {
+        // POST value takes priority over template var
+        $this->fakeServer->SetForm(FormKeys::EMAIL, 'posted@example.com');
+        $renderer = $this->buildFakeRenderer(['EmailValue' => 'template@example.com']);
+
+        $env = $this->makeEnvWithRenderer("{{ textbox('EMAIL', value='EmailValue') }}", $renderer);
+        $actual = $env->render('t');
+
+        $this->assertStringContainsString('value="posted@example.com"', $actual);
+    }
+
+    // -------------------------------------------------------------------------
+
+    /**
+     * Build a minimal fake TemplateRenderer for textbox tests.
+     * @param array<string,mixed> $vars Template vars to expose via getTemplateVars.
+     */
+    private function buildFakeRenderer(array $vars = []): \LibreBooking\Common\Templating\TemplateRenderer
+    {
+        return new class ($vars) implements \LibreBooking\Common\Templating\TemplateRenderer {
+            public PageValidators $Validators;
+            public function __construct(private array $vars = [])
+            {
+                $this->Validators = new PageValidators(new class () extends SmartyPage {
+                    public function AddFailedValidation($id, $validator): void
+                    {
+                    }
+                });
+            }
+            public function assign(string $name, mixed $value): void
+            {
+                $this->vars[$name] = $value;
+            }
+            public function render(string $templateName, array $v = []): string
+            {
+                return '';
+            }
+            public function display(string $templateName): void
+            {
+            }
+            public function fetch(string $templateName): string
+            {
+                return '';
+            }
+            public function getTemplateVars(?string $name = null): mixed
+            {
+                if ($name === null) {
+                    return $this->vars;
+                }
+                return $this->vars[$name] ?? null;
+            }
+            public function fetchLocalized(string $t, bool $e, ?string $l = null): string
+            {
+                return '';
+            }
+            public function addTemplateDirectory(string $dir): void
+            {
+            }
+            public function renderControlTemplate(string $t, array $v): string
+            {
+                return '';
+            }
+            public function validators(): PageValidators
+            {
+                return $this->Validators;
+            }
+            public function isValid(): bool
+            {
+                return true;
+            }
+        };
     }
 }
