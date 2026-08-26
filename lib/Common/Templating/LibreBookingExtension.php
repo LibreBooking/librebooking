@@ -426,6 +426,252 @@ class LibreBookingExtension extends AbstractExtension
                 },
                 ['is_safe' => ['html']]
             ),
+
+            // ── Group C: links, URLs, images, formatting, utility ────────────
+
+            /**
+             * Renders a navigation link with a people icon.
+             * Equivalent to SmartyPage::PrintLink (returns HTML string).
+             *
+             * Href starting with '/' is used as-is; otherwise rootPath is prepended.
+             * Title defaults to the resource string for `key` when not provided.
+             *
+             * @param array<string,mixed> $attributes Extra HTML attributes passed through verbatim.
+             */
+            new TwigFunction(
+                'html_link',
+                function (string $key, string $href, ?string $title = null, array $attributes = []): string {
+                    $string = $this->resources->GetString($key);
+                    $titleStr = $title !== null ? $this->resources->GetString($title) : $string;
+
+                    if (!str_starts_with($href, '/')) {
+                        $href = $this->rootPath . $href;
+                    }
+
+                    $extra = self::buildAttributes($attributes);
+                    return "<a href=\"$href\" class=\"link-primary\" title=\"$titleStr\" $extra><i class=\"bi bi-people-fill me-1\"></i>$string</a>";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Appends a named query-string parameter to the current page URL.
+             * Equivalent to SmartyPage::AddQueryString.
+             *
+             * `key` is the name of a constant on QueryStringKeys (e.g. 'SORT_DIRECTION').
+             */
+            new TwigFunction(
+                'add_querystring',
+                function (string $key, string $value): string {
+                    $url = new Url(ServiceLocator::GetServer()->GetUrl());
+                    $name = constant(sprintf('QueryStringKeys::%s', $key));
+                    $url->AddQueryString($name, $value);
+                    return $url->ToString();
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders a sortable-column header link with caret indicator.
+             * Equivalent to SmartyPage::SortColumn (echoed in Smarty; returned here).
+             *
+             * Reads current sort state from the request URL and toggles direction
+             * for the active field.
+             */
+            new TwigFunction(
+                'sort_column',
+                function (string $field, string $key): string {
+                    $server = ServiceLocator::GetServer();
+                    $url = $server->GetRequestUri();
+                    $sortField = $field;
+                    $sortDirection = 'asc';
+                    $currentDirection = $server->GetQuerystring(QueryStringKeys::SORT_DIRECTION);
+                    $currentField = $server->GetQuerystring(QueryStringKeys::SORT_FIELD);
+                    $hasQueryString = BookedStringHelper::Contains($url, '?');
+                    $sd = QueryStringKeys::SORT_DIRECTION;
+                    $sf = QueryStringKeys::SORT_FIELD;
+                    $indicator = '';
+                    if ($sortField == $currentField) {
+                        $sortDirection = $currentDirection == 'asc' ? 'desc' : 'asc';
+                        $indicator = '<i class="bi bi-caret-down-fill"></i>';
+                        if ($currentDirection == 'asc') {
+                            $indicator = '<i class="bi bi-caret-up-fill"></i>';
+                        }
+                    }
+                    if (BookedStringHelper::Contains($url, $sd)) {
+                        $url = preg_replace("/$sd=(asc|desc)&?/", "$sd=$sortDirection&", (string) $url);
+                    } else {
+                        $url = $url . ($hasQueryString ? '&' : '?') . "$sd=$sortDirection";
+                    }
+                    if (BookedStringHelper::Contains($url, $sf)) {
+                        $url = preg_replace("/$sf=[a-zA-Z0-9_\\-]+&?/", "$sf=$sortField&", (string) $url);
+                    } else {
+                        $url = "$url&$sf=$sortField";
+                    }
+                    return '<a href="' . $url . '">' . $this->resources->GetString($key) . ' ' . $indicator . '</a>';
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Returns the absolute URL for a resource (uploaded) image.
+             * Equivalent to SmartyPage::GetResourceImage.
+             *
+             * When the configured image URL does not start with 'http://', the
+             * application's script URL is prepended.
+             */
+            new TwigFunction(
+                'resource_image',
+                function (string $image): string {
+                    $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
+                    if (!str_contains((string) $imageUrl, 'http://')) {
+                        $imageUrl = Configuration::Instance()->GetScriptUrl() . "/$imageUrl";
+                    }
+                    return "$imageUrl/$image";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Returns the formatted full name, respecting the privacy-hide-user-details setting.
+             * Equivalent to SmartyPage::DisplayFullName.
+             *
+             * When privacy is enabled and the current user is not an admin, returns the
+             * translated 'Private' string. Pass `ignorePrivacy=true` to bypass the check.
+             */
+            new TwigFunction(
+                'fullname',
+                function (string $first, string $last, bool $ignorePrivacy = false): string {
+                    $config = Configuration::Instance();
+                    if (!$ignorePrivacy && $config->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()) && !ServiceLocator::GetServer()->GetUserSession()->IsAdmin) {
+                        return $this->resources->GetString('Private');
+                    }
+                    $fullName = new FullName($first, $last);
+                    // Names are stored either HTML-encoded or raw, so do not encode existing entities
+                    return htmlspecialchars($fullName->__toString(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Formats a Date (or date string) using a resource date format.
+             * Equivalent to SmartyPage::FormatDate.
+             *
+             * Returns '' when `date` is empty. Accepts an explicit `format` string
+             * or a resource `key` (default 'general_date'). Applies optional
+             * `timezone` conversion. Translates day names when the format contains 'l'.
+             */
+            new TwigFunction(
+                'formatdate',
+                function (mixed $date = null, ?string $timezone = null, ?string $format = null, string $key = 'general_date'): string {
+                    if ($date === null || $date === '') {
+                        return '';
+                    }
+                    $date = is_string($date) ? Date::Parse($date) : $date;
+                    $date = $timezone !== null ? $date->ToTimezone($timezone) : $date;
+                    if ($format !== null) {
+                        return $date->Format($format);
+                    }
+                    $fmt = $this->resources->GetDateFormat($key);
+                    $formatted = $date->Format($fmt);
+                    if (str_contains((string) $fmt, 'l')) {
+                        $englishDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        $days = $this->resources->GetDays('full');
+                        $formatted = str_replace($englishDays[$date->Weekday()], $days[$date->Weekday()], $formatted);
+                    }
+                    return $formatted;
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Alias for `formatdate` — same implementation, second name for template compat.
+             * Equivalent to SmartyPage::FormatDate.
+             */
+            new TwigFunction(
+                'format_date',
+                function (mixed $date = null, ?string $timezone = null, ?string $format = null, string $key = 'general_date'): string {
+                    if ($date === null || $date === '') {
+                        return '';
+                    }
+                    $date = is_string($date) ? Date::Parse($date) : $date;
+                    $date = $timezone !== null ? $date->ToTimezone($timezone) : $date;
+                    if ($format !== null) {
+                        return $date->Format($format);
+                    }
+                    $fmt = $this->resources->GetDateFormat($key);
+                    $formatted = $date->Format($fmt);
+                    if (str_contains((string) $fmt, 'l')) {
+                        $englishDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        $days = $this->resources->GetDays('full');
+                        $formatted = str_replace($englishDays[$date->Weekday()], $days[$date->Weekday()], $formatted);
+                    }
+                    return $formatted;
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Formats a monetary amount using the current locale's NumberFormatter.
+             * Equivalent to SmartyPage::FormatCurrency (echoed in Smarty; returned here).
+             *
+             * Falls back to a plain USD string when the `intl` extension is not available.
+             */
+            new TwigFunction(
+                'formatcurrency',
+                function (mixed $amount = null, string $currency = 'USD'): string {
+                    $amount = isset($amount) && is_numeric($amount) ? floatval($amount) : 0.0;
+                    if (!class_exists('NumberFormatter')) {
+                        if ($currency == 'USD') {
+                            return '$' . number_format($amount, 2) . ' USD';
+                        }
+                        return 'We cannot format this currency. <a href="http://php.net/manual/en/book.intl.php">You must enable internationalization</a>.';
+                    }
+                    $fmt = new NumberFormatter($this->resources->CurrentLanguage, NumberFormatter::CURRENCY);
+                    return (string) $fmt->formatCurrency($amount, $currency);
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Converts a PHP array to a JavaScript array literal string.
+             * Equivalent to SmartyPage::CreateJavascriptArray.
+             *
+             * @param mixed[] $array
+             */
+            new TwigFunction(
+                'js_array',
+                function (array $array): string {
+                    $string = implode('","', $array);
+                    return "[\"$string\"]";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Returns a newline character.
+             * Equivalent to SmartyPage::LineBreak.
+             */
+            new TwigFunction(
+                'linebreak',
+                static function (): string {
+                    return "\n";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Flushes the output buffer and returns the flushing marker comment.
+             * Equivalent to SmartyPage::Flush (which echoes the comment).
+             */
+            new TwigFunction(
+                'flush',
+                static function (): string {
+                    flush();
+                    return '<!-- flushing -->';
+                },
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
