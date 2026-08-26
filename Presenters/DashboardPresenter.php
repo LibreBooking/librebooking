@@ -21,10 +21,10 @@ class DashboardPresenter
 
     public function Initialize()
     {
-        $announcement = new AnnouncementsControl(new SmartyPage());
-        $pastReservations = new PastReservations(new SmartyPage());
-        $upcomingReservations = new UpcomingReservations(new SmartyPage());
-        $availability = new ResourceAvailabilityControl(new SmartyPage());
+        $announcement = new AnnouncementsControl(new SmartyRenderer());
+        $pastReservations = new PastReservations(new SmartyRenderer());
+        $upcomingReservations = new UpcomingReservations(new SmartyRenderer());
+        $availability = new ResourceAvailabilityControl(new SmartyRenderer());
 
         $this->_page->AddItem($announcement);
         $this->_page->AddItem($pastReservations);
@@ -32,23 +32,23 @@ class DashboardPresenter
         $this->_page->AddItem($availability);
 
         if (ServiceLocator::GetServer()->GetUserSession()->IsAdmin /*|| ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin || ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin*/) {
-            $allUpcomingReservations = new AllUpcomingReservations(new SmartyPage());
+            $allUpcomingReservations = new AllUpcomingReservations(new SmartyRenderer());
             $this->_page->AddItem($allUpcomingReservations);
         }
 
         if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin || ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
-            $myGroupReservations = new GroupUpcomingReservations(new SmartyPage());
+            $myGroupReservations = new GroupUpcomingReservations(new SmartyRenderer());
             $this->_page->AddItem($myGroupReservations);
         }
 
         //Only Resource Admins or App Admins can accept or reject pending reservations
         if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin || ServiceLocator::GetServer()->GetUserSession()->IsAdmin) {
-            $pendingApprovalReservations = new PendingApprovalReservations(new SmartyPage());
+            $pendingApprovalReservations = new PendingApprovalReservations(new SmartyRenderer());
             $this->_page->AddItem($pendingApprovalReservations);
         }
 
         if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin || ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin || ServiceLocator::GetServer()->GetUserSession()->IsAdmin) {
-            $missingCheckInOutReservations = new MissingCheckInOutReservations(new SmartyPage());
+            $missingCheckInOutReservations = new MissingCheckInOutReservations(new SmartyRenderer());
             $this->_page->AddItem($missingCheckInOutReservations);
         }
     }
