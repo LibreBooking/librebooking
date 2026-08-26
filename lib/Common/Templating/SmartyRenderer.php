@@ -19,11 +19,34 @@ class SmartyRenderer implements TemplateRenderer
     {
         $resources ??= Resources::GetInstance();
 
-        // No language is loaded when the configured one is not supported.
-        // SmartyPage treats an empty language like a missing one.
-        $language = $resources->CurrentLanguage;
-        $this->language = is_string(value: $language) ? $language : '';
+        $this->language = self::languageOf(resources: $resources);
         $this->page = new SmartyPage(resources: $resources, RootPath: $rootPath);
+    }
+
+    /**
+     * Wrap an existing SmartyPage instance without constructing a new one.
+     * Preserves the page's template directories and already-assigned variables.
+     *
+     * The page does not expose the language it was created for, so the
+     * renderer serves the language that is current when the page is wrapped.
+     */
+    public static function wrap(SmartyPage $page): self
+    {
+        $instance = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $instance->page = $page;
+        $instance->language = self::languageOf(resources: Resources::GetInstance());
+        return $instance;
+    }
+
+    /**
+     * No language is loaded when the configured one is not supported.
+     * SmartyPage treats an empty language like a missing one.
+     */
+    private static function languageOf(Resources $resources): string
+    {
+        $language = $resources->CurrentLanguage;
+
+        return is_string(value: $language) ? $language : '';
     }
 
     /**

@@ -1,11 +1,10 @@
 <?php
 
+use LibreBooking\Common\Templating\TemplateRenderer;
+
 abstract class Control
 {
-    /**
-     * @var SmartyPage|\Smarty\Smarty
-     */
-    protected $smarty = null;
+    protected TemplateRenderer $renderer;
 
     /**
      * @var string
@@ -13,35 +12,48 @@ abstract class Control
     protected $id = null;
 
     /**
-     * @var \Smarty\Data
+     * @var array<string,mixed>
      */
-    protected $data = null;
+    protected array $data = [];
 
     /**
-     * @param SmartyPage $smarty
+     * @param TemplateRenderer|SmartyPage $renderer
      */
-    public function __construct(SmartyPage $smarty)
+    public function __construct(TemplateRenderer|SmartyPage $renderer)
     {
-        $this->smarty = $smarty;
+        // BC: callers (e.g. SmartyPage::DisplayControl) still pass a raw SmartyPage.
+        $this->renderer = $renderer instanceof SmartyPage
+            ? SmartyRenderer::wrap($renderer)
+            : $renderer;
         $this->id = uniqid();
-
-        $this->data = $smarty->createData();
     }
 
     public function Set($var, $value)
     {
-        $this->data->assign($var, $value);
+        $this->data[$var] = $value;
+    }
+
+    /**
+     * Renders with the given renderer from now on, e.g. the page's Twig renderer for controls
+     * that were created before the page chose its template engine.
+     */
+    public function UseRenderer(TemplateRenderer $renderer): void
+    {
+        $this->renderer = $renderer;
     }
 
     protected function Get($var)
     {
-        return $this->data->getTemplateVars($var);
+        // Like the Smarty data object this replaces, fall back to the page's variables
+        if (array_key_exists($var, $this->data)) {
+            return $this->data[$var];
+        }
+        return $this->renderer->getTemplateVars($var);
     }
 
     protected function Display($templateName)
     {
-        $tpl = $this->smarty->createTemplate($templateName, $this->data);
-        $tpl->display();
+        echo $this->renderer->renderControlTemplate($templateName, $this->data);
     }
 
     abstract public function PageLoad();

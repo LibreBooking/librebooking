@@ -186,7 +186,7 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
      */
     public $presenter;
 
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
 
