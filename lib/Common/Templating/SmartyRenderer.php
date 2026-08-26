@@ -11,6 +11,17 @@ class SmartyRenderer implements TemplateRenderer
         $this->page = new SmartyPage($resources, $rootPath);
     }
 
+    /**
+     * Wrap an existing SmartyPage instance without constructing a new one.
+     * Preserves the page's template directories and already-assigned variables.
+     */
+    public static function wrap(SmartyPage $page): self
+    {
+        $instance = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $instance->page = $page;
+        return $instance;
+    }
+
     public function smarty(): SmartyPage
     {
         return $this->page;
