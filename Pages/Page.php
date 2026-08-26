@@ -16,6 +16,8 @@ abstract class Page implements IPage
 {
     private static ?string $displayVersion = null;
 
+    protected \LibreBooking\Common\Templating\TemplateRenderer $renderer;
+
     /**
      * @var SmartyPage
      */
@@ -41,7 +43,9 @@ abstract class Page implements IPage
         $this->server = ServiceLocator::GetServer();
         $resources = Resources::GetInstance();
 
-        $this->smarty = new SmartyPage($resources, $this->path);
+        $smartyRenderer = new SmartyRenderer($resources, $this->path);
+        $this->renderer = $smartyRenderer;
+        $this->smarty = $smartyRenderer->smarty(); // BC: existing $this->smarty->... calls keep working
 
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $this->smarty->assign('Timezone', $userSession->Timezone);
