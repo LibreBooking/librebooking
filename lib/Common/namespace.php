@@ -4,6 +4,7 @@ require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/LoginTime.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyPage.php');
 require_once(ROOT_DIR . 'lib/Common/Templating/SmartyRenderer.php');
+require_once(ROOT_DIR . 'lib/Common/Templating/TwigRenderer.php');
 require_once(ROOT_DIR . 'lib/Common/Resources.php');
 require_once(ROOT_DIR . 'lib/Common/ServiceLocator.php');
 require_once(ROOT_DIR . 'lib/Common/Date.php');
