@@ -1,0 +1,19 @@
+{{ include('globalheader.twig') }}
+
+{% if IsMissingInformation is defined and IsMissingInformation %}
+    <div class="error">This invitation is incorrect or does not exist</div>
+{% endif %}
+
+{% if (InvitationAccepted is defined and InvitationAccepted) or (InvitationDeclined is defined and InvitationDeclined) %}
+    <div class="success">Thanks, we've recorded your response
+    {% if (IsGuest is defined and IsGuest) or (AllowRegistration is defined and AllowRegistration) %}
+    <div><a href="{{ constant('Pages::REGISTRATION') }}">{{ translate('CreateAnAccount') }}</a></div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if CapacityReached is defined and CapacityReached %}
+<div class="error">{{ CapacityErrorMessage }}</div>
+{% endif %}
+{{ include('javascript-includes.twig') }}
+{{ include('globalfooter.twig') }}

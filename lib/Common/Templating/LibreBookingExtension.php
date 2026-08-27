@@ -136,6 +136,97 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 ['is_safe' => ['html']]
             ),
 
+            /**
+             * Renders an already-constructed DashboardItem (or any Control) by calling
+             * its PageLoad() method and capturing echoed output.
+             * Equivalent to `{$dashboardItem->PageLoad()}` in the Smarty dashboard template.
+             */
+            new TwigFunction(
+                'dashboard_item',
+                static function (object $item): string {
+                    ob_start();
+                    $item->PageLoad();
+                    return (string) ob_get_clean();
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders <option> elements from an associative array or parallel arrays.
+             * Equivalent to Smarty's built-in {html_options}.
+             *
+             * Supports two calling forms (matching Smarty):
+             *   - options form:       html_options(options={'key': 'label', ...}, selected=...)
+             *   - values+output form: html_options(values=[...], output=[...], selected=...)
+             *
+             * @param mixed[] $values   Array of option value attributes (parallel-array form).
+             * @param mixed[] $output   Array of option display labels (parallel-array form).
+             * @param array<string|int,string> $options Associative key=>label map (options form).
+             * @param mixed   $selected Currently selected value (scalar or array for multi-select).
+             */
+            new TwigFunction(
+                'html_options',
+                static function (array $values = [], array $output = [], array $options = [], mixed $selected = null): string {
+                    // Use ENT_COMPAT + no double-encode to match Smarty's smarty_function_escape_special_chars.
+                    $escapeAttr = static fn (string $s): string =>
+                        htmlspecialchars($s, ENT_COMPAT, 'UTF-8', false);
+
+                    // Build a value-keyed selected map (matching Smarty's $selected[$_sel] = true approach).
+                    // For scalar: escape and store as a plain string for === comparison.
+                    // For array: build [$escapedValue => true] map so isset() works correctly.
+                    /** @var array<string,true>|null $selectedMap */
+                    $selectedMap = null;
+                    $escapedScalarSelected = '';
+                    if (is_array($selected)) {
+                        $selectedMap = [];
+                        foreach ($selected as $sel) {
+                            $selectedMap[$escapeAttr((string) $sel)] = true;
+                        }
+                    } else {
+                        $escapedScalarSelected = $escapeAttr((string) ($selected ?? ''));
+                    }
+
+                    $isSelectedAttr = static function (string $escapedKey) use ($selectedMap, $escapedScalarSelected): string {
+                        if ($selectedMap !== null) {
+                            return isset($selectedMap[$escapedKey]) ? ' selected="selected"' : '';
+                        }
+                        return $escapedKey === $escapedScalarSelected ? ' selected="selected"' : '';
+                    };
+
+                    $builder = new StringBuilder();
+
+                    if ($options !== []) {
+                        // options form: assoc key => label
+                        foreach ($options as $key => $label) {
+                            $escapedKey = $escapeAttr((string) $key);
+                            // Trailing \n matches Smarty's {html_options} byte-for-byte output.
+                            $builder->Append(sprintf(
+                                '<option value="%s"%s>%s</option>' . "\n",
+                                $escapedKey,
+                                $isSelectedAttr($escapedKey),
+                                $escapeAttr((string) $label)
+                            ));
+                        }
+                    } else {
+                        // values+output form: parallel arrays
+                        foreach ($values as $i => $value) {
+                            $label = $output[$i] ?? $value;
+                            $escapedValue = $escapeAttr((string) $value);
+                            // Trailing \n matches Smarty's {html_options} byte-for-byte output.
+                            $builder->Append(sprintf(
+                                '<option value="%s"%s>%s</option>' . "\n",
+                                $escapedValue,
+                                $isSelectedAttr($escapedValue),
+                                $escapeAttr((string) $label)
+                            ));
+                        }
+                    }
+
+                    return $builder->ToString();
+                },
+                ['is_safe' => ['html']]
+            ),
+
             // ── Group A: buttons & icons ────────────────────────────────────
 
             /**
@@ -389,19 +480,40 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                     $type = strtolower($type === '' ? 'text' : $type);
                     $isRequired = (bool) $required;
 
-                    // Build the synthetic $params array in insertion order, mirroring Smarty tag order:
-                    // class first (always present after Textbox modifies it), then id, then placeholder,
-                    // then any caller-supplied extras.
+                    // Build the synthetic $params array in insertion order, mirroring Smarty tag order.
+                    //
+                    // SmartyPage::Textbox adds 'class' and 'placeholder' to $params AFTER reading the
+                    // tag attributes.  PHP associative-array semantics mean:
+                    //   - If 'class' was already a key (explicitly in the tag), assigning it modifies
+                    //     in-place — so class stays BEFORE any subsequent data-bv-* attributes.
+                    //   - If 'class' was absent, it is appended at the END of $params —  so class ends
+                    //     up AFTER data-bv-* attributes but BEFORE 'placeholder' (which is added next).
+                    //   - 'placeholder' (from placeholderkey) is always appended AFTER class.
+                    //
+                    // Mirror this insertion order here:
+                    //   class-provided  → class, id?, placeholder?, extras
+                    //   class-absent    → id?,  extras,  class,  placeholder?
                     $params = [];
-                    $params['class'] = $cssClass;
+
+                    $classWasProvided = $class !== '';
+                    if ($classWasProvided) {
+                        $params['class'] = $cssClass;
+                    }
+
                     if ($id !== '') {
                         $params['id'] = $id;
                     }
-                    if ($placeholderkey !== '') {
-                        $params['placeholder'] = $this->resources->GetString($placeholderkey);
-                    }
+
                     foreach ($attributes as $k => $v) {
                         $params[$k] = $v;
+                    }
+
+                    if (!$classWasProvided) {
+                        $params['class'] = $cssClass;
+                    }
+
+                    if ($placeholderkey !== '') {
+                        $params['placeholder'] = $this->resources->GetString($placeholderkey);
                     }
 
                     $extraStr = self::buildAttributes($params);
