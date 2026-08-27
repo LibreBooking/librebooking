@@ -294,6 +294,18 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             ),
 
             /**
+             * Returns the current logged-in user's ID from the session.
+             * Equivalent to ServiceLocator::GetServer()->GetUserSession()->UserId
+             * used inline in view.tpl for permission checks.
+             */
+            new TwigFunction(
+                'current_user_id',
+                static function (): int {
+                    return ServiceLocator::GetServer()->GetUserSession()->UserId;
+                }
+            ),
+
+            /**
              * Returns the minimum/epoch Date sentinel value.
              * Equivalent to the inline {Date::Min()} Smarty expression.
              *

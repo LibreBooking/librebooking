@@ -1,0 +1,41 @@
+{{ include('globalheader.twig') }}
+<div class="page-guest-collect">
+
+    {% set _vg %}
+{{ validator('emailformat', 'ValidEmailRequired') }}
+{{ validator('uniqueemail', 'UniqueEmailRequired') }}
+    {% endset %}
+    {{ validation_group(_vg, class: 'alert alert-danger') }}
+
+    <div class="card shadow col-12 col-sm-8 mx-auto">
+        <div class="card-body">
+            <h2 class="text-center">{{ translate('WeNeedYourEmailAddress') }}</h2>
+
+            <form method="post" id="form-guest-collect" action="{{ server.REQUEST_URI|escape }}" role="form">
+
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label class="reg fw-bold" for="email">{{ translate('Email') }}</label>
+                        {{ textbox(name: 'EMAIL', type: 'email', class: 'input', value: 'Email', required: true) }}
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="update btn btn-primary" name="" id="btnUpdate">
+                        {{ translate('Continue') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {{ setfocus('EMAIL') }}
+
+    {{ include('javascript-includes.twig') }}
+    {{ jsfile('ajax-helpers.js') }}
+
+    <div id="wait-box" class="wait-box">
+        {{ render_partial('wait-box.tpl', _context|merge({translateKey: 'Working'})) }}
+    </div>
+
+</div>
+{{ include('globalfooter.twig') }}

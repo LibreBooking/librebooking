@@ -2,7 +2,7 @@
 <html lang="{{ HtmlLang }}" dir="{{ HtmlTextDirection }}">
 
 <head>
-    <title>{% if TitleKey is defined and TitleKey != '' %}{{ translate(TitleKey, TitleArgs) }}{% else %}{{ Title }}{% endif %}</title>
+    <title>{% if TitleKey is defined and TitleKey != '' %}{{ translate(TitleKey, TitleArgs|default([])) }}{% else %}{{ Title }}{% endif %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset={{ Charset }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex" />

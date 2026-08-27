@@ -1,0 +1,446 @@
+{% block header %}
+{{ include('globalheader.twig', {TitleKey: 'ViewReservationHeading', printCssFiles: 'css/reservation.print.css'}) }}
+{% endblock %}
+<div id="page-view-reservation">
+    <div id="reservation-box" class="card shadow readonly">
+        <div id="reservationFormDiv" class="card-body">
+            <div class="row">
+                {# CHECK IF USER HAS PERMISSIONS TO THE RESOURCES OF THE RESERVATIONS, HIDE DETAILS IF HE DOESN'T HAVE PERMISSIONS TO ALL OF THEM #}
+                {% set isResourcePermitted = ResourceId in CanViewResourceReservations %}
+                {% for checkAditionalResourcePermissionsId in AdditionalResourceIds %}
+                    {% if not isResourcePermitted and checkAditionalResourcePermissionsId in CanViewResourceReservations %}
+                        {% set isResourcePermitted = true %}
+                    {% endif %}
+                {% endfor %}
+                {# Divergence from Smarty source: Twig has no break; using flag-variable approach.
+                   Smarty source had {break}; and {{/foreach}} (double-brace is a Smarty bug emitting literal {}) #}
+                {# HOWEVER THE USER CAN SEE THE RESERVATION IF HE IS A OWNER, PARTICIPANT OR INVITEE #}
+                {% if not isResourcePermitted %}
+                    {% if UserId == current_user_id() or IAmParticipating or IAmInvited %}
+                        {% set isResourcePermitted = true %}
+                    {% endif %}
+                {% endif %}
+
+                {% set detailsCol = 'col-12' %}
+                {% set participantCol = 'col-12' %}
+
+                {% if ShowParticipation and AllowParticipation and ShowReservationDetails and isResourcePermitted %}
+                    {% set detailsCol = 'col-12 col-sm-6' %}
+                    {% set participantCol = 'col-12 col-sm-6' %}
+                {% endif %}
+
+                <div id="reservationDetails" class="{{ detailsCol }}">
+                    <div class="col-12">
+                        <label class="fw-bold">{{ translate('User') }}</label>
+                        {% if ShowUserDetails and ShowReservationDetails and isResourcePermitted %}
+                            <a href="#" class="bindableUser link-primary" data-userid="{{ UserId }}">{{ ReservationUserName|escape_once }}</a>
+                            <input id="userId" type="hidden" value="{{ UserId }}" />
+                        {% else %}
+                            {{ translate('Private') }}
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 no-padding-left">
+                            <label class="fw-bold">{{ translate('BeginDate') }}</label> {{ formatdate(StartDate) }}
+                            <input type="hidden" id="BeginDate" value="{{ formatdate(StartDate, key: 'system') }}" />
+                            {% for period in StartPeriods %}
+                                {% if period == SelectedStart %}
+                                    {{ period.Label()|escape_once }}
+                                    <input type="hidden" id="BeginPeriod" value="{{ period.Begin() }}" />
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 no-padding-left">
+                            <label class="fw-bold">{{ translate('EndDate') }}</label> {{ formatdate(EndDate) }}
+                            <input type="hidden" id="EndDate" value="{{ formatdate(EndDate, key: 'system') }}" />
+                            {% for period in EndPeriods %}
+                                {% if period == SelectedEnd %}
+                                    {{ period.LabelEnd()|escape_once }}
+                                    <input type="hidden" id="EndPeriod" value="{{ period.End() }}" />
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <span class="fw-bold">{{ translate('ReservationLength') }}</span>
+                        <span class="durationText">
+                            <span id="durationDays">0</span> {{ translate('days') }}
+                            <span id="durationHours">0</span> {{ translate('hours') }}
+                            <span id="durationMinutes">0</span> {{ translate('minutes') }}
+                        </span>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="fw-bold">{{ translate('RepeatPrompt') }}</label>
+                        {{ translate(RepeatOptions[RepeatType]['key']) }}
+                        {% if IsRecurring %}
+                            <div class="repeat-details">
+                                <label class="fw-bold">{{ translate('RepeatEveryPrompt') }}</label> {{ RepeatInterval }}
+                                {{ RepeatOptions[RepeatType]['everyKey'] }}
+                                {% if RepeatMonthlyType != '' %}
+                                    ({{ RepeatMonthlyType }})
+                                {% endif %}
+                                {% if RepeatWeekdays is iterable and RepeatWeekdays|length > 0 %}
+                                    <br />
+                                    <label class="fw-bold">{{ translate('RepeatDaysPrompt') }}</label>
+                                    {% for day in RepeatWeekdays %}{{ translate(DayNames[day]) }} {% endfor %}
+                                {% endif %}
+                                <br /><label class="fw-bold">{{ translate('RepeatUntilPrompt') }}</label>
+                                {{ formatdate(RepeatTerminationDate) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 clearfix">
+                        <div class="float-start">
+                            <label class="fw-bold">{{ translate('Resources') }}</label> {{ ResourceName|escape_once }}
+                            <input id="primaryResourceId" type="hidden" value="{{ ResourceId }}" />
+                            <div id="additionalResources" class="inline">
+
+                                {% for resource in AvailableResources %}
+                                    {% if AdditionalResourceIds is iterable and resource.Id in AdditionalResourceIds %}
+                                        ,{{ resource.Name|escape_once }}
+                                        <input class="resourceId" type="hidden" value="{{ resource.Id }}" />
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not isResourcePermitted %}
+                                    <p class="text-danger">{{ translate('NoResourcePermissions') }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="float-end">
+                            {% if ShowReservationDetails and isResourcePermitted %}
+                                <label class="fw-bold">{{ translate('Accessories') }}</label>
+                                {% for accessory in Accessories %}
+                                    <span class="badge bg-secondary quantity">{{ accessory.QuantityReserved }}</span>
+                                    {% if loop.last %}
+                                        {{ accessory.Name|escape_once }}
+                                    {% else %}
+                                        {{ accessory.Name|escape_once }},
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if ShowReservationDetails and isResourcePermitted %}
+                        <div class="col-12">
+                            <label class="fw-bold">{{ translate('ReservationTitle') }}</label>
+                            {% if ReservationTitle != '' %}
+                                {{ ReservationTitle|escape_once }}
+                            {% else %}
+                                <span class="no-data fst-italic">{{ translate('None') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-12">
+                            <label class="fw-bold">{{ translate('ReservationDescription') }}</label>
+                            {% if Description != '' %}
+                                <br />
+                                {{ Description|escape_once|nl2br }}
+                            {% else %}
+                                <span class="no-data fst-italic">{{ translate('None') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="fw-bold">{{ translate('ReferenceNumber') }}</label>
+                                {{ ReferenceNumber }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if ShowParticipation and AllowParticipation and ShowReservationDetails and isResourcePermitted %}
+                    <div class="{{ participantCol }}">
+                        <div id="reservationParticipation">
+                            <div id="participationAction" class="participationAction">
+                                {% if IAmParticipating and CanAlterParticipation %}
+                                    <div class="alert alert-info" role="alert">
+                                        <span class="fw-bold">{{ translate('YouAreAParticipant') }}</span>
+                                        {% if IsRecurring %}
+                                            <button value="{{ constant('InvitationAction::CancelAll') }}"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-dash-square-fill"></i> {{ translate('AllInstances') }}
+                                            </button>
+                                            <button value="{{ constant('InvitationAction::CancelInstance') }}"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-dash-square-fill"></i> {{ translate('ThisInstance') }}
+                                            </button>
+                                        {% else %}
+                                            <button value="{{ constant('InvitationAction::CancelInstance') }}"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-dash-square-fill"></i> {{ translate('CancelParticipation') }}
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div id="invitationAction" class="participationAction">
+                                {% if IAmInvited and CanAlterParticipation %}
+                                    <div class="alert alert-info" role="alert">
+                                        <span class="fw-bold">{{ translate('YouAreInvited') }}</span>
+                                        <button value="{{ constant('InvitationAction::Accept') }}"
+                                            class="btn btn-sm btn-info participationAction">
+                                            <i class="bi bi-person-fill-check"></i> {{ translate('Attending') }}
+                                        </button>
+                                        <button value="{{ constant('InvitationAction::Decline') }}"
+                                            class="btn btn-sm btn-danger  participationAction">
+                                            <i class="bi bi-person-fill-x"></i> {{ translate('NotAttending') }}
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div id="joinReservation" class="participationAction">
+                                {% if AllowParticipantsToJoin and not IAmParticipating and not IAmInvited and CanAlterParticipation %}
+                                    <div class="alert alert-info " role="alert">
+                                        <span class="fw-bold">{{ translate('YouCanJoinThisReservation') }}</span>
+                                        {% if IsRecurring %}
+                                            <button value="{{ constant('InvitationAction::JoinAll') }}" id="btnJoinSeries"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-person-fill-check"></i> {{ translate('AllInstances') }}
+                                            </button>
+                                            <button value="{{ constant('InvitationAction::Join') }}" id="btnJoinInstance"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-person-fill-check"></i> {{ translate('ThisInstance') }}
+                                            </button>
+                                        {% else %}
+                                            <button value="{{ constant('InvitationAction::Join') }}" id="btnJoin"
+                                                class="btn btn-sm btn-info participationAction">
+                                                <i class="bi bi-person-fill-check"></i> {{ translate('Join') }}
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <span id="participate-indicator" class="spinner-border spinner-border-sm" role="status"
+                                style="display:none;"></span>
+
+                            {% if ShowUserDetails and isResourcePermitted %}
+                                <div id="ro-participantList">
+                                    <label class="fw-bold">{{ translate('ParticipantList') }}</label>
+                                    {% for participant in Participants %}
+                                        <div><a href="#" class="bindableUser link-primary"
+                                                data-userid="{{ participant.UserId }}">{{ participant.FullName|escape_once }}</a></div>
+                                    {% else %}
+                                        <div class="no-data fst-italic">{{ translate('None') }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div id="ro-inviteeList">
+                                    <label class="fw-bold">{{ translate('InvitationList') }}</label>
+                                    {% for invitee in Invitees %}
+                                        <div><a href="#" class="bindableUser link-primary"
+                                                data-userid="{{ invitee.UserId }}">{{ invitee.FullName|escape_once }}</a></div>
+                                    {% else %}
+                                        <div class="no-data fst-italic">{{ translate('None') }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="col-12 same-height">
+                    <div id="custom-attributes-placeholder" class="">
+                    </div>
+                </div>
+
+                {% if ShowReservationDetails and isResourcePermitted %}
+                    <div class="clearfix buttons">
+                        <div class="float-end">
+                            <button type="button" class="btn btn-outline-secondary"
+                                onclick="window.location='{{ ReturnUrl|raw }}'">
+                                {# raw: JS string context #}
+                                {{ translate('Close') }}
+                            </button>
+
+                            {% block deleteButtons %}
+                                {% if CanJoinWaitList %}
+                                    <button id="btnWaitList" class="btn btn-outline-secondary"><i class="bi bi-bell-fill"></i>
+                                        {{ translate('NotifyWhenAvailable') }}
+                                    </button>
+                                {% endif %}
+
+                                {% set icsUrl %}{{ Path }}export/{{ constant('Pages::CALENDAR_EXPORT') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}{% endset %}
+                                <a href="{{ icsUrl }}" download="{{ icsUrl }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-calendar3"></i>
+                                    {{ translate('AddToOutlook') }}</a>
+                                <a href="http://www.google.com/calendar/event?action=TEMPLATE&text={{ ReservationTitle|urlencode }}&dates=
+                                    {{ formatdate(StartDate.ToUtc(), key: 'google') }}/
+                                    {{ formatdate(EndDate.ToUtc(), key: 'google') }}&ctz={{ StartDate.Timezone() }}&details={{ Description|urlencode }}&location={{ Resource.Name|urlencode }}&trp=false&sprop=&sprop=name:"
+                                    target="_blank" rel="nofollow" class="btn btn-outline-secondary">
+                                    <i class="bi bi-google"></i>
+                                    {{ translate('AddToGoogleCalendar') }}</a>
+                                <button type="button" class="btnPrint btn btn-outline-secondary">
+                                    <i class="bi bi-printer"></i>
+                                    {{ translate('Print') }}</button>
+                                <button type="button" class="btnPDF btn btn-outline-secondary">
+                                    <i class="bi bi-filetype-pdf"></i>
+                                    PDF</button>
+                            {% endblock %}
+
+                            {% block submitButtons %}
+                                {% if CheckInRequired and (not checkinAdminOnly or CanViewAdmin) %}
+                                    <button type="button" class="btn btn-warning btnCheckin"><i
+                                            class="bi bi-box-arrow-in-right"></i>
+                                        {{ translate('CheckIn') }}<span class="autoReleaseButtonMessage"
+                                            data-autorelease-minutes="{{ AutoReleaseMinutes }}"> - {{ translate('ReleasedIn') }}
+                                            <span class="autoReleaseMinutes"></span> {{ translate('minutes') }}</span></button>
+                                {% endif %}
+                                {% if CheckOutRequired and (not checkoutAdminOnly or CanViewAdmin) %}
+                                    <button type="button" class="btn btn-warning btnCheckout"><i
+                                            class="bi bi-box-arrow-in-left"></i>
+                                        {{ translate('CheckOut') }}</button>
+                                {% endif %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if ShowReservationDetails and isResourcePermitted %}
+                {% if Attachments|default([])|length > 0 %}
+                    <div class="col-12">
+                        <div class="res-attachments border-top mt-2 pt-2">
+                            <span class="heading fw-bold">{{ translate('Attachments') }}
+                                ({{ Attachments|default([])|length }})</span>
+                            <br />
+                            {% for attachment in Attachments %}
+                                {% set attachmentUrl %}attachments/{{ constant('Pages::RESERVATION_FILE') }}?{{ constant('QueryStringKeys::ATTACHMENT_FILE_ID') }}={{ attachment.FileId() }}&{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}{% endset %}
+                                <a href="{{ attachmentUrl }}" download="{{ attachmentUrl }}" target="_blank"
+                                    class="link-primary">{{ attachment.FileName() }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <input type="hidden" id="referenceNumber" {{ formname(key: 'reference_number') }} value="{{ ReferenceNumber }}" />
+        </div>
+    </div>
+
+    <div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="creatingNotification" class="text-center">
+                        <h3 id="createUpdateMessage" class="d-none">
+                            {% block ajaxMessage %}
+                                {{ translate('UpdatingReservation') }}
+                            {% endblock %}
+                        </h3>
+                        <h3 id="joiningWaitingList" class="d-none">
+                            {{ translate('AddingToWaitlist') }}
+                        </h3>
+                        <h3 id="checkingInMessage" class="d-none">
+                            {{ translate('CheckingIn') }}
+                        </h3>
+                        <h3 id="checkingOutMessage" class="d-none">
+                            {{ translate('CheckingOut') }}
+                        </h3>
+                        <div class="spinner-border text-secondary" style="width: 3rem; height: 3rem;" role="status">
+                        </div>
+                    </div>
+                    <div id="result" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: none">
+        <form id="form-reservation" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" {{ formname(key: 'RESERVATION_ID') }} value="{{ ReservationId }}" />
+            <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" />
+            <input type="hidden" {{ formname(key: 'RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
+            <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
+                value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
+            <input type="hidden" {{ formname(key: 'DELETE_REASON') }} value="" id="hdnDeleteReason" />
+            <input type="hidden" {{ formname(key: 'BEGIN_DATE') }} value="{{ formatdate(StartDate, key: 'system') }}" />
+            <input type="hidden" {{ formname(key: 'BEGIN_PERIOD') }} value="{{ SelectedStart.Begin() }}" />
+            <input type="hidden" {{ formname(key: 'END_DATE') }} value="{{ formatdate(EndDate, key: 'system') }}" />
+            <input type="hidden" {{ formname(key: 'END_PERIOD') }} value="{{ SelectedEnd.End() }}" />
+            <input type="hidden" {{ formname(key: 'USER_ID') }} value="{{ UserId }}" />
+            <input type="hidden" {{ formname(key: 'RESOURCE_ID') }} value="{{ ResourceId }}" />
+            {{ csrf_token() }}
+        </form>
+    </div>
+</div>
+
+{% block reservationHeader %}{% endblock %}
+
+{{ include('javascript-includes.twig') }}
+{{ jsfile('participation.js') }}
+{{ jsfile('approval.js') }}
+{{ jsfile('resourcePopup.js') }}
+{{ jsfile('userPopup.js') }}
+{{ jsfile('date-helper.js') }}
+{{ jsfile('recurrence.js') }}
+{{ jsfile('reservation.js') }}
+{{ jsfile('autocomplete.js') }}
+{{ jsfile('force-numeric.js') }}
+{{ jsfile('reservation-reminder.js') }}
+{{ jsfile('ajax-helpers.js') }}
+{{ jsfile('reservation-pdf.js') }}
+{{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
+
+{{ include('Reservation/pdf_libraries.twig') }}
+{{ include('Reservation/pdf.twig') }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var participationOptions = {
+            responseType: 'json'
+        };
+
+        var participation = new Participation(participationOptions);
+        participation.initReservation();
+
+        var approvalOptions = {
+            responseType: 'json',
+            url: "{{ Path }}ajax/reservation_approve.php",
+            returnUrl: '{{ ReturnUrl|raw }}' {# raw: JS string context #}
+        };
+
+        var approval = new Approval(approvalOptions);
+        approval.initReservation();
+
+        var scopeOptions = {
+            instance: '{{ constant('SeriesUpdateScope::ThisInstance') }}',
+            full: '{{ constant('SeriesUpdateScope::FullSeries') }}',
+            future: '{{ constant('SeriesUpdateScope::FutureInstances') }}'
+        };
+
+        var reservationOpts = {
+            returnUrl: '{{ ReturnUrl|raw }}', {# raw: JS string context #}
+            scopeOpts: scopeOptions,
+            deleteUrl: 'ajax/reservation_delete.php',
+            checkinUrl: 'ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkin') }}',
+            checkoutUrl: 'ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkout') }}',
+            userAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::User') }}",
+            changeUserAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::MyUsers') }}",
+            waitlistUrl: 'ajax/reservation_waitlist.php',
+        };
+        var reservation = new Reservation(reservationOpts);
+        reservation.init('{{ UserId }}',
+            '{{ format_date(StartDate, key: 'system_datetime', timezone: Timezone) }}',
+            '{{ format_date(EndDate, key: 'system_datetime', timezone: Timezone) }}'
+        );
+
+        var ajaxOptions = {
+            target: '#result', // target element(s) to be updated with server response
+            beforeSubmit: reservation.preSubmit, // pre-submit callback
+            success: reservation.showResponse // post-submit callback
+        };
+
+        $('#form-reservation').submit(function() {
+            $(this).ajaxSubmit(ajaxOptions);
+            return false;
+        });
+
+    });
+</script>
+{{ include('globalfooter.twig') }}

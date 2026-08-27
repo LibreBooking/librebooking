@@ -1,0 +1,72 @@
+{#
+  Slot-display macros for the availability partial (Reservation/availability.twig).
+  These correspond to the Smarty {function name=display*} blocks previously defined
+  inline in availability.tpl.
+
+  Dynamic dispatch: DisplaySlotFactory::GetFunction(slot, true) returns one of the
+  macro names at runtime. Twig cannot call a macro by a dynamic string, so dispatch()
+  is an {% if/elseif %} chain over the finite name set.
+
+  All functions in availability.tpl use $spantype|default:'col' and $Slot->PeriodSpan().
+#}
+
+{% macro displayGeneralReserved(Slot, spantype) %}
+    <td {{ spantype|default('col') }}span="{{ Slot.PeriodSpan() }}" class="reserved">&nbsp;</td>
+{% endmacro %}
+
+{% macro displayMyReserved(Slot, spantype) %}
+    {{ _self.displayGeneralReserved(Slot, spantype) }}
+{% endmacro %}
+
+{% macro displayAdminReserved(Slot, spantype) %}
+    {{ _self.displayGeneralReserved(Slot, spantype) }}
+{% endmacro %}
+
+{% macro displayMyParticipating(Slot, spantype) %}
+    {{ _self.displayGeneralReserved(Slot, spantype) }}
+{% endmacro %}
+
+{% macro displayReserved(Slot, spantype) %}
+    {{ _self.displayGeneralReserved(Slot, spantype) }}
+{% endmacro %}
+
+{% macro displayPastTime(Slot, spantype) %}
+    <td {{ spantype|default('col') }}span="{{ Slot.PeriodSpan() }}" class="pasttime slot">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro displayReservable(Slot, spantype) %}
+    <td {{ spantype|default('col') }}span="{{ Slot.PeriodSpan() }}" class="reservable slot">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro displayRestricted(Slot, spantype) %}
+    <td {{ spantype|default('col') }}span="{{ Slot.PeriodSpan() }}">&nbsp;</td>
+{% endmacro %}
+
+{% macro displayUnreservable(Slot, spantype) %}
+    <td {{ spantype|default('col') }}span="{{ Slot.PeriodSpan() }}" class="unreservable slot">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro dispatch(fnName, Slot, spantype) %}
+    {%- if fnName == 'displayGeneralReserved' -%}
+        {{ _self.displayGeneralReserved(Slot, spantype) }}
+    {%- elseif fnName == 'displayMyReserved' -%}
+        {{ _self.displayMyReserved(Slot, spantype) }}
+    {%- elseif fnName == 'displayAdminReserved' -%}
+        {{ _self.displayAdminReserved(Slot, spantype) }}
+    {%- elseif fnName == 'displayMyParticipating' -%}
+        {{ _self.displayMyParticipating(Slot, spantype) }}
+    {%- elseif fnName == 'displayReserved' -%}
+        {{ _self.displayReserved(Slot, spantype) }}
+    {%- elseif fnName == 'displayPastTime' -%}
+        {{ _self.displayPastTime(Slot, spantype) }}
+    {%- elseif fnName == 'displayReservable' -%}
+        {{ _self.displayReservable(Slot, spantype) }}
+    {%- elseif fnName == 'displayRestricted' -%}
+        {{ _self.displayRestricted(Slot, spantype) }}
+    {%- else -%}
+        {{ _self.displayUnreservable(Slot, spantype) }}
+    {%- endif -%}
+{% endmacro %}

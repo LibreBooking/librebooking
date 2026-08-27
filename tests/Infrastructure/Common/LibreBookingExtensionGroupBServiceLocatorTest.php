@@ -140,6 +140,21 @@ class LibreBookingExtensionGroupBServiceLocatorTest extends TestBase
         $this->assertStringContainsString('value="posted@example.com"', $actual);
     }
 
+    // --- current_user_id -----------------------------------------------------
+
+    public function testCurrentUserIdReturnsSesssionUserId(): void
+    {
+        // TestBase::setUp() wires ServiceLocator with a FakeServer whose
+        // UserSession is a FakeUserSession(userId=1).  Override UserId with a
+        // known value so the assertion is deterministic.
+        $this->fakeUser->UserId = 42;
+
+        $env = $this->makeEnvWithRenderer('{{ current_user_id() }}');
+        $actual = $env->render('t');
+
+        $this->assertSame('42', $actual);
+    }
+
     // -------------------------------------------------------------------------
 
     /**
