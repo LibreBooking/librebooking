@@ -1,0 +1,104 @@
+<div class="dashboard accordion-item shadow mb-2 availabilityDashboard" id="availabilityDashboard">
+    <div class="accordion-header dashboardHeader">
+        <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+            data-bs-target="#ResourceAvailabilityContents" aria-expanded="false"
+            aria-controls="ResourceAvailabilityContents">
+            {{ translate('ResourceAvailability') }}
+        </button>
+    </div>
+
+    <div id="ResourceAvailabilityContents" class="dashboardContents accordion-collapse collapse">
+        <div class="accordion-body">
+
+            {# Section settings #}
+            {% set sections = [
+                {title: 'Available', data: Available, dateField: 'NextTime', label: 'AvailableUntil'},
+                {title: 'Unavailable', data: Unavailable, dateField: 'ReservationEnds', label: 'AvailableBeginningAt'},
+                {title: 'UnavailableAllDay', data: UnavailableAllDay, dateField: 'ReservationEnds', label: 'AvailableAt'},
+            ] %}
+
+            {# Main loop #}
+            {% for section in sections %}
+
+                <div class="header fw-bold fs-5 mt-3">
+                    {{ translate(section.title) }}
+                </div>
+
+                {# Compute hasData before entering any for-loop to avoid Twig 3 scope isolation #}
+                {% set hasData = Schedules|filter(s => section.data[s.GetId()] is defined and section.data[s.GetId()] is iterable and section.data[s.GetId()]|length > 0)|length > 0 %}
+
+                {% for s in Schedules %}
+                    {% set availability = section.data[s.GetId()] is defined ? section.data[s.GetId()] : [] %}
+
+                    {% if availability is iterable and availability|length > 0 %}
+
+                        <div class="text-body-secondary fs-4 mt-3 text-center fw-bold">
+                            {{ s.GetName()|escape_once }}
+                        </div>
+
+                        {% for i in availability %}
+                            {% if section.dateField == 'NextTime' %}
+                                {% set date = i.NextTime() %}
+                            {% else %}
+                                {% set date = i.ReservationEnds() %}
+                            {% endif %}
+
+                            {# Determine date format for future schedule availability #}
+                            {% set dateFormat = 'dashboard' %}
+                            {% if section.dateField == 'ReservationEnds' and i.IsFutureScheduleAvailability() %}
+                                {% set dateFormat = 'schedule_daily' %}
+                            {% endif %}
+
+                            <div class="availabilityItem row gy-2 p-2 border-bottom align-items-center">
+
+                                {# Resource name #}
+                                <div class="col-12 col-sm-5">
+                                    <span class="resourceName px-2 py-1 rounded-1"
+                                        {% if i.GetColor() %}style="background-color:{{ i.GetColor() }};color:{{ i.GetTextColor() }};"{% endif %}>
+
+                                        <i resource-id="{{ i.ResourceId() }}" class="resourceNameSelector bi bi-info-circle-fill"></i>
+                                        <a resource-id="{{ i.ResourceId() }}" class="resourceNameSelector"
+                                            {% if i.GetColor() %}style="color:{{ i.GetTextColor() }};"{% endif %}
+                                            href="{{ Path }}{{ constant('Pages::SCHEDULE') }}?{{ constant('QueryStringKeys::SCHEDULE_ID') }}={{ s.GetId() }}&{{ constant('QueryStringKeys::RESOURCE_ID') }}={{ i.ResourceId() }}{% if section.dateField == 'ReservationEnds' and date %}&{{ constant('QueryStringKeys::START_DATE') }}={{ format_date(date: date, timezone: Timezone, key: 'url') }}{% endif %}">
+                                            {{ i.ResourceName()|escape_once }}
+                                        </a>
+                                    </span>
+                                </div>
+
+                                {# Availability #}
+                                <div class="availability col-12 col-sm-4">
+                                    {% if date != null %}
+                                        {{ translate(section.label) }}
+                                        {{ format_date(date: date, timezone: Timezone, key: dateFormat) }}
+                                    {% else %}
+                                        <span class="no-data fst-italic">
+                                            {{ translate('AllNoUpcomingReservations', 30) }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                {# Button #}
+                                <div class="reserveButton col-12 col-sm-3 d-grid">
+                                    <button class="btn btn-sm btn-primary"
+                                        onclick="window.location.href='{{ Path }}{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::RESOURCE_ID') }}={{ i.ResourceId() }}{% if section.dateField == 'ReservationEnds' and date %}&{{ constant('QueryStringKeys::START_DATE') }}={{ format_date(date: date, timezone: Timezone, key: 'url_full') }}{% endif %}'">
+                                        {{ translate('Reserve') }}
+                                    </button>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {# No data #}
+                {% if not hasData %}
+                    <div class="no-data text-center fst-italic fs-5">
+                        {{ translate('None') }}
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

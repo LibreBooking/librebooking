@@ -1,0 +1,21 @@
+<div class="accordion-item shadow mb-2" id="announcementsDashboard">
+    <div class="accordion-header dashboardHeader">
+        <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+            data-bs-target="#announcementsContents" aria-expanded="false" aria-controls="announcementsContents">
+            {{ translate('Announcements') }} <span
+                class="badge bg-primary ms-1">{{ (Announcements ?? [])|length }}</span>
+        </button>
+    </div>
+    <div id="announcementsContents" class="accordion-collapse collapse">
+        <div class="accordion-body">
+            <div class="announcementContent">
+                {% for each in Announcements %}
+                    <div class="border-bottom py-2">{# sanitize_rich_text+url2link+nl2br chain produces safe HTML #}{{ each.Text()|sanitize_rich_text|url2link|nl2br|raw }}</div>
+                {% else %}
+                    <p class="noresults text-center fst-italic fs-5">{{ translate('NoAnnouncements') }}</p>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="dashboard upcomingReservationsDashboard accordion-item shadow mb-2" id="upcomingReservationsDashboard">
+    <div class="accordion-header dashboardHeader">
+        <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+            data-bs-target="#PendingApprovalReservationsContents" aria-expanded="false"
+            aria-controls="PendingApprovalReservationsContents">
+            {{ translate('PendingApprovalReservations') }}<span class="badge bg-primary ms-1">{{ Total }}</span>
+        </button>
+    </div>
+    <div id="PendingApprovalReservationsContents" class="accordion-collapse collapse">
+        <div class="dashboardContents accordion-body">
+            {% if Total > 0 %}
+                <div>
+                    {% set orangePending = false %}
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('Today') }} ({{ (TodaysReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in TodaysReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('Tomorrow') }} ({{ (TomorrowsReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in TomorrowsReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('LaterThisWeek') }} ({{ (ThisWeeksReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in ThisWeeksReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('NextWeek') }} ({{ (NextWeeksReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in NextWeeksReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('LaterThisMonth') }} ({{ T is defined and T ? T|length : 0 }})
+                    </div>
+                    {% for reservation in ThisMonthsReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('LaterThisYear') }} ({{ T is defined and T ? T|length : 0 }})
+                    </div>
+                    {% for reservation in ThisYearsReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('Other') }} ({{ T is defined and T ? T|length : 0 }})
+                    </div>
+                    {% for reservation in RemainingReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout, orangePending: orangePending}) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="noresults text-center fst-italic fs-5">{{ translate('NoPendingApprovalReservations') }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <form id="form-checkin" method="post">
+        <input type="hidden" id="referenceNumber" {{ formname('REFERENCE_NUMBER') }} />
+        {{ csrf_token() }}
+    </form>
+
+    {# <form id="form-checkout" method="post" action="ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkout') }}"> #}
+    {# <input type="hidden" id="referenceNumber" {{ formname('REFERENCE_NUMBER') }} /> #}
+    {# {{ csrf_token() }} #}
+    {# </form> #}
+</div>
