@@ -1195,6 +1195,21 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 ['is_safe' => ['html']]
             ),
 
+            /**
+             * Returns the raw date-format string for a resource date-format key.
+             * Equivalent to the inline Smarty expression
+             * {Resources::GetInstance()->GetDateFormat('...')}.
+             *
+             * Unlike formatdate(), this returns the format pattern itself (for
+             * client-side date formatting), not a formatted date.
+             */
+            new TwigFunction(
+                'date_format',
+                function (string $key): string {
+                    return (string) $this->resources->GetDateFormat($key);
+                },
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
