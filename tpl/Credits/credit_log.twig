@@ -1,0 +1,25 @@
+<div style="overflow-x:auto;">
+    {% set tableId = 'credit-log-list' %}
+    <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+        <thead>
+            <tr>
+                <th>{{ translate('Date') }}</th>
+                <th>{{ translate('Note') }}</th>
+                <th>{{ translate('CreditsBefore') }}</th>
+                <th>{{ translate('CreditsAfter') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in CreditLog %}
+                <tr>
+                    <td>{{ format_date(date: log.Date, timezone: Timezone, key: 'general_datetime') }}</td>
+                    <td>{{ log.Note|escape_once }}</td>
+                    <td>{{ log.OriginalCreditCount }}</td>
+                    <td>{{ log.CreditCount }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ pagination(PageInfo) }}
+</div>
+{{ datatable(tableId: tableId) }}
