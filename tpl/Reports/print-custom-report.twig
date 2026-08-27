@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="{{ HtmlLang }}" dir="{{ HtmlTextDirection }}">
+
+<head>
+    <title>{% if TitleKey != '' %}{{ translate(TitleKey, TitleArgs) }}{% else %}{{ Title }}{% endif %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset={{ Charset }}" />
+    {{ vendor_js('jquery/3.3.1/jquery-3.3.1.min.js') }}
+</head>
+
+<body>
+    {{ translate('Created') }}: {{ format_date(date: now(), key: 'general_datetime') }}
+    <table width="100%" border="1">
+        <tr>
+            {% for column in Definition.GetColumnHeaders() %}
+                {% if ReportCsvColumnView.ShouldShowCol(column, loop.index0) %}
+                    {% set columnTitle %} {% if column.HasTitle() %}{{ column.Title()|escape_once }}{% else %}{{ translate(column.TitleKey()) }}{% endif %} {% endset %}
+                    <th data-columnTitle="{{ columnTitle }}">
+                        {{ columnTitle }}
+                    </th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% for row in Report.GetData().Rows() %}
+            <tr>
+                {% for data in Definition.GetRow(row) %}
+                    {% if ReportCsvColumnView.ShouldShowCell(loop.index0) %}
+                        <td>{{ data.Value()|escape_once }}&nbsp;</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    {{ Report.ResultCount() }} {{ translate('Rows') }}
+    {% if Definition.GetTotal() != '' %}
+        | {{ Definition.GetTotal() }} {{ translate('Total') }}
+    {% endif %}
+
+    {{ jsfile('reports/common.js') }}
+
+    <script type="text/javascript">
+        var common = new ReportsCommon({
+            scriptUrl: '{{ ScriptUrl|raw }}'
+        });
+        common.init();
+        window.print();
+    </script>
+
+</body>
+
+</html>
