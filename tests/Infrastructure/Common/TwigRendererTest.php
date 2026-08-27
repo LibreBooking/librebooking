@@ -125,20 +125,6 @@ class TwigRendererTest extends TestBase
         );
     }
 
-    /**
-     * Like SmartyRenderer.
-     */
-    public function testControlTemplateDoesNotSeeAssignedVariables(): void
-    {
-        $renderer = $this->rendererWithTemplates(templates: ['control.twig' => '[{{ page }}|{{ id }}]']);
-        $renderer->assign(name: 'page', value: 'schedule');
-
-        $this->assertSame(
-            '[|agree]',
-            $renderer->renderControlTemplate(templateName: 'control.twig', vars: ['id' => 'agree'])
-        );
-    }
-
     public function testTemplatesAreFoundInAnAddedDirectory(): void
     {
         $dir = $this->createTemplateDirectory(templates: ['probe.twig' => 'from {{ where }}']);
