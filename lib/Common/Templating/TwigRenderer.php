@@ -53,11 +53,18 @@ class TwigRenderer implements TemplateRenderer
 
     /**
      * Twig is the primary engine; Smarty is only built the first time a template
-     * has no .twig counterpart.
+     * has no .twig counterpart. The variables assigned so far are replayed into it.
      */
     private function smartyFallback(): SmartyRenderer
     {
-        return $this->smartyFallback ??= new SmartyRenderer($this->resources, $this->rootPath);
+        if ($this->smartyFallback === null) {
+            $this->smartyFallback = new SmartyRenderer($this->resources, $this->rootPath);
+            foreach ($this->vars as $name => $value) {
+                $this->smartyFallback->assign($name, $value);
+            }
+        }
+
+        return $this->smartyFallback;
     }
 
     public function render(string $templateName, array $vars = []): string
@@ -116,6 +123,37 @@ class TwigRenderer implements TemplateRenderer
 
         // No .twig template found — fall back to Smarty rendering the original .tpl.
         return $this->smartyFallback()->renderControlTemplate($templateName, $vars);
+    }
+
+    /**
+     * Renders a partial template by name using engine-selecting fallback,
+     * with full-page Smarty context (equivalent to Smarty {include}).
+     *
+     * Used by render_partial() in LibreBookingExtension.  Unlike renderControlTemplate()
+     * (which creates an isolated data scope for Controls), this method renders via the
+     * shared Smarty page context so that {function} definitions compiled into the
+     * Smarty page are available to the sub-template — matching the behaviour of
+     * Smarty's {include file="..."} in the parent template.
+     *
+     * If a .twig counterpart exists, it is rendered via the Twig environment instead.
+     */
+    public function renderPartial(string $templateName, array $vars): string
+    {
+        // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
+        $twigCandidate = str_ends_with($templateName, '.tpl')
+            ? substr($templateName, 0, -4) . '.twig'
+            : $templateName;
+
+        /** @var \Twig\Loader\FilesystemLoader $loader */
+        $loader = $this->twig->getLoader();
+        if ($loader->exists($twigCandidate)) {
+            return $this->twig->render($twigCandidate, $vars);
+        }
+
+        // No .twig counterpart yet — fall back to Smarty using full-page context.
+        // SmartyRenderer::render() assigns vars to the main SmartyPage and calls
+        // fetch(), which replicates Smarty {include} shared-context semantics.
+        return $this->smartyFallback()->render($templateName, $vars);
     }
 
     public function validators(): PageValidators

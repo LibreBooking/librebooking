@@ -54,7 +54,7 @@
 <h1 id="scheduleName" class="text-center"></h1>
 
 {% if Format == 1 %}
-    {{ include('Schedule/schedule-reservations-grid-static.tpl') }}
+    {{ render_partial('Schedule/schedule-reservations-grid-static.tpl', _context) }}
 {% else %}
     {% set TodaysDate = now() %}
     {% for date in BoundDates %}

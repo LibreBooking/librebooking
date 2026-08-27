@@ -18,9 +18,15 @@ require_once(__DIR__ . '/../../tests/fakes/FakeServer.php');
  * and superglobal state; normalized outputs are asserted byte-identical.
  *
  * Notes:
- * - monitor-display-schedule Format=1 is NOT tested because
- *   Schedule/schedule-reservations-grid-static.twig has not been migrated yet.
  * - Clock is pinned to 2025-06-15 10:00:00 UTC to make Date::Now() deterministic.
+ * - monitor-display-schedule Format=1 is tested via render_partial (see below).
+ *   The grid sub-template (schedule-reservations-grid-static.tpl) uses Smarty
+ *   {call} to invoke slot-display {function} blocks defined in the parent .tpl.
+ *   When rendered standalone those functions are unavailable, so the Format=1
+ *   golden fixtures use dates whose GetPeriods() returns [] (triggering {continue}
+ *   before any {call} site), exercising the routing and partial-render machinery
+ *   without hitting undefined-function territory.  Full slot rendering will be
+ *   covered by Task 2.10 when the grid is migrated to .twig.
  */
 class MonitorResourceDisplayGoldenTest extends GoldenTemplateTestCase
 {
@@ -380,6 +386,135 @@ class MonitorResourceDisplayGoldenTest extends GoldenTemplateTestCase
             'Resources' => [$resource],
             'DailyLayout' => $dailyLayout,
             'SlotLabelFactory' => null,
+        ];
+        $this->assertParity(
+            'MonitorDisplay/monitor-display-schedule.tpl',
+            'MonitorDisplay/monitor-display-schedule.twig',
+            $vars
+        );
+    }
+
+    // ── monitor-display-schedule Format=1 (render_partial) ────────────────────
+
+    /**
+     * Format=1 with no dates: the grid sub-template receives an empty BoundDates
+     * array, iterates nothing, and produces no table output.  Both Smarty (via
+     * {include}) and Twig (via render_partial → Smarty fallback) must yield the
+     * same result (just the <h1> header element).
+     *
+     * This validates the render_partial routing path without reaching the
+     * {call} sites inside the grid that need parent-scope {function} definitions.
+     */
+    public function testMonitorDisplayScheduleFormat1EmptyMatchesSmarty(): void
+    {
+        $dailyLayout = new class () {
+            /** @return object[] */
+            public function GetPeriods(mixed $date, bool $flag): array
+            {
+                return [];
+            }
+            /** @return object[] */
+            public function GetLayout(mixed $date, mixed $resourceId): array
+            {
+                return [];
+            }
+            public function IsDateReservable(mixed $date): bool
+            {
+                return true;
+            }
+        };
+
+        $displaySlotFactory = new class () {
+            public function GetFunction(mixed $slot, mixed $accessAllowed): string
+            {
+                return 'displayReservable';
+            }
+        };
+
+        $vars = [
+            'Format' => 1,
+            'BoundDates' => [],
+            'Resources' => [],
+            'DailyLayout' => $dailyLayout,
+            'SlotLabelFactory' => null,
+            'DisplaySlotFactory' => $displaySlotFactory,
+            'ScheduleId' => 1,
+            'CreateReservationPage' => 'Web/reservation.php',
+        ];
+        $this->assertParity(
+            'MonitorDisplay/monitor-display-schedule.tpl',
+            'MonitorDisplay/monitor-display-schedule.twig',
+            $vars
+        );
+    }
+
+    /**
+     * Format=1 with one date but no periods (GetPeriods returns []).
+     * The grid template skips dates with zero periods via {continue}, so the
+     * slot-display {call} sites are never reached.  Exercises the render_partial
+     * Smarty-fallback path with a non-empty BoundDates array.
+     */
+    public function testMonitorDisplayScheduleFormat1WithDateNoPeriodMatchesSmarty(): void
+    {
+        $date = Date::Parse('2025-06-15', 'UTC');
+
+        $resource = new class () {
+            public string $Name = 'Conference Room';
+            public int $Id = 10;
+
+            public function HasColor(): bool
+            {
+                return false;
+            }
+            public function GetTextColor(): string
+            {
+                return '';
+            }
+            public function GetColor(): string
+            {
+                return '';
+            }
+            public function CanAccess(): bool
+            {
+                return true;
+            }
+        };
+
+        $dailyLayout = new class () {
+            /** @return object[] */
+            public function GetPeriods(mixed $date, bool $flag): array
+            {
+                // Returning [] causes the grid template to skip this date entirely
+                // (the {if count == 0}{continue} guard fires before any {call} site).
+                return [];
+            }
+            /** @return object[] */
+            public function GetLayout(mixed $date, mixed $resourceId): array
+            {
+                return [];
+            }
+            public function IsDateReservable(mixed $date): bool
+            {
+                return true;
+            }
+        };
+
+        $displaySlotFactory = new class () {
+            public function GetFunction(mixed $slot, mixed $accessAllowed): string
+            {
+                return 'displayReservable';
+            }
+        };
+
+        $vars = [
+            'Format' => 1,
+            'BoundDates' => [$date],
+            'Resources' => [$resource],
+            'DailyLayout' => $dailyLayout,
+            'SlotLabelFactory' => null,
+            'DisplaySlotFactory' => $displaySlotFactory,
+            'ScheduleId' => 1,
+            'CreateReservationPage' => 'Web/reservation.php',
         ];
         $this->assertParity(
             'MonitorDisplay/monitor-display-schedule.tpl',
