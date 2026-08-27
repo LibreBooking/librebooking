@@ -1,0 +1,666 @@
+{% block header %}
+    {{ include('globalheader.twig', {cssFiles: 'css/schedule.css', printCssFiles: 'css/reservation.print.css'}) }}
+{% endblock %}
+
+{% macro displayResource(resource) %}
+<div class="resourceName rounded-1 m-1 p-1 {% if not resource.GetColor() %}text-success bg-success bg-opacity-10" {% else %}"
+    style="background-color:{{ resource.GetColor() }};color:{{ resource.GetTextColor() }}" {% endif %}>
+    <span class="resourceDetails" data-resourceId="{{ resource.GetId() }}">{{ resource.Name|escape_once }}</span>
+    {% if resource.GetRequiresApproval() %}<span class="bi bi-lock-fill" data-bs-toggle="tooltip"
+        data-bs-title="approval"></span>{% endif %}
+    {% if resource.IsCheckInEnabled() %}<i class="bi bi-box-arrow-in-right" data-bs-toggle="tooltip"
+        data-bs-title="checkin"></i>{% endif %}
+    {% if resource.IsAutoReleased() %}<i class="bi bi-clock-history" data-bs-toggle="tooltip" data-bs-title="autorelease"
+        data-autorelease="{{ resource.GetAutoReleaseMinutes() }}"></i>{% endif %}
+</div>
+{% endmacro %}
+
+<div id="page-reservation">
+    <div id="reservation-box" class="mx-3">
+        <form id="form-reservation" method="post" enctype="multipart/form-data" role="form">
+
+            <div class="d-flex align-items-center justify-content-between border-bottom my-3 py-2">
+                <div class="reservationHeader">
+                    <h3 class="mb-0">{% block reservationHeader %}{{ translate('CreateReservationHeading') }}{% endblock %}
+                    </h3>
+                    {% if ReferenceNumber is defined and ReferenceNumber %}
+                        <div class="form-group">
+                            <label class="fw-bold">{{ translate('ReferenceNumber') }}</label>
+                            {{ ReferenceNumber }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="float-end buttonsEdit">
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                        onclick="window.location='{{ ReturnUrl|raw }}'">
+                        {# raw: JS string context #}
+                        <i class="bi bi-arrow-left-circle-fill"></i>
+                        <span>{{ translate('Cancel') }}</span>
+                    </button>
+                    {% block submitButtons %}
+                    <button type="button" class="btn btn-sm btn-primary save create btnCreate">
+                        <i class="bi bi-check-circle"></i>
+                        {{ translate('Create') }}
+                    </button>
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="row gx-2">
+                <div class="reservationTitle col-12 border-bottom py-2">
+                    <div class="form-group">
+                        <label class="fw-bold mb-0" for="reservationTitle">{{ translate('ReservationTitle') }}
+                            {% if TitleRequired %}
+                            <i class="bi bi-asterisk text-danger align-top text-small"></i>
+                            {% endif %}
+                        </label>
+                        {{ textbox(name: 'RESERVATION_TITLE', class: 'form-control has-feedback', value: 'ReservationTitle', id: 'reservationTitle', attributes: {maxlength: '300'}, required: TitleRequired) }}
+                    </div>
+                </div>
+                {% set detailsCol = 'col-12' %}
+
+                {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
+                {% set detailsCol = 'col-12 col-sm-6' %}
+                {% endif %}
+
+                <div class="form-group {{ detailsCol }} py-2 border-bottom">
+                    <label class="fw-bold" for="userName">{{ translate('Owner') }}</label>
+                    {% if ShowUserDetails and ShowReservationDetails %}
+                    <a href="#" id="userName" data-userid="{{ UserId }}" class="link-primary">{{ ReservationUserName|escape_once }}</a>
+                    {% else %}
+                    {{ translate('Private') }}
+                    {% endif %}
+                    <input id="userId" type="hidden" {{ formname(key: 'USER_ID') }} value="{{ UserId }}" />
+                    {% if CanChangeUser %}
+                    <a href="#" id="showChangeUsers" class="link-primary">{{ translate('Change') }} <i
+                            class="bi bi-person-fill"></i></a>
+                    <div class="modal fade" id="changeUserDialog" tabindex="-1" role="dialog"
+                        aria-labelledby="usersModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="usersModalLabel">{{ translate('ChangeUser') }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-hidden="true"></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
+                                    <button type="button" class="btn btn-primary">{{ translate('Done') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div id="availableCredits" {% if not CreditsEnabled %}class="d-none" {% endif %}>
+                        {{ translate('AvailableCredits') }}
+                        <span id="availableCreditsCount" class="fw-bold">{{ CurrentUserCredits }}</span> |
+                        {{ translate('CreditsRequired') }}
+                        <span id="requiredCreditsCount">
+                            <span class="spinner-border spinner-border-sm" role="status"></span></span>
+                        <span id="creditCost" class="fw-bold"></span>
+                    </div>
+
+                    <div class="mb-4" id="changeUsers" style="display: none;">
+                        <div class="form-group d-flex align-items-center gap-1">
+                            <label for="changeUserAutocomplete" class="visually-hidden">{{ translate('User') }}</label>
+                            <input type="text" id="changeUserAutocomplete"
+                                class="form-control form-control-sm user-search" />
+                            <span class="vr m-2"></span>
+                            <a href="#" id="promptForChangeUsers" class="link-primary">
+                                <i class="bi bi-people-fill"></i>
+                                {{ translate('AllUsers') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group {{ detailsCol }} py-2 border-bottom">
+                    {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
+                    {{ include('Reservation/participation.twig') }}
+                    {% else %}
+                    {{ include('Reservation/private-participation.twig') }}
+                    {% endif %}
+                </div>
+
+                <div class="reservationDates col-12 py-2 border-bottom">
+                    <div class="d-flex flex-wrap">
+                        <div class="form-group d-flex align-items-center me-2">
+                            <label for="BeginDate" class="reservationDate fw-bold">{{ translate('BeginDate') }}</label>
+                            <input type="text" id="BeginDate"
+                                class="form-control form-control-sm d-inline-block w-auto{% if LockPeriods %} no-show{% endif %}"
+                                {{ formname(key: 'BEGIN_DATE') }} />
+                            <select id="BeginPeriod" {{ formname(key: 'BEGIN_PERIOD') }}
+                                class="form-select form-select-sm w-auto timeinput{% if LockPeriods %} no-show{% endif %}"
+                                title="Begin time">
+                                {% for period in StartPeriods %}
+                                {% if period.IsReservable() %}
+                                {% set selected = '' %}
+                                {% if period == SelectedStart %}
+                                {% set selected = ' selected="selected"' %}
+                                {% set startPeriod = period %}
+                                {% endif %}
+                                <option value="{{ period.Begin() }}" {{ selected|raw }}{# raw: developer-controlled HTML attribute ('selected="selected"' or '') #}>{{ period.Label()|escape_once }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if LockPeriods %}{{ formatdate(StartDate) }} {{ startPeriod.Label()|escape_once }}{% endif %}
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label for="EndDate"
+                                class="reservationDate fw-bold text-md-end pe-md-1">{{ translate('EndDate') }}</label>
+                            <input type="text" id="EndDate"
+                                class="form-control form-control-sm d-inline-block w-auto{% if LockPeriods %} no-show{% endif %}"
+                                {{ formname(key: 'END_DATE') }} />
+                            <select id="EndPeriod" {{ formname(key: 'END_PERIOD') }}
+                                class="form-select form-select-sm w-auto timeinput{% if LockPeriods %} no-show{% endif %}"
+                                title="End time">
+                                {% for period in EndPeriods %}
+                                {% if period.IsReservable() %}
+                                {% set selected = '' %}
+                                {% if period == SelectedEnd %}
+                                {% set selected = ' selected="selected"' %}
+                                {% set endPeriod = period %}
+                                {% endif %}
+                                <option value="{{ period.End() }}" {{ selected|raw }}{# raw: developer-controlled HTML attribute ('selected="selected"' or '') #}>{{ period.LabelEnd()|escape_once }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if LockPeriods %}{{ formatdate(EndDate) }} {{ endPeriod.LabelEnd()|escape_once }}{% endif %}
+                        </div>
+
+                        <div class="reservationLength d-flex align-items-center ms-5">
+                            <div class="form-group">
+                                <span class="durationText fw-bold">
+                                    <span id="durationDays">0</span> {{ translate('days') }}
+                                    <span id="durationHours">0</span> {{ translate('hours') }}
+                                    <span id="durationMinutes">0</span> {{ translate('minutes') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
+                        <div class=" d-flex align-items-center ms-5">
+                            <a href="#" id="btnViewAvailability" class="link-primary"><i class="bi bi-calendar3"></i>
+                                {{ translate('ViewAvailability') }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if not HideRecurrence %}
+                    <div class="pt-2">{{ HideRecurrence }}
+                        {{ control('RecurrenceControl', {RepeatTerminationDate: RepeatTerminationDate}) }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="reservationResources col-12 col-sm-6 py-2 border-bottom" id="reservation-resources">
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="fw-bold mb-0">{{ translate('Resources') }}</label>
+                        {% if ShowAdditionalResources %}
+                        <a id="btnAddResources" href="#" class="link-primary" data-bs-toggle="modal"
+                            data-bs-target="#dialogResourceGroups">{{ translate('Change') }} <span
+                                class="bi bi-plus-square-fill"></span></a>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-inline-block">
+                        <div id="primaryResourceContainer">
+                            <input type="hidden" id="scheduleId" {{ formname(key: 'SCHEDULE_ID') }} value="{{ ScheduleId }}" />
+                            <input class="resourceId" type="hidden" id="primaryResourceId" {{ formname(key: 'RESOURCE_ID') }}
+                                value="{{ ResourceId }}" />
+                            {{ _self.displayResource(Resource) }}
+                        </div>
+
+                        <div id="additionalResources">
+                            {% for resource in AvailableResources %}
+                            {% if AdditionalResourceIds is iterable and resource.Id in AdditionalResourceIds %}
+                            <input class="resourceId" type="hidden" name="{{ constant('FormKeys::ADDITIONAL_RESOURCES') }}[]"
+                                value="{{ resource.Id }}" />
+                            {{ _self.displayResource(resource) }}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-12 col-sm-6 py-2 border-bottom">
+                    <div class="accessoriesDiv">
+                        {% if ShowReservationDetails and AvailableAccessories|default([])|length > 0 %}
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="fw-bold mb-0" for="addAccessoriesPrompt">{{ translate('Accessories') }}</label>
+                            <a href="#" id="addAccessoriesPrompt" class="link-primary" data-bs-toggle="modal"
+                                data-bs-target="#dialogAddAccessories">{{ translate('Add') }} <span
+                                    class="bi bi-plus-square-fill"></span></a>
+                        </div>
+                        <div id="accessories"></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group col-12 py-2 border-bottom">
+                    {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
+                    {{ include('Reservation/invitees.twig') }}
+                    {% else %}
+                    {{ include('Reservation/private-participation.twig') }}
+                    {% endif %}
+                </div>
+
+                {% if RemindersEnabled %}
+                <div class="reservationReminders border-bottom py-2">
+                    <label class="fw-bold mb-0">{{ translate('SendReminder') }}</label>
+                    <div class="d-flex gap-5">
+                        <div id="reminderOptionsStart" class="d-flex align-items-center flex-wrap gap-1">
+                            <div class="form-check">
+                                <input type="checkbox" id="startReminderEnabled"
+                                    class="reminderEnabled form-check-input" {{ formname(key: 'START_REMINDER_ENABLED') }}
+                                    aria-label="Enable Start Reminder Interval" />
+                            </div>
+                            <label for="startReminderTime" class="visually-hidden">Start Reminder Time</label>
+                            <label for="startReminderInterval" class="visually-hidden">Start Reminder Interval</label>
+                            <input type="number" min="0" max="999" size="3" maxlength="3" value="15"
+                                class="reminderTime form-control form-control-sm w-auto"
+                                {{ formname(key: 'START_REMINDER_TIME') }} id="startReminderTime" />
+                            <select class="reminderInterval form-select form-select-sm w-auto"
+                                {{ formname(key: 'START_REMINDER_INTERVAL') }} id="startReminderInterval">
+                                <option value="{{ constant('ReservationReminderInterval::Minutes') }}">{{ translate('minutes') }}
+                                </option>
+                                <option value="{{ constant('ReservationReminderInterval::Hours') }}">{{ translate('hours') }}</option>
+                                <option value="{{ constant('ReservationReminderInterval::Days') }}">{{ translate('days') }}</option>
+                            </select>
+
+                            <span class="reminderLabel">{{ translate('ReminderBeforeStart') }}</span>
+                        </div>
+                        <div id="reminderOptionsEnd" class="d-flex align-items-center flex-wrap gap-1">
+                            <div class="form-check">
+                                <input type="checkbox" id="endReminderEnabled" class="reminderEnabled form-check-input"
+                                    {{ formname(key: 'END_REMINDER_ENABLED') }} aria-label="Enable End Reminder Interval" />
+                            </div>
+                            <label for="endReminderTime" class="visually-hidden">End Reminder Time</label>
+                            <label for="endReminderInterval" class="visually-hidden">End Reminder Interval</label>
+                            <input type="number" min="0" max="999" size="3" maxlength="3" value="15"
+                                class="reminderTime form-control form-control-sm w-auto"
+                                {{ formname(key: 'END_REMINDER_TIME') }} id="endReminderTime" />
+                            <select class="reminderInterval form-select form-select-sm w-auto"
+                                {{ formname(key: 'END_REMINDER_INTERVAL') }} id="endReminderInterval">
+                                <option value="{{ constant('ReservationReminderInterval::Minutes') }}">{{ translate('minutes') }}
+                                </option>
+                                <option value="{{ constant('ReservationReminderInterval::Hours') }}">{{ translate('hours') }}</option>
+                                <option value="{{ constant('ReservationReminderInterval::Days') }}">{{ translate('days') }}</option>
+                            </select>
+                            <span class="reminderLabel">{{ translate('ReminderBeforeEnd') }}</span>
+
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="reservationDescription border-bottom py-2">
+                    <div class="form-group">
+                        <label class="fw-bold mb-0" for="description">
+                            {{ translate('ReservationDescription') }}{% if DescriptionRequired %}<i
+                                class="bi bi-asterisk text-danger align-top text-small"></i>
+                            {% endif %}
+                        </label>
+                        <textarea id="description" name="{{ constant('FormKeys::DESCRIPTION') }}" class="form-control has-feedback"
+                            {% if DescriptionRequired %}required="required" {% endif %}>{{ Description|escape_once }}</textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="custom-attributes-placeholder"></div>
+
+            {% if UploadsEnabled %}
+            <div class="border-bottom py-2">
+                <div class="reservationAttachments">
+
+                    <label class="fw-bold mb-0">{{ translate('AttachFile') }} <span
+                            class="note fst-italic">({{ MaxUploadSize }} MB {{ translate('Maximum') }})</span>
+                    </label>
+
+                    <div id="reservationAttachments">
+                        <div class="attachment-item">
+                            <label class="fw-bold" for="reservationUploadFile">Reservation Upload File</label>
+                            <input type="file" {{ formname(key: 'RESERVATION_FILE', multi: true) }} id="reservationUploadFile"
+                                class="form-control form-control-sm w-auto" />
+                            <a class="add-attachment link-primary" href="#">{{ translate('Add') }}<i
+                                    class="bi bi-plus-square-fill ms-1"></i></a>
+                            <a class="remove-attachment link-primary" href="#"><span
+                                    class="visually-hidden">{{ translate('Delete') }}</span><i
+                                    class="bi bi-dash-square-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if Terms != null %}
+            <div class="py-2" id="termsAndConditions">
+                <div class="">
+                    {% if TermsAccepted %}
+                    <div class="">
+                        <i class="bi bi-check-square-fill me-1"></i>{{ translate('IAccept') }}
+                        <a href="{{ Terms.DisplayUrl() }}" class="link-primary"
+                            target="_blank">{{ translate('TheTermsOfService') }}</a>
+                    </div>
+                    {% else %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="termsAndConditionsAcknowledgement"
+                            {{ formname(key: 'TOS_ACKNOWLEDGEMENT') }} {% if TermsAccepted %}checked="checked" {% endif %} />
+                        <label for="termsAndConditionsAcknowledgement">{{ translate('IAccept') }}</label>
+                        <a href="{{ Terms.DisplayUrl() }}" class="link-primary"
+                            target="_blank">{{ translate('TheTermsOfService') }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <input type="hidden" {{ formname(key: 'RESERVATION_ID') }} value="{{ ReservationId }}" />
+            <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" id="referenceNumber" />
+            <input type="hidden" {{ formname(key: 'RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
+            <input type="hidden" {{ formname(key: 'DELETE_REASON') }} value="" id="hdnDeleteReason" />
+
+            <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
+                value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
+
+            <div class="">
+                <div class="reservationButtons clearfix">
+                    <div class="float-sm-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                            onclick="window.location='{{ ReturnUrl|raw }}'">
+                            {# raw: JS string context #}
+                            <i class="bi bi-arrow-left-circle-fill"></i>
+                            <span class="d-none d-sm-inline-block">{{ translate('Cancel') }}</span>
+                        </button>
+                        {% block submitButtonsBottom %}
+                        {{ block('submitButtons') }}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+
+            {{ csrf_token() }}
+
+            {% if UploadsEnabled %}
+            {% block attachments %}
+            {% endblock %}
+            {% endif %}
+
+            <div id="retrySubmitParams" class="d-none"></div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogResourceGroups" tabindex="-1" role="dialog" aria-labelledby="resourcesModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resourcesModalLabel">{{ translate('AddResources') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div id="resourceGroups"></div>
+            </div>
+            <div class="modal-footer">
+                <div id="checking-availability" class="float-start">{{ translate('CheckingAvailability') }} <div
+                        class="spinner-border spinner-border-sm" role="status"></div>
+                </div>
+                <div id="checking-availability-error" class="float-start no-show">
+                    {{ translate('CheckingAvailabilityError') }}</div>
+                <button type="button" class="btn btn-outline-secondary btnClearAddResources"
+                    data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
+                <button type="button" class="btn btn-primary btnConfirmAddResources">{{ translate('Done') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogAddAccessories" tabindex="-1" role="dialog" aria-labelledby="accessoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accessoryModalLabel">{{ translate('AddAccessories') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>{{ translate('Accessory') }}</th>
+                            <th>{{ translate('QuantityRequested') }}</th>
+                            <th>{{ translate('QuantityAvailable') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for accessory in AvailableAccessories %}
+                        <tr accessory-id="{{ accessory.GetId() }}">
+                            <td>{{ accessory.GetName()|escape_once }}</td>
+                            <td>
+                                <input type="hidden" class="name" value="{{ accessory.GetName()|escape_once }}" />
+                                <input type="hidden" class="id" value="{{ accessory.GetId() }}" />
+                                <input type="hidden" class="resource-ids"
+                                    value="{{ accessory.ResourceIds()|join(',') }}" />
+                                <label for="accessory{{ accessory.GetId() }}"
+                                    class="visually-hidden">{{ accessory.GetName()|escape_once }}</label>
+                                {% if accessory.GetQuantityAvailable() == 1 %}
+                                <input class="form-check-input" type="checkbox" name="accessory{{ accessory.GetId() }}"
+                                    id="accessory{{ accessory.GetId() }}" value="1" size="3" aria-label="checkbox" />
+                                {% else %}
+                                <input type="number" min="0" max="999"
+                                    class="form-control form-control-sm accessory-quantity"
+                                    name="accessory{{ accessory.GetId() }}" id="accessory{{ accessory.GetId() }}" value="0"
+                                    size="3" />
+                                {% endif %}
+                            </td>
+                            <td accessory-quantity-id="{{ accessory.GetId() }}"
+                                accessory-quantity-available="{{ accessory.GetQuantityAvailable() }}">
+                                {{ accessory.GetQuantityAvailable() != 0 ? accessory.GetQuantityAvailable() : '∞' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                {{ cancel_button() }}
+                <button id="btnConfirmAddAccessories" type="button"
+                    class="btn btn-primary">{{ translate('Done') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="creatingNotification" class="text-center">
+                    <h3 id="createUpdateMessage" class="d-none">
+                        {% block ajaxMessage %}
+                        {{ translate('CreatingReservation') }}
+                        {% endblock %}
+                    </h3>
+                    <h3 id="checkingInMessage" class="d-none">
+                        {{ translate('CheckingIn') }}
+                    </h3>
+                    <h3 id="checkingOutMessage" class="d-none">
+                        {{ translate('CheckingOut') }}
+                    </h3>
+                    <h3 id="joiningWaitingList" class="d-none">
+                        {{ translate('AddingToWaitlist') }}
+                    </h3>
+                    <div class="spinner-border text-secondary" style="width: 3rem; height: 3rem;" role="status"></div>
+                </div>
+                <div id="result" class="text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="user-availability-box"></div>
+
+</div>
+
+{% block extras %}{% endblock %}
+
+{{ include('javascript-includes.twig') }}
+
+{{ control('DatePickerSetupControl', {ControlId: 'BeginDate', DefaultDate: StartDate, MinDate: AvailabilityStart, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'EndDate', DefaultDate: EndDate, MinDate: AvailabilityStart, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'EndRepeat', DefaultDate: RepeatTerminationDate, MinDate: StartDate, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'RepeatDate', MaxDate: AvailabilityEnd, FirstDay: FirstWeekday, MinDate: now().ToTimezone(Timezone), Multiple: false}) }}
+
+{{ jsfile('resourcePopup.js') }}
+{{ jsfile('userPopup.js') }}
+{{ jsfile('date-helper.js') }}
+{{ jsfile('recurrence.js') }}
+{{ jsfile('reservation.js') }}
+{{ jsfile('autocomplete.js') }}
+{{ jsfile('force-numeric.js') }}
+{{ jsfile('reservation-reminder.js') }}
+{{ jsfile('ajax-helpers.js') }}
+{{ jsfile('reservation-pdf.js') }}
+{{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
+
+{{ include('Reservation/pdf_libraries.twig') }}
+{{ include('Reservation/pdf.twig') }}
+<script type="text/javascript">
+    $(function() {
+        var scopeOptions = {
+            instance: '{{ constant('SeriesUpdateScope::ThisInstance') }}',
+            full: '{{ constant('SeriesUpdateScope::FullSeries') }}',
+            future: '{{ constant('SeriesUpdateScope::FutureInstances') }}'
+        };
+
+        var reservationOpts = {
+            additionalResourceElementId: '{{ constant('FormKeys::ADDITIONAL_RESOURCES') }}',
+            accessoryListInputId: '{{ constant('FormKeys::ACCESSORY_LIST') }}[]',
+            returnUrl: '{{ ReturnUrl|raw }}', {# raw: JS string context #}
+            scopeOpts: scopeOptions,
+            createUrl: 'ajax/reservation_save.php',
+            updateUrl: 'ajax/reservation_update.php',
+            deleteUrl: 'ajax/reservation_delete.php',
+            checkinUrl: 'ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkin') }}',
+            checkoutUrl: 'ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkout') }}',
+            waitlistUrl: 'ajax/reservation_waitlist.php',
+            userAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::User') }}",
+            groupAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::Group') }}",
+            changeUserAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::MyUsers') }}",
+            maxConcurrentUploads: '{{ MaxUploadCount }}',
+            guestLabel: '({{ translate('Guest') }})',
+            accessoriesUrl: 'ajax/available_accessories.php?{{ constant('QueryStringKeys::START_DATE') }}=[sd]&{{ constant('QueryStringKeys::END_DATE') }}=[ed]&{{ constant('QueryStringKeys::START_TIME') }}=[st]&{{ constant('QueryStringKeys::END_TIME') }}=[et]&{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=[rn]',
+            resourcesUrl: 'ajax/unavailable_resources.php?{{ constant('QueryStringKeys::SCHEDULE_ID') }}={{ ScheduleId }}&{{ constant('QueryStringKeys::START_DATE') }}=[sd]&{{ constant('QueryStringKeys::END_DATE') }}=[ed]&{{ constant('QueryStringKeys::START_TIME') }}=[st]&{{ constant('QueryStringKeys::END_TIME') }}=[et]&{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=[rn]',
+            creditsUrl: 'ajax/reservation_credits.php',
+            creditsEnabled: '{{ CreditsEnabled }}',
+            emailUrl: 'ajax/reservation_email.php?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}',
+            availabilityUrl: 'ajax/availability.php?{{ constant('QueryStringKeys::SCHEDULE_ID') }}={{ ScheduleId }}',
+            maximumResources: {{ MaximumResources|default(0) }}
+        };
+
+        var reminderOpts = {
+            reminderTimeStart: '{{ ReminderTimeStart }}',
+            reminderTimeEnd: '{{ ReminderTimeEnd }}',
+            reminderIntervalStart: '{{ ReminderIntervalStart }}',
+            reminderIntervalEnd: '{{ ReminderIntervalEnd }}'
+        };
+
+        var reservation = new Reservation(reservationOpts);
+        reservation.init('{{ UserId }}', '{{ format_date(StartDate, key: 'system_datetime', timezone: Timezone) }}', '{{ format_date(EndDate, key: 'system_datetime', timezone: Timezone) }}');
+
+        var reminders = new Reminder(reminderOpts);
+        reminders.init();
+
+        {% for user in Participants %}
+        reservation.addParticipant("{{ user.FullName|html_entity_decode|escape_js }}", "{{ user.UserId|escape_js }}");
+        {% endfor %}
+
+        {% for user in Invitees %}
+        reservation.addInvitee("{{ user.FullName|html_entity_decode|escape_js }}", '{{ user.UserId }}');
+        {% endfor %}
+
+        {% for guest in ParticipatingGuests %}
+        reservation.addParticipatingGuest('{{ guest|html_entity_decode|escape_js }}');
+        {% endfor %}
+
+        {% for guest in InvitedGuests %}
+        reservation.addInvitedGuest('{{ guest|html_entity_decode|escape_js }}');
+        {% endfor %}
+
+        {% for accessory in Accessories %}
+        reservation.addAccessory({{ accessory.AccessoryId }}, {{ accessory.QuantityReserved }}, "{{ accessory.Name|escape_js }}");
+        {% endfor %}
+
+        reservation.addResourceGroups({{ ResourceGroupsAsJson|raw }});{# raw: JS object literal context #}
+
+        var recurOpts = {
+            repeatType: '{{ RepeatType }}',
+            repeatInterval: '{{ RepeatInterval }}',
+            repeatMonthlyType: '{{ RepeatMonthlyType }}',
+            repeatWeekdays: [{% for day in RepeatWeekdays %}{{ day }}, {% endfor %}],
+            autoSetTerminationDate: $('#referenceNumber').val() != '',
+            customRepeatExclusions: ['{{ formatdate(StartDate, key: 'system') }}']
+        };
+
+        var recurrence = new Recurrence(recurOpts);
+        recurrence.init();
+
+        recurrence.onChange(reservation.repeatOptionsChanged);
+
+        {% for date in CustomRepeatDates %}
+        recurrence.addCustomDate('{{ format_date(date, key: 'system', timezone: Timezone) }}',
+        '{{ format_date(date, key: 'schedule_daily', timezone: Timezone) }}');
+        {% endfor %}
+
+        var ajaxOptions = {
+            target: '#result', // target element(s) to be updated with server response
+            beforeSubmit: reservation.preSubmit, // pre-submit callback
+            success: reservation.showResponse // post-submit callback
+        };
+
+        $('#form-reservation').submit(function() {
+            $(this).ajaxSubmit(ajaxOptions);
+            return false;
+        });
+
+        $('#userName').bindUserDetails();
+
+        translateTooltips();
+
+    });
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+    });
+</script>
+
+<script>
+    function translateTooltips() {
+        var resourcesContainer = document.querySelector('#reservation-resources');
+        var resources = [].slice.call(resourcesContainer.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        resources.forEach(function(resource) {
+            var tooltipType = resource.getAttribute('data-bs-title');
+            if (tooltipType === 'approval') {
+                var tooltipText = "{{ translate('RequiresApproval') }}";
+            }
+            if (tooltipType === 'checkin') {
+                var tooltipText ="{{ translate('RequiresCheckInNotification') }}";
+            }
+            if (tooltipType === 'autorelease') {
+                var text = "{{ translate('AutoReleaseNotification', {0: '%s'}) }}";
+                    var tooltipText = text.replace('%s', resource.getAttribute('data-autorelease'));
+                }
+                resource.setAttribute('data-bs-title', tooltipText);
+                new bootstrap.Tooltip(resource);
+            });
+        }
+    </script>
+
+    {{ include('globalfooter.twig') }}
