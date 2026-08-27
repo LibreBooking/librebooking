@@ -1,0 +1,43 @@
+<?php
+
+require_once(__DIR__ . '/../../../lang/AvailableLanguage.php');
+
+return [
+    'HtmlLang' => 'en',
+    'HtmlTextDirection' => 'ltr',
+    'Title' => 'LibreBooking',
+    'TitleKey' => '',
+    'TitleArgs' => [],
+    'Charset' => 'UTF-8',
+    'Path' => '/web/',
+    'FaviconUrl' => 'favicon.ico',
+    'UseLocalJquery' => false,
+    'Trumbowyg' => false,
+    'DataTable' => false,
+    'InlineEdit' => false,
+    'Select2' => false,
+    'cssTheme' => 'light',
+    'ScriptUrl' => 'http://localhost/web',
+    'HideNavBar' => false,
+    'HomeUrl' => 'http://localhost/web/index.php',
+    'LogoUrl' => 'logo.png',
+    'Version' => '1',
+    'CompanyName' => 'Test Corp',
+    'CompanyUrl' => 'https://example.com',
+    'AppTitle' => 'LibreBooking',
+    'LoggedIn' => true,
+    'AvailableLanguages' => [
+        new AvailableLanguage('en_us', 'en_us.php', 'English US'),
+        new AvailableLanguage('fr_fr', 'fr_fr.php', 'Français'),
+    ],
+    'CurrentLanguage' => 'en_us',
+    'CanViewAdmin' => true,
+    'ShowNewVersion' => true,
+    'EnableConfigurationPage' => true,
+    'ShowParticipation' => false,
+    'CreditsEnabled' => false,
+    'PaymentsEnabled' => false,
+    'CanViewResponsibilities' => false,
+    'CanViewReports' => true,
+    'ShowScheduleLink' => false,
+];
