@@ -242,6 +242,21 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 }
             ),
 
+            /**
+             * Returns the minimum/epoch Date sentinel value.
+             * Equivalent to the inline {Date::Min()} Smarty expression.
+             *
+             * Used in templates that need a sentinel "minimum date" for comparison,
+             * e.g. {% set LastDate = date_min() %} in the agenda template.
+             * Returns a Date object — NOT marked is_safe because it is not HTML.
+             */
+            new TwigFunction(
+                'date_min',
+                static function (): Date {
+                    return Date::Min();
+                }
+            ),
+
             // ── Group A: buttons & icons ────────────────────────────────────
 
             /**

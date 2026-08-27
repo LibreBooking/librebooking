@@ -99,4 +99,15 @@ class NowTwigFunctionTest extends TestBase
             $this->resetDateNow();
         }
     }
+
+    /**
+     * date_min() returns Date::Min() — the sentinel minimum date.
+     * Used in the agenda template: {% set LastDate = date_min() %}.
+     */
+    public function testDateMinReturnsMinDate(): void
+    {
+        $env = $this->makeEnv('{% set d = date_min() %}{{ d.Format("Y-m-d") }}');
+        $actual = $env->render('t');
+        $this->assertSame(Date::Min()->Format('Y-m-d'), $actual);
+    }
 }
