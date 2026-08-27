@@ -941,6 +941,17 @@ class LibreBookingExtensionTest extends TestCase
             $env->render('t', ['opts' => $options])
         );
     }
+
+    public function testJsonEncodeFilterIsSafeInsideScriptAndAttributes(): void
+    {
+        $env = $this->makeEnv('{{ v|json_encode }}');
+
+        $this->assertSame(
+            '["\\u003C\\/script\\u003E","\\u0026\\u0027\\u0022"]',
+            $env->render('t', ['v' => ['</script>', "&'\""]])
+        );
+    }
+
     // --- setfocus ------------------------------------------------------------
 
     public function testSetfocusWithKeyMatchesSmartyPage(): void

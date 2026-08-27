@@ -1,0 +1,152 @@
+{% if authorized %}
+    {# CHECK IF USER HAS PERMISSIONS TO ANY OF THE RESERVATION RESOURCES, HIDE DETAILS IF HE DOESN'T HAVE PERMISSIONS TO ANY OF THEM #}
+    {% set isResourcePermitted = false %}
+    {% for checkResourcePermission in resources %}
+        {% if not isResourcePermitted and checkResourcePermission.Id() in CanViewResourceReservations %}
+            {% set isResourcePermitted = true %}
+        {% endif %}
+    {% endfor %}
+    {# HOWEVER THE USER CAN SEE THE RESERVATION IF HE IS A OWNER, PARTICIPANT OR INVITEE #}
+    {% if not isResourcePermitted %}
+        {% if UserId == OwnerId or IAmParticipating or IAmInvited %}
+            {% set isResourcePermitted = true %}
+        {% endif %}
+    {% endif %}
+
+    <div class="res_popup_details mb-0">
+
+        {% set nameContent %}
+            <div class="user fw-bold">
+                {% if (hideUserInfo or hideDetails) or not isResourcePermitted %}
+                    {{ translate('Private') }}
+                {% else %}
+                    {{ fullName|escape_once }}
+                {% endif %}
+            </div>
+        {% endset %}
+        {{ formatter.Add('name', nameContent) }}
+
+        {% set emailContent %}
+            <div class="email">
+                {% if not hideUserInfo and not hideDetails and isResourcePermitted %}
+                    {{ email|escape_once }}
+                {% endif %}
+            </div>
+        {% endset %}
+        {{ formatter.Add('email', emailContent) }}
+
+        {% set phoneContent %}
+            <div class="phone">
+                {% if not hideUserInfo and not hideDetails and isResourcePermitted %}
+                    {{ phone|escape_once }}
+                {% endif %}
+            </div>
+        {% endset %}
+        {{ formatter.Add('phone', phoneContent) }}
+
+        {% set datesKey = 'res_popup' %}
+        {% if startDate.DateEquals(endDate) %}
+            {% set datesKey = 'res_popup_time' %}
+        {% endif %}
+        {% set datesContent %}
+            <div class="dates">{{ formatdate(startDate, key: 'res_popup') }} - {{ formatdate(endDate, key: datesKey) }}</div>
+        {% endset %}
+        {{ formatter.Add('dates', datesContent) }}
+
+        {% set reservationTitle = title %}
+        {% set titleContent %}
+            {% if not hideDetails and isResourcePermitted %}
+                <div class="title">{{ translate('Title') }}:
+                    {% if reservationTitle != '' %}{{ reservationTitle|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}</div>
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('title', titleContent) }}
+
+        {% set resourcesContent %}
+            <div class="resources">
+                {{ translate('Resources') }} ({{ resources|length }}):
+                {% for resource in resources %}
+                    {{ resource.Name()|escape_once }}
+
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+                {% if not isResourcePermitted %}
+                    <p class="text-danger">{{ translate('NoResourcePermissions') }}</p>
+                {% endif %}
+            </div>
+        {% endset %}
+        {{ formatter.Add('resources', resourcesContent) }}
+
+        {% set participantsContent %}
+            {% if not hideUserInfo and not hideDetails and isResourcePermitted %}
+                <div class="users">
+                    {{ translate('Participants') }} ({{ participants|length }}):
+                    {% for user in participants %}
+                        {% if not user.IsOwner() %}
+                            {{ fullname(user.FirstName, user.LastName) }}
+                        {% endif %}
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('participants', participantsContent) }}
+
+        {% set accessoriesContent %}
+            {% if not hideDetails and isResourcePermitted %}
+                <div class="accessories">
+                    {{ translate('Accessories') }} ({{ accessories|length }}):
+                    {% for accessory in accessories %}
+                        {{ accessory.Name|escape_once }} ({{ accessory.QuantityReserved }})
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('accessories', accessoriesContent) }}
+
+        {% set descriptionContent %}
+            {% if not hideDetails and isResourcePermitted %}
+                <div class="summary">{{ translate('Description') }}:
+                    {% if summary != '' %}{{ summary|truncate(300, '...')|escape_once|nl2br }}{% else %}{{ translate('NoDescriptionLabel') }}{% endif %}
+                </div>
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('description', descriptionContent) }}
+
+        {% set attributesContent %}
+            {% if not hideDetails and isResourcePermitted %}
+                {% if attributes is defined and attributes|length > 0 %}
+                    <div class="attributes-block mt-2">
+                        {% for attribute in attributes %}
+                            {% set attrKey = 'att' ~ attribute.Id() %}
+                            {% set attrContent %}
+                                <div>{{ control('AttributeControl', {attribute: attribute, readonly: true, tooltip: true}) }}</div>
+                            {% endset %}
+                            {{ attrContent|raw }}
+                            {{ formatter.Add(attrKey, attrContent) }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('attributes', attributesContent) }}
+
+        {% set pendingContent %}
+            {% if requiresApproval %}
+                <div class="pendingApproval text-warning">{{ translate('PendingApproval') }}</div>
+            {% endif %}
+        {% endset %}
+        {{ formatter.Add('pending', pendingContent) }}
+
+        {% set durationContent %}
+            <div class="duration">{{ translate('Duration') }}: {{ duration }}</div>
+        {% endset %}
+        {{ formatter.Add('duration', durationContent) }}
+        <!-- {{ ReservationId }} -->
+
+        {{ formatter.Display()|raw }}
+    </div>
+{% else %}
+    {{ translate('InsufficientPermissionsError') }}
+{% endif %}

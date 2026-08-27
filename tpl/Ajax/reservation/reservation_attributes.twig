@@ -1,0 +1,11 @@
+{% if Attributes is defined and Attributes|length > 0 %}
+    <div class="customAttributes border-bottom py-2">
+        <div class="row gy-2">
+            {% for attribute in Attributes %}
+                <div class="customAttribute col-sm-4 col-12">
+                    {{ control('AttributeControl', {attribute: attribute, readonly: ReadOnly}) }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

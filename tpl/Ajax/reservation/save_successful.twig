@@ -1,0 +1,35 @@
+<div id="{{ divId|default('reservation-created') }}" class="reservationResponseMessage">
+    <div id="reservation-response-image">
+        {% if RequiresApproval %}
+            <i class="bi bi-flag-fill fs-1 text-warning"></i>
+        {% else %}
+            <i class="bi bi-check-lg fs-1 text-success"></i>
+        {% endif %}
+    </div>
+
+    <div id="created-message" class="reservation-message fw-bold fs-4">
+        {{ translate(messageKey|default('ReservationCreated')) }}</div>
+    <div id="reference-number">{{ translate('YourReferenceNumber', ReferenceNumber) }}</div>
+
+    <div class="dates" style="max-height: 15em;display: block;overflow-y: auto;margin: 0.5em 0;">
+        <span class="fw-bold">{{ translate('Dates') }}:</span>
+        {% for instance in Instances %}
+            <span
+                class="date">{{ format_date(instance.StartDate(), timezone: Timezone) }}{% if not loop.last %},
+        {% endif %}</span>
+        {% endfor %}
+    </div>
+
+    <div class="resources">
+        <span class="fw-bold">{{ translate('Resources') }}:</span>
+        {% for resource in Resources %}
+            <span class="resource">{{ resource.GetName()|escape_once }}{% if not loop.last %}, {% endif %}</span>
+        {% endfor %}
+    </div>
+
+    {% if RequiresApproval %}
+        <div id="approval-message" class="fst-italic">{{ translate('ReservationRequiresApproval') }}</div>
+    {% endif %}
+
+    <input type="button" id="btnSaveSuccessful" value="{{ translate('Close') }}" class="btn btn-primary" />
+</div>
