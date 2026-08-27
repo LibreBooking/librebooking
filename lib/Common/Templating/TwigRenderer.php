@@ -23,8 +23,15 @@ class TwigRenderer implements TemplateRenderer
     private string $rootPath;
     private ?SmartyRenderer $smartyFallback = null;
 
-    public function __construct(?Resources $resources = null, ?string $rootPath = null)
-    {
+    /**
+     * @param PageValidators|null $validators the validators of the page being
+     *                                        rendered, when it already has some
+     */
+    public function __construct(
+        ?Resources $resources = null,
+        ?string $rootPath = null,
+        ?PageValidators $validators = null
+    ) {
         $resources ??= Resources::GetInstance();
         $this->resources = $resources;
         $this->rootPath = $rootPath ?? '';
@@ -46,7 +53,7 @@ class TwigRenderer implements TemplateRenderer
 
         $this->twig->addExtension(new LibreBookingExtension($this->resources, $this->rootPath, $this));
 
-        $this->validators = new PageValidators();
+        $this->validators = $validators ?? new PageValidators();
     }
 
     /**

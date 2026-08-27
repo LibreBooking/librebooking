@@ -591,11 +591,53 @@ abstract class Page implements IPage
      */
     protected function Display($templateName)
     {
-        if (!$this->InMaintenanceMode()) {
-            $this->smarty->display($templateName);
-        } else {
+        if ($this->InMaintenanceMode()) {
             $this->smarty->display('maintenance.tpl');
+            return;
         }
+
+        $twigName = \LibreBooking\Common\Templating\EngineSelector::twigNameFor(
+            $templateName,
+            $this->getTemplateSearchDirs()
+        );
+
+        if ($twigName !== null) {
+            $resources = Resources::GetInstance();
+            $twig = new TwigRenderer(
+                resources: $resources,
+                rootPath: $this->path,
+                validators: $this->renderer->validators()
+            );
+
+            // Add the search dirs in order: the renderer searches an added directory last.
+            foreach ($this->getTemplateSearchDirs() as $dir) {
+                $twig->addTemplateDirectory($dir);
+            }
+
+            foreach ($this->renderer->getTemplateVars() as $k => $v) {
+                $twig->assign($k, $v);
+            }
+
+            echo $twig->render($twigName);
+            return;
+        }
+
+        $this->smarty->display($templateName);
+    }
+
+    /**
+     * Returns the filesystem directories in which templates are searched.
+     * Override in subclasses (e.g., in tests) to inject a custom search path.
+     *
+     * @return string[]
+     */
+    protected function getTemplateSearchDirs(): array
+    {
+        $langDir = ROOT_DIR . 'lang/' . $this->GetVar('CurrentLanguage');
+        return [
+            ROOT_DIR . 'tpl',
+            $langDir,
+        ];
     }
 
     protected function DisplayCsv($templateName, $fileName)
