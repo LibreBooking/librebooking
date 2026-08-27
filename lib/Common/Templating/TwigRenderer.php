@@ -9,6 +9,7 @@ class TwigRenderer implements TemplateRenderer
     private array $vars = [];
     private string $rootPath;
     private Resources $resources;
+    private ?SmartyRenderer $smartyFallback = null;
     public PageValidators $Validators;
 
     /** @var array<int|string, mixed> */
@@ -48,6 +49,15 @@ class TwigRenderer implements TemplateRenderer
     public function assign(string $name, mixed $value): void
     {
         $this->vars[$name] = $value;
+    }
+
+    /**
+     * Twig is the primary engine; Smarty is only built the first time a template
+     * has no .twig counterpart.
+     */
+    private function smartyFallback(): SmartyRenderer
+    {
+        return $this->smartyFallback ??= new SmartyRenderer($this->resources, $this->rootPath);
     }
 
     public function render(string $templateName, array $vars = []): string
@@ -93,7 +103,19 @@ class TwigRenderer implements TemplateRenderer
 
     public function renderControlTemplate(string $templateName, array $vars): string
     {
-        return $this->twig->render($templateName, $vars);
+        // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
+        $twigCandidate = str_ends_with($templateName, '.tpl')
+            ? substr($templateName, 0, -4) . '.twig'
+            : $templateName;
+
+        /** @var \Twig\Loader\FilesystemLoader $loader */
+        $loader = $this->twig->getLoader();
+        if ($loader->exists($twigCandidate)) {
+            return $this->twig->render($twigCandidate, $vars);
+        }
+
+        // No .twig template found — fall back to Smarty rendering the original .tpl.
+        return $this->smartyFallback()->renderControlTemplate($templateName, $vars);
     }
 
     public function validators(): PageValidators

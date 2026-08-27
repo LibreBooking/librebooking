@@ -100,6 +100,29 @@ class LibreBookingExtension extends AbstractExtension
                 return $this->resources->GetString($key, $args);
             }, ['is_safe' => ['html']]),
 
+            /**
+             * Instantiates and renders a page Control by type name, capturing its echoed output.
+             * Equivalent to SmartyPage::DisplayControl / the Smarty {control} tag.
+             *
+             * @param string               $type   The control class name (e.g. 'CaptchaControl').
+             * @param array<string,mixed>  $params Key/value pairs forwarded to Control::Set().
+             */
+            new TwigFunction(
+                'control',
+                function (string $type, array $params = []): string {
+                    require_once ROOT_DIR . "Controls/$type.php";
+                    /** @var Control $control */
+                    $control = new $type($this->renderer);
+                    foreach ($params as $key => $val) {
+                        $control->Set($key, $val);
+                    }
+                    ob_start();
+                    $control->PageLoad();
+                    return (string) ob_get_clean();
+                },
+                ['is_safe' => ['html']]
+            ),
+
             // ── Group A: buttons & icons ────────────────────────────────────
 
             /**
