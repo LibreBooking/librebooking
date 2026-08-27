@@ -1,0 +1,259 @@
+{% macro displayReservation(reservation, Timezone, NoTitle) %}
+    <div class="card shadow-sm">
+        <div class="card-body p-2">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">
+                    {{ format_date(date: reservation.StartDate(), key: 'res_popup_time', timezone: Timezone) }}
+                    – {{ format_date(date: reservation.EndDate(), key: 'res_popup_time', timezone: Timezone) }}
+                </small>
+                <span class="badge bg-primary">
+                    {{ reservation.GetUserName()|escape_once }}
+                </span>
+            </div>
+            <div class="fw-bold text-truncate" title="{{ reservation.GetTitle()|default(NoTitle)|escape_once }}">
+                {{ reservation.GetTitle()|default(NoTitle)|escape_once }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+<div id="resource-display" class="resource-display">
+    <div class="card shadow">
+        <div class="card-body">
+            <h4 class="card-title clearfix pb-5">
+                <div class="float-start">
+                    {% if AvailableNow %}
+                        <div class="text-success">{{ ResourceName|escape_once }}:<i
+                                class="bi bi-check-circle-fill mx-1"></i>{{ translate('Available') }}</div>
+                    {% else %}
+                        <div class="text-warning">{{ ResourceName|escape_once }}:<i
+                                class="bi bi-exclamation-circle-fill mx-1"></i>{{ translate('Unavailable') }}</div>
+                    {% endif %}
+                </div>
+                <div class="float-end">
+                    <div class="date">{{ formatdate(date: ReservationDate, key: 'schedule_daily', timezone: Timezone) }}</div>
+                </div>
+            </h4>
+            <div class="row pt-5">
+                {% if CurrentReservation != null %}
+                    {% set colClass = 'col-md-4' %}
+                    <div class="{{ colClass }}">
+                        <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                            {{ translate('CurrentReservation') }}
+                        </div>
+                        {{ _self.displayReservation(CurrentReservation, Timezone, NoTitle) }}
+                    </div>
+                {% else %}
+                    {% set colClass = 'col-md-6' %}
+                {% endif %}
+
+                <div class="{{ colClass }}">
+                    <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                        {{ translate('NextReservation') }}
+                    </div>
+
+                    {% if NextReservation != null %}
+                        {{ _self.displayReservation(NextReservation, Timezone, NoTitle) }}
+                    {% else %}
+                        <div class="alert alert-light text-muted p-2 small mb-3">
+                            {{ translate('None') }}
+                        </div>
+                    {% endif %}
+
+                    {% if RequiresCheckin %}
+                        <form role="form" method="post" id="formCheckin"
+                            action="{{ server.SCRIPT_NAME }}?action=checkin" class="d-inline">
+                            <input type="hidden" {{ formname('REFERENCE_NUMBER') }} value="{{ CheckinReferenceNumber }}" />
+                            <button type="submit" class="btn btn-sm btn-primary mt-2">
+                                <i class="bi bi-check-lg"></i> {{ translate('CheckIn') }}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="{{ colClass }}">
+                    <div class="fw-bold text-uppercase fs-6 text-secondary mb-2">
+                        {{ translate('UpcomingReservations') }}
+                    </div>
+
+                    {% if UpcomingReservations is defined and UpcomingReservations|length > 0 %}
+                        {% for r in UpcomingReservations %}
+                            {{ _self.displayReservation(r, Timezone, NoTitle) }}
+                            {% if not loop.last %}
+                                <hr class="my-3 text-muted">
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-light text-muted p-2 small">
+                            {{ translate('None') }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if AllowReservations %}
+                    <div class="col-12 mt-3">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#reservation-box">
+                                <i class="bi bi-plus-lg me-1"></i>{{ translate('Reserve') }}
+                            </button>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="reservation-box" tabindex="-1">
+                            <div class="modal-dialog modal-fullscreen">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title">{{ translate('Reserve') }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form role="form" method="post" id="formReserve"
+                                            action="{{ server.SCRIPT_NAME }}?action=reserve">
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <div id="validationErrors"
+                                                        class="validationSummary alert alert-danger d-none">
+                                                        <ul></ul>
+                                                    </div>
+                                                    <div>
+                                                        <table class="reservations my-5">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for period in DailyLayout.GetPeriods(ReservationDate, true) %}
+                                                                        <td class="reslabel" colspan="{{ period.Span() }}">
+                                                                            {{ period.Label(ReservationDate)|escape_once }}
+                                                                        </td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    {% set slots = DailyLayout.GetLayout(ReservationDate, ResourceId) %}
+                                                                    {% for slot in slots %}
+                                                                        {% set referenceNumber = '' %}
+                                                                        {% if slot.IsReserved() %}
+                                                                            {% set class = 'reserved' %}
+                                                                            {% set referenceNumber = slot.Reservation().ReferenceNumber %}
+                                                                        {% elseif slot.IsReservable() %}
+                                                                            {% set class = 'reservable' %}
+                                                                            {% if slot.IsPastDate(now()) %}
+                                                                                {% set class = 'pasttime' %}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {% set class = 'unreservable' %}
+                                                                        {% endif %}
+                                                                        {% set color = '' %}
+                                                                        {% if slot.HasCustomColor() %}
+                                                                            {# raw: developer-assembled style attribute #}
+                                                                            {% set color = 'style="background-color:' ~ slot.Color() ~ ';color:' ~ slot.TextColor() ~ ';"' %}
+                                                                        {% endif %}
+                                                                        <td colspan="{{ slot.PeriodSpan() }}" {{ color|raw }}
+                                                                            data-begin="{{ slot.Begin() }}"
+                                                                            data-end="{{ slot.End() }}" class="slot {{ class }}"
+                                                                            data-refnum="{{ referenceNumber }}">
+                                                                            {{ slot.Label(SlotLabelFactory)|escape_once ?: '&nbsp;'|raw }}
+                                                                        </td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="input-group input-group-lg">
+                                                        <span class="input-group-text" id="email-addon"><span
+                                                                class="bi bi-envelope"></span></span>
+                                                        <label for="emailAddress"
+                                                            class="visually-hidden">{{ translate('Email') }}</label>
+                                                        <input id="emailAddress" type="email" class="form-control"
+                                                            placeholder="{{ translate('Email') }}"
+                                                            aria-describedby="email-addon" required="required"
+                                                            {{ formname('EMAIL') }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-6">
+                                                    <div class="input-group input-group-lg has-feedback">
+                                                        <span class="input-group-text" id="starttime-addon">
+                                                            <span class="bi bi-clock"></span>
+                                                        </span>
+                                                        <select title="Begin" class="form-select"
+                                                            aria-describedby="starttime-addon" id="beginPeriod"
+                                                            {{ formname('BEGIN_PERIOD') }}>
+                                                            {% for slot in slots %}
+                                                                {% if slot.IsReservable() and not slot.IsPastDate(ReservationDate) %}
+                                                                    <option value="{{ slot.Begin() }}">
+                                                                        {{ slot.Begin().Format(TimeFormat) }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="input-group input-group-lg">
+                                                        <span class="input-group-text" id="endtime-addon"><span
+                                                                class="bi bi-clock"></span></span>
+                                                        <select title="End" class="form-select input-lg"
+                                                            aria-describedby="endtime-addon" id="endPeriod"
+                                                            {{ formname('END_PERIOD') }}>
+                                                            {% for slot in slots %}
+                                                                {% if slot.IsReservable() and not slot.IsPastDate(ReservationDate) %}
+                                                                    <option value="{{ slot.End() }}">
+                                                                        {{ slot.End().Format(TimeFormat) }}
+                                                                    </option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {% if Terms is defined and Terms is not null %}
+                                                <div class="mt-3" id="termsAndConditions">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            id="termsAndConditionsAcknowledgement"
+                                                            {{ formname('TOS_ACKNOWLEDGEMENT') }}
+                                                            {% if TermsAccepted is defined and TermsAccepted %}checked="checked" {% endif %} />
+                                                        <label class="form-check-label"
+                                                            for="termsAndConditionsAcknowledgement">{{ translate('IAccept') }}</label>
+                                                        <a href="{{ Terms.DisplayUrl() }}" class="link-primary"
+                                                            target="_blank">{{ translate('TheTermsOfService') }}</a>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if Attributes is defined and Attributes|length > 0 %}
+                                                <div class="mt-3">
+                                                    <div class="customAttributes row gy-3">
+                                                        {% for attribute in Attributes %}
+                                                            <div class="customAttribute col-6">
+                                                                {{ control('AttributeControl', {attribute: attribute}) }}
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                            <div class="d-grid gap-2 mt-3">
+                                                <input type="submit" class="action-reserve btn btn-primary"
+                                                    value="{{ translate('Reserve') }}" />
+                                                <a href="#" class="action-cancel btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal" id="reserveCancel">{{ translate('Cancel') }}</a>
+                                            </div>
+
+                                            <input type="hidden" {{ formname('PUBLIC_RESOURCE_ID') }} value="{{ PublicResourceId }}" />
+                                            <input type="hidden" {{ formname('SCHEDULE_ID') }} value="{{ ScheduleId }}" />
+                                            <input type="hidden" {{ formname('TIMEZONE') }} value="{{ Timezone }}" />
+                                            <input type="hidden" {{ formname('BEGIN_DATE') }} value="{{ ReservationDate }}" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
