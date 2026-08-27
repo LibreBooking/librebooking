@@ -1,0 +1,85 @@
+{{ include('globalheader.twig') }}
+
+<div class="page-participation">
+    {% if result is not empty %}
+        <div>{{ result }}</div>
+    {% endif %}
+
+    <div id="jsonResult" class="error "></div>
+
+    <div id="participation-box" class="default-box card shadow">
+        <div class="card-body">
+            <h1 class="text-center border-bottom mb-3">{{ translate('OpenInvitations') }}
+                <span class="badge bg-primary">{{ Reservations|default([])|length }}</span>
+            </h1>
+
+            <table class="table table-hover table-striped align-middle participation">
+                <thead>
+                    <tr>
+                        <td>{{ translate('ReservationTitle') }}</td>
+                        <td>{{ translate('Date') }}</td>
+                        <td>{{ translate('Owner') }}</td>
+                        <td>{{ translate('Resource') }}</td>
+                        <td>{{ translate('Accept') }}/{{ translate('Decline') }}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in Reservations %}
+                        {% set referenceNumber = reservation.ReferenceNumber %}
+                        <tr>
+                            <td><span class="reservationTitle"
+                                    data-reference-number="{{ referenceNumber }}">{% if reservation.Title is not empty %}{{ reservation.Title|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}</span>
+                            </td>
+                            <td>
+                                <a href="{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ referenceNumber }}"
+                                    class="reservation link-primary" referenceNumber="{{ referenceNumber }}">
+                                    {{ formatdate(date: reservation.StartDate.ToTimezone(Timezone), key: 'dashboard') }}
+                                    - {{ formatdate(date: reservation.EndDate.ToTimezone(Timezone), key: 'dashboard') }}</a>
+                            </td>
+                            <td>
+                                {{ reservation.OwnerFirstName|escape_once }} {{ reservation.OwnerLastName|escape_once }}
+                            </td>
+                            <td>
+                                {{ reservation.ResourceName|escape_once }}
+                            </td>
+                            <td class="actions row{{ loop.index0 % 2 }}">
+                                <input type="hidden" value="{{ referenceNumber }}" class="referenceNumber" />
+                                <button value="{{ constant('InvitationAction::Accept') }}"
+                                    class="btn btn-primary btn-sm participationAction"><i
+                                        class="bi bi-check-circle-fill me-1"></i>{{ translate('Accept') }}</button>
+                                <button value="{{ constant('InvitationAction::Decline') }}"
+                                    class="btn btn-danger btn-sm participationAction"><i
+                                        class="bi bi-x-circle-fill me-1"></i>{{ translate('Decline') }}</button>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="no-data">
+                            <td colspan="5" class="noresults text-center fst-italic fs-5">{{ translate('None') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog" style="display:none;">
+
+    </div>
+
+    {{ include('javascript-includes.twig') }}
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'participation.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var participationOptions = {
+                responseType: 'json'
+            };
+
+            var participation = new Participation(participationOptions);
+            participation.initParticipation();
+        });
+    </script>
+
+</div>
+{{ include('globalfooter.twig') }}
