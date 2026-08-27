@@ -1068,4 +1068,21 @@ class LibreBookingExtensionTest extends TestCase
 
         $this->assertSame($smartyResult, $twigResult);
     }
+
+    public function testServerGlobalExposesServerSuperGlobal(): void
+    {
+        $_SERVER['FOO'] = 'bar_test_value';
+
+        $env = new \Twig\Environment(
+            new \Twig\Loader\ArrayLoader(['t' => '{{ server.FOO }}']),
+            ['autoescape' => false]
+        );
+        $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), ''));
+
+        $result = $env->render('t');
+
+        unset($_SERVER['FOO']);
+
+        $this->assertSame('bar_test_value', $result);
+    }
 }

@@ -2,10 +2,11 @@
 
 use LibreBooking\Common\Text\LinkifyText;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class LibreBookingExtension extends AbstractExtension
+class LibreBookingExtension extends AbstractExtension implements GlobalsInterface
 {
     public function __construct(
         private Resources $resources,
@@ -87,6 +88,17 @@ class LibreBookingExtension extends AbstractExtension
         $href = htmlspecialchars($newUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
         return sprintf('<a class="%s" href="%s" data-page="%s" data-page-size="%s">%s</a>', $class, $href, $page, $pageSize, $text);
+    }
+
+    /**
+     * Exposes PHP superglobals as Twig global variables.
+     * Provides `{{ server.REQUEST_URI }}` etc. as an equivalent to `{$smarty.server.*}`.
+     *
+     * @return array<string, mixed>
+     */
+    public function getGlobals(): array
+    {
+        return ['server' => $_SERVER];
     }
 
     public function getFunctions(): array
@@ -1043,6 +1055,26 @@ class LibreBookingExtension extends AbstractExtension
             new TwigFilter('urlencode', static function (mixed $value): string {
                 return urlencode((string) $value);
             }),
+
+            // Escapes a string for safe embedding inside a JavaScript string literal.
+            // Equivalent to Smarty's |escape:'javascript' modifier: escapes backslashes,
+            // single quotes, double quotes, newlines, and HTML script-closing sequences,
+            // but does NOT Unicode-escape hyphens or slashes (unlike Twig's built-in |e('js')).
+            new TwigFilter('escape_js', static function (mixed $value): string {
+                return strtr((string) $value, [
+                    '\\' => '\\\\',
+                    "'"  => "\\'",
+                    '"'  => '\\"',
+                    "\r" => '\\r',
+                    "\n" => '\\n',
+                    '</' => '<\/',
+                    '<!--' => '<\!--',
+                    '<s' => '<\s',
+                    '<S' => '<\S',
+                    '`' => '\\\\`',
+                    '${' => '\\\\${',
+                ]);
+            }, ['is_safe' => ['html']]),
 
             // NOTE: The following Smarty modifiers are intentionally NOT added
             // as custom Twig filters because Twig provides equivalent built-ins:
