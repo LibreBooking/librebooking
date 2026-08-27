@@ -1085,4 +1085,24 @@ class LibreBookingExtensionTest extends TestCase
 
         $this->assertSame('bar_test_value', $result);
     }
+
+    // -------------------------------------------------------------------------
+    // escape_js — parity test vs Smarty |escape:'javascript'
+    // -------------------------------------------------------------------------
+
+    public function testEscapeJsFilterMatchesSmartyJavascriptEscape(): void
+    {
+        // Input covers every character in the escape table:
+        // backslash, single quote, double quote, newline, CR, </, ${, <!--, <s, <S, `
+        $input = 'a\\b\'c"d' . "\n" . 'e' . "\r" . 'f</script>${foo}<!--bar--><s<S`end';
+
+        $env = $this->makeEnv('{{ v|escape_js }}');
+        $twigResult = $env->render('t', ['v' => $input]);
+
+        // Call Smarty's actual escape modifier directly for parity
+        $smartyExt = new \Smarty\Extension\DefaultExtension();
+        $smartyResult = $smartyExt->smarty_modifier_escape($input, 'javascript');
+
+        $this->assertSame($smartyResult, $twigResult);
+    }
 }

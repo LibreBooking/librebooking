@@ -70,4 +70,51 @@ class GlobalIncludesGoldenTest extends GoldenTemplateTestCase
         $rendered = $twigRenderer->render('javascript-includes.twig', $vars);
         $this->assertMatchesBaseline('javascript-includes', $rendered);
     }
+
+    public function testGlobalheaderFullMatchesBaseline(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/web/dashboard.php?foo=bar&baz=qux';
+
+        $vars = require __DIR__ . '/fixtures/globalheader_full.php';
+
+        if (getenv('UPDATE_GOLDEN') === '1') {
+            $this->captureSmartyBaseline('globalheader.tpl', $vars, 'globalheader_full');
+            $this->markTestSkipped('Baseline captured from Smarty');
+            return;
+        }
+
+        $twigRenderer = new TwigRenderer();
+        $rendered = $twigRenderer->render('globalheader.twig', $vars);
+        $this->assertMatchesBaseline('globalheader_full', $rendered);
+    }
+
+    public function testGlobalfooterFullMatchesBaseline(): void
+    {
+        $vars = require __DIR__ . '/fixtures/globalfooter_full.php';
+
+        if (getenv('UPDATE_GOLDEN') === '1') {
+            $this->captureSmartyBaseline('globalfooter.tpl', $vars, 'globalfooter_full');
+            $this->markTestSkipped('Baseline captured from Smarty');
+            return;
+        }
+
+        $twigRenderer = new TwigRenderer();
+        $rendered = $twigRenderer->render('globalfooter.twig', $vars);
+        $this->assertMatchesBaseline('globalfooter_full', $rendered);
+    }
+
+    public function testJavascriptIncludesFullMatchesBaseline(): void
+    {
+        $vars = require __DIR__ . '/fixtures/javascript-includes_full.php';
+
+        if (getenv('UPDATE_GOLDEN') === '1') {
+            $this->captureSmartyBaseline('javascript-includes.tpl', $vars, 'javascript-includes_full');
+            $this->markTestSkipped('Baseline captured from Smarty');
+            return;
+        }
+
+        $twigRenderer = new TwigRenderer();
+        $rendered = $twigRenderer->render('javascript-includes.twig', $vars);
+        $this->assertMatchesBaseline('javascript-includes_full', $rendered);
+    }
 }
