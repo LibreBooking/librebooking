@@ -1,0 +1,60 @@
+{# schedule-mobile.tpl #}
+{% extends 'Schedule/schedule.twig' %}
+
+{% block legend %}{% endblock %}
+
+{% block reservations %}
+{% import 'Schedule/_slot_macros_mobile.twig' as slot %}
+
+{% set TodaysDate = now() %}
+<table class="reservations mobile" border="1" cellpadding="0" style="width:100%;">
+
+    {% for date in BoundDates %}
+        {% set datePeriods = DailyLayout.GetPeriods(date, false) %}
+        {% set count = datePeriods|default([])|length %}
+        {% if count != 0 %}{# dont show if there are no slots #}
+            {% set min = datePeriods[0].BeginDate().TimeStamp() %}
+            {% set max = datePeriods[count - 1].EndDate().TimeStamp() %}
+            <tr>
+                {% set class = '' %}
+                {% if TodaysDate.DateEquals(date) == true %}
+                    {% set class = 'today' %}
+                {% endif %}
+                <td class="resdate {{ class }}" colspan="2">{{ formatdate(date, null, null, 'schedule_daily') }}</td>
+            </tr>
+            {% for resource in Resources %}
+                <tr>
+                    {% set resourceId = resource.Id %}
+                    {% set href = constant('Pages::RESERVATION') ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                    <td class="resourcename" {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important"
+                        {% endif %}>
+                        {% if resource.CanAccess %}
+                            <i resourceId="{{ resourceId }}" class="resourceNameSelector bi bi-info-circle-fill" data-show-event="click"
+                                {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}></i>
+                            <a href="{{ href|raw }}" resourceId="{{ resourceId }}"
+                                {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                {% endif %}>{{ resource.Name|escape_once }}</a>
+                        {% else %}
+                            <i resourceId="{{ resourceId }}" class="resourceNameSelector bi bi-info-circle-fill"
+                                {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}></i>
+                            <span {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                {% endif %}>{{ resource.Name|escape_once }}</span>
+                        {% endif %}
+                    </td>
+                    {% set addHref = CreateReservationPage ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                    <td class="" data-href="{{ addHref|raw }}" data-start="{{ date.Format('Y-m-d H:i:s')|url_encode }}"
+                        data-resourceId="{{ resourceId }}">
+                        <div class="reservable clickres" ref="{{ addHref|raw }}&rd={{ formatdate(date, null, null, 'url') }}" data-href="{{ addHref|raw }}"
+                            data-start="{{ date.Format('Y-m-d H:i:s')|url_encode }}"
+                            data-end="{{ date.Format('Y-m-d H:i:s')|url_encode }}">
+                            <i class="bi bi-plus-circle-fill"></i> {{ translate('CreateReservation') }}
+                            <input type="hidden" class="href" value="{{ addHref|raw }}" />
+                        </div>
+                        <div class="reservations" data-min="{{ min }}" data-max="{{ max }}" data-resourceid="{{ resource.Id }}"></div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</table>
+{% endblock %}
