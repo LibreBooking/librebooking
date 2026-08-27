@@ -1,0 +1,55 @@
+<div class="card shadow mb-2">
+    <div class="card-body">
+        {% set tableId = 'reservationTable' %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover border-top pt-3 w-100" id="{{ tableId }}">
+                <thead>
+                    <tr>
+                        <th>{{ translate('User') }}</th>
+                        <th>{{ translate('Resource') }}</th>
+                        <th>{{ translate('Title') }}</th>
+                        <th>{{ translate('Description') }}</th>
+                        <th>{{ translate('BeginDate') }}</th>
+                        <th>{{ translate('EndDate') }}</th>
+                        <th>{{ translate('Duration') }}</th>
+                        <th>{{ translate('ReferenceNumber') }}</th>
+                        <th>{{ translate('Created') }}</th>
+                        <th>{{ translate('LastModified') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in Reservations %}
+                        {% set rowCss = reservation.RequiresApproval ? 'pending table-warning' : '' %}
+                        {% set reservationId = reservation.ReservationId %}
+                        <tr class="{{ rowCss }} editable" data-seriesId="{{ reservation.SeriesId }}"
+                            data-refnum="{{ reservation.ReferenceNumber }}">
+                            <td class="user">
+                                {{ fullname(first: reservation.FirstName, last: reservation.LastName, ignorePrivacy: (reservation.OwnerId == UserId)) }}
+                            </td>
+                            <td class="resource">{{ reservation.ResourceName|escape_once }}</td>
+                            <td class="title"><span
+                                    class="reservationTitle">{% if reservation.Title is not empty %}{{ reservation.Title|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}</span>
+                            </td>
+                            <td class="description">{{ reservation.Description|escape_once }}</td>
+                            <td
+                                data-order="{{ formatdate(date: reservation.StartDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: reservation.StartDate, timezone: Timezone, key: 'short_reservation_date') }}</td>
+                            <td
+                                data-order="{{ formatdate(date: reservation.EndDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: reservation.EndDate, timezone: Timezone, key: 'short_reservation_date') }}</td>
+                            <td class="duration">{{ reservation.GetDuration() }}</td>
+                            <td class="referenceNumber">{{ reservation.ReferenceNumber }}</td>
+                            <td
+                                data-order="{{ formatdate(date: reservation.CreatedDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: reservation.CreatedDate, timezone: Timezone, key: 'short_datetime') }}</td>
+                            <td
+                                data-order="{{ formatdate(date: reservation.ModifiedDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: reservation.ModifiedDate, timezone: Timezone, key: 'short_datetime') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{ datatable(tableId: tableId) }}

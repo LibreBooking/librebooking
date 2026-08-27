@@ -1,0 +1,38 @@
+{% if (Openings|default([]))|length == 0 %}
+    <div class="alert alert-warning shadow mt-3 text-center">
+        <h4 class="alert-heading">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ translate('NoAvailableMatchingTimes') }}
+        </h4>
+    </div>
+{% else %}
+    <div class="card shadow">
+        <div class="card-body py-4">
+            <div class="row gy-3">
+                {% for opening in Openings %}
+                    <div class="col-sm-3">
+                        <div class="opening card shadow-sm" data-resourceid="{{ opening.Resource().Id }}"
+                            data-startdate="{{ format_date(date: opening.Start(), key: 'system_datetime') }}"
+                            data-enddate="{{ format_date(date: opening.End(), key: 'system_datetime') }}">
+                            <h5 class="card-header resourceName" data-resourceId="{{ opening.Resource().Id }}"
+                                {% if opening.Resource().HasColor() %}
+                                    style="background-color: {{ opening.Resource().Color }};color:{{ opening.Resource().TextColor }};"
+                                {% endif %}>
+                                <i class="bi bi-info-circle-fill pe-1"></i> {{ opening.Resource().Name|escape_once }}
+                            </h5>
+                            {% set key = 'short_reservation_date' %}
+                            {% if opening.SameDate() %}
+                                {% set key = 'period_time' %}
+                            {% endif %}
+                            <div class="card-body dates px-2 py-1">
+                                <h6 class="card-text">
+                                    {{ format_date(date: opening.Start(), key: 'res_popup') }} -
+                                    {{ format_date(date: opening.End(), key: key) }}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
