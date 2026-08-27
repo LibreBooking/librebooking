@@ -1,0 +1,42 @@
+{% if CanViewUser %}
+    <div id="userDetailsPopup">
+        <div class="card-header fw-bold">
+            {{ fullname(User.FirstName()|html_entity_decode, User.LastName()|html_entity_decode, true) }}
+        </div>
+        <div id="userDetailsName" class="card-body">
+            {% if User.EmailAddress() %}
+                <div id="userDetailsEmail" class="fw-bold">
+                    <span class="label">{{ translate('Email') }}</span>
+                    <a href="mailto:{{ User.EmailAddress()|escape_once }}" class="link-primary">{{ User.EmailAddress()|escape_once }}</a>
+                </div>
+            {% endif %}
+            {% if User.GetAttribute(constant('UserAttribute::Phone')) %}
+                <div id="userDetailsPhone" class="fw-bold">
+                    <span class="label">{{ translate('Phone') }}</span>
+                    <a href="tel:{{ User.GetAttribute(constant('UserAttribute::Phone'))|escape_once }}"
+                        class="link-primary">{{ User.GetAttribute(constant('UserAttribute::Phone'))|escape_once }}</a>
+                </div>
+            {% endif %}
+            {% if User.GetAttribute(constant('UserAttribute::Organization')) %}
+                <div id="userDetailsOrganization" class="fw-bold">
+                    <span class="label">{{ translate('Organization') }}</span>
+                    {{ User.GetAttribute(constant('UserAttribute::Organization'))|escape_once }}
+                </div>
+            {% endif %}
+            {% if User.GetAttribute(constant('UserAttribute::Position')) %}
+                <div id="userDetailsPosition" class="fw-bold">
+                    <span class="label">{{ translate('Position') }}</span>
+                    {{ User.GetAttribute(constant('UserAttribute::Position'))|escape_once }}
+                </div>
+            {% endif %}
+            <div id="userDetailsAttributes" class="fw-bold">
+                {% for attribute in Attributes %}
+                    <div class="customAttribute">
+                        <span class="label">{{ attribute.Label()|escape_once }}</span>
+                        {{ User.GetAttributeValue(attribute.Id())|escape_once }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

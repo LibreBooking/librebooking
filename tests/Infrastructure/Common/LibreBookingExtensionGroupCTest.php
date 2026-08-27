@@ -473,4 +473,30 @@ class LibreBookingExtensionGroupCTest extends TestBase
 
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @return array<string, array{string, int}>
+     */
+    public static function truncateProvider(): array
+    {
+        return [
+            'long text is cut at a word' => [str_repeat('lorem ipsum dolor ', 30), 300],
+            'short text is unchanged' => ['short', 300],
+            'no word boundary' => [str_repeat('x', 400), 300],
+            'multibyte text' => ['Ünïcødé wörds hère ' . str_repeat('ä', 50), 20],
+            'exact length' => ['exactly ten', 11],
+            'limit below suffix length' => ['abc def', 2],
+            'zero length' => ['a b', 0],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('truncateProvider')]
+    public function testTruncateMatchesSmarty(string $text, int $length): void
+    {
+        $env = $this->makeEnv('{{ s|truncate(n, "...") }}');
+
+        $expected = (new \Smarty\Extension\DefaultExtension())->smarty_modifier_truncate($text, $length, '...');
+
+        $this->assertSame($expected, $env->render('t', ['s' => $text, 'n' => $length]));
+    }
 }

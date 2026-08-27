@@ -1,0 +1,13 @@
+<div>
+    <div id="reservation-response-image">
+        <i class="bi bi-check-lg fs-1 text-success"></i>
+    </div>
+
+    {% if IsCheckingIn %}
+        <div id="checked-in-message" class="reservation-message fw-bold fs-4">{{ translate('CheckedInSuccess') }}</div>
+    {% else %}
+        <div id="checked-out-message" class="reservation-message fw-bold fs-4">{{ translate('CheckedOutSuccess') }}</div>
+    {% endif %}
+
+    <input type="button" id="btnSaveSuccessful" value="{{ translate('Close') }}" class="btn btn-primary" />
+</div>
