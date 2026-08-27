@@ -1,0 +1,37 @@
+<div class="row form-inline">
+    <div id="filter" class="text-center">
+
+        {% if GroupName is defined and GroupName %}
+            <span class="groupName fw-bold fs-5">{{ GroupName|escape_once }}</span>
+        {% else %}
+            <div class="d-flex justify-content-center align-items-center">
+                <div>{{ indicator(id: 'loadingIndicator') }}</div>
+                <label class="fw-bold me-2" for="calendarFilter">{{ translate('ChangeCalendar') }}</label>
+                <select id="calendarFilter" class="form-select w-auto">
+                    {% for filter in filters.GetFilters() %}
+                        <option value="s{{ filter.Id() }}" class="schedule" {% if filter.Selected() %}selected="selected" {% endif %}>
+                            {{ filter.Name()|escape_once }}</option>
+                        {% for subfilter in filter.GetFilters() %}
+                            <option value="r{{ subfilter.Id() }}" class="resource" {% if subfilter.Selected() %}selected="selected"
+                                {% endif %}>{{ subfilter.Name()|escape_once }}</option>
+                        {% endfor %}
+                    {% endfor %}
+        {% endif %}
+            </select>
+            <a href="#" id="showResourceGroups" class="link-primary ms-1">{{ translate('ResourceGroups') }}</a>
+        </div>
+    </div>
+
+    <div id="resourceGroupsContainer" class="bg-white border rounded pt-2">
+        <div id="resourceGroups"></div>
+    </div>
+
+    {# {if false} block omitted — dead code in source that never renders #}
+
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('#calendarFilter').select2();
+    });
+</script>
