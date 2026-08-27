@@ -7,6 +7,9 @@ class ErrorAndWaitBoxGoldenTest extends GoldenTemplateTestCase
 {
     private ?Resources $savedResources = null;
 
+    /** @var array<string, mixed> */
+    private array $savedServer = [];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -15,10 +18,13 @@ class ErrorAndWaitBoxGoldenTest extends GoldenTemplateTestCase
         $this->savedResources = Resources::GetInstance();
         Resources::SetInstance(null);
         Resources::GetInstance(); // triggers Create() → loads real language strings
+
+        $this->savedServer = $_SERVER;
     }
 
     protected function tearDown(): void
     {
+        $_SERVER = $this->savedServer;
         // Restore the original singleton to avoid polluting downstream tests.
         Resources::SetInstance($this->savedResources);
         parent::tearDown();
