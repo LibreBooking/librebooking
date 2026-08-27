@@ -1,0 +1,28 @@
+{% extends 'Export/embedded-calendar-container.twig' %}
+{% block calendar %}
+<div class="booked-calendar-agenda">
+    {% if Reservations.Reservations()|length == 0 %}
+        {{ translate('NoReservationsFound') }}
+    {% endif %}
+    {% set LastDate = date_min() %}
+    {% for r in Reservations.Reservations() %}
+        {% set color = r.GetColor() %}
+        {% if not r.StartDate().DateEquals(LastDate) %}
+            <div class="booked-agenda-date">
+                <a href="{{ ScheduleUrl }}{{ format_date(date: r.StartDate(), timezone: Timezone, key: 'url') }}"
+                   title="{{ translate('ViewCalendar') }}">{{ format_date(date: r.StartDate(), timezone: Timezone) }}</a>
+            </div>
+        {% endif %}
+        <a class="booked-calendar-event"
+           href="{{ ReservationUrl }}{{ r.ReferenceNumber() }}"
+           title="{{ translate('ViewReservation') }}"
+            {% if color is not empty %}style="background-color:{{ r.GetColor() }} !important;color:{{ r.GetTextColor() }} !important;border-color:{{ r.GetBorderColor() }} !important"{% endif %}>
+            {{ TitleFormatter.Format(r, r.StartDate())|raw }}
+            {# {format_date date=$r->StartDate() key=period_time timezone=$Timezone} #}
+            {# - {format_date date=$r->EndDate() key=period_time timezone=$Timezone} #}
+            {# {$r->Title} #}
+        </a>
+        {% set LastDate = r.StartDate() %}
+    {% endfor %}
+</div>
+{% endblock %}
