@@ -1,0 +1,44 @@
+{{ include('globalheader.twig', {HideNavBar: true, cssFiles: 'css/schedule.css'}) }}
+
+<div id="page-resource-display-resource">
+
+        <div class="resource-display date-picker ms-4">
+                <div class="date form-group w-50">
+                        <label class="fw-bold text-uppercase fs-6 text-secondary"
+                                for="availabilityStartDate">{{ translate('Date') }}</label>
+                        <input type="text" id="availabilityStartDate" class="form-control w-auto" />
+                </div>
+        </div>
+
+        <div id="placeholder"></div>
+</div>
+
+<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+        data-bs-backdrop="static" aria-hidden="true">
+        {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+</div>
+
+{{ include('javascript-includes.twig') }}
+{{ jsfile(src: 'resourceDisplay.js') }}
+{{ jsfile(src: 'ajax-helpers.js') }}
+{{ jsfile(src: 'autocomplete.js') }}
+
+{{ control('DatePickerSetupControl', {ControlId: 'availabilityStartDate', MaxDate: MaxFutureDate, MinDate: MinDate, DefaultDate: MinDate}) }}
+
+<script type="text/javascript">
+        function getResourceId() {
+                {# raw: JS string context — dev-assigned UUID #}
+                return '{{ PublicResourceId|raw }}';
+        }
+        $(function() {
+                var resourceDisplay = new ResourceDisplay();
+                resourceDisplay.initDisplay({
+                        {# raw: JS string context #}
+                        url: '{{ server.SCRIPT_NAME|raw }}?dr=resource&rid={{ PublicResourceId|raw }}&dr=display',
+                        userAutocompleteUrl: "ajax/autocomplete.php?type={{ constant('AutoCompleteType::User') }}&as=1",
+                        allowAutocomplete: {% if AllowAutocomplete %}true{% else %}false{% endif %},
+                });
+        });
+</script>
+
+{{ include('globalfooter.twig') }}

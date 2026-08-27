@@ -114,6 +114,57 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             }, ['is_safe' => ['html']]),
 
             /**
+             * Renders a partial template by name, with engine-selecting fallback.
+             *
+             * Given a template name (typically ending in .tpl), computes the .twig candidate
+             * by swapping the extension.  If the .twig file exists it is rendered via the
+             * current Twig environment directly.  Otherwise the original .tpl is rendered via
+             * a fresh SmartyRenderer using full-page context (equivalent to Smarty {include}).
+             *
+             * Using full-page Smarty context (rather than the isolated createData() context
+             * used by renderControlTemplate/Controls) is intentional: sub-templates included
+             * via {include} in Smarty share the calling template's {function} definitions and
+             * assigned variables.  render_partial must reproduce that behaviour so that
+             * templates like schedule-reservations-grid-static.tpl — which call {call} to
+             * invoke slot-display functions defined in the parent — work correctly.
+             *
+             * Once the .twig counterpart is migrated, the Twig branch fires automatically
+             * and the Smarty fallback is no longer reached.
+             *
+             * This is the standard mechanism for forward/cross-area includes in the Twig
+             * migration: use render_partial instead of {% include 'something.tpl' %}.
+             *
+             * Usage in templates:
+             *   {{ render_partial('Schedule/schedule-reservations-grid-static.tpl', _context) }}
+             *
+             * @param string              $name Template name, usually a .tpl path relative to tpl/.
+             * @param array<string,mixed> $vars Variables to pass to the partial (use _context to
+             *                                  forward all current page variables).
+             */
+            new TwigFunction(
+                'render_partial',
+                function (string $name, array $vars = []): string {
+                    if ($this->renderer === null) {
+                        return '';
+                    }
+
+                    // Delegate to TwigRenderer::renderPartial(), which computes the .twig
+                    // candidate, renders via Twig if it exists, and otherwise falls back to
+                    // the renderer's own SmartyRenderer using full-page context (matching
+                    // Smarty {include} shared-context semantics).
+                    // TwigRenderer is the only concrete renderer that adds this extension;
+                    // the instanceof check is for static-analysis safety.
+                    if ($this->renderer instanceof TwigRenderer) {
+                        return $this->renderer->renderPartial($name, $vars);
+                    }
+
+                    // Graceful degrade for non-TwigRenderer wiring (should not occur in practice).
+                    return $this->renderer->renderControlTemplate($name, $vars);
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
              * Instantiates and renders a page Control by type name, capturing its echoed output.
              * Equivalent to SmartyPage::DisplayControl / the Smarty {control} tag.
              *
