@@ -114,4 +114,17 @@ class EngineSelectorTest extends TestCase
 
         $this->assertSame('page.twig', $result);
     }
+
+    /**
+     * Smoke check against the real template directory: now that login.twig
+     * exists, engine selection must route login.tpl requests to the Twig engine.
+     */
+    public function testRealLoginTemplateSelectsTwig(): void
+    {
+        $tplDir = __DIR__ . '/../../../../tpl';
+
+        $result = EngineSelector::twigNameFor('login.tpl', [$tplDir]);
+
+        $this->assertSame('login.twig', $result);
+    }
 }

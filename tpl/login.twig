@@ -1,0 +1,173 @@
+{{ include('globalheader.twig') }}
+
+<div id="page-login">
+
+    {% if EnableCaptcha is defined and EnableCaptcha %}
+        {% set _vg %}{{ validator(id: 'captcha', key: 'CaptchaMustMatch') }}{% endset %}
+        {{ validation_group(_vg, 'alert alert-danger') }}
+    {% endif %}
+
+    {% if Announcements|default([])|length > 0 %}
+        <div id="announcements" class="col-sm-8 col-12 card mx-auto shadow mt-5">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for each in Announcements %}
+                        <li class="announcement list-group-item">{{ each.Text()|sanitize_rich_text }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="col-md-6 col-12 mx-auto mt-5">
+        <form role="form" name="login" id="login" class="form-horizontal" method="post"
+            action="{{ server.SCRIPT_NAME }}">
+            <div class="card shadow mb-2">
+                <div class="card-body mx-3">
+                    <div id="login-box" class="default-box">
+                        <div class="login-icon my-2">
+                            <img src="{{ Path }}{{ LogoUrl }}?{{ Version }}" alt="{{ Title }}" class="mx-auto d-block w-50">
+                        </div>
+
+                        {% if ShowLoginError is defined and ShowLoginError %}
+                            <div id="loginError" class="alert alert-danger">
+                                {% if LoginErrorMessage is not empty %}
+                                    {{ LoginErrorMessage }}
+                                {% else %}
+                                    {{ translate('LoginError') }}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if ShowUsernamePrompt is defined and ShowUsernamePrompt %}
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" required="" class="form-control" id="email" {{ formname(key: 'EMAIL') }}
+                                    placeholder="{{ translate('UsernameOrEmail') }}" />
+                            </div>
+                        {% endif %}
+
+                        {% if ShowPasswordPrompt is defined and ShowPasswordPrompt %}
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                <input type="password" required="" id="password" {{ formname(key: 'PASSWORD') }}
+                                    class="form-control" value="" placeholder="{{ translate('Password') }}" />
+                            </div>
+                        {% endif %}
+
+                        {% if EnableCaptcha is defined and EnableCaptcha %}
+                            <div class="text-center mb-2">
+                                {{ control('CaptchaControl') }}
+                            </div>
+                        {% else %}
+                            <input type="hidden" {{ formname(key: 'CAPTCHA') }} value="" />
+                        {% endif %}
+
+                        {% if (ShowUsernamePrompt is defined and ShowUsernamePrompt) and (ShowPasswordPrompt is defined and ShowPasswordPrompt) %}
+                            <div class="d-grid mb-2 mt-3">
+                                <button type="submit" class="btn btn-primary btn-block" name="{{ constant('Actions::LOGIN') }}"
+                                    value="submit">{{ translate('LogIn') }}</button>
+                                <input type="hidden" {{ formname(key: 'RESUME') }} value="{{ ResumeUrl }}" />
+                            </div>
+                        {% endif %}
+
+                        <div class="clearfix">
+                            {% if ShowRegisterLink is defined and ShowRegisterLink %}
+                                <div class="float-end register">
+                                    <span class="fw-bold">{{ translate('FirstTimeUser?') }}
+                                        <a class="link-primary" href="{{ RegisterUrl }}"
+                                            {% if RegisterUrlNew is defined %}{{ RegisterUrlNew|raw }}{% endif %}
+                                            title="{{ translate('Register') }}">{{ translate('Register') }}</a>
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <section class="d-flex justify-content-center flex-wrap gap-2 my-3 social-login">
+                            {% if AllowGoogleLogin is defined and AllowGoogleLogin %}
+                                <a type="button" href="{{ GoogleUrl }}" class="btn btn-outline-primary"><i
+                                        class="bi bi-google me-1"></i>{{ translate('SignInWith') }}<span class="fw-medium">
+                                        Google</span></a>
+                            {% endif %}
+                            {% if AllowMicrosoftLogin is defined and AllowMicrosoftLogin %}
+                                <a type="button" href="{{ MicrosoftUrl }}" class="btn btn-outline-primary"><i
+                                        class="bi bi-microsoft me-1"></i>{{ translate('SignInWith') }}<span
+                                        class="fw-medium"> Microsoft</span></a>
+                            {% endif %}
+                            {% if AllowFacebookLogin is defined and AllowFacebookLogin %}
+                                <a type="button" href="{{ FacebookUrl }}" class="btn btn-outline-primary"><i
+                                        class="bi bi-facebook me-1"></i>{{ translate('SignInWith') }}<span class="fw-medium">
+                                        Facebook</span></a>
+                            {% endif %}
+                            {% if AllowKeycloakLogin is defined and AllowKeycloakLogin %}
+                                <a type="button" href="{{ KeycloakUrl }}"
+                                    class="btn btn-outline-primary">{{ translate('SignInWith') }}<span class="fw-medium">
+                                        Keycloak</span></a>
+                            {% endif %}
+                            {% if AllowOauth2Login is defined and AllowOauth2Login %}
+                                <a type="button" href="{{ Oauth2Url }}"
+                                    class="btn btn-outline-primary">{{ translate('SignInWith') }}<span class="fw-medium">
+                                        {{ Oauth2Name }}</span></a>
+                            {% endif %}
+                        </section>
+                        {% if facebookError is defined and facebookError %}
+                            <p class="text-center my-3">
+                                {{ translate('FacebookLoginErrorMessage') }} </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="login-footer" class="card-footer d-flex align-items-start justify-content-between">
+                    {% if ShowForgotPasswordPrompt is defined and ShowForgotPasswordPrompt %}
+                        <div id="forgot-password">
+                            <a href="{{ ForgotPasswordUrl }}" {% if ForgotPasswordUrlNew is defined %}{{ ForgotPasswordUrlNew|raw }}{% endif %}
+                                class="link-primary"><span><i class="bi bi-question-circle-fill"></i></span>
+                                {{ translate('ForgotMyPassword') }}</a>
+                        </div>
+                    {% endif %}
+                    {% if Languages is defined and Languages|length > 1 %}
+                    <div id="change-language" class="text-end">
+                        <a type="button" class="link-primary" data-bs-toggle="collapse"
+                            data-bs-target="#change-language-options"><span><i class="bi bi-globe-americas"></i></span>
+                            {{ translate('ChangeLanguage') }}
+                        </a>
+                        <div id="change-language-options" class="collapse">
+                            <select {{ formname(key: 'LANGUAGE') }} class="form-select form-select-sm" id="languageDropDown">
+                                {{ object_html_options(options: Languages, key: 'GetLanguageCode', label: 'GetDisplayName', selected: SelectedLanguage) }}
+                            </select>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{{ setfocus(key: 'EMAIL') }}
+
+{{ include('javascript-includes.twig') }}
+
+<script type="text/javascript">
+    var url = 'index.php?{{ constant('QueryStringKeys::LANGUAGE') }}=';
+    $(document).ready(function() {
+        $('#languageDropDown').change(function() {
+            window.location.href = url + $(this).val();
+        });
+
+        var langCode = '{{ cookies.language|default('')|escape_js }}';
+
+        if (!langCode) {
+            langCode = (navigator.language + "").replace("-", "_").toLowerCase();
+
+            var availableLanguages = [{% for lang in Languages %}"{{ lang.GetLanguageCode() }}",{% endfor %}];
+            {# raw: JS string context, matches Smarty; SelectedLanguage is a language code #}
+            if (langCode !== "" && langCode != '{{ SelectedLanguage|lower|raw }}') {
+            if (availableLanguages.indexOf(langCode) !== -1) {
+                window.location.href = url + langCode;
+            }
+        }
+    }
+    });
+</script>
+{{ include('globalfooter.twig') }}

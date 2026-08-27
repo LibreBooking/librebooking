@@ -1105,4 +1105,31 @@ class LibreBookingExtensionTest extends TestCase
 
         $this->assertSame($smartyResult, $twigResult);
     }
+
+    // -------------------------------------------------------------------------
+    // getGlobals — server / cookies superglobal exposure
+    // -------------------------------------------------------------------------
+
+    public function testGetGlobalsExposesServerAndCookies(): void
+    {
+        $ext = new LibreBookingExtension(Resources::GetInstance(), '');
+        $globals = $ext->getGlobals();
+
+        $this->assertArrayHasKey('server', $globals);
+        $this->assertArrayHasKey('cookies', $globals);
+        $this->assertSame($_SERVER, $globals['server']);
+        $this->assertSame($_COOKIE, $globals['cookies']);
+    }
+
+    public function testCookiesGlobalIsReadableInTemplate(): void
+    {
+        $savedCookie = $_COOKIE;
+        $_COOKIE['language'] = 'de_de';
+        try {
+            $env = $this->makeEnv('{{ cookies.language }}');
+            $this->assertSame('de_de', $env->render('t'));
+        } finally {
+            $_COOKIE = $savedCookie;
+        }
+    }
 }

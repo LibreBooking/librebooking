@@ -92,13 +92,14 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
 
     /**
      * Exposes PHP superglobals as Twig global variables.
-     * Provides `{{ server.REQUEST_URI }}` etc. as an equivalent to `{$smarty.server.*}`.
+     * Provides `{{ server.REQUEST_URI }}` etc. as an equivalent to `{$smarty.server.*}`,
+     * and `{{ cookies.X }}` as an equivalent to `{$smarty.cookies.X}`.
      *
      * @return array<string, mixed>
      */
     public function getGlobals(): array
     {
-        return ['server' => $_SERVER];
+        return ['server' => $_SERVER, 'cookies' => $_COOKIE];
     }
 
     public function getFunctions(): array
