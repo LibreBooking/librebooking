@@ -1233,10 +1233,12 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             // Escapes single and double quotes for safe embedding in HTML
             // attributes or JS string literals.
             // Equivalent to SmartyPage::EscapeQuotes.
+            // Marked is_safe so Twig's autoescape does not double-encode the
+            // &#39; and &quot; entities produced by this filter.
             new TwigFilter('escapequotes', static function (mixed $var): string {
                 $str = str_replace('\'', '&#39;', (string) $var);
                 return str_replace('"', '&quot;', $str);
-            }),
+            }, ['is_safe' => ['html']]),
 
             // Decodes HTML entities back to their UTF-8 characters.
             // Equivalent to SmartyPage::HtmlEntityDecode.

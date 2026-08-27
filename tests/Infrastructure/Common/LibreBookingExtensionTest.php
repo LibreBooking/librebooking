@@ -184,6 +184,34 @@ class LibreBookingExtensionTest extends TestCase
         $this->assertSame('hello world', $env->render('t', ['v' => 'hello world']));
     }
 
+    /**
+     * Parity test: escapequotes under production-like autoescape:'html'.
+     *
+     * Without is_safe => ['html'], Twig would double-escape the &#39; and &quot;
+     * entities produced by the filter into &amp;#39; and &amp;quot;.
+     * With is_safe, the filter output is emitted verbatim — matching Smarty's
+     * behaviour (Smarty has no autoescape).
+     *
+     * Input:  A & B "q" <x> 'y'
+     * Expected: A & B &quot;q&quot; <x> &#39;y&#39;
+     *   - ' → &#39;  (escapequotes converts single quotes)
+     *   - " → &quot; (escapequotes converts double quotes)
+     *   - & / < / >  left raw  (escapequotes does NOT touch these)
+     */
+    public function testEscapeQuotesFilterIsNotDoubleEscapedUnderAutoescapeHtml(): void
+    {
+        $env = new \Twig\Environment(
+            new \Twig\Loader\ArrayLoader(['t' => '{{ v|escapequotes }}']),
+            ['autoescape' => 'html']
+        );
+        $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), ''));
+
+        $input    = 'A & B "q" <x> \'y\'';
+        $expected = 'A & B &quot;q&quot; <x> &#39;y&#39;';
+
+        $this->assertSame($expected, $env->render('t', ['v' => $input]));
+    }
+
     public function testHtmlEntityDecodeFilterDecodesEntities(): void
     {
         $env = $this->makeEnv('{{ v|html_entity_decode }}');
