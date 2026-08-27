@@ -1,0 +1,45 @@
+{{ include('globalheader.twig') }}
+
+<div class="accordion" id="page-dashboard">
+    <div id="dashboardList">
+        {% for dashboardItem in items %}
+            <div>{{ dashboard_item(dashboardItem) }}</div>
+        {% endfor %}
+    </div>
+
+    {{ include('javascript-includes.twig') }}
+
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'dashboard.js') }}
+    {{ jsfile(src: 'resourcePopup.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var dashboardOpts = {
+                reservationUrl: "{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=",
+                summaryPopupUrl: "ajax/respopup.php",
+                {# raw: JS string context, matches Smarty; ScriptUrl is developer-config #}
+                scriptUrl: '{{ ScriptUrl|raw }}'
+            };
+
+            var dashboard = new Dashboard(dashboardOpts);
+            dashboard.init();
+        });
+    </script>
+</div>
+
+<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="creatingNotification">
+                    {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+                </div>
+                <div id="result" class="text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ include('globalfooter.twig') }}
