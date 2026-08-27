@@ -1,0 +1,61 @@
+{#
+  Shared slot-display macros for the standard / tall / wide schedule grids.
+
+  These correspond to the Smarty {function name=display*} blocks previously
+  defined inline in tpl/Schedule/schedule.tpl and the reservations grids.
+
+  Dynamic dispatch: DisplaySlotFactory::GetFunction() returns one of the four
+  macro names at runtime.  Twig 3.28 cannot call a macro by a dynamic string
+  (attribute()/variable-held macros are not callable), so dispatch() is an
+  {% if/elseif %} chain over the finite name set, each branch calling
+  {{ _self.<literalName>(...) }} — a compile-time macro call that resolves to
+  this file's own macros even when imported from another template.
+#}
+
+{% macro displayPastTime(Slot, Href, SlotRef, ResourceId) %}
+    <td ref="{{ SlotRef }}" class="pasttime slot" data-href="{{ Href|raw }}"
+        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
+        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
+        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro displayReservable(Slot, Href, SlotRef, ResourceId) %}
+    <td class="reservable clickres slot" ref="{{ SlotRef }}" data-href="{{ Href|raw }}"
+        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
+        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
+        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro displayRestricted(Slot, Href, SlotRef, ResourceId) %}
+    <td ref="{{ SlotRef }}" class="restricted slot" data-href="{{ Href|raw }}"
+        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
+        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
+        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
+    </td>
+{% endmacro %}
+
+{% macro displayUnreservable(Slot, Href, SlotRef, ResourceId) %}
+    <td ref="{{ SlotRef }}" class="unreservable slot" data-href="{{ Href|raw }}"
+        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
+        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
+        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
+    </td>
+{% endmacro %}
+
+{#
+  Dispatch the computed function name to the matching macro.
+  DisplaySlotFactory (non-static) only ever returns one of these four names.
+#}
+{% macro dispatch(fnName, Slot, Href, SlotRef, ResourceId) %}
+    {%- if fnName == 'displayPastTime' -%}
+        {{ _self.displayPastTime(Slot, Href, SlotRef, ResourceId) }}
+    {%- elseif fnName == 'displayReservable' -%}
+        {{ _self.displayReservable(Slot, Href, SlotRef, ResourceId) }}
+    {%- elseif fnName == 'displayRestricted' -%}
+        {{ _self.displayRestricted(Slot, Href, SlotRef, ResourceId) }}
+    {%- else -%}
+        {{ _self.displayUnreservable(Slot, Href, SlotRef, ResourceId) }}
+    {%- endif -%}
+{% endmacro %}

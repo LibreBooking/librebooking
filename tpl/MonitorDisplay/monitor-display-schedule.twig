@@ -1,55 +1,12 @@
-{% macro displayGeneralReserved(Slot, Href, SlotRef, OwnershipClass, Draggable, ResourceId, spantype, SlotLabelFactory) %}
-    {% set class = '' %}
-    {% set color = '' %}
-    {% if Slot.IsPending() %}
-        {% set class = 'pending' %}
-    {% endif %}
-    {% if Slot.HasCustomColor() %}
-        {# raw: developer-assembled style attribute #}
-        {% set color = 'style="background-color:' ~ Slot.Color() ~ ' !important;color:' ~ Slot.TextColor() ~ ' !important;"' %}
-    {% endif %}
-    <td {{ (spantype ?? 'col') }}span="{{ Slot.PeriodSpan() }}" class="reserved {{ class }} {{ OwnershipClass }} clickres slot"
-        resid="{{ Slot.Id() }}" {{ color|raw }} {% if Draggable %}draggable="true" {% endif %} data-resourceId="{{ ResourceId }}"
-        id="{{ Slot.Id() }}|{{ Slot.Date().Format('Ymd') }}">{{ Slot.Label(SlotLabelFactory)|escapequotes }}</td>
-{% endmacro %}
-
-{% macro displayMyReserved(Slot, Href, SlotRef, ResourceId, spantype, SlotLabelFactory) %}
-    {{ _self.displayGeneralReserved(Slot, Href, SlotRef, 'mine', true, ResourceId, spantype, SlotLabelFactory) }}
-{% endmacro %}
-
-{% macro displayAdminReserved(Slot, Href, SlotRef, ResourceId, spantype, SlotLabelFactory) %}
-    {{ _self.displayGeneralReserved(Slot, Href, SlotRef, 'admin', true, ResourceId, spantype, SlotLabelFactory) }}
-{% endmacro %}
-
-{% macro displayMyParticipating(Slot, Href, SlotRef, ResourceId, spantype, SlotLabelFactory) %}
-    {{ _self.displayGeneralReserved(Slot, Href, SlotRef, 'participating', false, ResourceId, spantype, SlotLabelFactory) }}
-{% endmacro %}
-
-{% macro displayReserved(Slot, Href, SlotRef, ResourceId, CanViewAdmin, spantype, SlotLabelFactory) %}
-    {{ _self.displayGeneralReserved(Slot, Href, SlotRef, '', CanViewAdmin, ResourceId, spantype, SlotLabelFactory) }}
-{% endmacro %}
-
-{% macro displayPastTime(Slot, Href, SlotRef, ResourceId, CanViewAdmin, spantype, SlotLabelFactory) %}
-    <td {{ (spantype ?? 'col') }}span="{{ Slot.PeriodSpan() }}" ref="{{ SlotRef }}" class="pasttime slot"
-        draggable="{{ CanViewAdmin }}" resid="{{ Slot.Id() }}" data-resourceId="{{ ResourceId }}">
-        {{ Slot.Label(SlotLabelFactory)|escapequotes }}</td>
-{% endmacro %}
-
-{% macro displayReservable(Slot, Href, SlotRef, ResourceId, spantype) %}
-    <td {{ (spantype ?? 'col') }}span="{{ Slot.PeriodSpan() }}" ref="{{ SlotRef }}" class="reservable clickres slot"
-        data-href="{{ Href }}" data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
-        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-resourceId="{{ ResourceId }}">&nbsp;
-    </td>
-{% endmacro %}
-
-{% macro displayRestricted(Slot, spantype) %}
-    <td {{ (spantype ?? 'col') }}span="{{ Slot.PeriodSpan() }}" class="restricted slot">&nbsp;</td>
-{% endmacro %}
-
-{% macro displayUnreservable(Slot, spantype, SlotLabelFactory) %}
-    <td {{ (spantype ?? 'col') }}span="{{ Slot.PeriodSpan() }}" class="unreservable slot">
-        {{ Slot.Label(SlotLabelFactory) }}</td>
-{% endmacro %}
+{# monitor-display-schedule.twig — monitor schedule host (Format 1 = static grid, else day list) #}
+{#
+  The shared slot macros are imported (per the slot-dispatch design) so this host
+  and the static grid it renders share one macro definition.  Alias is NOT 'slot'
+  because the Format=2 day-list loop below binds a loop variable named `slot`, and
+  a `{% import ... as slot %}` alias would be resolved as a macro call rather than
+  the loop variable.  The actual dispatch happens inside the static grid partial.
+#}
+{% import 'MonitorDisplay/_slot_macros_monitor.twig' as slotMacros %}
 
 <h1 id="scheduleName" class="text-center"></h1>
 

@@ -20,13 +20,12 @@ require_once(__DIR__ . '/../../tests/fakes/FakeServer.php');
  * Notes:
  * - Clock is pinned to 2025-06-15 10:00:00 UTC to make Date::Now() deterministic.
  * - monitor-display-schedule Format=1 is tested via render_partial (see below).
- *   The grid sub-template (schedule-reservations-grid-static.tpl) uses Smarty
- *   {call} to invoke slot-display {function} blocks defined in the parent .tpl.
- *   When rendered standalone those functions are unavailable, so the Format=1
- *   golden fixtures use dates whose GetPeriods() returns [] (triggering {continue}
- *   before any {call} site), exercising the routing and partial-render machinery
- *   without hitting undefined-function territory.  Full slot rendering will be
- *   covered by Task 2.10 when the grid is migrated to .twig.
+ *   As of Task 2.10 the static grid (schedule-reservations-grid-static) is a
+ *   .twig that imports the shared monitor slot macros, so render_partial fires the
+ *   Twig branch and full slot rendering works.  The FULL-slot Format=1 parity case
+ *   (every StaticDisplaySlotFactory dispatch branch) lives in ScheduleGoldenTest
+ *   (testMonitorScheduleFormat1FullSlotsMatchesSmarty).  The empty / no-period
+ *   Format=1 cases below remain here as lightweight routing regressions.
  */
 class MonitorResourceDisplayGoldenTest extends GoldenTemplateTestCase
 {
