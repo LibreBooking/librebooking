@@ -46,12 +46,12 @@
                         </div>
                         <select {{ formname(key: 'BEGIN_TIME') }} id="startTime" aria-label="{{ translate('StartTime') }}"
                             class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
-                            data-step="30" data-default="{{ Today.Format('H:00') }}" disabled="disabled">
+                            data-step="30" data-default="{{ now().Format('H:00') }}" disabled="disabled">
                         </select>
                         <div class="mx-1">-</div>
                         <select {{ formname(key: 'END_TIME') }} id="endTime" aria-label="{{ translate('EndTime') }}"
                             class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
-                            data-step="30" data-default="{{ Today.AddHours(1).Format('H:00') }}"
+                            data-step="30" data-default="{{ now().AddHours(1).Format('H:00') }}"
                             disabled="disabled">
                         </select>
                     </div>

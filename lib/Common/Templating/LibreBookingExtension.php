@@ -227,6 +227,21 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 ['is_safe' => ['html']]
             ),
 
+            /**
+             * Returns the current LibreBooking Date (server time, UTC internally).
+             * Equivalent to the inline {Date::Now()} Smarty expression.
+             *
+             * Templates can write {{ now().Format('H:00') }},
+             * {{ now().AddHours(1).Format('H:00') }}, {{ now().ToTimezone(tz) }}, etc.
+             * Returns a Date object — NOT marked is_safe because it is not HTML.
+             */
+            new TwigFunction(
+                'now',
+                static function (): Date {
+                    return Date::Now();
+                }
+            ),
+
             // ── Group A: buttons & icons ────────────────────────────────────
 
             /**

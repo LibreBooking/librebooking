@@ -91,43 +91,6 @@ class SearchGoldenTest extends GoldenTemplateTestCase
         );
     }
 
-    /**
-     * Like assertParity but strips timepicker data-default attributes before comparison.
-     *
-     * The search-availability template uses {Date::Now()->format('H:00')} in Smarty,
-     * which always returns the live current time. In Twig we use Today.Format('H:00')
-     * with a fixed fixture. Stripping data-default="..." from both outputs before
-     * comparing keeps the structural assertion meaningful without relying on clock time.
-     *
-     * @param array<string, mixed> $vars
-     */
-    private function assertAvailabilityParity(string $tplName, string $twigName, array $vars): void
-    {
-        $smarty = new SmartyRenderer();
-        foreach ($vars as $k => $v) {
-            $smarty->assign($k, $v);
-        }
-        $expected = $smarty->render($tplName);
-
-        $twig = new TwigRenderer();
-        foreach ($vars as $k => $v) {
-            $twig->assign($k, $v);
-        }
-        $actual = $twig->render($twigName);
-
-        // Strip nondeterministic data-default="..." on timepicker selects;
-        // Smarty calls Date::Now() live while Twig uses the fixture Today.
-        $stripDataDefault = static function (string $html): string {
-            return preg_replace('/\s+data-default="[^"]*"/', '', $html) ?? $html;
-        };
-
-        $this->assertSame(
-            HtmlNormalizer::normalize($stripDataDefault($expected)),
-            HtmlNormalizer::normalize($stripDataDefault($actual)),
-            "Smarty vs Twig mismatch for $twigName"
-        );
-    }
-
     // ── search-reservations ──────────────────────────────────────────────────
 
     /**
@@ -237,7 +200,7 @@ class SearchGoldenTest extends GoldenTemplateTestCase
     {
         $vars = require __DIR__ . '/fixtures/search-availability.php';
         $vars['Resources'] = [];
-        $this->assertAvailabilityParity(
+        $this->assertParity(
             'SearchAvailability/search-availability.tpl',
             'SearchAvailability/search-availability.twig',
             $vars
@@ -250,7 +213,7 @@ class SearchGoldenTest extends GoldenTemplateTestCase
     public function testSearchAvailabilityWithResourcesMatchesSmarty(): void
     {
         $vars = require __DIR__ . '/fixtures/search-availability.php';
-        $this->assertAvailabilityParity(
+        $this->assertParity(
             'SearchAvailability/search-availability.tpl',
             'SearchAvailability/search-availability.twig',
             $vars
