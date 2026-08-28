@@ -679,9 +679,14 @@ function Schedule(opts, resourceGroups) {
               if (bufferStartEnd) {
                 let bufferHeight = 41;
                 let bufferTop = top;
+                var current_TR = t.find('tr[data-resourceid="' + res.ResourceId + '"]:first');
+                const currentTrId = current_TR.attr('id');
                 if (opts.scheduleStyle === ScheduleTall) {
                   bufferTop = bufferStartEnd.top;
                   bufferHeight = bufferStartEnd.height;
+                } else if (opts.scheduleStyle === ScheduleStandard
+                  && typeof trHeights[currentTrId] !== 'undefined'){
+                  bufferHeight = trHeights[currentTrId];
                 }
 
                 const style = `left:${bufferStartEnd.left}px; top:${bufferTop}px; width:${bufferStartEnd.width}px; height:${bufferHeight}px;`;
