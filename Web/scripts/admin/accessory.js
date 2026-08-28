@@ -134,11 +134,11 @@ function AccessoryManagement(opts) {
         handleAccessoryResourceClick(checkbox);
 
         var minQ = div.find('[data-type="min-quantity"]');
-				minQ.val(resource.MinQuantity);
-				minQ.removeAttr('disabled');
-				var maxQ = div.find('[data-type="max-quantity"]');
-				maxQ.val(resource.MaxQuantity);
-				maxQ.removeAttr('disabled');
+        minQ.val(resource.MinQuantity);
+        minQ.removeAttr('disabled');
+        var maxQ = div.find('[data-type="max-quantity"]');
+        maxQ.val(resource.MaxQuantity);
+        maxQ.removeAttr('disabled');
       });
 
       elements.accessoryResourcesDialog
