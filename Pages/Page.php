@@ -409,7 +409,7 @@ abstract class Page implements IPage
         } else {
             $this->Set('error', json_encode(['response' => $objectToSerialize, 'errors' => $error]));
         }
-        $this->smarty->display('json_data.tpl');
+        $this->RenderTemplate('json_data.tpl');
     }
 
     /**
@@ -423,7 +423,7 @@ abstract class Page implements IPage
 
         $this->Set('data', json_encode($objectToSerialize));
 
-        $this->smarty->display('json_data.tpl');
+        $this->RenderTemplate('json_data.tpl');
     }
 
     /**
@@ -433,10 +433,20 @@ abstract class Page implements IPage
     protected function Display($templateName)
     {
         if ($this->InMaintenanceMode()) {
-            $this->smarty->display('maintenance.tpl');
+            $this->RenderTemplate('maintenance.tpl');
             return;
         }
+        $this->RenderTemplate($templateName);
+    }
 
+    /**
+     * Selects the appropriate template engine and renders the given template.
+     *
+     * Checks for a Twig counterpart first; if one exists it is rendered via
+     * TwigRenderer. Otherwise falls back to Smarty.
+     */
+    protected function RenderTemplate(string $templateName): void
+    {
         $twigName = \LibreBooking\Common\Templating\EngineSelector::twigNameFor(
             $templateName,
             $this->getTemplateSearchDirs()

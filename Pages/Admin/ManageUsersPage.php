@@ -235,7 +235,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);
 
-        $this->RenderTemplate();
+        $this->RenderPageTemplate();
     }
 
     public function BindStatusDescriptions()
@@ -247,7 +247,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         );
     }
 
-    protected function RenderTemplate()
+    protected function RenderPageTemplate(): void
     {
         $this->Display('Admin/Users/manage_users.tpl');
     }

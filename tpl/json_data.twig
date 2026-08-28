@@ -1,0 +1,6 @@
+{% if data is defined and data != '' %}
+{{ data|raw }}
+{% endif %}
+{% if error is defined and error != '' %}
+{{ error|raw }}
+{% endif %}

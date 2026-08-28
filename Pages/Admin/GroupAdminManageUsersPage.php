@@ -14,10 +14,10 @@ class GroupAdminManageUsersPage extends ManageUsersPage
         $this->_presenter->SetGroupViewRepository($groupRepository);
     }
 
-    protected function RenderTemplate()
+    protected function RenderPageTemplate(): void
     {
         $this->Set('ManageGroupsUrl', Pages::MANAGE_GROUPS_ADMIN);
         $this->Set('ManageReservationsUrl', Pages::MANAGE_GROUP_RESERVATIONS);
-        parent::RenderTemplate();
+        parent::RenderPageTemplate();
     }
 }
