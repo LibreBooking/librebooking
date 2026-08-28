@@ -46,6 +46,7 @@ class QueryStringKeys
     public const COUNT = 'count';
     public const QUANTITY = 'quantity';
     public const QUOTA_ID = 'qid';
+    public const PEAK_TIMES_ID = 'ptid';
     public const READ_ONLY = 'ro';
     public const REDIRECT = 'redirect';
     public const REFERENCE_NUMBER = 'rn';

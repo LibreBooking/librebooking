@@ -351,6 +351,40 @@ class AddPeakTimesCommand extends SqlCommand
     }
 }
 
+class UpdatePeakTimesCommand extends SqlCommand
+{
+    /**
+     * @param int $peakTimesId
+     * @param int $scheduleId
+     * @param bool $allDay
+     * @param string $beginTime
+     * @param string $endTime
+     * @param bool $everyDay
+     * @param string $peakDays
+     * @param bool $allYear
+     * @param int $beginDay
+     * @param int $beginMonth
+     * @param int $endDay
+     * @param int $endMonth
+     */
+    public function __construct($peakTimesId, $scheduleId, $allDay, $beginTime, $endTime, $everyDay, $peakDays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth)
+    {
+        parent::__construct(Queries::UPDATE_PEAK_TIMES);
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_ID, $peakTimesId));
+        $this->AddParameter(new Parameter(ParameterNames::SCHEDULE_ID, $scheduleId));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_ALL_DAY, (int)$allDay));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_START_TIME, $beginTime));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_END_TIME, $endTime));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_EVERY_DAY, (int)$everyDay));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_DAYS, $peakDays));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_ALL_YEAR, (int)$allYear));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_BEGIN_DAY, $beginDay));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_BEGIN_MONTH, $beginMonth));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_END_DAY, $endDay));
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_END_MONTH, $endMonth));
+    }
+}
+
 class AddQuotaCommand extends SqlCommand
 {
     public function __construct($duration, $limit, $unit, $resourceId, $groupId, $scheduleIds, $enforcedStartTime, $enforcedEndTime, $enforcedDays, $scope)
@@ -995,9 +1029,19 @@ class DeletePaymentGatewaySettingsCommand extends SqlCommand
 
 class DeletePeakTimesCommand extends SqlCommand
 {
-    public function __construct($scheduleId)
+    public function __construct($peakTimesId, $scheduleId)
     {
         parent::__construct(Queries::DELETE_PEAK_TIMES);
+        $this->AddParameter(new Parameter(ParameterNames::PEAK_TIMES_ID, $peakTimesId));
+        $this->AddParameter(new Parameter(ParameterNames::SCHEDULE_ID, $scheduleId));
+    }
+}
+
+class DeleteAllPeakTimesCommand extends SqlCommand
+{
+    public function __construct($scheduleId)
+    {
+        parent::__construct(Queries::DELETE_ALL_PEAK_TIMES);
         $this->AddParameter(new Parameter(ParameterNames::SCHEDULE_ID, $scheduleId));
     }
 }

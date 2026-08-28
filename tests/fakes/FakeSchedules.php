@@ -226,6 +226,31 @@ class FakeScheduleRepository implements IScheduleRepository
         // TODO: Implement UpdatePeakTimes() method.
     }
 
+    /**
+     * @param int $scheduleId
+     * @param PeakTimes $peakTimes
+     */
+    public function AddPeakTimes($scheduleId, PeakTimes $peakTimes)
+    {
+        // TODO: Implement AddPeakTimes() method.
+    }
+    /**
+     * @param int $peakTimesId
+     * @param int $scheduleId
+     */
+    public function DeletePeakTimes($peakTimesId, $scheduleId)
+    {
+        // TODO: Implement DeletePeakTimes() method.
+    }
+
+    /**
+     * @param int $scheduleId
+     */
+    public function DeleteAllPeakTimes($scheduleId)
+    {
+        // TODO: Implement DeleteAllPeakTimes() method.
+    }
+
     public function GetCustomLayoutPeriods(Date $date, $scheduleId)
     {
         return $this->_CustomLayouts[$date->Timestamp()];

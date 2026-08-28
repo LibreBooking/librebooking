@@ -228,16 +228,16 @@ class ScheduleRepositoryTest extends TestBase
 
         $peakTimes = $layout->GetPeakTimes();
 
-        $this->assertEquals(false, $peakTimes->IsAllDay());
-        $this->assertEquals(Time::Parse('08:30 am', $timezone), $peakTimes->GetBeginTime());
-        $this->assertEquals(Time::Parse('05:45 pm', $timezone), $peakTimes->GetEndTime());
-        $this->assertEquals(false, $peakTimes->IsAllDay());
-        $this->assertEquals([1, 3, 5], $peakTimes->GetWeekdays());
-        $this->assertEquals(false, $peakTimes->IsAllYear());
-        $this->assertEquals(2, $peakTimes->GetBeginMonth());
-        $this->assertEquals(22, $peakTimes->GetBeginDay());
-        $this->assertEquals(4, $peakTimes->GetEndMonth());
-        $this->assertEquals(10, $peakTimes->GetEndDay());
+        $this->assertEquals(false, $peakTimes[0]->IsAllDay());
+        $this->assertEquals(Time::Parse('08:30 am', $timezone), $peakTimes[0]->GetBeginTime());
+        $this->assertEquals(Time::Parse('05:45 pm', $timezone), $peakTimes[0]->GetEndTime());
+        $this->assertEquals(false, $peakTimes[0]->IsAllDay());
+        $this->assertEquals([1, 3, 5], $peakTimes[0]->GetWeekdays());
+        $this->assertEquals(false, $peakTimes[0]->IsAllYear());
+        $this->assertEquals(2, $peakTimes[0]->GetBeginMonth());
+        $this->assertEquals(22, $peakTimes[0]->GetBeginDay());
+        $this->assertEquals(4, $peakTimes[0]->GetEndMonth());
+        $this->assertEquals(10, $peakTimes[0]->GetEndDay());
     }
 
     public function testGetLayoutReturnsEmptyLayoutWhenNoRows()

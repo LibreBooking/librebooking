@@ -18,7 +18,9 @@ class ManageSchedules
     public const ActionEnableSubscription = 'enableSubscription';
     public const ActionDisableSubscription = 'disableSubscription';
     public const ChangeAdminGroup = 'changeAdminGroup';
-    public const ActionChangePeakTimes = 'ActionChangePeakTimes';
+    public const ActionUpdatePeakTimes = 'ActionUpdatePeakTimes';
+    public const ActionAddPeakTimes = 'ActionAddPeakTimes';
+    public const ActionDeletePeakTimes = 'ActionDeletePeakTimes';
     public const ActionChangeAvailability = 'ActionChangeAvailability';
     public const ActionSwitchLayoutType = 'ActionSwitchLayoutType';
     public const ActionAddLayoutSlot = 'addLayoutSlot';
@@ -221,20 +223,47 @@ class ManageScheduleService
      * @param PeakTimes $peakTimes
      * @return IScheduleLayout
      */
-    public function ChangePeakTimes($scheduleId, PeakTimes $peakTimes)
+    public function UpdatePeakTimes($scheduleId, PeakTimes $peakTimes)
     {
         $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory(null));
-        $layout->ChangePeakTimes($peakTimes);
+        $layout->UpdatePeakTimes($peakTimes);
         $this->scheduleRepository->UpdatePeakTimes($scheduleId, $layout);
 
         return $layout;
     }
 
-    public function DeletePeakTimes($scheduleId)
+    /**
+     * @param int $scheduleId
+     * @param PeakTimes $peakTimes
+     * @return IScheduleLayout
+     */
+    public function AddPeakTimes($scheduleId, PeakTimes $peakTimes)
+    {
+        $insertId = $this->scheduleRepository->AddPeakTimes($scheduleId, $peakTimes);
+        $peakTimes->SetPeakTimesId($insertId);
+        $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory(null));
+
+        return $layout;
+    }
+
+    /**
+     * @param int $scheduleId
+     * @param int $peakTimesId
+     * @return IScheduleLayout
+     */
+    public function DeletePeakTimes(int $scheduleId, int $peakTimesId)
     {
         $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory(null));
-        $layout->RemovePeakTimes();
-        $this->scheduleRepository->UpdatePeakTimes($scheduleId, $layout);
+        $layout->DeletePeakTimes($peakTimesId);
+        $this->scheduleRepository->DeletePeakTimes($peakTimesId, $scheduleId);
+        return $layout;
+    }
+
+    public function DeleteAllPeakTimes($scheduleId)
+    {
+        $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory(null));
+        $layout->DeleteAllPeakTimes();
+        $this->scheduleRepository->DeleteAllPeakTimes($scheduleId);
 
         return $layout;
     }
@@ -433,7 +462,7 @@ class ManageSchedulesPresenter extends ActionPresenter
         $this->AddAction(ManageSchedules::ActionEnableSubscription, 'EnableSubscription');
         $this->AddAction(ManageSchedules::ActionDisableSubscription, 'DisableSubscription');
         $this->AddAction(ManageSchedules::ChangeAdminGroup, 'ChangeAdminGroup');
-        $this->AddAction(ManageSchedules::ActionChangePeakTimes, 'ChangePeakTimes');
+        $this->AddAction(ManageSchedules::ActionUpdatePeakTimes, 'UpdatePeakTimes');
         $this->AddAction(ManageSchedules::ActionChangeAvailability, 'ChangeAvailability');
         $this->AddAction(ManageSchedules::ActionSwitchLayoutType, 'SwitchLayoutType');
         $this->AddAction(ManageSchedules::ActionAddLayoutSlot, 'AddLayoutSlot');
@@ -579,14 +608,36 @@ class ManageSchedulesPresenter extends ActionPresenter
         $this->manageSchedulesService->DisableSubscription($this->page->GetScheduleId());
     }
 
-    public function ChangePeakTimes()
+    public function UpdatePeakTimes()
     {
         $scheduleId = $this->page->GetScheduleId();
+        $peakTimesId = $this->page->GetPeakTimesId();
         $deletePeak = $this->page->GetDeletePeakTimes();
+        $addPeak = $this->page->GetAddPeakTimes();
+        $updatePeak = $this->page->GetUpdatePeakTimes();
+
+        if (($deletePeak || $updatePeak) && ($peakTimesId === null || $peakTimesId === '')) {
+            throw new InvalidArgumentException('A peakTimesId is required for delete or update operations.');
+        }
 
         if ($deletePeak) {
-            $layout = $this->manageSchedulesService->DeletePeakTimes($scheduleId);
-        } else {
+            $layout = $this->manageSchedulesService->DeletePeakTimes($scheduleId, $peakTimesId);
+        } elseif ($addPeak) {
+            $allDay = $this->page->GetPeakAllDay();
+            $beginTime = $this->page->GetPeakBeginTime();
+            $endTime = $this->page->GetPeakEndTime();
+
+            $everyDay = $this->page->GetPeakEveryDay();
+            $peakDays = $this->page->GetPeakWeekdays();
+
+            $allYear = $this->page->GetPeakAllYear();
+            $beginDay = $this->page->GetPeakBeginDay();
+            $beginMonth = $this->page->GetPeakBeginMonth();
+            $endDay = $this->page->GetPeakEndDay();
+            $endMonth = $this->page->GetPeakEndDMonth();
+            $peakTimes = new PeakTimes($peakTimesId, $allDay, $beginTime, $endTime, $everyDay, $peakDays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth);
+            $layout = $this->manageSchedulesService->AddPeakTimes($scheduleId, $peakTimes);
+        } else { //assume $updatePeak
             $allDay = $this->page->GetPeakAllDay();
             $beginTime = $this->page->GetPeakBeginTime();
             $endTime = $this->page->GetPeakEndTime();
@@ -600,8 +651,8 @@ class ManageSchedulesPresenter extends ActionPresenter
             $endDay = $this->page->GetPeakEndDay();
             $endMonth = $this->page->GetPeakEndDMonth();
 
-            $peakTimes = new PeakTimes($allDay, $beginTime, $endTime, $everyDay, $peakDays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth);
-            $layout = $this->manageSchedulesService->ChangePeakTimes($scheduleId, $peakTimes);
+            $peakTimes = new PeakTimes($peakTimesId, $allDay, $beginTime, $endTime, $everyDay, $peakDays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth);
+            $layout = $this->manageSchedulesService->UpdatePeakTimes($scheduleId, $peakTimes);
         }
         $this->page->DisplayPeakTimes($layout);
     }

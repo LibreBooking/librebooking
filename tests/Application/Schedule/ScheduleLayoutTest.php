@@ -927,7 +927,7 @@ class ScheduleLayoutTest extends TestBase
     {
         $totalAvailableSlots = 16;
         $layout = $this->GetLayoutBetween(9, 17);
-        $layout->ChangePeakTimes(new PeakTimes(true, null, null, false, [1, 3], true, 0, 0, 0, 0));
+        $layout->AddPeakTimes(new PeakTimes(null, true, null, null, false, [1, 3], true, 0, 0, 0, 0));
 
         $start = Date::Parse('2016-04-11 8:00', 'UTC');
         $end = Date::Parse('2016-04-11 18:00', 'UTC');
@@ -941,7 +941,7 @@ class ScheduleLayoutTest extends TestBase
     public function testCanGetPeakForSpecificHours()
     {
         $layout = $this->GetLayoutBetween(9, 17);
-        $layout->ChangePeakTimes(new PeakTimes(false, '00:00', '10:00', false, [1, 3], true, 0, 0, 0, 0));
+        $layout->AddPeakTimes(new PeakTimes(null, false, '00:00', '10:00', false, [1, 3], true, 0, 0, 0, 0));
 
         $start = Date::Parse('2016-04-11 8:00', 'UTC');
         $end = Date::Parse('2016-04-11 18:00', 'UTC');
@@ -955,7 +955,7 @@ class ScheduleLayoutTest extends TestBase
     public function testCanGetPeakForSpecificDays()
     {
         $layout = $this->GetLayoutBetween(9, 17);
-        $layout->ChangePeakTimes(new PeakTimes(false, '00:00', '10:00', false, [1, 3], true, 0, 0, 0, 0));
+        $layout->AddPeakTimes(new PeakTimes(null, false, '00:00', '10:00', false, [1, 3], true, 0, 0, 0, 0));
 
         $start = Date::Parse('2016-04-12 8:00', 'UTC');
         $end = Date::Parse('2016-04-12 18:00', 'UTC');
@@ -969,7 +969,7 @@ class ScheduleLayoutTest extends TestBase
     public function testCanGetPeakWhenLimitedDates()
     {
         $layout = $this->GetLayoutBetween(9, 17);
-        $layout->ChangePeakTimes(new PeakTimes(true, '', '', true, [], false, 13, 1, 13, 4));
+        $layout->AddPeakTimes(new PeakTimes(null, true, '', '', true, [], false, 13, 1, 13, 4));
 
         $start = Date::Parse('2016-04-13 8:00', 'UTC');
         $end = Date::Parse('2016-04-13 18:00', 'UTC');

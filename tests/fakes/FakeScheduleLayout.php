@@ -91,6 +91,18 @@ class FakeScheduleLayout implements IScheduleLayout
         return $this->_SlotCount;
     }
 
+    public function UpdatePeakTimes(PeakTimes $peakTimes)
+    {
+        // TODO: Implement UpdatePeakTimes() method.
+    }
+
+
+    public function AddPeakTimes(PeakTimes $peakTimes)
+    {
+        // TODO: Implement AddPeakTimes() method.
+    }
+
+
     public function ChangePeakTimes(PeakTimes $peakTimes)
     {
         // TODO: Implement ChangePeakTimes() method.
@@ -99,6 +111,23 @@ class FakeScheduleLayout implements IScheduleLayout
     public function RemovePeakTimes()
     {
         // TODO: Implement RemovePeakTimes() method.
+    }
+
+
+    public function DeletePeakTimes(int $peakTimeId)
+    {
+        // TODO: Implement DeletePeakTimes() method.
+    }
+
+    public function DeleteAllPeakTimes()
+    {
+        // TODO: Implement DeleteAllPeakTimes() method.
+    }
+
+    public function GetPeakTimes()
+    {
+        // TODO: Implement GetPeakTimes() method.
+        return [];
     }
 
     /**

@@ -74,11 +74,26 @@ interface IScheduleLayout extends ILayoutCreation
     public function GetSlotCount(Date $startDate, Date $endDate);
 
     /**
+     * @return array|PeakTimes[]
+     */
+    public function GetPeakTimes();
+
+    /**
      * @param PeakTimes $peakTimes
      */
-    public function ChangePeakTimes(PeakTimes $peakTimes);
+    public function UpdatePeakTimes(PeakTimes $peakTimes);
 
-    public function RemovePeakTimes();
+    /**
+     * @param PeakTimes $peakTimes
+     */
+    public function AddPeakTimes(PeakTimes $peakTimes);
+
+    /**
+     * @param int $peakTimeId
+     */
+    public function DeletePeakTimes(int $peakTimeId);
+
+    public function DeleteAllPeakTimes();
 
     /**
      * @return bool
@@ -97,9 +112,9 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     public const Standard = 0;
 
     /**
-     * @var PeakTimes
+     * @var array|PeakTimes[]
      */
-    protected $peakTimes;
+    protected $peakTimes = [];
 
     /**
      * @var array|LayoutPeriod[]
@@ -436,7 +451,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     }
 
     /**
-     * @return PeakTimes
+     * @return array|PeakTimes[]
      */
     public function GetPeakTimes()
     {
@@ -610,7 +625,15 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
                 Log::Debug($period->Start);
                 Log::Debug($period->End);
 
-                $isPeak = $this->HasPeakTimesDefined() && $this->peakTimes->IsWithinPeak($testDate->SetTime($period->Start));
+                $isPeak = false;
+                if ($this->HasPeakTimesDefined()) {
+                    foreach ($this->peakTimes as $peakTimes) {
+                        $isPeak = $isPeak || $peakTimes->IsWithinPeak($testDate->SetTime($period->Start));
+                        if ($isPeak) {
+                            break;
+                        }
+                    }
+                }
                 if ($isPeak) {
                     $peakSlots++;
                 } else {
@@ -624,18 +647,38 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
 
     public function HasPeakTimesDefined()
     {
-        return $this->peakTimes != null;
+        return !empty($this->peakTimes);
     }
 
-    public function ChangePeakTimes(PeakTimes $peakTimes)
+    public function UpdatePeakTimes(PeakTimes $peakTimes)
+    {
+        foreach ($this->peakTimes as $index => $peakTimesTarget) {
+            if ($peakTimes->GetPeakTimesId() == $peakTimesTarget->GetPeakTimesId()) {
+                $peakTimes->InTimezone($this->layoutTimezone);
+                $this->peakTimes[$index] = $peakTimes;
+            }
+        }
+    }
+
+    public function AddPeakTimes(PeakTimes $peakTimes)
     {
         $peakTimes->InTimezone($this->layoutTimezone);
-        $this->peakTimes = $peakTimes;
+        $this->peakTimes[] = $peakTimes;
     }
 
-    public function RemovePeakTimes()
+    public function DeletePeakTimes(int $peakTimeId)
     {
-        $this->peakTimes = null;
+        foreach ($this->peakTimes as $index => $peakTimes) {
+            if ($peakTimeId == $peakTimes->GetPeakTimesId()) {
+                array_splice($this->peakTimes, $index, 1);
+                break;
+            }
+        }
+    }
+
+    public function DeleteAllPeakTimes()
+    {
+        $this->peakTimes = [];
     }
 
     public function FitsToHours()
@@ -668,6 +711,20 @@ class SlotCount
 
 class PeakTimes
 {
+    /**
+     */
+    public function SetPeakTimesId(int $peakTimesId)
+    {
+        $this->peakTimesId = $peakTimesId;
+    }
+
+    /**
+     */
+    public function GetPeakTimesId()
+    {
+        return $this->peakTimesId;
+    }
+
     /**
      * @return bool
      */
@@ -748,6 +805,7 @@ class PeakTimes
         return $this->endMonth;
     }
 
+    private $peakTimesId = null;
     private $allDay = false;
     private $beginTime = null;
     private $endTime = null;
@@ -760,6 +818,7 @@ class PeakTimes
     private $endMonth = 0;
 
     /**
+     * @param int $peakTimesId
      * @param bool $allDay
      * @param string|Time $beginTime
      * @param string|Time $endTime
@@ -771,8 +830,9 @@ class PeakTimes
      * @param int $endDay
      * @param int $endMonth
      */
-    public function __construct($allDay, $beginTime, $endTime, $everyDay, $weekdays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth)
+    public function __construct($peakTimesId, $allDay, $beginTime, $endTime, $everyDay, $weekdays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth)
     {
+        $this->peakTimesId = $peakTimesId;
         $this->allDay = $allDay;
 
         $this->beginTime = new NullTime();
@@ -799,6 +859,8 @@ class PeakTimes
 
     public static function FromRow($row)
     {
+        $peakTimesId = intval($row[ColumnNames::PEAK_TIMES_ID]);
+
         $allDay = intval($row[ColumnNames::PEAK_ALL_DAY]);
 
         $beginTime = !empty($row[ColumnNames::PEAK_START_TIME]) ? Time::Parse($row[ColumnNames::PEAK_START_TIME]) : null;
@@ -816,7 +878,7 @@ class PeakTimes
         $endDay = $row[ColumnNames::PEAK_END_DAY];
         $endMonth = $row[ColumnNames::PEAK_END_MONTH];
 
-        return new PeakTimes($allDay, $beginTime, $endTime, $everyDay, $weekdays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth);
+        return new PeakTimes($peakTimesId, $allDay, $beginTime, $endTime, $everyDay, $weekdays, $allYear, $beginDay, $beginMonth, $endDay, $endMonth);
     }
 
     public function IsWithinPeak(Date $date)

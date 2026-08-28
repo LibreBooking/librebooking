@@ -165,6 +165,8 @@ class FormKeys
     public const PAYPAL_SECRET = 'PAYPAL_SECRET';
     public const PAYPAL_ENVIRONMENT = 'PAYPAL_ENVIRONMENT';
     public const PAYMENT_RESPONSE_DATA = 'PAYMENT_RESPONSE_DATA';
+    public const PEAK_ID = 'PEAK_ID';
+    public const PEAK_TIMES_ID = 'PEAK_TIMES_ID';
     public const PEAK_ALL_DAY = 'PEAK_ALL_DAY';
     public const PEAK_ALL_YEAR = 'PEAK_ALL_YEAR';
     public const PEAK_EVERY_DAY = 'PEAK_EVERY_DAY';
@@ -175,7 +177,9 @@ class FormKeys
     public const PEAK_END_DAY = 'PEAK_END_DAY';
     public const PEAK_BEGIN_TIME = 'PEAK_BEGIN_TIME';
     public const PEAK_END_TIME = 'PEAK_END_TIME';
+    public const PEAK_UPDATE = 'PEAK_UPDATE';
     public const PEAK_DELETE = 'PEAK_DELETE';
+    public const PEAK_ADD = 'PEAK_ADD';
     public const PERSIST_LOGIN = 'persistLogin';
     public const PHONE = 'phone';
     public const POSITION = 'position';
