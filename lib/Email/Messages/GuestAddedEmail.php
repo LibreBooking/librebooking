@@ -47,6 +47,16 @@ class GuestAddedEmail extends ReservationEmailMessage
         $this->Set('AcceptUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Accept));
         $this->Set('DeclineUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Decline));
     }
+
+    /**
+     * Unlike the other ReservationEmailMessage subclasses, this one is addressed to the
+     * guest themselves — a genuine ATTENDEE being asked to Accept/Decline (see
+     * PopulateTemplate() above) — so REQUEST is the correct method, not the PUBLISH default.
+     */
+    protected function GetIcsMethod(): string
+    {
+        return 'REQUEST';
+    }
 }
 
 class GuestUpdatedEmail extends GuestAddedEmail

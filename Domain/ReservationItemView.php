@@ -289,6 +289,11 @@ class ReservationItemView implements IReservedItemView
     public $ParticipantNames = [];
 
     /**
+     * @var array|string[] Map of user id to email address, for registered-user participants.
+     */
+    public $ParticipantEmails = [];
+
+    /**
      * @var array|int[]
      */
     public $InviteeIds = [];
@@ -297,6 +302,11 @@ class ReservationItemView implements IReservedItemView
      * @var array|string[]
      */
     public $InviteeNames = [];
+
+    /**
+     * @var array|string[] Map of user id to email address, for registered-user invitees.
+     */
+    public $InviteeEmails = [];
 
     /**
      * @var CustomAttributes
@@ -488,10 +498,11 @@ class ReservationItemView implements IReservedItemView
             $participants = explode('!sep!', $participant_list);
 
             foreach ($participants as $participant) {
-                $pair = explode('=', $participant);
+                $pair = explode('=', $participant, 3);
 
                 $id = $pair[0];
                 $name = $pair[1];
+                $email = $pair[2] ?? null;
                 $name_parts = explode(' ', $name);
                 $firstnames = $name_parts[0];
                 $lastnames = $name_parts[1];
@@ -505,6 +516,9 @@ class ReservationItemView implements IReservedItemView
                 $this->ParticipantIds[] = $id;
                 $name = new FullName($firstnames, $lastnames);
                 $this->ParticipantNames[$id] = $name->__toString();
+                if (!empty($email)) {
+                    $this->ParticipantEmails[$id] = $email;
+                }
             }
         }
 
@@ -512,10 +526,11 @@ class ReservationItemView implements IReservedItemView
             $invitees = explode('!sep!', $invitee_list);
 
             foreach ($invitees as $invitee) {
-                $pair = explode('=', $invitee);
+                $pair = explode('=', $invitee, 3);
 
                 $id = $pair[0];
                 $name = $pair[1];
+                $email = $pair[2] ?? null;
                 $name_parts = explode(' ', $name);
                 $firstnames = $name_parts[0];
                 $lastnames = $name_parts[1];
@@ -529,6 +544,9 @@ class ReservationItemView implements IReservedItemView
                 $this->InviteeIds[] = $id;
                 $name = new FullName($firstnames, $lastnames);
                 $this->InviteeNames[$id] = $name->__toString();
+                if (!empty($email)) {
+                    $this->InviteeEmails[$id] = $email;
+                }
             }
         }
 
@@ -690,10 +708,14 @@ class ReservationItemView implements IReservedItemView
 
         foreach ($r->Participants as $u) {
             $item->ParticipantIds[] = $u->UserId;
+            $item->ParticipantNames[$u->UserId] = $u->FullName;
+            $item->ParticipantEmails[$u->UserId] = $u->Email;
         }
 
         foreach ($r->Invitees as $u) {
             $item->InviteeIds[] = $u->UserId;
+            $item->InviteeNames[$u->UserId] = $u->FullName;
+            $item->InviteeEmails[$u->UserId] = $u->Email;
         }
 
         foreach ($r->Attributes as $a) {

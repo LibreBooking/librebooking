@@ -37,6 +37,11 @@ abstract class ReservationEmailMessage extends EmailMessage
      */
     protected $userRepository;
 
+    /** @var array<int, UserDto|null> Populated by PopulateIcsAttachment(); reused by PopulateTemplate() to avoid N+1 GetById() calls. */
+    private array $resolvedParticipants = [];
+    /** @var array<int, UserDto|null> */
+    private array $resolvedInvitees = [];
+
     public function __construct(
         User $reservationOwner,
         ReservationSeries $reservationSeries,
@@ -163,18 +168,10 @@ abstract class ReservationEmailMessage extends EmailMessage
         $this->Set('AutoReleaseMinutes', $minimumAutoRelease);
         $this->Set('ReferenceNumber', $currentInstance->ReferenceNumber());
 
-        $participants = [];
-        foreach ($currentInstance->Participants() as $id) {
-            $participants[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Participants', $participants);
+        // resolvedParticipants/resolvedInvitees were populated in PopulateIcsAttachment() above.
+        $this->Set('Participants', array_values($this->resolvedParticipants));
         $this->Set('ParticipatingGuests', $currentInstance->ParticipatingGuests());
-
-        $invitees = [];
-        foreach ($currentInstance->Invitees() as $id) {
-            $invitees[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Invitees', $invitees);
+        $this->Set('Invitees', array_values($this->resolvedInvitees));
         $this->Set('InvitedGuests', $currentInstance->InvitedGuests());
 
         $this->Set('CreditsCurrent', $currentInstance->GetCreditsRequired());
@@ -215,10 +212,77 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
-        $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
+        $rv->ParticipantIds = $currentInstance->Participants();
+        foreach ($rv->ParticipantIds as $id) {
+            $participant = $this->userRepository->GetById($id);
+            $this->resolvedParticipants[$id] = $participant;
+            if ($participant !== null) {
+                $rv->ParticipantNames[$id] = (new FullName($participant->FirstName, $participant->LastName))->__toString();
+                $rv->ParticipantEmails[$id] = $participant->EmailAddress;
+            }
+        }
+
+        $rv->InviteeIds = $currentInstance->Invitees();
+        foreach ($rv->InviteeIds as $id) {
+            $invitee = $this->userRepository->GetById($id);
+            $this->resolvedInvitees[$id] = $invitee;
+            if ($invitee !== null) {
+                $rv->InviteeNames[$id] = (new FullName($invitee->FirstName, $invitee->LastName))->__toString();
+                $rv->InviteeEmails[$id] = $invitee->EmailAddress;
+            }
+        }
+
+        $rv->ParticipatingGuests = $currentInstance->ParticipatingGuests();
+        $rv->InvitedGuests = $currentInstance->InvitedGuests();
+
+        // BookedBy() is null for a series loaded without an explicit UpdateBookedBy() call
+        // (e.g. ReservationRepository::BuildSeries() never sets it); fall back to a session
+        // wrapping the owner so the non-nullable UserSession parameter below never gets null.
+        $currentUser = $this->reservationSeries->BookedBy() ?? new UserSession($this->reservationOwner->Id());
+        $icsView = new iCalendarReservationView($rv, $currentUser, new NullPrivacyFilter());
+
+        $method = $this->GetIcsMethod();
+        if ($method === 'CANCEL') {
+            $icsView->IsCancelled = true;
+
+            $cancelledAttendee = $this->GetCancelledAttendee();
+            if ($cancelledAttendee !== null && !in_array($cancelledAttendee['Email'], array_column($icsView->Attendees, 'Email'), true)) {
+                $icsView->Attendees[] = $cancelledAttendee;
+            }
+        }
 
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
-        $this->AddStringAttachment($icsContents, 'reservation.ics');
+        $icsContents = $display->Render([$icsView], null, $method);
+        $this->AddStringAttachment($icsContents, 'reservation.ics', "text/calendar; charset=UTF-8; method={$method}");
+    }
+
+    /**
+     * The iTip (RFC 5546) method this email's ICS attachment represents. PUBLISH by default,
+     * since this recipient is the reservation owner or an arbitrary share recipient, never
+     * one of the reservation's own attendees — a METHOD:REQUEST only makes sense addressed
+     * to an ATTENDEE. Overridden to CANCEL (ReservationDeletedEmail) or REQUEST
+     * (InviteeAddedEmail/GuestAddedEmail, whose recipient is the attendee being invited).
+     *
+     * @return string 'PUBLISH', 'CANCEL', or 'REQUEST'
+     */
+    protected function GetIcsMethod(): string
+    {
+        return 'PUBLISH';
+    }
+
+    /**
+     * The attendee a CANCEL email's ICS attachment must list even though the reservation's
+     * current (post-removal) attendee data no longer includes them — e.g. an invitee, guest,
+     * or participant who was just removed. Without this, PopulateIcsAttachment() above builds
+     * the ATTENDEE list from $currentInstance, which by definition already excludes anyone
+     * removed in the change that triggered this CANCEL, leaving a RFC 5546 CANCEL with no
+     * ATTENDEE identifying who it applies to. Null when there's no specific removed recipient
+     * to re-add (e.g. the base ReservationDeletedEmail, sent to the owner).
+     *
+     * @return array{Email: string, Name: string}|null
+     */
+    protected function GetCancelledAttendee(): ?array
+    {
+        return null;
     }
 }

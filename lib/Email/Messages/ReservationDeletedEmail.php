@@ -25,4 +25,9 @@ class ReservationDeletedEmail extends ReservationEmailMessage
     {
         return 'ReservationDeleted.tpl';
     }
+
+    protected function GetIcsMethod(): string
+    {
+        return 'CANCEL';
+    }
 }

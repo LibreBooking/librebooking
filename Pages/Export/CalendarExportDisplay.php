@@ -16,16 +16,35 @@ class CalendarExportDisplay extends Page
     }
 
     /**
+     * A single reservation with real attendees is a scheduling request a client can act
+     * on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
+     * feed) stays PUBLISH; see commit dfd28fef ("remove METHOD:REQUEST ... fix Add to Outlook")
+     * for why REQUEST without attendee data broke basic calendar import.
+     *
+     * @param iCalendarReservationView[] $reservations
+     * @return string 'REQUEST' or 'PUBLISH'
+     */
+    public static function DetermineMethod(array $reservations): string
+    {
+        $hasSingleReservationWithAttendees = count($reservations) === 1 && !empty($reservations[0]->Attendees);
+        return $hasSingleReservationWithAttendees ? 'REQUEST' : 'PUBLISH';
+    }
+
+    /**
      * @param iCalendarReservationView[] $reservations
      * @param string|null $calendarName Optional display name rendered as X-WR-CALNAME
+     * @param string|null $forceMethod Overrides DetermineMethod(), e.g. reservation invite emails
+     *                                 always send METHOD:REQUEST regardless of attendee count.
      */
-    public function Render(array $reservations, ?string $calendarName = null): string
+    public function Render(array $reservations, ?string $calendarName = null, ?string $forceMethod = null): string
     {
+        $resolvedMethod = $forceMethod ?? self::DetermineMethod($reservations);
+
         // Values passed as constructor children are merged over getDefaults(),
         // replacing the PRODID that VCalendar would otherwise generate.
         $vcal = new VCalendar([
             'PRODID' => '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
-            'METHOD' => 'REQUEST',
+            'METHOD' => $resolvedMethod,
         ]);
 
         if ($calendarName !== null && $calendarName !== '') {
@@ -54,10 +73,30 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
-            $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            if (!empty($res->OrganizerEmail) && $res->OrganizerEmail !== 'Private') {
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            }
+            // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE list MUST be empty. Only emit
+            // ATTENDEE for single-event non-PUBLISH renders (REQUEST/CANCEL scheduling emails
+            // and single-reservation calendar exports). Multi-event feeds always resolve to
+            // PUBLISH (see DetermineMethod()) and must never carry ATTENDEE data.
+            if (count($reservations) === 1 && $resolvedMethod !== 'PUBLISH') {
+                foreach ($res->Attendees as $attendee) {
+                    $accepted = $attendee['Accepted'] ?? false;
+                    $event->add('ATTENDEE', 'mailto:' . $attendee['Email'], [
+                        'CN' => $attendee['Name'],
+                        'ROLE' => 'REQ-PARTICIPANT',
+                        'PARTSTAT' => $accepted ? 'ACCEPTED' : 'NEEDS-ACTION',
+                        'RSVP' => $accepted ? 'FALSE' : 'TRUE',
+                    ]);
+                }
+            }
+            $event->add('STATUS', $res->IsCancelled ? 'CANCELLED' : ($res->IsPending ? 'TENTATIVE' : 'CONFIRMED'));
             $event->add('SUMMARY', $res->Summary);
-            $event->add('SEQUENCE', 0);
+            // RFC 5546 §3.2.5: CANCEL must carry a SEQUENCE strictly greater than the last
+            // REQUEST for the same UID so calendar clients know to apply it. Since LibreBooking
+            // always emits SEQUENCE:0 on REQUEST, CANCEL uses 1.
+            $event->add('SEQUENCE', $resolvedMethod === 'CANCEL' ? 1 : 0);
             $event->add('URL', $res->ReservationUrl);
             $event->add('X-MICROSOFT-CDO-BUSYSTATUS', 'BUSY');
 

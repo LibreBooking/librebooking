@@ -38,4 +38,9 @@ class GuestDeletedEmail extends ReservationDeletedEmail
     {
         return 'ReservationInvitation.tpl';
     }
+
+    protected function GetCancelledAttendee(): ?array
+    {
+        return ['Email' => $this->guestEmail, 'Name' => $this->guestEmail];
+    }
 }

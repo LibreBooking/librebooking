@@ -110,9 +110,8 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
     }
 
-    public function testOrganizerIsDefaultedIfCurrentUserIsOrganizer()
+    public function testOrganizerIsRealEmailEvenWhenCurrentUserIsOrganizer()
     {
-        // this fixes a bug in outlook which prevents you from adding a meeting that you are the organizer of
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId;
@@ -121,7 +120,7 @@ class CalendarExportPresenterTest extends TestBase
         $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
-        $this->assertEquals('e-noreply@m.com', $reservationView->OrganizerEmail);
+        $this->assertEquals('e@m.com', $reservationView->OrganizerEmail);
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
     }
@@ -400,5 +399,81 @@ class CalendarExportPresenterTest extends TestBase
         // reservation (or the rest of the malformed one's own properties) from rendering.
         $this->assertStringContainsString('good-ref', $ics);
         $this->assertStringContainsString('bad-ref', $ics);
+    }
+
+    public function testOrganizerIsOmittedFromRenderedOutputWhenPrivacyFilteringHidesUserDetails()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $privacyFilter = new FakePrivacyFilter();
+        $privacyFilter->_CanViewUser = false;
+
+        $reservationView = new iCalendarReservationView($res, $user, $privacyFilter);
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringNotContainsString('ORGANIZER', $ics);
+    }
+
+    public function testSingleReservationWithAttendeesUsesRequestMethodAndListsAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->ParticipantIds = [2];
+        $res->ParticipantNames = [2 => 'Part One'];
+        $res->ParticipantEmails = [2 => 'part1@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+        $unfolded = str_replace("\r\n ", '', $ics);
+
+        $this->assertStringContainsString('METHOD:REQUEST', $ics);
+        $this->assertMatchesRegularExpression('/ATTENDEE[^\r\n]*mailto:part1@example\.com/', $unfolded);
+        // Participants have already accepted — PARTSTAT must be ACCEPTED, not NEEDS-ACTION.
+        $this->assertStringContainsString('PARTSTAT=ACCEPTED', $ics);
+        $this->assertStringContainsString('RSVP=FALSE', $ics);
+    }
+
+    public function testMultipleReservationsWithAttendeesStayPublish()
+    {
+        $user = new FakeUserSession();
+
+        $res1 = new ReservationItemView();
+        $res1->ReferenceNumber = 'ref-1';
+        $res1->StartDate = Date::Now();
+        $res1->EndDate = Date::Now()->AddHours(1);
+        $res1->ParticipantIds = [2];
+        $res1->ParticipantNames = [2 => 'Part One'];
+        $res1->ParticipantEmails = [2 => 'part1@example.com'];
+
+        $res2 = new ReservationItemView();
+        $res2->ReferenceNumber = 'ref-2';
+        $res2->StartDate = Date::Now();
+        $res2->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+        $view1 = new iCalendarReservationView($res1, $user, $this->privacyFilter);
+        $view2 = new iCalendarReservationView($res2, $user, $this->privacyFilter);
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$view1, $view2]);
+
+        // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE property list MUST be empty, since
+        // PUBLISH doesn't solicit a reply. A multi-event feed always stays PUBLISH (see
+        // DetermineMethod()), so it must never carry ATTENDEE data even when one of its
+        // reservations has real attendees.
+        $this->assertStringContainsString('METHOD:PUBLISH', $ics);
+        $this->assertStringNotContainsString('ATTENDEE', $ics);
     }
 }

@@ -74,6 +74,16 @@ class InviteeAddedEmail extends ReservationEmailMessage
             $action
         );
     }
+
+    /**
+     * Unlike the other ReservationEmailMessage subclasses, this one is addressed to the
+     * invitee themselves — a genuine ATTENDEE being asked to Accept/Decline (see
+     * GetAcceptUrl() above) — so REQUEST is the correct method, not the PUBLISH default.
+     */
+    protected function GetIcsMethod(): string
+    {
+        return 'REQUEST';
+    }
 }
 
 class InviteeUpdatedEmail extends InviteeAddedEmail
@@ -132,5 +142,10 @@ class InviteeRemovedEmail extends ReservationDeletedEmail
     public function GetTemplateName()
     {
         return 'ReservationDeleted.tpl';
+    }
+
+    protected function GetCancelledAttendee(): ?array
+    {
+        return ['Email' => $this->invitee->EmailAddress(), 'Name' => $this->invitee->FullName()];
     }
 }
