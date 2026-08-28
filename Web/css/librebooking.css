@@ -782,3 +782,8 @@ a.fc-event:hover {
 .fc-timegrid-event-harness > .fc-timegrid-event {
   inset: 0 -4px 0 0;
 }
+
+.unavailableResource {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
