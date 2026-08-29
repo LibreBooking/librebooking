@@ -1,2 +1,2 @@
-commitizen==4.16.5
+commitizen==4.18.0
 doc8==2.0.0
