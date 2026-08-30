@@ -19,7 +19,8 @@
         "phpunit/phpunit": "^11.3",
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-phpunit": "^2.1",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "vincentlanglet/twig-cs-fixer": "^4.1"
     },
     "require": {
         "php": ">=8.2",
@@ -52,13 +53,16 @@
         "build": "./tools/phing",
         "phpcsfixer:fix": "./vendor/bin/php-cs-fixer fix -v",
         "phpcsfixer:lint": "./vendor/bin/php-cs-fixer fix -vv --dry-run",
+        "twigcsfixer:fix": "./vendor/bin/twig-cs-fixer fix tpl",
+        "twigcsfixer:lint": "./vendor/bin/twig-cs-fixer lint tpl",
         "phpunit": "./vendor/bin/phpunit",
         "phpstan": "./vendor/bin/phpstan analyse",
         "phpstan_next": "./vendor/bin/phpstan analyse -c phpstan_next.neon",
         "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
         "test": [
             "@phpunit",
-            "@phpcsfixer:lint"
+            "@phpcsfixer:lint",
+            "@twigcsfixer:lint"
         ],
         "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
         "preflight": "php lib/preflight.php",

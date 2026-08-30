@@ -69,3 +69,6 @@ php8-report.log
 # phpunit cache
 .phpunit.cache/
 .env
+
+# twig-cs-fixer
+.twig-cs-fixer.cache
