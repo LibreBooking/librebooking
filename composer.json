@@ -39,7 +39,7 @@
         "phpmailer/phpmailer": "^7.1",
         "claviska/simpleimage": "^4.2",
         "mashape/unirest-php": "^3.0",
-        "vlucas/phpdotenv": "^5.6",
+        "vlucas/phpdotenv": "^5.7",
         "pear/net_ldap2": "^2.3",
         "ext-intl": "*",
         "ext-ldap": "*",
