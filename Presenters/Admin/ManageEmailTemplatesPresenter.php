@@ -209,7 +209,9 @@ class EmailTemplateFile
     {
         $templateList = [];
         foreach ($templates as $template) {
+            // Only Smarty templates can be edited and customized so far; the .twig files next to them are skipped
             if (
+                !BookedStringHelper::EndsWith($template, '.tpl') ||
                 BookedStringHelper::Contains($template, 'help.tpl') ||
                 BookedStringHelper::Contains($template, 'help-admin.tpl') ||
                 BookedStringHelper::Contains($template, '-custom.tpl')

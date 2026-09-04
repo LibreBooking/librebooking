@@ -1,0 +1,18 @@
+<p>You missed your check in.</p>
+<p><strong>Reservation Details:</strong></p>
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>End:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Resource:</strong> {{ ResourceName|escape_once }}<br/>
+    <strong>Title:</strong> {{ Title|escape_once }}<br/>
+    <strong>Description:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+{% if IsAutoRelease %}
+    <p>If you do not check in, this reservation will be automatically cancelled at {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}</p>
+{% endif %}
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">View this reservation</a> |
+    <a href="{{ ScriptUrl|raw }}">Log in to {{ AppTitle|raw }}</a>
+</p>
