@@ -35,7 +35,7 @@ class ViewSchedulesPresenter
 
     public function PageLoad()
     {
-        $results = $this->manageSchedulesService->GetList(null, null);
+        $results = $this->manageSchedulesService->GetList($this->page->GetPageNumber(), $this->page->GetPageSize());
         $schedules = $results->Results();
 
         $sourceSchedules = $this->manageSchedulesService->GetSourceSchedules();

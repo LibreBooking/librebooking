@@ -39,5 +39,6 @@
             {/foreach}
         </tbody>
     </table>
+    {pagination pageInfo=$PageInfo}
 </div>
-{datatable tableId={$tableId}}
+{datatable tableId=$tableId}
