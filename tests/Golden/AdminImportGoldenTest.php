@@ -8,7 +8,7 @@ require_once(__DIR__ . '/../../tests/fakes/FakeServer.php');
  * Live Smarty-vs-Twig golden comparison for Admin/Import templates.
  *
  * Templates covered:
- *   - tpl/Admin/Import/ics_import.tpl      → .twig  (structural for external link CSRF; see notes)
+ *   - tpl/Admin/Import/ics_import.tpl      → .twig  (full parity)
  *
  * Parity strategy
  * ---------------

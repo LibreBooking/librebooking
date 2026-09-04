@@ -11,23 +11,23 @@ require_once(__DIR__ . '/../../Presenters/Admin/ManageBlackoutsPresenter.php');
  * Live Smarty-vs-Twig golden comparison for Admin/Blackouts templates.
  *
  * Templates covered:
- *   - tpl/Admin/Blackouts/manage_blackouts_response.tpl  → .twig (structural)
- *   - tpl/Admin/Blackouts/manage_blackouts_edit.tpl      → .twig (structural)
- *   - tpl/Admin/Blackouts/manage_blackouts.tpl           → .twig (structural)
+ *   - tpl/Admin/Blackouts/manage_blackouts_response.tpl  → .twig (full parity)
+ *   - tpl/Admin/Blackouts/manage_blackouts_edit.tpl      → .twig (full parity)
+ *   - tpl/Admin/Blackouts/manage_blackouts.tpl           → .twig (parity after stripping data-default)
  *
  * Parity strategy
  * ---------------
- * All three templates use structural assertTwigContains rather than full parity because:
- *   - manage_blackouts.tpl is a full page with globalheader/globalfooter includes
- *     which contain CSRF token, user session data etc. — not deterministic enough
- *     for byte-equal comparison.
- *   - manage_blackouts_edit.tpl and manage_blackouts_response.tpl involve
- *     Date object rendering which may differ slightly between engines in edge cases.
- *   - Class constants (ReservationConflictResolution, SeriesUpdateScope, etc.)
- *     rendered via constant() in Twig vs {ClassName::CONST} in Smarty are
- *     structurally equivalent but the accepted-divergence pattern applies.
+ * manage_blackouts_response and manage_blackouts_edit:
+ *   Full parity — no accepted divergences. CSRF token is pinned via FakeServer.
+ *   Date objects are pinned to deterministic fixture values.
  *
- * We pin the clock to a fixed date for deterministic date output.
+ * manage_blackouts (main full page):
+ *   Has two nondeterministic `data-default` attributes populated by the wall clock
+ *   (`now().Format('H:00')` in Twig, `{format_date format='H:00' date=now}` in Smarty).
+ *   Neither engine honors Date::_SetNow() for these — both use PHP's time(). The
+ *   attribute is stripped from BOTH outputs before comparison so that the rest of the
+ *   page (every translated string, form field, table row, JS block, CSRF token,
+ *   conditional section) is Smarty-verified. The stripping is documented per method.
  */
 class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
 {
@@ -67,6 +67,8 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
         parent::tearDown();
     }
 
+    // ── Helpers ─────────────────────────────────────────────────────────────
+
     /**
      * Render both Smarty and Twig with the given vars and assert normalized parity.
      *
@@ -94,28 +96,50 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
-     * Render Twig only and assert the output contains expected strings.
+     * Render both engines for manage_blackouts (main page) and assert parity after
+     * stripping nondeterministic `data-default` attributes.
+     *
+     * The main page has two `<select ... data-default="H:00">` elements whose
+     * `data-default` value is the current wall-clock hour. Both Smarty
+     * (`{format_date format='H:00' date=now}`) and Twig (`{{ now().Format('H:00') }}`)
+     * use the live clock; Date::_SetNow() does not affect them. Stripping
+     * `data-default="..."` from BOTH outputs before comparison normalizes the clock
+     * dependency while keeping all other markup Smarty-verified.
      *
      * @param array<string, mixed> $vars
-     * @param string[]             $expectedStrings
      */
-    private function assertTwigContains(string $twigName, array $vars, array $expectedStrings): void
+    private function assertMainPageParity(array $vars): void
     {
+        $smarty = new SmartyRenderer();
+        foreach ($vars as $k => $v) {
+            $smarty->assign($k, $v);
+        }
+        $smartyHtml = $smarty->render('Admin/Blackouts/manage_blackouts.tpl');
+
         $twig = new TwigRenderer();
         foreach ($vars as $k => $v) {
             $twig->assign($k, $v);
         }
-        $output = $twig->render($twigName);
-        foreach ($expectedStrings as $needle) {
-            $this->assertStringContainsString($needle, $output, "Expected '$needle' in $twigName output");
-        }
+        $twigHtml = $twig->render('Admin/Blackouts/manage_blackouts.twig');
+
+        // Strip data-default="..." (clock-based H:00 values) from BOTH outputs BEFORE
+        // normalization so that surrounding whitespace is correctly collapsed.
+        $smartyHtml = preg_replace('/\s+data-default="[^"]*"/', '', $smartyHtml);
+        $twigHtml   = preg_replace('/\s+data-default="[^"]*"/', '', $twigHtml);
+
+        $this->assertSame(
+            HtmlNormalizer::normalize($smartyHtml),
+            HtmlNormalizer::normalize($twigHtml),
+            'Smarty vs Twig mismatch for manage_blackouts.twig (after stripping data-default)'
+        );
     }
 
     // ── manage_blackouts_response ─────────────────────────────────────────────
 
     public function testResponseSuccessful(): void
     {
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_response.tpl',
             'Admin/Blackouts/manage_blackouts_response.twig',
             [
                 'Successful' => true,
@@ -125,14 +149,14 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
                 'Reservations' => [],
                 'Blackouts' => [],
                 'Timezone' => 'America/New_York',
-            ],
-            ['reload btn btn-primary']
+            ]
         );
     }
 
     public function testResponseFailure(): void
     {
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_response.tpl',
             'Admin/Blackouts/manage_blackouts_response.twig',
             [
                 'Successful' => false,
@@ -142,14 +166,14 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
                 'Reservations' => [],
                 'Blackouts' => [],
                 'Timezone' => 'America/New_York',
-            ],
-            ['unblock btn btn-primary']
+            ]
         );
     }
 
     public function testResponseWithMessage(): void
     {
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_response.tpl',
             'Admin/Blackouts/manage_blackouts_response.twig',
             [
                 'Successful' => true,
@@ -159,8 +183,7 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
                 'Reservations' => [],
                 'Blackouts' => [],
                 'Timezone' => 'UTC',
-            ],
-            ['Custom blackout message', 'reload btn btn-primary']
+            ]
         );
     }
 
@@ -178,7 +201,8 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
             }
         };
 
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_response.tpl',
             'Admin/Blackouts/manage_blackouts_response.twig',
             [
                 'Successful' => false,
@@ -188,8 +212,7 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
                 'Reservations' => [],
                 'Blackouts' => [$blackout],
                 'Timezone' => 'UTC',
-            ],
-            ['blackoutConflictsTable', 'Server Maintenance']
+            ]
         );
     }
 
@@ -211,7 +234,8 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
             }
         };
 
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_response.tpl',
             'Admin/Blackouts/manage_blackouts_response.twig',
             [
                 'Successful' => false,
@@ -221,8 +245,7 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
                 'Reservations' => [$reservation],
                 'Blackouts' => [],
                 'Timezone' => 'UTC',
-            ],
-            ['reservationTable', 'REF-999', 'Jane', 'Doe', 'Team Meeting', 'Conference Room A']
+            ]
         );
     }
 
@@ -277,29 +300,19 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
 
     public function testEditBasicNonRecurring(): void
     {
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_edit.tpl',
             'Admin/Blackouts/manage_blackouts_edit.twig',
-            $this->makeEditVars(false),
-            [
-                'editBlackoutForm',
-                'updateStartDate',
-                'updateEndDate',
-                'Scheduled Maintenance',
-                'btnUpdateAllInstances',
-            ]
+            $this->makeEditVars(false)
         );
     }
 
     public function testEditRecurring(): void
     {
-        $this->assertTwigContains(
+        $this->assertParity(
+            'Admin/Blackouts/manage_blackouts_edit.tpl',
             'Admin/Blackouts/manage_blackouts_edit.twig',
-            $this->makeEditVars(true),
-            [
-                'editBlackoutForm',
-                'btnUpdateThisInstance',
-                'btnUpdateAllInstances',
-            ]
+            $this->makeEditVars(true)
         );
     }
 
@@ -381,43 +394,16 @@ class AdminBlackoutsGoldenTest extends GoldenTemplateTestCase
 
     public function testMainPageEmpty(): void
     {
-        $this->assertTwigContains(
-            'Admin/Blackouts/manage_blackouts.twig',
-            $this->makeMainVars(),
-            [
-                'page-manage-blackouts',
-                'addBlackoutForm',
-                'blackoutTable',
-                'deleteDialog',
-            ]
-        );
+        $this->assertMainPageParity($this->makeMainVars());
     }
 
     public function testMainPageWithBlackouts(): void
     {
-        $this->assertTwigContains(
-            'Admin/Blackouts/manage_blackouts.twig',
-            $this->makeMainVars(true),
-            [
-                'page-manage-blackouts',
-                'blackoutTable',
-                'Maintenance Window',
-                'Conference Room',
-            ]
-        );
+        $this->assertMainPageParity($this->makeMainVars(true));
     }
 
     public function testMainPageWithSchedulesAndResources(): void
     {
-        $this->assertTwigContains(
-            'Admin/Blackouts/manage_blackouts.twig',
-            $this->makeMainVars(false, true),
-            [
-                'page-manage-blackouts',
-                'addScheduleId',
-                'allResources',
-                'Main Schedule',
-            ]
-        );
+        $this->assertMainPageParity($this->makeMainVars(false, true));
     }
 }
