@@ -219,6 +219,10 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $display = new CalendarExportDisplay();
         $icsContents = $display->Render([$icsView]);
-        $this->AddStringAttachment($icsContents, 'reservation.ics');
+        $this->AddStringAttachment(
+            $icsContents,
+            'reservation.ics',
+            'text/calendar; charset=UTF-8; method=REQUEST'
+        );
     }
 }
