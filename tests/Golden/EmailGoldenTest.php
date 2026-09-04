@@ -109,20 +109,37 @@ class EmailGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
-     * TwigRenderer::fetchLocalized() must fall back to Smarty for a not-yet-migrated
-     * email body template (lang/en_us/*.tpl without a .twig counterpart).
+     * TwigRenderer::fetchLocalized() selects the Twig engine for en_us email bodies
+     * now that Phase 4b has migrated all 20 bodies to .twig.
+     * This test verifies that ReportEmail.tpl routes to the .twig engine and
+     * produces output matching the Smarty .tpl (parity).
      */
-    public function testFetchLocalizedFallsBackToSmartyForUnmigratedBody(): void
+    public function testFetchLocalizedRoutesToTwigForMigratedBody(): void
     {
-        $renderer = new TwigRenderer();
-        $renderer->assign('CurrentLanguage', 'en_us');
-        $renderer->assign('ScriptUrl', 'http://localhost/');
-        $renderer->assign('AppTitle', 'LibreBooking');
+        $vars = [
+            'CurrentLanguage' => 'en_us',
+            'ScriptUrl' => 'http://localhost/',
+            'AppTitle' => 'LibreBooking',
+        ];
 
-        // ReportEmail.tpl exists in lang/en_us/ but has no .twig counterpart.
-        $result = $renderer->fetchLocalized('ReportEmail.tpl', false, 'en_us');
+        $twig = new TwigRenderer();
+        foreach ($vars as $k => $v) {
+            $twig->assign($k, $v);
+        }
+        $twigResult = $twig->fetchLocalized('ReportEmail.tpl', false, 'en_us');
 
-        $this->assertIsString($result);
-        $this->assertNotEmpty($result);
+        $smarty = new SmartyRenderer();
+        foreach ($vars as $k => $v) {
+            $smarty->assign($k, $v);
+        }
+        $smartyResult = $smarty->fetchLocalized('ReportEmail.tpl', false, 'en_us');
+
+        $this->assertIsString($twigResult);
+        $this->assertNotEmpty($twigResult);
+        $this->assertSame(
+            HtmlNormalizer::normalize($smartyResult),
+            HtmlNormalizer::normalize($twigResult),
+            'fetchLocalized must route en_us ReportEmail.tpl to Twig and match Smarty output'
+        );
     }
 }

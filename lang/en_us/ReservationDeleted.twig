@@ -1,0 +1,57 @@
+<p><strong>Reservation Details:</strong></p>
+
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>End:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Title:</strong> {{ Title|escape_once }}<br/>
+    <strong>Description:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes is defined and Attributes|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+    <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+</p>
+
+<p>
+    {% if ResourceNames is defined and ResourceNames|default([])|length > 1 %}
+        <strong>Resources ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Resource:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage is defined and ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+{% if RepeatRanges is defined and RepeatRanges|length > 0 %}
+    <br/>
+    <strong>The reservation occurs on the following dates ({{ RepeatRanges|default([])|length }}):</strong>
+    <br/>
+    {% for date in RepeatRanges %}
+        {{ formatdate(date: date.GetBegin()) }}
+        {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<p>
+    {% if CreatedBy is defined and CreatedBy %}
+        <strong>Deleted by:</strong>
+        {{ CreatedBy|raw }}
+        <br/>
+        <strong>Delete Reason: {{ DeleteReason|escape_once|nl2br }}</strong>
+    {% endif %}
+</p>
+
+<p><strong>Reference Number:</strong> {{ ReferenceNumber|raw }}</p>
+
+<a href="{{ ScriptUrl|raw }}">Log in to {{ AppTitle|raw }}</a>
