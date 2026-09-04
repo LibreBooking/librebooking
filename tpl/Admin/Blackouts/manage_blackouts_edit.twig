@@ -1,0 +1,114 @@
+<form id="editBlackoutForm" class="form-inline" role="form" method="post">
+    <div id="updateBlackout" class="row gy-1 p-4">
+        <div class="form-group col-12 col-md-6 d-flex align-items-center gap-1">
+            <label class="fw-bold" for="updateStartDate">{{ translate('BeginDate') }}</label>
+            <input {{ formname('BEGIN_DATE') }} type="text" id="updateStartDate"
+                class="form-control form-control-sm w-auto" />
+            <select {{ formname('BEGIN_TIME') }} id="updateStartTime" class="form-select form-select-sm w-auto timepicker"
+                data-format="{{ TimeFormat }}" data-step="30" data-default="{{ BlackoutStartDate.format('H:i') }}"
+                title="{{ translate('StartTime') }}"></select>
+        </div>
+
+        <div class="form-group col-12 col-md-6 d-flex align-items-center gap-1">
+            <label class="fw-bold" for="updateEndDate">{{ translate('EndDate') }}</label>
+            <input {{ formname('END_DATE') }} type="text" id="updateEndDate" class="form-control form-control-sm w-auto" />
+            <select {{ formname('END_TIME') }} id="updateEndTime" class="form-select form-select-sm w-auto timepicker"
+                data-format="{{ TimeFormat }}" data-step="30" data-default="{{ BlackoutEndDate.format('H:i') }}"
+                title="{{ translate('EndTime') }}"></select>
+        </div>
+
+        <label class="col-12 mt-2 mb-0 fw-bold">{{ translate('Resources') }}</label>
+        <div class="form-group col-12 blackouts-edit-resources border rounded mb-2">
+            <div class="row">
+                {% for resource in Resources %}
+                    <div class="resourceItem col-12 col-sm-6">
+                        <div class="form-check">
+                            <input class="form-check-input" {{ formname('RESOURCE_ID', multi: true) }} type="checkbox"
+                                value="{{ resource.GetId() }}" {% if resource.GetId() in BlackoutResourceIds %}checked="checked"{% endif %} id="r{{ resource.GetId() }}" />
+                            <label class="form-check-label" for="r{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</label>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group d-flex align-items-center col-12 mb-2">
+            <label class="fw-bold" id="blackoutReasonLabel" for="blackoutReason">{{ translate('Reason') }}<i
+                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
+            <input {{ formname('SUMMARY') }} type="text" id="blackoutReason" required
+                class="form-control form-control-sm w-auto required has-feedback" value="{{ BlackoutTitle|escape_once }}" />
+        </div>
+
+        <div class="col-12 mb-2" id="editRecurrenceModal">
+            {{ control('RecurrenceControl', {RepeatTerminationDate: RepeatTerminationDate, prefix: 'edit'}) }}
+        </div>
+
+        <div class="form-group col-12 mb-2">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio" id="bookAroundUpdate"
+                    name="existingReservations" checked="checked" value="{{ constant('ReservationConflictResolution::BookAround') }}" />
+                <label class="form-check-label" for="bookAroundUpdate">{{ translate('BlackoutAroundConflicts') }}</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio" id="notifyExistingUpdate"
+                    name="existingReservations" value="{{ constant('ReservationConflictResolution::Notify') }}" />
+                <label class="form-check-label" for="notifyExistingUpdate">{{ translate('BlackoutShowMe') }}</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio" id="deleteExistingUpdate"
+                    name="existingReservations" value="{{ constant('ReservationConflictResolution::Delete') }}" />
+                <label class="form-check-label"
+                    for="deleteExistingUpdate">{{ translate('BlackoutDeleteConflicts') }}</label>
+            </div>
+        </div>
+
+        <div id="update-blackout-buttons" class="d-grid gap-2 d-md-flex justify-content-md-end">
+            {{ cancel_button() }}
+            {% if IsRecurring %}
+                <button type="button" class="btn btn-primary save btnUpdateThisInstance">
+                    <i class="bi bi-check-circle-fill"></i>
+                    {{ translate('ThisInstance') }}
+                </button>
+                <button type="button" class="btn btn-primary save btnUpdateAllInstances">
+                    <i class="bi bi-check2-all"></i>
+                    {{ translate('AllInstances') }}
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-primary save update btnUpdateAllInstances">
+                    <i class="bi bi-check-circle-fill"></i>
+                    {{ translate('Update') }}
+                </button>
+            {% endif %}
+
+        </div>
+
+        <input type="hidden" {{ formname('BLACKOUT_INSTANCE_ID') }} value="{{ BlackoutId }}" />
+        <input type="hidden" {{ formname('SERIES_UPDATE_SCOPE') }} class="hdnSeriesUpdateScope"
+            value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
+    </div>
+    {{ csrf_token() }}
+</form>
+
+<script type="text/javascript">
+    $(function() {
+        var recurOpts = {
+            repeatType: '{{ RepeatType|raw }}', {# raw: JS string context #}
+            repeatInterval: '{{ RepeatInterval|raw }}', {# raw: JS string context #}
+            repeatMonthlyType: '{{ RepeatMonthlyType|raw }}', {# raw: JS string context #}
+            repeatWeekdays: [{% for day in RepeatWeekdays %}{{ day }}, {% endfor %}],
+            customRepeatExclusions: ['{{ formatdate(date: BlackoutStartDate, key: 'system') }}']
+        };
+
+        var recurrence = new Recurrence(recurOpts, {}, 'edit');
+        recurrence.init();
+        {% for date in CustomRepeatDates %}
+            recurrence.addCustomDate('{{ format_date(date: date, timezone: Timezone, key: 'system') }}',
+            '{{ format_date(date: date, timezone: Timezone, key: 'schedule_daily') }}');
+        {% endfor %}
+    });
+</script>
+
+{{ control('DatePickerSetupControl', {ControlId: 'updateStartDate', DefaultDate: BlackoutStartDate}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'updateEndDate', DefaultDate: BlackoutEndDate}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'editEndRepeat', DefaultDate: RepeatTerminationDate}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'editRepeatDate', Multiple: false}) }}
