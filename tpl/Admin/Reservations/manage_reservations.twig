@@ -1,0 +1,687 @@
+{% set InlineEdit = true %}{% set DataTable = true %}{{ include('globalheader.twig') }}
+
+<div id="page-manage-reservations" class="admin-page">
+    <div class="clearfix border-bottom mb-3">
+        <div class="dropdown admin-header-more float-end">
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="moreReservationActions"
+                data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots"></i>
+                <span class="visually-hidden">Expand</span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="moreReservationActions">
+                {% if CanViewAdmin is defined and CanViewAdmin %}
+                    <li role="presentation">
+                        <a role="menuitem" href="#" id="import-reservations" class="add-link dropdown-item">
+                            <i class="bi bi-box-arrow-in-down"></i>
+                            {{ translate('Import') }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li role="presentation">
+                    <a role="menuitem" href="{{ CsvExportUrl }}" download="{{ CsvExportUrl }}" class="add-link dropdown-item"
+                        target="_blank">
+                        <i class="bi bi-box-arrow-in-up"></i>
+                        {{ translate('Export') }} CVS
+                    </a>
+                </li>
+                {% if CanViewAdmin is defined and CanViewAdmin %}
+                    <li role="separator" class="divider"></li>
+                    <li role="presentation">
+                        <a role="menuitem" href="#" id="addTermsOfService" class="add-link dropdown-item">
+                            <i class="bi bi-journals"></i>
+                            {{ translate('TermsOfService') }}
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" href="manage_reservation_colors.php" id="addTermsOfService"
+                            class="add-link dropdown-item">
+                            <i class="bi bi-brush"></i>
+                            {{ translate('ReservationColors') }}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <h1 class="float-start">{{ translate('ManageReservations') }}</h1>
+    </div>
+
+    <div class="accordion">
+        <div class="filterTable accordion-item shadow mb-2" id="filter-reservations-panel">
+            <h2 class="accordion-header">
+                <button class="accordion-button link-primary fw-bold" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#filter-reservations-content" aria-expanded="true"
+                    aria-controls="filter-reservations-content">
+                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
+                </button>
+            </h2>
+            <div id="filter-reservations-content" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
+                    <form id="filterForm" role="form" class="row gy-2">
+                        <div
+                            class="form-group filter-dates {{ groupClass }} d-flex justify-content-between align-items-center">
+                            <div>
+                                <label for="startDate" class="fw-bold">{{ translate('BeginDate') }}</label>
+                                <input id="startDate" type="text" class="form-control form-control-sm" />
+                            </div>
+                            <div>
+                                <label for="endDate" class="fw-bold">{{ translate('EndDate') }}</label>
+                                <input id="endDate" type="text" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                        <div class="form-group filter-user {{ groupClass }}">
+                            <label for="userFilter" class="fw-bold">{{ translate('User') }}</label>
+                            <div class="position-relative">
+                                <input id="userFilter" type="text" class="form-control form-control-sm"
+                                    value="{{ (UserNameFilter is defined ? UserNameFilter : '')|escape_once }}" placeholder="{{ translate('User') }}" />
+                                <input id="userId" type="hidden" value="{{ UserIdFilter is defined ? UserIdFilter : '' }}" />
+                                <span class="searchclear bi bi-x-circle-fill" ref="userFilter,userId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group filter-schedule {{ groupClass }}">
+                            <label for="scheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
+                            <select id="scheduleId" class="form-select form-select-sm">
+                                <option value="">{{ translate('AllSchedules') }}</option>
+                                {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: (ScheduleId is defined ? ScheduleId : null)) }}
+                            </select>
+                        </div>
+                        <div class="form-group filter-resource {{ groupClass }}">
+                            <label for="resourceId" class="fw-bold">{{ translate('Resource') }}</label>
+                            <select id="resourceId" class="form-select form-select-sm">
+                                <option value="">{{ translate('AllResources') }}</option>
+                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: (ResourceId is defined ? ResourceId : null)) }}
+                            </select>
+                        </div>
+                        <div class="form-group filter-status {{ groupClass }}">
+                            <label for="statusId" class="fw-bold">{{ translate('Status') }}</label>
+                            <select id="statusId" class="form-select form-select-sm">
+                                <option value="">{{ translate('AllReservations') }}</option>
+                                <option value="{{ constant('ReservationStatus::Pending') }}"
+                                    {% if ReservationStatusId is defined and ReservationStatusId == constant('ReservationStatus::Pending') %}selected="selected" {% endif %}>
+                                    {{ translate('PendingReservations') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group filter-referenceNumber {{ groupClass }}">
+                            <label for="referenceNumber" class="fw-bold">{{ translate('ReferenceNumber') }}</label>
+                            <div class="position-relative">
+                                <input id="referenceNumber" type="text" class="form-control form-control-sm"
+                                    value="{{ ReferenceNumber is defined ? ReferenceNumber : '' }}" placeholder="{{ translate('ReferenceNumber') }}" />
+                                <span class="searchclear bi bi-x-circle-fill" ref="referenceNumber"></span>
+                            </div>
+                        </div>
+                        <div class="form-group filter-title {{ groupClass }}">
+                            <label for="reservationTitle" class="fw-bold">{{ translate('Title') }}</label>
+                            <div class="position-relative">
+                                <input id="reservationTitle" type="text" class="form-control form-control-sm"
+                                    value="{{ (ReservationTitle is defined ? ReservationTitle : '')|escape_once }}" placeholder="{{ translate('Title') }}" />
+                                <span class="searchclear bi bi-x-circle-fill" ref="reservationTitle"></span>
+                            </div>
+                        </div>
+                        <div class="form-group filter-title {{ groupClass }}">
+                            <label for="reservationDescription"
+                                class="fw-bold">{{ translate('ReservationDescription') }}</label>
+                            <div class="position-relative">
+                                <input id="reservationDescription" type="text" class="form-control form-control-sm"
+                                    value="{{ (ReservationDescription is defined ? ReservationDescription : '')|escape_once }}" placeholder="{{ translate('Description') }}" />
+                                <span class="searchclear bi bi-x-circle-fill" ref="reservationDescription"></span>
+                            </div>
+                        </div>
+                        <div class="form-group filter-resourceStatus {{ groupClass }}">
+                            <label for="resourceStatusIdFilter" class="fw-bold">{{ translate('ResourceStatus') }}</label>
+                            <select id="resourceStatusIdFilter" class="form-select form-select-sm">
+                                <option value="">{{ translate('AllResourceStatuses') }}</option>
+                                <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}</option>
+                                <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">{{ translate('Unavailable') }}</option>
+                                <option value="{{ constant('ResourceStatus::HIDDEN') }}">{{ translate('Hidden') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group filter-resourceStatusReason {{ groupClass }}">
+                            <label for="resourceReasonIdFilter" class="fw-bold">{{ translate('Reason') }}</label>
+                            <select id="resourceReasonIdFilter" class="form-select form-select-sm"></select>
+                        </div>
+                        <div class="form-group filter-checkin {{ groupClass }} d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="missedCheckin"
+                                    {% if MissedCheckin is defined and MissedCheckin %}checked="checked" {% endif %} />
+                                <label class="form-check-label"
+                                    for="missedCheckin">{{ translate('MissedCheckin') }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group filter-checkout {{ groupClass }} d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="missedCheckout"
+                                    {% if MissedCheckout is defined and MissedCheckout %}checked="checked" {% endif %} />
+                                <label class="form-check-label"
+                                    for="missedCheckout">{{ translate('MissedCheckout') }}</label>
+                            </div>
+                        </div>
+                        {% if AttributeFilters is defined %}
+                            {% for attribute in AttributeFilters %}
+                                {{ control('AttributeControl', {attribute: attribute, searchmode: true, class: 'customAttribute filter-customAttribute' ~ attribute.Id() ~ ' ' ~ groupClass}) }}
+                            {% endfor %}
+                        {% endif %}
+                    </form>
+
+                    <div class="accordion-footer border-top mt-3 pt-3">
+                        {{ filter_button(attributes: {id: 'filter'}) }}
+                        {{ reset_button(attributes: {id: 'clearFilter'}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                {% set tableId = 'reservationTable' %}
+                <table class="table table-striped table-hover border-top w-100 admin-panel" id="{{ tableId }}">
+                    {% set colCount = 11 %}
+                    <thead>
+                        <tr>
+                            <th class="id d-none">ID</th>
+                            <th>{{ translate('User') }}</th>
+                            <th>{{ translate('Resource') }}</th>
+                            <th>{{ translate('Title') }}</th>
+                            <th>{{ translate('Description') }}</th>
+                            <th>{{ translate('BeginDate') }}</th>
+                            <th>{{ translate('EndDate') }}</th>
+                            <th>{{ translate('Duration') }}</th>
+                            <th>{{ translate('ReferenceNumber') }}</th>
+                            {% if CreditsEnabled is defined and CreditsEnabled %}
+                                <th>{{ translate('Credits') }}</th>
+                                {% set colCount = colCount + 1 %}
+                            {% endif %}
+                            {% if not (IsDesktop is defined and IsDesktop) %}
+                                <th class="action">{{ translate('Edit') }}</th>
+                                {% set colCount = colCount + 1 %}
+                            {% endif %}
+                            <th class="action">{{ translate('Approve') }}</th>
+                            <th class="action">{{ translate('Delete') }}</th>
+                            <th class="action">
+                                <div class="form-check checkbox-single">
+                                    <input type="checkbox" id="delete-all" aria-label="{{ translate('All') }}"
+                                        class="form-check-input" title="{{ translate('All') }}" />
+                                    <label for="delete-all"></label>
+                                </div>
+                                <div class="action-delete">
+                                    <a href="#" id="delete-selected" class="d-none" title="{{ translate('Delete') }}">
+                                        <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                                        <span class="visually-hidden">{{ translate('Delete') }}</span>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>{{ translate('More') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                            {% if reservation.RequiresApproval %}
+                                {% set rowCss = 'table-warning pending' %}
+                            {% else %}
+                                {% set rowCss = '' %}
+                            {% endif %}
+                            {% set reservationId = reservation.ReservationId %}
+                            <tr class="{{ rowCss }} {% if IsDesktop is defined and IsDesktop %}editable{% endif %}" data-seriesId="{{ reservation.SeriesId }}"
+                                data-refnum="{{ reservation.ReferenceNumber }}">
+                                <td class="id d-none">{{ reservationId }}</td>
+                                <td class="user">
+                                    {{ fullname(first: reservation.FirstName|html_entity_decode, last: reservation.LastName|html_entity_decode, ignorePrivacy: true) }}
+                                </td>
+                                <td class="resource">{{ reservation.ResourceName|escape_once }}
+                                    {% if reservation.ResourceStatusId == constant('ResourceStatus::AVAILABLE') %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% elseif reservation.ResourceStatusId == constant('ResourceStatus::UNAVAILABLE') %}
+                                        <i class="bi bi-exclamation-circle-fill text-warning"></i>
+                                    {% else %}
+                                        <i class="bi bi-x-circle-fill text-danger"></i>
+                                    {% endif %}
+                                </td>
+                                <td><span
+                                        class="reservationTitle">{% if reservation.Title is not empty %}{{ reservation.Title|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}</span>
+                                </td>
+                                <td class="description">{{ reservation.Description|escape_once }}</td>
+                                <td class="date">
+                                    {{ format_date(reservation.StartDate, key: 'short_reservation_date', timezone: Timezone) }}
+                                </td>
+                                <td class="date">
+                                    {{ format_date(reservation.EndDate, key: 'short_reservation_date', timezone: Timezone) }}
+                                </td>
+                                <td class="duration">{{ reservation.GetDuration().__toString() }}</td>
+                                <td class="referenceNumber">{{ reservation.ReferenceNumber }}</td>
+                                {% if CreditsEnabled is defined and CreditsEnabled %}
+                                    <td class="credits">{{ reservation.CreditsConsumed }}</td>
+                                {% endif %}
+                                {% if not (IsDesktop is defined and IsDesktop) %}
+                                    <td class="action">
+                                        <a href="#" class="update edit link-primary"><i class="bi bi-pencil-fill fs-6"></i></a>
+                                    </td>
+                                {% endif %}
+                                <td class="action">
+                                    {% if reservation.RequiresApproval %}
+                                        <a href="#" class="update approve link-success"><i class="bi bi-check-lg fs-4"></i></a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="action">
+                                    <a href="#" class="update delete">
+                                        <span class="bi bi-trash3-fill text-danger icon remove fs-5"></span>
+                                        <span class="visually-hidden">{{ translate('Delete') }}</span>
+                                    </a>
+                                </td>
+                                <td class="action no-edit">
+                                    <div class="form-check checkbox-single">
+                                        <input {{ formname(key: 'RESERVATION_ID', multi: true) }}
+                                            class="delete-multiple form-check-input" type="checkbox"
+                                            id="delete{{ reservationId }}" value="{{ reservationId }}"
+                                            aria-label="{{ translate('Delete') }}" title="{{ translate('Delete') }}" />
+                                        <label class="" for="delete{{ reservationId }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="reservation-list-dates d-flex">
+                                        <div>
+                                            <label class="fw-bold">{{ translate('Created') }}</label>
+                                            {{ format_date(reservation.CreatedDate, key: 'short_datetime', timezone: Timezone) }}
+                                        </div>
+                                        <div>
+                                            <label class="fw-bold">{{ translate('LastModified') }}</label>
+                                            {{ format_date(reservation.ModifiedDate, key: 'short_datetime', timezone: Timezone) }}
+                                        </div>
+                                        <div>
+                                            <label class="fw-bold">{{ translate('CheckInTime') }}</label>
+                                            {{ format_date(reservation.CheckinDate, key: 'short_datetime', timezone: Timezone) }}
+                                        </div>
+                                        <div>
+                                            <label class="fw-bold">{{ translate('CheckOutTime') }}</label>
+                                            {{ format_date(reservation.CheckoutDate, key: 'short_datetime', timezone: Timezone) }}
+                                        </div>
+                                        <div>
+                                            <label class="fw-bold">{{ translate('OriginalEndDate') }}</label>
+                                            {{ format_date(reservation.OriginalEndDate, key: 'short_datetime', timezone: Timezone) }}
+                                        </div>
+                                    </div>
+                                    {% if ReservationAttributes is defined and ReservationAttributes|length > 0 %}
+                                        <div class="reservation-list-attributes d-flex">
+                                            {% for attribute in ReservationAttributes %}
+                                                {{ render_partial('Admin/InlineAttributeEdit.tpl', {id: reservation.ReferenceNumber, attribute: attribute, value: reservation.Attributes.Get(attribute.Id()), url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageReservationsActions::UpdateAttribute')}) }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ pagination(PageInfo) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteInstanceDialog" tabindex="-1" role="dialog"
+        aria-labelledby="deleteInstanceDialogLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteInstanceForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteInstanceDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="delResResponse"></div>
+                        <div class="alert alert-warning">
+                            {{ translate('DeleteWarning') }}
+                        </div>
+
+                        <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }}
+                            value="{{ constant('SeriesUpdateScope::ThisInstance') }}" />
+                        <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="" class="referenceNumber" />
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteSeriesDialog" tabindex="-1" role="dialog"
+        aria-labelledby="deleteSeriesDialogLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteSeriesForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="deleteSeriesDialogLabel">{{ translate('Delete') }}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            {{ translate('DeleteWarning') }}
+                        </div>
+                        <input type="hidden" id="hdnSeriesUpdateScope" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} />
+                        <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="" class="referenceNumber" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary cancel"
+                            data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
+
+                        <button type="button" class="btn btn-danger saveSeries btnUpdateThisInstance"
+                            id="btnUpdateThisInstance">
+                            {{ translate('ThisInstance') }}
+                        </button>
+                        <button type="button" class="btn btn-danger saveSeries btnUpdateAllInstances"
+                            id="btnUpdateAllInstances">
+                            {{ translate('AllInstances') }}
+                        </button>
+                        <button type="button" class="btn btn-danger saveSeries btnUpdateFutureInstances"
+                            id="btnUpdateFutureInstances">
+                            {{ translate('FutureInstances') }}
+                        </button>
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteMultipleDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
+        <form id="deleteMultipleForm" method="post" ajaxAction="{{ constant('ManageReservationsActions::DeleteMultiple') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="deleteMultipleModalLabel">{{ translate('Delete') }} (<span
+                                id="deleteMultipleCount"></span>)</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+
+                            <div>{{ translate('DeleteMultipleReservationsWarning') }}</div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                    <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="inlineUpdateErrorDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="inlineErrorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="inlineErrorLabel">{{ translate('Error') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="inlineUpdateErrors" class="hidden error">&nbsp;</div>
+                    <div id="reservationAccessError" class="hidden error"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary cancel"
+                        data-bs-dismiss="modal">{{ translate('OK') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="importReservationsDialog" class="modal" tabindex="-1" role="dialog"
+        aria-labelledby="importReservationsModalLabel" aria-hidden="true">
+        <form id="importReservationsForm" class="form" role="form" method="post" enctype="multipart/form-data"
+            ajaxAction="{{ constant('ManageReservationsActions::Import') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="importReservationsModalLabel">{{ translate('Import') }}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="importInstructions" class="alert alert-info">
+                            <div class="note">{{ translate('ReservationImportInstructions') }}</div>
+                            <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
+                                download="{{ server.SCRIPT_NAME }}?dr=template"
+                                target="_blank">{{ translate('GetTemplate') }}<span class="bi bi-download ms-1"></span></a>
+                        </div>
+                        <div id="importUserResults" class="validationSummary alert alert-danger d-none">
+                            <ul>
+                                {{ async_validator(id: 'fileExtensionValidator', key: '') }}
+                            </ul>
+                        </div>
+                        <div id="importErrors" class="alert alert-danger d-none"></div>
+                        <div id="importResult" class="alert alert-success d-none">
+                            <span>{{ translate('RowsImported') }}</span>
+
+                            <span id="importCount" class="inline fw-bold">0</span>
+                            <span>{{ translate('RowsSkipped') }}</span>
+
+                            <span id="importSkipped" class="inline fw-bold">0</span>
+                            <a class="alert-link" href="{{ server.SCRIPT_NAME }}">{{ translate('Done') }}<i
+                                    class="bi bi-arrow-repeat ms-1"></i></a>
+                        </div>
+                        <div class="">
+                            <label for="reservationImportFile" class="visually-hidden">{{ translate('File') }}</label>
+                            <input type="file" {{ formname(key: 'RESERVATION_IMPORT_FILE') }} id="reservationImportFile"
+                                class="form-control form-control-sm" accept=".csv" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button(key: 'Import') }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="termsOfServiceDialog" tabindex="-1" role="dialog"
+        aria-labelledby="termsOfServiceDialogLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="termsOfServiceForm" method="post" ajaxAction="termsOfService" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsOfServiceDialogLabel">{{ translate('TermsOfService') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="form-check">
+                                <input type="radio" {{ formname(key: 'TOS_METHOD') }} value="manual" id="tos_manual_radio"
+                                    checked="checked" data-ref="tos_manual_div" class="toggle form-check-input">
+                                <label for="tos_manual_radio">{{ translate('EnterTermsManually') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" {{ formname(key: 'TOS_METHOD') }} value="url" id="tos_url_radio"
+                                    data-ref="tos_url_div" class="toggle form-check-input">
+                                <label for="tos_url_radio">{{ translate('LinkToTerms') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" {{ formname(key: 'TOS_METHOD') }} value="upload" id="tos_upload_radio"
+                                    data-ref="tos_upload_div" class="toggle form-check-input">
+                                <label for="tos_upload_radio">{{ translate('UploadTerms') }}</label>
+                            </div>
+                        </div>
+                        <div id="tos_manual_div" class="tos-div">
+                            <div class="form-group">
+                                <label for="tos-manual" class="fw-bold">{{ translate('TermsOfService') }}</label>
+                                <textarea id="tos-manual" class="form-control form-control-sm w-100" rows="10"
+                                    {{ formname(key: 'TOS_TEXT') }}></textarea>
+                            </div>
+                        </div>
+                        <div id="tos_url_div" class="tos-div d-none">
+                            <div class="form-group">
+                                <label for="tos-url" class="fw-bold">{{ translate('LinkToTerms') }}</label>
+                                <input type="url" id="tos-url" class="form-control form-control-sm"
+                                    placeholder="http://www.example.com/tos.html" {{ formname(key: 'TOS_URL') }}
+                                    maxlength="255" />
+                            </div>
+                        </div>
+                        <div id="tos_upload_div" class="tos-div d-none margin-bottom-15">
+                            <label for="tos-upload" class="fw-bold">{{ translate('TermsOfService') }} PDF</label>
+                            <div class="dropzone text-center border border-2 rounded-3 bg-light"
+                                id="termsOfServiceUpload">
+                                <div class="">
+                                    <i class="bi bi-filetype-pdf fs-1"></i><br />
+                                    {{ translate('ChooseOrDropFile') }}
+                                </div>
+                                <input id="tos-upload" type="file" {{ formname(key: 'TOS_UPLOAD') }} accept="application/pdf" />
+                            </div>
+                            <div id="tos-upload-link" class="d-none">
+                                <a href="{{ ScriptUrl is defined ? ScriptUrl : '' }}/uploads/tos/tos.pdf" target="_blank" class="link-primary"><span
+                                        class="bi bi-filetype-pdf me-1"></span> {{ translate('ViewTerms') }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div>{{ translate('RequireTermsOfServiceAcknowledgement') }}</div>
+                            <div class="form-check">
+                                <input type="radio" {{ formname(key: 'TOS_APPLICABILITY') }} class="form-check-input"
+                                    value="{{ constant('TermsOfService::RESERVATION') }}" id="tos_reservation" checked="checked">
+                                <label for="tos_reservation"
+                                    class="form-check-label">{{ translate('UponReservation') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" {{ formname(key: 'TOS_APPLICABILITY') }} class="form-check-input"
+                                    value="{{ constant('TermsOfService::REGISTRATION') }}" id="tos_registration">
+                                <label for="tos_registration"
+                                    class="form-check-label">{{ translate('UponRegistration') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button(class: 'd-none', attributes: {id: 'deleteTerms'}) }}
+                        {{ update_button(submit: true) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{ render_partial('javascript-includes.tpl', _context) }}
+    {{ datatable(tableId: tableId) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'admin/reservations.js') }}
+    {{ jsfile(src: 'search-clear.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'approval.js') }}
+    {{ vendor_js(src: 'dropzone/1.0.0/js/dropzone.js') }}
+
+    <script type="text/javascript">
+        /*function hidePopoversWhenClickAway() {
+            $('body').on('click', function(e) {
+                $('[rel="popover"]').each(function() {
+                    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e
+                            .target).length === 0) {
+                        $(this).popover('hide');
+                    }
+                });
+            });
+        }*/
+
+        function setUpPopovers() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+
+        function setUpEditables() {
+            $.fn.editable.defaults.mode = 'popup';
+            $.fn.editable.defaults.toggle = 'manual';
+            $.fn.editable.defaults.emptyclass = '';
+            $.fn.editable.defaults.params = function(params) {
+                params.CSRF_TOKEN = $('#csrf_token').val();
+                return params;
+            };
+
+            var updateUrl = '{{ server.SCRIPT_NAME|raw }}?action='; {# raw: JS string context #}
+
+            $('.inlineAttribute').editable({
+                url: updateUrl + '{{ constant('ManageReservationsActions::UpdateAttribute')|raw }}', emptytext: '-' {# raw: JS string context #}
+            });
+        }
+
+        $(document).ready(function() {
+
+            setUpPopovers();
+            //hidePopoversWhenClickAway();
+            setUpEditables();
+            dropzone($("#termsOfServiceUpload"));
+
+            var updateScope = {};
+            updateScope['btnUpdateThisInstance'] = '{{ constant('SeriesUpdateScope::ThisInstance')|raw }}'; {# raw: JS string context #}
+            updateScope['btnUpdateAllInstances'] = '{{ constant('SeriesUpdateScope::FullSeries')|raw }}'; {# raw: JS string context #}
+            updateScope['btnUpdateFutureInstances'] = '{{ constant('SeriesUpdateScope::FutureInstances')|raw }}'; {# raw: JS string context #}
+
+            var actions = {};
+
+            var resOpts = {
+                autocompleteUrl: "{{ Path is defined ? Path : '' }}ajax/autocomplete.php?type={{ constant('AutoCompleteType::User')|raw }}", {# raw: JS string context #}
+                reservationUrlTemplate: "{{ Path is defined ? Path : '' }}reservation.php?{{ constant('QueryStringKeys::REFERENCE_NUMBER')|raw }}=[refnum]", {# raw: JS string context #}
+                popupUrl: "{{ Path is defined ? Path : '' }}ajax/respopup.php",
+                updateScope: updateScope,
+                actions: actions,
+                deleteUrl: '{{ Path is defined ? Path : '' }}ajax/reservation_delete.php?{{ constant('QueryStringKeys::RESPONSE_TYPE')|raw }}=json', {# raw: JS string context #}
+                resourceStatusUrl: '{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION')|raw }}=changeStatus', {# raw: JS string context #}
+                submitUrl: '{{ server.SCRIPT_NAME|raw }}', {# raw: JS string context #}
+                termsOfServiceUrl: '{{ server.SCRIPT_NAME|raw }}?dr=tos', {# raw: JS string context #}
+                updateTermsOfServiceAction: 'termsOfService',
+                deleteTermsOfServiceAction: 'deleteTerms'
+            };
+
+            var approvalOpts = {
+                url: '{{ Path is defined ? Path : '' }}ajax/reservation_approve.php'
+            };
+
+            var approval = new Approval(approvalOpts);
+
+            var reservationManagement = new ReservationManagement(resOpts, approval);
+            reservationManagement.init();
+
+            {% for reservation in reservations %}
+
+                reservationManagement.addReservation({
+                    id: '{{ reservation.ReservationId }}',
+                    referenceNumber: '{{ reservation.ReferenceNumber }}',
+                    isRecurring: '{{ reservation.IsRecurring }}',
+                    resourceStatusId: '{{ reservation.ResourceStatusId }}',
+                    resourceStatusReasonId: '{{ reservation.ResourceStatusReasonId }}',
+                    resourceId: '{{ reservation.ResourceId }}'
+                });
+            {% endfor %}
+
+            {% for reason in StatusReasons %}
+                reservationManagement.addStatusReason('{{ reason.Id() }}', '{{ reason.StatusId() }}', '{{ reason.Description()|escape_js }}');
+            {% endfor %}
+
+            reservationManagement.initializeStatusFilter('{{ ResourceStatusFilterId is defined ? ResourceStatusFilterId : '' }}', '{{ ResourceStatusReasonFilterId is defined ? ResourceStatusReasonFilterId : '' }}');
+        });
+    </script>
+
+    {{ control('DatePickerSetupControl', {ControlId: 'startDate', DefaultDate: StartDate is defined ? StartDate : null}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'endDate', DefaultDate: EndDate is defined ? EndDate : null}) }}
+
+    {{ csrf_token() }}
+
+    <div class="modal fade" id="approveDiv" tabindex="-1" role="dialog" aria-labelledby="approveDivLabel"
+        data-bs-backdrop="static" aria-hidden="true">
+        {{ include('wait-box.twig', {translateKey: 'Approving'}) }}
+    </div>
+
+</div>
+{{ include('globalfooter.twig') }}
