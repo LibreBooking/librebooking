@@ -359,13 +359,33 @@ class AdminReservationsGoldenTest extends GoldenTemplateTestCase
         );
     }
 
+    /**
+     * CSV parity with apostrophe and HTML-special chars in attribute label.
+     *
+     * This test CATCHES the escape:'quotes' → escapequotes mistake:
+     * - Smarty escape:'quotes' → backslash-escapes only single quotes (')
+     * - Wrong Twig |escapequotes → HTML entities (&#39;, &amp;, &quot;)
+     * - Correct Twig |replace({("'"): "\\'"}) → byte-identical to Smarty
+     *
+     * Data: label with apostrophe ("Patron's Choice") and label with
+     * ampersand/angle-brackets ("Room <A> & B") to verify raw CSV output.
+     */
+    public function testImportTemplateCsvApostropheAndSpecialChars(): void
+    {
+        $attr1 = $this->makeFakeAttribute(10, "Patron's Choice");
+        $attr2 = $this->makeFakeAttribute(11, 'Room <A> & B');
+
+        $this->assertParity(
+            'Admin/Reservations/import_reservations_template_csv.tpl',
+            'Admin/Reservations/import_reservations_template_csv.twig',
+            ['Attributes' => [$attr1, $attr2]]
+        );
+    }
+
     public function testImportTemplateCsvWithSingleQuoteInLabel(): void
     {
-        // Smarty |escape:'quotes' escapes single quotes only (backslash-prefixed).
-        // Twig |escapequotes escapes both single (&#39;) and double (&quot;) quotes.
-        // Use a label with no quotes to keep byte-identical parity. Labels with
-        // double-quote characters are a real divergence (accepted — not a real-world
-        // attribute label scenario). Labels with apostrophes also differ in encoding.
+        // Kept for historical context; the apostrophe case is now explicitly
+        // covered by testImportTemplateCsvApostropheAndSpecialChars above.
         $attr = $this->makeFakeAttribute(3, 'Room A Type - Special');
 
         $this->assertParity(
@@ -475,6 +495,75 @@ class AdminReservationsGoldenTest extends GoldenTemplateTestCase
     {
         $reservation = $this->makeCsvReservation();
         $attr = $this->makeFakeAttribute(10, 'Department');
+
+        $this->assertParity(
+            'Admin/Reservations/reservations_csv.tpl',
+            'Admin/Reservations/reservations_csv.twig',
+            [
+                'reservations' => [$reservation],
+                'ReservationAttributes' => [$attr],
+                'Timezone' => 'UTC',
+            ]
+        );
+    }
+
+    /**
+     * CSV parity with apostrophe and HTML-special chars in escaped fields.
+     *
+     * This test CATCHES the escape:'quotes' → escapequotes mistake in
+     * reservations_csv.tpl/.twig for ResourceName, Title, Description,
+     * attribute labels, and attribute values:
+     * - Smarty escape:'quotes' → backslash-escapes only single quotes (')
+     * - Wrong Twig |escapequotes → HTML entities (&#39;, &amp;, &quot;)
+     * - Correct Twig |replace({("'"): "\\'"}) → byte-identical to Smarty
+     */
+    public function testReservationsCsvApostropheAndSpecialChars(): void
+    {
+        $reservation = new class () {
+            public string $FirstName = "O'Brien";
+            public string $LastName = 'Smith';
+            public string $ResourceName = "St. Patrick's Hall & <Annex>";
+            public string $Title = "Team's Meeting";
+            public string $Description = 'Review & discuss "Q3" goals';
+            public string $ReferenceNumber = 'REF-2025-APOS';
+            public Date $StartDate;
+            public Date $EndDate;
+            public Date $CreatedDate;
+            public Date $ModifiedDate;
+            public Date $CheckinDate;
+            public Date $CheckoutDate;
+            public Date $OriginalEndDate;
+            public object $Attributes;
+
+            public function __construct()
+            {
+                $this->StartDate = Date::Parse('2025-06-15 09:00:00', 'UTC');
+                $this->EndDate = Date::Parse('2025-06-15 10:30:00', 'UTC');
+                $this->CreatedDate = Date::Parse('2025-06-10 08:00:00', 'UTC');
+                $this->ModifiedDate = Date::Parse('2025-06-11 08:00:00', 'UTC');
+                $this->CheckinDate = Date::Parse('2025-06-15 09:05:00', 'UTC');
+                $this->CheckoutDate = Date::Parse('2025-06-15 10:35:00', 'UTC');
+                $this->OriginalEndDate = Date::Parse('2025-06-15 10:30:00', 'UTC');
+                $this->Attributes = new class () {
+                    public function Get(mixed $id): string
+                    {
+                        return "Patron's value & <more>";
+                    }
+                };
+            }
+
+            public function GetDuration(): object
+            {
+                return new class () {
+                    public function __toString(): string
+                    {
+                        return '1h 30m';
+                    }
+                };
+            }
+        };
+
+        $attr = $this->makeFakeAttribute(20, "Patron's Type");
 
         $this->assertParity(
             'Admin/Reservations/reservations_csv.tpl',

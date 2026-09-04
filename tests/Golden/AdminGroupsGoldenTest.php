@@ -344,6 +344,50 @@ class AdminGroupsGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
+     * CSV parity with apostrophe and HTML-special chars in escaped fields.
+     *
+     * This test CATCHES the escape:'quotes' → escapequotes mistake:
+     * - Smarty escape:'quotes' → backslash-escapes only single quotes (')
+     * - Wrong Twig |escapequotes → HTML entities (&#39;, &amp;, &quot;)
+     * - Correct Twig |replace({("'"): "\\'"}) → byte-identical to Smarty
+     *
+     * Data: group name with apostrophe ("St. Patrick's Hall"),
+     * admin group name with apostrophe ("O'Brien & Associates"),
+     * resource name with HTML-special chars ("Lab <B> & \"Main\"").
+     */
+    public function testGroupsCsvApostropheAndSpecialChars(): void
+    {
+        $group = $this->makeGroup(4, "St. Patrick's Hall", "O'Brien & Associates", 0, []);
+
+        $user = new stdClass();
+        $user->Email = "user@o'brien.example.com";
+
+        $pWrite = new class () {
+            public function ResourceName(): string
+            {
+                return 'Lab <B> & "Main"';
+            }
+        };
+        $pRead = new class () {
+            public function ResourceName(): string
+            {
+                return "Room A's Corner";
+            }
+        };
+
+        $this->assertParity(
+            'Admin/Groups/groups_csv.tpl',
+            'Admin/Groups/groups_csv.twig',
+            [
+                'Groups'           => [$group],
+                'Users'            => [4 => [$user]],
+                'PermissionsWrite' => [4 => [$pWrite]],
+                'PermissionsRead'  => [4 => [$pRead]],
+            ]
+        );
+    }
+
+    /**
      * CSV with multiple groups covering various role combinations.
      */
     public function testGroupsCsvMultipleGroups(): void

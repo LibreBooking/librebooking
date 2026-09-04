@@ -1,0 +1,217 @@
+{{ include('globalheader.twig') }}
+
+{% macro list_settings(settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) %}
+    <div class="row gy-4 mb-3">
+        {% for setting in settings %}
+            {% set rowCss = 'col-sm-6' %}
+            {% set name = setting.Name %}
+            {% set disabled = setting.hasEnv ? 'disabled' : '' %}
+            <div class="{{ rowCss }}">
+                <div class="form-group">
+                    <label for="{{ name }}" class="fw-bold" data-bs-toggle="tooltip"
+                        title="{{ setting.Description }}">{{ setting.Label }} <span
+                            class="fw-normal">({{ setting.Key }})</span></label>
+                    {% if setting.Key == DefaultTimezoneKey %}
+                        <select id="{{ name }}" name="{{ name }}" {{ disabled }} class="form-select form-select-sm">
+                            {{ html_options(values: TimezoneValues, output: TimezoneOutput, selected: setting.Value) }}
+                        </select>
+                    {% elseif setting.Key == DefaultLanguageKey %}
+                        <select id="{{ name }}" name="{{ name }}" {{ disabled }} class="form-select form-select-sm">
+                            {{ object_html_options(options: Languages, key: 'GetLanguageCode', label: 'GetDisplayName', selected: setting.Value|lower) }}
+                        </select>
+                    {% elseif setting.Key == DefaultHomepageKey %}
+                        <select id="default__homepage|" name="{{ name }}" {{ disabled }} class="form-select form-select-sm">
+                            {{ html_options(options: setting.Choices, selected: setting.Value) }}
+                        </select> <a href="#" id="applyHomepage" class="link-primary">{{ translate('ApplyToCurrentUsers') }}</a>
+                    {% elseif setting.IsPrivate %}
+                        <input id="{{ name }}" type="password" size="50" name="{{ name }}" {{ disabled }}
+                            value="{{ setting.Value }}" class="form-control form-control-sm" />
+                    {% elseif setting.AllowCustom and setting.Choices is iterable %}
+                        <input type="text" id="{{ name }}" name="{{ name }}" {{ disabled }}
+                               class="form-control form-control-sm"
+                               value="{{ setting.Value }}"
+                               list="{{ name }}-list" />
+                        <datalist id="{{ name }}-list">
+                            {% for choiceKey, choiceLabel in setting.Choices %}
+                                {% if choiceKey != '' %}
+                                    <option value="{{ choiceKey }}" label="{{ choiceLabel }}"></option>
+                                {% endif %}
+                            {% endfor %}
+                        </datalist>
+                    {% elseif setting.Choices is iterable %}
+                        <select id="{{ name }}" name="{{ name }}" {{ disabled }} class="form-select form-select-sm">
+                            {{ html_options(options: setting.Choices, selected: setting.Value) }}
+                        </select>
+                    {% elseif setting.Type == constant('ConfigSettingType::String') %}
+                        <input id="{{ name }}" type="text" size="50" name="{{ name }}" {{ disabled }} value="{{ setting.Value }}"
+                            class="form-control form-control-sm" />
+                    {% elseif setting.Type == constant('ConfigSettingType::Integer') %}
+                        <input id="{{ name }}" type="number" size="50" name="{{ name }}" {{ disabled }} value="{{ setting.Value }}"
+                            class="form-control form-control-sm" />
+                    {% else %}
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="radio{{ name }}t" type="radio" value="true" name="{{ name }}"
+                                    {{ disabled }} {% if setting.Value %} checked="checked" {% endif %} />
+                                <label class="form-check-label" for="radio{{ name }}t">{{ translate('True') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="radio{{ name }}f" type="radio" value="false" name="{{ name }}"
+                                    {{ disabled }} {% if not setting.Value %} checked="checked" {% endif %} />
+                                <label class="form-check-label" for="radio{{ name }}f">{{ translate('False') }}</label>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% import _self as configHelpers %}
+
+<div id="page-manage-configuration" class="admin-page">
+
+    <h1 class="border-bottom mb-3">{{ translate('ManageConfiguration') }}</h1>
+
+    {% if ShowScriptUrlWarning is defined and ShowScriptUrlWarning %}
+        <div class="alert alert-danger">
+            {{ translate('ScriptUrlWarning', [CurrentScriptUrl, SuggestedScriptUrl]) }}
+        </div>
+    {% endif %}
+
+    {% if IsEnvPresent is defined and IsEnvPresent %}
+        <div class="alert alert-warning">
+            {{ translate('ConfigurationEnvWarning') }}
+        </div>
+    {% endif %}
+
+    <form id="frmConfigFile" method="GET" action="{{ SCRIPT_NAME }}" role="form">
+        <div class="form-group mb-2">
+            <label for="cf" class="fw-bold">{{ translate('File') }}</label>
+            <select name="cf" id="cf" class="form-select form-select-sm">
+                {% for file in ConfigFiles %}
+                    {% set selected = '' %}
+                    {% if file.Location == SelectedFile %}{% set selected = "selected='selected'" %}{% endif %}
+                    <option value="{{ file.Location }}" {{ selected|raw }}>{{ file.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    {% if not IsPageEnabled %}
+        <div class="alert alert-danger">
+            {{ translate('ConfigurationUiNotEnabled') }}
+        </div>
+    {% endif %}
+
+    {% if not IsConfigFileWritable %}
+        <div class="alert alert-danger">
+            {{ translate('ConfigurationFileNotWritable') }}
+        </div>
+    {% endif %}
+
+    {% if IsPageEnabled and IsConfigFileWritable %}
+        <div class="card shadow">
+            <div class="card-body">
+                {% set HelpUrl = 'https://librebooking.readthedocs.io/en/latest/ADMINISTRATION.html' %}
+                <h2 class="text-center border-bottom mb-3">{{ translate('ConfigurationUpdateHelp', HelpUrl) }}</h2>
+                <div id="updatedMessage" class="alert alert-success" style="display:none;">
+                    {{ translate('ConfigurationUpdated') }}
+                </div>
+                <div id="configSettings">
+                    <div class="d-grid">
+                        <input type="button" value="{{ translate('Update') }}" class="btn btn-primary save" />
+                    </div>
+
+                    <form id="frmConfigSettings" method="post" ajaxAction="{{ constant('ConfigActions::Update') }}"
+                        action="{{ server.SCRIPT_NAME }}">
+                        <div class="accordion my-3" id="accordionConfig">
+                            {% if Settings is not empty %}
+                                <div>
+                                    <div class="accordion-item shadow mb-2">
+                                        <h2 class="accordion-header text-capitalize">
+                                            <button class="accordion-button text-capitalize" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#{{ translate('GeneralConfigSettings') }}">
+                                                {{ translate('GeneralConfigSettings') }}
+                                            </button>
+                                        </h2>
+                                        <div id="{{ translate('GeneralConfigSettings') }}"
+                                            class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <fieldset>
+                                                    <div class="no-style config-settings">
+                                                        {{ configHelpers.list_settings(Settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) }}
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% for section, settings in SectionSettings %}
+                                <div>
+                                    <div class="accordion-item shadow mb-2">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed text-capitalize" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#{{ section }}">
+                                                {{ section }}
+                                            </button>
+                                        </h2>
+                                        <div id="{{ section }}" class="accordion-collapse collapse">
+                                            <div class="accordion-body">
+                                                <fieldset>
+                                                    <div class="no-style config-settings">
+                                                        {{ configHelpers.list_settings(settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) }}
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="setting_names" value="{{ SettingNames }}" />
+                    </form>
+
+                    <div class="d-grid">
+                        <input type="button" value="{{ translate('Update') }}" class="btn btn-primary save" />
+                    </div>
+
+                </div>
+
+                <form id="updateHomepageForm" method="post" ajaxAction="{{ constant('ConfigActions::SetHomepage') }}"
+                    action="{{ server.SCRIPT_NAME }}">
+                    <input type="hidden" name="homepage_id" id="homepage_id" />
+                </form>
+
+                {{ csrf_token() }}
+            </div>
+        </div>
+
+        {{ include('javascript-includes.twig') }}
+
+        {{ jsfile(src: 'ajax-helpers.js') }}
+        {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+        {{ jsfile(src: 'admin/configuration.js') }}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var config = new Configuration();
+                config.init();
+            });
+        </script>
+        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+            data-bs-backdrop="static" aria-hidden="true">
+            {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+        </div>
+    {% endif %}
+</div>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+{{ include('globalfooter.twig') }}
