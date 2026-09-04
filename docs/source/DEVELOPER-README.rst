@@ -80,15 +80,15 @@ Run ``composer install`` to install Composer-managed tools into
 ``composer build`` Builds / Packages a distributable relase inside
 ``/build`` configured via ``/build.xml``.
 
-`PHPUnit <https://phpunit.readthedocs.io/en/latest/writing-tests-for-phpunit.html>`__
+`PHPUnit <https://docs.phpunit.de/en/13.3/writing-tests-for-phpunit.html>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All classes should have good unit test coverage. The level of coverage
 is up to the developer and should be done when the code is sufficiently
 complex. Tests must all succeed for a final release.
 
-`PHPDocumentor <https://docs.phpdoc.org/latest/guide/guides/running-phpdocumentor.html>`__
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`PHPDocumentor <https://docs.phpdoc.org/guide/getting-started/generating-documentation.html>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Generates automatic documentation based on code comments. You can
 customize the output by copying ``/phpdoc.dist.xml`` to ``/phpdoc.xml``
