@@ -149,11 +149,6 @@ fieldset:disabled .btn {
   border-color: var(--primary-disabled);
 }
 
-a.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
 .link-primary {
   color: var(--primary) !important;
   text-decoration: none;
