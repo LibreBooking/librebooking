@@ -99,33 +99,33 @@ class RenderPartialTwigFunctionTest extends TestBase
      */
     public function testRenderPartialDoesNotUseTwigWhenOnlyTplExists(): void
     {
-        // Only a .tpl-named Smarty template exists in the real fs (Controls/Checkbox.tpl).
-        // We verify that no .twig is rendered by checking the Smarty output is returned.
+        // Controls/Checkbox.twig now exists, so render_partial uses the Twig path.
+        // This test verifies the output still contains checkbox markup (structural check)
+        // and no synthetic twig-partial marker from injected templates.
         [$env] = $this->makeEnv(
             "{{ render_partial('Controls/Checkbox.tpl', {'name-key': 'ALLOW_PARTICIPATION', 'label-key': 'Yes'}) }}"
         );
 
         $output = $env->render('t');
 
-        // Smarty rendered the .tpl — output contains checkbox markup.
+        // Output contains checkbox markup regardless of engine.
         $this->assertNotEmpty($output);
         $this->assertStringContainsString('booked-checkbox', $output);
-        // Must NOT contain any .twig-specific marker.
+        // Must NOT contain any .twig-specific marker from injected synthetic templates.
         $this->assertStringNotContainsString('twig-partial', $output);
     }
 
     // -------------------------------------------------------------------------
-    // Test (b): only .tpl exists → renders via SmartyRenderer, output matches
+    // Test (b): .twig exists → renders via Twig (Twig takes precedence)
     // -------------------------------------------------------------------------
 
     /**
-     * When no .twig counterpart exists, render_partial falls back to Smarty and
-     * produces the same output as SmartyRenderer::render() called directly.
-     *
-     * Uses Controls/Checkbox.tpl — a real .tpl with no .twig counterpart — as the
-     * test subject.
+     * Controls/Checkbox.twig now exists alongside Controls/Checkbox.tpl, so
+     * render_partial uses the Twig path (not the Smarty fallback).
+     * The output must be structurally equivalent to the Smarty reference — verified
+     * via HtmlNormalizer to account for minor whitespace differences between engines.
      */
-    public function testRenderPartialFallsBackToSmartyWhenNoTwigExists(): void
+    public function testRenderPartialRendersCheckboxViaTwig(): void
     {
         $vars = ['name-key' => 'ALLOW_PARTICIPATION', 'label-key' => 'Yes'];
 
@@ -133,20 +133,25 @@ class RenderPartialTwigFunctionTest extends TestBase
         $smarty = new SmartyRenderer();
         $expected = $smarty->render('Controls/Checkbox.tpl', $vars);
 
-        // render_partial output via Twig environment.
+        // render_partial output via Twig environment — uses Controls/Checkbox.twig.
         [$env] = $this->makeEnv(
             "{{ render_partial('Controls/Checkbox.tpl', vars) }}"
         );
         $actual = $env->render('t', ['vars' => $vars]);
 
-        $this->assertSame($expected, $actual);
+        // Structural parity: both engines produce equivalent normalised HTML.
+        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        $this->assertSame(
+            HtmlNormalizer::normalize($expected),
+            HtmlNormalizer::normalize($actual)
+        );
     }
 
     /**
-     * The Smarty fallback output must be non-empty and contain expected structural
-     * HTML from the .tpl (structural assertion in addition to the parity check).
+     * The Twig render output must be non-empty and contain expected structural
+     * HTML from the checkbox template (structural assertion alongside parity check).
      */
-    public function testRenderPartialSmartyFallbackOutputIsNonEmpty(): void
+    public function testRenderPartialCheckboxOutputIsNonEmpty(): void
     {
         [$env] = $this->makeEnv(
             "{{ render_partial('Controls/Checkbox.tpl', {'name-key': 'ALLOW_PARTICIPATION', 'label-key': 'Yes'}) }}"
@@ -157,6 +162,42 @@ class RenderPartialTwigFunctionTest extends TestBase
         $this->assertNotEmpty($output);
         $this->assertStringContainsString('<label', $output);
         $this->assertStringContainsString('booked-checkbox', $output);
+    }
+
+    // -------------------------------------------------------------------------
+    // Test (c): only .tpl exists → renders via SmartyRenderer (Smarty fallback)
+    // -------------------------------------------------------------------------
+
+    /**
+     * When no .twig counterpart exists for a .tpl, render_partial must fall back
+     * to SmartyRenderer and produce the same output as SmartyRenderer directly.
+     *
+     * Uses tpl/_render_fallback_probe.tpl — a test-only fixture that intentionally
+     * has no .twig sibling, ensuring the Smarty-fallback branch actually executes.
+     * The probe template renders: <span class="probe">{$probeValue}</span>
+     */
+    public function testRenderPartialFallsBackToSmartyWhenNoTwigExists(): void
+    {
+        // Confirm no .twig sibling exists for the probe template.
+        $tplDir = __DIR__ . '/../../../tpl/';
+        $this->assertFileDoesNotExist($tplDir . '_render_fallback_probe.twig');
+
+        $vars = ['probeValue' => 'smarty-fallback'];
+
+        // Smarty reference: render the probe directly.
+        $smarty = new SmartyRenderer();
+        $expected = trim($smarty->render('_render_fallback_probe.tpl', $vars));
+
+        // render_partial must fire the Smarty fallback and produce matching output.
+        [$env] = $this->makeEnv(
+            "{{ render_partial('_render_fallback_probe.tpl', vars) }}"
+        );
+        $actual = trim($env->render('t', ['vars' => $vars]));
+
+        // The Smarty fallback branch must have fired and produced the probe output.
+        $this->assertStringContainsString('smarty-fallback', $actual);
+        $this->assertStringContainsString('probe', $actual);
+        $this->assertSame($expected, $actual);
     }
 
     // -------------------------------------------------------------------------

@@ -79,19 +79,22 @@ class ControlTwigFunctionTest extends TestBase
     }
 
     // -------------------------------------------------------------------------
-    // Test 2: CheckboxControl — .tpl fallback through TwigRenderer
+    // Test 2: CheckboxControl — .twig takes precedence (Twig path)
     // -------------------------------------------------------------------------
 
     /**
      * CheckboxControl::PageLoad() calls $this->Display('Controls/Checkbox.tpl').
-     * Since no Controls/Checkbox.twig exists, TwigRenderer::renderControlTemplate
-     * must fall back to SmartyRenderer.
+     * Controls/Checkbox.twig now exists, so TwigRenderer::renderControlTemplate
+     * renders via Twig (not the Smarty fallback path).
      *
      * This test proves:
-     *  (a) the .twig/.tpl fallback path is exercised, and
-     *  (b) the output matches what Smarty produces for the same control.
+     *  (a) the .twig template is found and rendered (not the .tpl fallback), and
+     *  (b) the output is structurally equivalent to what Smarty produces.
+     *
+     * The Twig and Smarty renders produce equivalent normalised output but may
+     * differ in insignificant whitespace, so HtmlNormalizer is used for parity.
      */
-    public function testControlFunctionCheckboxControlFallsBackToTpl(): void
+    public function testControlFunctionCheckboxControlRendersViaTwig(): void
     {
         // Params required by CheckboxControl::PageLoad()
         $params = ['name-key' => 'ALLOW_PARTICIPATION', 'label-key' => 'Yes'];
@@ -105,21 +108,25 @@ class ControlTwigFunctionTest extends TestBase
             )
         );
 
-        // Twig side via TwigRenderer (real filesystem loader — Checkbox.twig absent)
+        // Twig side via TwigRenderer — Controls/Checkbox.twig exists and is used.
         $renderer = new TwigRenderer();
         $env = $this->makeTwigEnv("{{ control('CheckboxControl', params) }}", $renderer);
         $twigActual = $env->render('t', ['params' => $params]);
 
-        // The output must be non-empty — the .tpl fallback rendered successfully.
+        // The output must be non-empty — the Twig template rendered successfully.
         $this->assertNotEmpty($twigActual);
 
-        // Parity with Smarty output.
-        $this->assertSame($smartyExpected, $twigActual);
+        // Structural parity: both engines produce the same normalised HTML.
+        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        $this->assertSame(
+            HtmlNormalizer::normalize($smartyExpected),
+            HtmlNormalizer::normalize($twigActual)
+        );
     }
 
     /**
      * Verify the CheckboxControl output contains expected structural HTML elements
-     * when rendered through the Twig control() function with .tpl fallback.
+     * when rendered through the Twig control() function (Twig path via Checkbox.twig).
      */
     public function testControlFunctionCheckboxControlOutputContainsExpectedHtml(): void
     {
@@ -133,6 +140,39 @@ class ControlTwigFunctionTest extends TestBase
         $this->assertStringContainsString('<label', $output);
         $this->assertStringContainsString('<button', $output);
         $this->assertStringContainsString('booked-checkbox', $output);
+    }
+
+    // -------------------------------------------------------------------------
+    // Test 2b: Smarty fallback — renderControlTemplate falls back when no .twig exists
+    // -------------------------------------------------------------------------
+
+    /**
+     * When no .twig counterpart exists for a .tpl, renderControlTemplate must fall
+     * back to SmartyRenderer and produce the same output as SmartyRenderer directly.
+     *
+     * Uses tpl/_render_fallback_probe.tpl — a test-only fixture that intentionally
+     * has no .twig sibling, ensuring the Smarty-fallback branch is exercised.
+     * The probe template renders: <span class="probe">{$probeValue}</span>
+     */
+    public function testRenderControlTemplateFallsBackToSmartyWhenNoTwigExists(): void
+    {
+        // Confirm no .twig sibling exists for the probe template.
+        $tplDir = __DIR__ . '/../../../tpl/';
+        $this->assertFileDoesNotExist($tplDir . '_render_fallback_probe.twig');
+
+        $renderer = new TwigRenderer();
+
+        $vars = ['probeValue' => 'hello-fallback'];
+        $output = $renderer->renderControlTemplate('_render_fallback_probe.tpl', $vars);
+
+        // Smarty reference: render the probe directly via SmartyRenderer.
+        $smarty = new SmartyRenderer();
+        $expected = trim($smarty->renderControlTemplate('_render_fallback_probe.tpl', $vars));
+
+        // The Smarty fallback branch must have fired and produced the probe output.
+        $this->assertStringContainsString('hello-fallback', $output);
+        $this->assertStringContainsString('probe', $output);
+        $this->assertSame($expected, trim($output));
     }
 
     // -------------------------------------------------------------------------

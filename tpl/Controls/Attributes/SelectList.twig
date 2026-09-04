@@ -1,0 +1,24 @@
+<div class="form-group {{ class }}">
+    {% if readonly and tooltip is defined and tooltip %}
+        <span class="customAttribute readonly">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}:</span>
+    {% else %}
+        <label class="customAttribute {% if readonly %}readonly{% elseif searchmode %}search{% else %}standard{% endif %} fw-bold"
+            for="{{ attributeId }}">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}</label>
+    {% endif %}
+    {% if readonly %}
+        <span class="attributeValue {{ class }}">{{ attribute.Value()|escape_once }}</span>
+    {% else %}
+        <select id="{{ attributeId }}" name="{{ attributeName }}"
+            class="customAttribute form-select form-select-sm {% if not searchmode and attribute.Required() %}has-feedback{% endif %}"
+            {% if attribute.Required() and not searchmode %}required{% endif %}>
+            <option value="">--</option>
+            {% for value in attribute.PossibleValueList() %}
+                <option value="{{ value|escape_once }}" {% if attribute.Value() == value %}selected="selected" {% endif %}>{{ value|escape_once }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+</div>
