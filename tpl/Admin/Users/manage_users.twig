@@ -1,0 +1,784 @@
+{{ include('globalheader.twig', {InlineEdit: true, DataTable: true}) }}
+
+<div id="page-manage-users" class="admin-page">
+
+    <div class="border-bottom mb-3 clearfix">
+        <div class="dropdown admin-header-more float-end">
+            <div class="btn-group btn-group-sm">
+                {% if CanCreateUsers is defined and CanCreateUsers %}
+                    <a href="#" id="add-user" class="add-link add-user add-group btn btn-primary">
+                        <i class="bi bi-plus-circle-fill me-1"></i>
+                        {{ translate('AddUser') }}
+                    </a>
+                {% endif %}
+
+                {% if (CanCreateUsers is defined and CanCreateUsers) or (CanExportUsers is defined and CanExportUsers) %}
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="moreUserActions"
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ translate('More') }}">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="moreUserActions">
+                    {% if CanCreateUsers is defined and CanCreateUsers %}
+                        <li>
+                            <a href="#" id="invite-users" class="dropdown-item">
+                                <i class="bi bi-send me-1"></i>
+                                {{ translate('InviteUsers') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="import-users" class="dropdown-item">
+                                <i class="bi bi-download me-1"></i>
+                                {{ translate('Import') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if CanExportUsers is defined and CanExportUsers %}
+                        <li>
+                            <a href="{{ ExportUrl }}" download id="export-users" class="dropdown-item" target="_blank"
+                                rel="noopener noreferrer">
+                                <i class="bi bi-upload me-1"></i>
+                                {{ translate('Export') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <h1 class="float-start">{{ translate('ManageUsers') }}</h1>
+    </div>
+
+    <div class="card shadow mb-2">
+        <div class="card-body">
+            <form id="filterForm" class="row" role="form">
+                <div class="form-group col-sm-4">
+                    <label class="fw-bold" for="userSearch"><i
+                            class="bi bi-person-fill me-1"></i>{{ translate('FindUser') }}
+                        | {{ html_link(key: 'AllUsers', href: server.SCRIPT_NAME) }}</label>
+                    <input type="text" id="userSearch" class="form-control form-control-sm" />
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="fw-bold" for="filterStatusId">{{ translate('Status') }}</label>
+                    <select id="filterStatusId" class="form-select">
+                        {{ html_options(options: statusDescriptions, selected: FilterStatusId) }}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                {% set tableId = 'userList' %}
+                <table class="table table-striped table-hover w-100 admin-panel" id="{{ tableId }}">
+                    <thead>
+                        <tr>
+                            <th>{{ translate('Name') }}</th>
+                            <th>{{ translate('Username') }}</th>
+                            <th>{{ translate('Email') }}</th>
+                            <th>{{ translate('Phone') }}</th>
+                            <th>{{ translate('Organization') }}</th>
+                            <th>{{ translate('Position') }}</th>
+                            <th>{{ translate('Created') }}</th>
+                            <th>{{ translate('LastLogin') }}</th>
+                            <th class="action">{{ translate('Status') }}</th>
+                            {% if CreditsEnabled is defined and CreditsEnabled %}
+                                <th class="action">{{ translate('Credits') }}</th>
+                            {% endif %}
+                            {% if PerUserColors is defined and PerUserColors %}
+                                <th class="action">{{ translate('Color') }}</th>
+                            {% endif %}
+                            <th>{{ translate('Actions') }}</th>
+                            {% if CanDeleteUsers is defined and CanDeleteUsers %}
+                                <th class="action-delete">
+                                    <div class="form-check checkbox-single">
+                                        <input class="form-check-input" type="checkbox" id="delete-all"
+                                            aria-label="{{ translate('All') }}" title="{{ translate('All') }}" />
+                                    </div>
+                                    <a href="#" id="delete-selected" class="d-none" title="{{ translate('Delete') }}">
+                                        <span class="visually-hidden">{{ translate('Delete') }}</span>
+                                        <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                                    </a>
+                                </th>
+                            {% endif %}
+                            {% set attributes = AttributeList %}
+                            {% if attributes|default([])|length > 0 %}
+                                <th>{{ translate('More') }}
+                                </th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            {% set id = user.Id %}
+                            <tr data-userId="{{ id }}">
+                                <td>{{ fullname(first: user.First|default('')|html_entity_decode, last: user.Last|default('')|html_entity_decode, ignorePrivacy: true) }}
+                                </td>
+                                <td>{{ user.Username|escape_once }}</td>
+                                <td><a href="mailto:{{ user.Email|escape_once }}" class="link-primary">{{ user.Email|escape_once }}</a></td>
+                                <td>{{ user.Phone|escape_once }}</td>
+                                <td>{{ user.Organization|escape_once }}</td>
+                                <td>{{ user.Position|escape_once }}</td>
+                                <td
+                                    data-order="{{ format_date(user.DateCreated, format: 'Y-m-d H:i', timezone: Timezone) }}">
+                                    {{ format_date(user.DateCreated, key: 'short_datetime', timezone: Timezone) }}</td>
+                                <td data-order="{{ format_date(user.LastLogin, format: 'Y-m-d H:i', timezone: Timezone) }}">
+                                    {{ format_date(user.LastLogin, key: 'short_datetime', timezone: Timezone) }}</td>
+                                <td class="action">
+                                    {% if CanChangeUserStatus is defined and CanChangeUserStatus %}
+                                        <a href="#"
+                                            class="update changeStatus link-primary">{{ statusDescriptions[user.StatusId] }}</a>
+                                        {{ indicator(id: 'userStatusIndicator') }}
+                                    {% else %}
+                                        {{ statusDescriptions[user.StatusId] }}
+                                    {% endif %}
+                                </td>
+                                {% if CreditsEnabled is defined and CreditsEnabled %}
+                                    <td class="text-end">
+                                        {% if CanChangeCredits is defined and CanChangeCredits %}
+                                            <span class="propertyValue inlineUpdate changeCredits fw-bold text-decoration-underline"
+                                                data-type="number" data-pk="{{ id }}" data-value="{{ user.CurrentCreditCount }}"
+                                                data-name="{{ constant('FormKeys::CREDITS') }}">{{ user.CurrentCreditCount }}</span>
+                                        {% else %}
+                                            <span class="fw-bold">{{ user.CurrentCreditCount }}</span>
+                                        {% endif %}
+                                        <a href="credit_log.php?{{ constant('QueryStringKeys::USER_ID') }}={{ id }}"
+                                            title="{{ translate('CreditHistory') }}" class="link-primary">
+                                            <span class="no-color">{{ translate('CreditHistory') }}</span>
+                                            <i class="bi bi-list-task"></i>
+                                        </a>
+                                    </td>
+                                {% endif %}
+                                {% if PerUserColors is defined and PerUserColors %}
+                                    <td class="action">
+                                        {% if CanChangeColors is defined and CanChangeColors %}
+                                            <a href="#" class="update changeColor link-primary">{{ translate('Edit') }}</a>
+                                            {% if user.ReservationColor is not empty %}
+                                                <div class="user-color update changeColor rounded"
+                                                    style="background-color:{{ user.ReservationColor|escape('html') }}">
+                                                    &nbsp;
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if user.ReservationColor is not empty %}
+                                                <div class="user-color rounded"
+                                                    style="background-color:{{ user.ReservationColor|escape('html') }}">
+                                                    &nbsp;
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+
+                                <td width="100">
+                                    <div class="btn-group btn-group-sm">
+                                        {% if CanEditUsers is defined and CanEditUsers %}
+                                            <button type="button" class="btn btn-primary update edit">
+                                                <span class="visually-hidden">{{ translate('Update') }}</span>
+                                                <i class="bi bi-pencil-square"></i></button>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                            data-bs-toggle="dropdown">
+                                            <span class="visually-hidden">{{ translate('More') }}</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            {% if CanEditUsers is defined and CanEditUsers %}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update edit">{{ translate('Edit') }}</a>
+                                                </li>
+                                            {% endif %}
+                                            {% if CanChangePermissions is defined and CanChangePermissions %}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update changePermissions">{{ translate('Permissions') }}</a>
+                                                </li>
+                                            {% endif %}
+                                            <li role="presentation"><a role="menuitem" href="#"
+                                                    class="dropdown-item update changeGroups">{{ translate('Groups') }}</a>
+                                            </li>
+                                            <li role="presentation"><a role="menuitem" href="#"
+                                                    class="dropdown-item update viewReservations">{{ translate('Reservations') }}</a>
+                                            </li>
+                                            {% if CanChangePasswords is defined and CanChangePasswords %}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update resetPassword">{{ translate('ChangePassword') }}</a>
+                                                </li>
+                                            {% endif %}
+
+                                        </ul>
+                                    </div>
+                                    {% if CanDeleteUsers is defined and CanDeleteUsers %}
+                                        |
+                                        <span class="inline">
+                                            <a href="#" class="update delete">
+                                                <span class="visually-hidden">{{ translate('Delete') }}</span>
+                                                <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                {% if CanDeleteUsers is defined and CanDeleteUsers %}
+                                    <td class="action-delete">
+                                        <div class="form-check checkbox-single">
+                                            <input {{ formname(key: 'USER_ID', multi: true) }} class="delete-multiple form-check-input"
+                                                type="checkbox" id="delete{{ id }}" value="{{ id }}"
+                                                aria-label="{{ translate('Delete') }}" title="{{ translate('Delete') }}" />
+                                        </div>
+                                    </td>
+                                {% endif %}
+
+                                {% if attributes|default([])|length > 0 %}
+                                    <td class="customAttributes" userId="{{ id }}">
+                                        {% set changeAttributeAction = constant('ManageUsersActions::ChangeAttribute') %}
+                                        {% set attributeUrl = server.SCRIPT_NAME ~ '?action=' ~ changeAttributeAction %}
+                                        {% for attribute in AttributeList %}
+                                            {% if CanChangeAttributes is defined and CanChangeAttributes %}
+                                                {{ render_partial('Admin/InlineAttributeEdit.tpl', {url: attributeUrl, id: id, attribute: attribute, value: user.GetAttributeValue(attribute.Id())}) }}
+                                            {% elseif attribute.AppliesToEntity(id) %}
+                                                <div class="mb-0 d-inline-block">
+                                                    <label class="inline fw-bold">{{ attribute.Label()|escape_once }}</label>
+                                                    {{ user.GetAttributeValue(attribute.Id())|escape_once }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                {{ pagination(PageInfo) }}
+            </div>
+        </div>
+    </div>
+
+    {% if CanCreateUsers is defined and CanCreateUsers %}
+    <div id="addUserDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+        aria-hidden="true">
+        <form id="addUserForm" class="form" role="form" method="post" ajaxAction="{{ constant('ManageUsersActions::AddUser') }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">{{ translate('AddUser') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body row gy-2">
+                        <div class="col-12">
+                            <div id="addUserResults" class="validationSummary alert alert-danger d-none">
+                                <ul>
+                                    {{ async_validator(id: 'addUserEmailformat', key: 'ValidEmailRequired') }}
+                                    {{ async_validator(id: 'addUserUniqueemail', key: 'UniqueEmailRequired') }}
+                                    {{ async_validator(id: 'addUserUsername', key: 'UniqueUsernameRequired') }}
+                                    {{ async_validator(id: 'addAttributeValidator', key: '') }}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="fw-bold" for="addUsername">{{ translate('Username') }}<i
+                                        class="bi bi-asterisk text-danger align-top"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <input type="text" {{ formname(key: 'USERNAME') }} class="required form-control has-feedback"
+                                    required id="addUsername" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="fw-bold" for="addEmail">{{ translate('Email') }}<i
+                                        class="bi bi-asterisk text-danger align-top"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <input type="text" {{ formname(key: 'EMAIL') }} class="required form-control has-feedback"
+                                    required id="addEmail" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="fw-bold" for="addFname">{{ translate('FirstName') }}<i
+                                        class="bi bi-asterisk text-danger align-top"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <input type="text" {{ formname(key: 'FIRST_NAME') }}
+                                    class="required form-control has-feedback" required id="addFname" />
+                                <i class="glyphicon glyphicon-asterisk form-control-feedback"
+                                    data-bv-icon-for="addFname"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="fw-bold" for="addLname">{{ translate('LastName') }}<i
+                                        class="bi bi-asterisk text-danger align-top"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <input type="text" {{ formname(key: 'LAST_NAME') }} class="required form-control has-feedback"
+                                    required id="addLname" />
+                                <i class="glyphicon glyphicon-asterisk form-control-feedback"
+                                    data-bv-icon-for="addLname"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="fw-bold" for="addPassword">{{ translate('Password') }}<i
+                                        class="bi bi-asterisk text-danger align-top"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <input type="text" {{ formname(key: 'PASSWORD') }} class="required form-control has-feedback"
+                                    required id="addPassword" />
+                                <i class="glyphicon glyphicon-asterisk form-control-feedback"
+                                    data-bv-icon-for="addPassword"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="fw-bold" for="addTimezone">{{ translate('Timezone') }}</label>
+                                <select id="addTimezone" {{ formname(key: 'TIMEZONE') }} class="form-select">
+                                    {{ html_options(values: Timezones, output: Timezones, selected: Timezone) }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="fw-bold" for="addPhone">{{ translate('Phone') }}</label>
+                                <input type="text" {{ formname(key: 'PHONE') }} class="form-control" id="addPhone" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="fw-bold" for="addOrganization">{{ translate('Organization') }}</label>
+                                <input type="text" {{ formname(key: 'ORGANIZATION') }} class="form-control"
+                                    id="addOrganization" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="fw-bold" for="addPosition">{{ translate('Position') }}</label>
+                                <input type="text" {{ formname(key: 'POSITION') }} class="form-control" id="addPosition" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="fw-bold" for="addGroup">{{ translate('Group') }}</label>
+                                <select id="addGroup" {{ formname(key: 'GROUP_ID') }} class="form-select">
+                                    <option value="">{{ translate('None') }}</option>
+                                    {{ object_html_options(options: Groups, label: 'Name', key: 'Id') }}
+                                </select>
+                            </div>
+                        </div>
+                        {% if AttributeList|default([])|length > 0 %}
+                            <div class="col-12 col-sm-6">
+                                {{ control('AttributeControl', {attribute: AttributeList[0]}) }}
+                            </div>
+                        {% else %}
+                            <div class="col-sm-12 col-md-6">&nbsp;</div>
+                        {% endif %}
+
+                        {% if AttributeList|default([])|length > 1 %}
+                            {% for i in 1..(AttributeList|default([])|length - 1) %}
+                                <div class="col-12 col-sm-6">
+                                    {{ control('AttributeControl', {attribute: AttributeList[i]}) }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="sendAddEmail" checked="checked"
+                                {{ formname(key: 'SEND_AS_EMAIL') }} />
+                            <label class="form-check-label" for="sendAddEmail">{{ translate('NotifyUser') }}</label>
+                        </div>
+                        {{ cancel_button() }}
+                        {{ add_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="importUsersDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importUsersModalLabel"
+        aria-hidden="true">
+        <form id="importUsersForm" class="form" role="form" method="post" enctype="multipart/form-data"
+            ajaxAction="{{ constant('ManageUsersActions::ImportUsers') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importUsersModalLabel">{{ translate('Import') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body gap-3">
+                        <div id="importUserResults" class="validationSummary alert alert-danger d-none">
+                            <ul>
+                                {{ async_validator(id: 'fileExtensionValidator', key: '') }}
+                            </ul>
+                        </div>
+                        <div id="importErrors" class="alert alert-danger d-none"></div>
+                        <div id="importResult" class="alert alert-success d-none">
+                            <span>{{ translate('RowsImported') }}</span>
+
+                            <span id="importCount" class="inline fw-bold">0</span>
+                            <span>{{ translate('RowsSkipped') }}</span>
+
+                            <span id="importSkipped" class="inline fw-bold">0</span>
+                            <a class="alert-link" href="{{ server.SCRIPT_NAME }}">{{ translate('Done') }}</a>
+                        </div>
+                        <div id="importInstructions" class="alert alert-info">
+                            <div class="note fst-italic">{{ translate('UserImportInstructions') }}</div>
+                            <a href="{{ server.SCRIPT_NAME }}?dr=template"
+                                download="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
+                                target="_blank">{{ translate('GetTemplate') }}<span class="bi bi-download ms-1"></span></a>
+                        </div>
+                        <div>
+                            <input class="form-control" type="file" {{ formname(key: 'USER_IMPORT_FILE') }} accept=".csv"
+                                id="userImportFile" />
+                            <label for="userImportFile" class="visually-hidden">User Import File</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="updateOnImport"
+                                    {{ formname(key: 'UPDATE_ON_IMPORT') }} />
+                                <label class="form-check-label"
+                                    for="updateOnImport">{{ translate('UpdateUsersOnImport') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button(key: 'Import') }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <input type="hidden" id="activeId" />
+
+    {% if CanChangePermissions is defined and CanChangePermissions %}
+    <div id="permissionsDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permissionsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="permissionsModalLabel">{{ translate('Permissions') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="permissionsForm" method="post" ajaxAction="{{ constant('ManageUsersActions::Permissions') }}">
+                        <div class="alert alert-warning">{{ translate('UserPermissionInfo') }}</div>
+                        <a href="#" class="link-primary" id="checkNoResources">{{ translate('None') }}</a> |
+                        <a href="#" class="link-primary" id="checkAllResourcesFull">{{ translate('FullAccess') }}</a> |
+                        <a href="#" class="link-primary" id="checkAllResourcesView">{{ translate('ViewOnly') }}</a>
+                        {% set tableIdFilter = 'permissionsFormFilter' %}
+                        <table class="table table-striped table-hover w-100" id="{{ tableIdFilter }}">
+                            <thead>
+                                <tr>
+                                    <th>{{ translate('Resource') }}</th>
+                                </tr>
+                            </thead>
+                            {% for resource in resources %}
+                                <tr>
+                                    <td>
+                                        {% set rid = resource.GetResourceId() %}
+                                        <div class="permissionRow form-group clearfix">
+                                            <label for="permission_{{ rid }}"
+                                                class="float-start">{{ resource.GetName()|escape_once }}</label>
+                                            <select class="float-end form-select form-select-sm resourceId inline-block"
+                                                style="width:auto;" {{ formname(key: 'RESOURCE_ID', multi: true) }}
+                                                id="permission_{{ rid }}">
+                                                <option value="{{ rid }}_none" class="none">{{ translate('None') }}</option>
+                                                <option value="{{ rid }}_0" class="full">{{ translate('FullAccess') }}</option>
+                                                <option value="{{ rid }}_1" class="view">{{ translate('ViewOnly') }}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true, attributes: {form: 'permissionsForm'}) }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if CanChangePasswords is defined and CanChangePasswords %}
+    <div id="passwordDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"
+        aria-hidden="true">
+        <form id="passwordForm" method="post" ajaxAction="{{ constant('ManageUsersActions::Password') }}" class="was-validated">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordModalLabel">{{ translate('Password') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label for="password">{{ translate('Password') }}</label>
+                            {{ textbox(type: 'password', name: 'PASSWORD', class: 'required', required: 'required', value: '') }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if CanCreateUsers is defined and CanCreateUsers %}
+    <div id="invitationDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="invitationModalLabel"
+        aria-hidden="true">
+        <form id="invitationForm" method="post" ajaxAction="{{ constant('ManageUsersActions::InviteUsers') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="invitationModalLabel">{{ translate('InviteUsers') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label for="inviteEmails">{{ translate('InviteUsersLabel') }}</label>
+                            <textarea id="inviteEmails" class="form-control" rows="5"
+                                {{ formname(key: 'INVITED_EMAILS') }}></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        <button type="button" class="btn btn-primary save"><span class="bi bi-send-fill"></span>
+                            {{ translate('InviteUsers') }}</button>
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if CanEditUsers is defined and CanEditUsers %}
+    <div id="userDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+        aria-hidden="true">
+        <form id="userForm" method="post" ajaxAction="{{ constant('ManageUsersActions::UpdateUser') }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userModalLabel">{{ translate('Edit') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="update-user-placeholder"></div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if CanDeleteUsers is defined and CanDeleteUsers %}
+    <div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <form id="deleteUserForm" method="post" ajaxAction="{{ constant('ManageUsersActions::DeleteUser') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+
+                            <div>{{ translate('DeleteUserWarning') }}</div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="deleteMultipleDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
+        <form id="deleteMultipleUserForm" method="post" ajaxAction="{{ constant('ManageUsersActions::DeleteMultipleUsers') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteMultipleModalLabel">{{ translate('Delete') }} (<span
+                                id="deleteMultipleCount"></span>)</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+
+                            <div>{{ translate('DeleteMultipleUserWarning') }}</div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                    <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <div id="groupsDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groupsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="groupsModalLabel">{{ translate('Groups') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body scrollable-modal-content">
+
+                    <div id="groupList" class="d-none">
+                        {% for group in Groups %}
+                            <div class="group-item d-flex align-items-center" groupId="{{ group.Id }}">
+                                <a href="#"><span class="visually-hidden">{{ group.Name|escape_once }}</span>&nbsp;</a>
+                                <span>{{ group.Name|escape_once }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <h6>{{ translate('GroupMembership') }} <span class="badge bg-primary" id="groupCount">0</span></h6>
+                    <div id="addedGroups">
+                    </div>
+
+                    <h5>{{ translate('AvailableGroups') }}</h5>
+                    <div id="removedGroups">
+                    </div>
+
+                    <form id="addGroupForm" method="post" ajaxAction="addUser">
+                        <input type="hidden" id="addGroupId" {{ formname(key: 'GROUP_ID') }} />
+                        <input type="hidden" id="addGroupUserId" {{ formname(key: 'USER_ID') }} />
+                    </form>
+
+                    <form id="removeGroupForm" method="post" ajaxAction="removeUser">
+                        <input type="hidden" id="removeGroupId" {{ formname(key: 'GROUP_ID') }} />
+                        <input type="hidden" id="removeGroupUserId" {{ formname(key: 'USER_ID') }} />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="colorDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="colorModalLabel"
+        aria-hidden="true">
+        <form id="colorForm" method="post" ajaxAction="{{ constant('ManageUsersActions::ChangeColor') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="colorModalLabel">{{ translate('Color') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-paint-bucket"></i></span>
+                            <label for="reservationColor" class="visually-hidden">Reservation Color</label>
+                            <input type="color" {{ formname(key: 'RESERVATION_COLOR') }} id="reservationColor"
+                                class="form-control form-control-color">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{ csrf_token() }}
+    {{ include('javascript-includes.twig', {InlineEdit: true, DataTable: true}) }}
+    {{ datatable(tableId is defined ? tableId : '') }}
+    {{ datatablefilter(tableIdFilter is defined ? tableIdFilter : '') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'admin/user.js') }}
+    {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        function setUpEditables() {
+            $.fn.editable.defaults.mode = 'popup';
+            $.fn.editable.defaults.toggle = 'manual';
+            $.fn.editable.defaults.emptyclass = '';
+            $.fn.editable.defaults.params = function(params) {
+                params.CSRF_TOKEN = $('#csrf_token').val();
+                return params;
+            };
+
+            var updateUrl = '{{ server.SCRIPT_NAME|raw }}?action=';{# raw: JS string context, matches Smarty #}
+            $('.inlineAttribute').editable({
+                url: updateUrl + '{{ constant('ManageUsersActions::ChangeAttribute') }}', emptytext: '-'
+            });
+
+            $('.changeCredits').editable({
+                url: updateUrl + '{{ constant('ManageUsersActions::ChangeCredits') }}', emptytext: '-'
+            });
+        }
+
+        $(document).ready(function() {
+            var actions = {
+                activate: '{{ constant('ManageUsersActions::Activate') }}', deactivate: '{{ constant('ManageUsersActions::Deactivate') }}'
+            };
+
+            var userOptions = {
+                userAutocompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::MyUsers') }}",
+                orgAutoCompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::Organization') }}",
+                groupsUrl: '{{ server.SCRIPT_NAME|raw }}',{# raw: JS string context, matches Smarty #}
+                groupManagementUrl: '{{ ManageGroupsUrl|raw }}',{# raw: JS string context, matches Smarty #}
+                permissionsUrl: '{{ server.SCRIPT_NAME|raw }}',{# raw: JS string context, matches Smarty #}
+                submitUrl: '{{ server.SCRIPT_NAME|raw }}',{# raw: JS string context, matches Smarty #}
+                saveRedirect: '{{ server.SCRIPT_NAME|raw }}',{# raw: JS string context, matches Smarty #}
+                selectUserUrl: '{{ server.SCRIPT_NAME|raw }}?uid=',{# raw: JS string context, matches Smarty #}
+                filterUrl: '{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACCOUNT_STATUS') }}=',{# raw: JS string context, matches Smarty #}
+                actions: actions,
+                manageReservationsUrl: '{{ ManageReservationsUrl|raw }}',{# raw: JS string context, matches Smarty #}
+            };
+
+            var userManagement = new UserManagement(userOptions);
+            userManagement.init();
+
+            {% for user in users %}
+                var user = {
+                    id: {{ user.Id }},
+                    first: '{{ user.First|html_entity_decode|escape_js }}',
+                    last: '{{ user.Last|html_entity_decode|escape_js }}',
+                    isActive: '{{ user.IsActive() }}',
+                    username: '{{ user.Username|html_entity_decode|escape_js }}',
+                    email: '{{ user.Email|html_entity_decode|escape_js }}',
+                    timezone: '{{ user.Timezone|escape_js }}',
+                    phone: '{{ user.Phone|html_entity_decode|escape_js }}',
+                    organization: '{{ user.Organization|html_entity_decode|escape_js }}',
+                    position: '{{ user.Position|html_entity_decode|escape_js }}',
+                    reservationColor: '{{ user.ReservationColor|escape_js }}'
+                };
+                userManagement.addUser(user);
+            {% endfor %}
+
+            setUpEditables();
+        });
+    </script>
+</div>
+{{ include('globalfooter.twig') }}
