@@ -1,0 +1,614 @@
+{% set DataTable = true %}{{ include('globalheader.twig') }}
+
+<div id="page-manage-groups" class="admin-page">
+    <div class="border-bottom mb-3 clearfix">
+        <div class="dropdown admin-header-more float-end">
+            <div class="btn-group btn-group-sm">
+                <a href="#" class="add-group btn btn-primary" id="add-group">
+                    <i class="bi bi-plus-circle-fill me-1"></i>
+                    {{ translate('AddGroup') }}
+                </a>
+                {% if CanImportGroups or CanExportGroups %}
+                <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
+                    data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ translate('More') }}">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="moreResourceActions">
+                    {% if CanImportGroups %}
+                        <li>
+                            <a href="#" class="import-groups dropdown-item" id="import-groups" data-bs-toggle="modal"
+                                data-bs-target="#importGroupsDialog">
+                                <i class="bi bi-download me-1"></i>{{ translate('Import') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if CanExportGroups %}
+                        <li>
+                            <a href="{{ server.SCRIPT_NAME }}?dr=export" download class="export-groups dropdown-item"
+                                id="export-groups" target="_blank" rel="noopener noreferrer">
+                                <i class="bi bi-upload me-1"></i>{{ translate('Export') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <h1>{{ translate('ManageGroups') }}</h1>
+    </div>
+
+    <div class="card shadow mb-2" id="groupSearchPanel">
+        <div class="card-body">
+            <label for="groupSearch">{{ translate('FindGroup') }}</label>
+            | {{ html_link(key: 'AllGroups', href: server.SCRIPT_NAME) }}
+            <input type="text" id="groupSearch" class="form-control form-control-sm" size="40" />
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            {% set tableId = 'groupList' %}
+            <table class="table table-striped table-hover border-top" id="{{ tableId }}">
+                <thead>
+                    <tr>
+                        <th>{{ translate('GroupName') }}</th>
+                        <th>{{ translate('GroupMembers') }}</th>
+                        <th>{{ translate('Permissions') }}</th>
+                        {% if CanChangeRoles %}
+                            <th>{{ translate('GroupRoles') }}</th>
+                        {% endif %}
+                        <th>{{ translate('GroupAdmin') }}</th>
+                        <th>{{ translate('GroupAutomaticallyAdd') }}</th>
+                        <th class="action">{{ translate('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                        <tr data-group-id="{{ group.Id }}" data-group-default="{{ group.IsDefault }}">
+                            <td class="dataGroupName">{{ group.Name|escape_once }}</td>
+                            <td><a href="#" class="update members link-primary">{{ translate('Manage') }}</a></td>
+                            <td><a href="#" class="update permissions link-primary">{{ translate('Change') }}</a></td>
+                            {% if CanChangeRoles %}
+                                <td>
+                                    {% if group.IsExtendedAdmin() %}
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="#" class="update roles btn btn-outline-primary">{{ translate('Change') }}</a>
+                                            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-label="{{ translate('More') }}">
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                <li>
+                                                    <h6 class="dropdown-header">{{ translate('Administration') }}</h6>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                {% if group.IsGroupAdmin() %}
+                                                    <li role="presentation">
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminGroups dropdown-item">{{ translate('Groups') }}</a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if group.IsResourceAdmin() %}
+                                                    <li role="presentation">
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminResources dropdown-item">{{ translate('Resources') }}</a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if group.IsScheduleAdmin() %}
+                                                    <li role="presentation">
+                                                        <a role="menuitem" href="#"
+                                                            class="update changeAdminSchedules dropdown-item">{{ translate('Schedules') }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    {% else %}
+                                        <a href="#" class="update roles link-primary">{{ translate('Add') }}</a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td>{% if CanChangeRoles %}
+                                    <a href="#"
+                                        class="update groupAdmin link-primary">{{ (group.AdminGroupName ?: chooseText)|escape_once }}</a>
+                                {% else %}
+                                    {{ (group.AdminGroupName ?: chooseText)|escape_once }}
+                                {% endif %}
+                            </td>
+                            <td>{% if group.IsDefault %}
+                                    <i class="bi bi-check-circle text-success"></i>
+                                {% else %}
+                                    <span class="bi bi-x-circle text-danger"></span>
+                                {% endif %}
+                            </td>
+                            <td class="action">
+                                <a href="#" class="update rename link-primary" aria-label="{{ translate('Edit') }}">
+                                    <span class="bi bi-pencil-square icon"></span></a> |
+                                <a href="#" class="update delete" aria-label="{{ translate('Delete') }}">
+                                    <span class="bi bi-trash3-fill text-danger icon remove"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {{ pagination(PageInfo) }}
+        </div>
+    </div>
+
+    <input type="hidden" id="activeId" />
+
+    <div class="modal fade" id="membersDialog" tabindex="-1" role="dialog" aria-labelledby="membersDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="membersDialogLabel">{{ translate('GroupMembers') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label class="fw-bold" for="userSearch">{{ translate('AddUser') }}: </label>
+                        <a href="#" id="browseUsers" class="link-primary">{{ translate('Browse') }}</a>
+                        <input type="text" id="userSearch" class="form-control form-control-sm" size="40" />
+                    </div>
+                    <h5><span id="totalUsers"></span> {{ translate('UsersInGroup') }}</h5>
+
+                    <div id="groupUserList"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary cancel"
+                        data-bs-dismiss="modal">{{ translate('Done') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="browseUsersDialogLabel">{{ translate('AllUsers') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="allUsersList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="permissionsDialog" tabindex="-1" role="dialog" aria-labelledby="permissionsDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="permissionsDialogLabel">{{ translate('Permissions') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="permissionsForm" method="post">
+                        <div class="d-flex align-items-center gap-1">
+                            <a href="#" id="checkNoResources" class="link-primary">{{ translate('None') }}</a>
+                            <div class="vr"></div>
+                            <a href="#" id="checkAllResourcesFull" class="link-primary">{{ translate('FullAccess') }}</a>
+                            <div class="vr"></div>
+                            <a href="#" id="checkAllResourcesView" class="link-primary">{{ translate('ViewOnly') }}</a>
+                        </div>
+
+                        {% set tableIdFilter = 'permissionsDialogtable' %}
+                        <table class="table table-striped table-hover overflow-auto w-100" id="{{ tableIdFilter }}">
+                            <thead class="visually-hidden">
+                                <tr>
+                                    <th>{{ translate('Resource') }}</th>
+                                </tr>
+                            </thead>
+                            {% for resource in resources %}
+                                {% set rid = resource.GetResourceId() %}
+                                <tr>
+                                    <td>
+                                        <div class="permissionRow form-group clearfix">
+                                            <label for="permission_{{ rid }}"
+                                                class="float-start">{{ resource.GetName()|escape_once }}</label>
+                                            <select class="form-select form-select-sm w-auto resourceId float-end"
+                                                {{ formname(key: 'RESOURCE_ID', multi: true) }}id="permission_{{ rid }}">
+                                                <option value="{{ rid }}_none" class="none">{{ translate('None') }}</option>
+                                                <option value="{{ rid }}_0" class="full">{{ translate('FullAccess') }}</option>
+                                                <option value="{{ rid }}_1" class="view">{{ translate('ViewOnly') }}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true, attributes: {form: 'permissionsForm'}) }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="removeUserForm" method="post">
+        <input type="hidden" id="removeUserId" {{ formname(key: 'USER_ID') }} />
+    </form>
+
+    <form id="addUserForm" method="post">
+        <input type="hidden" id="addUserId" {{ formname(key: 'USER_ID') }} />
+    </form>
+
+    <div class="modal fade" id="addGroupDialog" tabindex="-1" role="dialog" aria-labelledby="addDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="addGroupForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDialogLabel">{{ translate('AddGroup') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="addGroupResults" class="error" style="display:none;"></div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="addGroupName">{{ translate('Name') }}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
+                            <input {{ formname(key: 'GROUP_NAME') }} type="text" id="addGroupName" required
+                                class="form-control required has-feedback" />
+                        </div>
+                        <div class="form-group mt-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="addGroupIsDefault"
+                                    {{ formname(key: 'IS_DEFAULT') }} />
+                                <label class="form-check-label"
+                                    for="addGroupIsDefault">{{ translate('AutomaticallyAddToGroup') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteGroupForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                            <div>{{ translate('DeleteGroupWarning') }}</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="editGroupForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDialogLabel">{{ translate('Update') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="fw-bold" for="editGroupName">{{ translate('Name') }}<i
+                                    class="bi bi-asterisk text-danger align-top form-control-feedback"
+                                    style="font-size: 0.5rem;"></i></label>
+                            <input type="text" id="editGroupName" class="form-control required has-feedback" required
+                                {{ formname(key: 'GROUP_NAME') }} />
+                        </div>
+                        <div class="form-group mt-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="editGroupIsDefault"
+                                    {{ formname(key: 'IS_DEFAULT') }} />
+                                <label class="form-check-label"
+                                    for="editGroupIsDefault">{{ translate('AutomaticallyAddToGroup') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if CanChangeRoles %}
+        <div class="modal fade" id="rolesDialog" tabindex="-1" role="dialog" aria-labelledby="rolesDialogLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="rolesForm" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rolesDialogLabel">{{ translate('WhatRolesApplyToThisGroup') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for role in Roles %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="role{{ role.Id }}"
+                                        {{ formname(key: 'ROLE_ID', multi: true) }} value="{{ role.Id }}" />
+                                    <label class="form-check-label" for="role{{ role.Id }}">{{ role.Name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            {{ cancel_button() }}
+                            {{ update_button() }}
+                            {{ indicator() }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal fade adminDialog" id="resourceAdminDialog" tabindex="-1" role="dialog"
+            aria-labelledby="resourceAdminDialogLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resourceAdminDialogLabel">{{ translate('WhatCanThisGroupManage') }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="resourceAdminForm" method="post">
+                            <h4><span class="count"></span> {{ translate('Resources') }}</h4>
+
+                            {% for resource in resources %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="resource{{ resource.GetId() }}"
+                                        {{ formname(key: 'RESOURCE_ID', multi: true) }} value="{{ resource.GetId() }}" />
+                                    <label class="form-check-label"
+                                        for="resource{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</label>
+                                </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button(submit: true, attributes: {form: 'resourceAdminForm'}) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade adminDialog" id="groupAdminAllDialog" tabindex="-1" role="dialog"
+            aria-labelledby="groupAdminAllDialogLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="groupAdminGroupsForm" method="post">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="groupAdminAllDialogLabel">{{ translate('WhatCanThisGroupManage') }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body scrollable-modal-content">
+                            <h4><span class="count"></span> {{ translate('Groups') }}</h4>
+
+                            {% for group in groups %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="group{{ group.Id }}"
+                                        {{ formname(key: 'GROUP_ID', multi: true) }}" value="{{ group.Id }}" />
+                            <label class="form-check-label" for="group{{ group.Id }}">{{ group.Name|escape_once }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade adminDialog" id="scheduleAdminDialog" tabindex="-1" role="dialog"
+        aria-labelledby="scheduleAdminDialogLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleAdminAllDialogLabel">{{ translate('WhatCanThisGroupManage') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleAdminForm" method="post">
+                        <h4><span class="count"></span> {{ translate('Schedules') }}</h4>
+
+                        {% for schedule in Schedules %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="schedule{{ schedule.GetId() }}"
+                                {{ formname(key: 'SCHEDULE_ID', multi: true) }} value="{{ schedule.GetId() }}" />
+                            <label class="form-check-label"
+                                for="schedule{{ schedule.GetId() }}">{{ schedule.GetName()|escape_once }}</label>
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true, attributes: {form: 'scheduleAdminForm'}) }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if CanChangeRoles %}
+    <div class="modal fade" id="groupAdminDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="groupAdminForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="groupAdminDialogLabel">{{ translate('WhoCanManageThisGroup') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label for="groupAdmin"
+                                class="off-screen fw-bold">{{ translate('WhoCanManageThisGroup') }}</label>
+                            <select {{ formname(key: 'GROUP_ADMIN') }} class="form-select" id="groupAdmin">
+                                <option value="">-- {{ translate('None') }} --</option>
+                                {% for adminGroup in AdminGroups %}
+                                <option value="{{ adminGroup.Id }}">{{ adminGroup.Name|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if CanImportGroups %}
+    <div id="importGroupsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importGroupsModalLabel"
+        aria-hidden="true">
+        <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data"
+            ajaxAction="{{ constant('ManageGroupsActions::Import') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importGroupsModalLabel">{{ translate('Import') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="importInstructions" class="alert alert-info">
+                            <div class="note fst-italic">{{ translate('GroupsImportInstructions') }}</div>
+                            <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
+                                download="{{ server.SCRIPT_NAME }}?dr=template"
+                                target="_blank">{{ translate('GetTemplate') }} <span class="bi bi-download"></span></a>
+                        </div>
+                        <div id="importGroupsResults" class="validationSummary alert alert-danger d-none">
+                            <ul>
+                                {{ async_validator('fileExtensionValidator', '') }}
+                            </ul>
+                        </div>
+                        <div id="importErrors" class="alert alert-danger d-none"></div>
+                        <div id="importResult" class="alert alert-success d-none">
+                            <span>{{ translate('RowsImported') }}</span>
+
+                            <span id="importCount" class="inline fw-bold">0</span>
+                            <span>{{ translate('RowsSkipped') }}</span>
+
+                            <span id="importSkipped" class="inline fw-bold">0</span>
+                            <a class="alert-link" href="{{ server.SCRIPT_NAME }}">{{ translate('Done') }}</a>
+                        </div>
+                        <div class="">
+                            <label class="visually-hidden" for="groupsImportFile">{{ translate('File') }}</label>
+                            <input type="file" class="form-control" {{ formname(key: 'GROUP_IMPORT_FILE') }}
+                                id="groupsImportFile" />
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" id="updateOnImport"
+                                    {{ formname(key: 'UPDATE_ON_IMPORT') }} />
+                                <label class="form-check-label"
+                                    for="updateOnImport">{{ translate('UpdateGroupsOnImport') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button(key: 'Import') }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {{ csrf_token() }}
+
+    {{ include('javascript-includes.twig', {DataTable: true}) }}
+    {{ datatable(tableId) }}
+    {{ datatablefilter(tableIdFilter) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'admin/group.js') }}
+    {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var actions = {
+                activate: '{{ constant('ManageGroupsActions::Activate')|raw }}',
+                deactivate: '{{ constant('ManageGroupsActions::Deactivate')|raw }}',
+                permissions: '{{ constant('ManageGroupsActions::Permissions')|raw }}',
+                password: '{{ constant('ManageGroupsActions::Password')|raw }}',
+                removeUser: '{{ constant('ManageGroupsActions::RemoveUser')|raw }}',
+                addUser: '{{ constant('ManageGroupsActions::AddUser')|raw }}',
+                addGroup: '{{ constant('ManageGroupsActions::AddGroup')|raw }}',
+                updateGroup: '{{ constant('ManageGroupsActions::UpdateGroup')|raw }}',
+                deleteGroup: '{{ constant('ManageGroupsActions::DeleteGroup')|raw }}',
+                roles: '{{ constant('ManageGroupsActions::Roles')|raw }}',
+                groupAdmin: '{{ constant('ManageGroupsActions::GroupAdmin')|raw }}',
+                adminGroups: '{{ constant('ManageGroupsActions::AdminGroups')|raw }}',
+                resourceGroups: '{{ constant('ManageGroupsActions::ResourceGroups')|raw }}',
+                scheduleGroups: '{{ constant('ManageGroupsActions::ScheduleGroups')|raw }}',
+                importGroups: '{{ constant('ManageGroupsActions::Import')|raw }}'
+            };
+
+            var dataRequests = {
+                permissions: 'permissions',
+                roles: 'roles',
+                groupMembers: 'groupMembers',
+                adminGroups: '{{ constant('ManageGroupsActions::AdminGroups')|raw }}',
+                resourceGroups: '{{ constant('ManageGroupsActions::ResourceGroups')|raw }}',
+                scheduleGroups: '{{ constant('ManageGroupsActions::ScheduleGroups')|raw }}'
+            };
+
+            var groupOptions = {
+                userAutocompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::User')|raw }}",
+                groupAutocompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::Group')|raw }}",
+                groupsUrl: "{{ server.SCRIPT_NAME|raw }}",
+                        permissionsUrl: '{{ server.SCRIPT_NAME|raw }}',
+                        rolesUrl: '{{ server.SCRIPT_NAME|raw }}',
+                        submitUrl: '{{ server.SCRIPT_NAME|raw }}',
+                        saveRedirect: '{{ server.SCRIPT_NAME|raw }}',
+                        selectGroupUrl: '{{ server.SCRIPT_NAME|raw }}?gid=',
+                        actions: actions,
+                        dataRequests: dataRequests
+                    };
+
+                    var groupManagement = new GroupManagement(groupOptions);
+                    groupManagement.init();
+
+                    //$('#add-group-panel').showHidePanel();
+                });
+            </script>
+        </div>
+        {{ include('globalfooter.twig') }}
