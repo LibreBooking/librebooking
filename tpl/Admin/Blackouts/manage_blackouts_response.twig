@@ -1,0 +1,74 @@
+<div>
+    {% if Successful %}
+        <h2>{{ translate(SuccessKey) }}</h2>
+        <button class="reload btn btn-primary">{{ translate('OK') }}</button>
+    {% else %}
+        <h2>{{ translate(FailKey) }}</h2>
+        <button class="unblock btn btn-primary">{{ translate('OK') }}</button>
+    {% endif %}
+
+    {% if Message is defined and Message is not empty %}
+        <h5>{{ Message }}</h5>
+    {% endif %}
+
+    {% if Blackouts is defined and Blackouts is not empty %}
+        <h5 class="mt-2">{{ translate('BlackoutConflicts') }}</h5>
+        <div class="table-responsive">
+            <table class="table" id="blackoutConflictsTable">
+                <thead>
+                    <tr>
+                        <th>{{ translate('Title') }}</th>
+                        <th>{{ translate('BeginDate') }}</th>
+                        <th>{{ translate('EndDate') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blackout in Blackouts %}
+                        <tr>
+                            <td>{% if blackout.Title is defined and blackout.Title is not empty %}{{ blackout.Title|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}
+                            </td>
+                            <td data-order="{{ formatdate(date: blackout.StartDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: blackout.StartDate, timezone: Timezone, key: 'res_popup') }}</td>
+                            <td data-order="{{ formatdate(date: blackout.EndDate, timezone: Timezone, format: 'Y-m-d H:i:s') }}">
+                                {{ formatdate(date: blackout.EndDate, timezone: Timezone, key: 'res_popup') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if Reservations is defined and Reservations is not empty %}
+        <h5 class="mt-2">{{ translate('ReservationConflicts') }}</h5>
+        <div class="table-responsive">
+            <table class="table" id="reservationTable">
+                <thead>
+                    <tr>
+                        <th>{{ translate('User') }}</th>
+                        <th>{{ translate('Title') }}</th>
+                        <th>{{ translate('Resource') }}</th>
+                        <th>{{ translate('BeginDate') }}</th>
+                        <th>{{ translate('EndDate') }}</th>
+                        <th>{{ translate('ReferenceNumber') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in Reservations %}
+                        <tr class="editable" data-refnum="{{ reservation.ReferenceNumber }}">
+                            <td>{{ reservation.FirstName|escape_once }} {{ reservation.LastName|escape_once }}</td>
+                            <td>
+                                <span class="reservationTitle" data-bs-custom-class="respopup-tooltip" data-bs-html="true">
+                                    {% if reservation.Title is defined and reservation.Title is not empty %}{{ reservation.Title|escape_once }}{% else %}{{ translate('NoTitleLabel') }}{% endif %}
+                                </span>
+                            </td>
+                            <td>{{ reservation.ResourceName|escape_once }}</td>
+                            <td>{{ formatdate(date: reservation.StartDate, timezone: Timezone, key: 'res_popup') }}</td>
+                            <td>{{ formatdate(date: reservation.EndDate, timezone: Timezone, key: 'res_popup') }}</td>
+                            <td class="referenceNumber">{{ reservation.ReferenceNumber }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,393 @@
+{% set DataTable = true %}{{ include('globalheader.twig') }}
+<div id="page-manage-blackouts" class="admin-page">
+    <h1 class="border-bottom mb-3">{{ translate('ManageBlackouts') }}</h1>
+    <div class="accordion">
+        <form id="addBlackoutForm" role="form" method="post">
+            <div class="accordion-item shadow mb-2 panel-default" id="add-blackout-panel">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed link-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#add-blackout-content" aria-expanded="false"
+                        aria-controls="add-blackout-content">
+                        <i class="bi bi-plus-circle-fill me-1"></i>{{ translate('AddBlackout') }}
+                    </button>
+                </h2>
+                <div id="add-blackout-content" class="accordion-collapse collapse">
+                    <div class="accordion-body add-contents">
+                        <div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
+                            <div class="d-flex align-items-center flex-wrap gap-1 me-sm-4">
+                                <label class="fw-bold" for="addStartDate">{{ translate('BeginDate') }}</label>
+                                <input type="text" id="addStartDate" {{ formname('BEGIN_DATE') }}
+                                    class="form-control form-control-sm w-auto" />
+                                <select {{ formname('BEGIN_TIME') }} id="addStartTime"
+                                    class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
+                                    data-step="30" data-default="{{ now().Format('H:00') }}">
+                                </select>
+                                <label for="addStartTime" class="visually-hidden">{{ translate('StartTime') }}</label>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap gap-1">
+                                <label class="fw-bold" for="addEndDate">{{ translate('EndDate') }}</label>
+                                <input type="text" id="addEndDate" {{ formname('END_DATE') }}
+                                    class="form-control form-control-sm w-auto" />
+                                <select {{ formname('END_TIME') }} id="addEndTime"
+                                    class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
+                                    data-step="30"
+                                    data-default="{{ now().AddHours(1).Format('H:00') }}">
+                                </select>
+                                <label for="addEndTime" class="visually-hidden">{{ translate('EndTime') }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
+                            <label class="fw-bold" for="addResourceId">{{ translate('Resource') }}</label>
+                            <select {{ formname('RESOURCE_ID') }} class="form-select form-select-sm w-auto"
+                                id="addResourceId">
+                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId) }}
+                            </select>
+                            {% if Schedules is defined and Schedules|length > 0 %}
+                                <div class="vr mx-2"></div>
+                                <div class="form-check me-2">
+                                    <input class="form-check-input" {{ formname('BLACKOUT_APPLY_TO_SCHEDULE') }}
+                                        type="checkbox" id="allResources" />
+                                    <label class="form-check-label" for="allResources"
+                                        style="">{{ translate('AllResourcesOn') }}
+                                    </label>
+                                </div>
+                                <label for="addScheduleId" class="visually-hidden">{{ translate('Schedule') }} </label>
+                                <select {{ formname('SCHEDULE_ID') }} id="addScheduleId"
+                                    class="form-select form-select-sm w-auto" disabled="disabled"
+                                    title="{{ translate('Schedule') }}">
+                                    {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId) }}
+                                </select>
+                            {% endif %}
+                        </div>
+                        <div class="form-group d-flex align-items-center gap-1 mb-2">
+                            <label class="fw-bold" for="blackoutReason">{{ translate('Reason') }}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i>
+                            </label>
+                            <input {{ formname('SUMMARY') }} type="text" id="blackoutReason" required
+                                class="form-control form-control-sm w-auto required has-feedback" />
+                        </div>
+                        <div class="form-group mb-2">
+                            {{ control('RecurrenceControl') }}
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio"
+                                    id="bookAround" name="existingReservations" checked="checked"
+                                    value="{{ constant('ReservationConflictResolution::BookAround') }}" />
+                                <label class="form-check-label"
+                                    for="bookAround">{{ translate('BlackoutAroundConflicts') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio"
+                                    id="notifyExisting" name="existingReservations"
+                                    value="{{ constant('ReservationConflictResolution::Notify') }}" />
+                                <label class="form-check-label"
+                                    for="notifyExisting">{{ translate('BlackoutShowMe') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" {{ formname('CONFLICT_ACTION') }} type="radio"
+                                    id="deleteExisting" name="existingReservations"
+                                    value="{{ constant('ReservationConflictResolution::Delete') }}" />
+                                <label class="form-check-label"
+                                    for="deleteExisting">{{ translate('BlackoutDeleteConflicts') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="accordion-footer border-top pt-3">
+                            {{ add_button() }}
+                            {{ reset_button() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form role="form">
+            <div class="accordion-item shadow mb-2 panel panel-default" id="filter-panel">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed link-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#filter-content" aria-expanded="false" aria-controls="filter-content">
+                        <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
+                    </button>
+                </h2>
+                <div id="filter-content" class="accordion-collapse collapse">
+                    <div class="accordion-body row gy-2">
+                        <div class="form-group col-12 col-sm-4">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="d-flex flex-column">
+                                    <label for="startDate" class="fw-bold">{{ translate('BeginDate') }}</label>
+                                    <input id="startDate" type="text" class="form-control form-control-sm w-auto"
+                                        placeholder="{{ translate('BeginDate') }}" />
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="endDate" class="fw-bold">{{ translate('EndDate') }}</label>
+                                    <input id="endDate" type="text" class="form-control form-control-sm w-auto"
+                                        placeholder="{{ translate('EndDate') }}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-sm-4">
+                            <label for="scheduleId" class="fw-bold">{{ translate('Schedule') }} </label>
+
+                            <select id="scheduleId" class="form-select form-select-sm col-12 col-sm-4">
+                                <option value="">{{ translate('AllSchedules') }}</option>
+                                {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId) }}
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-sm-4 mb-2">
+                            <label for="resourceId" class="fw-bold">{{ translate('Resource') }} </label>
+
+                            <select id="resourceId" class="form-select form-select-sm col-12 col-sm-4">
+                                <option value="">{{ translate('AllResources') }}</option>
+                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId) }}
+                            </select>
+                        </div>
+                        <div class="accordion-footer border-top pt-3">
+                            {{ filter_button(attributes: {id: 'filter'}) }}
+                            <button id="showAll" class="btn btn-outline-secondary btn-sm"><i
+                                    class="bi bi-list-task me-1"></i>{{ translate('ViewAll') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                {% set tableId = 'blackoutTable' %}
+                <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+                    <thead>
+                        <tr>
+                            <th>{{ translate('Resource') }}</th>
+                            <th>{{ translate('BeginDate') }}</th>
+                            <th>{{ translate('EndDate') }}</th>
+                            <th>{{ translate('Reason') }}</th>
+                            <th style="max-width:150px;">{{ translate('CreatedBy') }}</th>
+                            <th>{{ translate('Update') }}</th>
+                            <th>{{ translate('Delete') }}</th>
+                            <th class="action-delete">
+                                <div class="checkbox checkbox-single form-check">
+                                    <input class="form-check-input" type="checkbox" id="delete-all"
+                                        aria-label="{{ translate('All') }}" />
+                                    <label class="visually-hidden">{{ translate('Delete') }}</label>
+                                    <a href="#" id="delete-selected" class="link-danger d-none"
+                                        title="{{ translate('Delete') }}"><i
+                                            class="bi bi-trash3-fill text-danger icon remove"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for blackout in blackouts %}
+                            {% set id = blackout.InstanceId %}
+                            <tr class="editable" data-blackout-id="{{ id }}">
+                                <td>{{ blackout.ResourceName|escape_once }}</td>
+                                <td class="date">{{ formatdate(date: blackout.StartDate, timezone: Timezone, key: 'res_popup') }}
+                                </td>
+                                <td class="date">{{ formatdate(date: blackout.EndDate, timezone: Timezone, key: 'res_popup') }}</td>
+                                <td>{{ blackout.Title|escape_once }}</td>
+                                <td>{{ fullname(first: blackout.FirstName, last: blackout.LastName) }}</td>
+                                <td class="update edit"><a href="#" class="link-primary"
+                                        aria-label="{{ translate('Edit') }}"><i class="bi bi-pencil-square"></i></a>
+                                </td>
+                                {% if blackout.IsRecurring %}
+                                    <td class="update">
+                                        <a href="#" class="update delete-recurring" aria-label="{{ translate('Delete') }}"><i
+                                                class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
+                                    </td>
+                                {% else %}
+                                    <td class="update">
+                                        <a href="#" class="update delete" aria-label="{{ translate('Delete') }}"><i
+                                                class="bi bi-trash3-fill text-danger icon remove" aria-hidden="true"></i></a>
+                                    </td>
+                                {% endif %}
+                                <td class="action-delete">
+                                    <div class="checkbox checkbox-single">
+                                        <input {{ formname('BLACKOUT_INSTANCE_ID', multi: true) }}
+                                            class="delete-multiple form-check-input" type="checkbox" id="delete{{ id }}"
+                                            value="{{ id }}" aria-label="{{ translate('Delete') }}" />
+                                        <label for="delete{{ id }}" class="visually-hidden">Delete</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ pagination(PageInfo) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="deleteModalLabel">{{ translate('Delete') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        {{ translate('DeleteWarning') }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="post">
+                        {{ cancel_button() }}
+                        {{ delete_button(class: 'btnUpdateAllInstances') }}
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteRecurringDialog" tabindex="-1" role="dialog"
+        aria-labelledby="deleteRecurringModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="deleteRecurringModalLabel">{{ translate('Delete') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        {{ translate('DeleteWarning') }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteRecurringForm" method="post" class="gap-2 d-md-flex justify-content-md-end">
+                        {{ cancel_button() }}
+
+                        <button type="button" class="btn btn-danger save btnUpdateThisInstance">
+                            <i class="bi bi-x-lg"></i> {{ translate('ThisInstance') }}</button>
+
+                        <button type="button" class="btn btn-danger save btnUpdateAllInstances">
+                            <i class="bi bi-x-circle"></i> {{ translate('AllInstances') }}</button>
+
+                        <input type="hidden" {{ formname('SERIES_UPDATE_SCOPE') }} class="hdnSeriesUpdateScope"
+                            value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteMultipleDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
+        <form id="deleteMultipleForm" method="post"
+            action="{{ server.SCRIPT_NAME }}?action={{ constant('ManageBlackoutsActions::DELETE_MULTIPLE') }}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="deleteMultipleModalLabel">{{ translate('Delete') }} (<span
+                                id="deleteMultipleCount"></span>)</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                    <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{ csrf_token() }}
+    {% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ datatable(tableId) }}
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'admin/blackouts.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'recurrence.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var updateScope = {};
+            updateScope.instance = '{{ constant('SeriesUpdateScope::ThisInstance')|raw }}'; {# raw: JS string context #}
+            updateScope.full = '{{ constant('SeriesUpdateScope::FullSeries')|raw }}'; {# raw: JS string context #}
+            updateScope.future = '{{ constant('SeriesUpdateScope::FutureInstances')|raw }}'; {# raw: JS string context #}
+
+            var actions = {};
+
+            var blackoutOpts = {
+                scopeOpts: updateScope,
+                actions: actions,
+                deleteUrl: '{{ server.SCRIPT_NAME|raw }}?action={{ constant('ManageBlackoutsActions::DELETE')|raw }}&{{ constant('QueryStringKeys::BLACKOUT_ID')|raw }}=',
+                addUrl: '{{ server.SCRIPT_NAME|raw }}?action={{ constant('ManageBlackoutsActions::ADD')|raw }}',
+                editUrl: '{{ server.SCRIPT_NAME|raw }}?action={{ constant('ManageBlackoutsActions::LOAD')|raw }}&{{ constant('QueryStringKeys::BLACKOUT_ID')|raw }}=',
+                updateUrl: '{{ server.SCRIPT_NAME|raw }}?action={{ constant('ManageBlackoutsActions::UPDATE')|raw }}',
+                reservationUrlTemplate: "{{ Path|raw }}reservation.php?{{ constant('QueryStringKeys::REFERENCE_NUMBER')|raw }}=[refnum]",
+                popupUrl: "{{ Path|raw }}ajax/respopup.php",
+                timeFormat: '{{ TimeFormat|raw }}' {# raw: JS string context #}
+            };
+
+            var recurOpts = {
+                repeatType: '{{ RepeatType|raw }}', {# raw: JS string context #}
+                repeatInterval: '{{ RepeatInterval|raw }}', {# raw: JS string context #}
+                repeatMonthlyType: '{{ RepeatMonthlyType|raw }}', {# raw: JS string context #}
+                repeatWeekdays: [{% for day in RepeatWeekdays %}{{ day }}, {% endfor %}]
+            };
+
+            var recurElements = {
+                beginDate: $('#addStartDate'),
+                endDate: $('#addEndDate'),
+                beginTime: $('#addStartTime'),
+                endTime: $('#addEndTime')
+            };
+
+            var recurrence = new Recurrence(recurOpts, recurElements);
+            recurrence.init();
+
+            var blackoutManagement = new BlackoutManagement(blackoutOpts);
+            blackoutManagement.init();
+
+        });
+    </script>
+
+    {{ control('DatePickerSetupControl', {ControlId: 'startDate', DefaultDate: StartDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'endDate', DefaultDate: EndDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'addStartDate', DefaultDate: AddStartDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'addEndDate', DefaultDate: AddEndDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'EndRepeat', DefaultDate: AddEndDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'RepeatDate', Multiple: false}) }}
+
+    <div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="creatingNotification">
+                        {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+                    </div>
+                    <div id="result" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="update-box" tabindex="-1" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{ indicator(id: 'update-spinner') }}
+                    <div id="update-contents"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{{ include('globalfooter.twig') }}
