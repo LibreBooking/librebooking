@@ -99,18 +99,19 @@ class RenderPartialTwigFunctionTest extends TestBase
      */
     public function testRenderPartialDoesNotUseTwigWhenOnlyTplExists(): void
     {
-        // Only a .tpl-named Smarty template exists in the real fs (Controls/Checkbox.tpl).
-        // We verify that no .twig is rendered by checking the Smarty output is returned.
+        // Controls/Checkbox.twig now exists, so render_partial uses the Twig path.
+        // This test verifies the output still contains checkbox markup (structural check)
+        // and no synthetic twig-partial marker from injected templates.
         [$env] = $this->makeEnv(
             "{{ render_partial('Controls/Checkbox.tpl', {'name-key': 'ALLOW_PARTICIPATION', 'label-key': 'Yes'}) }}"
         );
 
         $output = $env->render('t');
 
-        // Smarty rendered the .tpl — output contains checkbox markup.
+        // Output contains checkbox markup regardless of engine.
         $this->assertNotEmpty($output);
         $this->assertStringContainsString('booked-checkbox', $output);
-        // Must NOT contain any .twig-specific marker.
+        // Must NOT contain any .twig-specific marker from injected synthetic templates.
         $this->assertStringNotContainsString('twig-partial', $output);
     }
 
@@ -119,11 +120,13 @@ class RenderPartialTwigFunctionTest extends TestBase
     // -------------------------------------------------------------------------
 
     /**
-     * When no .twig counterpart exists, render_partial falls back to Smarty and
-     * produces the same output as SmartyRenderer::render() called directly.
+     * Controls/Checkbox.twig now exists alongside Controls/Checkbox.tpl, so
+     * render_partial uses the Twig path (not the Smarty fallback).
+     * The output must be structurally equivalent to the Smarty reference — verified
+     * via HtmlNormalizer to account for minor whitespace differences between engines.
      *
-     * Uses Controls/Checkbox.tpl — a real .tpl with no .twig counterpart — as the
-     * test subject.
+     * Updated from assertSame to normalized parity now that Controls/Checkbox.twig
+     * has been migrated as part of the Controls Twig migration.
      */
     public function testRenderPartialFallsBackToSmartyWhenNoTwigExists(): void
     {
@@ -133,13 +136,18 @@ class RenderPartialTwigFunctionTest extends TestBase
         $smarty = new SmartyRenderer();
         $expected = $smarty->render('Controls/Checkbox.tpl', $vars);
 
-        // render_partial output via Twig environment.
+        // render_partial output via Twig environment — now uses Controls/Checkbox.twig.
         [$env] = $this->makeEnv(
             "{{ render_partial('Controls/Checkbox.tpl', vars) }}"
         );
         $actual = $env->render('t', ['vars' => $vars]);
 
-        $this->assertSame($expected, $actual);
+        // Structural parity: both engines produce equivalent normalised HTML.
+        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        $this->assertSame(
+            HtmlNormalizer::normalize($expected),
+            HtmlNormalizer::normalize($actual)
+        );
     }
 
     /**

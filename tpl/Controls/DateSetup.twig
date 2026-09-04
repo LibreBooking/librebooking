@@ -1,0 +1,29 @@
+<script type="text/javascript">
+    $(function() {
+        let $controlId = $("#{{ ControlId }}");
+        let $altId = $("#{{ AltId }}");
+
+        {% if MinDate %}
+            var minDate = "{{ formatdate(date: MinDate, format: 'Y-m-d') }}"
+            $controlId.attr('min', minDate);
+        {% endif %}
+
+        {% if MaxDate %}
+            var maxDate = "{{ formatdate(date: MaxDate.AddDays(1), format: 'Y-m-d') }}"
+            $controlId.attr('max', maxDate);
+        {% endif %}
+
+        {% if DefaultDate %}
+            var defaultDate = "{{ formatdate(date: DefaultDate, format: 'Y-m-d') }}";
+            $controlId.val(defaultDate);
+
+        {% endif %}
+
+        {% if AltId != '' %}
+            $controlId.on('change', function() {
+                var dateVal = $controlId.val();
+                $altId.val(dateVal);
+            });
+        {% endif %}
+    });
+</script>

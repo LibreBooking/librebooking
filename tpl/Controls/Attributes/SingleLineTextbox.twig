@@ -1,0 +1,25 @@
+<div class="form-group {% if class is defined %}{{ class }}{% endif %}">
+    {% if readonly is defined and readonly and tooltip is defined and tooltip %}
+        <span class="customAttribute readonly">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}:</span>
+    {% else %}
+        <label
+            class="customAttribute {% if readonly is defined and readonly %}readonly{% elseif searchmode is defined and searchmode %}search{% else %}standard{% endif %} fw-bold"
+            for="{{ attributeId }}">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}</label>
+    {% endif %}
+    {% if readonly is defined and readonly %}
+        <span class="attributeValue {{ class }}">{{ attribute.Value()|escape_once }}</span>
+    {% else %}
+        <div class="position-relative">
+            <input id="{{ attributeId }}" name="{{ attributeName }}" value="{{ attribute.Value()|escape_once }}" class="customAttribute form-control form-control-sm
+        {% if not searchmode and attribute.Required() %}has-feedback{% endif %}"
+                {% if attribute.Required() and not searchmode %}required="required" {% endif %} />
+            {% if searchmode %}
+                <span class="searchclear searchclear-label bi bi-x-circle-fill" ref="{{ attributeId }}"></span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

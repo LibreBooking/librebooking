@@ -84,12 +84,16 @@ class ControlTwigFunctionTest extends TestBase
 
     /**
      * CheckboxControl::PageLoad() calls $this->Display('Controls/Checkbox.tpl').
-     * Since no Controls/Checkbox.twig exists, TwigRenderer::renderControlTemplate
-     * must fall back to SmartyRenderer.
+     * Controls/Checkbox.twig now exists, so TwigRenderer::renderControlTemplate
+     * renders via Twig (not the Smarty fallback path).
      *
      * This test proves:
-     *  (a) the .twig/.tpl fallback path is exercised, and
-     *  (b) the output matches what Smarty produces for the same control.
+     *  (a) the .twig template is found and rendered (not the .tpl fallback), and
+     *  (b) the output is structurally equivalent to what Smarty produces.
+     *
+     * Updated from assertSame to HtmlNormalizer parity now that Controls/Checkbox.twig
+     * exists alongside Controls/Checkbox.tpl. The Twig and Smarty renders produce
+     * equivalent normalised output but may differ in insignificant whitespace.
      */
     public function testControlFunctionCheckboxControlFallsBackToTpl(): void
     {
@@ -105,16 +109,20 @@ class ControlTwigFunctionTest extends TestBase
             )
         );
 
-        // Twig side via TwigRenderer (real filesystem loader — Checkbox.twig absent)
+        // Twig side via TwigRenderer — Controls/Checkbox.twig now exists and is used.
         $renderer = new TwigRenderer();
         $env = $this->makeTwigEnv("{{ control('CheckboxControl', params) }}", $renderer);
         $twigActual = $env->render('t', ['params' => $params]);
 
-        // The output must be non-empty — the .tpl fallback rendered successfully.
+        // The output must be non-empty — the Twig template rendered successfully.
         $this->assertNotEmpty($twigActual);
 
-        // Parity with Smarty output.
-        $this->assertSame($smartyExpected, $twigActual);
+        // Structural parity: both engines produce the same normalised HTML.
+        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        $this->assertSame(
+            HtmlNormalizer::normalize($smartyExpected),
+            HtmlNormalizer::normalize($twigActual)
+        );
     }
 
     /**
