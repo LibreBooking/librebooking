@@ -79,7 +79,7 @@ class ControlTwigFunctionTest extends TestBase
     }
 
     // -------------------------------------------------------------------------
-    // Test 2: CheckboxControl — .tpl fallback through TwigRenderer
+    // Test 2: CheckboxControl — .twig takes precedence (Twig path)
     // -------------------------------------------------------------------------
 
     /**
@@ -91,11 +91,10 @@ class ControlTwigFunctionTest extends TestBase
      *  (a) the .twig template is found and rendered (not the .tpl fallback), and
      *  (b) the output is structurally equivalent to what Smarty produces.
      *
-     * Updated from assertSame to HtmlNormalizer parity now that Controls/Checkbox.twig
-     * exists alongside Controls/Checkbox.tpl. The Twig and Smarty renders produce
-     * equivalent normalised output but may differ in insignificant whitespace.
+     * The Twig and Smarty renders produce equivalent normalised output but may
+     * differ in insignificant whitespace, so HtmlNormalizer is used for parity.
      */
-    public function testControlFunctionCheckboxControlFallsBackToTpl(): void
+    public function testControlFunctionCheckboxControlRendersViaTwig(): void
     {
         // Params required by CheckboxControl::PageLoad()
         $params = ['name-key' => 'ALLOW_PARTICIPATION', 'label-key' => 'Yes'];
@@ -109,7 +108,7 @@ class ControlTwigFunctionTest extends TestBase
             )
         );
 
-        // Twig side via TwigRenderer — Controls/Checkbox.twig now exists and is used.
+        // Twig side via TwigRenderer — Controls/Checkbox.twig exists and is used.
         $renderer = new TwigRenderer();
         $env = $this->makeTwigEnv("{{ control('CheckboxControl', params) }}", $renderer);
         $twigActual = $env->render('t', ['params' => $params]);
@@ -127,7 +126,7 @@ class ControlTwigFunctionTest extends TestBase
 
     /**
      * Verify the CheckboxControl output contains expected structural HTML elements
-     * when rendered through the Twig control() function with .tpl fallback.
+     * when rendered through the Twig control() function (Twig path via Checkbox.twig).
      */
     public function testControlFunctionCheckboxControlOutputContainsExpectedHtml(): void
     {
@@ -141,6 +140,39 @@ class ControlTwigFunctionTest extends TestBase
         $this->assertStringContainsString('<label', $output);
         $this->assertStringContainsString('<button', $output);
         $this->assertStringContainsString('booked-checkbox', $output);
+    }
+
+    // -------------------------------------------------------------------------
+    // Test 2b: Smarty fallback — renderControlTemplate falls back when no .twig exists
+    // -------------------------------------------------------------------------
+
+    /**
+     * When no .twig counterpart exists for a .tpl, renderControlTemplate must fall
+     * back to SmartyRenderer and produce the same output as SmartyRenderer directly.
+     *
+     * Uses tpl/_render_fallback_probe.tpl — a test-only fixture that intentionally
+     * has no .twig sibling, ensuring the Smarty-fallback branch is exercised.
+     * The probe template renders: <span class="probe">{$probeValue}</span>
+     */
+    public function testRenderControlTemplateFallsBackToSmartyWhenNoTwigExists(): void
+    {
+        // Confirm no .twig sibling exists for the probe template.
+        $tplDir = __DIR__ . '/../../../tpl/';
+        $this->assertFileDoesNotExist($tplDir . '_render_fallback_probe.twig');
+
+        $renderer = new TwigRenderer();
+
+        $vars = ['probeValue' => 'hello-fallback'];
+        $output = $renderer->renderControlTemplate('_render_fallback_probe.tpl', $vars);
+
+        // Smarty reference: render the probe directly via SmartyRenderer.
+        $smarty = new SmartyRenderer();
+        $expected = trim($smarty->renderControlTemplate('_render_fallback_probe.tpl', $vars));
+
+        // The Smarty fallback branch must have fired and produced the probe output.
+        $this->assertStringContainsString('hello-fallback', $output);
+        $this->assertStringContainsString('probe', $output);
+        $this->assertSame($expected, trim($output));
     }
 
     // -------------------------------------------------------------------------
