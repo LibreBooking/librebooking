@@ -49,6 +49,9 @@ class TwigRenderer implements TemplateRenderer
     public function assign(string $name, mixed $value): void
     {
         $this->vars[$name] = $value;
+        // Keep the Smarty fallback in sync so that when fetch()/fetchLocalized()
+        // delegate to it, the assigned variables are available in the template.
+        $this->smartyFallback?->assign($name, $value);
     }
 
     /**
@@ -79,7 +82,19 @@ class TwigRenderer implements TemplateRenderer
 
     public function fetch(string $templateName): string
     {
-        return $this->render($templateName);
+        // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
+        $twigCandidate = str_ends_with($templateName, '.tpl')
+            ? substr($templateName, 0, -4) . '.twig'
+            : $templateName;
+
+        /** @var \Twig\Loader\FilesystemLoader $loader */
+        $loader = $this->twig->getLoader();
+        if ($loader->exists($twigCandidate)) {
+            return $this->twig->render($twigCandidate, $this->vars);
+        }
+
+        // No .twig counterpart — fall back to Smarty.
+        return $this->smartyFallback()->fetch($templateName);
     }
 
     public function getTemplateVars(?string $name = null): mixed
@@ -90,13 +105,65 @@ class TwigRenderer implements TemplateRenderer
         return $this->vars[$name] ?? null;
     }
 
+    /**
+     * Mirrors SmartyPage::FetchLocalized resolution exactly.
+     *
+     * 1. Resolve the language code (from arg or assigned vars or Resources).
+     * 2. Check for a localized template (and -custom override) at lang/<lang>/.
+     * 3. If enforceCustomTemplate is true and no custom exists, check the default language.
+     * 4. Fall back to lang/en_us/ when the localized path has no match.
+     * 5. Engine-select: if a .twig counterpart of the resolved name exists under the
+     *    resolved directory, render via Twig; otherwise delegate to the Smarty fallback.
+     */
     public function fetchLocalized(
         string $templateName,
         bool $enforceCustomTemplate,
         ?string $languageCode = null
     ): string {
-        // Full localized/-custom resolution implemented in Task 4.x; default path for now.
-        return $this->render($templateName);
+        if ($languageCode === null) {
+            $languageCode = $this->vars['CurrentLanguage'] ?? $this->resources->CurrentLanguage;
+        }
+
+        $langPath = ROOT_DIR . 'lang/';
+        $localizedPath = $langPath . $languageCode;
+        $customTemplateName = str_ends_with($templateName, '.tpl')
+            ? substr($templateName, 0, -4) . '-custom.tpl'
+            : $templateName . '-custom';
+        $hasCustomTemplate = file_exists($localizedPath . '/' . $customTemplateName);
+
+        if ($enforceCustomTemplate && !$hasCustomTemplate) {
+            $defaultLanguageCode = \Configuration::Instance()->GetKey(\ConfigKeys::DEFAULT_LANGUAGE);
+            $defaultLocalizedPath = $langPath . $defaultLanguageCode;
+            $hasCustomDefaultTemplate = file_exists($defaultLocalizedPath . '/' . $customTemplateName);
+            if ($languageCode !== $defaultLanguageCode && $hasCustomDefaultTemplate) {
+                $hasCustomTemplate = true;
+                $localizedPath = $defaultLocalizedPath;
+            }
+        }
+
+        if (file_exists($localizedPath . '/' . $templateName) || $hasCustomTemplate) {
+            $resolvedDir = $localizedPath;
+        } else {
+            // Fall back to en_us
+            $resolvedDir = ROOT_DIR . 'lang/en_us';
+        }
+
+        $resolvedName = file_exists($resolvedDir . '/' . $customTemplateName)
+            ? $customTemplateName
+            : $templateName;
+
+        // Engine-select on the resolved template path.
+        $twigCandidate = str_ends_with($resolvedName, '.tpl')
+            ? substr($resolvedName, 0, -4) . '.twig'
+            : $resolvedName . '.twig';
+
+        if (file_exists($resolvedDir . '/' . $twigCandidate)) {
+            $this->addTemplateDirectory($resolvedDir);
+            return $this->twig->render($twigCandidate, $this->vars);
+        }
+
+        // No .twig counterpart — delegate to Smarty fallback.
+        return $this->smartyFallback()->fetchLocalized($templateName, $enforceCustomTemplate, $languageCode);
     }
 
     public function addTemplateDirectory(string $dir): void
