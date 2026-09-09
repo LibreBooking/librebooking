@@ -1,0 +1,35 @@
+{% set manageResourcesUrl = Path ~ 'admin/manage_resources.php' %}
+{% if CanViewResourceAdmin or CanViewScheduleAdmin %}
+    {% set manageResourcesUrl = Path ~ 'admin/manage_admin_resources.php' %}
+{% endif %}
+<div class="clearfix border-bottom mb-3">
+    <div class="dropdown admin-header-more float-end">
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
+                data-bs-toggle="dropdown">
+                <span class="visually-hidden">{{ translate('More') }}</span>
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="moreResourceActions">
+
+                <li role="presentation"><a role="menuitem" class="dropdown-item"
+                        href="{{ Path }}admin/manage_resource_groups.php">{{ translate('ManageResourceGroups') }}</a>
+                </li>
+                <li role="presentation"><a role="menuitem" class="dropdown-item"
+                        href="{{ Path }}admin/manage_resource_types.php">{{ translate('ManageResourceTypes') }}</a>
+                </li>
+                <li role="presentation"><a role="menuitem" class="dropdown-item"
+                        href="{{ Path }}admin/manage_resource_status.php">{{ translate('ManageResourceStatus') }}</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li role="presentation"><a role="menuitem" class="dropdown-item"
+                        href="{{ manageResourcesUrl }}">{{ translate('ManageResources') }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <h1>{{ translate(ResourcePageTitleKey) }}</h1>
+</div>

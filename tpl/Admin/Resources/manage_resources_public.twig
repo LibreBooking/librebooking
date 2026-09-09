@@ -1,0 +1,40 @@
+{% if resource.GetIsCalendarSubscriptionAllowed() and modeEdit %}
+    <span>Resource Display</span>
+    <a href="{{ ScriptUrl }}/{{ constant('Pages::DISPLAY_RESOURCE') }}?{{ constant('QueryStringKeys::RESOURCE_ID') }}={{ resource.GetPublicId() }}"
+        class="link-primary">{{ ScriptUrl }}/{{ constant('Pages::DISPLAY_RESOURCE') }}?{{ constant('QueryStringKeys::RESOURCE_ID') }}={{ resource.GetPublicId() }}</a>
+{% elseif resource.GetIsCalendarSubscriptionAllowed() and not modeEdit %}
+    {% if IcsEnabled %}
+        <div><a class="update disableSubscription subscriptionButton link-primary"
+                href="#">{{ translate('TurnOffSubscription') }}</a>
+        </div>
+    {% endif %}
+    <div>
+        {% if IcsEnabled %}
+            {% set icalUrl = resource.GetSubscriptionUrl().GetWebcalUrl() %}
+            {% set atomUrl = resource.GetSubscriptionUrl().GetAtomUrl() %}
+            <i class="bi bi-calendar link-primary"></i>
+            <a target="_blank" href="{{ icalUrl|e }}" class="link-primary"
+                title="{{ translate('UrlCopiedToClipboard') }}"
+                onclick="copyUrlToClipboard('{{ icalUrl|escape_js|e('html') }}'); return false;">{{ translate('SubscribeToCalendar') }}</a>
+            <div class="vr mx-1"></div>
+            <i class="bi bi-rss-fill link-primary"></i>
+            <a target="_blank" href="{{ atomUrl|e }}" class="link-primary"
+                title="{{ translate('UrlCopiedToClipboard') }}"
+                onclick="copyUrlToClipboard('{{ atomUrl|escape_js|e('html') }}'); return false;">Atom</a>
+            <div class="vr mx-1"></div>
+        {% endif %}
+        <i class="bi bi-display link-primary"></i>
+        <a href="{{ ScriptUrl }}/{{ constant('Pages::DISPLAY_RESOURCE') }}?{{ constant('QueryStringKeys::RESOURCE_ID') }}={{ resource.GetPublicId() }}"
+            class="link-primary">Display</a>
+    </div>
+    <div>
+        <span>{{ translate('PublicId') }}</span>
+        <span class="propertyValue fw-bold">{{ resource.GetPublicId() }}</span>
+    </div>
+{% elseif not resource.GetIsCalendarSubscriptionAllowed() and not modeEdit and IcsEnabled %}
+    <div>
+        <a class="update enableSubscription subscriptionButton link-primary" href="#">{{ translate('TurnOnSubscription') }}</a>
+    </div>
+{% else %}
+    {{ translate('None') }}
+{% endif %}
