@@ -1,0 +1,220 @@
+{% set DataTable = true %}{{ include('globalheader.twig') }}
+
+<div id="page-manage-schedules" class="admin-page">
+
+    <div class="border-bottom mb-3 clearfix">
+        <h1 class="float-start">{{ translate('ManageSchedules') }}</h1>
+    </div>
+
+    <div class="card shadow" id="list-schedules-panel">
+        <div class="card-body" id="scheduleList">
+            <div class="accordion" id="scheduleAccordion">
+                {% set tableIdFilter = 'schedulesViewTable' %}
+                <table class="table table-borderless w-100" id="{{ tableIdFilter }}">
+                    <thead class="d-none">
+                        <tr>
+                            <th>{{ translate('AllSchedules') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in Schedules %}
+                            <tr>
+                                <td>
+                                    {% set id = schedule.GetId() %}
+                                    {% set dayOfWeek = schedule.GetWeekdayStart() %}
+                                    {% set daysVisibleSpan %}<span class='fw-bold'>{{ schedule.GetDaysVisible() }}</span>{% endset %}
+                                    {% set dayNameSpan %}<span
+                                        class='fw-bold'>{% if dayOfWeek == constant('Schedule::Today') %}{{ Today }}{% else %}{{ DayNames[dayOfWeek] }}{% endif %}</span>{% endset %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#panel{{ id }}" aria-expanded="true"
+                                                aria-controls="panel{{ id }}">
+                                                {{ schedule.GetName()|escape_once }}
+                                            </button>
+                                        </h2>
+                                        <div id="panel{{ id }}" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="scheduleDetails row">
+                                                    <div class="col-12 col-sm-6">
+                                                        <div class="fw-bold">{{ schedule.GetName()|escape_once }}</div>
+
+                                                        <div>
+                                                            {{ translate('LayoutDescription', [dayNameSpan, daysVisibleSpan]) }}</div>
+
+                                                        <div>{{ translate('ScheduleAdministrator') }}
+                                                            <span
+                                                                class="fw-bold">
+                                                                {% set adminGroupId = schedule.GetAdminGroupId() %}
+                                                                {% if adminGroupId is not null and GroupLookup[adminGroupId] is defined %}
+                                                                    {{ GroupLookup[adminGroupId].Name|escape_once }}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="">
+                                                            {{ render_partial('Admin/Schedules/manage_availability.tpl', _context|merge({schedule: schedule, timezone: Timezone})) }}
+                                                        </div>
+
+                                                        <div class="maximumConcurrentContainer">
+                                                            {% if schedule.EnforceConcurrentReservationMaximum() %}
+                                                                {{ translate('ScheduleConcurrentMaximum', [schedule.GetTotalConcurrentReservations()]) }}
+                                                            {% else %}
+                                                                {{ translate('ScheduleConcurrentMaximumNone') }}
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div class="resourcesPerReservationContainer">
+                                                            {% if schedule.EnforceMaxResourcesPerReservation() %}
+                                                                {{ translate('ScheduleResourcesPerReservationMaximum', [schedule.GetMaxResourcesPerReservation()]) }}
+                                                            {% else %}
+                                                                {{ translate('ScheduleResourcesPerReservationNone') }}
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div>
+                                                            {{ translate('DefaultStyle') }}
+                                                            <span
+                                                                class="fw-bold">{{ StyleNames[schedule.GetDefaultStyle().value] }}</span>
+                                                        </div>
+
+                                                        {% if CreditsEnabled is defined and CreditsEnabled %}
+                                                            <span>{{ translate('PeakTimes') }}</span>
+                                                            <div class="fw-bold">
+                                                                {{ render_partial('Admin/Schedules/manage_peak_times.tpl', _context|merge({Layout: Layouts[id], Months: Months, DayNames: DayNames})) }}
+                                                            </div>
+                                                        {% endif %}
+
+                                                        <div>{{ translate('Resources') }}
+                                                            <span class="fw-bold">
+                                                                {% if Resources[id] is defined %}
+                                                                    {% for r in Resources[id] %}
+                                                                        {{ r.GetName()|escape_once }}{% if not loop.last %},
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+
+                                                        {% if schedule.GetIsCalendarSubscriptionAllowed() %}
+                                                            <div>
+                                                                <span>{{ translate('PublicId') }}</span>
+                                                                <span class="fw-bold">{{ schedule.GetPublicId() }}</span>
+                                                            </div>
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                    <div class="layout col-12 col-sm-6">
+                                                        <div>
+                                                            {{ translate('ScheduleLayout', [schedule.GetTimezone()]) }}
+                                                        </div>
+
+                                                        {% if Layouts[id].UsesDailyLayouts() %}
+                                                            {{ translate('LayoutVariesByDay') }} -
+                                                            <div class="allDailyLayouts">
+                                                                {% for day in range(0, 6) %}
+                                                                    {{ DayNames[day] }}
+                                                                    <div class="reservableSlots" id="reservableSlots_{{ day }}"
+                                                                        ref="reservableEdit_{{ day }}">
+                                                                        {% for period in Layouts[id].GetSlots(day) %}
+                                                                            {% if period.IsReservable() %}
+                                                                                {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                                {% if period.IsLabelled() %}
+                                                                                    {{ period.Label|escape_once }}
+                                                                                {% endif %}
+                                                                                {% if not loop.last %}, {% endif %}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {{ translate('None') }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    <div class="blockedSlots" id="blockedSlots_{{ day }}"
+                                                                        ref="blockedEdit_{{ day }}">
+                                                                        {% for period in Layouts[id].GetSlots(day) %}
+                                                                            {% if not period.IsReservable() %}
+                                                                                {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                                {% if period.IsLabelled() %}
+                                                                                    {{ period.Label|escape_once }}
+                                                                                {% endif %}
+                                                                                {% if not loop.last %}, {% endif %}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {{ translate('None') }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesAStandardLayout') }}
+                                                            </div>
+                                                        {% elseif Layouts[id].UsesCustomLayout() %}
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesACustomLayout') }}
+                                                            </div>
+                                                        {% else %}
+                                                            {{ translate('ReservableTimeSlots') }}
+                                                            <div class="reservableSlots" id="reservableSlots"
+                                                                ref="reservableEdit">
+                                                                {% for period in Layouts[id].GetSlots(null) %}
+                                                                    {% if period.IsReservable() %}
+                                                                        {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                        {% if period.IsLabelled() %}
+                                                                            {{ period.Label|escape_once }}
+                                                                        {% endif %}
+                                                                        {% if not loop.last %}, {% endif %}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endfor %}
+                                                            </div>
+                                                            {{ translate('BlockedTimeSlots') }}
+                                                            <div class="blockedSlots" id="blockedSlots" ref="blockedEdit">
+                                                                {% for period in Layouts[id].GetSlots(null) %}
+                                                                    {% if not period.IsReservable() %}
+                                                                        {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                        {% if period.IsLabelled() %}
+                                                                            {{ period.Label|escape_once }}
+                                                                        {% endif %}
+                                                                        {% if not loop.last %}, {% endif %}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesAStandardLayout') }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="actions col-12">
+                                                        {% if schedule.GetIsDefault() %}
+                                                            <span
+                                                                class="fst-italic fw-bold">{{ translate('ThisIsTheDefaultSchedule') }}</span>
+                                                        {% endif %}
+                                                        {{ indicator(id: 'action-indicator') }}
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ pagination(PageInfo) }}
+            </div>
+        </div>
+    </div>
+
+    {% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ datatable(tableIdFilter) }}
+</div>
+
+{{ include('globalfooter.twig') }}
