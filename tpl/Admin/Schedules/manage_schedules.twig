@@ -1,0 +1,1096 @@
+{% set InlineEdit = true %}{% set Fullcalendar = true %}{% set DataTable = true %}{{ include('globalheader.twig') }}
+
+<div id="page-manage-schedules" class="admin-page">
+
+    <div class="border-bottom mb-3 clearfix">
+        <h1 class="float-start">{{ translate('ManageSchedules') }}</h1>
+        <a href="#" class="add-link btn btn-sm btn-primary float-end" id="add-schedule">
+            <span class="bi bi-plus-circle-fill me-1 icon add"></span>{{ translate('AddSchedule') }}
+        </a>
+    </div>
+
+    <div class="card shadow" id="list-schedules-panel">
+        <div class="card-body no-padding" id="scheduleList">
+            <div class="accordion" id="scheduleAccordion">
+                {% set tableIdFilter = 'schedulesTable' %}
+                <table class="table table-borderless w-100" id="{{ tableIdFilter }}">
+                    <thead class="d-none">
+                        <tr>
+                            <th>{{ translate('AllSchedules') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in Schedules %}
+                            <tr>
+                                <td>
+                                    {% set id = schedule.GetId() %}
+                                    {% set dayOfWeek = schedule.GetWeekdayStart() %}
+                                    {% set daysVisibleSpan %}<span
+                                            class='propertyValue daysVisible inlineUpdate fw-bold text-decoration-underline pe-auto'
+                                            data-type='number' data-pk='{{ id }}' data-name='{{ constant('FormKeys::SCHEDULE_DAYS_VISIBLE') }}'
+                                        data-min='0'>{{ schedule.GetDaysVisible() }}</span>{% endset %}
+                                    {% set dayNameSpan %}<span
+                                            class='propertyValue dayName inlineUpdate fw-bold text-decoration-underline pe-auto'
+                                            data-type='select' data-pk='{{ id }}' data-name='{{ constant('FormKeys::SCHEDULE_WEEKDAY_START') }}'
+                                            data-value='{{ dayOfWeek }}'>{% if dayOfWeek == constant('Schedule::Today') %}{{ Today }}{% else %}{{ DayNames[dayOfWeek] }}{% endif %}</span>
+                                    {% endset %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#panel{{ id }}" aria-expanded="true"
+                                                aria-controls="panel{{ id }}">
+                                                {{ schedule.GetName()|escape_once }}
+                                            </button>
+                                        </h2>
+                                        <div id="panel{{ id }}" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="scheduleDetails row" data-schedule-id="{{ id }}">
+                                                    <div class="col-12 col-sm-6">
+                                                        <input type="hidden" class="id" value="{{ id }}" />
+                                                        <input type="hidden" class="daysVisible" value="" />
+                                                        <input type="hidden" class="dayOfWeek" value="{{ dayOfWeek }}" />
+
+                                                        <div>
+                                                            <span class="title scheduleName fw-bold" data-type="text"
+                                                                data-pk="{{ id }}"
+                                                                data-name="{{ constant('FormKeys::SCHEDULE_NAME') }}">{{ schedule.GetName()|escape_once }}</span>
+                                                            <a class="update renameButton link-primary" href="#"><span
+                                                                    class="visually-hidden">{{ translate('Rename') }}</span><span
+                                                                    class="bi bi-pencil-square"></span></a>
+                                                        </div>
+
+                                                        <div>
+                                                            {{ translate('LayoutDescription', [dayNameSpan, daysVisibleSpan], 'fw-bold') }}</div>
+
+                                                        <div>
+                                                            {{ translate('ScheduleAdministrator') }}
+                                                            <span class="propertyValue scheduleAdmin fw-bold"
+                                                                data-type="select" data-pk="{{ id }}"
+                                                                data-value="{{ schedule.GetAdminGroupId() }}"
+                                                                data-name="{{ constant('FormKeys::SCHEDULE_ADMIN_GROUP_ID') }}">
+                                                                {% set adminGroupId = schedule.GetAdminGroupId() %}
+                                                                {% if adminGroupId is not null and GroupLookup[adminGroupId] is defined %}
+                                                                    {{ GroupLookup[adminGroupId].Name|escape_once }}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endif %}
+                                                            </span>
+                                                            {% if AdminGroups is defined and AdminGroups|length > 0 %}
+                                                                <a class="link-primary update changeScheduleAdmin"><span
+                                                                        class="visually-hidden">{{ translate('ScheduleAdministrator') }}</span><span
+                                                                        class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                            {% endif %}
+
+                                                        </div>
+
+                                                        <div class="availabilityPlaceHolder d-flex align-items-center">
+                                                            <div class="availabilityContent">
+                                                                {{ render_partial('Admin/Schedules/manage_availability.tpl', _context|merge({schedule: schedule, timezone: Timezone})) }}
+                                                            </div>
+
+                                                            <a class="update changeAvailability link-primary ms-1" href="#">
+                                                                <span
+                                                                    class="visually-hidden">{{ translate('Availability') }}</span>
+                                                                <span class="bi bi-pencil-square"></span>
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="maximumConcurrentContainer"
+                                                            data-concurrent="{{ schedule.GetTotalConcurrentReservations() }}">
+                                                            {% if schedule.EnforceConcurrentReservationMaximum() %}
+                                                                {{ translate('ScheduleConcurrentMaximum', [schedule.GetTotalConcurrentReservations()]) }}
+                                                            {% else %}
+                                                                {{ translate('ScheduleConcurrentMaximumNone') }}
+                                                            {% endif %}
+                                                            <a href="#"
+                                                                class="update changeScheduleConcurrentMaximum link-primary">
+                                                                <span
+                                                                    class="visually-hidden">{{ translate('ScheduleMaximumConcurrent') }}</span>
+                                                                <span class="bi bi-pencil-square"></span>
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="resourcesPerReservationContainer"
+                                                            data-maximum="{{ schedule.GetMaxResourcesPerReservation() }}">
+                                                            {% if schedule.EnforceMaxResourcesPerReservation() %}
+                                                                {{ translate('ScheduleResourcesPerReservationMaximum', [schedule.GetMaxResourcesPerReservation()]) }}
+                                                            {% else %}
+                                                                {{ translate('ScheduleResourcesPerReservationNone') }}
+                                                            {% endif %}
+                                                            <a href="#"
+                                                                class="update changeResourcesPerReservation link-primary">
+                                                                <span
+                                                                    class="visually-hidden">{{ translate('ScheduleResourcesPerReservation') }}</span>
+                                                                <span class="bi bi-pencil-square"></span>
+                                                            </a>
+                                                        </div>
+
+                                                        <div>
+                                                            {{ translate('DefaultStyle') }}
+                                                            <span
+                                                                class="propertyValue defaultScheduleStyle inlineUpdate fw-bold text-decoration-underline"
+                                                                data-type="select" data-pk="{{ id }}"
+                                                                data-name="{{ constant('FormKeys::SCHEDULE_DEFAULT_STYLE') }}"
+                                                                data-value="{{ schedule.GetDefaultStyle().value }}">{{ StyleNames[schedule.GetDefaultStyle().value] }}</span>
+                                                        </div>
+
+                                                        {% if CreditsEnabled is defined and CreditsEnabled %}
+                                                            <span>{{ translate('PeakTimes') }}</span>
+                                                            <a class="update changePeakTimes link-primary" href="#">
+                                                                <span class="visually-hidden">{{ translate('PeakTimes') }}</span>
+                                                                <span class="bi bi-pencil-square"></span>
+                                                            </a>
+                                                            <div class="peakPlaceHolder">
+                                                                {{ render_partial('Admin/Schedules/manage_peak_times.tpl', _context|merge({Layout: Layouts[id], Months: Months, DayNames: DayNames})) }}
+                                                            </div>
+                                                        {% endif %}
+
+                                                        <div>{{ translate('Resources') }}
+                                                            <span class="propertyValue fw-bold">
+                                                                {% if Resources[id] is defined %}
+                                                                    {% for r in Resources[id] %}
+                                                                        {{ r.GetName()|escape_once }}{% if not loop.last %},
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+
+                                                        {% if schedule.GetIsCalendarSubscriptionAllowed() %}
+                                                            <div>
+                                                                <span>{{ translate('PublicId') }}</span>
+                                                                <span
+                                                                    class="propertyValue fw-bold">{{ schedule.GetPublicId() }}</span>
+                                                            </div>
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                    <div class="layout col-12 col-sm-6">
+                                                        <div>
+                                                            {{ translate('ScheduleLayout', [schedule.GetTimezone()]) }}
+                                                            <a class="update changeLayoutButton link-primary" href="#"
+                                                                title="{{ translate('ChangeLayout') }}">
+                                                                <span class="bi bi-pencil-square"
+                                                                    data-layout-type="{{ Layouts[id].GetType() }}"></span>
+                                                                <span
+                                                                    class="visually-hidden">{{ translate('ChangeLayout') }}</span>
+                                                            </a>
+                                                        </div>
+                                                        <input type="hidden" class="timezone"
+                                                            value="{{ schedule.GetTimezone() }}" />
+
+                                                        {% if Layouts[id].UsesDailyLayouts() %}
+                                                            <input type="hidden" class="usesDailyLayouts" value="true" />
+                                                            {{ translate('LayoutVariesByDay') }} - <a href="#layout{{ id }}"
+                                                                class="link-primary" role="button"
+                                                                data-bs-toggle="collapse">{{ translate('ShowHide') }}</a>
+                                                            <div class="collapse" id="layout{{ id }}">
+                                                                {% for day in range(0, 6) %}
+                                                                    {{ DayNames[day] }}
+                                                                    <div class="reservableSlots" id="reservableSlots_{{ day }}"
+                                                                        ref="reservableEdit_{{ day }}">
+                                                                        {% for period in Layouts[id].GetSlots(day) %}
+                                                                            {% if period.IsReservable() %}
+                                                                                {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                                {% if period.IsLabelled() %}
+                                                                                    {{ period.Label|escape_once }}
+                                                                                {% endif %}
+                                                                                {% if not loop.last %}, {% endif %}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {{ translate('None') }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    <div class="blockedSlots" id="blockedSlots_{{ day }}"
+                                                                        ref="blockedEdit_{{ day }}">
+                                                                        {% for period in Layouts[id].GetSlots(day) %}
+                                                                            {% if not period.IsReservable() %}
+                                                                                {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                                {% if period.IsLabelled() %}
+                                                                                    {{ period.Label|escape_once }}
+                                                                                {% endif %}
+                                                                                {% if not loop.last %}, {% endif %}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {{ translate('None') }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesAStandardLayout') }}</div>
+                                                            <div><a href="#" class="update switchLayout link-primary"
+                                                                    data-switch-to="{{ constant('ScheduleLayout::Custom') }}">{{ translate('SwitchToACustomLayout') }}</a>
+                                                            </div>
+                                                        {% elseif Layouts[id].UsesCustomLayout() %}
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesACustomLayout') }}</div>
+                                                            <div><a href="#" class="update switchLayout link-primary"
+                                                                    data-switch-to="{{ constant('ScheduleLayout::Standard') }}">{{ translate('SwitchToAStandardLayout') }}</a>
+                                                            </div>
+                                                        {% else %}
+                                                            <input type="hidden" class="usesDailyLayouts" value="false" />
+                                                            {{ translate('ReservableTimeSlots') }}
+                                                            <div class="reservableSlots" id="reservableSlots"
+                                                                ref="reservableEdit">
+                                                                {% for period in Layouts[id].GetSlots(null) %}
+                                                                    {% if period.IsReservable() %}
+                                                                        {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                        {% if period.IsLabelled() %}
+                                                                            {{ period.Label|escape_once }}
+                                                                        {% endif %}
+                                                                        {% if not loop.last %}, {% endif %}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endfor %}
+                                                            </div>
+                                                            {{ translate('BlockedTimeSlots') }}
+                                                            <div class="blockedSlots" id="blockedSlots" ref="blockedEdit">
+                                                                {% for period in Layouts[id].GetSlots(null) %}
+                                                                    {% if not period.IsReservable() %}
+                                                                        {{ period.Start.Format('H:i') }} - {{ period.End.Format('H:i') }}
+                                                                        {% if period.IsLabelled() %}
+                                                                            {{ period.Label|escape_once }}
+                                                                        {% endif %}
+                                                                        {% if not loop.last %}, {% endif %}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ translate('None') }}
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4 fw-bold">
+                                                                {{ translate('ThisScheduleUsesAStandardLayout') }}</div>
+                                                            <div><a href="#" class="update switchLayout link-primary"
+                                                                    data-switch-to="{{ constant('ScheduleLayout::Custom') }}">{{ translate('SwitchToACustomLayout') }}</a>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="actions col-12">
+                                                        <div
+                                                            class="alert alert-light  d-flex align-items-center gap-1 mb-0">
+                                                            {% if schedule.GetIsDefault() %}
+                                                                <span
+                                                                    class="note fst-italic">{{ translate('ThisIsTheDefaultSchedule') }}</span>
+                                                                <div class="vr"></div>
+                                                                <span
+                                                                    class="note fst-italic">{{ translate('DefaultScheduleCannotBeDeleted') }}</span>
+                                                                <div class="vr"></div>
+                                                            {% else %}
+                                                                <a class="update makeDefaultButton link-primary"
+                                                                    href="#">{{ translate('MakeDefault') }}</a>
+                                                                <div class="vr"></div>
+                                                                <a class="update deleteScheduleButton link-primary"
+                                                                    href="#">{{ translate('Delete') }}</a>
+                                                                <div class="vr"></div>
+                                                            {% endif %}
+                                                            {% if IcsEnabled is defined and IcsEnabled %}
+                                                                {% if schedule.GetIsCalendarSubscriptionAllowed() %}
+                                                                    <a class="update disableSubscription link-primary"
+                                                                        href="#">{{ translate('TurnOffSubscription') }}</a>
+                                                                    <div class="vr"></div>
+                                                                {% else %}
+                                                                    <a class="update enableSubscription link-primary"
+                                                                        href="#">{{ translate('TurnOnSubscription') }}</a>
+                                                                {% endif %}
+                                                                {% if schedule.GetIsCalendarSubscriptionAllowed() %}
+                                                                    {% set atomUrl = schedule.GetSubscriptionUrl().GetAtomUrl() %}
+                                                                    {% set icalUrl = schedule.GetSubscriptionUrl().GetWebcalUrl() %}
+                                                                    <a target="_blank" class="link-primary"
+                                                                        title="{{ translate('UrlCopiedToClipboard') }}"
+                                                                        onclick="copyUrlToClipboard('{{ atomUrl|escape_js|e('html') }}'); return false;"
+                                                                        href="{{ atomUrl|e }}"> <i
+                                                                            class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
+                                                                    <div class="vr"></div>
+                                                                    <a target="_blank" class="link-primary"
+                                                                        title="{{ translate('UrlCopiedToClipboard') }}"
+                                                                        onclick="copyUrlToClipboard('{{ icalUrl|escape_js|e('html') }}'); return false;"
+                                                                        href="{{ icalUrl|e }}">iCalendar</a>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                            {{ indicator('action-indicator') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ pagination(PageInfo) }}
+            </div>
+        </div>
+    </div>
+
+    <div id="addDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addScheduleDialogLabel"
+        aria-hidden="true">
+        <form id="addScheduleForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addScheduleDialogLabel">{{ translate('AddSchedule') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body vstack gap-2">
+                        <div class="form-group">
+                            <label class="fw-bold" for="addName">{{ translate('Name') }}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
+                            <input type="text" id="addName" class="form-control has-feedback required"
+                                {{ formname('SCHEDULE_NAME') }} />
+                        </div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="addStartsOn">{{ translate('StartsOn') }}</label>
+                            <select {{ formname('SCHEDULE_WEEKDAY_START') }} class="form-select" id="addStartsOn">
+                                <option value="{{ constant('Schedule::Today') }}">{{ Today }}</option>
+                                {% for dayIndex, dayName in DayNames %}
+                                    <option value="{{ dayIndex }}">{{ dayName }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="addNumDaysVisible">{{ translate('NumberOfDaysVisible') }}</label>
+                            <input type="number" min="1" max="100" class="form-control required" id="addNumDaysVisible"
+                                value="7" {{ formname('SCHEDULE_DAYS_VISIBLE') }} />
+                        </div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="addSameLayoutAs">{{ translate('UseSameLayoutAs') }}</label>
+                            <select class="form-select" {{ formname('SCHEDULE_ID') }} id="addSameLayoutAs">
+                                {% for schedule in SourceSchedules %}
+                                    <option value="{{ schedule.GetId() }}">{{ schedule.GetName()|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button(submit: true) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <input type="hidden" id="activeId" value="" />
+
+    <div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteScheduleDialogLabel"
+        aria-hidden="true">
+        <form id="deleteForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteScheduleDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="fw-bold"
+                                for="targetScheduleId">{{ translate('MoveResourcesAndReservations') }}</label>
+                            <select id="targetScheduleId" {{ formname('SCHEDULE_ID') }} class="form-select required">
+                                <option value="">-- {{ translate('Schedule') }} --</option>
+                                {% for schedule in SourceSchedules %}
+                                    <option value="{{ schedule.GetId() }}">{{ schedule.GetName()|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="changeLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="changeLayoutDialogLabel" aria-hidden="true">
+        <form id="changeLayoutForm" method="post" role="form" class="form-inline">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changeLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body row gy-2">
+                        <div class="col-12">
+                            <div class="validationSummary alert alert-danger no-show">
+                                <ul>{{ async_validator('layoutValidator', 'ValidLayoutRequired') }}</ul>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="usesSingleLayout"
+                                    {{ formname('USING_SINGLE_LAYOUT') }}>
+                                <label class="form-check-label"
+                                    for="usesSingleLayout">{{ translate('UseSameLayoutForAllDays') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12" id="dailySlots">
+                            <div role="tabpanel" id="tabs">
+                                <ul class="nav nav-tabs mb-2" role="tablist">
+                                    <li role="presentation" class="nav-item"><a href="#tabs-0"
+                                            class="nav-link active link-primary" aria-controls="tabs-0" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[0] }}</a>
+                                    </li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-1"
+                                            class="nav-link link-primary" aria-controls="tabs-1" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[1] }}</a>
+                                    </li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-2"
+                                            class="nav-link link-primary" aria-controls="tabs-2" role="tab"
+                                            data-bs-toggle="tab" class="nav-item">{{ DayNames[2] }}</a></li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-3"
+                                            class="nav-link link-primary" aria-controls="tabs-3" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[3] }}</a>
+                                    </li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-4"
+                                            class="nav-link link-primary" aria-controls="tabs-4" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[4] }}</a>
+                                    </li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-5"
+                                            class="nav-link link-primary" aria-controls="tabs-5" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[5] }}</a>
+                                    </li>
+                                    <li role="presentation" class="nav-item"><a href="#tabs-6"
+                                            class="nav-link link-primary" aria-controls="tabs-6" role="tab"
+                                            data-bs-toggle="tab">{{ DayNames[6] }}</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tab-pane" class="tab-pane active" id="tabs-0">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_0">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_0"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_0"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_0">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_0"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_0"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-1">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_1">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_1"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_1"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_1">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_1"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_1"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-2">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_2">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_2"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_2"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_2">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_2"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_2"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-3">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_3">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_3"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_3"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_3">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_3"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-4">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_4">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_4"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_4"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_4">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_4"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_4"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-5">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_5">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_5"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_5"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_5">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_5"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tabs-6">
+                                        <div id="{{ id }}" class="row">
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="reservableEdit_6">{{ translate('ReservableTimeSlots') }}</label>
+                                                <textarea class="reservableEdit form-control" id="reservableEdit_6"
+                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_6"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="fw-bold"
+                                                    for="blockedEdit_6">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                        class="bi bi-magic"></i>
+                                                    {{ translate('Autofill') }}</a>
+                                                <textarea class="blockedEdit form-control" id="blockedEdit_6"
+                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_6"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="staticSlots" class="row">
+                            <div class="col-6">
+                                <label class="fw-bold"
+                                    for="reservableEdit">{{ translate('ReservableTimeSlots') }}</label>
+                                <textarea class="reservableEdit form-control" id="reservableEdit"
+                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}"></textarea>
+                            </div>
+                            <div class="col-6">
+                                <label class="fw-bold"
+                                    for="blockedEdit">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                        class="bi bi-magic"></i>
+                                    {{ translate('Autofill') }}</a>
+                                <textarea class="blockedEdit form-control" id="blockedEdit"
+                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="slotTimezone col-12 d-flex align-items-center gap-1">
+                            <label class="fw-bold" for="layoutTimezone">{{ translate('Timezone') }}</label>
+                            <select {{ formname('TIMEZONE') }} id="layoutTimezone"
+                                class="form-select form-select-sm w-auto">
+                                {{ html_options(values: TimezoneValues, output: TimezoneOutput) }}
+                            </select>
+                        </div>
+
+                        <div class="slotWizard col-12">
+                            <div class="d-flex align-items-center flex-wrap gap-1">
+                                {% set layoutConfig %}<input type='number' min='0' step='15' value='30' id='quickLayoutConfig' size='5'
+                                    title='Minutes' class='form-control form-control-sm' />{% endset %}
+                                {% set layoutStart %}<input type='text' value='08:00' id='quickLayoutStart' size='10' title='From time'
+                                    class='form-control form-control-sm' maxlength='5' />{% endset %}
+                                {% set layoutEnd %}<input type='text' value='18:00' id='quickLayoutEnd' size='10' title='End time'
+                                    class='form-control form-control-sm' maxlength='5' />{% endset %}
+                                {{ translate('QuickSlotCreation', [layoutConfig, layoutStart, layoutEnd]) }}
+                                <a href="#" id="createQuickLayout" type="button"
+                                    class="btn btn-primary btn-sm">{{ translate('Create') }}</a>
+                            </div>
+                        </div>
+                        <div class="slotHelpText col-12">
+                            <p>{{ translate('Format') }}: <span class="font-monospace">HH:MM - HH:MM
+                                </span> {{ translate('OptionalLabel') }}</p>
+
+                            <p>{{ translate('LayoutInstructions') }}</p>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="peakTimesDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="peakTimesDialogLabel"
+        aria-hidden="true">
+        <form id="peakTimesForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="peakTimesDialogLabel">{{ translate('PeakTimes') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="peakAllDay"
+                                    {{ formname('PEAK_ALL_DAY') }} />
+                                <label class="form-check-label" for="peakAllDay">{{ translate('AllDay') }}</label>
+                            </div>
+                            <div id="peakTimes" class="d-flex align-items-center flex-wrap gap-1">
+                                <label class="fw-bold" for="peakStartTime">{{ translate('Between') }}</label>
+                                <label for="peakStartTime" class="visually-hidden">Peak Begin Time</label>
+                                <label for="peakEndTime" class="visually-hidden">Peak End Time</label>
+                                <select {{ formname('PEAK_BEGIN_TIME') }} id="peakStartTime"
+                                    class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
+                                    data-step="30" data-default="{{ DefaultDate.format('H:i') }}">
+                                </select>
+                                <div class="mx-1">-</div>
+                                <select {{ formname('PEAK_END_TIME') }} id="peakEndTime"
+                                    class="form-select form-select-sm w-auto timepicker" data-format="{{ TimeFormat }}"
+                                    data-step="30" data-default="{{ DefaultDate.AddHours(9).format('H:i') }}">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="peakEveryDay" checked="checked"
+                                    {{ formname('PEAK_EVERY_DAY') }} />
+                                <label class="form-check-label" for="peakEveryDay">{{ translate('Everyday') }}</label>
+                            </div>
+                            <div id="peakDayList" class="no-show">
+                                <div class="btn-group-sm" data-bs-toggle="buttons">
+                                    <input type="checkbox" class="btn-check" id="peakDay0"
+                                        {{ formname('REPEAT_SUNDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay0">
+                                        {{ DayNames[0] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay1"
+                                        {{ formname('REPEAT_MONDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay1">
+                                        {{ DayNames[1] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay2"
+                                        {{ formname('REPEAT_TUESDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay2">
+                                        {{ DayNames[2] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay3"
+                                        {{ formname('REPEAT_WEDNESDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay3">
+                                        {{ DayNames[3] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay4"
+                                        {{ formname('REPEAT_THURSDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay4">
+                                        {{ DayNames[4] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay5"
+                                        {{ formname('REPEAT_FRIDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay5">
+                                        {{ DayNames[5] }}
+                                    </label>
+
+                                    <input type="checkbox" class="btn-check" id="peakDay6"
+                                        {{ formname('REPEAT_SATURDAY') }} />
+                                    <label class="btn btn-outline-primary" for="peakDay6">
+                                        {{ DayNames[6] }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="peakAllYear" checked="checked"
+                                    {{ formname('PEAK_ALL_YEAR') }} />
+                                <label class="form-check-label" for="peakAllYear">{{ translate('AllYear') }}</label>
+                            </div>
+                            <div id="peakDateRange" class="no-show d-flex align-items-center gap-1">
+                                <label for="peakBeginMonth" class="fw-bold">{{ translate('BeginDate') }}</label>
+
+                                <select id="peakBeginMonth" class="form-select form-select-sm"
+                                    {{ formname('PEAK_BEGIN_MONTH') }}>
+                                    {% for i, month in Months %}
+                                        <option value="{{ i + 1 }}">{{ month }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <label for="peakBeginDay" class="no-show">Peak Begin Day</label>
+                                <select id="peakBeginDay" class="form-select form-select-sm"
+                                    {{ formname('PEAK_BEGIN_DAY') }}>
+                                    {% for day in DayList %}
+                                        <option value="{{ day }}">{{ day }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <label for="peakEndMonth" class="fw-bold ms-2">{{ translate('EndDate') }}</label>
+                                <select id="peakEndMonth" class="form-select form-select-sm"
+                                    {{ formname('PEAK_END_MONTH') }}>
+                                    {% for i, month in Months %}
+                                        <option value="{{ i + 1 }}">{{ month }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="peakEndDay" class="no-show">Peak End Day</label>
+                                <select id="peakEndDay" class="form-select form-select-sm" {{ formname('PEAK_END_DAY') }}>
+                                    {% for day in DayList %}
+                                        <option value="{{ day }}">{{ day }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <input type="hidden" {{ formname('PEAK_DELETE') }} id="deletePeakTimes" value="" />
+                    </div>
+                    <div class="modal-footer">
+                        {{ delete_button(class: 'pull-left', attributes: {id: 'deletePeakBtn'}) }}
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="availabilityDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="availabilityDialogLabel" aria-hidden="true">
+        <form id="availabilityForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="availabilityDialogLabel">{{ translate('Availability') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="availableAllYear"
+                                    {{ formname('AVAILABLE_ALL_YEAR') }} />
+                                <label class="form-check-label"
+                                    for="availableAllYear">{{ translate('AvailableAllYear') }}</label>
+                            </div>
+                            <div id="availableDates" class="d-flex align-items-center gap-1">
+                                <label for="availabilityStartDate">{{ translate('AvailableBetween') }}</label>
+                                <label for="availabilityEndDate" class="visually-hidden">Available End Date</label>
+                                <input type="text" id="availabilityStartDate" {{ formname('AVAILABLE_BEGIN_DATE') }}
+                                    class="form-control form-control-sm w-auto" required />
+                                <div class="mx-1">-</div>
+                                <input type="text" id="availabilityEndDate" {{ formname('AVAILABLE_END_DATE') }}
+                                    class="form-control form-control-sm w-auto" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="switchLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="switchLayoutDialogLabel" aria-hidden="true">
+        <form id="switchLayoutForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="switchLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            {{ translate('SwitchLayoutWarning') }}
+                        </div>
+                        <input type="hidden" id="switchLayoutTypeId" {{ formname('LAYOUT_TYPE') }} />
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button(submit: true) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="customLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="customLayoutDialogLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="layoutSlotForm" method="post">
+        <input type="hidden" id="slotStartDate" {{ formname('BEGIN_DATE') }} />
+        <input type="hidden" id="slotEndDate" {{ formname('END_DATE') }} />
+        <input type="hidden" id="slotId" {{ formname('LAYOUT_PERIOD_ID') }} />
+    </form>
+
+    <div id="deleteCustomLayoutDialog" style="z-index:10000;" class="default-box-shadow">
+        <form id="deleteCustomTimeSlotForm" method="post">
+            <input type="hidden" id="deleteSlotStartDate" {{ formname('BEGIN_DATE') }} />
+            <input type="hidden" id="deleteSlotEndDate" {{ formname('END_DATE') }} />
+            <div>{{ translate('DeleteThisTimeSlot') }}</div>
+            <div>
+                {{ cancel_button(attributes: {id: 'cancelDeleteSlot'}) }}
+                {{ delete_button(attributes: {id: 'deleteSlot'}) }}
+            </div>
+        </form>
+    </div>
+
+    <div id="confirmCreateSlotDialog" class="default-box-shadow" style="z-index:10000;">
+        {{ cancel_button(attributes: {id: 'cancelCreateSlot'}) }}
+        {{ add_button(attributes: {id: 'confirmCreateOK'}) }}
+    </div>
+
+    <div id="concurrentMaximumDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="concurrentMaximumDialogLabel" aria-hidden="true">
+        <form id="concurrentMaximumForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="concurrentMaximumDialogLabel">
+                            {{ translate('ScheduleMaximumConcurrent') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            {{ translate('ScheduleMaximumConcurrentNote') }}
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="maximumConcurrentUnlimited"
+                                {{ formname('MAXIMUM_CONCURRENT_UNLIMITED') }} />
+                            <label class="form-check-label"
+                                for="maximumConcurrentUnlimited">{{ translate('Unlimited') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="fw-bold" for="maximumConcurrent">{{ translate('Resources') }}</label>
+                            <input type="number" class="form-control form-control-sm required" min="0"
+                                id="maximumConcurrent" {{ formname('MAXIMUM_CONCURRENT_RESERVATIONS') }} />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button(submit: true) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="resourcesPerReservationDialog" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="resourcesPerReservationDialogLabel" aria-hidden="true">
+        <form id="resourcesPerReservationForm" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resourcesPerReservationDialogLabel">
+                            {{ translate('ScheduleResourcesPerReservation') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="resourcesPerReservationUnlimited"
+                                {{ formname('MAXIMUM_RESOURCES_PER_RESERVATION_UNLIMITED') }} />
+                            <label class="form-check-label"
+                                for="resourcesPerReservationUnlimited">{{ translate('Unlimited') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="fw-bold"
+                                for="resourcesPerReservationResources">{{ translate('Resources') }}</label>
+                            <input type="number" class="form-control form-control-sm required" min="0"
+                                id="resourcesPerReservationResources"
+                                {{ formname('MAXIMUM_RESOURCES_PER_RESERVATION') }} />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button(submit: true) }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{ control('DatePickerSetupControl', {ControlId: 'availabilityStartDate', DefaultDate: StartDate}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'availabilityEndDate', DefaultDate: EndDate}) }}
+
+    {{ csrf_token() }}
+    {% set InlineEdit = true %}{% set Fullcalendar = true %}{% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ datatable(tableIdFilter) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'admin/schedule.js') }}
+    {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        function setUpEditables() {
+            $.fn.editable.defaults.mode = 'popup';
+            $.fn.editable.defaults.toggle = 'manual';
+            $.fn.editable.defaults.emptyclass = '';
+            $.fn.editable.defaults.params = function(params) {
+                params.CSRF_TOKEN = $('#csrf_token').val();
+                return params;
+            };
+
+            var updateUrl = '{{ server.SCRIPT_NAME }}?action=';
+
+            $('.scheduleName').editable({
+                url: updateUrl + '{{ constant('ManageSchedules::ActionRename') }}',
+                validate: function(value) {
+                    if ($.trim(value) === '') {
+                        return "{{ translate('RequiredValue')|escape_js }}";
+                    }
+                }
+            });
+
+            $('.daysVisible').editable({
+                url: updateUrl + '{{ constant('ManageSchedules::ActionChangeDaysVisible') }}'
+            });
+
+            $('.dayName').editable({
+                url: updateUrl + '{{ constant('ManageSchedules::ActionChangeStartDay') }}',
+                source: [{
+                        value: '{{ constant('Schedule::Today') }}',
+                        text: "{{ Today|escape_js }}"
+                    }
+                    {% for dayIndex, dayName in DayNames %}
+                        , {
+                            value: {{ dayIndex }},
+                            text: "{{ dayName|escape_js }}"
+                        }
+                    {% endfor %}
+                ]
+            });
+
+            $('.defaultScheduleStyle').editable({
+                url: updateUrl + '{{ constant('ManageSchedules::ActionChangeDefaultStyle') }}',
+                source: [
+                    {% for styleIndex, styleName in StyleNames %}
+                        {
+                            value: '{{ styleIndex }}',
+                            text: "{{ styleName|escape_js }}"
+                        },
+                    {% endfor %}
+                ]
+            });
+
+            $('.scheduleAdmin').editable({
+                url: updateUrl + '{{ constant('ManageSchedules::ChangeAdminGroup') }}',
+                emptytext: "{{ translate('None')|escape_js }}",
+                source: [{
+                        value: '0',
+                        text: "{{ translate('None')|escape_js }}",
+                    }
+                    {% if AdminGroups is defined %}
+                        {% for group in AdminGroups %}
+                            , {
+                                value: {{ group.Id() }},
+                                text: "{{ group.Name()|escape_js }}"
+                            }
+                        {% endfor %}
+                    {% endif %}
+                ]
+            });
+        }
+
+        $(document).ready(function() {
+            setUpEditables();
+
+            var opts = {
+                submitUrl: '{{ server.SCRIPT_NAME }}',
+                saveRedirect: '{{ server.SCRIPT_NAME }}',
+                changeLayoutAction: '{{ constant('ManageSchedules::ActionChangeLayout') }}',
+                addAction: '{{ constant('ManageSchedules::ActionAdd') }}',
+                peakTimesAction: '{{ constant('ManageSchedules::ActionChangePeakTimes') }}',
+                makeDefaultAction: '{{ constant('ManageSchedules::ActionMakeDefault') }}',
+                deleteAction: '{{ constant('ManageSchedules::ActionDelete') }}',
+                availabilityAction: '{{ constant('ManageSchedules::ActionChangeAvailability') }}',
+                enableSubscriptionAction: '{{ constant('ManageSchedules::ActionEnableSubscription') }}',
+                disableSubscriptionAction: '{{ constant('ManageSchedules::ActionDisableSubscription') }}',
+                switchLayout: '{{ constant('ManageSchedules::ActionSwitchLayoutType') }}',
+                addLayoutSlot: '{{ constant('ManageSchedules::ActionAddLayoutSlot') }}',
+                updateLayoutSlot: '{{ constant('ManageSchedules::ActionUpdateLayoutSlot') }}',
+                deleteLayoutSlot: '{{ constant('ManageSchedules::ActionDeleteLayoutSlot') }}',
+                maximumConcurrentAction: '{{ constant('ManageSchedules::ActionChangeMaximumConcurrent') }}',
+                maximumResourcesAction: '{{ constant('ManageSchedules::ActionChangeResourcesPerReservation') }}',
+                calendarOptions: {
+                    buttonText: {
+                        today: "{{ translate('Today')|escape_js }}",
+                        month: "{{ translate('Month')|escape_js }}",
+                        week: "{{ translate('Week')|escape_js }}",
+                        day: "{{ translate('Day')|escape_js }}",
+                        list: "{{ translate('List')|escape_js }}"
+                    },
+                    defaultDate: '{{ now().ToTimezone(Timezone).Format('Y-m-d') }}',
+                    eventsUrl: '{{ server.SCRIPT_NAME }}'
+                }
+            };
+
+            var scheduleManagement = new ScheduleManagement(opts);
+            scheduleManagement.init();
+        });
+    </script>
+
+</div>
+{{ include('globalfooter.twig') }}
