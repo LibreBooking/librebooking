@@ -1,0 +1,396 @@
+{{ include('globalheader.twig', {DataTable: true}) }}
+
+<div id="page-manage-resources" class="admin-page">
+    <div class="clearfix border-bottom mb-3">
+        <h1 class="float-start">{{ translate('ManageResources') }}</h1>
+    </div>
+
+    <div class="accordion">
+        <div class="accordion-item shadow mb-3 panel-default filterTable" id="filter-resources-panel">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#filter-resources-content" aria-expanded="false"
+                    aria-controls="filter-resources-content">
+                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
+                </button>
+            </h2>
+            <div id="filter-resources-content" class="accordion-collapse collapse">
+                <form id="filterForm" class="horizontal-list" role="form" method="get">
+                    <div class="accordion-body">
+                        <div class="row gy-2 mb-2">
+                            {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
+
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterResourceName" class="fw-bold">{{ translate('Resource') }}</label>
+                                <div class="position-relative">
+                                    <input type="text" id="filterResourceName" class="form-control"
+                                        {{ formname(key: 'RESOURCE_NAME') }} value="{{ ResourceNameFilter|escape_once }}"
+                                        placeholder="{{ translate('Name') }}" />
+                                    <span class="searchclear searchclear-label bi bi-x-circle-fill"
+                                        ref="filterResourceName"></span>
+                                </div>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterScheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
+                                <select id="filterScheduleId" {{ formname(key: 'SCHEDULE_ID') }} class="form-select">
+                                    <option value="">{{ translate('AllSchedules') }}</option>
+                                    {{ object_html_options(options: AllSchedules, key: 'GetId', label: 'GetName', selected: ScheduleIdFilter) }}
+                                </select>
+                            </div>
+
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterResourceType" class="fw-bold">{{ translate('ResourceType') }}</label>
+                                <select id="filterResourceType" class="form-select" {{ formname(key: 'RESOURCE_TYPE_ID') }}>
+                                    <option value="">{{ translate('AllResourceTypes') }}</option>
+                                    {{ object_html_options(options: ResourceTypes, key: 'Id', label: 'Name', selected: ResourceTypeFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="resourceStatusIdFilter"
+                                    class="fw-bold">{{ translate('ResourceStatus') }}</label>
+                                <div class="d-flex flex-wrap">
+                                    <select id="resourceStatusIdFilter" class="form-select inline w-auto"
+                                        {{ formname(key: 'RESOURCE_STATUS_ID') }}>
+                                        <option value="">{{ translate('AllResourceStatuses') }}</option>
+                                        <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}</option>
+                                        <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">{{ translate('Unavailable') }}
+                                        </option>
+                                        <option value="{{ constant('ResourceStatus::HIDDEN') }}">{{ translate('Hidden') }}</option>
+                                    </select>
+                                    <label for="resourceReasonIdFilter"
+                                        class="visually-hidden">{{ translate('Reason') }}</label>
+                                    <select id="resourceReasonIdFilter" class="form-select w-auto inline"
+                                        {{ formname(key: 'RESOURCE_STATUS_REASON_ID') }}>
+                                        <option value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterCapacity" class="fw-bold">{{ translate('MinimumCapacity') }}</label>
+                                <input type="number" min="0" id="filterCapacity" class="form-control"
+                                    {{ formname(key: 'MAX_PARTICIPANTS') }} value="{{ CapacityFilter }}"
+                                    placeholder="{{ translate('MinimumCapacity') }}" />
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterRequiresApproval"
+                                    class="fw-bold">{{ translate('ResourceRequiresApproval') }}</label>
+                                <select id="filterRequiresApproval" class="form-select" {{ formname(key: 'REQUIRES_APPROVAL') }}
+                                    title="{{ translate('ResourceRequiresApproval') }}">
+                                    <option value="">{{ translate('ResourceRequiresApproval') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: RequiresApprovalFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterAutoAssign"
+                                    class="fw-bold">{{ translate('ResourcePermissionAutoGranted') }}</label>
+                                <select id="filterAutoAssign" class="form-select" {{ formname(key: 'AUTO_ASSIGN') }}
+                                    title="{{ translate('ResourcePermissionAutoGranted') }}">
+                                    <option value="">{{ translate('ResourcePermissionAutoGranted') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: AutoPermissionFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterAllowMultiDay"
+                                    class="fw-bold">{{ translate('ResourceAllowMultiDay') }}</label>
+                                <select id="filterAllowMultiDay" class="form-select" {{ formname(key: 'ALLOW_MULTIDAY') }}
+                                    title="{{ translate('ResourceAllowMultiDay') }}">
+                                    <option value="">{{ translate('ResourceAllowMultiDay') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: AllowMultiDayFilter) }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            {% for attribute in AttributeFilters %}
+                                {{ control('AttributeControl', {idPrefix: 'search', attribute: attribute, searchmode: true, class: 'customAttribute filter-customAttribute' ~ attribute.Id() ~ ' ' ~ groupClass}) }}
+                            {% endfor %}
+                        </div>
+
+                        <div class="card-footer border-top pt-3">
+                            {{ filter_button(attributes: {id: 'filter'}) }}
+                            {{ reset_button(attributes: {id: 'clearFilter'}) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="globalError" class="error d-none"></div>
+
+    <div class="card shadow panel-default admin-panel" id="list-resources-panel">
+        <div class="card-body accordion" id="resourceList">
+            {% if Resources is defined and Resources|length > 0 %}
+                {% set tableId = 'resourcesTable' %}
+                <table class="table table-borderless w-100" id="{{ tableId }}">
+                    <thead class="d-none">
+                        <tr>
+                            <th>{{ translate('Resources') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resource in Resources %}
+                            {% set id = resource.GetResourceId() %}
+                            <tr>
+                                <td>
+                                    <div class="accordion-item shadow mb-2">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#id{{ resource.GetResourceId() }}" aria-expanded="false"
+                                                aria-controls="id{{ resource.GetResourceId() }}">
+                                                {{ resource.GetName()|escape_once }}
+                                            </button>
+                                        </h2>
+                                        <div id="id{{ id }}" class="accordion-collapse collapse">
+                                            <div class="accordion-body resourceDetails row" data-resourceId="{{ id }}">
+                                                <div class="col-12 col-sm-5">
+                                                    <input type="hidden" class="id" value="{{ id }}" />
+                                                    <div class="row gy-2">
+                                                        <div class="col-sm-3 col-6 resourceImage">
+                                                            <div class="">
+                                                                {% if resource.HasImage() %}
+
+                                                                    <div id="resourceImageCarousel" class="carousel slide">
+                                                                        <div class="carousel-inner">
+                                                                            <div class="carousel-item active">
+                                                                                <img src="{{ resource_image(resource.GetImage()) }}"
+                                                                                    alt="{{ resource.GetName()|escape_once }}"
+                                                                                    class="rounded d-block w-100" />
+                                                                            </div>
+                                                                            {% for image in resource.GetImages() %}
+                                                                                <div class="carousel-item">
+                                                                                    <img src="{{ resource_image(image) }}"
+                                                                                        alt="{{ resource.GetName()|escape_once }}"
+                                                                                        class="rounded d-block w-100" />
+                                                                                </div>
+                                                                            {% endfor %}
+                                                                        </div>
+
+                                                                        <div class="carousel-indicators">
+                                                                            {% if resource.GetImages()|length > 0 %}
+                                                                                {% set slide = 1 %}
+                                                                                <button type="button"
+                                                                                    data-bs-target="#resourceImageCarousel"
+                                                                                    data-bs-slide-to="0" class="active"></button>
+                                                                                {% for image in resource.GetImages() %}
+                                                                                    <button type="button"
+                                                                                        data-bs-target="#resourceImageCarousel"
+                                                                                        data-bs-slide-to="{{ slide }}"></button>
+                                                                                    {% set slide = slide + 1 %}
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="text-center">
+                                                                        <div
+                                                                            class="noImage w-100 bg-light border rounded-3 mx-auto">
+                                                                            <span class="bi bi-image fs-1"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="text-center mt-4">
+                                                                {{ translate('ResourceColor') }}
+                                                                <div class="border rounded-1 mx-auto w-100"
+                                                                    style="height: 23px;background-color:{% if resource.HasColor() %}{{ resource.GetColor() }}{% else %}#ffffff{% endif %}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-9 col-6">
+                                                            <div class="title resourceNameField fs-5 fw-bold">
+                                                                {{ resource.GetName()|escape_once }}</div>
+                                                            <div>
+                                                                <label class="inline fw-bold">ResourceId:</label>
+                                                                <span>{{ id }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('Status') }}</label>
+                                                                {% if resource.IsAvailable() %}
+                                                                    <span>{{ translate('Available') }}<i
+                                                                            class="bi bi-check-circle-fill text-success ms-1"></i></span>
+                                                                {% elseif resource.IsUnavailable() %}
+                                                                    <span>{{ translate('Unavailable') }}<i
+                                                                            class="bi bi-exclamation-circle-fill text-warning ms-1"></i></span>
+                                                                {% else %}
+                                                                    <span>{{ translate('Hidden') }}<i
+                                                                            class="bi bi-x-circle-fill text-danger ms-1"></i></span>
+                                                                {% endif %}
+                                                                {% if StatusReasons is defined and resource.GetStatusReasonId() in StatusReasons|keys %}
+                                                                    <span
+                                                                        class="statusReason">{{ StatusReasons[resource.GetStatusReasonId()].Description()|escape_once }}</span>
+                                                                {% endif %}
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('Schedule') }}</label>
+                                                                <span>{{ Schedules[resource.GetScheduleId()].GetName()|escape_once }}</span>
+                                                            </div>
+
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('ResourceType') }}</label>
+                                                                <span>
+                                                                    {% if resource.HasResourceType() %}
+                                                                        {{ ResourceTypes[resource.GetResourceTypeId()].Name()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoResourceTypeLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('SortOrder') }}</label>
+                                                                <span>{{ resource.GetSortOrder() ?: '0' }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('Location') }}</label>
+                                                                <span>
+                                                                    {% if resource.HasLocation() %}
+                                                                        {{ resource.GetLocation()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoLocationLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('Contact') }}</label>
+                                                                <span>
+                                                                    {% if resource.HasContact() %}
+                                                                        {{ resource.GetContact()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoContactLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Description') }}</label>
+                                                                <div class="descriptionValue">{%- if resource.HasDescription() -%}{{ resource.GetDescription()|sanitize_rich_text }}{%- else -%}{{ translate('NoDescriptionLabel') }}{%- endif -%}</div>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('Notes') }}</label>
+                                                                <div class="notesValue">
+                                                                    {% if resource.HasNotes() %}
+                                                                        {{ resource.GetNotes()|sanitize_rich_text }}
+                                                                    {% else %}
+                                                                        {{ translate('NoNotesLabel') }}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">{{ translate('ResourceAdministrator') }}</label>
+                                                                <span>
+                                                                    {% set adminGroupId = resource.GetAdminGroupId() %}
+                                                                    {% if adminGroupId is not null and ResourceAdminGroup is defined and adminGroupId in ResourceAdminGroup|keys %}
+                                                                        {{ ResourceAdminGroup[adminGroupId].Name|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('None') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-sm-7">
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-12">
+                                                            <div class="mb-4">
+                                                                <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
+                                                                <div class="durationPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+
+                                                            {% if CreditsEnabled is defined and CreditsEnabled %}
+                                                                <div class="mb-4">
+                                                                    <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
+                                                                    <div class="creditsPlaceHolder">
+                                                                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+
+                                                            <div style="mb-4">
+                                                                <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
+                                                                <div class="capacityPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-sm-6 col-12">
+                                                            <div style="mb-4">
+                                                                <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
+                                                                <div class="accessPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 col-12 mt-4">
+                                                            <span class="fs-6 fw-bold">{{ translate('PermissionType') }}</span>
+                                                            <div class="resourcePermissionTypePlaceHolder">
+                                                                {% if ResourcePermissionTypes is defined and ResourcePermissionTypes[resource.GetId()] == 0 %}
+                                                                    {{ translate('FullAccess') }}
+                                                                {% else %}
+                                                                    {{ translate('ViewOnly') }}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 col-12 mt-4">
+                                                            <span class="fs-6 fw-bold">{{ translate('ResourceGroups') }}</span>
+                                                            <div class="resourceGroupsPlaceHolder">
+                                                                {% if resource.GetResourceGroupIds()|length == 0 %}
+                                                                    {{ translate('None') }}
+                                                                {% endif %}
+                                                                {% for resourceGroupId in resource.GetResourceGroupIds() %}
+                                                                    <span class="resourceGroupId"
+                                                                        data-value="{{ resourceGroupId }}">{{ ResourceGroup[resourceGroupId].name|escape_once }}</span>{% if not loop.last %},
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12 mt-2">
+                                                            <div class="fs-6 fw-bold">{{ translate('Public') }}</div>
+                                                            <div class="publicSettingsPlaceHolder">
+                                                                {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource, modeEdit: true}) }}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="customAttributes">
+                                                    {% if AttributeList is defined and AttributeList|length > 0 %}
+                                                        {% for attribute in AttributeList %}
+                                                            {{ include('Admin/InlineAttributeEdit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}) }}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h3 class="text-center">{{ translate('NoResourcesToView') }}</h3>
+            {% endif %}
+        </div>
+    </div>
+
+    {{ csrf_token() }}
+
+    {{ include('javascript-includes.twig', {DataTable: true}) }}
+    {{ datatable(tableId is defined ? tableId : '') }}
+    {{ jsfile('search-clear.js') }}
+</div>
+
+{{ include('globalfooter.twig') }}
