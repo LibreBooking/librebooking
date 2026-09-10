@@ -1,0 +1,2398 @@
+{{ include('globalheader.twig', {InlineEdit: true, DataTable: true, Trumbowyg: true}) }}
+
+<div id="page-manage-resources" class="admin-page">
+    <div class="clearfix border-bottom mb-3">
+        <div class="dropdown admin-header-more float-end">
+            <div class="btn-group btn-group-sm" role="group">
+                <button href="#" role="button" class="add-link add-resource btn btn-primary">
+                    <span class="bi bi-plus-circle-fill icon add"></span>
+                    {{ translate('AddResource') }}
+                </button>
+                <button class="btn btn-primary dropdown-toggle" type="button" id="moreResourceActions"
+                    data-bs-toggle="dropdown">
+                    {{ translate('MoreResourceActions') }}
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="moreResourceActions">
+
+                    <li role="presentation">
+                        <a role="menuitem" href="{{ Path }}admin/manage_resource_groups.php"
+                            class="dropdown-item">{{ translate('ManageResourceGroups') }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" href="{{ Path }}admin/manage_resource_types.php"
+                            class="dropdown-item">{{ translate('ManageResourceTypes') }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" href="{{ Path }}admin/manage_resource_status.php"
+                            class="dropdown-item">{{ translate('ManageResourceStatus') }}</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" href="#" class="import-resources dropdown-item" id="import-resources">
+                            <i class="bi bi-box-arrow-in-down"></i>
+                            {{ translate('ImportResources') }}
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" href="{{ ExportUrl }}" download="{{ ExportUrl }}"
+                            class="export-resources dropdown-item" id="export-resources" target="_blank">
+                            <i class="bi bi-box-arrow-in-up"></i>
+                            {{ translate('ExportResources') }}
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    {% if Resources is defined and Resources|length > 0 %}
+                        <li role="presentation">
+                            <a role="menuitem" href="#" class="dropdown-item"
+                                id="bulkUpdatePromptButton">{{ translate('BulkResourceUpdate') }}</a>
+                        </li>
+                    {% endif %}
+                    {% if Resources is defined and Resources|length > 0 %}
+                        <li role="presentation">
+                            <a role="menuitem" href="#" class="dropdown-item"
+                                id="bulkDeletePromptButton">{{ translate('BulkResourceDelete') }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <h1 class="float-start">{{ translate('ManageResources') }}</h1>
+    </div>
+
+    <div class="accordion">
+        <div class="accordion-item shadow mb-3 panel-default filterTable" id="filter-resources-panel">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#filter-resources-content" aria-expanded="false"
+                    aria-controls="filter-resources-content">
+                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
+                </button>
+            </h2>
+            <div id="filter-resources-content" class="accordion-collapse collapse">
+                <form id="filterForm" class="horizontal-list" role="form" method="get">
+                    <div class="accordion-body">
+                        <div class="row gy-2 mb-2">
+                            {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
+
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterResourceName" class="fw-bold">{{ translate('Resource') }}</label>
+                                <div class="position-relative">
+                                    <input id="filterResourceName" class="form-control form-control-sm"
+                                        {{ formname(key: 'RESOURCE_NAME') }} value="{{ ResourceNameFilter|escape_once }}"
+                                        placeholder="{{ translate('Name') }}" />
+                                    <span class="searchclear searchclear-label bi bi-x-circle-fill"
+                                        ref="filterResourceName"></span>
+                                </div>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterScheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
+                                <select id="filterScheduleId" {{ formname(key: 'SCHEDULE_ID') }}
+                                    class="form-select form-select-sm">
+                                    <option value="">{{ translate('AllSchedules') }}</option>
+                                    {{ object_html_options(options: AllSchedules, key: 'GetId', label: 'GetName', selected: ScheduleIdFilter) }}
+                                </select>
+                            </div>
+
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterResourceType" class="fw-bold">{{ translate('ResourceType') }}</label>
+                                <select id="filterResourceType" class="form-select form-select-sm"
+                                    {{ formname(key: 'RESOURCE_TYPE_ID') }}>
+                                    <option value="">{{ translate('AllResourceTypes') }}</option>
+                                    {{ object_html_options(options: ResourceTypes, key: 'Id', label: 'Name', selected: ResourceTypeFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="resourceStatusIdFilter"
+                                    class="fw-bold">{{ translate('ResourceStatus') }}</label>
+                                <div class="d-flex flex-wrap">
+                                    <select id="resourceStatusIdFilter" class="form-select form-select-sm inline w-auto"
+                                        {{ formname(key: 'RESOURCE_STATUS_ID') }}>
+                                        <option value="">{{ translate('AllResourceStatuses') }}</option>
+                                        <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}</option>
+                                        <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">{{ translate('Unavailable') }}
+                                        </option>
+                                        <option value="{{ constant('ResourceStatus::HIDDEN') }}">{{ translate('Hidden') }}</option>
+                                    </select>
+                                    <label for="resourceReasonIdFilter"
+                                        class="visually-hidden">{{ translate('Reason') }}</label>
+                                    <select id="resourceReasonIdFilter" class="form-select form-select-sm w-auto inline"
+                                        {{ formname(key: 'RESOURCE_STATUS_REASON_ID') }}>
+                                        <option value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterCapacity" class="fw-bold">{{ translate('MinimumCapacity') }}</label>
+                                <div class="position-relative">
+                                    <input type="number" min="0" id="filterCapacity"
+                                        class="form-control form-control-sm" {{ formname(key: 'MAX_PARTICIPANTS') }}
+                                        value="{{ CapacityFilter }}" placeholder="{{ translate('MinimumCapacity') }}" />
+                                    <span class="searchclear searchclear-label bi bi-x-circle-fill me-4"
+                                        ref="filterCapacity"></span>
+                                </div>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterRequiresApproval"
+                                    class="fw-bold">{{ translate('ResourceRequiresApproval') }}</label>
+                                <select id="filterRequiresApproval" class="form-select form-select-sm"
+                                    {{ formname(key: 'REQUIRES_APPROVAL') }} title="{{ translate('ResourceRequiresApproval') }}">
+                                    <option value="">{{ translate('ResourceRequiresApproval') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: RequiresApprovalFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterAutoAssign"
+                                    class="fw-bold">{{ translate('ResourcePermissionAutoGranted') }}</label>
+                                <select id="filterAutoAssign" class="form-select form-select-sm"
+                                    {{ formname(key: 'AUTO_ASSIGN') }} title="{{ translate('ResourcePermissionAutoGranted') }}">
+                                    <option value="">{{ translate('ResourcePermissionAutoGranted') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: AutoPermissionFilter) }}
+                                </select>
+                            </div>
+                            <div class="form-group {{ groupClass }}">
+                                <label for="filterAllowMultiDay"
+                                    class="fw-bold">{{ translate('ResourceAllowMultiDay') }}</label>
+                                <select id="filterAllowMultiDay" class="form-select form-select-sm"
+                                    {{ formname(key: 'ALLOW_MULTIDAY') }} title="{{ translate('ResourceAllowMultiDay') }}">
+                                    <option value="">{{ translate('ResourceAllowMultiDay') }}</option>
+                                    {{ html_options(options: YesNoOptions, selected: AllowMultiDayFilter) }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            {% for attribute in AttributeFilters %}
+                                {{ control('AttributeControl', {idPrefix: 'search', attribute: attribute, searchmode: true, class: 'customAttribute filter-customAttribute' ~ attribute.Id() ~ ' ' ~ groupClass}) }}
+                            {% endfor %}
+                        </div>
+
+                        <div class="card-footer border-top pt-3">
+                            {{ filter_button(attributes: {id: 'filter'}) }}
+                            {{ reset_button(attributes: {id: 'clearFilter'}) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="globalError" class="error d-none"></div>
+
+    <div class="card shadow panel-default admin-panel" id="list-resources-panel">
+        <div class="no-padding card-body accordion" id="resourceList">
+            {% set tableId = 'resourcesTable' %}
+            <table class="table table-borderless w-100" id="{{ tableId }}">
+                <thead class="d-none">
+                    <tr>
+                        <th>{{ translate('Resources') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resource in Resources %}
+                        {% set id = resource.GetResourceId() %}
+                        <tr>
+                            <td>
+                                <div class="resourceItem accordion-item shadow mb-2">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#id{{ resource.GetResourceId() }}" aria-expanded="false"
+                                            aria-controls="id{{ resource.GetResourceId() }}">
+                                            {{ resource.GetName()|escape_once }}
+                                        </button>
+                                    </h2>
+
+                                    <div id="id{{ id }}" class="accordion-collapse collapse">
+                                        <div class="accordion-body resourceDetails" data-resourceId="{{ id }}">
+                                            <input type="hidden" class="id" value="{{ id }}" />
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2 p-2">
+                                                    <div class="resourceImage">
+                                                        {% if resource.HasImage() %}
+                                                            <div id="resourceImageCarousel{{ id }}" class="carousel slide">
+                                                                <div
+                                                                    class="carousel-inner h-100 ratio ratio-1x1 border rounded-3 shadow-sm">
+                                                                    <div class="carousel-item active">
+                                                                        <img src="{{ resource_image(resource.GetImage()) }}"
+                                                                            alt="{{ resource.GetName()|escape_once }}"
+                                                                            class="rounded d-block w-100 h-100 object-fit-cover" />
+                                                                    </div>
+                                                                    {% for image in resource.GetImages() %}
+                                                                        <div class="carousel-item">
+                                                                            <img src="{{ resource_image(image) }}"
+                                                                                alt="{{ resource.GetName()|escape_once }}"
+                                                                                class="rounded d-block w-100 h-100 object-fit-cover" />
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                                <div class="carousel-indicators mb-0">
+                                                                    {% if resource.GetImages()|length > 0 %}
+                                                                            <button type="button"
+                                                                            data-bs-target="#resourceImageCarousel{{ id }}"
+                                                                            data-bs-slide-to="0" class="active"></button>
+                                                                        {% for image in resource.GetImages() %}
+                                                                            <button type="button"
+                                                                                data-bs-target="#resourceImageCarousel{{ id }}"
+                                                                                data-bs-slide-to="{{ loop.index }}"></button>
+                                                                        {% endfor %}
+                                                                    {% endif %}
+
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="noImageContainer text-center">
+                                                                <div
+                                                                    class="noImage d-flex align-items-center justify-content-center w-100 bg-light border rounded-3 mx-auto">
+                                                                    <span class="bi bi-image fs-1"></span>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="edit-image d-inline-block rounded p-2 bg-body"
+                                                            style="position: relative; top: -36px; left:1px; width: 35px; height: 35px;">
+                                                            <a href="#" class="update imageButton link-primary "
+                                                                title="{{ translate('Change') }}"><span
+                                                                    class="bi bi-pencil-square"></span></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <div>{{ translate('ResourceColor') }}</div>
+                                                        <input type="color"
+                                                            class="resourceColorPicker w-50 mx-auto border form-control form-control-color"
+                                                            value="{% if resource.HasColor() %}{{ resource.GetColor() }}{% else %}#ffffff{% endif %}"
+                                                            alt="{{ translate('ResourceColor') }}"
+                                                            title="{{ translate('ResourceColor') }}" />
+                                                        <div>
+                                                            <a href="#" class="update clearColor link-danger"
+                                                                title="{{ translate('Remove') }}"><i
+                                                                    class="bi bi-trash3-fill icon delete"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-10">
+                                                    <div class="row row-cols-auto row-cols-sm-3 ">
+                                                        <div class="col d-block">
+                                                            <div>
+                                                                <div class="resourceNameField title fs-5 fw-bold me-1"
+                                                                    data-type="text" data-pk="{{ id }}"
+                                                                    data-name="{{ constant('FormKeys::RESOURCE_NAME') }}">
+                                                                    {{ resource.GetName()|escape_once }}</div>
+                                                                <div>
+                                                                    <a class="update renameButton link-primary me-1"
+                                                                        href="#" title="{{ translate('Rename') }}">
+                                                                        <span
+                                                                            class="visually-hidden">{{ translate('Rename') }}</span>
+                                                                        <i class="bi bi-pencil-square me-1"></i></a>
+                                                                    <div class="vr me-1"></div>
+                                                                    <a class="update copyButton link-primary me-1" href="#"
+                                                                        title="{{ translate('Copy') }}">
+                                                                        <span
+                                                                            class="visually-hidden">{{ translate('Copy') }}</span>
+                                                                        <i class="bi bi-copy"></i></a>
+                                                                    <div class="vr me-1"></div>
+                                                                    <a class="update deleteButton link-danger me-1" href="#"
+                                                                        title="{{ translate('Delete') }}">
+                                                                        <span
+                                                                            class="visually-hidden">{{ translate('Delete') }}</span>
+                                                                        <i class="bi bi-trash3-fill icon delete"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label class="inline fw-bold">ResourceId:</label>
+                                                                <span>{{ id }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Status') }}</label>
+                                                                {% if resource.IsAvailable() %}
+                                                                    <a class="update changeStatus link-primary" href="#"
+                                                                        data-popover-content="#statusDialog">{{ translate('Available') }}</a>
+                                                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                                                {% elseif resource.IsUnavailable() %}
+                                                                    <a class="update changeStatus link-primary" href="#"
+                                                                        data-popover-content="#statusDialog">{{ translate('Unavailable') }}</a>
+                                                                    <i class="bi bi-exclamation-circle-fill text-warning"></i>
+                                                                {% else %}
+                                                                    <a class="update changeStatus link-primary" href="#"
+                                                                        data-popover-content="#statusDialog">{{ translate('Hidden') }}</a>
+                                                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                                                {% endif %}
+                                                                {% if resource.GetStatusReasonId() in StatusReasons|keys %}
+                                                                    <span
+                                                                        class="statusReason">{{ StatusReasons[resource.GetStatusReasonId()].Description()|escape_once }}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Schedule') }}</label>
+                                                                <span class="propertyValue scheduleName" data-type="select"
+                                                                    data-pk="{{ id }}"
+                                                                    data-value="{{ resource.GetScheduleId() }}"
+                                                                    data-name="{{ constant('FormKeys::SCHEDULE_ID') }}">{{ Schedules[resource.GetScheduleId()]|escape_once }}</span>
+                                                                <a class="update changeScheduleButton link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#"><span
+                                                                        class="bi bi-pencil-square"></span></a>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('ResourceType') }}</label>
+                                                                <span class="propertyValue resourceTypeName"
+                                                                    data-type="select" data-pk="{{ id }}"
+                                                                    data-value="{{ resource.GetResourceTypeId() }}"
+                                                                    data-name="{{ constant('FormKeys::RESOURCE_TYPE_ID') }}">
+                                                                    {% if resource.HasResourceType() %}
+                                                                        {{ ResourceTypes[resource.GetResourceTypeId()].Name()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoResourceTypeLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                                <a class="update changeResourceType link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('ResourceType') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('SortOrder') }}</label>
+                                                                <span class="propertyValue sortOrderValue"
+                                                                    data-type="number" data-pk="{{ id }}"
+                                                                    data-name="{{ constant('FormKeys::RESOURCE_SORT_ORDER') }}">
+                                                                    {{ resource.GetSortOrder()|default('0') }}
+                                                                </span>
+                                                                <a class="update changeSortOrder link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('SortOrder') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Location') }}</label>
+                                                                <span class="propertyValue locationValue" data-type="text"
+                                                                    data-pk="{{ id }}" data-value="{{ resource.GetLocation()|escape_once }}"
+                                                                    data-name="{{ constant('FormKeys::RESOURCE_LOCATION') }}">
+                                                                    {% if resource.HasLocation() %}
+                                                                        {{ resource.GetLocation()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoLocationLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                                <a class="update changeLocation link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Location') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Contact') }}</label>
+                                                                <span class="propertyValue contactValue" data-type="{% if ResourceContactIsUser %}select{% else %}text{% endif %}" data-pk="{{ id }}"
+                                                                    data-value="{{ resource.GetContact()|escape_once }}"
+                                                                    data-name="{{ constant('FormKeys::RESOURCE_CONTACT') }}">
+                                                                    {% if resource.HasContact() %}
+                                                                        {{ resource.GetContact()|escape_once }}
+                                                                    {% else %}
+                                                                        {{ translate('NoContactLabel') }}
+                                                                    {% endif %}
+                                                                </span>
+                                                                <a class="update changeContact link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Contact') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span></a>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Description') }}</label>
+                                                                <a class="update changeDescription link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Description') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span></a>
+                                                                {% if resource.HasDescription() %}
+                                                                    {% set description = resource.GetDescription() %}
+                                                                {% else %}
+                                                                    {% set description = '' %}
+                                                                {% endif %}
+                                                                <div class="descriptionValue" data-type="trumbowyg" data-pk="{{ id }}" data-value="{{ description|escape_once }}" data-name="{{ constant('FormKeys::RESOURCE_DESCRIPTION') }}">{% if resource.HasDescription() %}{{ description|sanitize_rich_text }}{% else %}{{ translate('NoDescriptionLabel') }}{% endif %}</div>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="inline fw-bold">{{ translate('Notes') }}</label>
+                                                                <a class="update changeNotes link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Notes') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                                {% if resource.HasNotes() %}
+                                                                    {% set notes = resource.GetNotes() %}
+                                                                {% else %}
+                                                                    {% set notes = '' %}
+                                                                {% endif %}
+                                                                <div class="notesValue" data-type="trumbowyg" data-pk="{{ id }}" data-value="{{ notes|escape_once }}" data-name="{{ constant('FormKeys::RESOURCE_NOTES') }}">{% if resource.HasNotes() %}{{ notes|sanitize_rich_text }}{% else %}{{ translate('NoNotesLabel') }}{% endif %}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="">
+                                                                <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
+                                                                <a class="inline update changeAccess link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Access') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+
+                                                                <div class="accessPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <span
+                                                                    class="fs-6 fw-bold">{{ translate('ResourceAdministrator') }}</span>
+                                                                {% if AdminGroups|default([])|length > 0 %}
+                                                                    <a class="update changeResourceAdmin link-primary"
+                                                                        title="{{ translate('Edit') }}" href="#">
+                                                                        <span
+                                                                            class="visually-hidden">{{ translate('ResourceAdministrator') }}</span>
+                                                                        <span class="bi bi-pencil-square"></span></a>
+                                                                {% endif %}
+                                                                <div>
+                                                                    <span class="propertyValue resourceAdminValue"
+                                                                        data-type="select" data-pk="{{ id }}"
+                                                                        data-value="{{ resource.GetAdminGroupId() }}"
+                                                                         data-name="{{ constant('FormKeys::RESOURCE_ADMIN_GROUP_ID') }}">
+                                                                            {% set adminGroupId = resource.GetAdminGroupId() %}
+                                                                            {% if adminGroupId is not null and adminGroupId in GroupLookup|keys %}
+                                                                                {{ GroupLookup[adminGroupId].Name|escape_once }}
+                                                                            {% else %}
+                                                                                {{ translate('None') }}
+                                                                            {% endif %}
+                                                                        </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <span
+                                                                    class="fs-6 fw-bold">{{ translate('Permissions') }}</span>
+                                                                <div>
+                                                                    <a href="#"
+                                                                        class="update changeUserPermission link-primary">{{ translate('Users') }}</a>
+                                                                    <div class="vr mx-1"></div>
+                                                                    <a href="#"
+                                                                        class="update changeGroupPermissions link-primary">{{ translate('Groups') }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="">
+                                                                <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
+                                                                <a class="inline update changeDuration link-primary"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Duration') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+
+                                                                <div class="durationPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+
+                                                            {% if CreditsEnabled %}
+                                                                <div class="mt-2">
+                                                                    <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
+                                                                    <a class="inline update changeCredits link-primary"
+                                                                        title="{{ translate('Edit') }}" href="#">
+                                                                        <span
+                                                                            class="visually-hidden">{{ translate('Credits') }}</span>
+                                                                        <span class="bi bi-pencil-square"></span>
+                                                                    </a>
+                                                                    <div class="creditsPlaceHolder">
+                                                                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+
+                                                            <div class="mt-2">
+                                                                <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
+                                                                <a class="link-primary update changeCapacity"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('Capacity') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+                                                                <div class="capacityPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <span
+                                                                    class="fs-6 fw-bold">{{ translate('ResourceGroups') }}</span>
+                                                                <a class="link-primary update changeResourceGroups"
+                                                                    title="{{ translate('Edit') }}" href="#">
+                                                                    <span
+                                                                        class="visually-hidden">{{ translate('ResourceGroups') }}</span>
+                                                                    <span class="bi bi-pencil-square"></span>
+                                                                </a>
+
+                                                                <div class="resourceGroupsPlaceHolder">
+                                                                    {{ include('Admin/Resources/manage_resources_groups.twig', {resource: resource}) }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="hr" />
+                                                    {% if AttributeList|default([])|length > 0 %}
+                                                        {% set applicableAttributes = AttributeList|default([])|filter(a => a.AppliesToEntity(id)) %}
+                                                        {% if applicableAttributes|length > 0 %}
+                                                            <div class="mb-4">
+                                                                <span class="fs-6 fw-bold">{{ translate('CustomAttributes') }}</span>
+                                                                <a id="customAttributesControl" class="link-primary" href="#"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#customAttributes{{ id }}">
+                                                                    <i id="customAttributesIcon{{ id }}"
+                                                                        class="bi bi-chevron-down"></i>
+                                                                </a>
+                                                                <div id="customAttributes{{ id }}" class="collapse show">
+                                                                    <div>
+                                                                        {% for attribute in applicableAttributes %}
+                                                                            {{ include('Admin/InlineAttributeEdit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}) }}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <div class="">
+                                                        <div class="fs-6 fw-bold me-2">{{ translate('Public') }}</div>
+                                                        <div class="publicSettingsPlaceHolder">
+                                                            {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource}) }}
+                                                        </div>
+                                                        <div class="">
+                                                            <a href="{{ server.SCRIPT_NAME }}?action={{ constant('ManageResourcesActions::ActionPrintQR') }}&rid={{ id }}"
+                                                                target="_blank" class="link-primary">{{ translate('PrintQRCode') }}
+                                                                <i class="bi bi-qr-code"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {{ pagination(PageInfo) }}
+        </div>
+    </div>
+
+    <div id="add-resource-dialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="addResourceModalLabel"
+        aria-hidden="true">
+        <form id="addResourceForm" class="form" role="form" method="post"
+            ajaxAction="{{ constant('ManageResourcesActions::ActionAdd') }}" enctype="multipart/form-data">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addResourceModalLabel">{{ translate('AddNewResource') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="addResourceResults" class="alert alert-danger no-show"></div>
+
+                        <div class="form-group mb-2">
+                            <label class="fw-bold" for="resourceName">{{ translate('Name') }}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i>
+                            </label>
+                            <input type="text" class="form-control form-control-sm required has-feedback "
+                                maxlength="85" id="resourceName" {{ formname(key: 'RESOURCE_NAME') }} />
+
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="fw-bold" for="scheduleId">{{ translate('Schedule') }}</label>
+                            <select class="form-select form-select-sm" {{ formname(key: 'SCHEDULE_ID') }} id="scheduleId">
+                                {% for scheduleId, scheduleName in Schedules %}
+                                    <option value="{{ scheduleId }}">{{ scheduleName|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="fw-bold" for="permissions">{{ translate('ResourcePermissions') }}</label>
+                            <select class="form-select form-select-sm" {{ formname(key: 'AUTO_ASSIGN') }} id="permissions">
+                                <option value="0">{{ translate('ResourcePermissionNotAutoGranted') }}</option>
+                                <option value="1">{{ translate('ResourcePermissionAutoGranted') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="fw-bold"
+                                for="resourceAdminGroupId">{{ translate('ResourceAdministrator') }}</label>
+                            <select class="form-select form-select-sm" {{ formname(key: 'RESOURCE_ADMIN_GROUP_ID') }}
+                                id="resourceAdminGroupId">
+                                {% if CanViewAdmin %}
+                                <option value="">{{ translate('None') }}</option>{% endif %}
+                                {% for adminGroup in AdminGroups %}
+                                    <option value="{{ adminGroup.Id }}">{{ adminGroup.Name|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <label class="fw-bold mb-2" for="resourceImageAdd">{{ translate('Image') }}</label>
+                        <div class="dropzone text-center border border-2 rounded-3 bg-light" id="addResourceImage">
+                            <div>
+                                <i class="bi bi-image fs-1"></i><br />
+                                {{ translate('ChooseOrDropFile') }}
+                            </div>
+                            <input id="resourceImageAdd" type="file" {{ formname(key: 'RESOURCE_IMAGE') }}
+                                accept="image/*;capture=camera" />
+                        </div>
+                        <div class="note fst-italic">.gif, .jpg, or .png</div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <input type="hidden" id="activeId" value="" />
+
+    <div id="imageDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <form id="imageForm" method="post" enctype="multipart/form-data"
+            ajaxAction="{{ constant('ManageResourcesActions::ActionChangeImage') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">{{ translate('ResourceImages') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="clearfix">
+                            <div class="row " id="resource-images">
+
+                            </div>
+                        </div>
+
+                        <label for="resourceImage" class="visually-hidden">{{ translate('Image') }}</label>
+                        <div class="dropzone text-center border border-2 rounded-3 bg-light" id="changeResourceImage">
+                            <div class="dropzone-empty">
+                                <i class="bi bi-image fs-1"></i><br />
+                                {{ translate('ChooseOrDropFile') }}
+                            </div>
+                            <div class="dropzone-preview"></div>
+                            <input id="resourceImage" type="file" {{ formname(key: 'RESOURCE_IMAGE') }}
+                                accept="image/*;capture=camera" />
+                        </div>
+
+                        <div class="note fst-italic">.gif, .jpg, .png</div>
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ cancel_button(key: 'Done') }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <form id="removeImageForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionRemoveImage') }}">
+        <input type="hidden" id="removeImageName" {{ formname(key: 'RESOURCE_IMAGE') }} />
+    </form>
+
+    <form id="defaultImageForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionDefaultImage') }}">
+        <input type="hidden" id="defaultImageName" {{ formname(key: 'RESOURCE_IMAGE') }} />
+    </form>
+
+    <div id="copyDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true">
+        <form id="copyForm" method="post" enctype="multipart/form-data"
+            ajaxAction="{{ constant('ManageResourcesActions::ActionCopyResource') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="copyModalLabel">{{ translate('Copy') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="fw-bold" for="copyResourceName">{{ translate('Name') }}<i
+                                    class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
+                            <input type="text" class="form-control required has-feedback" maxlength="85"
+                                id="copyResourceName" {{ formname(key: 'RESOURCE_NAME') }} />
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="durationDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="durationModalLabel"
+        aria-hidden="true">
+        <form id="durationForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeDuration') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="durationModalLabel">{{ translate('Duration') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="editMinDuration mb-2">
+                            <div class="form-check">
+                                <input type="checkbox" id="noMinimumDuration" class="noMinimumDuration form-check-input"
+                                    data-related-inputs="#minDurationInputs" />
+                                <label for="noMinimumDuration"
+                                    class="form-check-label">{{ translate('ResourceMinLengthNone') }}</label>
+                            </div>
+                            {% set txtMinDuration %}
+                                <div class='input-group-sm d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' size='3' id='minDurationDays' class='days form-control w-auto'
+                                        maxlength='3' title='Days' max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' size='2' id='minDurationHours' class='hours form-control w-auto'
+                                        maxlength='2' title='Hours' max='99' min='0' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' size='2' id='minDurationMinutes'
+                                        class='minutes form-control w-auto' maxlength='2' title='Minutes' max='99' min='0'
+                                        placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='minDuration' class='interval minDuration'
+                                        {{ formname(key: 'MIN_DURATION') }} />
+                                </div>
+                            {% endset %}
+                            <div id="minDurationInputs" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-2">
+                                    {{ translate('ResourceMinLength', txtMinDuration) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editMaxDuration mb-2">
+                            <div class="form-check">
+                                <input type="checkbox" id="noMaximumDuration" data-related-inputs="#maxDurationInputs"
+                                    class="form-check-input" />
+                                <label for="noMaximumDuration"
+                                    class="form-check-label">{{ translate('ResourceMaxLengthNone') }}</label>
+                            </div>
+                            {% set txtMaxDuration %}
+                                <div class='input-group-sm d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='maxDurationDays' size='3' class='days form-control w-auto'
+                                        maxlength='3' title='Days' max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='maxDurationHours' size='2' class='hours form-control w-auto'
+                                        maxlength='2' title='Hours' max='99' min='0' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='maxDurationMinutes' size='2'
+                                        class='minutes form-control w-auto' maxlength='2' title='Minutes' max='99' min='0'
+                                        placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='maxDuration' class='interval' {{ formname(key: 'MAX_DURATION') }} />
+                                </div>
+                            {% endset %}
+                            <div id="maxDurationInputs" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-2">
+                                    {{ translate('ResourceMaxLength', txtMaxDuration) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editBuffer mb-2">
+                            <div class="form-check">
+                                <input type="checkbox" id="noBufferTime" data-related-inputs="#bufferInputs"
+                                    class="form-check-input" />
+                                <label for="noBufferTime"
+                                    class="form-check-label">{{ translate('ResourceBufferTimeNone') }}</label>
+                            </div>
+
+                            {% set txtBufferTime %}
+                                <div class='input-group-sm d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='bufferTimeDays' size='3' class='days form-control w-auto'
+                                        maxlength='3' title='Days' max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='bufferTimeHours' size='2' class='hours form-control w-auto'
+                                        maxlength='2' title='Hours' max='99' min='0' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='bufferTimeMinutes' size='2' class='minutes form-control w-auto'
+                                        maxlength='2' title='Minutes' max='99' min='0'
+                                        placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='bufferTime' class='interval' {{ formname(key: 'BUFFER_TIME') }} />
+                                </div>
+                            {% endset %}
+                            <div id="bufferInputs" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-2">
+                                    {{ translate('ResourceBufferTime', txtBufferTime) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editMultiDay">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'ALLOW_MULTIDAY') }} id="allowMultiDay"
+                                    class="form-check-input" />
+                                <label for="allowMultiDay"
+                                    class="form-check-label">{{ translate('ResourceAllowMultiDay') }}</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="capacityDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="capacityModalLabel"
+        aria-hidden="true">
+        <form id="capacityForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCapacity') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="capacityModalLabel">{{ translate('Capacity') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="editCapacity">
+                            <div class="form-check">
+                                <input type="checkbox" id="unlimitedCapacity" class="unlimitedCapacity form-check-input"
+                                    data-related-inputs="#maxCapacityInputs" />
+                                <label for="unlimitedCapacity"
+                                    class="form-check-label">{{ translate('ResourceCapacityNone') }}</label>
+                            </div>
+                            <div id="maxCapacityInputs" class="collapse">
+                                <div class="d-flex align-items-center gap-1 ms-4">
+                                    {% set txtMaxCapacity %}
+                                        <label for='maxCapacity' class='visually-hidden'>{{ translate('Capacity') }}</label>
+                                        <input type='number' id='maxCapacity'
+                                            class='form-control form-control-sm w-auto mid-number' min='0' max='9999'
+                                            size='5' {{ formname(key: 'MAX_PARTICIPANTS') }} />
+                                    {% endset %}
+                                    {{ translate('ResourceCapacity', txtMaxCapacity) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="accessDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="accessModalLabel"
+        aria-hidden="true">
+        <form id="accessForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeAccess') }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="accessModalLabel">{{ translate('Access') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="editStartNoticeAdd">
+                            <div class="form-check">
+                                <input type="checkbox" id="noStartNoticeAdd" class="noStartNoticeAdd form-check-input"
+                                    data-related-inputs="#startNoticeInputsAdd" />
+                                <label for="noStartNoticeAdd"
+                                    class="form-check-label">{{ translate('ResourceMinNoticeNone') }}</label>
+                            </div>
+                            {% set txtStartNoticeAdd %}
+                                <div class='d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='startNoticeAddDays' size='3'
+                                        class='days form-control form-control-sm w-auto' maxlength='3' title='Days'
+                                        max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='startNoticeAddHours' size='2'
+                                        class='hours form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Hours' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='startNoticeAddMinutes' size='2'
+                                        class='minutes form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Minutes' placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='startNoticeAdd' class='interval'
+                                        {{ formname(key: 'MIN_NOTICE_ADD') }} />
+                                </div>
+                            {% endset %}
+                            <div id="startNoticeInputsAdd" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-4 mb-2">
+                                    {{ translate('ResourceMinNotice', txtStartNoticeAdd) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editStartNoticeUpdate">
+                            <div class="form-check">
+                                <input type="checkbox" id="noStartNoticeUpdate"
+                                    class="noStartNoticeUpdate form-check-input"
+                                    data-related-inputs="#startNoticeInputsUpdate" />
+                                <label for="noStartNoticeUpdate"
+                                    class="form-check-label">{{ translate('ResourceMinNoticeNoneUpdate') }}</label>
+                            </div>
+                            {% set txtStartNoticeUpdate %}
+                                <div class='d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='startNoticeUpdateDays' size='3'
+                                        class='days form-control form-control-sm w-auto' maxlength='3' title='Days'
+                                        max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='startNoticeUpdateHours' size='2'
+                                        class='hours form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Hours' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='startNoticeUpdateMinutes' size='2'
+                                        class='minutes form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Minutes' placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='startNoticeUpdate' class='interval'
+                                        {{ formname(key: 'MIN_NOTICE_UPDATE') }} />
+                                </div>
+                            {% endset %}
+                            <div id="startNoticeInputsUpdate" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-4 mb-2">
+                                    {{ translate('ResourceMinNoticeUpdate', txtStartNoticeUpdate) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editStartNoticeDelete">
+                            <div class="form-check">
+                                <input type="checkbox" id="noStartNoticeDelete"
+                                    class="noStartNoticeDelete form-check-input"
+                                    data-related-inputs="#startNoticeInputsDelete" />
+                                <label for="noStartNoticeDelete"
+                                    class="form-check-label">{{ translate('ResourceMinNoticeNoneDelete') }}</label>
+                            </div>
+                            {% set txtStartNoticeDelete %}
+                                <div class='d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='startNoticeDeleteDays' size='3'
+                                        class='days form-control form-control-sm w-auto' maxlength='3' title='Days'
+                                        max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='startNoticeDeleteHours' size='2'
+                                        class='hours form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Hours' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='startNoticeDeleteMinutes' size='2'
+                                        class='minutes form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Minutes' placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='startNoticeDelete' class='interval'
+                                        {{ formname(key: 'MIN_NOTICE_DELETE') }} />
+                                </div>
+                            {% endset %}
+                            <div id="startNoticeInputsDelete" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-4 mb-2">
+                                    {{ translate('ResourceMinNoticeDelete', txtStartNoticeDelete) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editEndNotice">
+                            <div class="form-check">
+                                <input type="checkbox" id="noEndNotice" data-related-inputs="#endNoticeInputs"
+                                    class="form-check-input" />
+                                <label for="noEndNotice"
+                                    class="form-check-label">{{ translate('ResourceMaxNoticeNone') }}</label>
+                            </div>
+                            {% set txtEndNotice %}
+                                <div class='d-flex align-items-center flex-wrap gap-1'>
+                                    <input type='number' id='endNoticeDays' size='3'
+                                        class='days form-control form-control-sm w-auto' maxlength='3' title='Days'
+                                        max='999' min='0' placeholder='{{ translate('days') }}' />
+                                    <input type='number' id='endNoticeHours' size='2'
+                                        class='hours form-control form-control-sm w-auto' maxlength='2' title='Hours'
+                                        max='99' min='0' placeholder='{{ translate('hours') }}' />
+                                    <input type='number' id='endNoticeMinutes' size='2'
+                                        class='minutes form-control form-control-sm w-auto' maxlength='2' max='99' min='0'
+                                        title='Minutes' placeholder='{{ translate('minutes') }}' />
+                                    <input type='hidden' id='endNotice' class='interval' {{ formname(key: 'MAX_NOTICE') }} />
+                                </div>
+                            {% endset %}
+                            <div id="endNoticeInputs" class="collapse">
+                                <div class="d-flex align-items-center flex-wrap gap-1 ms-4 mb-2">
+                                    {{ translate('ResourceMaxNotice', txtEndNotice) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editRequiresApproval">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'REQUIRES_APPROVAL') }} id="requiresApproval"
+                                    class="form-check-input" />
+                                <label for="requiresApproval"
+                                    class="form-check-label">{{ translate('ResourceRequiresApproval') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="editAutoAssign">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'AUTO_ASSIGN') }} id="autoAssign" value="1"
+                                    class="form-check-input" />
+                                <label for="autoAssign"
+                                    class="form-check-label">{{ translate('ResourcePermissionAutoGranted') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="ms-4" id="autoAssignRemoveAllPermissions">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'AUTO_ASSIGN_CLEAR') }}
+                                    id="autoAssignRemoveAllPermissionsChk" value="1" class="form-check-input" />
+                                <label for="autoAssignRemoveAllPermissionsChk"
+                                    class="form-check-label">{{ translate('RemoveExistingPermissions') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="editCheckin">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'ENABLE_CHECK_IN') }} id="enableCheckIn"
+                                    class="form-check-input" />
+                                <label for="enableCheckIn"
+                                    class="form-check-label">{{ translate('RequiresCheckInNotification') }}</label>
+                            </div>
+                            <div class="ms-4 collapse" id="autoReleaseMinutesDiv">
+                                {% set txtAutoRelease %}
+                                    <label for='autoReleaseMinutes' class='visually-hidden'>Auto Release Minutes</label>
+                                    <input type='number' max='99' min='0' id='autoReleaseMinutes'
+                                        class='minutes form-control form-control-sm w-auto'
+                                        {{ formname(key: 'AUTO_RELEASE_MINUTES') }} />
+                                {% endset %}
+                                <div class="d-flex align-items-center gap-1">
+                                    {{ translate('AutoReleaseNotification', txtAutoRelease) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editConcurrent mb-2">
+                            <div class="form-check">
+                                <input type="checkbox" {{ formname(key: 'ALLOW_CONCURRENT_RESERVATIONS') }}
+                                    id="allowConcurrentChk" value="1" class="form-check-input" />
+                                <label for="allowConcurrentChk"
+                                    class="form-check-label">{{ translate('AllowConcurrentReservations') }}</label>
+                            </div>
+
+                            <div class="ms-4 collapse" id="allowConcurrentDiv">
+                                {% set txtConcurrentReservations %}
+                                    <label for='maxConcurrentReservations' class='visually-hidden'>Maximum Concurrent
+                                        Reservations</label>
+                                    <input type='number' max='99' min='2' id='maxConcurrentReservations'
+                                        class='form-control form-control-sm w-auto minutes'
+                                        {{ formname(key: 'MAX_CONCURRENT_RESERVATIONS') }} />
+                                {% endset %}
+                                <div class="d-flex align-items-center gap-1">
+                                    {{ translate('ResourceConcurrentReservations', txtConcurrentReservations) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="statusDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
+        aria-hidden="true">
+        <form id="statusForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeStatus') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="statusModalLabel">{{ translate('ChangeResourceStatus') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="control-group form-group">
+                            <div class="form-group mb-2">
+                                <label class="fw-bold">{{ translate('Status') }}
+                                    <select {{ formname(key: 'RESOURCE_STATUS_ID') }} class="statusId form-select">
+                                        <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}</option>
+                                        <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">{{ translate('Unavailable') }}
+                                        </option>
+                                        <option value="{{ constant('ResourceStatus::HIDDEN') }}">{{ translate('Hidden') }}</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="form-group d-none newStatusReason mb-3">
+                                <label class="clearfix">
+                                    <div class="fw-bold float-start">{{ translate('ReasonText') }}</div>
+                                    <a href="#" class="float-end addStatusReason">
+                                        <span class="visually-hidden">{{ translate('ReasonText') }}</span>
+                                        <span
+                                            class="addStatusIcon bi bi-list-columns-reverse link-primary icon add"></span>
+                                    </a>
+                                    <input type="text" class="form-control resourceStatusReason"
+                                        {{ formname(key: 'RESOURCE_STATUS_REASON') }} />
+                                </label>
+                            </div>
+                            <div class="form-group existingStatusReason mb-3">
+                                <label class="clearfix">
+                                    <div class="fw-bold float-start">{{ translate('Reason') }}</div>
+                                    <a href="#" class="float-end link-primary addStatusReason">
+                                        <span class="visually-hidden">{{ translate('Reason') }}</span>
+                                        <span class="addStatusIcon bi bi-plus-lg icon add"></span>
+                                    </a>
+                                    <select {{ formname(key: 'RESOURCE_STATUS_REASON_ID') }}
+                                        class="form-select reasonId"></select>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" id="toggleStatusChangeMessage" class="form-check-input"
+                                        {{ formname(key: 'SEND_AS_EMAIL') }} />
+                                    <label for="toggleStatusChangeMessage"
+                                        class="form-check-label">{{ translate('NotifyUsers') }}</label>
+                                </div>
+                            </div>
+
+                            <div id="sendStatusChangeMessageContent" class="d-none border rounded bg-light p-3">
+                                <div class="form-group mb-2">
+                                    <label class="fw-bold"
+                                        for="statusMessageSendDays">{{ translate('AllUsersWhoHaveAReservationInTheNext') }}</label>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="365" step="1" value="30"
+                                            id="statusMessageSendDays" class="form-control" {{ formname(key: 'DAY') }} />
+                                        <div class="input-group-text">{{ translate('days') }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="fw-bold" for="statusMessageContent">{{ translate('Message') }}</label>
+                                    <textarea id="statusMessageContent" class="form-control"
+                                        {{ formname(key: 'EMAIL_CONTENTS') }}></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="deletePrompt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteResourceDialogLabel"
+        aria-hidden="true">
+        <form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionDelete') }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteResourceDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                            {{ translate('DeleteResourceWarning') }}:
+                            <ul>
+                                <li>{{ translate('DeleteResourceWarningReservations') }}</li>
+                                <li>{{ translate('DeleteResourceWarningPermissions') }}</li>
+                            </ul>
+
+                            {{ translate('DeleteResourceWarningReassign') }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="bulkUpdateDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bulkUpdateLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bulkUpdateLabel">{{ translate('BulkResourceUpdate') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="bulkUpdateForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionBulkUpdate') }}"
+                        class="form-vertical" role="form">
+                        <div id="bulkUpdateErrors" class="error d-none mb-2">
+                            {{ async_validator(id: 'bulkAttributeValidator', key: '') }}
+                        </div>
+                        <div class="d-flex align-items-center gap-1 mb-1">
+                            <div>{{ translate('Select') }}</div>
+                            <a href="#" id="checkAllResources" class="link-primary">{{ translate('All') }}</a>
+                            <div class="vr"></div>
+                            <a href="#" id="checkNoResources" class="link-primary">{{ translate('None') }}</a>
+                        </div>
+                        <div id="bulkUpdateList" class="bg-light border rounded p-2 mb-2"></div>
+                        <div class="accordion" id="accordionbulkUpdate">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelCommon" aria-expanded="false" aria-controls="panelCommon">
+                                        {{ translate('Common') }}
+                                    </button>
+                                </h2>
+                                <div id="panelCommon" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditSchedule"
+                                                class="fw-bold">{{ translate('MoveToSchedule') }}:</label>
+                                            <select id="bulkEditSchedule" class="form-select"
+                                                {{ formname(key: 'SCHEDULE_ID') }}>
+                                                <option value="-1">{{ translate('Unchanged') }}</option>
+                                                {% for scheduleId, scheduleName in Schedules %}
+                                                    <option value="{{ scheduleId }}">{{ scheduleName|escape_once }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditResourceType"
+                                                class="fw-bold">{{ translate('ResourceType') }}:</label>
+                                            <select id="bulkEditResourceType" class="form-select"
+                                                {{ formname(key: 'RESOURCE_TYPE_ID') }}>
+                                                <option value="-1">{{ translate('Unchanged') }}</option>
+                                                <option value="">-- {{ translate('None') }} --</option>
+                                                {% for id, resourceType in ResourceTypes %}
+                                                    <option value="{{ id }}">{{ resourceType.Name()|escape_once }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditLocation"
+                                                class="fw-bold">{{ translate('Location') }}:</label>
+                                            <input id="bulkEditLocation" type="text" class="form-control" maxlength="85"
+                                                {{ formname(key: 'RESOURCE_LOCATION') }} />
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditContact"
+                                                class="fw-bold">{{ translate('Contact') }}:</label>
+                                            <input id="bulkEditContact" type="text" class="form-control" maxlength="85"
+                                                {{ formname(key: 'RESOURCE_CONTACT') }} />
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditAdminGroupId"
+                                                class="fw-bold">{{ translate('ResourceAdministrator') }}:</label>
+                                            <select id="bulkEditAdminGroupId" {{ formname(key: 'RESOURCE_ADMIN_GROUP_ID') }}
+                                                class="form-select">
+                                                <option value="-1">{{ translate('Unchanged') }}</option>
+                                                <option value="">-- {{ translate('None') }} --</option>
+                                                {% for adminGroup in AdminGroups %}
+                                                    <option value="{{ adminGroup.Id }}">{{ adminGroup.Name|escape_once }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditStatusId"
+                                                class="fw-bold">{{ translate('Status') }}:</label>
+                                            <select id="bulkEditStatusId" {{ formname(key: 'RESOURCE_STATUS_ID') }}
+                                                class="form-select">
+                                                <option value="-1">{{ translate('Unchanged') }}</option>
+                                                <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}
+                                                </option>
+                                                <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">
+                                                    {{ translate('Unavailable') }}</option>
+                                                <option value="{{ constant('ResourceStatus::HIDDEN') }}">{{ translate('Hidden') }}</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditStatusReasonId"
+                                                class="fw-bold">{{ translate('Reason') }}:</label>
+                                            <select id="bulkEditStatusReasonId" {{ formname(key: 'RESOURCE_STATUS_REASON_ID') }}
+                                                class="form-select">
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditDescription"
+                                                class="fw-bold">{{ translate('Description') }}:</label>
+                                            <textarea id="bulkEditDescription" class="form-control"
+                                                {{ formname(key: 'RESOURCE_DESCRIPTION') }}></textarea>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditNotes" class="fw-bold">{{ translate('Notes') }}:</label>
+                                            <textarea id="bulkEditNotes" class="form-control"
+                                                {{ formname(key: 'RESOURCE_NOTES') }}></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelCapacity" aria-expanded="false"
+                                        aria-controls="panelCapacity">
+                                        {{ translate('Capacity') }}
+                                    </button>
+                                </h2>
+                                <div id="panelCapacity" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditUnlimitedCapacity"
+                                                    class="unlimitedCapacity form-check-input"
+                                                    data-related-inputs="#bulkEditMaxCapacityInputs"
+                                                    {{ formname(key: 'MAX_PARTICIPANTS_UNLIMITED') }} />
+                                                <label class="form-check-label"
+                                                    for="bulkEditUnlimitedCapacity">{{ translate('ResourceCapacityNone') }}</label>
+                                            </div>
+                                            <div id="bulkEditMaxCapacityInputs">
+                                                {% set txtBulkEditMaxCapacity %}
+                                                    <label for='bulkEditMaxCapacity'
+                                                        class='visually-hidden'>{{ translate('Capacity') }}</label>
+                                                    <input type='number' id='bulkEditMaxCapacity'
+                                                        class='form-control form-control-sm w-auto mid-number' min='0'
+                                                        max='9999' size='5' {{ formname(key: 'MAX_PARTICIPANTS') }} />
+                                                {% endset %}
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceCapacity', txtBulkEditMaxCapacity) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelDuration" aria-expanded="false"
+                                        aria-controls="panelDuration">
+                                        {{ translate('Duration') }}
+                                    </button>
+                                </h2>
+                                <div id="panelDuration" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoMinimumDuration" value="1"
+                                                    {{ formname(key: 'MIN_DURATION_NONE') }} class="form-check-input"
+                                                    data-related-inputs="#bulkMinDuration" />
+                                                <label class="form-check-label"
+                                                    for="bulkEditNoMinimumDuration">{{ translate('ResourceMinLengthNone') }}</label>
+                                            </div>
+
+                                            {% set txtMinDuration %}
+                                                <label for='bulkEditMinDurationDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditMinDurationHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditMinDurationMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditMinDurationDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditMinDurationHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditMinDurationMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditMinDuration' class='interval'
+                                                    {{ formname(key: 'MIN_DURATION') }} />
+                                            {% endset %}
+                                            <div id="bulkMinDuration">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMinLength', txtMinDuration) }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoMaximumDuration" value="1"
+                                                    {{ formname(key: 'MAX_DURATION_NONE') }}
+                                                    data-related-inputs="#bulkMaxDuration" class="form-check-input" />
+                                                <label for="bulkEditNoMaximumDuration"
+                                                    class="form-check-label">{{ translate('ResourceMaxLengthNone') }}</label>
+                                            </div>
+
+                                            {% set txtMaxDuration %}
+                                                <label for='bulkEditMaxDurationDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditMaxDurationHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditMaxDurationMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditMaxDurationDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditMaxDurationHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditMaxDurationMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditMaxDuration' class='interval'
+                                                    {{ formname(key: 'MAX_DURATION') }} />
+                                            {% endset %}
+                                            <div id="bulkMaxDuration">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMaxLength', txtMaxDuration) }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoBufferTime" value="1"
+                                                    {{ formname(key: 'BUFFER_TIME_NONE') }} class="form-check-input"
+                                                    data-related-inputs="#bulkBufferTime" />
+                                                <label for="bulkEditNoBufferTime"
+                                                    class="form-check-label">{{ translate('ResourceBufferTimeNone') }}</label>
+                                            </div>
+
+                                            {% set txtBufferTime %}
+                                                <label for='bulkEditBufferTimeDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditBufferTimeHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditBufferTimeMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditBufferTimeDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditBufferTimeHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditBufferTimeMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditBufferTime' class='interval'
+                                                    {{ formname(key: 'BUFFER_TIME') }} />
+                                            {% endset %}
+                                            <div id="bulkBufferTime">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceBufferTime', txtBufferTime) }}</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelAccess" aria-expanded="false" aria-controls="panelAccess">
+                                        {{ translate('Access') }}
+                                    </button>
+                                </h2>
+                                <div id="panelAccess" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoStartNoticeAdd" value="1"
+                                                    {{ formname(key: 'MIN_NOTICE_NONE_ADD') }} class="form-check-input"
+                                                    data-related-inputs="#bulkStartNoticeInputsAdd" />
+                                                <label class="form-check-label"
+                                                    for="bulkEditNoStartNoticeAdd">{{ translate('ResourceMinNoticeNone') }}</label>
+                                            </div>
+                                            {% set txtStartNoticeAdd %}
+                                                <label for='bulkEditStartNoticeAddDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditStartNoticeAddHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditStartNoticeAddMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditStartNoticeAddDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditStartNoticeAddHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditStartNoticeAddMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditStartNoticeAdd' class='interval'
+                                                    {{ formname(key: 'MIN_NOTICE_ADD') }} />
+                                            {% endset %}
+                                            <div id="bulkStartNoticeInputsAdd">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMinNotice', txtStartNoticeAdd) }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoStartNoticeUpdate" value="1"
+                                                    class="form-check-input" {{ formname(key: 'MIN_NOTICE_NONE_UPDATE') }}
+                                                    data-related-inputs="#bulkStartNoticeInputsUpdate" />
+                                                <label for="bulkEditNoStartNoticeUpdate"
+                                                    class="form-check-label">{{ translate('ResourceMinNoticeNoneUpdate') }}</label>
+                                            </div>
+                                            {% set txtStartNoticeUpdate %}
+                                                <label for='bulkEditStartNoticeUpdateDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditStartNoticeUpdateHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditStartNoticeUpdateMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditStartNoticeUpdateDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditStartNoticeUpdateHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditStartNoticeUpdateMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditStartNoticeUpdate' class='interval'
+                                                    {{ formname(key: 'MIN_NOTICE_UPDATE') }} />
+                                            {% endset %}
+                                            <div id="bulkStartNoticeInputsUpdate">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMinNoticeUpdate', txtStartNoticeUpdate) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoStartNoticeDelete" value="1"
+                                                    {{ formname(key: 'MIN_NOTICE_NONE_DELETE') }} class="form-check-input"
+                                                    data-related-inputs="#bulkStartNoticeInputsDelete" />
+                                                <label class="form-check-label"
+                                                    for="bulkEditNoStartNoticeDelete">{{ translate('ResourceMinNoticeNoneDelete') }}</label>
+                                            </div>
+                                            {% set txtStartNoticeDelete %}
+                                                <label for='bulkEditStartNoticeDeleteDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditStartNoticeDeleteHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditStartNoticeDeleteMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='number' id='bulkEditStartNoticeDeleteDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3' min='0'
+                                                    max='999' placeholder='{{ translate('days') }}' />
+                                                <input type='number' id='bulkEditStartNoticeDeleteHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2' min='0'
+                                                    max='99' placeholder='{{ translate('hours') }}' />
+                                                <input type='number' id='bulkEditStartNoticeDeleteMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    min='0' max='99' placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditStartNoticeDelete' class='interval'
+                                                    {{ formname(key: 'MIN_NOTICE_DELETE') }} />
+                                            {% endset %}
+                                            <div id="bulkStartNoticeInputsDelete">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMinNoticeDelete', txtStartNoticeDelete) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="bulkEditNoEndNotice" value="1"
+                                                    {{ formname(key: 'MAX_NOTICE_NONE') }} class="form-check-input"
+                                                    data-related-inputs="#bulkEndNotice" />
+                                                <label class="form-check-label"
+                                                    for="bulkEditNoEndNotice">{{ translate('ResourceMaxNoticeNone') }}</label>
+                                            </div>
+
+                                            {% set txtEndNotice %}
+                                                <label for='bulkEditEndNoticeDays'
+                                                    class='visually-hidden'>{{ translate('days') }}</label>
+                                                <label for='bulkEditEndNoticeHours'
+                                                    class='visually-hidden'>{{ translate('hours') }}</label>
+                                                <label for='bulkEditEndNoticeMinutes'
+                                                    class='visually-hidden'>{{ translate('minutes') }}</label>
+                                                <input type='text' id='bulkEditEndNoticeDays' size='3'
+                                                    class='days form-control form-control-sm w-auto' maxlength='3'
+                                                    placeholder='{{ translate('days') }}' />
+                                                <input type='text' id='bulkEditEndNoticeHours' size='2'
+                                                    class='hours form-control form-control-sm w-auto' maxlength='2'
+                                                    placeholder='{{ translate('hours') }}' />
+                                                <input type='text' id='bulkEditEndNoticeMinutes' size='2'
+                                                    class='minutes form-control form-control-sm w-auto' maxlength='2'
+                                                    placeholder='{{ translate('minutes') }}' />
+                                                <input type='hidden' id='bulkEditEndNotice' class='interval'
+                                                    {{ formname(key: 'MAX_NOTICE') }} />
+                                            {% endset %}
+                                            <div id="bulkEndNotice">
+                                                <div class="d-flex align-items-center gap-1 ms-4">
+                                                    {{ translate('ResourceMaxNotice', txtEndNotice) }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditAllowMultiday"
+                                                class="fw-bold">{{ translate('ResourceAllowMultiDay') }}</label>
+                                            <select id="bulkEditAllowMultiday" class="form-select form-select-sm"
+                                                {{ formname(key: 'ALLOW_MULTIDAY') }}>
+                                                {{ html_options(options: YesNoUnchangedOptions) }}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditRequiresApproval"
+                                                class="fw-bold">{{ translate('ResourceRequiresApproval') }}</label>
+                                            <select id="bulkEditRequiresApproval" class="form-select form-select-sm"
+                                                {{ formname(key: 'REQUIRES_APPROVAL') }}>
+                                                {{ html_options(options: YesNoUnchangedOptions) }}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditAutoAssign"
+                                                class="fw-bold">{{ translate('ResourcePermissionAutoGranted') }}</label>
+                                            <select id="bulkEditAutoAssign" class="form-select form-select-sm"
+                                                {{ formname(key: 'AUTO_ASSIGN') }}>
+                                                {{ html_options(options: YesNoUnchangedOptions) }}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditEnableCheckIn"
+                                                class="fw-bold">{{ translate('RequiresCheckInNotification') }}</label>
+                                            <select id="bulkEditEnableCheckIn" class="form-select form-select-sm"
+                                                {{ formname(key: 'ENABLE_CHECK_IN') }}>
+                                                {{ html_options(options: YesNoUnchangedOptions) }}
+                                            </select>
+                                            <div class="d-none" id="bulkUpdateAutoReleaseMinutesDiv">
+                                                {% set bulkEditTxtAutoRelease %}
+                                                    <label for='bulkEditAutoReleaseMinutes' class='visually-hidden'>Auto
+                                                        Release
+                                                        minutes</label>
+                                                    <input type='number' max='99' min='0' id='bulkEditAutoReleaseMinutes'
+                                                        class='minutes form-control form-control-sm w-auto'
+                                                        {{ formname(key: 'AUTO_RELEASE_MINUTES') }} />
+                                                {% endset %}
+                                                <div class="d-flex align-items-center gap-1 ms-4 mt-2">
+                                                    {{ translate('AutoReleaseNotification', bulkEditTxtAutoRelease) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <label for="bulkEditConcurrent"
+                                                class="fw-bold">{{ translate('AllowConcurrentReservations') }}</label>
+                                            <select id="bulkEditConcurrent" class="form-select form-select-sm"
+                                                {{ formname(key: 'ALLOW_CONCURRENT_RESERVATIONS') }}>
+                                                {{ html_options(options: YesNoUnchangedOptions) }}
+                                            </select>
+                                            <div class="d-none" id="bulkEditAllowConcurrentDiv">
+                                                {% set txtConcurrentReservations %}
+                                                    <label for='bulkEditMaxConcurrentReservations'
+                                                        class='visually-hidden'>Maximum
+                                                        Concurrent Reservations</label>
+                                                    <input type='number' max='99' min='2'
+                                                        id='bulkEditMaxConcurrentReservations'
+                                                        class='form-control form-control-sm w-auto minutes'
+                                                        {{ formname(key: 'MAX_CONCURRENT_RESERVATIONS') }} value='2' />
+                                                {% endset %}
+                                                <div class="d-flex align-items-center gap-1 ms-4 mt-2">
+                                                    {{ translate('ResourceConcurrentReservations', txtConcurrentReservations) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% if IcsEnabled %}
+                                            <div class="form-group">
+                                                <label for="bulkEditAllowSubscriptions"
+                                                    class="fw-bold">{{ translate('TurnOnSubscription') }}</label>
+                                                <select id="bulkEditAllowSubscriptions" class="form-select form-select-sm"
+                                                    {{ formname(key: 'ALLOW_CALENDAR_SUBSCRIPTIONS') }}>
+                                                    {{ html_options(options: YesNoUnchangedOptions) }}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if CreditsEnabled %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#panelCredits" aria-expanded="false"
+                                            aria-controls="panelCredits">
+                                            {{ translate('Credits') }}
+                                        </button>
+                                    </h2>
+                                    <div id="panelCredits" class="accordion-collapse collapse">
+                                        <div class="accordion-body">
+                                            <div class="form-group mb-2">
+                                                {% set bulkEditCreditsPerSLot %}
+                                                    <label for='bulkEditCreditsPerSlot' class='visually-hidden'>Credits Per
+                                                        Slot</label>
+                                                    <input type='number' min='0' step='1' id='bulkEditCreditsPerSlot'
+                                                        class='credits form-control form-control-sm w-auto'
+                                                        {{ formname(key: 'CREDITS') }} />
+                                                {% endset %}
+                                                <div class="d-flex align-items-center gap-1">
+                                                    {{ translate('CreditUsagePerSlot', bulkEditCreditsPerSLot) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                {% set bulkEditPeakCreditsPerSlot %}
+                                                    <label for='bulkEditPeakCreditsPerSlot' class='visually-hidden'>Peak Credits
+                                                        Per
+                                                        Slot</label>
+                                                    <input type='number' min='0' step='1' id='bulkEditPeakCreditsPerSlot'
+                                                        class='credits form-control form-control-sm w-auto'
+                                                        {{ formname(key: 'PEAK_CREDITS') }} />
+                                                {% endset %}
+                                                <div class="d-flex align-items-center gap-1">
+                                                    {{ translate('PeakCreditUsagePerSlot', bulkEditPeakCreditsPerSlot) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelAdditionalAttributes" aria-expanded="false"
+                                        aria-controls="panelAdditionalAttributes">
+                                        {{ translate('AdditionalAttributes') }}
+                                    </button>
+                                </h2>
+                                <div id="panelAdditionalAttributes" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        {% for attribute in AttributeFilters %}
+                                            {% if not attribute.UniquePerEntity() %}
+                                                <div class="customAttribute">
+                                                    {{ control('AttributeControl', {attribute: attribute, searchmode: true}) }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {{ csrf_token() }}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: '1', attributes: {form: 'bulkUpdateForm'}) }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bulkDeleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bulkDeleteLabel"
+        aria-hidden="true">
+        <form id="bulkDeleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionBulkDelete') }}"
+            class="form-vertical" role="form">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulkDeleteLabel">{{ translate('BulkResourceDelete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                            {{ translate('DeleteResourceWarning') }}:
+                            <ul>
+                                <li>{{ translate('DeleteResourceWarningReservations') }}</li>
+                                <li>{{ translate('DeleteResourceWarningPermissions') }}</li>
+                            </ul>
+
+                            {{ translate('DeleteResourceWarningReassign') }}
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1">{{ translate('Select') }}
+                            <a href="#" id="checkAllDeleteResources" class="link-primary">{{ translate('All') }}</a>
+                            <div class="vr"></div>
+                            <a href="#" id="checkNoDeleteResources" class="link-primary">{{ translate('None') }}</a>
+                        </div>
+                        <div id="bulkDeleteList" class="bg-light border rounded p-2"></div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </div>
+            {{ csrf_token() }}
+        </form>
+    </div>
+
+    <div id="userDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userPermissionDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userPermissionDialogLabel">{{ translate('Users') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="userSearch">{{ translate('AddUser') }}</label>
+                        <a href="#" id="browseUsers" class="link-primary">{{ translate('Browse') }}</a>
+                        <input type="text" id="userSearch" class="form-control form-control-sm" size="60" />
+                    </div>
+                    <div id="resourceUserList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="browseUsersDialogLabel">{{ translate('AllUsers') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="allUsersList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="changeUserForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeUserPermission') }}">
+        <input type="hidden" id="changeUserId" {{ formname(key: 'USER_ID') }} />
+        <input type="hidden" id="changeUserType" {{ formname(key: 'PERMISSION_TYPE') }} />
+    </form>
+
+    <div id="groupDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseGroupsDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="browseGroupsDialogLabel">{{ translate('AllGroups') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body scrollable-modal-content">
+                    <div class="form-group">
+                        <label for="groupSearch">{{ translate('AddGroup') }}</label>
+                        <a href="#" id="browseGroups" class="link-primary">{{ translate('AllGroups') }}</a>
+                        <input type="text" id="groupSearch" class="form-control form-control-sm" size="60" />
+                    </div>
+
+                    <div id="resourceGroupList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="allGroups" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groupPermissionDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="groupPermissionDialogLabel">{{ translate('Groups') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="allGroupsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="changeGroupForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeGroupPermission') }}">
+        <input type="hidden" id="changeGroupId" {{ formname(key: 'GROUP_ID') }} />
+        <input type="hidden" id="changeGroupType" {{ formname(key: 'PERMISSION_TYPE') }} />
+    </form>
+
+    <div class="modal fade" id="resourceGroupDialog" tabindex="-1" role="dialog"
+        aria-labelledby="resourceGroupsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <form id="resourceGroupForm" method="post"
+                ajaxAction="{{ constant('ManageResourcesActions::ActionChangeResourceGroups') }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resourceGroupsModalLabel">{{ translate('ResourceGroups') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="resourceGroups">{{ translate('None') }}</div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            {{ cancel_button() }}
+            {{ update_button(submit: '1', attributes: {form: 'resourceGroupForm'}) }}
+            {{ indicator() }}
+        </div>
+    </div>
+</div>
+</div>
+
+<form id="colorForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeColor') }}">
+    <input type="hidden" id="reservationColor" {{ formname(key: 'RESERVATION_COLOR') }} />
+</form>
+
+<div id="creditsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="creditsModalLabel"
+    aria-hidden="true">
+    <form id="creditsForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCredits') }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="creditsModalLabel">{{ translate('Credits') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        {% set creditsPerSLot %}
+                            <label for='creditsPerSlot' class='visually-hidden'>Credits Per Slot</label>
+                            <input type='number' min='0' step='1' id='creditsPerSlot'
+                                class='credits form-control form-control-sm w-auto' {{ formname(key: 'CREDITS') }} />
+                        {% endset %}
+                        <div class="d-flex align-items-center gap-1">
+                            {{ translate('CreditUsagePerSlot', creditsPerSLot) }}</div>
+                    </div>
+
+                    <div>
+                        {% set peakCreditsPerSlot %}
+                            <label for='peakCreditsPerSlot' class='visually-hidden'>Peak Credits Per Slot</label>
+                            <input type='number' min='0' step='1' id='peakCreditsPerSlot'
+                                class='credits form-control form-control-sm w-auto' {{ formname(key: 'PEAK_CREDITS') }} />
+                        {% endset %}
+                        <div class="d-flex align-items-center gap-1">
+                            {{ translate('PeakCreditUsagePerSlot', peakCreditsPerSlot) }}</div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="importDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <form id="importForm" class="form" role="form" method="post" enctype="multipart/form-data"
+        ajaxAction="{{ constant('ManageResourcesActions::ImportResources') }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">{{ translate('Import') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="importInstructions" class="alert alert-info fst-italic">
+                        <div class="note">{{ translate('ResourceImportInstructions') }}</div>
+                        <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
+                            download="{{ server.SCRIPT_NAME }}?dr=template"
+                            target="_blank">{{ translate('GetTemplate') }}<i class="bi bi-download ms-1"></i></a>
+                    </div>
+                    <div id="importResults" class="validationSummary alert alert-danger d-none">
+                        <ul>
+                            {{ async_validator(id: 'fileExtensionValidator', key: '') }}
+                        </ul>
+                    </div>
+                    <div id="importErrors" class="alert alert-danger d-none"></div>
+                    <div id="importResult" class="alert alert-success d-none">
+                        <span>{{ translate('RowsImported') }}</span>
+
+                        <span id="importCount" class="fw-bold">0</span>
+                        <span>{{ translate('RowsSkipped') }}</span>
+
+                        <span id="importSkipped" class="fw-bold">0</span>
+                        <a class="alert-link" href="{{ server.SCRIPT_NAME }}">{{ translate('Done') }}</a>
+                    </div>
+                    <div class="">
+                        <label for="resourceImportFile" class="visually-hidden">Resource Import File</label>
+                        <input type="file" {{ formname(key: 'RESOURCE_IMPORT_FILE') }} id="resourceImportFile"
+                            class="form-control" accept=".csv" />
+                        <div class="form-check">
+                            <input type="checkbox" id="updateOnImport" class="form-check-input"
+                                {{ formname(key: 'UPDATE_ON_IMPORT') }} />
+                            <label for="updateOnImport"
+                                class="form-check-label">{{ translate('UpdateResourcesOnImport') }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button(key: 'Import') }}
+                    {{ indicator() }}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{ csrf_token() }}
+
+{{ include('javascript-includes.twig', {InlineEdit: true, Clear: true, DataTable: true, Trumbowyg: true}) }}
+{{ datatable(tableId: tableId) }}
+{{ jsfile(src: 'ajax-helpers.js') }}
+{{ jsfile(src: 'autocomplete.js') }}
+{{ vendor_js(src: 'jqtree/1.8.11/js/tree.jquery.js') }}
+{{ jsfile(src: 'admin/resource.js') }}
+{{ vendor_js(src: 'dropzone/1.0.0/js/dropzone.js') }}
+{{ jsfile(src: 'search-clear.js') }}
+
+<script type="text/javascript">
+    function addTrumbowygType() {
+        var Trumbowyg = function(options) {
+            this.init('trumbowyg', options, Trumbowyg.defaults);
+        };
+        $.fn.editableutils.inherit(Trumbowyg, $.fn.editabletypes.abstractinput);
+        $.extend(Trumbowyg.prototype, {
+            render: function() {
+                // Set any provided classes or attributes
+                this.setClass();
+                this.setAttr('placeholder');
+
+                this.$input.trumbowyg({
+                    tagsToRemove: ['script', 'link'],
+                    removeformatPasted: true,
+                    urlProtocol: true,
+                    btns: [
+                        ['bold', 'italic', 'underline'],
+                        ['link'],
+                        ['unorderedList', 'orderedList']
+                    ]
+                });
+            },
+
+            value2html: function(value, element) {
+                const sanitizedHtml = DOMPurify.sanitize(value || '');
+                $(element).html(sanitizedHtml);
+            },
+
+            html2value: function(html) {
+                return html || '';
+            },
+
+            activate: function() {
+                if (this.$input.data('trumbowyg')) {
+                    this.$input.trumbowyg('open');
+                }
+            },
+            value2input: function(value) {
+                this.$input.trumbowyg('html', value);
+            },
+            input2value: function() {
+                const sanitizedHtml = DOMPurify.sanitize(this.$input.trumbowyg('html'));
+                return sanitizedHtml;
+            }
+        });
+
+        Trumbowyg.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
+            tpl: '<textarea></textarea>',
+            inputclass: 'input-large',
+            placeholder: null,
+            rows: 7
+        });
+        $.fn.editabletypes.trumbowyg = Trumbowyg;
+    }
+
+    function setUpPopovers() {
+        $('[rel="popover"]').popover({
+            container: 'body',
+            html: true,
+            placement: 'top',
+            trigger: 'manual',
+            content: function() {
+                var popoverId = $(this).data('popover-content');
+                return $(popoverId).html();
+            }
+        });
+
+        $('[rel="popover"]').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Hide other popovers if needed
+            $('[rel="popover"]').not(this).popover('hide');
+
+            // Toggle the clicked one
+            $(this).popover('toggle');
+        });
+
+        $('.descriptionValue').on('shown', function(e, editable) {
+            $(document).off('click.editable');
+        });
+
+        $('.notesValue').on('shown', function(e, editable) {
+            $(document).off('click.editable');
+        });
+    }
+
+    function setupCustomAttributesIcon() {
+        $('[id^="customAttributesIcon"]').each(function() {
+            const icon = $(this);
+            const target = icon.closest('a').data('bs-target');
+
+            $(target).on('shown.bs.collapse', function() {
+                icon.removeClass('bi-chevron-down').addClass('bi-chevron-up');
+            });
+
+            $(target).on('hidden.bs.collapse', function() {
+                icon.removeClass('bi-chevron-up').addClass('bi-chevron-down');
+            });
+        });
+    }
+
+    function setUpEditables() {
+        $.fn.editable.defaults.mode = 'popup';
+        $.fn.editable.defaults.toggle = 'manual';
+        $.fn.editable.defaults.emptyclass = '';
+        $.fn.editable.default
+        $.fn.editable.defaults.params = function(params) {
+            params.CSRF_TOKEN = $('#csrf_token').val();
+            return params;
+        };
+
+        var updateUrl = '{{ server.SCRIPT_NAME }}?action=';
+        var xUserAutocompleteUrl = "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::XUser') }}";
+
+        $('.resourceNameField').editable({
+                url: updateUrl + '{{ constant('ManageResourcesActions::ActionRename') }}', validate: function (value) {
+                if ($.trim(value) == '') {
+                    return '{{ translate('RequiredValue') }}';
+                }
+            }
+        });
+
+    $('.scheduleName').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeSchedule') }}', source: [
+        {% for scheduleId, scheduleName in Schedules %}
+            {
+                value:{{ scheduleId }}, text: "{{ scheduleName|escape_js }}"
+            },
+        {% endfor %}
+    ]
+    });
+
+    $('.resourceTypeName').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeResourceType') }}',
+        emptytext: "{{ translate('NoResourceTypeLabel')|escape_js }}",
+        source: [{
+                value: '0', text: '' //'-- {{ translate('None') }} --'
+            },
+            {% for id, resourceType in ResourceTypes %}
+                {
+                    value:{{ id }}, text: "{{ resourceType.Name()|escape_js }}"
+                },
+            {% endfor %}
+        ]
+    });
+
+    $('.sortOrderValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeSort') }}', emptytext: '0', min: 0, max: 999
+    });
+
+    $('.locationValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeLocation') }}', emptytext: "{{ translate('NoLocationLabel')|escape_js }}"
+    });
+
+    $('.contactValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeContact') }}',
+        {% if ResourceContactIsUser %}
+            emptytext: "{{ translate('NoContactLabel')|escape_js }}",
+            source: xUserAutocompleteUrl,
+        {% else %}
+            emptytext: "{{ translate('NoContactLabel')|escape_js }}"
+        {% endif %}
+    });
+
+    $('.descriptionValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeDescription') }}',
+        emptytext: "{{ translate('NoDescriptionLabel')|escape_js }}"
+    });
+
+    $('.notesValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeNotes') }}', emptytext: "{{ translate('NoDescriptionLabel')|escape_js }}"
+    });
+
+    $('.resourceAdminValue').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeAdmin') }}', emptytext: "{{ translate('None')|escape_js }}", source: [{
+        value: '0',
+        text: ''
+    },
+    {% for scheduleId, group in AdminGroups %}
+        {
+            value:{{ group.Id() }}, text: "{{ group.Name()|escape_js }}"
+        },
+    {% endfor %}
+    ]
+    });
+
+    $('.inlineAttribute').editable({
+        url: updateUrl + '{{ constant('ManageResourcesActions::ActionChangeAttribute') }}', emptytext: '-'
+    });
+
+    }
+
+    $(document).ready(function() {
+        addTrumbowygType();
+        setUpPopovers();
+        setUpEditables();
+        setupCustomAttributesIcon();
+
+        dropzone($("#addResourceImage"));
+        dropzone($("#changeResourceImage"), {
+            autoSubmit: true
+        });
+
+        var actions = {
+            enableSubscription: '{{ constant('ManageResourcesActions::ActionEnableSubscription') }}',
+            disableSubscription: '{{ constant('ManageResourcesActions::ActionDisableSubscription') }}'
+        };
+
+        var opts = {
+            submitUrl: '{{ server.SCRIPT_NAME }}',
+            saveRedirect: '{{ server.SCRIPT_NAME }}',
+            actions: actions,
+            userAutocompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::User') }}",
+            groupAutocompleteUrl: "../ajax/autocomplete.php?type={{ constant('AutoCompleteType::Group') }}",
+            permissionsUrl: '{{ server.SCRIPT_NAME }}',
+            copyText: "{{ translate('Copy')|escape_js }}"
+        };
+
+        var resourceManagement = new ResourceManagement(opts);
+
+        {% for resource in Resources %}
+            var resource = {
+                id: '{{ resource.GetResourceId() }}',
+                name: "{{ resource.GetName()|escape_js }}",
+                location: "{{ resource.GetLocation()|escape_js }}",
+                contact: "{{ resource.GetContact()|escape_js }}",
+                description: "{{ resource.GetDescription()|escape_js }}",
+                notes: "{{ resource.GetNotes()|escape_js }}",
+                autoAssign: '{{ resource.GetAutoAssign() }}',
+                requiresApproval: '{{ resource.GetRequiresApproval() }}',
+                allowMultiday: '{{ resource.GetAllowMultiday() }}',
+                maxParticipants: '{{ resource.GetMaxParticipants() }}',
+                scheduleId: '{{ resource.GetScheduleId() }}',
+                minLength: {},
+                maxLength: {},
+                startNoticeAdd: {},
+                startNoticeUpdate: {},
+                startNoticeDelete: {},
+                endNotice: {},
+                bufferTime: {},
+                adminGroupId: '{{ resource.GetAdminGroupId() }}',
+                sortOrder: '{{ resource.GetSortOrder() }}',
+                resourceTypeId: '{{ resource.GetResourceTypeId() }}',
+                statusId: '{{ resource.GetStatusId() }}',
+                reasonId: '{{ resource.GetStatusReasonId() }}',
+                allowSubscription: '{{ resource.GetIsCalendarSubscriptionAllowed() }}',
+                enableCheckin: '{{ resource.IsCheckInEnabled() }}',
+                autoReleaseMinutes: '{{ resource.GetAutoReleaseMinutes() }}',
+                credits: '{{ resource.GetCreditsPerSlot() }}',
+                peakCredits: '{{ resource.GetPeakCreditsPerSlot() }}',
+                allowConcurrent: '{{ resource.GetAllowConcurrentReservations() }}',
+                maxConcurrent: '{{ resource.GetMaxConcurrentReservations() }}'
+            };
+
+            {% if resource.HasMinLength() %}
+                resource.minLength = {
+                    value: '{{ resource.GetMinLength() }}',
+                    days: '{{ resource.GetMinLength().Days() }}',
+                    hours: '{{ resource.GetMinLength().Hours() }}',
+                    minutes: '{{ resource.GetMinLength().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasMaxLength() %}
+                resource.maxLength = {
+                    value: '{{ resource.GetMaxLength() }}',
+                    days: '{{ resource.GetMaxLength().Days() }}',
+                    hours: '{{ resource.GetMaxLength().Hours() }}',
+                    minutes: '{{ resource.GetMaxLength().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasMinNoticeAdd() %}
+                resource.startNoticeAdd = {
+                    value: '{{ resource.GetMinNoticeAdd() }}',
+                    days: '{{ resource.GetMinNoticeAdd().Days() }}',
+                    hours: '{{ resource.GetMinNoticeAdd().Hours() }}',
+                    minutes: '{{ resource.GetMinNoticeAdd().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasMinNoticeUpdate() %}
+                resource.startNoticeUpdate = {
+                    value: '{{ resource.GetMinNoticeUpdate() }}',
+                    days: '{{ resource.GetMinNoticeUpdate().Days() }}',
+                    hours: '{{ resource.GetMinNoticeUpdate().Hours() }}',
+                    minutes: '{{ resource.GetMinNoticeUpdate().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasMinNoticeDelete() %}
+                resource.startNoticeDelete = {
+                    value: '{{ resource.GetMinNoticeDelete() }}',
+                    days: '{{ resource.GetMinNoticeDelete().Days() }}',
+                    hours: '{{ resource.GetMinNoticeDelete().Hours() }}',
+                    minutes: '{{ resource.GetMinNoticeDelete().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasMaxNotice() %}
+                resource.endNotice = {
+                    value: '{{ resource.GetMaxNotice() }}',
+                    days: '{{ resource.GetMaxNotice().Days() }}',
+                    hours: '{{ resource.GetMaxNotice().Hours() }}',
+                    minutes: '{{ resource.GetMaxNotice().Minutes() }}'
+                };
+            {% endif %}
+
+            {% if resource.HasBufferTime() %}
+                resource.bufferTime = {
+                    value: '{{ resource.GetBufferTime() }}',
+                    days: '{{ resource.GetBufferTime().Days() }}',
+                    hours: '{{ resource.GetBufferTime().Hours() }}',
+                    minutes: '{{ resource.GetBufferTime().Minutes() }}'
+                };
+            {% endif %}
+
+            resource.image = null;
+            {% if resource.HasImage() %}
+                resource.image = '{{ resource_image(resource.GetImage()) }}';
+            {% endif %}
+
+            resource.images = [];
+            {% for image in resource.GetImages() %}
+                resource.images.push('{{ resource_image(image) }}');
+            {% endfor %}
+
+            resource.resourceGroupIds = [{{ resource.GetResourceGroupIds()|join(',') }}];
+
+            resourceManagement.add(resource);
+        {% endfor %}
+
+        {% for reason in StatusReasons %}
+            resourceManagement.addStatusReason('{{ reason.Id() }}', '{{ reason.StatusId() }}', '{{ reason.Description()|escape_js }}');
+        {% endfor %}
+
+        resourceManagement.init();
+        resourceManagement.initializeStatusFilter('{{ ResourceStatusFilterId }}', '{{ ResourceStatusReasonFilterId }}');
+        resourceManagement.addResourceGroups({{ ResourceGroups|raw }});
+
+    });
+</script>
+</div>
+
+{{ include('globalfooter.twig') }}
