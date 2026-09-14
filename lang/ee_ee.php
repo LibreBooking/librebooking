@@ -1107,6 +1107,6 @@ class ee_ee extends en_us
 
     protected function _GetHtmlLangCode()
     {
-        return 'et';
+        return 'et'; 
     }
 }
