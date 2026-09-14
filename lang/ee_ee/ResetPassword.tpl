@@ -1,9 +1,9 @@
-Sinu ajutine Rannahalli kalendri parool on: {$TemporaryPassword}
+Siin on Teie ajutine parool süsteemile {$AppTitle}: {$TemporaryPassword}
 
 <br/>
 
-Sinu vana parool enam ei tööta.
+Teie vana parool ei tööta enam.
 <br/>
 <br/>
 
-Palun <a href="{$ScriptUrl}">Logi sisse Rannahalli kalendrisse</a> ja muuda parool võimalikult kiirelt.
+Palun <a href="{$ScriptUrl}">logige sisse süsteemi {$AppTitle}</a> ja vahetage oma parool esimesel võimalusel.
