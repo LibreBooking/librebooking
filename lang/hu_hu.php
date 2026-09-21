@@ -825,8 +825,8 @@ class hu_hu extends en_us
         $strings['QuotaExceeded'] = 'A kvóta limit meghaladva.';
         $strings['MultiDayRule'] = '%s nem fogad foglalást az alábbi napokon.';
         $strings['InvalidReservationData'] = 'Probléma adódott az igényelt foglalásával.';
-        $strings['PasswordError'] = 'A jelszónak tartalmaznia kell %s betűt és %s számot.';
-        $strings['PasswordErrorRequirements'] = 'A jelszónak tartalmaznia kell %s nagy és kisbetűt valamint %s számot.';
+        $strings['PasswordError'] = 'A jelszónak tartalmaznia kell %s betűt, %s számot és %s speciális karaktert.';
+        $strings['PasswordErrorRequirements'] = 'A jelszónak tartalmaznia kell %s nagy és kisbetűt, %s számot valamint %s speciális karaktert.';
         $strings['NoReservationAccess'] = 'Nioncs jogosultsága megváltoztatni ezt a foglalást.';
         $strings['PasswordControlledExternallyError'] = 'Jelszavát egy külső rendszer kezeli, így innen nem frissíthető.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'A kiegészítő %s csak az alábbi elemekkel együtt fogalható %s';

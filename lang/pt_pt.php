@@ -563,8 +563,8 @@ class pt_pt extends en_gb
         $strings['PasswordChangedSuccessfully'] = 'A sua senha foi alterada com sucesso';
         $strings['PasswordConfirmation'] = 'Confirmar senha';
         $strings['PasswordControlledExternallyError'] = 'A sua senha é controlada por um sistema externo e não pode ser atualizada aqui.';
-        $strings['PasswordError'] = 'A senha deve conter pelo menos %1$s letras e pelo menos %2$s números.';
-        $strings['PasswordErrorRequirements'] = 'A senha deve conter uma combinação de pelo menos %1$s letras maiúsculas e minúsculas e %2$s números.';
+        $strings['PasswordError'] = 'A senha deve conter pelo menos %1$s letras, %2$s números e %3$s caracteres especiais.';
+        $strings['PasswordErrorRequirements'] = 'A senha deve conter uma combinação de pelo menos %1$s letras maiúsculas e minúsculas, %2$s números e %3$s caracteres especiais.';
         $strings['Past'] = 'Passado';
         $strings['PayPalClientId'] = 'Client ID';
         $strings['PayPalEnvironment'] = 'Environment';

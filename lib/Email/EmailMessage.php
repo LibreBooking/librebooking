@@ -14,6 +14,7 @@ abstract class EmailMessage implements IEmailMessage
      * @var string|null
      */
     private $attachmentFileName;
+    private ?string $attachmentMimeType = null;
 
     protected bool $enforceCustomTemplate;
 
@@ -81,10 +82,11 @@ abstract class EmailMessage implements IEmailMessage
         return $this->email->getTemplateVars('Charset');
     }
 
-    public function AddStringAttachment($contents, $fileName)
+    public function AddStringAttachment($contents, $fileName, ?string $mimeType = null)
     {
         $this->attachmentContents = $contents;
         $this->attachmentFileName = $fileName;
+        $this->attachmentMimeType = $mimeType;
     }
 
     public function HasStringAttachment()
@@ -96,6 +98,7 @@ abstract class EmailMessage implements IEmailMessage
     {
         $this->attachmentContents = null;
         $this->attachmentFileName = null;
+        $this->attachmentMimeType = null;
     }
 
     public function AttachmentContents()
@@ -106,5 +109,10 @@ abstract class EmailMessage implements IEmailMessage
     public function AttachmentFileName()
     {
         return $this->attachmentFileName;
+    }
+
+    public function AttachmentMimeType(): ?string
+    {
+        return $this->attachmentMimeType;
     }
 }

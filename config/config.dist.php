@@ -520,14 +520,17 @@ return [
             # Disable the 'Forgot Password' feature (true/false)
             'disable.reset' => false,
 
-            # Minimum number of letters required in passwords
-            'minimum.letters' => 6,
+            # Minimum number of characters required in passwords
+            'minimum.length' => 8,
 
             # Minimum number of numeric digits required in passwords
-            'minimum.numbers' => 0,
+            'minimum.numbers' => 1,
 
             # Require both upper and lower case characters in passwords (true/false)
-            'upper.and.lower' => false,
+            'upper.and.lower' => true,
+
+            # Minimum number of special characters required in passwords
+            'minimum.specialchar' => 1,
         ],
 
         #########

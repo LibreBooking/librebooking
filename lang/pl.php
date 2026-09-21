@@ -869,8 +869,8 @@ class pl extends en_gb
         $strings['QuotaExceeded'] = 'Przekroczono limit.';
         $strings['MultiDayRule'] = '%s nie zezwala na rezerwacje pomiędzy dniami.';
         $strings['InvalidReservationData'] = 'Wystąpił problem z Twoim żądaniem rezerwacji.';
-        $strings['PasswordError'] = 'Hasło musi zawierać co najmniej %s liter oraz co najmniej %s cyfr.';
-        $strings['PasswordErrorRequirements'] = 'Hasło musi zawierać kombinację co najmniej %s wielkich i małych liter oraz %s cyfr.';
+        $strings['PasswordError'] = 'Hasło musi zawierać co najmniej %s liter, %s cyfr oraz %s znaków specjalnych.';
+        $strings['PasswordErrorRequirements'] = 'Hasło musi zawierać kombinację co najmniej %s wielkich i małych liter, %s cyfr oraz %s znaków specjalnych.';
         $strings['NoReservationAccess'] = 'Nie masz uprawnień do zmiany tej rezerwacji.';
         $strings['PasswordControlledExternallyError'] = 'Twoje hasło jest zarządzane przez zewnętrzny system i nie może być zmienione tutaj.';
         $strings['AccessoryResourceRequiredErrorMessage'] = '%s może być zarezerwowane wyłącznie z zasobami %s';

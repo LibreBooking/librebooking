@@ -855,8 +855,8 @@ class pt_br extends en_gb
         $strings['QuotaExceeded'] = 'Limite da cota excedido.';
         $strings['MultiDayRule'] = '%s não permite reservas através de múltiplos dias.';
         $strings['InvalidReservationData'] = 'Houve um problema com sua solicitação de reserva.';
-        $strings['PasswordError'] = 'A senha deve conter pelo menos %s letras e pelo menos %s números.';
-        $strings['PasswordErrorRequirements'] = 'A senha deve conter uma combinação de pelo menos %s letras maiúsculas e minúsculas e %s números.';
+        $strings['PasswordError'] = 'A senha deve conter pelo menos %s letras, %s números e %s caracteres especiais.';
+        $strings['PasswordErrorRequirements'] = 'A senha deve conter uma combinação de pelo menos %s letras maiúsculas e minúsculas, %s números e %s caracteres especiais.';
         $strings['NoReservationAccess'] = 'Você não tem permissão para alterar esta reserva.';
         $strings['PasswordControlledExternallyError'] = 'Sua senha é controlada por um sistema externo e não pode ser atualizada aqui.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'O acessório %s só pode ser reservado com recursos %s';

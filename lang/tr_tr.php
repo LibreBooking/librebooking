@@ -651,8 +651,8 @@ class tr_tr extends en_gb
         $strings['QuotaExceeded'] = 'Quota limit exceeded.';
         $strings['MultiDayRule'] = '%s does not allow reservations across days.';
         $strings['InvalidReservationData'] = 'Rezervasyon talebi sırasında hata oluştu.';
-        $strings['PasswordError'] = 'Şifreniz en az %s karakter ve en az %s adet rakam içermelidir.';
-        $strings['PasswordErrorRequirements'] = 'Şifreniz en az %s adet büyük küçük harf ve %s adet rakam içermelidir.';
+        $strings['PasswordError'] = 'Şifreniz en az %s karakter, %s adet rakam ve %s adet özel karakter içermelidir.';
+        $strings['PasswordErrorRequirements'] = 'Şifreniz en az %s adet büyük küçük harf, %s adet rakam ve %s adet özel karakter içermelidir.';
         $strings['NoReservationAccess'] = 'You are not allowed to change this reservation.';
         $strings['PasswordControlledExternallyError'] = 'Your password is controlled by an external system and cannot be updated here.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Accessory %s can only be booked with resources %s';

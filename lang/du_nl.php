@@ -834,8 +834,8 @@ class du_nl extends en_gb
         $strings['QuotaExceeded'] = 'Quota limiet overschreden.';
         $strings['MultiDayRule'] = '%s staat reserveringen over meerdere dagen niet toe.';
         $strings['InvalidReservationData'] = 'Er was een probleem met je reserverings aanvraag.';
-        $strings['PasswordError'] = 'Wachtwoord moet minstens %s letters en minstens %s nummers.';
-        $strings['PasswordErrorRequirements'] = 'Wachtwoord moet een combinatie van minstens %s hoofdletters en kleine letters en %s nummers.';
+        $strings['PasswordError'] = 'Wachtwoord moet minstens %s letters, %s nummers en %s speciale tekens.';
+        $strings['PasswordErrorRequirements'] = 'Wachtwoord moet een combinatie van minstens %s hoofdletters en kleine letters, %s nummers en %s speciale tekens.';
         $strings['NoReservationAccess'] = 'Je hebt geen rechten om deze reservering te wijzigen.';
         $strings['PasswordControlledExternallyError'] = 'Je wachtwoord wordt beheerd door een extern systeem en kan hier niet worden bijgewerkt.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Accessoire %s kan alleen gereserveerd worden met deze bronnen: %s';

@@ -845,8 +845,8 @@ class da_da extends en_gb
         $strings['QuotaExceeded'] = 'Begrænsningerne er overskredet.';
         $strings['MultiDayRule'] = '%s kan ikke reserveres over flere dage.';
         $strings['InvalidReservationData'] = 'Der var problemer med den ønskede reservation';
-        $strings['PasswordError'] = 'Kodeordet skal indeholde mindst %s bogstaver og mindst %s tal.';
-        $strings['PasswordErrorRequirements'] = 'Kodeordet skal indeholde en kombination af mindst %s bogstaver med stort og lille begyndelsesbogstav og mindst %s tal.';
+        $strings['PasswordError'] = 'Kodeordet skal indeholde mindst %s bogstaver, %s tal og %s specialtegn.';
+        $strings['PasswordErrorRequirements'] = 'Kodeordet skal indeholde en kombination af mindst %s bogstaver med stort og lille begyndelsesbogstav, %s tal og %s specialtegn.';
         $strings['NoReservationAccess'] = 'Du har ikke tilladelse til at ændre denne reservation.';
         $strings['PasswordControlledExternallyError'] = 'Dit kodeord styres af et eksternt system og kan ikke opdateres her.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Udstyr kan kun reserveres sammen med en facilitet %s';

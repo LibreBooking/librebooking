@@ -14,12 +14,12 @@
             {assign var="atomUrl" value=$resource->GetSubscriptionUrl()->GetAtomUrl()}
             <i class="bi bi-calendar link-primary"></i>
             <a target="_blank" href="{$icalUrl|escape:'html'}" class="link-primary"
-                title="{translate key=UrlCopiedToClipboard}"
+                title="{translate key=SubscribeToCalendar}"
                 onclick="copyUrlToClipboard('{$icalUrl|escape:'javascript'|escape:'html'}'); return false;">{translate key=SubscribeToCalendar}</a>
             <div class="vr mx-1"></div>
             <i class="bi bi-rss-fill link-primary"></i>
             <a target="_blank" href="{$atomUrl|escape:'html'}" class="link-primary"
-                title="{translate key=UrlCopiedToClipboard}"
+                title="{translate key=SubscribeToCalendar}"
                 onclick="copyUrlToClipboard('{$atomUrl|escape:'javascript'|escape:'html'}'); return false;">Atom</a>
             <div class="vr mx-1"></div>
         {/if}

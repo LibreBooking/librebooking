@@ -530,8 +530,8 @@ class no_no extends en_gb
         $strings['QuotaExceeded'] = 'Kvotegrensen overskredet.';
         $strings['MultiDayRule'] = '%s tillater ikke reservasjoner over flere dager.';
         $strings['InvalidReservationData'] = 'Det oppsto et problem med din anmodning om reservasjon.';
-        $strings['PasswordError'] = 'Passordet må inneholde minst %s bokstaver og minst %s tall.';
-        $strings['PasswordErrorRequirements'] = 'Passordet må inneholde en kombinasjon av minst %s store og små bokstaver og %s tall.';
+        $strings['PasswordError'] = 'Passordet må inneholde minst %s bokstaver, %s tall og %s spesialtegn.';
+        $strings['PasswordErrorRequirements'] = 'Passordet må inneholde en kombinasjon av minst %s store og små bokstaver, %s tall og %s spesialtegn.';
         $strings['NoReservationAccess'] = 'Du har ikke tilgangsrettigheter til å endre denne reservasjonen.';
         $strings['PasswordControlledExternallyError'] = 'Passordet ditt er kontrollert av et eksternt system og kan ikke forandres her.';
         $strings['NoResources'] = 'Du har ikke lagt til noen enheter.';

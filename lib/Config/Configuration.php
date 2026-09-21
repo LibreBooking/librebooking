@@ -527,7 +527,7 @@ class ConfigurationFile implements IConfigurationFile
         $envKey = ConfigKeysMeta::envKeyForConfig(config: $configKey);
         $envValue = $envKey !== null ? env($envKey) : null;
 
-        if (!empty($envValue)) {
+        if ($envValue !== null && $envValue !== '') {
             $value = $envValue;
         } elseif ($section !== null && $section !== '') {
             $sectionKey = str_starts_with($fullKey, $section . '.') ? substr($fullKey, strlen($section) + 1) : $fullKey;

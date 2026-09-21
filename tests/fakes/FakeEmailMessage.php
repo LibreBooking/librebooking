@@ -14,6 +14,7 @@ class FakeEmailMessage implements IEmailMessage
     public $_ReplyTo;
     public $_AttachmentContents;
     public $_AttachmentFileName;
+    public ?string $_AttachmentMimeType = null;
 
     public function __construct()
     {
@@ -61,10 +62,11 @@ class FakeEmailMessage implements IEmailMessage
         return $this->_ReplyTo;
     }
 
-    public function AddStringAttachment($contents, $fileName)
+    public function AddStringAttachment($contents, $fileName, ?string $mimeType = null)
     {
         $this->_AttachmentContents = $contents;
         $this->_AttachmentFileName = $fileName;
+        $this->_AttachmentMimeType = $mimeType;
     }
 
     public function HasStringAttachment()
@@ -80,5 +82,10 @@ class FakeEmailMessage implements IEmailMessage
     public function AttachmentFileName()
     {
         return $this->_AttachmentFileName;
+    }
+
+    public function AttachmentMimeType(): ?string
+    {
+        return $this->_AttachmentMimeType;
     }
 }

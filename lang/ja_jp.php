@@ -847,8 +847,8 @@ class ja_jp extends en_gb
         $strings['QuotaExceeded'] = '予約量の制限を越えています';
         $strings['MultiDayRule'] = '%s 日をまたいだ予約は出来ません';
         $strings['InvalidReservationData'] = '予約リクエストに問題があります';
-        $strings['PasswordError'] = 'パスワードは %s 文字以上で、%s 文字以上の数字を含む必要があります。';
-        $strings['PasswordErrorRequirements'] = 'パスワードには %s 文字以上の大文字と小文字のアルファベット、%s 文字以上の数字が必要です。';
+        $strings['PasswordError'] = 'パスワードは %s 文字以上で、%s 文字以上の数字と %s 文字以上の特殊文字を含む必要があります。';
+        $strings['PasswordErrorRequirements'] = 'パスワードには %s 文字以上の大文字と小文字のアルファベット、%s 文字以上の数字、%s 文字以上の特殊文字が必要です。';
         $strings['NoReservationAccess'] = 'この予約の変更は許可されていません。';
 
         $strings['PasswordControlledExternallyError'] = 'あなたのパスワードは外部システムによって制御しているため、ここでは更新できません';

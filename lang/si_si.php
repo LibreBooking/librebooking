@@ -541,8 +541,8 @@ class si_si extends en_gb
         $strings['QuotaExceeded'] = 'Presežena meja kvote.';
         $strings['MultiDayRule'] = '%s ne dovoljuje rezervacij preko več dni.';
         $strings['InvalidReservationData'] = 'Pri vaši zahtevi za rezervacijo je prišlo do težav.';
-        $strings['PasswordError'] = 'Geslo mora vsebovati najmanj %s črk in najmanj %s številk.';
-        $strings['PasswordErrorRequirements'] = 'Geslo mora vsebovati kombinacijo najmanj %s velikih in malih črk in %s številk.';
+        $strings['PasswordError'] = 'Geslo mora vsebovati najmanj %s črk, %s številk in %s posebnih znakov.';
+        $strings['PasswordErrorRequirements'] = 'Geslo mora vsebovati kombinacijo najmanj %s velikih in malih črk, %s številk in %s posebnih znakov.';
         $strings['NoReservationAccess'] = 'Za spremembo te rezervacije nimate dovoljenja.';
         $strings['PasswordControlledExternallyError'] = 'Vaše geslo kontrolira zunanji sistem in ga zato tu ne morete posodobiti.';
         $strings['NoResources'] = 'Niste dodali nobenih virov.';

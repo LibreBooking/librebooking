@@ -58,4 +58,48 @@ class EmailServiceTest extends TestBase
             'Each send() should see only the attachment for its own message, proving clearAttachments() ran before addStringAttachment() each time.'
         );
     }
+
+    public function testAttachmentIsAddedWithItsMimeType()
+    {
+        $phpMailer = $this->createMock('PHPMailer\PHPMailer\PHPMailer');
+
+        $message = new FakeEmailMessage();
+        $message->AddStringAttachment(
+            contents: 'BEGIN:VCALENDAR...',
+            fileName: 'reservation.ics',
+            mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
+        );
+
+        $phpMailer->expects($this->once())
+            ->method('addStringAttachment')
+            ->with(
+                $this->equalTo('BEGIN:VCALENDAR...'),
+                $this->equalTo('reservation.ics'),
+                $this->anything(),
+                $this->equalTo('text/calendar; charset=UTF-8; method=REQUEST')
+            );
+
+        $service = new EmailService($phpMailer);
+        $service->Send($message);
+    }
+
+    public function testAttachmentWithNoMimeTypeFallsBackToAutoDetection()
+    {
+        $phpMailer = $this->createMock('PHPMailer\PHPMailer\PHPMailer');
+
+        $message = new FakeEmailMessage();
+        $message->AddStringAttachment(contents: 'col1,col2', fileName: 'report.csv');
+
+        $phpMailer->expects($this->once())
+            ->method('addStringAttachment')
+            ->with(
+                $this->equalTo('col1,col2'),
+                $this->equalTo('report.csv'),
+                $this->anything(),
+                $this->equalTo('')
+            );
+
+        $service = new EmailService($phpMailer);
+        $service->Send($message);
+    }
 }

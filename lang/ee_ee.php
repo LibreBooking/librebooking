@@ -634,8 +634,8 @@ class ee_ee extends en_gb
         $strings['QuotaExceeded'] = 'Quota limit exceeded.';
         $strings['MultiDayRule'] = '%s ei luba broneeringuid üle päeva.';
         $strings['InvalidReservationData'] = 'Soovitud broneeringuga tekkis probleem.';
-        $strings['PasswordError'] = 'Parool peab sisaldama vähemalt %s tähte ja %s numbrit.';
-        $strings['PasswordErrorRequirements'] = 'Parool peab koosnema %s suure ja väikese tähe ja %s numbri kombinatsioonist.';
+        $strings['PasswordError'] = 'Parool peab sisaldama vähemalt %s tähte, %s numbrit ja %s erimärki.';
+        $strings['PasswordErrorRequirements'] = 'Parool peab koosnema %s suure ja väikese tähe, %s numbri ja %s erimärgi kombinatsioonist.';
         $strings['NoReservationAccess'] = 'Sul pole lubatud broneeringut muuta.';
         $strings['PasswordControlledExternallyError'] = 'Your password is controlled by an external system and cannot be updated here.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Accessory %s can only be booked with resources %s';

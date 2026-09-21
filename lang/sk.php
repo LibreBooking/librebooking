@@ -529,8 +529,8 @@ class sk extends en_gb
         $strings['QuotaExceeded'] = 'Maximálna kvóta prekročená.';
         $strings['MultiDayRule'] = '%s neumožňuje rezervácie viac dní.';
         $strings['InvalidReservationData'] = 'Nastali problémy s Vašou žiadosťou o rezerváciu.';
-        $strings['PasswordError'] = 'Heslo musí obsahovať aspoň %s písmeno/á a aspoň %s číslo/a.';
-        $strings['PasswordErrorRequirements'] = 'Heslo musí obsahovať kombináciu aspoň %s veľké a malé písmeno/á a %s číslo/a.';
+        $strings['PasswordError'] = 'Heslo musí obsahovať aspoň %s písmeno/á, aspoň %s číslo/a a aspoň %s špeciálny znak/y.';
+        $strings['PasswordErrorRequirements'] = 'Heslo musí obsahovať kombináciu aspoň %s veľké a malé písmeno/á, %s číslo/a a %s špeciálny znak/y.';
         $strings['NoReservationAccess'] = 'Nie ste oprávnený meniť túto rezerváciu.';
         // End Errors
 

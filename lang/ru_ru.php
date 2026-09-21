@@ -668,8 +668,8 @@ class ru_ru extends en_gb
         $strings['QuotaExceeded'] = 'Предел квоты превышены.';
         $strings['MultiDayRule'] = '%s не допускает Бронирование через дней.';
         $strings['InvalidReservationData'] = 'Были проблемы с Вашим запросом.';
-        $strings['PasswordError'] = 'Пароль должен содержать по меньшей мере %s букв и по крайней мере %s чисел.';
-        $strings['PasswordErrorRequirements'] = 'Пароль должен содержать комбинацию, по меньшей мере, %s верхние и строчные буквы и %s чисел.';
+        $strings['PasswordError'] = 'Пароль должен содержать по меньшей мере %s букв, %s чисел и %s специальных символов.';
+        $strings['PasswordErrorRequirements'] = 'Пароль должен содержать комбинацию, по меньшей мере, %s верхние и строчные буквы, %s чисел и %s специальных символов.';
         $strings['NoReservationAccess'] = 'Вы не можете изменить это бронирование.';
         $strings['PasswordControlledExternallyError'] = 'Ваш пароль контролируется внешней системой и не может быть обновлен здесь.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Доп. оборудование %s можно заказать только с помещениями %s';

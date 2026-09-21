@@ -1176,20 +1176,21 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => 'Disable the \'Forgot Password\' feature',
         'section' => 'password'
     ];
-    # previously PASSWORD_LETTERS
-    public const PASSWORD_MINIMUM_LETTERS = [
-        'key' => 'password.minimum.letters',
+    # previously PASSWORD_LETTERS AND PASSWORD_MINIMUM_LETTERS
+    public const PASSWORD_MINIMUM_LENGTH = [
+        'key' => 'password.minimum.length',
+        'legacy' => 'password.minimum.letters',
         'type' => 'integer',
-        'default' => 6,
-        'label' => 'Minimum Letters in Password',
-        'description' => 'Minimum number of letters required in passwords',
+        'default' => 8,
+        'label' => 'Minimum Length of the Password',
+        'description' => 'Minimum number of characters required in passwords',
         'section' => 'password'
     ];
     # previously PASSWORD_NUMBERS
     public const PASSWORD_MINIMUM_NUMBERS = [
         'key' => 'password.minimum.numbers',
         'type' => 'integer',
-        'default' => 0,
+        'default' => 1,
         'label' => 'Minimum Numbers in Password',
         'description' => 'Minimum number of numbers required in passwords',
         'config_file_comment' => 'Minimum number of numeric digits required in passwords',
@@ -1198,10 +1199,19 @@ class ConfigKeys extends AbstractConfigKeys
     public const PASSWORD_UPPER_AND_LOWER = [
         'key' => 'password.upper.and.lower',
         'type' => 'boolean',
-        'default' => false,
+        'default' => true,
         'label' => 'Require Upper and Lower Case',
         'description' => 'Require both upper and lower case letters in passwords',
         'config_file_comment' => 'Require both upper and lower case characters in passwords',
+        'section' => 'password'
+    ];
+    public const PASSWORD_MINIMUM_SPECIALCHAR = [
+        'key' => 'password.minimum.specialchar',
+        'type' => 'integer',
+        'default' => 1,
+        'label' => 'Minimum Special Characters in Password',
+        'description' => 'Minimum number of special characters required in passwords',
+        'config_file_comment' => 'Minimum number of special characters required in passwords',
         'section' => 'password'
     ];
 

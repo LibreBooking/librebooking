@@ -872,8 +872,8 @@ class de_de extends en_gb
         $strings['QuotaExceeded'] = 'Kontingentgrenze überschritten.';
         $strings['MultiDayRule'] = '%s erlaubt keine Reservierung über Tagesgrenzen.';
         $strings['InvalidReservationData'] = 'Es gab Probleme mit Ihrer Reservierungsanfrage.';
-        $strings['PasswordError'] = 'Das Passwort muss mindestens %s Buchstaben und mindestens %s Ziffern enthalten.';
-        $strings['PasswordErrorRequirements'] = 'Das Passwort muss eine Kombination von mindestens %s Groß- und Kleinbuchstaben und %s Ziffern enthalten.';
+        $strings['PasswordError'] = 'Das Passwort muss mindestens %s Buchstaben, mindestens %s Ziffern und mindestens %s Sonderzeichen enthalten.';
+        $strings['PasswordErrorRequirements'] = 'Das Passwort muss eine Kombination von mindestens %s Groß- und Kleinbuchstaben, %s Ziffern und %s Sonderzeichen enthalten.';
         $strings['NoReservationAccess'] = 'Sie dürfen diese Reservierung nicht verändern.';
         $strings['PasswordControlledExternallyError'] = 'Ihr Passwort wird von einem externen System verwaltet und kann deshalb hier nicht aktualisiert werden.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Zubehör %s kann nur in Zusammenhang mit Ressource %s gebucht werden';

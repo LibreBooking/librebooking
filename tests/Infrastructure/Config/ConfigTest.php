@@ -233,15 +233,15 @@ PHP
             $loggingLevel = $config->GetKey(ConfigKeys::LOGGING_LEVEL);
             $this->assertEquals('error', $loggingLevel, 'Invalid choice should be replaced with default');
 
-            $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-            $this->assertEquals(6, $minimumLetters, 'Type conversion should return integer');
+            $minimumLength = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LENGTH, new IntConverter());
+            $this->assertEquals(8, $minimumLength, 'Type conversion should return integer');
         });
 
         $this->assertLogMessage($errorLogs, "Invalid type for 'app.debug'. Should be 'boolean'", 'app.debug type validation error');
         $this->assertLogMessage($errorLogs, "Invalid type for 'app.title'. Should be 'string'", 'app.title type validation error');
         $this->assertLogMessage($errorLogs, "Invalid value 'super-verbose' for 'logging.level'", 'logging.level value validation error');
         $this->assertLogMessage($errorLogs, "Invalid type for 'inactivity.timeout'. Should be 'integer'", 'inactivity.timeout type validation error');
-        $this->assertLogMessage($errorLogs, "Invalid type for 'password.minimum.letters'. Should be 'integer'", 'password.minimum.letters type validation error');
+        $this->assertLogMessage($errorLogs, "Invalid type for 'password.minimum.length'. Should be 'integer'", 'password.minimum.letters type validation error');
     }
 
     public function testRegistersPluginConfigFiles()

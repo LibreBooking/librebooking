@@ -845,8 +845,8 @@ class fr_fr extends en_gb
         $strings['QuotaExceeded'] = 'Limite de quota dépassée.';
         $strings['MultiDayRule'] = '%s ne permet pas de réservations sur plusieurs jours.';
         $strings['InvalidReservationData'] = 'Votre demande de réservation a rencontré des problèmes.';
-        $strings['PasswordError'] = 'Le mot de passe doit contenir au moins %s lettres et au moins %s chiffres.';
-        $strings['PasswordErrorRequirements'] = 'Le mot de passe doit contenir au moins %s lettres majuscules et minuscules et %s chiffres.';
+        $strings['PasswordError'] = 'Le mot de passe doit contenir au moins %s lettres, %s chiffres et %s caractères spéciaux.';
+        $strings['PasswordErrorRequirements'] = 'Le mot de passe doit contenir une combinaison d\'au moins %s lettres majuscules et minuscules, %s chiffres et %s caractères spéciaux.';
         $strings['NoReservationAccess'] = 'Vous n\'êtes pas autorisé à changer cette réservation.';
         $strings['PasswordControlledExternallyError'] = 'Votre mot de passe est contrôlé par un système externe et ne peut pas être mis à jour ici.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'L\'Accessoire %s peut être réservé uniquement avec la ressource %s';

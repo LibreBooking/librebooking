@@ -681,8 +681,8 @@ class cz extends en_us
         $strings['QuotaExceeded'] = 'Quota limit exceeded.';
         $strings['MultiDayRule'] = '%s není povolené rezervovat na několik dní.';
         $strings['InvalidReservationData'] = 'Nastal problém při požadavku na rezervaci.';
-        $strings['PasswordError'] = 'Heslo musí obsahovat nejméně %s písměn a nejméně %s čísel.';
-        $strings['PasswordErrorRequirements'] = 'Heslo musí obsahovat kombinaci nejméně %s malých a velkých písmen a %s čísel.';
+        $strings['PasswordError'] = 'Heslo musí obsahovat nejméně %s písměn, %s čísel a %s speciálních znaků.';
+        $strings['PasswordErrorRequirements'] = 'Heslo musí obsahovat kombinaci nejméně %s malých a velkých písmen, %s čísel a %s speciálních znaků.';
         $strings['NoReservationAccess'] = 'Nemáte povolení měnit tuto rezervaci.';
         // End Errors
 
