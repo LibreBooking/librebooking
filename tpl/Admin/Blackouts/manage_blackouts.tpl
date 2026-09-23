@@ -215,6 +215,7 @@
 						{/foreach}
 					</tbody>
 				</table>
+				{pagination pageInfo=$PageInfo}
 			</div>
 		</div>
 	</div>

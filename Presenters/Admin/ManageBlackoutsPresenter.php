@@ -80,7 +80,7 @@ class ManageBlackoutsPresenter extends ActionPresenter
 
         $blackouts = $this->manageBlackoutsService->LoadFiltered(
             $this->page->GetPageNumber(),
-            null,
+            $this->page->GetPageSize(),
             $this->page->GetSortField(),
             $this->page->GetSortDirection(),
             $filter,
