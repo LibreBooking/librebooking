@@ -549,19 +549,13 @@ function Reservation(opts) {
       elements.groupDiv.find(':not([resource-id])').attr('checked', false).attr('disabled', true);
     }
 
-    if (allCheckboxes.length > 50) {
-      dialog.find('#checking-availability-error').removeClass('no-show');
-      dialog.find('#checking-availability').addClass('no-show');
-      return;
-    }
-
     dialog.find('#checking-availability').removeClass('no-show');
 
     ajaxGet(url, null, function (data) {
       $.each(data, function (i, unavailableResourceId) {
         var checkbox = dialog.find('[resource-id="' + unavailableResourceId + '"]');
         checkbox.prop('checked', false);
-        checkbox.trigger('checked');
+        //checkbox.trigger('checked');
         checkbox.prop('disabled', true);
         checkbox.parent().addClass('unavailableResource');
       });
@@ -575,7 +569,7 @@ function Reservation(opts) {
     if (opts.maximumResources && elements.groupDiv.find(':checked').length >= opts.maximumResources) {
       elements.groupDiv.find(':not(:checked)').attr('disabled', true);
     } else {
-      elements.groupDiv.find('[resource-id]').attr('disabled', false);
+      //elements.groupDiv.find('[resource-id]').attr('disabled', false);
     }
 
     if (!checkbox[0].hasAttribute('resource-id')) {
