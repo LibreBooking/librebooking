@@ -137,11 +137,11 @@ class LoginPresenter
         $keycloakEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter());
         $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
-        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
+        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
-        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
-        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
+        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl($this->_page->GetResumeUrl()) : null);
+        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url($this->_page->GetResumeUrl()) : null);
         $this->_page->SetOauth2Name($oauth2Enabled ? Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME) : null);
     }
 
@@ -291,7 +291,7 @@ class LoginPresenter
      * Checks in the config files if google authentication is active creating a new client if true and setting it's config keys.
      * Returns the created google url for the authentication
      */
-    public function GetGoogleUrl()
+    public function GetGoogleUrl(?string $state = null)
     {
         $client = new Google\Client();
         $client->setClientId(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID));
@@ -300,9 +300,11 @@ class LoginPresenter
         $client->addScope('email');
         $client->addScope('profile');
         $client->setPrompt('select_account');
-        $GoogleUrl = $client->createAuthUrl();
+        if (!empty($state)) {
+            $client->setState($state);
+        }
 
-        return $GoogleUrl;
+        return $client->createAuthUrl();
     }
 
     /**
@@ -366,7 +368,7 @@ class LoginPresenter
         return $FacebookUrl;
     }
 
-    public function GetKeycloakUrl()
+    public function GetKeycloakUrl(?string $state = null)
     {
         // Retrieve Keycloak configuration values
         $baseUrl    = rtrim(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL), '/');
@@ -383,10 +385,15 @@ class LoginPresenter
             'response_type' => 'code'
         ];
 
+        if (!empty($state)) {
+            $params['state'] = $state;
+        }
+
         return $authorizeEndpoint . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
     }
 
-    public function GetOauth2Url()
+    public function GetOauth2Url(?string $state = null)
     {
         // Retrieve Oauth2 configuration values
         $removeTrailingSlash = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_STRIP_TRAILING_SLASH);
@@ -404,8 +411,12 @@ class LoginPresenter
             'response_type' => 'code'
         ];
 
-        $Oauth2Url = $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-        return $Oauth2Url;
+        if (!empty($state)) {
+            $params['state'] = $state;
+        }
+
+        return $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
     }
 
 }
