@@ -191,12 +191,14 @@
 													<label class="fw-bold">{translate key=MinimumQuantity}
 														<input type="number" min="0" data-type="min-quantity"
 															class="form-control form-control-sm" size="4" maxlength="4"
-															name="{FormKeys::ACCESSORY_MIN_QUANTITY}[{$resource->GetId()}]">
+															name="{FormKeys::ACCESSORY_MIN_QUANTITY}[{$resource->GetId()}]"
+															id="acc_min" disabled>
 													</label>
 													<label class="fw-bold">{translate key=MaximumQuantity}
 														<input type="number" min="0" data-type="max-quantity"
 															class="form-control form-control-sm" size="4" maxlength="4"
-															name="{FormKeys::ACCESSORY_MAX_QUANTITY}[{$resource->GetId()}]">
+															name="{FormKeys::ACCESSORY_MAX_QUANTITY}[{$resource->GetId()}]"
+															id="acc_max" disabled>
 													</label>
 												</div>
 											</div>
