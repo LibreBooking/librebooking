@@ -191,7 +191,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         } else {
             $userList = $this->userRepository->GetList(
                 $this->page->GetPageNumber(),
-                null,
+                $this->page->GetPageSize(),
                 $this->page->GetSortField(),
                 $this->page->GetSortDirection(),
                 null,
@@ -256,7 +256,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition()
+        ];
 
         $user = $this->manageUsersService->AddUser(
             $this->page->GetUserName(),
@@ -300,7 +301,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition()
+        ];
 
         $this->manageUsersService->UpdateUser(
             $this->page->GetUserId(),
