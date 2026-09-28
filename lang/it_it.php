@@ -304,6 +304,9 @@ class it_it extends en_gb
         $strings['AddUser'] = 'Aggiungi utente';
         $strings['UserPermissionInfo'] = 'L\'accesso attuale alla risorsa può essere diverso a seconda del ruolo, permessi di gruppo, o impostazioni di permessi esterni';
         $strings['DeleteUserWarning'] = 'Eliminando questo utente verranno rimosse tutte le sue prenotazioni passate, presenti e future.';
+        $strings['Impersonate'] = 'Visualizza come';
+        $strings['ImpersonationBannerText'] = 'Stai visualizzando l\'applicazione come %s.';
+        $strings['SwitchBackToMyAccount'] = 'Torna al tuo account';
         $strings['AddAnnouncement'] = 'Aggiungi avviso';
         $strings['Announcement'] = 'Avviso';
         $strings['Priority'] = 'Priorità';

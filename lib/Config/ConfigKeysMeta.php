@@ -155,6 +155,7 @@ class ConfigKeysMeta
             'app.debug',
             'admin.email',
             'admin.email.name',
+            'admin.impersonation.enabled',
             'company.name',
             'company.url',
         ],
