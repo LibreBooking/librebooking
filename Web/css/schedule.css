@@ -312,6 +312,8 @@ div.legend {
   margin: 0 2px;
   cursor: default;
   color: var(--label-text-on-light);
+  hyphens: auto;
+  overflow-wrap: anywhere;
 }
 
 .reservations-left-header {
