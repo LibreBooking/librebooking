@@ -344,6 +344,9 @@ class de_de extends en_gb
         $strings['AddUser'] = 'Benutzer hinzufügen';
         $strings['UserPermissionInfo'] = 'Aktueller Zugriff zur Ressource unterscheidet sich in Abhängigkeit der Benutzerrolle, der Gruppenberechtigungen oder externer Zugriffseinstellungen';
         $strings['DeleteUserWarning'] = 'Das Löschen des Benutzers führt auch zum Entfernen seiner momentanen, zukünftigen und vergangenen Reservierungen.';
+        $strings['Impersonate'] = 'Ansehen als';
+        $strings['ImpersonationBannerText'] = 'Sie sehen die Anwendung als %s.';
+        $strings['SwitchBackToMyAccount'] = 'Zurück zu meinem Konto wechseln';
         $strings['AddAnnouncement'] = 'Ankündigung hinzufügen';
         $strings['Announcement'] = 'Ankündigung';
         $strings['Priority'] = 'Priorität';

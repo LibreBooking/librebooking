@@ -308,6 +308,9 @@ class fr_fr extends en_gb
         $strings['AddUser'] = 'Ajouter un Utilisateur';
         $strings['UserPermissionInfo'] = 'L\'accès réel aux ressources peut parfois être différent de ce qui est indiqué ici (rôle de l\'utilisateur, permissions du groupe, réglages de permissions autres)';
         $strings['DeleteUserWarning'] = 'Effacer cet utilisateur supprimera toutes ses réservations passées, actuelles et futures.';
+        $strings['Impersonate'] = 'Voir en tant que';
+        $strings['ImpersonationBannerText'] = 'Vous consultez l\'application en tant que %s.';
+        $strings['SwitchBackToMyAccount'] = 'Revenir à mon compte';
         $strings['AddAnnouncement'] = 'Ajouter une annonce';
         $strings['Announcement'] = 'Annonce';
         $strings['Priority'] = 'Priorité';

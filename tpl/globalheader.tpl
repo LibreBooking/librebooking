@@ -127,6 +127,13 @@
         </div>
     {/if}
 
+    {if !empty($IsImpersonating)}
+        <div class="alert alert-warning text-center m-2" role="alert" id="impersonation-banner">
+            {$ImpersonationBannerText}
+            <a href="#" id="switch-back-link" class="alert-link fw-bold ms-2">{translate key="SwitchBackToMyAccount"}</a>
+        </div>
+    {/if}
+
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">

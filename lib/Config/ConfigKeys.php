@@ -39,6 +39,14 @@ class ConfigKeys extends AbstractConfigKeys
         'description' => 'Display name used for outgoing admin emails',
     ];
 
+    public const ADMIN_IMPERSONATION_ENABLED = [
+        'key' => 'admin.impersonation.enabled',
+        'type' => 'boolean',
+        'default' => false,
+        'label' => 'Enable User Impersonation',
+        'description' => 'Allow application administrators to temporarily view the application as another user',
+    ];
+
     public const COMPANY_NAME = [
         'key' => 'company.name',
         'type' => 'string',

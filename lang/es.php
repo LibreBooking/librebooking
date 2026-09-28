@@ -306,6 +306,9 @@ class es extends en_gb
         $strings['AddUser'] = 'Agregar usuario';
         $strings['UserPermissionInfo'] = 'El acceso real a los recursos puede ser diferente dependiendo de los roles del usuario, permisos de grupo, o ajustes externos de permisos';
         $strings['DeleteUserWarning'] = 'Al borrar este usuario se eliminarán todas sus reservas actuales, futuras y pasadas.';
+        $strings['Impersonate'] = 'Ver como';
+        $strings['ImpersonationBannerText'] = 'Está viendo la aplicación como %s.';
+        $strings['SwitchBackToMyAccount'] = 'Volver a mi cuenta';
         $strings['AddAnnouncement'] = 'Agregar anuncio';
         $strings['Announcement'] = 'Anuncio';
         $strings['Priority'] = 'Prioridad';
