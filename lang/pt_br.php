@@ -308,6 +308,9 @@ class pt_br extends en_gb
         $strings['AddUser'] = 'Adicionar Usuário';
         $strings['UserPermissionInfo'] = 'O acesso efetivo ao recurso pode ser diferente dependendo da função do usuário, permissões de grupo, ou definições de permissões externas';
         $strings['DeleteUserWarning'] = 'A exclusão desse usuário removerá todas as suas reservas atuais, futuras e históricas.';
+        $strings['Impersonate'] = 'Ver como';
+        $strings['ImpersonationBannerText'] = 'Você está vendo o aplicativo como %s.';
+        $strings['SwitchBackToMyAccount'] = 'Voltar para a minha conta';
         $strings['AddAnnouncement'] = 'Adicionar Anúncio';
         $strings['Announcement'] = 'Anúncio';
         $strings['Priority'] = 'Prioridade';
