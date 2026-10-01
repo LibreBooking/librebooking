@@ -5,6 +5,7 @@ require_once(ROOT_DIR . 'lib/Application/Authentication/IAuthentication.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/WebLoginContext.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/WebAuthentication.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/WebServiceAuthentication.php');
+require_once(ROOT_DIR . 'lib/Application/Authentication/UserSessionFactory.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/Authentication.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/PasswordEncryption.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/Password.php');

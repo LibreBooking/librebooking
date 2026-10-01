@@ -7,6 +7,8 @@ require_once(ROOT_DIR . 'lib/Application/User/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/UserImportCsv.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/ResourcePermissionService.php');
+require_once(ROOT_DIR . 'lib/Application/Admin/ImpersonationService.php');
+require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/InviteUserEmail.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/AccountCreationForUserEmail.php');
 
@@ -25,6 +27,7 @@ class ManageUsersActions
     public const ChangeCredits = 'changeCredits';
     public const InviteUsers = 'inviteUsers';
     public const DeleteMultipleUsers = 'deleteMultipleUsers';
+    public const Impersonate = 'impersonate';
 }
 
 interface IManageUsersPresenter
@@ -80,6 +83,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
      * @var IResourcePermissionService
      */
     private $resourcePermissionService;
+
+    private IImpersonationService $impersonationService;
 
     /**
      * @param IGroupRepository $groupRepository
@@ -139,6 +144,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
      * @param IGroupRepository $groupRepository
      * @param IGroupViewRepository $groupViewRepository
      * @param IResourcePermissionService|null $resourcePermissionService
+     * @param IRoleService|null $roleService
+     * @param IImpersonationService|null $impersonationService
      */
     public function __construct(
         IManageUsersPage $page,
@@ -150,6 +157,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         IGroupRepository $groupRepository,
         IGroupViewRepository $groupViewRepository,
         ?IResourcePermissionService $resourcePermissionService = null,
+        ?IRoleService $roleService = null,
+        ?IImpersonationService $impersonationService = null,
     ) {
         parent::__construct($page);
 
@@ -162,6 +171,10 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $this->groupRepository = $groupRepository;
         $this->groupViewRepository = $groupViewRepository;
         $this->resourcePermissionService = $resourcePermissionService ?? new ResourcePermissionService($resourceRepository);
+        $this->impersonationService = $impersonationService ?? new ImpersonationService(
+            $roleService ?? PluginManager::Instance()->LoadAuthorization(),
+            $userRepository
+        );
 
         $this->AddAction(ManageUsersActions::Activate, 'Activate');
         $this->AddAction(ManageUsersActions::AddUser, 'AddUser');
@@ -176,6 +189,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $this->AddAction(ManageUsersActions::ChangeCredits, 'ChangeCredits');
         $this->AddAction(ManageUsersActions::InviteUsers, 'InviteUsers');
         $this->AddAction(ManageUsersActions::DeleteMultipleUsers, 'DeleteMultipleUsers');
+        $this->AddAction(ManageUsersActions::Impersonate, 'Impersonate');
     }
 
     public function PageLoad()
@@ -199,11 +213,25 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             );
         }
 
-        $this->page->BindUsers($userList->Results());
-        $this->page->BindPageInfo($userList->PageInfo());
-
         $groups = $this->groupViewRepository->GetList();
-        $this->page->BindGroups($groups->Results());
+        $groupResults = $groups->Results();
+        $this->page->BindGroups($groupResults);
+
+        $adminGroupIds = [];
+        foreach ($groupResults as $group) {
+            if ($group->IsAdmin()) {
+                $adminGroupIds[] = $group->Id();
+            }
+        }
+
+        $users = $userList->Results();
+        foreach ($users as $user) {
+            $user->IsApplicationAdmin = Configuration::Instance()->IsAdminEmail($user->Email)
+                || !empty(array_intersect($user->GroupIds, $adminGroupIds));
+        }
+
+        $this->page->BindUsers($users);
+        $this->page->BindPageInfo($userList->PageInfo());
 
         $user = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
 
@@ -764,6 +792,20 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         Log::Debug('User multiple delete. Ids=%s', implode(',', $ids));
         foreach ($ids as $id) {
             $this->manageUsersService->DeleteUser($id);
+        }
+    }
+
+    public function Impersonate(): void
+    {
+        // EnforceCSRFCheck() only validates POSTs, so reject everything else.
+        if (!$this->page->IsPostBack()) {
+            Log::Error('Impersonate denied. Request is not a POST.');
+            return;
+        }
+
+        $targetUser = $this->userRepository->LoadById((int) $this->page->GetUserId());
+        if ($this->impersonationService->StartImpersonation($targetUser)) {
+            $this->page->SetJsonResponse(['success' => true]);
         }
     }
 

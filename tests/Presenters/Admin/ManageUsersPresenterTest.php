@@ -653,6 +653,67 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals($this->page->_BoundUpdateUser, $user);
         $this->assertEquals($this->page->_BoundUpdateAttributes, $attributes);
     }
+
+    private function CreatePresenterWithImpersonationService($impersonationService)
+    {
+        return new ManageUsersPresenter(
+            $this->page,
+            $this->userRepo,
+            $this->resourceRepo,
+            $this->encryption,
+            $this->manageUsersService,
+            $this->attributeService,
+            $this->groupRepository,
+            $this->groupViewRepository,
+            impersonationService: $impersonationService,
+        );
+    }
+
+    public function testImpersonateDeniedWhenNotPost()
+    {
+        $this->page->_IsPostBack = false;
+
+        $impersonationService = $this->createMock('IImpersonationService');
+        $impersonationService->expects($this->never())->method('StartImpersonation');
+        $presenter = $this->CreatePresenterWithImpersonationService($impersonationService);
+
+        $this->page->_UserId = 55;
+        $presenter->Impersonate();
+
+        $this->assertNull($this->page->_JsonResponse);
+    }
+
+    public function testImpersonateRespondsWithoutSuccessWhenServiceDenies()
+    {
+        $this->page->_IsPostBack = true;
+        $targetUser = new FakeUser(55);
+        $this->userRepo->_UserById[55] = $targetUser;
+
+        $impersonationService = $this->createMock('IImpersonationService');
+        $impersonationService->expects($this->once())->method('StartImpersonation')->with($targetUser)->willReturn(false);
+        $presenter = $this->CreatePresenterWithImpersonationService($impersonationService);
+
+        $this->page->_UserId = 55;
+        $presenter->Impersonate();
+
+        $this->assertNull($this->page->_JsonResponse);
+    }
+
+    public function testImpersonateRespondsWithSuccessWhenServiceStarts()
+    {
+        $this->page->_IsPostBack = true;
+        $targetUser = new FakeUser(55);
+        $this->userRepo->_UserById[55] = $targetUser;
+
+        $impersonationService = $this->createMock('IImpersonationService');
+        $impersonationService->expects($this->once())->method('StartImpersonation')->with($targetUser)->willReturn(true);
+        $presenter = $this->CreatePresenterWithImpersonationService($impersonationService);
+
+        $this->page->_UserId = 55;
+        $presenter->Impersonate();
+
+        $this->assertEquals(['success' => true], $this->page->_JsonResponse);
+    }
 }
 
 class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage

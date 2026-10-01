@@ -205,6 +205,11 @@
                                                         class="dropdown-item update resetPassword">{translate key="ChangePassword"}</a>
                                                 </li>
                                             {/if}
+                                            {if $CanImpersonateUsers && $ImpersonateEnabled && !$user->IsApplicationAdmin && $user->IsActive()}
+                                                <li role="presentation"><a role="menuitem" href="#"
+                                                        class="dropdown-item update impersonate">{translate key="Impersonate"}</a>
+                                                </li>
+                                            {/if}
 
                                         </ul>
                                     </div>
@@ -739,7 +744,8 @@
 
         $(document).ready(function() {
             var actions = {
-                activate: '{ManageUsersActions::Activate}', deactivate: '{ManageUsersActions::Deactivate}'
+                activate: '{ManageUsersActions::Activate}', deactivate: '{ManageUsersActions::Deactivate}',
+                impersonate: '{ManageUsersActions::Impersonate}'
             };
 
             var userOptions = {
@@ -754,6 +760,7 @@
                 filterUrl: '{$smarty.server.SCRIPT_NAME}?{QueryStringKeys::ACCOUNT_STATUS}=',
                 actions: actions,
                 manageReservationsUrl: '{$ManageReservationsUrl}',
+                dashboardUrl: '{$DashboardUrl}',
             };
 
             var userManagement = new UserManagement(userOptions);

@@ -32,11 +32,14 @@ class Authentication implements IAuthentication
      */
     private $groupRepository;
 
+    private UserSessionFactory $userSessionFactory;
+
     public function __construct(IRoleService $roleService, IUserRepository $userRepository, IGroupRepository $groupRepository)
     {
         $this->roleService = $roleService;
         $this->userRepository = $userRepository;
         $this->groupRepository = $groupRepository;
+        $this->userSessionFactory = new UserSessionFactory($roleService);
     }
 
     public function SetMigration(PasswordMigration $migration)
@@ -125,7 +128,7 @@ class Authentication implements IAuthentication
 
             $user = $this->GetFirstRegistrationStrategy()->HandleLogin($user, $this->userRepository, $this->groupRepository);
 
-            return $this->GetUserSession($user, $loginTime);
+            return $this->userSessionFactory->Create($user, $loginTime);
         }
 
         return new NullUserSession();
@@ -144,41 +147,6 @@ class Authentication implements IAuthentication
     public function HandleLoginFailure(IAuthenticationPage $loginPage)
     {
         $loginPage->SetShowLoginError();
-    }
-
-    /**
-     * @param User $user
-     * @param string $loginTime
-     * @return UserSession
-     */
-    private function GetUserSession(User $user, $loginTime)
-    {
-        $userSession = new UserSession($user->Id());
-        $userSession->Email = $user->EmailAddress();
-        $userSession->FirstName = $user->FirstName();
-        $userSession->LastName = $user->LastName();
-        $userSession->Timezone = $user->Timezone();
-        $userSession->HomepageId = $user->Homepage();
-        $userSession->LanguageCode = $user->Language();
-        $userSession->LoginTime = $loginTime;
-        $userSession->PublicId = $user->GetPublicId();
-        $userSession->ScheduleId = $user->GetDefaultScheduleId();
-
-        $userSession->IsAdmin = $this->roleService->IsApplicationAdministrator($user);
-        $userSession->IsGroupAdmin = $this->roleService->IsGroupAdministrator($user);
-        $userSession->IsResourceAdmin = $this->roleService->IsResourceAdministrator($user);
-        $userSession->IsScheduleAdmin = $this->roleService->IsScheduleAdministrator($user);
-        $userSession->CSRFToken = CSRFToken::Create();
-
-        foreach ($user->Groups() as $group) {
-            $userSession->Groups[] = $group->GroupId;
-        }
-
-        foreach ($user->GetAdminGroups() as $group) {
-            $userSession->AdminGroups[] = $group->GroupId;
-        }
-
-        return $userSession;
     }
 
     public function ShowUsernamePrompt()

@@ -113,6 +113,10 @@ function UserManagement(opts) {
       window.location.href = url;
     });
 
+    elements.userList.on('click', '.impersonate', function (e) {
+      impersonateUser($(this));
+    });
+
     elements.userList.on('click', '.changeAttribute', function (e) {
       e.stopPropagation();
       $(e.target).closest('.updateCustomAttribute').find('.inlineAttribute').editable('toggle');
@@ -417,6 +421,17 @@ function UserManagement(opts) {
         changeStatusResultCallback
       );
     }
+  };
+
+  var impersonateUser = function (linkElement) {
+    PerformAsyncAction(linkElement, getSubmitCallback(options.actions.impersonate), null, function (data) {
+      if (data && data.success) {
+        window.location.href = options.dashboardUrl;
+      } else {
+        // Denied server-side; reload to refresh the list.
+        window.location.reload();
+      }
+    });
   };
 
   var changeGroups = function () {

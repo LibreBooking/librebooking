@@ -930,6 +930,11 @@ class UserItemView
     public $First;
     public $Last;
     public $Email;
+
+    /**
+     * @var bool
+     */
+    public $IsApplicationAdmin = false;
     public $Phone;
     /**
      * @var Date
