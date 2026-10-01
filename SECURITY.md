@@ -9,8 +9,10 @@ supported_version: 5.3.0
 
 ## Reporting a Vulnerability
 
-Report suspected security vulnerabilities to
-**[librebooking@outlook.com](mailto:librebooking@outlook.com)**.
+Report suspected security vulnerabilities through
+[GitHub's private vulnerability reporting form](https://github.com/LibreBooking/librebooking/security/advisories/new).
+Do not open a public issue for a suspected vulnerability. If you cannot use
+GitHub's form, email **[librebooking@outlook.com](mailto:librebooking@outlook.com)**.
 
 LibreBooking is maintained by a small volunteer team. Please allow 2-5 days for
 an initial response. If the issue is confirmed, a patch will be released as

@@ -3,6 +3,9 @@ description: Create a report to help us improve
 title: "[Bug] "
 labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: "For security vulnerabilities, please [report privately](https://github.com/LibreBooking/librebooking/security/advisories/new) instead of opening a public issue."
   - type: checkboxes
     id: acknowledgements
     attributes:

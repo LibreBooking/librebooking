@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/LibreBooking/librebooking/security/advisories/new
+    about: Please use GitHub's private vulnerability reporting form instead of opening a public issue.
   - name: LibreBooking Community Support
     url: https://github.com/LibreBooking/librebooking/discussions
     about: Please ask and answer questions here.
