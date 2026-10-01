@@ -65,6 +65,25 @@ class Database
     }
 
     /**
+     * Executes a single-statement alter query and returns the number of rows it affected.
+     * For UPDATE, MySQL counts only rows whose values actually changed.
+     *
+     * @param ISqlCommand $command must not be a multi-query command
+     * @return int number of rows affected by the statement
+     * @throws InvalidArgumentException if the command is a multi-query command
+     */
+    public function ExecuteAffectedRows(ISqlCommand $command): int
+    {
+        $this->Connection->Connect();
+
+        try {
+            return $this->Connection->ExecuteAffectedRows($command);
+        } finally {
+            $this->Connection->Disconnect();
+        }
+    }
+
+    /**
      * Executes an insert query against the database and returns the auto-increment id
      *
      * @param ISqlCommand $command

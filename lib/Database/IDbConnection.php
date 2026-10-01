@@ -30,6 +30,16 @@ interface IDbConnection
     public function Execute(ISqlCommand $command);
 
     /**
+     * Executes a single-statement alter query and returns the number of rows it affected.
+     * For UPDATE, MySQL counts only rows whose values actually changed.
+     *
+     * @param ISqlCommand $command must not be a multi-query command
+     * @return int number of rows affected by the statement
+     * @throws InvalidArgumentException if the command is a multi-query command
+     */
+    public function ExecuteAffectedRows(ISqlCommand $command): int;
+
+    /**
      * @return int last auto-increment id inserted for this connection
      */
     public function GetLastInsertId();

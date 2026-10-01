@@ -150,4 +150,59 @@ class DatabaseTest extends TestBase
         $this->assertEquals($expectedInsertId, $actualInsertId);
         $this->assertTrue($cn->_DisconnectWasCalled, 'Disonnect should be called for every query');
     }
+
+    public function testExecuteAffectedRowsReturnsConnectionCountAndConnects()
+    {
+        $sqlCommand = new SqlCommand('query');
+        $cn = new FakeDBConnection();
+        $cn->_ExpectedAffectedRows = 1;
+
+        $db = new Database($cn);
+        $affectedRows = $db->ExecuteAffectedRows($sqlCommand);
+
+        $this->assertSame(1, $affectedRows);
+        $this->assertSame($sqlCommand, $cn->_LastExecuteAffectedRowsCommand);
+        $this->assertTrue($cn->_ConnectWasCalled, 'Connect should be called for every query');
+        $this->assertTrue($cn->_DisconnectWasCalled, 'Disconnect should be called for every query');
+    }
+
+    public function testExecuteAffectedRowsReturnsZeroWhenNothingMatched()
+    {
+        $cn = new FakeDBConnection();
+        $cn->_ExpectedAffectedRows = 0;
+
+        $db = new Database($cn);
+
+        $this->assertSame(0, $db->ExecuteAffectedRows(new SqlCommand('query')));
+    }
+
+    public function testExecuteAffectedRowsPropagatesErrorsAndDisconnects()
+    {
+        $exception = new Exception('query failed');
+        $cn = new FakeDBConnection();
+        $cn->_ExecuteAffectedRowsException = $exception;
+
+        $db = new Database($cn);
+
+        try {
+            $db->ExecuteAffectedRows(new SqlCommand('query'));
+            $this->fail('Expected the connection exception to propagate');
+        } catch (Exception $caught) {
+            $this->assertSame($exception, $caught);
+        }
+
+        $this->assertTrue($cn->_DisconnectWasCalled, 'Disconnect should be called even when execution fails');
+    }
+
+    public function testFakeDatabaseReturnsConfiguredAffectedRowsPerCall()
+    {
+        $db = new FakeDatabase();
+        $db->_ExpectedAffectedRowsList = [1, 0];
+        $command = new SqlCommand('query');
+
+        $this->assertSame(1, $db->ExecuteAffectedRows($command));
+        $this->assertSame(0, $db->ExecuteAffectedRows($command));
+        $this->assertSame($command, $db->_LastCommand);
+        $this->assertCount(2, $db->_Commands);
+    }
 }
