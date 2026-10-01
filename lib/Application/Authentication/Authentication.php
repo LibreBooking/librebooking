@@ -6,17 +6,14 @@ require_once(ROOT_DIR . 'lib/Database/namespace.php');
 require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
 require_once(ROOT_DIR . 'Domain/Values/RoleLevel.php');
 
+use LibreBooking\Application\Authentication\UserSessionBuilder;
+
 class Authentication implements IAuthentication
 {
     /**
      * @var PasswordMigration
      */
     private $passwordMigration = null;
-
-    /**
-     * @var IRoleService
-     */
-    private $roleService;
 
     /**
      * @var IUserRepository
@@ -32,11 +29,17 @@ class Authentication implements IAuthentication
      */
     private $groupRepository;
 
-    public function __construct(IRoleService $roleService, IUserRepository $userRepository, IGroupRepository $groupRepository)
-    {
-        $this->roleService = $roleService;
+    private UserSessionBuilder $userSessionBuilder;
+
+    public function __construct(
+        IRoleService $roleService,
+        IUserRepository $userRepository,
+        IGroupRepository $groupRepository,
+        ?UserSessionBuilder $userSessionBuilder = null
+    ) {
         $this->userRepository = $userRepository;
         $this->groupRepository = $groupRepository;
+        $this->userSessionBuilder = $userSessionBuilder ?? new UserSessionBuilder(roleService: $roleService);
     }
 
     public function SetMigration(PasswordMigration $migration)
@@ -125,7 +128,7 @@ class Authentication implements IAuthentication
 
             $user = $this->GetFirstRegistrationStrategy()->HandleLogin($user, $this->userRepository, $this->groupRepository);
 
-            return $this->GetUserSession($user, $loginTime);
+            return $this->userSessionBuilder->buildUserSession(user: $user, loginTime: $loginTime);
         }
 
         return new NullUserSession();
@@ -144,41 +147,6 @@ class Authentication implements IAuthentication
     public function HandleLoginFailure(IAuthenticationPage $loginPage)
     {
         $loginPage->SetShowLoginError();
-    }
-
-    /**
-     * @param User $user
-     * @param string $loginTime
-     * @return UserSession
-     */
-    private function GetUserSession(User $user, $loginTime)
-    {
-        $userSession = new UserSession($user->Id());
-        $userSession->Email = $user->EmailAddress();
-        $userSession->FirstName = $user->FirstName();
-        $userSession->LastName = $user->LastName();
-        $userSession->Timezone = $user->Timezone();
-        $userSession->HomepageId = $user->Homepage();
-        $userSession->LanguageCode = $user->Language();
-        $userSession->LoginTime = $loginTime;
-        $userSession->PublicId = $user->GetPublicId();
-        $userSession->ScheduleId = $user->GetDefaultScheduleId();
-
-        $userSession->IsAdmin = $this->roleService->IsApplicationAdministrator($user);
-        $userSession->IsGroupAdmin = $this->roleService->IsGroupAdministrator($user);
-        $userSession->IsResourceAdmin = $this->roleService->IsResourceAdministrator($user);
-        $userSession->IsScheduleAdmin = $this->roleService->IsScheduleAdministrator($user);
-        $userSession->CSRFToken = CSRFToken::Create();
-
-        foreach ($user->Groups() as $group) {
-            $userSession->Groups[] = $group->GroupId;
-        }
-
-        foreach ($user->GetAdminGroups() as $group) {
-            $userSession->AdminGroups[] = $group->GroupId;
-        }
-
-        return $userSession;
     }
 
     public function ShowUsernamePrompt()
