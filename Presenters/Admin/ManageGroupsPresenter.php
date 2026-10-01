@@ -498,6 +498,12 @@ class ManageGroupsPresenter extends ActionPresenter
             return;
         }
 
+        $this->LoadDataForExport();
+    }
+
+    protected function LoadDataForExport()
+    {
+        // Load ALL groups (no pagination)
         /** @var GroupItemView[] $groups */
         $groups = $this->groupRepository->GetList()->Results();
         /** @var UserItemView[] $userGroups */

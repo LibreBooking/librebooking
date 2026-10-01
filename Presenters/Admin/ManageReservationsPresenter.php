@@ -208,9 +208,13 @@ class ManageReservationsPresenter extends ActionPresenter
             $missedCheckout
         );
 
+        // Use no pagination for CSV export to get all results
+        $pageNumber = $this->page->GetFormat() == 'csv' ? null : $this->page->GetPageNumber();
+        $pageSize = $this->page->GetFormat() == 'csv' ? null : $this->page->GetPageSize();
+
         $reservations = $this->manageReservationsService->LoadFiltered(
-            $this->page->GetPageNumber(),
-            null,
+            $pageNumber,
+            $pageSize,
             $this->page->GetSortField(),
             $this->page->GetSortDirection(),
             $filter,
@@ -350,7 +354,8 @@ class ManageReservationsPresenter extends ActionPresenter
                         'text' => $terms->Text(),
                         'url' => $terms->Url(),
                         'filename' => $terms->FileName(),
-                        'applicability' => $terms->Applicability()]
+                        'applicability' => $terms->Applicability(),
+                    ]
                 );
             } else {
                 $this->page->BindTerms(null);
@@ -746,7 +751,8 @@ class ReservationFilterPreferences
         $this->FilterCustomAttributes = serialize($filters);
     }
 
-    public static $filterKeys = ['FilterStartDateDelta' => -7,
+    public static $filterKeys = [
+        'FilterStartDateDelta' => -7,
         'FilterEndDateDelta' => +7,
         'FilterUserId' => '',
         'FilterUserName' => '',
