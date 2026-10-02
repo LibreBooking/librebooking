@@ -605,7 +605,7 @@ class ManageGroupsPresenter extends ActionPresenter
                         $group->ChangeAllowedPermissions($resourceIds);
                     }
 
-                    if (!empty($row->permissionsView)) {
+                    if (!empty($row->permissionsRead)) {
                         $resourceIds = $this->GetImportResources($row->permissionsRead, $resourcesIndexed);
 
                         $group->ChangeViewPermissions($resourceIds);
