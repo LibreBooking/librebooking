@@ -62,6 +62,7 @@
         "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
         "preflight": "php lib/preflight.php",
         "test:integration": "./vendor/bin/phpunit --testsuite integration --testdox",
+        "test:integration:db": "./vendor/bin/phpunit tests/Integration/Database --testdox",
         "config-dist:generate": "php scripts/generate-config-dist.php --write",
         "config-dist:check": "php scripts/generate-config-dist.php --check",
         "env-example:generate": "php scripts/generate-env-example.php --write",
