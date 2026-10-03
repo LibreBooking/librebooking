@@ -55,7 +55,7 @@ class ExportCsvTemplatesTest extends TestBase
         $page = new SmartyPage();
         $page->assign('AttributeList', $this->attributes(category: CustomAttributeCategory::RESOURCE));
         $page->assign('Resources', $this->resources());
-        $page->assign('Schedules', [self::SCHEDULE_ID => 'Main Schedule']);
+        $page->assign('Schedules', [self::SCHEDULE_ID => 'Main "East" Schedule']);
         $page->assign('ResourceTypes', [
             self::RESOURCE_TYPE_ID => new ResourceType(self::RESOURCE_TYPE_ID, "Room 'Large'", 'description'),
         ]);
@@ -112,7 +112,7 @@ class ExportCsvTemplatesTest extends TestBase
         $full->Last = 'O\'Brien, Jr.';
         $full->Username = 'mobrien';
         $full->Email = 'mary@example.com';
-        $full->Phone = '555-0100';
+        $full->Phone = '555-0100 "work"';
         $full->Organization = "Acme 'Labs'";
         $full->Position = "Lead 'Tech'";
         $full->DateCreated = Date::Parse('2026-01-15 08:30:00', 'UTC');
@@ -160,7 +160,7 @@ class ExportCsvTemplatesTest extends TestBase
             maxParticipants: 12,
             minNoticeAdd: 3600,
             maxNotice: 86400,
-            description: "Big 'room'",
+            description: 'Big "room" with \'view\'',
             scheduleId: self::SCHEDULE_ID,
             adminGroupId: self::ADMIN_GROUP_ID,
             minNoticeUpdate: 1800,
@@ -218,15 +218,15 @@ class ExportCsvTemplatesTest extends TestBase
     }
 
     private const EXPECTED_USERS_CSV = <<<'CSV'
-"FirstName","LastName","Username","Email","Phone","Organization","Position","Created","LastLogin","Status","Credits","Color","Timezone","Language","Groups"",Badge Number"",Owner\'s Note"
-"Mary \'Mae\'","O\'Brien, Jr.","mobrien","mary@example.com","555-0100","Acme \'Labs\'","Lead \'Tech\'","2026-01-15 08:30","2026-09-30 17:05","Active","12","#ff0000","America/Chicago","en_us","Staff "A",Guests \'B\'","B-42","It\'s mine"
+"FirstName","LastName","Username","Email","Phone","Organization","Position","Created","LastLogin","Status","Credits","Color","Timezone","Language","Groups"",Badge Number"",Owner's Note"
+"Mary 'Mae'","O'Brien, Jr.","mobrien","mary@example.com","555-0100 ""work""","Acme 'Labs'","Lead 'Tech'","2026-01-15 08:30","2026-09-30 17:05","Active","12","#ff0000","America/Chicago","en_us","Staff ""A"",Guests 'B'","B-42","It's mine"
 "Bob","Smith","bsmith","bob@example.com","","","","2025-12-01 00:00","","Inactive","","","UTC","en_us","","",""
 CSV . "\n";
 
     private const EXPECTED_RESOURCES_CSV = <<<'CSV'
-"Name","Status","Schedule","ResourceType","SortOrder","Location","Contact","Description","Notes","ResourceAdministrator","ResourceColor","ResourceMinLengthCsv","ResourceMaxLengthCsv","ResourceBufferTimeCsv","ResourceAllowMultiDay","Capacity","ResourceGroups","ResourceMinNoticeAddCsv","ResourceMinNoticeUpdateCsv","ResourceMinNoticeDeleteCsv","ResourceMaxNotice","ResourceRequiresApproval","ResourcePermissionAutoGranted","RequiresCheckInNotification","AutoReleaseMinutes","CreditsOffPeak","CreditsPeak","MaximumConcurrentReservations,"Badge Number","Owner\'s Note"
-"Conference \'A\', North","Available","Main Schedule","Room \'Large\'",3,"Bldg \'One\'","x1234","Big \'room\'","Bring \'adapter\'","Admins \'R\' Us","#00ff00","30 minutes","2 hours","10 minutes","1","12","Building 1,Floor \'Two\'","1 hours","30 minutes","15 minutes","1 days","1","1","1","15","2","4","R-1","Owner\'s"
-"Projector","Unavailable","Main Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
-"Old Lab","Hidden","Main Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
+"Name","Status","Schedule","ResourceType","SortOrder","Location","Contact","Description","Notes","ResourceAdministrator","ResourceColor","ResourceMinLengthCsv","ResourceMaxLengthCsv","ResourceBufferTimeCsv","ResourceAllowMultiDay","Capacity","ResourceGroups","ResourceMinNoticeAddCsv","ResourceMinNoticeUpdateCsv","ResourceMinNoticeDeleteCsv","ResourceMaxNotice","ResourceRequiresApproval","ResourcePermissionAutoGranted","RequiresCheckInNotification","AutoReleaseMinutes","CreditsOffPeak","CreditsPeak","MaximumConcurrentReservations,"Badge Number","Owner's Note"
+"Conference 'A', North","Available","Main ""East"" Schedule","Room 'Large'",3,"Bldg 'One'","x1234","Big ""room"" with 'view'","Bring 'adapter'","Admins 'R' Us","#00ff00","30 minutes","2 hours","10 minutes","1","12","Building 1,Floor 'Two'","1 hours","30 minutes","15 minutes","1 days","1","1","1","15","2","4","R-1","Owner's"
+"Projector","Unavailable","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
+"Old Lab","Hidden","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
 CSV . "\n";
 }
