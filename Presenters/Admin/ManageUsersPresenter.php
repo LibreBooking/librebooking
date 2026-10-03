@@ -191,7 +191,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         } else {
             $userList = $this->userRepository->GetList(
                 $this->page->GetPageNumber(),
-                null,
+                $this->page->GetPageSize(),
                 $this->page->GetSortField(),
                 $this->page->GetSortDirection(),
                 null,
@@ -256,7 +256,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition(),
+        ];
 
         $user = $this->manageUsersService->AddUser(
             $this->page->GetUserName(),
@@ -300,7 +301,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition(),
+        ];
 
         $this->manageUsersService->UpdateUser(
             $this->page->GetUserId(),
@@ -378,8 +380,37 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             return;
         }
 
-        $this->PageLoad();
+        $this->LoadDataForExport();
         $this->page->ShowExportCsv();
+    }
+
+    protected function LoadDataForExport()
+    {
+        // Load ALL users matching filters (no pagination)
+        $userList = $this->userRepository->GetList(
+            null,  // No pagination
+            null,  // No pagination
+            $this->page->GetSortField(),
+            $this->page->GetSortDirection(),
+            null,
+            $this->page->GetFilterStatusId()
+        );
+
+        $this->page->BindUsers($userList->Results());
+        // Note: We skip BindPageInfo() as pagination info is not needed for CSV export
+
+        $groups = $this->groupViewRepository->GetList();
+        $this->page->BindGroups($groups->Results());
+
+        $user = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
+
+        $resources = $this->GetResourcesThatCurrentUserCanAdminister($user);
+        $this->page->BindResources($resources);
+
+        $attributeList = $this->attributeService->GetByCategory(CustomAttributeCategory::USER);
+        $this->page->BindAttributeList($attributeList);
+
+        $this->page->BindStatusDescriptions();
     }
 
     public function ProcessDataRequest($dataRequest)

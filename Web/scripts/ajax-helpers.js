@@ -270,7 +270,7 @@ function HtmlDecode(encoded) {
 }
 
 function ajaxPagination(element, callback) {
-  element.find('a.page').on('click', function (e) {
+  element.find('a[data-page][data-page-size]').on('click', function (e) {
     e.preventDefault();
     var a = $(e.target);
     callback(a.data('page'), a.data('page-size'));

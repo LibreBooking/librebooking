@@ -151,7 +151,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         $results = $this->resourceRepository->GetList(
             $this->page->GetPageNumber(),
-            null,
+            $this->page->GetPageSize(),
             null,
             null,
             $filterValues->AsFilter($resourceAttributes)
@@ -1091,8 +1091,65 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function ExportResources()
     {
-        $this->PageLoad();
+        $this->LoadDataForExport();
         $this->page->ShowExportCsv();
+    }
+
+    protected function LoadDataForExport()
+    {
+        $resourceAttributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
+
+        $filterValues = $this->page->GetFilterValues();
+
+        // Load ALL resources matching the filters (no pagination)
+        $results = $this->resourceRepository->GetList(
+            null,  // No pagination
+            null,  // No pagination
+            null,
+            null,
+            $filterValues->AsFilter($resourceAttributes)
+        );
+        $resources = $results->Results();
+        $this->page->BindResources($resources);
+        // Note: We skip BindPageInfo() as pagination info is not needed for CSV export
+
+        // Load all auxiliary data (same as PageLoad)
+        $schedules = $this->scheduleRepository->GetAll();
+        $scheduleList = [];
+
+        /* @var Schedule $schedule */
+        foreach ($schedules as $schedule) {
+            $scheduleList[$schedule->GetId()] = $schedule->GetName();
+        }
+        $this->page->BindSchedules($scheduleList);
+        $this->page->AllSchedules($schedules);
+
+        $resourceTypes = $this->resourceRepository->GetResourceTypes();
+        $resourceTypeList = [];
+
+        /* @var ResourceType $resourceType */
+        foreach ($resourceTypes as $resourceType) {
+            $resourceTypeList[$resourceType->Id()] = $resourceType;
+        }
+        $this->page->BindResourceTypes($resourceTypeList);
+
+        $statusReasons = $this->resourceRepository->GetStatusReasons();
+        $statusReasonList = [];
+
+        foreach ($statusReasons as $reason) {
+            $statusReasonList[$reason->Id()] = $reason;
+        }
+        $this->page->BindResourceStatusReasons($statusReasonList);
+
+        $groups = $this->groupRepository->GetGroupsByRole(RoleLevel::RESOURCE_ADMIN);
+        $this->page->BindAdminGroups($groups);
+
+        $attributeList = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
+        $this->page->BindAttributeList($attributeList);
+
+        $this->InitializeFilter($filterValues, $resourceAttributes);
+
+        $this->page->BindResourceGroups($this->resourceRepository->GetResourceGroups(null, new ResourceFilterNone()));
     }
 
     protected function LoadValidators($action)
@@ -1232,7 +1289,6 @@ class ManageResourcesPresenter extends ActionPresenter
             }
         }
         return $path = "$path/$fileName";
-        ;
     }
 }
 
