@@ -31,6 +31,14 @@ class CustomCsvTemplateTest extends TestBase
         $this->assertEveryRowMatchesHeaderColumnCount($output);
     }
 
+    public function testOmitsSeparatorBeforeFirstShownColumnWhenFirstColumnIsHidden(): void
+    {
+        $output = $this->render(selectedColumns: implode(self::COLUMN_SEPARATOR, ['Title', "Owner's \"Note\""]));
+
+        $this->assertSame(self::EXPECTED_FIRST_COLUMN_HIDDEN_CSV, $output);
+        $this->assertEveryRowMatchesHeaderColumnCount($output);
+    }
+
     private function render(string $selectedColumns): string
     {
         $columns = [
@@ -82,14 +90,20 @@ class CustomCsvTemplateTest extends TestBase
     }
 
     private const EXPECTED_ALL_COLUMNS_CSV = <<<'CSV'
-"ResourceName","Title","Owner's ""Note""",
-"Room 'A', North","Kickoff ""Q2""","A & B <b>",
-"Projector","","",
+"ResourceName","Title","Owner's ""Note"""
+"Room 'A', North","Kickoff ""Q2""","A & B <b>"
+"Projector","",""
 CSV . "\n";
 
     private const EXPECTED_SELECTED_COLUMNS_CSV = <<<'CSV'
-"ResourceName","Owner's ""Note""",
-"Room 'A', North","A & B <b>",
-"Projector","",
+"ResourceName","Owner's ""Note"""
+"Room 'A', North","A & B <b>"
+"Projector",""
+CSV . "\n";
+
+    private const EXPECTED_FIRST_COLUMN_HIDDEN_CSV = <<<'CSV'
+"Title","Owner's ""Note"""
+"Kickoff ""Q2""","A & B <b>"
+"",""
 CSV . "\n";
 }
