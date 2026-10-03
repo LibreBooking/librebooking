@@ -82,14 +82,14 @@ class CustomCsvTemplateTest extends TestBase
     }
 
     private const EXPECTED_ALL_COLUMNS_CSV = <<<'CSV'
-"ResourceName","Title","Owner's "Note"",
-"Room &#039;A&#039;, North","Kickoff &quot;Q2&quot;","A &amp; B &lt;b&gt;",
+"ResourceName","Title","Owner's ""Note""",
+"Room 'A', North","Kickoff ""Q2""","A & B <b>",
 "Projector","","",
 CSV . "\n";
 
     private const EXPECTED_SELECTED_COLUMNS_CSV = <<<'CSV'
-"ResourceName","Owner's "Note"",
-"Room &#039;A&#039;, North","A &amp; B &lt;b&gt;",
+"ResourceName","Owner's ""Note""",
+"Room 'A', North","A & B <b>",
 "Projector","",
 CSV . "\n";
 }
