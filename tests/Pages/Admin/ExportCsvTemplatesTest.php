@@ -22,11 +22,17 @@ class ExportCsvTemplatesTest extends TestBase
     private const USER_GROUP_ID_B = 21;
     private const ATTRIBUTE_ID_A = 100;
     private const ATTRIBUTE_ID_B = 101;
+    private const EXPORT_GROUP_ID_A = 30;
+    private const EXPORT_GROUP_ID_B = 31;
+    private const RESOURCE_ID_A = 40;
+    private const RESOURCE_ID_B = 41;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->fakeResources->SetDateFormat('short_datetime', 'Y-m-d H:i');
+        $this->fakeResources->SetDateFormat('res_popup', 'D, m/d g:i A');
+        $this->fakeResources->SetDateFormat('general_datetime', 'Y-m-d H:i:s');
     }
 
     public function testUsersCsvRendersExpectedCsv(): void
@@ -71,6 +77,59 @@ class ExportCsvTemplatesTest extends TestBase
         $output = $page->fetch('Admin/Resources/resources_csv.tpl');
 
         $this->assertSame(self::EXPECTED_RESOURCES_CSV, $output);
+        $this->assertEveryRowMatchesHeaderColumnCount($output);
+    }
+
+    public function testGroupsCsvRendersExpectedCsv(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('Groups', $this->exportGroups());
+        $page->assign('Users', [
+            self::EXPORT_GROUP_ID_A => [
+                $this->userWithEmail(email: "o'brien@example.com"),
+                $this->userWithEmail(email: 'bob@example.com'),
+            ],
+            self::EXPORT_GROUP_ID_B => [],
+        ]);
+        $page->assign('PermissionsWrite', [
+            self::EXPORT_GROUP_ID_A => [
+                $this->permission(groupId: self::EXPORT_GROUP_ID_A, resourceId: self::RESOURCE_ID_A, resourceName: "Room 'A'"),
+                $this->permission(groupId: self::EXPORT_GROUP_ID_A, resourceId: self::RESOURCE_ID_B, resourceName: 'Projector "X"'),
+            ],
+            self::EXPORT_GROUP_ID_B => [],
+        ]);
+        $page->assign('PermissionsRead', [
+            self::EXPORT_GROUP_ID_A => [],
+            self::EXPORT_GROUP_ID_B => [
+                $this->permission(groupId: self::EXPORT_GROUP_ID_B, resourceId: self::RESOURCE_ID_A, resourceName: "Room 'A'"),
+            ],
+        ]);
+
+        $output = $page->fetch('Admin/Groups/groups_csv.tpl');
+
+        $this->assertSame(self::EXPECTED_GROUPS_CSV, $output);
+        $this->assertEveryRowMatchesHeaderColumnCount($output);
+    }
+
+    public function testGroupsCsvImportTemplateRendersHeaderOnly(): void
+    {
+        $page = new SmartyPage();
+
+        $output = $page->fetch('Admin/Groups/groups_csv.tpl');
+
+        $this->assertSame(self::EXPECTED_GROUPS_TEMPLATE_CSV, $output);
+    }
+
+    public function testReservationsCsvRendersExpectedCsv(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('ReservationAttributes', $this->attributes(category: CustomAttributeCategory::RESERVATION));
+        $page->assign('reservations', $this->reservations());
+        $page->assign('Timezone', 'UTC');
+
+        $output = $page->fetch('Admin/Reservations/reservations_csv.tpl');
+
+        $this->assertSame(self::EXPECTED_RESERVATIONS_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);
     }
 
@@ -238,6 +297,83 @@ class ExportCsvTemplatesTest extends TestBase
         return [$full, $noAdminGroup, $hidden];
     }
 
+    /**
+     * @return GroupItemView[]
+     */
+    private function exportGroups(): array
+    {
+        return [
+            new GroupItemView(
+                groupId: self::EXPORT_GROUP_ID_A,
+                groupName: 'Staff "A"',
+                adminGroupName: "Admins 'R' Us",
+                isDefault: 1,
+                roles: [RoleLevel::APPLICATION_ADMIN, RoleLevel::RESOURCE_ADMIN]
+            ),
+            new GroupItemView(
+                groupId: self::EXPORT_GROUP_ID_B,
+                groupName: "Guests 'B'",
+                adminGroupName: null,
+                isDefault: 0,
+                roles: [RoleLevel::GROUP_ADMIN, RoleLevel::SCHEDULE_ADMIN]
+            ),
+        ];
+    }
+
+    private function userWithEmail(string $email): UserItemView
+    {
+        $user = new UserItemView();
+        $user->Email = $email;
+
+        return $user;
+    }
+
+    private function permission(int $groupId, int $resourceId, string $resourceName): GroupResourcePermission
+    {
+        return GroupResourcePermission::Create([
+            ColumnNames::GROUP_ID => $groupId,
+            ColumnNames::RESOURCE_ID => $resourceId,
+            ColumnNames::RESOURCE_NAME => $resourceName,
+            ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full,
+        ]);
+    }
+
+    /**
+     * @return ReservationItemView[]
+     */
+    private function reservations(): array
+    {
+        $full = new ReservationItemView(
+            referenceNumber: 'ref-1',
+            startDate: Date::Parse('2026-03-02 09:00:00', 'UTC'),
+            endDate: Date::Parse('2026-03-02 10:30:00', 'UTC'),
+            resourceName: "Room 'A'",
+            title: 'Kickoff "Q2"',
+            description: "Team's sync, all hands",
+            userFirstName: "Mary 'Mae'",
+            userLastName: "O'Brien",
+        );
+        $full->CreatedDate = Date::Parse('2026-02-01 08:00:00', 'UTC');
+        $full->ModifiedDate = Date::Parse('2026-02-15 12:30:00', 'UTC');
+        $full->CheckinDate = Date::Parse('2026-03-02 09:05:00', 'UTC');
+        $full->CheckoutDate = Date::Parse('2026-03-02 10:20:00', 'UTC');
+        $full->OriginalEndDate = Date::Parse('2026-03-02 11:00:00', 'UTC');
+        $full->Attributes->Add(self::ATTRIBUTE_ID_A, 'B-42');
+        $full->Attributes->Add(self::ATTRIBUTE_ID_B, 'Say "cheese"');
+
+        $minimal = new ReservationItemView(
+            referenceNumber: 'ref-2',
+            startDate: Date::Parse('2026-03-03 14:00:00', 'UTC'),
+            endDate: Date::Parse('2026-03-03 15:00:00', 'UTC'),
+            resourceName: 'Projector',
+            userFirstName: 'Bob',
+            userLastName: 'Smith',
+        );
+        $minimal->CreatedDate = Date::Parse('2026-02-20 10:00:00', 'UTC');
+
+        return [$full, $minimal];
+    }
+
     private const EXPECTED_USERS_CSV = <<<'CSV'
 "FirstName","LastName","Username","Email","Phone","Organization","Position","Created","LastLogin","Status","Credits","Color","Timezone","Language","Groups","Badge Number","Owner's Note"
 "Mary 'Mae'","O'Brien, Jr.","mobrien","mary@example.com","555-0100 ""work""","Acme 'Labs'","Lead 'Tech'","2026-01-15 08:30","2026-09-30 17:05","Active","12","#ff0000","America/Chicago","en_us","Staff ""A"",Guests 'B'","B-42","It's mine"
@@ -249,5 +385,21 @@ CSV . "\n";
 "Conference 'A', North","Available","Main ""East"" Schedule","Room 'Large'",3,"Bldg 'One'","x1234","Big ""room"" with 'view'","Bring 'adapter'","Admins 'R' Us","#00ff00","30 minutes","2 hours","10 minutes","1","12","Building 1,Floor 'Two'","1 hours","30 minutes","15 minutes","1 days","1","1","1","15","2","4","3","R-1","Owner's"
 "Projector","Unavailable","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","1","",""
 "Old Lab","Hidden","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","1","",""
+CSV . "\n";
+
+    private const EXPECTED_GROUPS_CSV = <<<'CSV'
+"Name","Is Auto Add","Group Administrator","Is Application Admin","Is Group Admin","Is Resource Admin","Is Schedule Admin","Members","Full Permissions","Read Only Permissions"
+"Staff "A"","true","Admins \'R\' Us","true","false","true","false","o\'brien@example.com,bob@example.com","Room \'A\',Projector "X"",""
+"Guests \'B\'","false","","false","true","false","true","","","Room \'A\'"
+CSV . "\n";
+
+    private const EXPECTED_GROUPS_TEMPLATE_CSV = <<<'CSV'
+"Name","Is Auto Add","Group Administrator","Is Application Admin","Is Group Admin","Is Resource Admin","Is Schedule Admin","Members","Full Permissions","Read Only Permissions"
+CSV . "\n";
+
+    private const EXPECTED_RESERVATIONS_CSV = <<<'CSV'
+"User","Resource","Title","Description","BeginDate","EndDate","Duration","Created","LastModified","ReferenceNumber","CheckInTime","CheckOutTime","OriginalEndDate","Badge Number","Owner\'s Note"
+"Mary &#039;Mae&#039; O&#039;Brien","Room \'A\'","Kickoff "Q2"","Team\'s sync, all hands","Mon, 03/02 9:00 AM","Mon, 03/02 10:30 AM","1 hours 30 minutes","2026-02-01 08:00:00","2026-02-15 12:30:00","ref-1",2026-03-02 09:05:00,2026-03-02 10:20:00,2026-03-02 11:00:00,"B-42","Say "cheese""
+"Bob Smith","Projector","","","Tue, 03/03 2:00 PM","Tue, 03/03 3:00 PM","1 hours","2026-02-20 10:00:00","","ref-2",,,,"",""
 CSV . "\n";
 }
