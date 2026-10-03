@@ -132,7 +132,7 @@ class CalendarSubscriptionPresenter
         $session = ServiceLocator::GetServer()->GetUserSession();
 
         foreach ($res as $r) {
-            if (empty($resourceIds) || in_array($r->ResourceId, $resourceIds)) {
+            if (empty($resourceGroupId) || in_array($r->ResourceId, $resourceIds)) {
                 $reservations[] = new iCalendarReservationView(
                     $r,
                     $session,

@@ -233,6 +233,22 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->assertCount(1, $this->page->Reservations);
     }
 
+    public function testResourceGroupWithNoResourcesReturnsNoReservationsEvenWithScheduleId()
+    {
+        $this->page->ScheduleId = '1';
+        $this->page->ResourceGroupId = '2';
+
+        $this->service->method('GetSchedule')->willReturn(new FakeSchedule(999));
+        $this->service->method('GetResourcesInGroup')->willReturn([]);
+
+        $this->repo->method('GetReservations')
+                ->willReturn([new TestReservationItemView(1, Date::Now(), Date::Now(), 1)]);
+
+        $this->presenter->PageLoad();
+
+        $this->assertCount(0, $this->page->Reservations);
+    }
+
     public function testGetsResourceGroupReservationsSetsCalendarNameFromGroup()
     {
         $publicId = '1';
