@@ -16,7 +16,7 @@
 "{translate key='Language'}",
 "{translate key='Groups'}"
 {foreach from=$AttributeList item=attr name=attributeLabels}
-    ",{$attr->Label()|escape_csv}"
+    ,"{$attr->Label()|escape_csv}"
 {/foreach}
 {linebreak}
 {foreach from=$users item=user}

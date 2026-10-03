@@ -48,6 +48,7 @@ class ExportCsvTemplatesTest extends TestBase
         $output = $page->fetch('Admin/Users/users_csv.tpl');
 
         $this->assertSame(self::EXPECTED_USERS_CSV, $output);
+        $this->assertEveryRowMatchesHeaderColumnCount($output);
     }
 
     public function testResourcesCsvOutputIsUnchanged(): void
@@ -70,6 +71,24 @@ class ExportCsvTemplatesTest extends TestBase
         $output = $page->fetch('Admin/Resources/resources_csv.tpl');
 
         $this->assertSame(self::EXPECTED_RESOURCES_CSV, $output);
+    }
+
+    private function assertEveryRowMatchesHeaderColumnCount(string $csv): void
+    {
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, $csv);
+        rewind($handle);
+
+        $rows = [];
+        while (($row = fgetcsv($handle, null, ',', '"', '')) !== false) {
+            $rows[] = $row;
+        }
+        fclose($handle);
+
+        $headerCount = count($rows[0]);
+        foreach ($rows as $index => $row) {
+            $this->assertCount($headerCount, $row, "CSV row $index does not match the header column count");
+        }
     }
 
     /**
@@ -218,7 +237,7 @@ class ExportCsvTemplatesTest extends TestBase
     }
 
     private const EXPECTED_USERS_CSV = <<<'CSV'
-"FirstName","LastName","Username","Email","Phone","Organization","Position","Created","LastLogin","Status","Credits","Color","Timezone","Language","Groups"",Badge Number"",Owner's Note"
+"FirstName","LastName","Username","Email","Phone","Organization","Position","Created","LastLogin","Status","Credits","Color","Timezone","Language","Groups","Badge Number","Owner's Note"
 "Mary 'Mae'","O'Brien, Jr.","mobrien","mary@example.com","555-0100 ""work""","Acme 'Labs'","Lead 'Tech'","2026-01-15 08:30","2026-09-30 17:05","Active","12","#ff0000","America/Chicago","en_us","Staff ""A"",Guests 'B'","B-42","It's mine"
 "Bob","Smith","bsmith","bob@example.com","","","","2025-12-01 00:00","","Inactive","","","UTC","en_us","","",""
 CSV . "\n";
