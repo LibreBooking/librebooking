@@ -93,15 +93,30 @@ class ExportCsvTemplatesTest extends TestBase
         ]);
         $page->assign('PermissionsWrite', [
             self::EXPORT_GROUP_ID_A => [
-                $this->permission(groupId: self::EXPORT_GROUP_ID_A, resourceId: self::RESOURCE_ID_A, resourceName: "Room 'A'"),
-                $this->permission(groupId: self::EXPORT_GROUP_ID_A, resourceId: self::RESOURCE_ID_B, resourceName: 'Projector "X"'),
+                $this->permission(
+                    groupId: self::EXPORT_GROUP_ID_A,
+                    resourceId: self::RESOURCE_ID_A,
+                    resourceName: "Room 'A'",
+                    permissionType: ResourcePermissionType::Full
+                ),
+                $this->permission(
+                    groupId: self::EXPORT_GROUP_ID_A,
+                    resourceId: self::RESOURCE_ID_B,
+                    resourceName: 'Projector "X"',
+                    permissionType: ResourcePermissionType::Full
+                ),
             ],
             self::EXPORT_GROUP_ID_B => [],
         ]);
         $page->assign('PermissionsRead', [
             self::EXPORT_GROUP_ID_A => [],
             self::EXPORT_GROUP_ID_B => [
-                $this->permission(groupId: self::EXPORT_GROUP_ID_B, resourceId: self::RESOURCE_ID_A, resourceName: "Room 'A'"),
+                $this->permission(
+                    groupId: self::EXPORT_GROUP_ID_B,
+                    resourceId: self::RESOURCE_ID_A,
+                    resourceName: "Room 'A'",
+                    permissionType: ResourcePermissionType::View
+                ),
             ],
         ]);
 
@@ -328,13 +343,17 @@ class ExportCsvTemplatesTest extends TestBase
         return $user;
     }
 
-    private function permission(int $groupId, int $resourceId, string $resourceName): GroupResourcePermission
-    {
+    private function permission(
+        int $groupId,
+        int $resourceId,
+        string $resourceName,
+        int $permissionType
+    ): GroupResourcePermission {
         return GroupResourcePermission::Create([
             ColumnNames::GROUP_ID => $groupId,
             ColumnNames::RESOURCE_ID => $resourceId,
             ColumnNames::RESOURCE_NAME => $resourceName,
-            ColumnNames::PERMISSION_TYPE => ResourcePermissionType::Full,
+            ColumnNames::PERMISSION_TYPE => $permissionType,
         ]);
     }
 
@@ -389,8 +408,8 @@ CSV . "\n";
 
     private const EXPECTED_GROUPS_CSV = <<<'CSV'
 "Name","Is Auto Add","Group Administrator","Is Application Admin","Is Group Admin","Is Resource Admin","Is Schedule Admin","Members","Full Permissions","Read Only Permissions"
-"Staff "A"","true","Admins \'R\' Us","true","false","true","false","o\'brien@example.com,bob@example.com","Room \'A\',Projector "X"",""
-"Guests \'B\'","false","","false","true","false","true","","","Room \'A\'"
+"Staff ""A""","true","Admins 'R' Us","true","false","true","false","o'brien@example.com,bob@example.com","Room 'A',Projector ""X""",""
+"Guests 'B'","false","","false","true","false","true","","","Room 'A'"
 CSV . "\n";
 
     private const EXPECTED_GROUPS_TEMPLATE_CSV = <<<'CSV'
@@ -398,8 +417,8 @@ CSV . "\n";
 CSV . "\n";
 
     private const EXPECTED_RESERVATIONS_CSV = <<<'CSV'
-"User","Resource","Title","Description","BeginDate","EndDate","Duration","Created","LastModified","ReferenceNumber","CheckInTime","CheckOutTime","OriginalEndDate","Badge Number","Owner\'s Note"
-"Mary &#039;Mae&#039; O&#039;Brien","Room \'A\'","Kickoff "Q2"","Team\'s sync, all hands","Mon, 03/02 9:00 AM","Mon, 03/02 10:30 AM","1 hours 30 minutes","2026-02-01 08:00:00","2026-02-15 12:30:00","ref-1",2026-03-02 09:05:00,2026-03-02 10:20:00,2026-03-02 11:00:00,"B-42","Say "cheese""
+"User","Resource","Title","Description","BeginDate","EndDate","Duration","Created","LastModified","ReferenceNumber","CheckInTime","CheckOutTime","OriginalEndDate","Badge Number","Owner's Note"
+"Mary 'Mae' O'Brien","Room 'A'","Kickoff ""Q2""","Team's sync, all hands","Mon, 03/02 9:00 AM","Mon, 03/02 10:30 AM","1 hours 30 minutes","2026-02-01 08:00:00","2026-02-15 12:30:00","ref-1",2026-03-02 09:05:00,2026-03-02 10:20:00,2026-03-02 11:00:00,"B-42","Say ""cheese"""
 "Bob Smith","Projector","","","Tue, 03/03 2:00 PM","Tue, 03/03 3:00 PM","1 hours","2026-02-20 10:00:00","","ref-2",,,,"",""
 CSV . "\n";
 }

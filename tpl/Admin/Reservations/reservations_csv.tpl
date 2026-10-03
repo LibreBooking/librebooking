@@ -14,14 +14,14 @@
 "{translate key='CheckOutTime'}",
 "{translate key='OriginalEndDate'}"
 {foreach from=$ReservationAttributes item=attr}
-    ,"{$attr->Label()|escape:'quotes'}"
+    ,"{$attr->Label()|escape_csv}"
 {/foreach}
 {linebreak}
 {foreach from=$reservations item=reservation}
-    "{fullname first=$reservation->FirstName last=$reservation->LastName}",
-    "{$reservation->ResourceName|escape:'quotes'}",
-    "{$reservation->Title|escape:'quotes'}",
-    "{$reservation->Description|escape:'quotes'}",
+    "{fullname first=$reservation->FirstName last=$reservation->LastName csv=true}",
+    "{$reservation->ResourceName|escape_csv}",
+    "{$reservation->Title|escape_csv}",
+    "{$reservation->Description|escape_csv}",
     "{formatdate date=$reservation->StartDate timezone=$Timezone key=res_popup}",
     "{formatdate date=$reservation->EndDate timezone=$Timezone key=res_popup}",
     "{$reservation->GetDuration()->__toString()}",
@@ -32,7 +32,7 @@
     {formatdate date=$reservation->CheckoutDate timezone=$Timezone key=general_datetime},
     {formatdate date=$reservation->OriginalEndDate timezone=$Timezone key=general_datetime}
     {foreach from=$ReservationAttributes item=attribute}
-        ,"{$reservation->Attributes->Get($attribute->Id())|escape:'quotes'}"
+        ,"{$reservation->Attributes->Get($attribute->Id())|escape_csv}"
     {/foreach}
     {linebreak}
 {/foreach}

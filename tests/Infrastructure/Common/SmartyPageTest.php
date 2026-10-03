@@ -133,6 +133,38 @@ class SmartyPageTest extends TestBase
         ];
     }
 
+    public function testDisplayFullNameEncodesHtmlByDefault(): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            'Mary &#039;Mae&#039; &quot;O&quot;',
+            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"'], $page)
+        );
+    }
+
+    public function testDisplayFullNameEscapesForCsvWhenRequested(): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            'Mary \'Mae\' ""O""',
+            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"', 'csv' => true], $page)
+        );
+    }
+
+    public function testDisplayFullNameHonorsPrivacyForCsv(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, true);
+        $this->fakeUser->IsAdmin = false;
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            'Private',
+            $page->DisplayFullName(['first' => 'Mary', 'last' => 'Smith', 'csv' => true], $page)
+        );
+    }
+
     public function testEscapeCsvModifierIsRegistered(): void
     {
         $page = new SmartyPage();

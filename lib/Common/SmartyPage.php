@@ -797,6 +797,9 @@ class SmartyPage extends Smarty
         return "[\"$string\"]";
     }
 
+    /**
+     * Pass csv=true to escape the name for a double-quoted CSV field instead of HTML.
+     */
     public function DisplayFullName($params, $smarty)
     {
         $config = Configuration::Instance();
@@ -804,6 +807,7 @@ class SmartyPage extends Smarty
         if (isset($params['ignorePrivacy']) && strtolower($params['ignorePrivacy'] == 'true')) {
             $ignorePrivacy = true;
         }
+        $csv = filter_var($params['csv'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         if (
             !$ignorePrivacy && $config->GetKey(
@@ -811,10 +815,15 @@ class SmartyPage extends Smarty
                 new BooleanConverter()
             ) && !ServiceLocator::GetServer()->GetUserSession()->IsAdmin
         ) {
-            return $this->Resources->GetString('Private');
+            $private = $this->Resources->GetString('Private');
+            return $csv ? $this->EscapeCsv($private) : $private;
         }
 
         $fullName = new FullName($params['first'], $params['last']);
+
+        if ($csv) {
+            return $this->EscapeCsv($fullName->__toString());
+        }
 
         return htmlspecialchars($fullName->__toString());
     }
