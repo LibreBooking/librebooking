@@ -6,43 +6,13 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class CalendarSubscriptionPresenter
 {
-    /**
-     * @var ICalendarSubscriptionPage
-     */
-    private $page;
-
-    /**
-     * @var IReservationViewRepository
-     */
-    private $reservationViewRepository;
-
-    /**
-     * @var ICalendarExportValidator
-     */
-    private $validator;
-
-    /**
-     * @var ICalendarSubscriptionService
-     */
-    private $subscriptionService;
-
-    /**
-     * @var IPrivacyFilter
-     */
-    private $privacyFilter;
-
     public function __construct(
-        ICalendarSubscriptionPage $page,
-        IReservationViewRepository $reservationViewRepository,
-        ICalendarExportValidator $validator,
-        ICalendarSubscriptionService $subscriptionService,
-        IPrivacyFilter $filter
+        private readonly ICalendarSubscriptionPage $page,
+        private readonly IReservationViewRepository $reservationViewRepository,
+        private readonly ICalendarExportValidator $validator,
+        private readonly ICalendarSubscriptionService $subscriptionService,
+        private readonly IPrivacyFilter $privacyFilter
     ) {
-        $this->page = $page;
-        $this->reservationViewRepository = $reservationViewRepository;
-        $this->validator = $validator;
-        $this->subscriptionService = $subscriptionService;
-        $this->privacyFilter = $filter;
     }
 
     public function PageLoad(): bool
@@ -51,99 +21,118 @@ class CalendarSubscriptionPresenter
             return false;
         }
 
-        $userId = $this->page->GetUserId();
-        $scheduleId = $this->page->GetScheduleId();
-        $resourceId = $this->page->GetResourceId();
-        $accessoryIds = $this->page->GetAccessoryIds();
-        $resourceGroupId = $this->page->GetResourceGroupId();
+        $this->SetCalendarName();
+        $this->page->SetReservations($this->GetReservationViews());
 
-        $daysAgo = $this->page->GetPastNumberOfDays();
-        $daysAhead = $this->page->GetFutureNumberOfDays();
+        return true;
+    }
 
-        $pastDays = Configuration::Instance()->GetKey(ConfigKeys::ICS_PAST_DAYS, new IntConverter());
-        $futureDays = Configuration::Instance()->GetKey(ConfigKeys::ICS_FUTURE_DAYS, new IntConverter());
-        if ($futureDays == 0) {
-            $futureDays = 30;
-        }
-
-        $daysAgo = empty($daysAgo) ? $pastDays : intval($daysAgo);
-        $daysAhead = empty($daysAhead) ? $futureDays : intval($daysAhead);
-
-        $weekAgo = Date::Now()->AddDays(-$daysAgo);
-        $nextYear = Date::Now()->AddDays($daysAhead);
-
-        $sid = null;
-        $rid = null;
-        $uid = null;
-        $aid = null;
-        $resourceIds = [];
-
-        $reservations = [];
-        $res = [];
-
-        $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY);
-
-        $reservationUserLevel = ReservationUserLevel::OWNER;
-
-        if (!empty($scheduleId)) {
-            $sid = $this->subscriptionService->GetSchedule($scheduleId)->GetId();
-        }
-        if (!empty($resourceId)) {
-            $rid = $this->subscriptionService->GetResource($resourceId)->GetId();
-        }
-        if (!empty($accessoryIds)) {
-            ## No transformation is implemented. It is assumed the accessoryIds is provided as AccessoryName
-            ## filter is defined by LIKE "PATTERN%"
-            $aid = $accessoryIds;
-        }
-
-        $calendarName = $this->subscriptionService->ResolveCalendarName($scheduleId, $resourceId, $resourceGroupId, $userId);
-
-        if (!empty($userId)) {
-            $user = $this->subscriptionService->GetUser($userId);
-            $uid = $user->Id();
-            $reservationUserLevel = ReservationUserLevel::ALL;
-            $summaryFormat = Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY);
-        }
-
-        if (!empty($resourceGroupId)) {
-            $resourceIds = $this->subscriptionService->GetResourcesInGroup($resourceGroupId);
-        }
+    private function SetCalendarName(): void
+    {
+        $calendarName = $this->subscriptionService->ResolveCalendarName(
+            $this->page->GetScheduleId(),
+            $this->page->GetResourceId(),
+            $this->page->GetResourceGroupId(),
+            $this->page->GetUserId()
+        );
 
         if ($calendarName !== null && $calendarName !== '') {
             $this->page->SetCalendarName($calendarName);
         }
+    }
 
-        if (!empty($uid) || !empty($sid) || !empty($rid) || !empty($resourceIds)) {
-            $res = $this->reservationViewRepository->GetReservations($weekAgo, $nextYear, $uid, $reservationUserLevel, $sid, $rid, true);
-        } elseif (!empty($aid)) {
+    /**
+     * @return iCalendarReservationView[]
+     */
+    private function GetReservationViews(): array
+    {
+        $userId = $this->page->GetUserId();
+        $resourceGroupId = $this->page->GetResourceGroupId();
+        $resourceIds = empty($resourceGroupId) ? [] : $this->subscriptionService->GetResourcesInGroup($resourceGroupId);
+
+        $summaryKey = empty($userId) ? ConfigKeys::RESERVATION_LABELS_ICS_SUMMARY : ConfigKeys::RESERVATION_LABELS_ICS_MY_SUMMARY;
+        $summaryFormat = Configuration::Instance()->GetKey($summaryKey);
+        $session = ServiceLocator::GetServer()->GetUserSession();
+
+        $views = [];
+        foreach ($this->FetchReservations($resourceIds) as $reservation) {
+            // A requested group restricts the feed, even when it resolved to no resources
+            if (!empty($resourceGroupId) && !in_array($reservation->ResourceId, $resourceIds)) {
+                continue;
+            }
+            $views[] = new iCalendarReservationView($reservation, $session, $this->privacyFilter, $summaryFormat);
+        }
+
+        return $views;
+    }
+
+    /**
+     * Resolve the public ids from the query string to internal ids; null when not requested.
+     *
+     * @return array{0: ?int, 1: ?int, 2: ?int} [userId, scheduleId, resourceId]
+     */
+    private function ResolveFilters(): array
+    {
+        $userId = $this->page->GetUserId();
+        $scheduleId = $this->page->GetScheduleId();
+        $resourceId = $this->page->GetResourceId();
+
+        return [
+            empty($userId) ? null : $this->subscriptionService->GetUser($userId)->Id(),
+            empty($scheduleId) ? null : $this->subscriptionService->GetSchedule($scheduleId)->GetId(),
+            empty($resourceId) ? null : $this->subscriptionService->GetResource($resourceId)->GetId(),
+        ];
+    }
+
+    /**
+     * @param int[] $groupResourceIds resources of the requested group, if any
+     * @return ReservationItemView[]
+     */
+    private function FetchReservations(array $groupResourceIds): array
+    {
+        [$uid, $sid, $rid] = $this->ResolveFilters();
+        // keyed on the requested public id: an unknown user resolves to a null id but must still use the ALL level
+        $userLevel = empty($this->page->GetUserId()) ? ReservationUserLevel::OWNER : ReservationUserLevel::ALL;
+
+        $reservations = [];
+        if (!empty($uid) || !empty($sid) || !empty($rid) || !empty($groupResourceIds)) {
+            [$start, $end] = $this->GetDateRange();
+            $reservations = $this->reservationViewRepository->GetReservations($start, $end, $uid, $userLevel, $sid, $rid, true);
+        } elseif (!empty($this->page->GetAccessoryIds())) {
+            // Accessory subscriptions are not supported yet
             throw new Exception('need to give an accessory a public id, allow subscriptions');
-            $res = $this->reservationViewRepository->GetAccessoryReservationList($weekAgo, $nextYear, $accessoryIds);
         }
 
         Log::Debug(
             'Loading calendar subscription for userId %s, scheduleId %s, resourceId %s. Found %s reservations.',
-            $userId,
-            $scheduleId,
-            $resourceId,
-            count($res)
+            $this->page->GetUserId(),
+            $this->page->GetScheduleId(),
+            $this->page->GetResourceId(),
+            count($reservations)
         );
 
-        $session = ServiceLocator::GetServer()->GetUserSession();
+        return $reservations;
+    }
 
-        foreach ($res as $r) {
-            if (empty($resourceGroupId) || in_array($r->ResourceId, $resourceIds)) {
-                $reservations[] = new iCalendarReservationView(
-                    $r,
-                    $session,
-                    $this->privacyFilter,
-                    $summaryFormat
-                );
-            }
+    /**
+     * Requested window, falling back to the configured ICS defaults.
+     *
+     * @return Date[] [start, end]
+     */
+    private function GetDateRange(): array
+    {
+        $config = Configuration::Instance();
+        $pastDays = $config->GetKey(ConfigKeys::ICS_PAST_DAYS, new IntConverter());
+        $futureDays = $config->GetKey(ConfigKeys::ICS_FUTURE_DAYS, new IntConverter());
+        if ($futureDays == 0) {
+            $futureDays = 30;
         }
 
-        $this->page->SetReservations($reservations);
+        $daysAgo = $this->page->GetPastNumberOfDays();
+        $daysAhead = $this->page->GetFutureNumberOfDays();
+        $daysAgo = empty($daysAgo) ? $pastDays : intval($daysAgo);
+        $daysAhead = empty($daysAhead) ? $futureDays : intval($daysAhead);
 
-        return true;
+        return [Date::Now()->AddDays(-$daysAgo), Date::Now()->AddDays($daysAhead)];
     }
 }

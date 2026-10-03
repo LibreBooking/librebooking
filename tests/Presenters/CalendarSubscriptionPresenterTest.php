@@ -162,6 +162,22 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->assertEquals(Resources::GetInstance()->GetString('MyCalendar'), $this->page->CalendarName);
     }
 
+    public function testUnknownUserWithScheduleStillUsesAllUserLevel()
+    {
+        $this->page->UserId = 'unknown';
+        $this->page->ScheduleId = '1';
+
+        $this->service->method('GetUser')->willReturn(new NullUser());
+        $this->service->method('GetSchedule')->willReturn(new FakeSchedule(999));
+
+        $this->repo->expects($this->once())
+                ->method('GetReservations')
+                ->with($this->anything(), $this->anything(), $this->isNull(), ReservationUserLevel::ALL, 999, $this->isNull())
+                ->willReturn([]);
+
+        $this->presenter->PageLoad();
+    }
+
     public function testGetsUserReservationsFilteredByResourceCombinesCalendarNameWithResourceName()
     {
         $userPublicId = '1';
