@@ -29,7 +29,7 @@ class ExportCsvTemplatesTest extends TestBase
         $this->fakeResources->SetDateFormat('short_datetime', 'Y-m-d H:i');
     }
 
-    public function testUsersCsvOutputIsUnchanged(): void
+    public function testUsersCsvRendersExpectedCsv(): void
     {
         $page = new SmartyPage();
         $page->assign('AttributeList', $this->attributes(category: CustomAttributeCategory::USER));
@@ -51,7 +51,7 @@ class ExportCsvTemplatesTest extends TestBase
         $this->assertEveryRowMatchesHeaderColumnCount($output);
     }
 
-    public function testResourcesCsvOutputIsUnchanged(): void
+    public function testResourcesCsvRendersExpectedCsv(): void
     {
         $page = new SmartyPage();
         $page->assign('AttributeList', $this->attributes(category: CustomAttributeCategory::RESOURCE));
@@ -71,6 +71,7 @@ class ExportCsvTemplatesTest extends TestBase
         $output = $page->fetch('Admin/Resources/resources_csv.tpl');
 
         $this->assertSame(self::EXPECTED_RESOURCES_CSV, $output);
+        $this->assertEveryRowMatchesHeaderColumnCount($output);
     }
 
     private function assertEveryRowMatchesHeaderColumnCount(string $csv): void
@@ -193,6 +194,7 @@ class ExportCsvTemplatesTest extends TestBase
         $full->SetCheckin(true, 15);
         $full->SetCreditsPerSlot(2);
         $full->SetPeakCreditsPerSlot(4);
+        $full->SetMaxConcurrentReservations(3);
         $full->ChangeStatus(ResourceStatus::AVAILABLE);
         $full->WithAttribute(new AttributeValue(self::ATTRIBUTE_ID_A, 'R-1'));
         $full->WithAttribute(new AttributeValue(self::ATTRIBUTE_ID_B, "Owner's"));
@@ -243,9 +245,9 @@ class ExportCsvTemplatesTest extends TestBase
 CSV . "\n";
 
     private const EXPECTED_RESOURCES_CSV = <<<'CSV'
-"Name","Status","Schedule","ResourceType","SortOrder","Location","Contact","Description","Notes","ResourceAdministrator","ResourceColor","ResourceMinLengthCsv","ResourceMaxLengthCsv","ResourceBufferTimeCsv","ResourceAllowMultiDay","Capacity","ResourceGroups","ResourceMinNoticeAddCsv","ResourceMinNoticeUpdateCsv","ResourceMinNoticeDeleteCsv","ResourceMaxNotice","ResourceRequiresApproval","ResourcePermissionAutoGranted","RequiresCheckInNotification","AutoReleaseMinutes","CreditsOffPeak","CreditsPeak","MaximumConcurrentReservations,"Badge Number","Owner's Note"
-"Conference 'A', North","Available","Main ""East"" Schedule","Room 'Large'",3,"Bldg 'One'","x1234","Big ""room"" with 'view'","Bring 'adapter'","Admins 'R' Us","#00ff00","30 minutes","2 hours","10 minutes","1","12","Building 1,Floor 'Two'","1 hours","30 minutes","15 minutes","1 days","1","1","1","15","2","4","R-1","Owner's"
-"Projector","Unavailable","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
-"Old Lab","Hidden","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","",""
+"Name","Status","Schedule","ResourceType","SortOrder","Location","Contact","Description","Notes","ResourceAdministrator","ResourceColor","ResourceMinLengthCsv","ResourceMaxLengthCsv","ResourceBufferTimeCsv","ResourceAllowMultiDay","Capacity","ResourceGroups","ResourceMinNoticeAddCsv","ResourceMinNoticeUpdateCsv","ResourceMinNoticeDeleteCsv","ResourceMaxNotice","ResourceRequiresApproval","ResourcePermissionAutoGranted","RequiresCheckInNotification","AutoReleaseMinutes","CreditsOffPeak","CreditsPeak","MaximumConcurrentReservations","Badge Number","Owner's Note"
+"Conference 'A', North","Available","Main ""East"" Schedule","Room 'Large'",3,"Bldg 'One'","x1234","Big ""room"" with 'view'","Bring 'adapter'","Admins 'R' Us","#00ff00","30 minutes","2 hours","10 minutes","1","12","Building 1,Floor 'Two'","1 hours","30 minutes","15 minutes","1 days","1","1","1","15","2","4","3","R-1","Owner's"
+"Projector","Unavailable","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","1","",""
+"Old Lab","Hidden","Main ""East"" Schedule","",0,"","","","","","","","","","","","","","","","","0","","","","0","0","1","",""
 CSV . "\n";
 }

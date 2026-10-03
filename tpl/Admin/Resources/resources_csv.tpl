@@ -27,7 +27,7 @@
 "{translate key='AutoReleaseMinutes'}",
 "{translate key='CreditsOffPeak'}",
 "{translate key='CreditsPeak'}",
-"{translate key='MaximumConcurrentReservations'}
+"{translate key='MaximumConcurrentReservations'}"
 {foreach from=$AttributeList item=attr name=attributeLabels}
     ,"{$attr->Label()|escape_csv}"
 {/foreach}
@@ -80,7 +80,8 @@
     "{$resource->IsCheckInEnabled()|default:0}",
     "{$resource->GetAutoReleaseMinutes()}",
     "{$resource->GetCreditsPerSlot()}",
-    "{$resource->GetPeakCreditsPerSlot()}"
+    "{$resource->GetPeakCreditsPerSlot()}",
+    "{$resource->GetMaxConcurrentReservations()}"
     {foreach from=$AttributeList item=attribute name=attributeLoop}
         ,"{$resource->GetAttributeValue($attribute->Id())|escape_csv}"
     {/foreach}
