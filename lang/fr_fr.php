@@ -836,6 +836,7 @@ class fr_fr extends en_gb
         $strings['CustomAttributeInvalid'] = 'La valeur saisie pour %s est invalide';
         $strings['AttachmentLoadingError'] = 'Désolé, il y a eu un problème de chargement du fichier demandé.';
         $strings['InvalidAttachmentExtension'] = 'Vous pouvez uniquement uploader des fichiers de type : %s';
+        $strings['AttachmentUploadFailed'] = 'Le fichier %s n\'a pas pu être téléversé. La taille maximale de téléversement est de %s Mo.';
         $strings['InvalidStartSlot'] = 'La date et heure de début demandée n\'est pas valide.';
         $strings['InvalidEndSlot'] = 'La date et heure de fin demandée n\'est pas valide.';
         $strings['MaxParticipantsError'] = '%s ne supporte que %s participants.';

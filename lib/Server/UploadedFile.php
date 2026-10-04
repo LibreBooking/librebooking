@@ -68,6 +68,33 @@ class UploadedFile
         return $this->file['error'] != UPLOAD_ERR_OK;
     }
 
+    /**
+     * An empty file input is reported as UPLOAD_ERR_NO_FILE, which is not a failure
+     * @return bool
+     */
+    public function IsRejected()
+    {
+        return $this->IsError() && $this->file['error'] != UPLOAD_ERR_NO_FILE;
+    }
+
+    /**
+     * @static
+     * @param UploadedFile[]|null $files
+     * @return string[] a message for each rejected upload, which is also logged
+     */
+    public static function GetRejectedMessages($files)
+    {
+        $messages = [];
+        foreach ($files ?? [] as $file) {
+            if ($file != null && $file->IsRejected()) {
+                Log::Error('Error attaching file %s. %s', $file->OriginalName(), $file->Error());
+                $messages[] = Resources::GetInstance()->GetString('AttachmentUploadFailed', [htmlspecialchars($file->OriginalName()), self::GetMaxSize()]);
+            }
+        }
+
+        return $messages;
+    }
+
     public function Error()
     {
         $messages = [
@@ -77,10 +104,11 @@ class UploadedFile
             UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
             UPLOAD_ERR_NO_FILE => 'No file was uploaded',
             UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary storage folder',
-            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk, check folder permissions of configured upload directory'
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk, check folder permissions of configured upload directory',
+            UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload'
         ];
 
-        return $messages[$this->file['error']];
+        return $messages[$this->file['error']] ?? 'Unknown upload error';
     }
 
     /**

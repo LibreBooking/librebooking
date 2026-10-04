@@ -871,6 +871,7 @@ class en_us extends Language
         $strings['CustomAttributeInvalid'] = 'The value provided for %s is invalid.';
         $strings['AttachmentLoadingError'] = 'Sorry, there was a problem loading the requested file.';
         $strings['InvalidAttachmentExtension'] = 'You can only upload files of type: %s';
+        $strings['AttachmentUploadFailed'] = 'The file %s could not be uploaded. The maximum upload size is %s MB.';
         $strings['InvalidStartSlot'] = 'The start date and time requested is not valid.';
         $strings['InvalidEndSlot'] = 'The end date and time requested is not valid.';
         $strings['MaxParticipantsError'] = '%s can only support %s participants.';

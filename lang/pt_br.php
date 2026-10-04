@@ -846,6 +846,7 @@ class pt_br extends en_gb
         $strings['CustomAttributeInvalid'] = 'O valor fornecido para %s é inválido.';
         $strings['AttachmentLoadingError'] = 'Desculpe, houve um problema ao carregar o arquivo solicitado.';
         $strings['InvalidAttachmentExtension'] = 'Você pode carregar apenas arquivos do tipo: %s';
+        $strings['AttachmentUploadFailed'] = 'Não foi possível carregar o arquivo %s. O tamanho máximo de upload é %s MB.';
         $strings['InvalidStartSlot'] = 'A data e horário de início solicitados são inválidos.';
         $strings['InvalidEndSlot'] = 'A data e horário de término solicitados são inválidos.';
         $strings['MaxParticipantsError'] = '%s pode suportar apenas %s participantes.';

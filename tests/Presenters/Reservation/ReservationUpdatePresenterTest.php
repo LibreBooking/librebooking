@@ -224,6 +224,22 @@ class ReservationUpdatePresenterTest extends TestBase
         $this->assertEquals($instance->ReferenceNumber(), $this->page->referenceNumber);
         $this->assertEquals($series->RequiresApproval(), $this->page->requiresApproval);
     }
+
+    public function testRejectedUploadFailsUpdateWithEscapedFileNameInsteadOfSilentlyDroppingFile()
+    {
+        $file = new FakeUploadedFile();
+        $file->OriginalName = '<b>big</b>.pdf';
+        $file->IsError = true;
+        $this->page->attachment = $file;
+
+        $this->handler->expects($this->never())->method('Handle');
+
+        $this->presenter->HandleReservation((new ExistingReservationSeriesBuilder())->Build());
+
+        $this->assertFalse($this->page->saveSuccessful);
+        $this->assertCount(1, $this->page->errors);
+        $this->assertStringContainsString('&lt;b&gt;big&lt;/b&gt;.pdf', $this->page->errors[0]);
+    }
 }
 
 class FakeReservationUpdatePage extends FakeReservationSavePage implements IReservationUpdatePage
