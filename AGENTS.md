@@ -388,7 +388,7 @@ Follow conventional commits format:
 
 **Rules**:
 
-- Header max 72 characters
+- Header, body and footer lines max 72 characters (enforced by commitlint)
 - Use imperative, present tense ("change" not "changed")
 - Reference GitHub issues in footer (e.g., `Closes: #123`)
 - Breaking changes: Start footer with `BREAKING CHANGE:`
