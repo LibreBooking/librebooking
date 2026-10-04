@@ -543,21 +543,21 @@ class de_de extends en_gb
         $strings['WeNeedYourEmailAddress'] = 'Sie müssen Ihre E-Mail-Adresse angeben, um die Reservierung anzulegen';
         $strings['ResourceColor'] = 'Ressourcen-Farbe';
         $strings['DateTime'] = 'Datum Zeit';
-        $strings['AutoReleaseNotification'] = 'Wird automatisch freigegeben, wenn Sie sich nicht innerhalb von %s Minuten anmelden';
-        $strings['RequiresCheckInNotification'] = 'Erfordert An- und Abmeldung';
-        $strings['NoCheckInRequiredNotification'] = 'Erfordert keine An- und Abmeldung';
+        $strings['AutoReleaseNotification'] = 'Wird automatisch freigegeben, wenn Sie sich nicht innerhalb von %s Minuten einchecken';
+        $strings['RequiresCheckInNotification'] = 'Erfordert Ein- und Auschecken';
+        $strings['NoCheckInRequiredNotification'] = 'Erfordert kein Ein- und Auschecken';
         $strings['RequiresApproval'] = 'Bestätigung erforderlich';
-        $strings['CheckingIn'] = 'Melde an';
-        $strings['CheckingOut'] = 'Melde ab';
-        $strings['CheckIn'] = 'Anmelden';
-        $strings['CheckOut'] = 'Abmelden';
+        $strings['CheckingIn'] = 'Checke ein';
+        $strings['CheckingOut'] = 'Checke aus';
+        $strings['CheckIn'] = 'Einchecken';
+        $strings['CheckOut'] = 'Auschecken';
         $strings['ReleasedIn'] = 'Freigabe in';
-        $strings['CheckedInSuccess'] = 'Sie sind nicht angemeldet';
-        $strings['CheckedOutSuccess'] = 'Sie sind abgemeldet';
-        $strings['CheckInFailed'] = 'Sie konnten nicht angemeldet werden';
-        $strings['CheckOutFailed'] = 'Sie konnten nicht abgemeldet werden';
-        $strings['CheckInTime'] = 'Zeit der Anmeldung';
-        $strings['CheckOutTime'] = 'Zeit der Abmeldung';
+        $strings['CheckedInSuccess'] = 'Sie sind eingecheckt';
+        $strings['CheckedOutSuccess'] = 'Sie sind ausgecheckt';
+        $strings['CheckInFailed'] = 'Einchecken war nicht möglich';
+        $strings['CheckOutFailed'] = 'Auschecken war nicht möglich';
+        $strings['CheckInTime'] = 'Zeit des Eincheckens';
+        $strings['CheckOutTime'] = 'Zeit des Auscheckens';
         $strings['OriginalEndDate'] = 'Ursprüngliches Ende';
         $strings['SpecificDates'] = 'Zeige spezielle Daten';
         $strings['Users'] = 'Benutzer';
@@ -882,8 +882,8 @@ class de_de extends en_gb
         $strings['AccessoryResourceAssociationErrorMessage'] = 'Zubehör \'%s\' kann nicht in Zusammenhang mit den angeforderten Ressourcen gebucht werden';
         $strings['NoResources'] = 'Sie haben keine Ressourcen angegeben.';
         $strings['ParticipationNotAllowed'] = 'Sie haben keine Berechtigung, dieser Reservierung beizutreten.';
-        $strings['ReservationCannotBeCheckedInTo'] = 'Die Anmeldung für diese Reservierung kann nicht ausgeführt werden vor:';
-        $strings['ReservationCannotBeCheckedOutFrom'] = 'Die Abmeldung für diese Reservierung kann nicht ausgeführt werden nach:';
+        $strings['ReservationCannotBeCheckedInTo'] = 'Das Einchecken für diese Reservierung ist nicht möglich vor:';
+        $strings['ReservationCannotBeCheckedOutFrom'] = 'Das Auschecken für diese Reservierung ist nicht möglich nach:';
         $strings['InvalidEmailDomain'] = 'Die Domain dieser E-Mail-Adresse ist nicht erlaubt';
         $strings['TermsOfServiceError'] = 'Sie müssen die Nutzungsbedingungen akzeptieren';
         $strings['UserNotFound'] = 'Benutzer nicht gefunden';
@@ -1015,7 +1015,7 @@ class de_de extends en_gb
         $strings['ParticipantAddedSubjectWithResource'] = '%s hat Sie zu einer Reservierung für %s hinzugefügt';
         $strings['ParticipantDeletedSubjectWithResource'] = '%s hat eine Reservierung für %s gelöscht';
         $strings['InviteeAddedSubjectWithResource'] = '%s hat Sie zu einer Reservierung für %s eingeladen';
-        $strings['MissedCheckinEmailSubject'] = 'Anmeldung verpasst für %s';
+        $strings['MissedCheckinEmailSubject'] = 'Einchecken verpasst für %s';
         // End Email Subjects
 
         //NEEDS CHECKING
