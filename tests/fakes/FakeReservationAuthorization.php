@@ -8,6 +8,7 @@ class FakeReservationAuthorization implements IReservationAuthorization
     public $_CanEdit = true;
     public $_CanApprove = true;
     public $_CanViewDetails = true;
+    public $_CanViewAttachments = true;
 
     /**
      * @param UserSession $currentUser
@@ -46,5 +47,15 @@ class FakeReservationAuthorization implements IReservationAuthorization
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser)
     {
         return $this->_CanViewDetails;
+    }
+
+    public function CanViewAttachments(ReservationView $reservationView, UserSession $currentUser): bool
+    {
+        return $this->_CanViewAttachments;
+    }
+
+    public function CanViewSeriesAttachments(ExistingReservationSeries $series, UserSession $currentUser): bool
+    {
+        return $this->_CanViewAttachments;
     }
 }

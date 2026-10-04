@@ -646,6 +646,8 @@ class ReservationComponentTest extends TestBase
                    ->method('SetAttachments')
                    ->with($this->equalTo($attachments));
 
+        $this->reservationAuthorization->method('CanViewAttachments')->willReturn(true);
+
         $isEditable = false;
 
         $this->reservationAuthorization->expects($this->once())
