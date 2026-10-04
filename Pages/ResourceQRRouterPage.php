@@ -14,7 +14,7 @@ class ResourceQRRouterPage extends Page
     {
         $resourceId = $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
 
-        $referenceNumber = $this->GetReferenceNumber($resourceId);
+        $referenceNumber = $this->GetOwnActiveCheckinReferenceNumber($resourceId);
         if (!empty($referenceNumber)) {
             $page = sprintf('%s/%s?%s=%s', Configuration::Instance()->GetScriptUrl(), Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $referenceNumber);
         } else {
@@ -24,7 +24,7 @@ class ResourceQRRouterPage extends Page
         $this->Redirect($page);
     }
 
-    private function GetReferenceNumber($resourceId)
+    private function GetOwnActiveCheckinReferenceNumber($resourceId): ?string
     {
         if (!$this->IsAuthenticated()) {
             return null;
