@@ -822,6 +822,7 @@ class it_it extends en_gb
         $strings['CustomAttributeInvalid'] = 'Il valore fornito per %s non è valido';
         $strings['AttachmentLoadingError'] = 'Spiacente, c\'è stato un problema durante il caricamento del file richiesto.';
         $strings['InvalidAttachmentExtension'] = 'Puoi solo caricare file in %s';
+        $strings['AttachmentUploadFailed'] = 'Impossibile caricare il file %s. La dimensione massima di caricamento è %s MB.';
         $strings['InvalidStartSlot'] = 'La data/ora di inizio non è valida.';
         $strings['InvalidEndSlot'] = 'La data/ora di fine non è valida.';
         $strings['MaxParticipantsError'] = '%s può contenere al massimo %s partecipanti.';

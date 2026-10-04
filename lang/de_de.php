@@ -863,6 +863,7 @@ class de_de extends en_gb
         $strings['CustomAttributeInvalid'] = 'Der Wert für %s ist ungültig';
         $strings['AttachmentLoadingError'] = 'Sorry, es gab ein Problem beim Laden der angeforderten Datei.';
         $strings['InvalidAttachmentExtension'] = 'Sie können nur Dateien dieses Typs hochladen: %s';
+        $strings['AttachmentUploadFailed'] = 'Die Datei %s konnte nicht hochgeladen werden. Die maximale Upload-Größe beträgt %s MB.';
         $strings['InvalidStartSlot'] = 'Die angeforderte Startzeit ist nicht gültig.';
         $strings['InvalidEndSlot'] = 'Die angeforderte Endzeit ist nicht gültig.';
         $strings['MaxParticipantsError'] = '%s ist für maximal %s Teilnehmer.';
