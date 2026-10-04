@@ -31,7 +31,6 @@
                     <div class="validationSummary alert alert-danger d-none">
                         <ul>
                             {async_validator id="fileExtensionValidator" key=""}
-                            {async_validator id="importQuartzyValidator" key=""}
                         </ul>
                     </div>
                     <div class="mb-2">
