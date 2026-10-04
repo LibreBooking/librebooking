@@ -305,7 +305,8 @@ class ReservationDetailsBinder implements IReservationComponentBinder
         $this->page->SetIsApprovable($this->reservationAuthorization->CanApprove($this->reservationView, $currentUser));
         $this->page->SetRequiresApproval($this->reservationView->RequiresApproval());
 
-        $this->page->SetAttachments($this->reservationView->Attachments);
+        $canViewAttachments = $this->reservationAuthorization->CanViewAttachments($this->reservationView, $currentUser);
+        $this->page->SetAttachments($canViewAttachments ? $this->reservationView->Attachments : []);
 
         $showUser = $this->privacyFilter->CanViewUser($initializer->CurrentUser(), $this->reservationView);
         $showDetails = $this->privacyFilter->CanViewDetails($initializer->CurrentUser(), $this->reservationView);

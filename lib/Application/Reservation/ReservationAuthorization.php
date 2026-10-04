@@ -28,6 +28,13 @@ interface IReservationAuthorization
      * @return bool
      */
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser);
+
+    /**
+     * @param ReservationView $reservationView
+     * @param UserSession $currentUser
+     * @return bool
+     */
+    public function CanViewAttachments(ReservationView $reservationView, UserSession $currentUser);
 }
 
 class ReservationAuthorization implements IReservationAuthorization
@@ -114,6 +121,21 @@ class ReservationAuthorization implements IReservationAuthorization
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser)
     {
         return $this->IsAccessibleTo($reservationView, $currentUser);
+    }
+
+    public function CanViewAttachments(ReservationView $reservationView, UserSession $currentUser)
+    {
+        if ($this->IsAccessibleTo($reservationView, $currentUser)) {
+            return true;
+        }
+
+        foreach (array_merge($reservationView->Participants, $reservationView->Invitees) as $user) {
+            if ($user->UserId == $currentUser->UserId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
