@@ -26,9 +26,20 @@ class ResourceQRRouterPage extends Page
 
     private function GetReferenceNumber($resourceId)
     {
+        if (!$this->IsAuthenticated()) {
+            return null;
+        }
+
+        $userId = $this->server->GetUserSession()->UserId;
         $repo = new ReservationViewRepository();
         /** @var ReservationItemView[] $reservations */
-        $reservations = $repo->GetReservations(Date::Now(), Date::Now(), null, null, null, $resourceId);
+        $reservations = $repo->GetReservations(
+            startDate: Date::Now(),
+            endDate: Date::Now(),
+            userIds: $userId,
+            userLevel: ReservationUserLevel::OWNER,
+            resourceIds: $resourceId,
+        );
 
         foreach ($reservations as $reservation) {
             if ($reservation->StartDate->LessThanOrEqual(Date::Now())
