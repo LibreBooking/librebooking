@@ -26,19 +26,32 @@ class ReservationAttachmentPresenterTest extends TestBase
      */
     private $fakePermissionService;
 
+    /**
+     * @var IReservationAuthorization|PHPUnit\Framework\MockObject\MockObject
+     */
+    private $reservationAuthorization;
+
     public function setUp(): void
     {
         $this->fakePermissionService = new FakePermissionService([true]);
         $this->reservationRepository = $this->createMock('IReservationRepository');
         $this->page = $this->createMock('IReservationAttachmentPage');
 
-        $this->presenter = new ReservationAttachmentPresenter($this->page, $this->reservationRepository, $this->fakePermissionService);
+        $this->reservationAuthorization = $this->createMock('IReservationAuthorization');
+
+        $this->presenter = new ReservationAttachmentPresenter(
+            $this->page,
+            $this->reservationRepository,
+            $this->fakePermissionService,
+            $this->reservationAuthorization
+        );
 
         parent::setup();
     }
 
     public function testLoadsAttachmentIfUserHasPermissionToPrimaryResource()
     {
+        $this->reservationAuthorization->method('CanViewSeriesAttachments')->willReturn(true);
         $fileId = 110;
         $resourceId = 1909;
         $referenceNumber = 'rn';
@@ -218,5 +231,32 @@ class ReservationAttachmentPresenterTest extends TestBase
                 ->method('ShowError');
 
         $this->presenter->PageLoad($this->fakeUser);
+    }
+
+    public function testShowsErrorIfUserCanBookResourceButIsNotRelatedToReservation()
+    {
+        $this->ArrangeAttachmentOnReservation();
+        $this->reservationAuthorization->method('CanViewSeriesAttachments')->willReturn(false);
+
+        $this->page->expects($this->once())->method('ShowError');
+        $this->page->expects($this->never())->method('BindAttachment');
+
+        $this->presenter->PageLoad($this->fakeUser);
+    }
+
+    private function ArrangeAttachmentOnReservation(): void
+    {
+        $seriesId = 1;
+        $builder = new ExistingReservationSeriesBuilder();
+        $builder->WithPrimaryResource(new FakeBookableResource(1909));
+        $builder->WithId($seriesId);
+
+        $attachment = new FakeReservationAttachment(110);
+        $attachment->SetSeriesId($seriesId);
+
+        $this->page->method('GetFileId')->willReturn(110);
+        $this->page->method('GetReferenceNumber')->willReturn('rn');
+        $this->reservationRepository->method('LoadReservationAttachment')->willReturn($attachment);
+        $this->reservationRepository->method('LoadByReferenceNumber')->willReturn($builder->Build());
     }
 }

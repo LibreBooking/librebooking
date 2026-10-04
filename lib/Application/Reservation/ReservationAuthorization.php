@@ -28,6 +28,10 @@ interface IReservationAuthorization
      * @return bool
      */
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser);
+
+    public function CanViewAttachments(ReservationView $reservationView, UserSession $currentUser): bool;
+
+    public function CanViewSeriesAttachments(ExistingReservationSeries $series, UserSession $currentUser): bool;
 }
 
 class ReservationAuthorization implements IReservationAuthorization
@@ -116,6 +120,31 @@ class ReservationAuthorization implements IReservationAuthorization
         return $this->IsAccessibleTo($reservationView, $currentUser);
     }
 
+    public function CanViewAttachments(ReservationView $reservationView, UserSession $currentUser): bool
+    {
+        $userIds = array_map(fn (ReservationUserView $user) => $user->UserId, array_merge($reservationView->Participants, $reservationView->Invitees));
+
+        return $this->CanViewAttachmentsFor($reservationView->OwnerId, $reservationView->Resources, $userIds, $currentUser);
+    }
+
+    public function CanViewSeriesAttachments(ExistingReservationSeries $series, UserSession $currentUser): bool
+    {
+        $instance = $series->CurrentInstance();
+        $userIds = array_merge($instance->Participants(), $instance->Invitees());
+
+        return $this->CanViewAttachmentsFor($series->UserId(), $series->AllResources(), $userIds, $currentUser);
+    }
+
+    /**
+     * @param IResource[] $resources
+     * @param int[] $userIds participant and invitee ids
+     */
+    private function CanViewAttachmentsFor($ownerId, array $resources, array $userIds, UserSession $currentUser): bool
+    {
+        return $this->IsAccessibleToOwnerOrResourceAdmin($ownerId, $resources, $currentUser)
+            || in_array($currentUser->UserId, $userIds);
+    }
+
     /**
      * @param ReservationView $reservationView
      * @param UserSession $currentUser
@@ -123,18 +152,25 @@ class ReservationAuthorization implements IReservationAuthorization
      */
     private function IsAccessibleTo(ReservationView $reservationView, UserSession $currentUser)
     {
-        if ($reservationView->OwnerId == $currentUser->UserId || $currentUser->IsAdmin) {
-            return true;
-        } else {
-            $canReserveForUser = $this->authorizationService->CanReserveFor($currentUser, $reservationView->OwnerId);
-            if ($canReserveForUser) {
-                return true;
-            }
+        return $this->IsAccessibleToOwnerOrResourceAdmin($reservationView->OwnerId, $reservationView->Resources, $currentUser);
+    }
 
-            foreach ($reservationView->Resources as $resource) {
-                if ($this->authorizationService->CanEditForResource($currentUser, $resource)) {
-                    return true;
-                }
+    /**
+     * @param IResource[] $resources
+     */
+    private function IsAccessibleToOwnerOrResourceAdmin($ownerId, array $resources, UserSession $currentUser): bool
+    {
+        if ($ownerId == $currentUser->UserId || $currentUser->IsAdmin) {
+            return true;
+        }
+
+        if ($this->authorizationService->CanReserveFor($currentUser, $ownerId)) {
+            return true;
+        }
+
+        foreach ($resources as $resource) {
+            if ($this->authorizationService->CanEditForResource($currentUser, $resource)) {
+                return true;
             }
         }
 
