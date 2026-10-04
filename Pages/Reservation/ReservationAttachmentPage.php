@@ -46,7 +46,13 @@ class ReservationAttachmentPage extends SecurePage implements IReservationAttach
 
     public function PageLoad()
     {
-        $this->presenter = new ReservationAttachmentPresenter($this, new ReservationRepository(), PluginManager::Instance()->LoadPermission());
+        $this->presenter = new ReservationAttachmentPresenter(
+            page: $this,
+            reservationRepository: new ReservationRepository(),
+            permissionService: PluginManager::Instance()->LoadPermission(),
+            reservationViewRepository: new ReservationViewRepository(),
+            reservationAuthorization: new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization()),
+        );
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
     }
 

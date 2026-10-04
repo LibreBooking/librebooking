@@ -276,4 +276,39 @@ class ReservationAuthorizationTest extends TestBase
 
         $this->assertTrue($canSeeDetails);
     }
+
+    public function testCanViewAttachmentsIfCanViewDetails()
+    {
+        $reservationView = new ReservationView();
+        $reservationView->OwnerId = $this->currentUser->UserId;
+
+        $this->assertTrue($this->reservationAuthorization->CanViewAttachments($reservationView, $this->currentUser));
+    }
+
+    public function testCanViewAttachmentsIfParticipant()
+    {
+        $reservationView = new ReservationView();
+        $reservationView->OwnerId = 92929;
+        $reservationView->Participants[] = new ReservationUserView($this->currentUser->UserId, 'f', 'l', 'e', ReservationUserLevel::PARTICIPANT);
+
+        $this->assertTrue($this->reservationAuthorization->CanViewAttachments($reservationView, $this->currentUser));
+    }
+
+    public function testCanViewAttachmentsIfInvitee()
+    {
+        $reservationView = new ReservationView();
+        $reservationView->OwnerId = 92929;
+        $reservationView->Invitees[] = new ReservationUserView($this->currentUser->UserId, 'f', 'l', 'e', ReservationUserLevel::INVITEE);
+
+        $this->assertTrue($this->reservationAuthorization->CanViewAttachments($reservationView, $this->currentUser));
+    }
+
+    public function testCanNotViewAttachmentsIfUnrelatedToReservation()
+    {
+        $reservationView = new ReservationView();
+        $reservationView->OwnerId = 92929;
+        $reservationView->Resources = [new ReservationResourceView(1, '', 1, 1, 1, false, null, ResourceStatus::AVAILABLE)];
+
+        $this->assertFalse($this->reservationAuthorization->CanViewAttachments($reservationView, $this->currentUser));
+    }
 }
