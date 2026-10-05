@@ -2,8 +2,11 @@
 
 ## Supported Versions
 
-Only the most current stable version receives patches for security
-vulnerabilities.
+Only the
+[latest release](https://github.com/LibreBooking/librebooking/releases/latest)
+is supported. Security vulnerabilities are fixed by publishing a new release;
+existing releases are not patched and fixes are not backported. Upgrade to the
+latest release to receive security fixes.
 
 supported_version: 6.1.0
 
@@ -15,9 +18,9 @@ Do not open a public issue for a suspected vulnerability. If you cannot use
 GitHub's form, email **[librebooking@outlook.com](mailto:librebooking@outlook.com)**.
 
 LibreBooking is maintained by a small volunteer team. Please allow 2-5 days for
-an initial response. If the issue is confirmed, a patch will be released as
-soon as practical depending on severity, complexity, and maintainer
-availability.
+an initial response. If the issue is confirmed, a new release containing the
+fix will be published as soon as practical depending on severity, complexity,
+and maintainer availability.
 
 ## Report Requirements
 
