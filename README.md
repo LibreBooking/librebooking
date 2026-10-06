@@ -1,6 +1,20 @@
 
 # Librebooking
 
+> [!WARNING]
+> **Security: upgrade to LibreBooking 7.0.0 or later immediately.**
+>
+> All versions before 7.0.0 contain a critical vulnerability that lets an
+> unauthenticated attacker take over an administrator account. Security fixes
+> are not backported, so no fix will be released for 6.x or earlier.
+>
+> If you cannot upgrade right away, delete `Web/install/migrate.php` or block
+> access to it in your web server. See the
+> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-3356-vjx2-5pg8)
+> for details and for how to check whether an installation was compromised,
+> and get the
+> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
+
 [![GitHub issues](https://img.shields.io/github/issues/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/issues)
 [![Last commit](https://img.shields.io/github/last-commit/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/commits)
 [![GitHub release](https://img.shields.io/github/v/release/LibreBooking/librebooking?include_prereleases)](https://github.com/LibreBooking/librebooking/releases)
