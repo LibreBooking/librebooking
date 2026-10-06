@@ -352,7 +352,6 @@ per-PR tooling changes are needed when adding files there.
 **Important**: The main development branch is `develop`, NOT `main` or `master`.
 
 - **develop** - Active development, latest beta code
-- **master** - Stable releases only
 - Feature branches: `feature/description-of-feature`
 - Bugfix branches: `bugfix/issue-number-description`
 
