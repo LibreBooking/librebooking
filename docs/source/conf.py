@@ -25,6 +25,7 @@ source_suffix = {
 
 templates_path = ["_templates"]
 exclude_patterns = []
+myst_enable_extensions = ["alert"]
 myst_heading_anchors = 2
 
 
