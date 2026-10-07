@@ -12,6 +12,8 @@
 #   LB_TEST_DB_NAME      Database name, must end in "_test" (default: librebooking_test)
 #   LB_TEST_DB_USER      Database user (required)
 #   LB_TEST_DB_PASSWORD  Database password (default: empty)
+#   LB_TEST_SAMPLE_DATA  SQL file loaded after the base data
+#                        (default: database_schema/sample-data-utf8.sql)
 #
 # The user needs privileges to drop and create LB_TEST_DB_NAME and full access
 # to it. Example local setup (as a MariaDB/MySQL admin):
@@ -85,6 +87,6 @@ echo "Loading base data"
 db "${db_name}" <"${schema_dir}/create-data.sql"
 
 echo "Loading sample data"
-db "${db_name}" <"${schema_dir}/sample-data-utf8.sql"
+db "${db_name}" <"${LB_TEST_SAMPLE_DATA:-${schema_dir}/sample-data-utf8.sql}"
 
 echo "Test database ${db_name} is ready."
