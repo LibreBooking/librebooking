@@ -81,19 +81,55 @@ We'd love to hear your ideas for improving LibreBooking.
 
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-2. Update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations, and container parameters.
-3. Increase the version numbers in any examples files and the README.md to the new version that this Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. Your PR will be reviewed by maintainers. We aim to review PRs in a timely manner, but please be patient.
-5. Address any feedback or requested changes.
-6. Once your PR is approved and CI checks pass, it will be merged. Thank you for your contribution.
+1. Update the documentation (`README.md` and the relevant files in
+   `docs/source/`) when your change affects behavior, configuration, or the API.
+2. Do not change version numbers or `CHANGELOG.md` in your PR. Both are
+   generated automatically at release time (see
+   [Versioning and Releases](#versioning-and-releases)).
+3. Your PR will be reviewed by maintainers. We aim to review PRs in a timely manner, but please be patient.
+4. Address any feedback or requested changes.
+5. Once your PR is approved and CI checks pass, it will be merged. Thank you for your contribution.
+
+## Versioning and Releases
+
+LibreBooking follows [Semantic Versioning](https://semver.org/)
+(`MAJOR.MINOR.PATCH`). Version numbers are never chosen or edited by hand:
+[python-semantic-release](https://python-semantic-release.readthedocs.io/)
+derives the next version from the commit messages merged into `develop` since
+the previous release.
+
+| Commit                                    | Version bump |
+| ----------------------------------------- | ------------ |
+| `fix` or `perf`                           | Patch        |
+| `feat`                                    | Minor        |
+| `!` in the header, or `BREAKING CHANGE:`  | Major        |
+| Any other type (`docs`, `chore`, ...)     | No release   |
+
+The largest bump among the commits wins. If no commit since the previous
+release warrants a bump, no release is made.
+
+Releases are created from the `develop` branch by the `Release` GitHub Actions
+workflow, which runs monthly and can also be started manually by a maintainer.
+It updates the version in `lib/Config/Configuration.php`, `docs/source/conf.py`
+and `SECURITY.md`, updates `CHANGELOG.md`, commits the result as
+`chore: release vX.Y.Z`, tags it `vX.Y.Z`, and publishes a GitHub release. The
+configuration lives in `releaserc.toml`.
+
+Because the commit type decides the version number, choosing the correct type
+(and marking breaking changes) matters. See the guidelines below. When merging
+a PR with `Squash and merge`, verify both the header and body of the final
+commit message. The release tool also parses embedded commit messages and
+`BREAKING CHANGE:` footers, so the PR title alone does not determine the bump.
+For example, a `fix:` header with an embedded `feat:` commit produces a minor
+release, while a `BREAKING CHANGE:` footer produces a major release.
 
 ## Commit Message Guidelines
 
 We have precise rules over how our git commit messages should be formatted.
 This leads to more readable messages that are easy to follow when looking
 through the project history. This also enables us to automate our Changelog
-generation at release time.
+generation and version numbering at release time (see
+[Versioning and Releases](#versioning-and-releases)).
 
 ### Commit Message Format
 
@@ -218,10 +254,31 @@ Further paragraphs come after blank lines.
 
 ### Footer
 
-The footer should contain a reference to a GitHub issue that this commit **Closes** or **Resolves**.
-The footer should contain any information about **Breaking Changes**.
+The footer should contain a reference to a GitHub issue that this commit
+**Closes** or **Resolves**.
 
-**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines.
+A **breaking change** must be marked in at least one of two ways, and either
+one results in a new major version:
+
+* A footer line that starts with `BREAKING CHANGE:` followed by a description
+  of what changed and what users need to do.
+* A `!` before the colon in the header (e.g.
+  `fix(install)!: remove the web-based migration`).
+
+Prefer the footer, with or without the `!`: its description becomes the entry
+under "Breaking Changes" in `CHANGELOG.md`. A commit marked only with `!` still
+produces a major version, but is not listed there.
+
+Example using both:
+
+```text
+fix(install)!: remove the web-based migration
+
+Remove the legacy migration script, which is no longer supported.
+
+BREAKING CHANGE: Direct web migration from phpScheduleIt 1.2 is no
+longer supported.
+```
 
 ### Pull Requests practices
 
