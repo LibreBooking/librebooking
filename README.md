@@ -2,6 +2,25 @@
 # Librebooking
 
 > [!WARNING]
+> We are planning on doing a security release for a high-impact security
+> vulnerability. The release is planned to happen on [Tuesday 13-October-2026 @
+> 9AM PDT (Pacific Daylight Time)](https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306).
+>
+> You can convert to your local time zone here:
+> [https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306](https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306)
+>
+> If you have questions/comments feel free to join the
+> [Discord channel](https://discord.gg/4TGThPtmX8) or comment on the
+> [related issue](https://github.com/LibreBooking/librebooking/issues/1779)
+> Though we will not disclose what the issue is until the release.
+>
+> Regular backups are also recommended in case of any issues.
+>
+> As always we invite people to join the [Discord channel](https://discord.gg/4TGThPtmX8)
+
+Previous security update
+
+> [!WARNING]
 > **Security: upgrade to LibreBooking 7.0.0 or later immediately.**
 >
 > All versions before 7.0.0 contain a critical vulnerability that lets an
