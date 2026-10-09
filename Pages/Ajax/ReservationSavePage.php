@@ -160,6 +160,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
     public function PageLoad()
     {
         try {
+            UploadedFile::CheckOversizedPost();
             $this->EnforceCSRFCheck();
             $reservation = $this->_presenter->BuildReservation();
             $this->_presenter->HandleReservation($reservation);
