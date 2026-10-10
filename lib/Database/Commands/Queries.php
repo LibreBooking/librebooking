@@ -210,10 +210,6 @@ class Queries
     public const CLEANUP_USER_SESSIONS =
         'DELETE FROM `user_session` WHERE utc_timestamp()>date_add(`last_modified`,interval 24 hour)';
 
-    public const COOKIE_LOGIN =
-        'SELECT `user_id`, `lastlogin`, `email`
-		FROM `users` WHERE `user_id` = @userid';
-
     public const DELETE_ACCESSORY = 'DELETE FROM `accessories` WHERE `accessory_id` = @accessoryid';
 
     public const DELETE_ACCESSORY_RESOURCES = 'DELETE FROM `resource_accessories` WHERE `accessory_id` = @accessoryid';

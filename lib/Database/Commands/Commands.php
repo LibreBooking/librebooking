@@ -824,15 +824,6 @@ class CheckUsernameCommand extends SqlCommand
     }
 }
 
-class CookieLoginCommand extends SqlCommand
-{
-    public function __construct($userId)
-    {
-        parent::__construct(Queries::COOKIE_LOGIN);
-        $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userId));
-    }
-}
-
 class DeleteAccessoryCommand extends SqlCommand
 {
     public function __construct($accessoryId)

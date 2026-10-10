@@ -184,7 +184,11 @@ Important methods:
 ``Login($username, $loginContext)``
   Loads or creates the LibreBooking user session after validation succeeds. Most
   plugins delegate to the base authentication service once they have determined
-  the LibreBooking username.
+  the LibreBooking username. ``$loginContext->GetData()`` returns a
+  ``LoginData`` object. Its ``Persist`` property and the matching first
+  constructor argument (``new LoginData($persist, $language)``) are deprecated:
+  the "Remember Me" login option was removed, so the value is ignored. Existing
+  code that passes it keeps working.
 
 ``Logout(UserSession $user)``
   Runs when a user logs out. Use this to clear external sessions or delegate to
@@ -201,8 +205,13 @@ Important methods:
   Control whether the login form asks for username and password. Single sign-on
   plugins often return ``false``.
 
-``ShowPersistLoginPrompt()`` and ``ShowForgotPasswordPrompt()``
-  Control whether the remember-me and forgot-password prompts are shown.
+``ShowForgotPasswordPrompt()``
+  Controls whether the forgot-password prompt is shown.
+
+``ShowPersistLoginPrompt()``
+  Deprecated. The "Remember Me" login option was removed, so the return value
+  is no longer used. The method is still part of the interface, so plugins
+  must keep implementing it.
 
 Profile field permission methods
   Control which profile fields users can edit when account data is managed by

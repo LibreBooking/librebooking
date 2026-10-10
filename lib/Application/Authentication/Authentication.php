@@ -157,6 +157,9 @@ class Authentication implements IAuthentication
         return true;
     }
 
+    /**
+     * @deprecated Persistent login was removed. The result is no longer used.
+     */
     public function ShowPersistLoginPrompt()
     {
         return true;

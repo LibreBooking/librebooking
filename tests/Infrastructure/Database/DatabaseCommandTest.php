@@ -62,18 +62,6 @@ class DatabaseCommandTest extends TestBase
         $this->assertEquals($salt, $par3->Value);
     }
 
-    public function testCookieLoginCommand()
-    {
-        $userid = 10;
-        $command = new CookieLoginCommand($userid);
-
-        $this->assertEquals(Queries::COOKIE_LOGIN, $command->GetQuery());
-        $this->assertEquals(1, $command->Parameters->Count());
-
-        $par1 = $command->Parameters->Items(0);
-        $this->assertEquals(new Parameter(ParameterNames::USER_ID, $userid), $par1);
-    }
-
     public function testCheckUserExistenceCommand()
     {
         $username = 'username';

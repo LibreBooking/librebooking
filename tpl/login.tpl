@@ -73,16 +73,6 @@
                         {/if}
 
                         <div class="clearfix">
-                            {if $ShowUsernamePrompt &&  $ShowPasswordPrompt}
-                                <div class="float-start">
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="rememberMe" type="checkbox"
-                                            {formname key=PERSIST_LOGIN}>
-                                        <label class="form-check-label" for="rememberMe">{translate key=RememberMe}</label>
-                                    </div>
-                                </div>
-                            {/if}
-
                             {if $ShowRegisterLink}
                                 <div class="float-end register">
                                     <span class="fw-bold">{translate key="FirstTimeUser?"}
