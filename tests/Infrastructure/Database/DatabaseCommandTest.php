@@ -318,4 +318,25 @@ class DatabaseCommandTest extends TestBase
         $this->assertEquals($expected, $command->GetQuery());
         $this->assertEquals(new ParameterRaw('@sort_params', 'email'), $command->Parameters->Items(0));
     }
+
+    public function testUpdateLoginDataOnlySetsLoginColumns()
+    {
+        $command = new UpdateLoginDataCommand(
+            userId: 1,
+            lastLoginTime: '2026-10-01 12:00:00',
+            language: 'en_us',
+            publicId: 'public_id'
+        );
+
+        $query = $command->GetQuery();
+        $this->assertSame(1, preg_match('/\bSET\b(.*)\bWHERE\b/is', $query, $setClause), 'Query should have a SET ... WHERE clause');
+        preg_match_all('/`(\w+)`\s*=/', $setClause[1], $assignedColumns);
+
+        $assigned = $assignedColumns[1];
+        sort($assigned);
+
+        // Login must never rewrite credentials, status, credits or other account data
+        // from a possibly stale copy of the user.
+        $this->assertSame(['language', 'last_modified', 'lastlogin', 'public_id'], $assigned);
+    }
 }

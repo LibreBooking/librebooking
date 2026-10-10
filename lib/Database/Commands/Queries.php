@@ -1089,7 +1089,15 @@ class Queries
 		SET `name` = @groupname, `admin_group_id` = @admin_group_id, `isdefault` = @isdefault
 		WHERE `group_id` = @groupid';
 
-    public const UPDATE_LOGINDATA = 'UPDATE `users` SET `lastlogin` = @lastlogin, `language` = @language WHERE `user_id` = @userid';
+    public const UPDATE_LOGINDATA =
+        'UPDATE `users`
+		SET
+			`lastlogin` = @lastlogin,
+			`language` = COALESCE(@language, `language`),
+			`public_id` = COALESCE(NULLIF(`public_id`, \'\'), @publicid),
+			`last_modified` = @dateModified
+		WHERE
+			`user_id` = @userid';
 
     public const UPDATE_FUTURE_RESERVATION_INSTANCES =
         'UPDATE `reservation_instances`

@@ -43,6 +43,10 @@ class FakeUserRepository implements IUserRepository
      */
     public $_AllUsers = [];
     public $_DeletedUserId;
+    /**
+     * @var User|null
+     */
+    public $_LoginDataUpdatedUser = null;
 
     public function __construct()
     {
@@ -85,6 +89,11 @@ class FakeUserRepository implements IUserRepository
     public function Update(User $user)
     {
         $this->_UpdatedUser = $user;
+    }
+
+    public function UpdateLoginData(User $user, ?string $language): void
+    {
+        $this->_LoginDataUpdatedUser = $user;
     }
 
     /**
