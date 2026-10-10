@@ -9,6 +9,7 @@ class iCalendarReservationView
     public $Description;
     public $Organizer;
     public $OrganizerEmail;
+    public $OrganizerSentBy;
     public $RecurRule;
     public $ReferenceNumber;
     public $Summary;
@@ -60,12 +61,6 @@ class iCalendarReservationView
         $this->ExportFactory = PluginManager::Instance()->LoadExport();
 
         $privateNotice = 'Private';
-        $privateEmail = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
-        static $missingPrivateOrganizerEmailLogged = false;
-        if (!$canViewUser && $privateEmail === '' && !$missingPrivateOrganizerEmailLogged) {
-            Log::Error('ICS private organizer email is not configured. Set the email.default.from.address setting.');
-            $missingPrivateOrganizerEmailLogged = true;
-        }
 
         $this->Classification = method_exists($this->ExportFactory, 'GetIcalendarClassification') ? $this->ExportFactory->GetIcalendarClassification($res) : 'PUBLIC';
         if ($res->DateCreated) {
@@ -78,9 +73,17 @@ class iCalendarReservationView
         $this->DateStart = $res->StartDate;
         $this->Summary = $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
         $this->Description = $canViewDetails ? ($res->Description ?? '') : $privateNotice;
-        $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
-        $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
-        $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateEmail;
+
+        $defaultFromAddress = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
+        if ($canViewUser) {
+            $ownerName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
+            $this->Organizer = $ownerName->__toString();
+            $this->OrganizerEmail = $res->OwnerEmailAddress;
+            $this->OrganizerSentBy = $defaultFromAddress;
+        } else {
+            $this->Organizer = $privateNotice;
+            $this->OrganizerEmail = $defaultFromAddress;
+        }
         $this->RecurRule = $this->CreateRecurRule($res);
         $this->ReferenceNumber = $res->ReferenceNumber;
         $this->ReservationUrl = sprintf(
@@ -96,10 +99,6 @@ class iCalendarReservationView
         $this->EndReminder = $res->EndReminder;
         $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $this->DateCreated : $res->ModifiedDate;
         $this->IsPending = $res->RequiresApproval;
-
-        if ($canViewUser && $res->OwnerId == $currentUser->UserId) {
-            $this->OrganizerEmail = str_replace('@', '-noreply@', $res->OwnerEmailAddress);
-        }
 
         $this->ExtraIcalLines = method_exists($this->ExportFactory, 'GetIcalendarExtraLines') ? $this->ExportFactory->GetIcalendarExtraLines($res) : null;
     }

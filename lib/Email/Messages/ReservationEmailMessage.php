@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
@@ -215,14 +217,28 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
-        $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
+        // BookedBy() is null for series from ReservationRepository::BuildSeries(); use the
+        // owner, with a timezone for the {startdate}/{enddate} summary placeholders.
+        $currentUser = $this->reservationSeries->BookedBy();
+        if ($currentUser === null) {
+            $currentUser = new UserSession($this->reservationOwner->Id());
+            $currentUser->Timezone = $this->timezone;
+        }
+        $icsView = new iCalendarReservationView($rv, $currentUser, new NullPrivacyFilter());
+
+        $method = $this->GetIcsMethod();
 
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
+        $icsContents = $display->Render([$icsView], null, $method);
         $this->AddStringAttachment(
             contents: $icsContents,
             fileName: 'reservation.ics',
-            mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
+            mimeType: "text/calendar; charset=UTF-8; method={$method->value}"
         );
+    }
+
+    protected function GetIcsMethod(): IcsMethod
+    {
+        return IcsMethod::PUBLISH;
     }
 }
