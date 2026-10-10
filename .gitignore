@@ -69,3 +69,9 @@ php8-report.log
 # phpunit cache
 .phpunit.cache/
 .env
+
+# Playwright E2E
+/tests/e2e/node_modules/
+/tests/e2e/.auth/
+/tests/e2e/test-results/
+/tests/e2e/playwright-report/
