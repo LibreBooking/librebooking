@@ -2,6 +2,8 @@
 
 require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 
+use LibreBooking\Application\Authentication\UserSessionBuilder;
+
 interface IResourceDisplayPage extends IPage, IActionPage
 {
     public function DisplayLogin();
@@ -154,13 +156,15 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
             new ScheduleRepository(),
             new DailyLayoutFactory(),
             new GuestUserService(
-                PluginManager::Instance()->LoadAuthentication(),
-                new GuestRegistration(
+                authentication: PluginManager::Instance()->LoadAuthentication(),
+                registration: new GuestRegistration(
                     new PasswordEncryption(),
                     new UserRepository(),
                     new GuestRegistrationNotificationStrategy(),
                     new GuestReservationPermissionStrategy($this)
-                )
+                ),
+                userRepository: new UserRepository(),
+                userSessionBuilder: new UserSessionBuilder(roleService: PluginManager::Instance()->LoadAuthorization())
             ),
             new AttributeService(new AttributeRepository(), new GuestPermissionService()),
             new ReservationRepository(),

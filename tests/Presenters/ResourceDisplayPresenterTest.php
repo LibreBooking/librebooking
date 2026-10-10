@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use LibreBooking\Application\Authentication\UserSessionBuilder;
+
 require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 require_once(ROOT_DIR . 'Pages/ResourceDisplayPage.php');
 
@@ -332,6 +334,119 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertEquals($this->reservationCreateHandler->_Errors, $this->page->_ResultCollector->Errors);
     }
 
+    public function testWhenTheAccountCannotBookNothingIsReserved()
+    {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Email = 'inactive@user.com';
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+
+        $this->guestUserService->_UserSession = new NullUserSession();
+        $this->presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        $this->presenter->Reserve();
+
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertFalse($this->page->_ResultCollector->Succeeded);
+        $this->assertNotEmpty($this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationCreateHandler->_LastSeries, 'no reservation should be attempted');
+    }
+
+    public function testReservingAsAnExistingAccountDoesNotLogItInOrChangeItEvenWhenTheBookingFails()
+    {
+        $email = 'some@user.com';
+        $userId = 123;
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->never())->method('Login');
+        $userRepository = new FakeUserRepository();
+        $userRepository->_User = new FakeUser($userId, $email);
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($email, $authentication, $userRepository, $registration);
+        $this->reservationCreateHandler->_Success = false;
+        $this->reservationCreateHandler->_Errors = ['booking refused'];
+
+        $presenter->ProcessAction();
+
+        $this->assertTrue($this->page->_Validators['guestdenied']->IsValid());
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertEquals(['booking refused'], $this->page->_ResultCollector->Errors);
+        $this->assertSame($userId, $this->reservationCreateHandler->_LastSeries->UserId(), 'the booking is still attributed to the named user');
+        $this->assertFalse($registration->_RegisterCalled);
+        $this->assertNull($userRepository->_UpdatedUser);
+        $this->assertNull($userRepository->_LoginDataUpdatedUser);
+    }
+
+    public function testWhenTheRegisteredAccountCheckFailsNothingIsReservedAndNoAccountIsTouched()
+    {
+        $email = 'inactive@user.com';
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->never())->method('Login');
+        $user = new FakeUser(123, $email);
+        $user->SetStatus(AccountStatus::INACTIVE);
+        $userRepository = new FakeUserRepository();
+        $userRepository->_User = $user;
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($email, $authentication, $userRepository, $registration);
+
+        $presenter->ProcessAction();
+
+        $this->assertFalse($this->page->_Validators['guestdenied']->IsValid());
+        $this->assertNull($this->page->_ReservationCreatedSuccessfully, 'Reserve() must not run when validation fails');
+        $this->assertNull($this->reservationCreateHandler->_LastSeries);
+        $this->assertFalse($registration->_RegisterCalled);
+        $this->assertSame(AccountStatus::INACTIVE, $user->StatusId());
+        $this->assertNull($userRepository->_UpdatedUser);
+        $this->assertNull($userRepository->_LoginDataUpdatedUser);
+    }
+
+    /**
+     * A presenter for the 'reserve' action that uses the real GuestUserService, with guest
+     * reservations disabled so the registered-account validator runs, and a page that runs
+     * its validators before the action as the real page does.
+     */
+    private function reservePresenterWithRealGuestUserService(
+        string $email,
+        IAuthentication $authentication,
+        FakeUserRepository $userRepository,
+        FakeRegistration $registration
+    ): ResourceDisplayPresenter {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Action = 'reserve';
+        $this->page->_RunValidators = true;
+        // The test page returns $_Username from GetEmail().
+        $this->page->_Username = $email;
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_GUEST_RESERVATIONS, 'false');
+        $this->resourceRepository->_Resource = new FakeBookableResource(122);
+
+        $presenter = new ResourceDisplayPresenter(
+            $this->page,
+            $this->resourceRepository,
+            $this->reservationService,
+            $this->authorizationService,
+            $this->authentication,
+            $this->scheduleRepository,
+            $this->dailyLayoutFactory,
+            new GuestUserService(
+                authentication: $authentication,
+                registration: $registration,
+                userRepository: $userRepository,
+                userSessionBuilder: new UserSessionBuilder(roleService: $this->authorizationService)
+            ),
+            $this->attributeService,
+            $this->reservationRepository,
+            $this->termsOfServiceRepository
+        );
+        $presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        return $presenter;
+    }
+
     private function setupStandardExpectations($requiresCheckin = false, $checkinMin = 0)
     {
         $timezone = 'America/Chicago';
@@ -412,6 +527,26 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public $_RequiresCheckIn = false;
     public $_CheckinReferenceNumber;
     public $_TermsOfService;
+    public $_Action;
+    public $_RunValidators = false;
+
+    /**
+     * Runs the registered validators, as the real page does, when $_RunValidators is set.
+     */
+    public function IsValid()
+    {
+        if (!$this->_RunValidators) {
+            return parent::IsValid();
+        }
+
+        $isValid = true;
+        foreach ($this->_Validators as $validator) {
+            $validator->Validate();
+            $isValid = $isValid && $validator->IsValid();
+        }
+
+        return $isValid;
+    }
 
     public function TakingAction()
     {
@@ -420,7 +555,7 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
 
     public function GetAction()
     {
-        // TODO: Implement GetAction() method.
+        return $this->_Action;
     }
 
     public function RequestingData()

@@ -263,8 +263,15 @@ class ResourceDisplayPresenter extends ActionPresenter
             $resultCollector->SetErrors(['Unauthorized']);
             $success = false;
         } else {
-
             $userSession = $this->guestUserService->CreateOrLoad($email);
+
+            if (!$userSession->IsLoggedIn()) {
+                $resultCollector->SetSaveSuccessfulMessage(false);
+                $resultCollector->SetErrors([Resources::GetInstance()->GetString('RegisteredAccountRequired')]);
+                $this->page->SetReservationSaveResults(false, $resultCollector);
+                return;
+            }
+
             $resource = $this->resourceRepository->LoadById($resourceId);
 
             $series = ReservationSeries::Create($userSession->UserId, $resource, Resources::GetInstance()->GetString('AdHocMeeting'), Resources::GetInstance()->GetString('AdHocMeeting'), $date, new RepeatNone(), $userSession);
