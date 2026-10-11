@@ -1,0 +1,93 @@
+Foglalás részletei:
+<br/>
+<br/>
+
+Kezdés: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Befejezés: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Elemel:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Elem: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Megnevezés: {{ Title|escape_once }}<br/>
+Leírás: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    A foglaás az alábbi dátumokon érvényes:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Participants|default([])|length > 0 %}
+    <br/>
+    Résztvevők:
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br/>
+    Meghívottak:
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Kiegészítők:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    A foglalt elemek legalább egyike jóváhagyást igényel. A foglalás függőben marad jóváhagyásáig.
+{% endif %}
+
+<br/>
+Részt vesz? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Igen</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Nem</a>
+<br/>
+<br/>
+
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">A foglalás megtekintése</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Naptárhoz adás</a> |
+<a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Hozzáadás a Google Naptárhoz</a> |
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

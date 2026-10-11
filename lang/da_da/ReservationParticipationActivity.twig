@@ -1,0 +1,38 @@
+Oplysninger om reservation:
+<br/>
+<br/>
+
+Begynder: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Slutter: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Faciliteter:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Facilitet: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+Overskrift: {{ Title|escape_once }}<br/>
+Beskrivelse: {{ Description|escape_once|nl2br }}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Udstyr:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+Referencenummer: {{ ReferenceNumber|raw }}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Se denne reservation</a> |
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

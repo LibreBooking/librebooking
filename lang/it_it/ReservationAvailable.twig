@@ -1,0 +1,7 @@
+<p>{{ FirstName|raw }},</p>
+<p>{{ ResourceName|escape_once }} è disponibile tra {{ formatdate(date: StartDate, key: 'res_popup') }} e {{ formatdate(date: EndDate, key: 'res_popup') }}</p>
+<p>&nbsp;</p>
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Prenotare ora</a> |
+    <a href="{{ ScriptUrl|raw }}">Login su Booking Scheduler</a>
+</p>

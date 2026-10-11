@@ -1,0 +1,28 @@
+Bokningsdetaljer:
+<br/>
+<br/>
+
+Er bokning börjar: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Er bokning slutar: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+Bokning: {{ ResourceName|escape_once }}<br/>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Rubrik: {{ Title|escape_once }}<br/>
+Beskrivning: {{ Description|escape_once|nl2br }}<br/>
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Följande bokning har ångrats:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+<a href="{{ ScriptUrl|raw }}">Logga in i Bokningsprogrammet</a>

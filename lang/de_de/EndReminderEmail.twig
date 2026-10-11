@@ -1,0 +1,12 @@
+Ihre Reservierung endet bald.<br/>
+Reservierungsdetails:<br/>
+    <br/>
+    Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Ende: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Ressource: {{ ResourceName|escape_once }}<br/>
+    Titel: {{ Title|escape_once }}<br/>
+    Beschreibung: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<p><a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reservierung ansehen</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Zum Kalender hinzuf&uuml;gen</a> |
+<a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a></p>

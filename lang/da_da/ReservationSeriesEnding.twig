@@ -1,0 +1,13 @@
+Din serie af reservationer for {{ ResourceName|escape_once }} slutter {{ formatdate(date: StartDate, key: 'reservation_email') }}.<br/>
+Oplysninger om reservation:
+    <br/>
+    <br/>
+    Begynder: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Slutter: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Facilitet: {{ ResourceName|escape_once }}<br/>
+    Overskrift: {{ Title|escape_once }}<br/>
+    Beskrivelse: {{ Description|escape_once|nl2br }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Se denne reservation</a> |
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

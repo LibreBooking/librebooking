@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>Uus kasutaja on registreeritud järgmiste andmetega:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Nimi: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Töökoht: {{ Organization|raw }}<br/>
+Amet: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    Created by: {{ CreatedBy|raw }}
+{% endif %}

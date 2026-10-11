@@ -1,0 +1,14 @@
+<p>Je terugkerende reserveringen voor {{ ResourceName|escape_once }} gaan eindigen op {{ formatdate(date: StartDate, key: 'reservation_email') }}.</p>
+<p><strong>Reservering details:</strong></p>
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Eind:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Bron:</strong> {{ ResourceName|escape_once }}<br/>
+    <strong>Titel:</strong> {{ Title|escape_once }}<br/>
+    <strong>Omschrijving:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Bekijk de reservering</a> |
+    <a href="{{ ScriptUrl|raw }}">Login in {{ AppTitle|raw }}</a>
+</p>

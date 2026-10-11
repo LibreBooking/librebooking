@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>sinulle on luotu {{ AppTitle|raw }} -tili seuraavilla tiedoilla:<br/>
+Sähköposti: {{ EmailAddress|raw }}<br/>
+Nimi: {{ FullName|raw }}<br/>
+Puhelin: {{ Phone|raw }}<br/>
+Organisaatio: {{ Organization|raw }}<br/>
+Rooli: {{ Position|raw }}<br/>
+Salasana: {{ Password }}</p>
+{% if CreatedBy %}
+    Luonut: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Kirjaudu sovellukseen {{ AppTitle|raw }}</a>

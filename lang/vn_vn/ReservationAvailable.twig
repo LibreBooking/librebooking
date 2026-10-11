@@ -1,0 +1,6 @@
+{{ FirstName|raw }},<br/>
+{{ ResourceName|escape_once }} is currently available between {{ formatdate(date: StartDate, key: 'res_popup') }} and {{ formatdate(date: EndDate, key: 'res_popup') }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Book now</a> |
+<a href="{{ ScriptUrl|raw }}">Log in to LibreBooking</a>

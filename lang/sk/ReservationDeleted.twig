@@ -1,0 +1,43 @@
+Administrátorom boli zmazané tieto rezervácie:
+<br/>
+<br/>
+
+Nadpis: {{ Title|escape_once }}<br/>
+Popis: {{ Description|escape_once|nl2br }}<br/><br/>
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+Začiatok: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Koniec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Ihriská:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Ihrisko: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Došlo k zmazaniu všetkých týchto rezervovaných termínov:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Príslušenstvo:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+<a href="{{ ScriptUrl|raw }}">Prihlásiť sa do rezervačného systému</a>

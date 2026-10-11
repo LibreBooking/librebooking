@@ -1,0 +1,59 @@
+Oplysninger om reservation:
+<br/>
+<br/>
+
+Bruger: {{ UserName|raw }}<br/>
+Begynder: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Slutter: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Faciliteter:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Facilitet: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Overskrift: {{ Title|escape_once }}<br/>
+Beskrivelse: {{ Description|escape_once|nl2br }}<br/>
+Årsag: {{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    Disse datoer er slettede:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Udstyr:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if CreatedBy %}
+    <br/>
+    Slettet af: {{ CreatedBy|raw }}
+{% endif %}
+
+<br/>
+Referencenummer: {{ ReferenceNumber|raw }}
+
+<br/>
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

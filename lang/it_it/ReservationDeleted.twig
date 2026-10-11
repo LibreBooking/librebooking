@@ -1,0 +1,51 @@
+<p>{{ UserName|raw }},</p>
+<p>La seguente prenotazione è stata cancellata.</p>
+<p>Dettagli della prenotazione:</p>
+<p>
+    <strong>Inizio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br />
+    <strong>Fine:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br />
+    <strong>Titolo:</strong> {{ Title|escape_once }}<br />
+    <strong>Descrizione:</strong> {{ Description|escape_once|nl2br }}
+</p>
+{% if Attributes|default([])|length > 0 %}
+    <p>
+        {% for attribute in Attributes %}
+              <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+      </p>
+{% endif %}
+{% if ResourceNames|default([])|length > 1 %}
+    <p>
+            <strong>Risorse ({{ ResourceNames|default([])|length }}):</strong>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br />
+        {% endfor %}
+    </p>
+{% else %}
+    <p>
+            <strong>Risorsa:</strong> {{ ResourceName|escape_once }}<br />
+    </p>
+{% endif %}
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+{% if RepeatRanges|length > 0 %}
+    <p>
+          La prenotazione riguarda le seguenti ({{ RepeatRanges|default([])|length }}) date:
+        {% for date in RepeatRanges %}
+            <br />
+            {{ formatdate(date: date.GetBegin()) }}
+            {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+        {% endfor %}
+        </p>
+{% endif %}
+{% if CreatedBy %}
+    <p>
+            <strong>Cancellata da:</strong> {{ CreatedBy|raw }}
+            <br />
+            <strong>Motivazione:</strong> <em>{{ DeleteReason|escape_once|nl2br }}</em>
+    </p>
+{% endif %}
+<p><strong>Numero riferimento:</strong> {{ ReferenceNumber|raw }}</p>
+<p>&nbsp;</p>
+<p><a href="{{ ScriptUrl|raw }}">Login su LibreBooking</a></p>

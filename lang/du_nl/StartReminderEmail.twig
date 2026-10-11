@@ -1,0 +1,14 @@
+Je reservering start binnenkort.<br/>
+Reserverings Details:
+    <br/>
+    <br/>
+    Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Eindigd: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Bron: {{ ResourceName|escape_once }}<br/>
+    Titel: {{ Title|escape_once }}<br/>
+    Beschrijving: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Bekijk deze reservering</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Voeg toe aan agenda</a> |
+<a href="{{ ScriptUrl|raw }}">Login in LibreBooking</a>

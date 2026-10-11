@@ -1,0 +1,78 @@
+     Detalji o rezervaciji:
+    <br/>
+    <br/>
+
+    Početak: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Kraj: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+
+    {% if Resources|default([])|length > 1 %}
+        <strong>Resursi ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>Resurs:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Raspored:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>ID resursa:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Lokacija:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Kontakt:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Opis:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Beleške:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Administrator resursa:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Detalji resursa:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+
+    Naziv: {{ Title|escape_once }}<br/>
+    Opis: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Rezervacija va�i za navedeni datum:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Dodatno:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if Attributes|default([])|length > 0 %}
+        <br/>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Jedan ili više terena zahtevaju odobrenje pre upotrebe. Ova rezervacija će biti zadržana do dozvole.
+    {% endif %}
+
+    <br/>
+    <br/>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Pregled rezervacije</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Dodaj u kalendar</a> |
+    <a href="{{ ScriptUrl|raw }}">Uloguj se</a>

@@ -1,0 +1,14 @@
+Zure erreeserba laster hasiko da.<br/>
+Erreserbaren xehetasunak:
+    <br/>
+    <br/>
+    Hasiera: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Data: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Baliabidea: {{ ResourceName|escape_once }}<br/>
+    Izenburua: {{ Title|escape_once }}<br/>
+    Deskripzioa: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Erreserba hau ikusi</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Egutegi batera gehitu</a> |
+<a href="{{ ScriptUrl|raw }}">Saioa hasi LibreBooking-en</a>

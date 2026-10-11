@@ -1,0 +1,52 @@
+    予約の詳細:
+    <br/>
+    <br/>
+
+    開始: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    終了: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        リソース:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        リソース: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    件名: {{ Title|escape_once }}<br/>
+    説明: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        下記の日時で予約されました:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Accessories:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        承認が必要なリソースが含まれています。 そのため承認されるまでは保留状態となります。
+    {% endif %}
+
+    <br/>
+    出席しますか? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">はい</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">いいえ</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">予約の表示</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">カレンダーへ追加</a> |
+    <a href="{{ ScriptUrl|raw }}">LibreBooking へログイン</a>

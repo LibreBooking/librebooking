@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>Egy új fiók: {{ AppTitle|raw }} készült az Ön számára az alábbi információkkal:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Név: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Szervezet: {{ Organization|raw }}<br/>
+Pozíció: {{ Position|raw }}</p>
+Jelszó: {{ Password }}</p>
+{% if CreatedBy %}
+    Készítette: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

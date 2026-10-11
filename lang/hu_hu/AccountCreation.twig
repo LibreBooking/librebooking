@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>Egy új felhasználó regisztrált az alábbi információkkal:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Név: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Szervezet: {{ Organization|raw }}<br/>
+Pozíció: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    Készítette: {{ CreatedBy|raw }}
+{% endif %}

@@ -1,0 +1,37 @@
+    Podrobnosti rezervacije:
+    <br/>
+    <br/>
+
+    Začetek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Vir: {{ ResourceName|escape_once }}<br/>
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Nalsov: {{ Title|escape_once }}<br/>
+    Opis: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Rezervacija je narejena za naslednje dneve:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Eden ali več rezerviranih virov pred uporabo potrebuje potrditev. Ta rezervacija je na čakanju, dokler ni potrjena.
+    {% endif %}
+
+    <br/>
+    Sprejmete? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Da</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Ne</a>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ogled rezervacije</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Dodaj v Koledar (Outlook)</a> |
+    <a href="{{ ScriptUrl|raw }}">Prijava v program LibreBooking</a>

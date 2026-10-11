@@ -1,0 +1,133 @@
+<p><strong>Détails de la réservation:</strong></p>
+
+<p>
+    <strong>Utilisateur:</strong> {{ UserName|raw }}<br/>
+    {% if CreatedBy %}
+        <strong>Créé par:</strong>
+        {{ CreatedBy|raw }}
+        <br/>
+    {% endif %}
+    <strong>Début:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Fin:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Libellé:</strong> {{ Title|escape_once }}<br/>
+    <strong>Description:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+    <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+</p>
+
+<p>
+
+    {% if Resources|default([])|length > 1 %}
+    <strong>Ressources ({{ Resources|default([])|length }}):</strong>
+    <br/>
+    {% else %}
+    <strong>Ressource:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Calendrier:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>ID de la ressource:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Emplacement:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Contact:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Description:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Notes:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Administrateur de la ressource:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Détails de la ressource:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+
+{% if RequiresApproval %}
+    <p>* Une ou plusieurs ressources réservées nécessitent une approbation. Vérifiez que la demande de réservation soit approuvée ou rejetée. *</p>
+{% endif %}
+
+{% if CheckInEnabled %}
+    <p>
+        Une ou plusieurs ressources réservées nécessitent que l'utilisateur fasse un check-in et un check-out de la réservation.
+        {% if AutoReleaseMinutes is not null %}
+            Cette réservation sera annulée sauf si vous faîtes un check-in dans les {{ AutoReleaseMinutes|raw }} minutes suivant l'heure de début.
+        {% endif %}
+    </p>
+{% endif %}
+
+{% if RepeatRanges|length > 0 %}
+    <p>
+        Cette réservation se répète aux dates suivantes ({{ RepeatRanges|default([])|length }}):
+        <br/>
+        {% for date in RepeatRanges %}
+            {{ formatdate(date: date.GetBegin()) }}
+            {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+            <br/>
+        {% endfor %}
+    </p>
+{% endif %}
+
+{% if Participants|default([])|length > 0 %}
+    <br/>
+    <strong>Participants ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+    <br/>
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br/>
+    <strong>Invités ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+    <br/>
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    <strong>Accessoires ({{ Accessories|default([])|length }}):</strong>
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<p><strong>Numéro de réference:</strong> {{ ReferenceNumber|raw }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Voir cette réservation</a> | <a href="{{ ScriptUrl|raw }}">Connexion à {{ AppTitle|raw }}</a>
+</p>

@@ -1,0 +1,13 @@
+Nezmeškajte rezervovaný termín.<br/>
+Detaily rezervácie:
+    <br/>
+    <br/>
+    Začiatok: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Koniec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Ihrisko: {{ ResourceName|escape_once }}<br/>
+    Názov: {{ Title|escape_once }}<br/>
+    Popis: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Zobraziť túto rezerváciu v systéme</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Pridať do Outlook-u</a> |
+    <a href="{{ ScriptUrl|raw }}">Prihlásiť sa do rezervačného systému</a>
