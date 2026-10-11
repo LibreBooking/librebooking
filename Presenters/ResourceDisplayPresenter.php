@@ -243,8 +243,21 @@ class ResourceDisplayPresenter extends ActionPresenter
             return;
         }
 
+        $resultCollector = new ReservationResultCollector();
+
+        // The resource is identified by its public id and must be enabled for display, the
+        // same requirement as viewing it here. This is checked before any guest account or
+        // reservation is created, so a request for any other resource has no effect. An
+        // internal resource id from the request is never used.
+        $resource = $this->LoadDisplayEnabledResource($this->page->GetReservationResourcePublicId());
+        if ($resource == null) {
+            $resultCollector->SetSaveSuccessfulMessage(false);
+            $resultCollector->SetErrors(['Unauthorized']);
+            $this->page->SetReservationSaveResults(false, $resultCollector);
+            return;
+        }
+
         $timezone = $this->page->GetTimezone();
-        $resourceId = $this->page->GetResourceId();
         $email = $this->page->GetEmail();
 
         $reservationDate = Date::Parse($this->page->GetBeginDate(), $timezone)->Format('Y-m-d ');
@@ -256,36 +269,57 @@ class ResourceDisplayPresenter extends ActionPresenter
         }
         $maxDate = Date::Now()->ToTimezone($timezone)->AddDays($maxFutureDays + 1)->GetDate();
 
-        $resultCollector = new ReservationResultCollector();
-
         if ($date->GetBegin()->GreaterThan($maxDate)) {
             $resultCollector->SetSaveSuccessfulMessage(false);
             $resultCollector->SetErrors(['Unauthorized']);
-            $success = false;
-        } else {
-            $userSession = $this->guestUserService->CreateOrLoad($email);
-
-            if (!$userSession->IsLoggedIn()) {
-                $resultCollector->SetSaveSuccessfulMessage(false);
-                $resultCollector->SetErrors([Resources::GetInstance()->GetString('RegisteredAccountRequired')]);
-                $this->page->SetReservationSaveResults(false, $resultCollector);
-                return;
-            }
-
-            $resource = $this->resourceRepository->LoadById($resourceId);
-
-            $series = ReservationSeries::Create($userSession->UserId, $resource, Resources::GetInstance()->GetString('AdHocMeeting'), Resources::GetInstance()->GetString('AdHocMeeting'), $date, new RepeatNone(), $userSession);
-
-            $series->AcceptTerms($this->page->GetTermsOfServiceAcknowledgement());
-
-            $attributes = $this->page->GetAttributes();
-            foreach ($attributes as $attribute) {
-                $series->AddAttributeValue(new AttributeValue($attribute->Id, $attribute->Value));
-            }
-
-            $success = $this->GetHandler($userSession)->Handle($series, $resultCollector);
+            $this->page->SetReservationSaveResults(false, $resultCollector);
+            return;
         }
+
+        $userSession = $this->guestUserService->CreateOrLoad($email);
+
+        if (!$userSession->IsLoggedIn()) {
+            $resultCollector->SetSaveSuccessfulMessage(false);
+            $resultCollector->SetErrors([Resources::GetInstance()->GetString('RegisteredAccountRequired')]);
+            $this->page->SetReservationSaveResults(false, $resultCollector);
+            return;
+        }
+
+        $series = ReservationSeries::Create($userSession->UserId, $resource, Resources::GetInstance()->GetString('AdHocMeeting'), Resources::GetInstance()->GetString('AdHocMeeting'), $date, new RepeatNone(), $userSession);
+
+        $series->AcceptTerms($this->page->GetTermsOfServiceAcknowledgement());
+
+        $attributes = $this->page->GetAttributes();
+        foreach ($attributes as $attribute) {
+            $series->AddAttributeValue(new AttributeValue($attribute->Id, $attribute->Value));
+        }
+
+        $success = $this->GetHandler($userSession)->Handle($series, $resultCollector);
         $this->page->SetReservationSaveResults($success, $resultCollector);
+    }
+
+    /**
+     * Loads the resource to book from the tablet view by its public id. Returns null when the
+     * public id is missing or unknown, or the resource is not enabled for display. Enablement
+     * is the same test DisplayResource() applies, so only a resource the tablet can show can
+     * be booked from it; an internal resource id is never accepted.
+     *
+     * @param string|null $publicResourceId
+     * @return BookableResource|null
+     */
+    private function LoadDisplayEnabledResource($publicResourceId)
+    {
+        if (empty($publicResourceId)) {
+            return null;
+        }
+
+        $resource = $this->resourceRepository->LoadByPublicId($publicResourceId);
+
+        if (empty($resource->GetId()) || !$resource->GetIsCalendarSubscriptionAllowed()) {
+            return null;
+        }
+
+        return $resource;
     }
 
     public function Checkin()

@@ -225,6 +225,7 @@ class FormKeys
     public const RESOURCE_CONTACT = 'resourceContact';
     public const RESOURCE_DESCRIPTION = 'resourceDescription';
     public const RESOURCE_ID = 'resourceId';
+    public const PUBLIC_RESOURCE_ID = 'publicResourceId';
     public const RESOURCE_IMAGE = 'resourceImage';
     public const RESOURCE_IMPORT_FILE = 'resourceImportFile';
     public const RESOURCE_LOCATION = 'resourceLocation';

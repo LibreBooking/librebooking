@@ -19,6 +19,13 @@ interface IResourceDisplayPage extends IPage, IActionPage
     public function GetPublicResourceId();
 
     /**
+     * The public id of the resource being booked, posted by the reservation form.
+     *
+     * @return string
+     */
+    public function GetReservationResourcePublicId();
+
+    /**
      * @return string
      */
     public function GetEmail();
@@ -244,6 +251,11 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
     }
 
+    public function GetReservationResourcePublicId()
+    {
+        return $this->GetForm(FormKeys::PUBLIC_RESOURCE_ID);
+    }
+
     public function GetStartDate()
     {
         $userTimezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
@@ -260,6 +272,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
     {
         $this->Set('ResourceName', $resource->GetName());
         $this->Set('ResourceId', $resource->GetId());
+        $this->Set('PublicResourceId', $resource->GetPublicId());
     }
 
     public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber)

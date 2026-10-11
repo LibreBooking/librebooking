@@ -19,6 +19,13 @@ class FakeResourceRepository implements IResourceRepository
      * @var FakeBookableResource
      */
     public $_Resource;
+    /**
+     * Resources keyed by public id. When non-empty, LoadByPublicId() uses this map strictly
+     * and returns a Null resource for an id that is not present.
+     *
+     * @var BookableResource[]
+     */
+    public $_ResourcesByPublicId = [];
 
     /**
      * @var BookableResource|FakeBookableResource
@@ -80,6 +87,9 @@ class FakeResourceRepository implements IResourceRepository
 
     public function LoadByPublicId($publicId)
     {
+        if (!empty($this->_ResourcesByPublicId)) {
+            return $this->_ResourcesByPublicId[$publicId] ?? BookableResource::Null();
+        }
         return $this->_Resource;
     }
 
