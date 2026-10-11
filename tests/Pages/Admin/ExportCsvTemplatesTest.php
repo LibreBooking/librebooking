@@ -37,7 +37,7 @@ class ExportCsvTemplatesTest extends TestBase
 
     public function testUsersCsvRendersExpectedCsv(): void
     {
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
         $page->assign('AttributeList', $this->attributes(category: CustomAttributeCategory::USER));
         $page->assign('users', $this->users());
         $page->assign('statusDescriptions', [
@@ -51,7 +51,7 @@ class ExportCsvTemplatesTest extends TestBase
             self::USER_GROUP_ID_B => new Group(self::USER_GROUP_ID_B, "Guests 'B'"),
         ]);
 
-        $output = $page->fetch('Admin/Users/users_csv.tpl');
+        $output = $page->fetch('Admin/Users/users_csv.twig');
 
         $this->assertSame(self::EXPECTED_USERS_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);
@@ -59,7 +59,7 @@ class ExportCsvTemplatesTest extends TestBase
 
     public function testResourcesCsvRendersExpectedCsv(): void
     {
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
         $page->assign('AttributeList', $this->attributes(category: CustomAttributeCategory::RESOURCE));
         $page->assign('Resources', $this->resources());
         $page->assign('Schedules', [self::SCHEDULE_ID => 'Main "East" Schedule']);
@@ -74,7 +74,7 @@ class ExportCsvTemplatesTest extends TestBase
             self::RESOURCE_GROUP_ID_B => new ResourceGroup(self::RESOURCE_GROUP_ID_B, "Floor 'Two'"),
         ]);
 
-        $output = $page->fetch('Admin/Resources/resources_csv.tpl');
+        $output = $page->fetch('Admin/Resources/resources_csv.twig');
 
         $this->assertSame(self::EXPECTED_RESOURCES_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);
@@ -82,7 +82,7 @@ class ExportCsvTemplatesTest extends TestBase
 
     public function testGroupsCsvRendersExpectedCsv(): void
     {
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
         $page->assign('Groups', $this->exportGroups());
         $page->assign('Users', [
             self::EXPORT_GROUP_ID_A => [
@@ -120,7 +120,7 @@ class ExportCsvTemplatesTest extends TestBase
             ],
         ]);
 
-        $output = $page->fetch('Admin/Groups/groups_csv.tpl');
+        $output = $page->fetch('Admin/Groups/groups_csv.twig');
 
         $this->assertSame(self::EXPECTED_GROUPS_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);
@@ -128,21 +128,21 @@ class ExportCsvTemplatesTest extends TestBase
 
     public function testGroupsCsvImportTemplateRendersHeaderOnly(): void
     {
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
 
-        $output = $page->fetch('Admin/Groups/groups_csv.tpl');
+        $output = $page->fetch('Admin/Groups/groups_csv.twig');
 
         $this->assertSame(self::EXPECTED_GROUPS_TEMPLATE_CSV, $output);
     }
 
     public function testReservationsCsvRendersExpectedCsv(): void
     {
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
         $page->assign('ReservationAttributes', $this->attributes(category: CustomAttributeCategory::RESERVATION));
         $page->assign('reservations', $this->reservations());
         $page->assign('Timezone', 'UTC');
 
-        $output = $page->fetch('Admin/Reservations/reservations_csv.tpl');
+        $output = $page->fetch('Admin/Reservations/reservations_csv.twig');
 
         $this->assertSame(self::EXPECTED_RESERVATIONS_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);

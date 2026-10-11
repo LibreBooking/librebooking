@@ -860,19 +860,19 @@ class AdminResourcesListGoldenTest extends GoldenTemplateTestCase
             $vars
         );
 
-        // Prove apostrophe IS backslash-escaped in Twig output (not HTML-encoded)
+        // Prove apostrophes are kept literal in Twig output (escape_csv only doubles double quotes)
         $twig = new TwigRenderer();
         foreach ($vars as $k => $v) {
             $twig->assign($k, $v);
         }
         $twigOutput = $twig->render('Admin/Resources/resources_csv.twig');
 
-        // apostrophe in resource name → backslash-escaped
-        $this->assertStringContainsString("O\\'Brien\\'s Room", $twigOutput, 'Apostrophe should be backslash-escaped');
+        // apostrophe in resource name → kept literal
+        $this->assertStringContainsString("O'Brien's Room", $twigOutput, 'Apostrophe should be kept literal');
         // & in resource name → kept as literal & (not &amp;)
         $this->assertStringContainsString('& Lab', $twigOutput, '& should be literal in CSV output');
-        // attribute label with apostrophe → escaped
-        $this->assertStringContainsString("Room\\'s Type", $twigOutput, 'Attribute label apostrophe should be backslash-escaped');
+        // attribute label with apostrophe → kept literal
+        $this->assertStringContainsString("Room's Type", $twigOutput, 'Attribute label apostrophe should be kept literal');
     }
 
     public function testResourcesCsvMultipleResources(): void

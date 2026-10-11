@@ -828,15 +828,20 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
              *
              * When privacy is enabled and the current user is not an admin, returns the
              * translated 'Private' string. Pass `ignorePrivacy=true` to bypass the check.
+             * Pass `csv=true` to escape the name for a double-quoted CSV field instead of HTML.
              */
             new TwigFunction(
                 'fullname',
-                function (string $first, string $last, bool $ignorePrivacy = false): string {
+                function (string $first, string $last, bool $ignorePrivacy = false, bool $csv = false): string {
                     $config = Configuration::Instance();
                     if (!$ignorePrivacy && $config->GetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, new BooleanConverter()) && !ServiceLocator::GetServer()->GetUserSession()->IsAdmin) {
-                        return $this->resources->GetString('Private');
+                        $private = $this->resources->GetString('Private');
+                        return $csv ? str_replace('"', '""', $private) : $private;
                     }
                     $fullName = new FullName($first, $last);
+                    if ($csv) {
+                        return str_replace('"', '""', $fullName->__toString());
+                    }
                     // Names are stored either HTML-encoded or raw, so do not encode existing entities
                     return htmlspecialchars($fullName->__toString(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
                 },
@@ -1250,6 +1255,13 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             new TwigFilter('escapequotes', static function (mixed $var): string {
                 $str = str_replace('\'', '&#39;', (string) $var);
                 return str_replace('"', '&quot;', $str);
+            }, ['is_safe' => ['html']]),
+
+            // Escapes a value for use inside a double-quoted CSV field (RFC 4180) by
+            // doubling embedded double quotes. The template supplies the enclosing quotes.
+            // Equivalent to SmartyPage::EscapeCsv; is_safe so autoescape leaves it alone.
+            new TwigFilter('escape_csv', static function (mixed $value): string {
+                return str_replace('"', '""', (string) $value);
             }, ['is_safe' => ['html']]),
 
             // Decodes HTML entities back to their UTF-8 characters.

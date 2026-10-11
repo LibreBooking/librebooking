@@ -36,7 +36,7 @@ class ScheduleDaysHorizontalTemplateTest extends TestBase
         $output = $this->render(daysWithPeriods: [self::FIRST_DAY, self::MIDDLE_DAY, self::LAST_DAY]);
 
         $this->assertTableRange(self::FIRST_DAY, self::LAST_DAY, $output);
-        $this->assertSame(3 * self::SLOTS_PER_DAY, substr_count($output, 'class="slot"'));
+        $this->assertSame(3 * self::SLOTS_PER_DAY, substr_count($output, 'class="unreservable slot"'));
     }
 
     public function testSkipsFirstDayWithoutPeriods(): void
@@ -44,7 +44,7 @@ class ScheduleDaysHorizontalTemplateTest extends TestBase
         $output = $this->render(daysWithPeriods: [self::MIDDLE_DAY, self::LAST_DAY]);
 
         $this->assertTableRange(self::MIDDLE_DAY, self::LAST_DAY, $output);
-        $this->assertSame(2 * self::SLOTS_PER_DAY, substr_count($output, 'class="slot"'));
+        $this->assertSame(2 * self::SLOTS_PER_DAY, substr_count($output, 'class="unreservable slot"'));
     }
 
     public function testSkipsLastDayWithoutPeriods(): void
@@ -52,7 +52,7 @@ class ScheduleDaysHorizontalTemplateTest extends TestBase
         $output = $this->render(daysWithPeriods: [self::FIRST_DAY, self::MIDDLE_DAY]);
 
         $this->assertTableRange(self::FIRST_DAY, self::MIDDLE_DAY, $output);
-        $this->assertSame(2 * self::SLOTS_PER_DAY, substr_count($output, 'class="slot"'));
+        $this->assertSame(2 * self::SLOTS_PER_DAY, substr_count($output, 'class="unreservable slot"'));
     }
 
     public function testSkipsFirstAndLastDaysWithoutPeriods(): void
@@ -83,10 +83,10 @@ class ScheduleDaysHorizontalTemplateTest extends TestBase
         );
 
         $slotFactory = $this->createStub(DisplaySlotFactory::class);
-        $slotFactory->method('GetFunction')->willReturn('displaySlotStub');
+        $slotFactory->method('GetFunction')->willReturn('displayUnreservable');
 
-        $page = new SmartyPage();
-        $page->setTemplateDir(array_merge([self::PARENT_TEMPLATE_DIR], $page->getTemplateDir()));
+        $page = new TwigRenderer();
+        $page->addTemplateDirectory(self::PARENT_TEMPLATE_DIR);
         $page->assign('BoundDates', array_map(
             fn (string $day): Date => Date::Parse($day, self::TIMEZONE),
             [self::FIRST_DAY, self::MIDDLE_DAY, self::LAST_DAY]
@@ -96,7 +96,7 @@ class ScheduleDaysHorizontalTemplateTest extends TestBase
         $page->assign('Resources', [new TestResourceDto()]);
         $page->assign('ScheduleId', 1);
 
-        return $page->fetch('Schedule/schedule-days-horizontal.tpl');
+        return $page->fetch('Schedule/schedule-days-horizontal.twig');
     }
 
     /**

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InstallEntryPointTest extends TestCase
 {
-    private const PAGE_MARKER = 'id="page-install"';
+    private const PAGE_MARKER_PATTERN = '/id=["\']page-install["\']/';
     private const PASSWORD_PROMPT = 'name="install_password"';
 
     public function setUp(): void
@@ -46,7 +46,7 @@ class InstallEntryPointTest extends TestCase
     private function assertInstallPasswordPromptShown(string $output): void
     {
         $this->assertStringNotContainsString('Fatal error', $output);
-        $this->assertStringContainsString(self::PAGE_MARKER, $output, 'The install page must render');
+        $this->assertMatchesRegularExpression(self::PAGE_MARKER_PATTERN, $output, 'The install page must render');
         $this->assertStringContainsString(self::PASSWORD_PROMPT, $output, 'The install password prompt must be shown');
     }
 

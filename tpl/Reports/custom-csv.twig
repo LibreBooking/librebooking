@@ -1,1 +1,19 @@
-{% for column in Definition.GetColumnHeaders() %}{% if ReportCsvColumnView.ShouldShowCol(column, loop.index0) %}"{% if column.HasTitle() %}{{ column.Title() }}{% else %}{{ translate(column.TitleKey()) }}{% endif %}",{% endif %}{% endfor %}{{ '\n' }}{% for row in Report.GetData().Rows() %}{% for data in Definition.GetRow(row) %}{% if ReportCsvColumnView.ShouldShowCell(loop.index0) %}"{{ data.Value()|escape }}",{% endif %}{% endfor %}{{ '\n' }}{% endfor %}
+{%- set header = [] -%}
+{%- for column in Definition.GetColumnHeaders() -%}
+    {%- if ReportCsvColumnView.ShouldShowCol(column, loop.index0) -%}
+        {%- set title = column.HasTitle() ? column.Title() : translate(column.TitleKey()) -%}
+        {%- set header = header|merge(['"' ~ (title|replace({'"': '""'})) ~ '"']) -%}
+    {%- endif -%}
+{%- endfor -%}
+{{- header|join(',')|raw -}}
+{{- '\n' -}}
+{%- for row in Report.GetData().Rows() -%}
+    {%- set cells = [] -%}
+    {%- for data in Definition.GetRow(row) -%}
+        {%- if ReportCsvColumnView.ShouldShowCell(loop.index0) -%}
+            {%- set cells = cells|merge(['"' ~ (data.Value()|replace({'"': '""'})) ~ '"']) -%}
+        {%- endif -%}
+    {%- endfor -%}
+    {{- cells|join(',')|raw -}}
+    {{- '\n' -}}
+{%- endfor -%}
