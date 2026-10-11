@@ -1,0 +1,52 @@
+预约详情:
+<br/>
+<br/>
+
+用户: {{ UserName|raw }}<br/>
+开始时间: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+结束时间: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    资源名称:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    资源名称: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+预约名称: {{ Title|escape_once }}<br/>
+预约说明: {{ Description|escape_once|nl2br }}
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    The following dates have been removed:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    自主添加的附件:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">登录到 CVC Rental</a>

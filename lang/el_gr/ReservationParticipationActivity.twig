@@ -1,0 +1,49 @@
+<p>Ο/Η {{ ParticipantDetails|raw }}
+    {% if (InvitationAction == constant('InvitationAction::Decline') or InvitationAction == constant('InvitationAction::CancelAll') or InvitationAction == constant('InvitationAction::CancelInstance')) %}
+        απέρριψε την πρόσκληση για την κράτησή σας.
+    {% elseif (InvitationAction == constant('InvitationAction::Join') or InvitationAction == constant('InvitationAction::JoinAll')) %}
+        έκανε εγγραφή στην κράτησή σας.
+    {% else %}
+        δέχτηκε την πρόσκληση για την κράτησή σας.
+    {% endif %}
+</p>
+<p><strong>Πληροφορίες κράτησης:</strong></p>
+
+<p>
+    <strong>Έναρξη:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Λήξη:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Τίτλος:</strong> {{ Title|escape_once }}<br/>
+    <strong>Περιγραφή:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+        <br/>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Πόροι ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Πόρος:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+<p><strong>Αριθμός αναφοράς:</strong> {{ ReferenceNumber|raw }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Δείτε την κράτηση</a> |
+    <a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>
+</p>

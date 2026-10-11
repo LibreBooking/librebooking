@@ -1,0 +1,25 @@
+<p>
+    Sua reserva encerrará em breve.
+</p>
+
+<p>
+    <strong>Detalhes da Reserva:</strong>
+</p>
+
+<p>
+    <strong>Início:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}
+    <br />
+    <strong>Fim:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}
+    <br />
+    <strong>Recurso:</strong> {{ ResourceName|escape_once }}
+    <br />
+    <strong>Título:</strong> {{ Title|escape_once }}
+    <br />
+    <strong>Descrição:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ver esta reserva</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Adicionar ao calendário</a> |
+    <a href="{{ ScriptUrl|raw }}">Acessar {{ AppTitle|raw }}</a>
+</p>

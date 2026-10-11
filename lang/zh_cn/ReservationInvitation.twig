@@ -1,0 +1,60 @@
+预约详情:
+<br/>
+<br/>
+
+开始时间: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+结束时间: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    资源名称:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    资源名称: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+预约标题: {{ Title|escape_once }}<br/>
+预约说明: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    The reservation occurs on the following dates:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    自主添加的附件:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    一个或多个资源在预约使用之前需要被批准，此预约在批准之前处于待定状态。
+{% endif %}
+
+<br/>
+待定? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">是</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">否</a>
+<br/>
+<br/>
+
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">查看此预约</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">添加到日历</a> |
+<a href="{{ ScriptUrl|raw }}">登录到 CVC Rental</a>

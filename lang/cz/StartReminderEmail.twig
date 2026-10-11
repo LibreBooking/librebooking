@@ -1,0 +1,14 @@
+Nezmeškejte svůj rezervovaný termín.<br/>
+Detaily rezervace:
+<br/>
+<br/>
+Začátek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+Zdroj: {{ ResourceName|escape_once }}<br/>
+Název: {{ Title|escape_once }}<br/>
+Popis: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Zobrazit tuto rezervaci v systému</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Přidat do Outlook</a> |
+<a href="{{ ScriptUrl|raw }}">Přihlásit se do rezervačního systému</a>

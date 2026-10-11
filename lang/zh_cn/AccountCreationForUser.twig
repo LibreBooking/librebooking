@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>在{{ AppTitle|raw }}上有一个账户已为您建立，以下是该账户信息：<br/>
+邮箱: {{ EmailAddress|raw }}<br/>
+姓名: {{ FullName|raw }}<br/>
+电话: {{ Phone|raw }}<br/>
+单位: {{ Organization|raw }}<br/>
+职位: {{ Position|raw }}<br/>
+密码: {{ Password }}</p>
+{% if CreatedBy %}
+    创建者: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">登录到{{ AppTitle|raw }}</a>

@@ -1,0 +1,63 @@
+    Varauksen tiedot:
+    <br/>
+    <br/>
+
+    Alkaa: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Päättyy: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+
+    {% if Resources|default([])|length > 1 %}
+        <strong>Resurssit ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>Resurssi:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Kalenteri:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>Resurssin tunnus:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Sijainti:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Yhteystieto:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Kuvaus:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Huomautukset:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Resurssin ylläpitäjä:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Resurssin tiedot:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+
+    Otsikko: {{ Title|escape_once }}<br/>
+    Kuvaus: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Varaus toistuu seuraavina päivinä:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Yksi tai useampi varattu resurssi vaatii hyväksynnän ennen käyttöä.  Ole hyvä ja varmista, hyväksytäänkö vai hylätäänkö tämä varauspyyntö.
+    {% endif %}
+
+    <br/>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Näytä varaus</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Lisää kalenteriisi</a> |
+    <a href="{{ ScriptUrl|raw }}">Kirjaudu sovellukseen LibreBooking</a>

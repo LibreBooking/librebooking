@@ -1,0 +1,14 @@
+<p>Kære {{ FullName|raw }},</p>
+
+<p>Der er oprettet en konto for dig i {{ AppTitle|raw }} med disse informationer:<br/>
+E-mail: {{ EmailAddress|raw }}<br/>
+Navn: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Organisation: {{ Organization|raw }}<br/>
+Adresse: {{ Position|raw }}<br/>
+Adgangskode: {{ Password }}</p>
+{% if CreatedBy %}
+    Oprettet af: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

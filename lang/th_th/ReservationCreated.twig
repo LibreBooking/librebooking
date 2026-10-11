@@ -1,0 +1,105 @@
+รายละเอียดการจอง:
+<br/>
+<br/>
+
+เริ่มต้น: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+สิ้นสุด: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+<p>
+    {% if Resources|default([])|length > 1 %}
+        <strong>ทรัพยากร ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>ทรัพยากร:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>ตารางเวลา:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>รหัสทรัพยากร:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>สถานที่:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>ผู้ติดต่อ:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>คำอธิบาย:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>หมายเหตุ:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>ผู้ดูแลทรัพยากร:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>รายละเอียดทรัพยากร:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+
+ชื่อเรื่อง: {{ Title|escape_once }}<br/>
+รายละเอียด: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    การจองจะเกิดขึ้นในวันที่ดังต่อไปนี้:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    อุปกรณ์เสริม:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+        <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    ทรัพยากรที่สงวนไว้อย่างน้อยหนึ่งรายการต้องได้รับอนุมัติก่อนการใช้งาน การจองนี้จะอยู่ระหว่างการพิจารณาจนกว่าจะได้รับการอนุมัติ
+{% endif %}
+
+{% if CheckInEnabled %}
+    <br/>
+    ทรัพยากรที่สงวนไว้อย่างน้อยหนึ่งรายการกำหนดให้คุณต้องเช็คอินและเช็คเอาท์การจองของคุณ
+    {% if AutoReleaseMinutes is not null %}
+        การจองนี้จะถูกยกเลิกเว้นแต่คุณจะเช็คอินภายใน {{ AutoReleaseMinutes|raw }} นาทีหลังจากเวลาเริ่มต้นที่กำหนดไว้
+    {% endif %}
+{% endif %}
+
+{% if ApprovedBy %}
+    <br/>
+    อนุญาตโดย: {{ ApprovedBy|raw }}
+{% endif %}
+
+{% if CreatedBy %}
+    <br/>
+    สร้างโดย: {{ CreatedBy|raw }}
+{% endif %}
+
+<br/>
+หมายเลขอ้างอิง: {{ ReferenceNumber|raw }}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">ดูการจองนี้</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">เพิ่มลงในปฏิทิน</a> |
+<a href="{{ ScriptUrl|raw }}">เข้าสู่ระบบ LibreBooking</a>

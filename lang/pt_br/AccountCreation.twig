@@ -1,0 +1,22 @@
+<p>
+    {{ To|raw }},
+    <br />
+</p>
+
+<p>
+    Um novo usuário registou-se com as seguintes informações:
+    <br />
+    E-mail: {{ EmailAddress|raw }}
+    <br />
+    Nome: {{ FullName|raw }}
+    <br />
+    Telefone: {{ Phone|raw }}
+    <br />
+    Organização: {{ Organization|raw }}
+    <br />
+    Posição: {{ Position|raw }}
+    {% if CreatedBy %}
+        <br />
+        Criada por: {{ CreatedBy|raw }}
+    {% endif %}
+</p>

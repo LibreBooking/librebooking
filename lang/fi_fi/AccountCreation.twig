@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>uusi käyttäjä on rekisteröitynyt seuraavilla tiedoilla:<br/>
+Sähköposti: {{ EmailAddress|raw }}<br/>
+Nimi: {{ FullName|raw }}<br/>
+Puhelin: {{ Phone|raw }}<br/>
+Organisaatio: {{ Organization|raw }}<br/>
+Rooli: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    Luonut: {{ CreatedBy|raw }}
+{% endif %}

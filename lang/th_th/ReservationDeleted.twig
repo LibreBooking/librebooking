@@ -1,0 +1,52 @@
+รายละเอียดการจอง:
+<br/>
+<br/>
+
+ชื่อผู้ใช้: {{ UserName|raw }}<br/>
+เริ่มต้น: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+สิ้นสุด: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    ทรัพยากร:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    ทรัพยากร: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+ชื่อ: {{ Title|escape_once }}<br/>
+รายละเอียด: {{ Description|escape_once|nl2br }}
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    วันที่ต่อไปนี้ถูกลบออกแล้ว:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    อุปกรร์เสริม:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">เข้าสู่ระบบ LibreBooking</a>

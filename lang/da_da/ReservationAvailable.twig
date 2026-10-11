@@ -1,0 +1,6 @@
+Kære {{ FirstName|raw }},<br/>
+{{ ResourceName|escape_once }} er nu ledig mellem {{ formatdate(date: StartDate, key: 'res_popup') }} og {{ formatdate(date: EndDate, key: 'res_popup') }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reserver nu</a> |
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

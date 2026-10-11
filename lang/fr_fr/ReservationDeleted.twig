@@ -1,0 +1,43 @@
+Détails de la réservation :
+<br/>
+<br/>
+
+Début: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Fin: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Ressources:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Ressource: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+Libellé: {{ Title|escape_once }}<br/>
+Description: {{ Description|escape_once|nl2br }}<br/>
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Les dates suivantes ont été effacées:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Accessoires:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Connexion à LibreBooking</a>

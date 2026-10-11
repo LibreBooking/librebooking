@@ -1,0 +1,52 @@
+    Reserverings Details:
+    <br/>
+    <br/>
+
+    Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Eindigd: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Bronnen:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Bron: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Titel: {{ Title|escape_once }}<br/>
+    Beschrijving: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        De reservering zal zijn op de volgende data:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Benodigdheden:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        E�n of meerdere bronnen die gereserveerd zijn hebben goedkeuring nodig voor gebruik. Deze reservering wordt in behandeling genomen totdat hij is goedgekeurd.
+    {% endif %}
+
+    <br/>
+    Ben je aanwezig? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ja</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Nee</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Bekijk deze reservering</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Voeg toe aan agenda</a> |
+    <a href="{{ ScriptUrl|raw }}">Login in LibreBooking</a>

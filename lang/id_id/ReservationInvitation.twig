@@ -1,0 +1,51 @@
+    Rincian Reservasi:
+    <br/>
+    <br/>
+
+    Mulai: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Akhir: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Resource:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Resource: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Judul: {{ Title|escape_once }}<br/>
+    Penjelasan: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Reservasi diulang sampai tanggal:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Aksesoris:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Satu atau resource lain yang direservasi membutuhkan persetujuan sebelum digunakan. Reservasi ini akan ditunda sampai disetujui.
+    {% endif %}
+
+    <br/>
+    Datang? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ya</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Tidak</a>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Lihat reservasi ini</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Tambah ke kalender</a> |
+    <a href="{{ ScriptUrl|raw }}">Masuk LibreBooking</a>

@@ -1,0 +1,13 @@
+Sinu broneering lõpeb varsti.<br/>
+Broneeringu detailid:
+    <br/>
+    <br/>
+    Algus: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Lõpp: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Väljak: {{ ResourceName|escape_once }}<br/>
+    Pealkiri: {{ Title|escape_once }}<br/>
+    Kirjeldus: {{ Description|escape_once|nl2br }}
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Vaata seda broneeringut</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Lisa kalendrisse</a> |
+<a href="{{ ScriptUrl|raw }}">Logi sisse broneeringu kalendrisse</a>

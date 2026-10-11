@@ -1,0 +1,57 @@
+<p>
+    {{ ParticipantDetails|raw }}
+    {% if (InvitationAction == constant('InvitationAction::Decline') or InvitationAction == constant('InvitationAction::CancelAll') or InvitationAction == constant('InvitationAction::CancelInstance')) %}
+        declinou o seu convite de participação na reserva.
+    {% elseif (InvitationAction == constant('InvitationAction::Join') or InvitationAction == constant('InvitationAction::JoinAll')) %}
+        aceitou o seu convite.
+    {% else %}
+        aceitou o seu convite de participação na reserva.
+    {% endif %}
+</p>
+
+<p>
+    <strong>Detalhes da Reserva:</strong>
+</p>
+
+<p>
+    <strong>Início:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}
+    <br />
+    <strong>Fim:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}
+    <br />
+    <strong>Título:</strong> {{ Title|escape_once }}
+    <br />
+    <strong>Descrição:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+        {% for attribute in Attributes %}
+            <br />
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Resources ({{ ResourceNames|default([])|length }}):</strong>
+        {% for resourceName in ResourceNames %}
+            <br />
+            {{ resourceName|escape_once }}
+        {% endfor %}
+    {% else %}
+        <strong>Resource:</strong> {{ ResourceName|escape_once }}
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image">
+            <img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}" />
+    </div>
+{% endif %}
+
+<p>
+    <strong>Número de Referência:</strong> {{ ReferenceNumber|raw }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ver esta reserva</a> |
+    <a href="{{ ScriptUrl|raw }}">Acessar o {{ AppTitle|raw }}</a>
+</p>
