@@ -271,3 +271,16 @@ function fallbackCopyToClipboard(url) {
   }
   return succeeded;
 }
+
+// Names are stored entity-encoded (e.g. &#039;); jqTree escapes again, so decode once to plain text.
+// eslint-disable-next-line no-unused-vars -- Used by page scripts loaded separately.
+function decodeNames(nodes) {
+  return _.map(nodes, function (n) {
+    const copy = _.extend({}, n);
+    _.each(['name', 'label'], function (k) {
+      if (typeof copy[k] === 'string') copy[k] = HtmlDecode(copy[k]);
+    });
+    if (n.children) copy.children = decodeNames(n.children);
+    return copy;
+  });
+}
