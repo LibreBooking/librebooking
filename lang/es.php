@@ -833,6 +833,7 @@ class es extends en_gb
         $strings['CustomAttributeInvalid'] = 'El valor proporcionado para %s no es válido.';
         $strings['AttachmentLoadingError'] = 'Lo siento, hubo un problema con el fichero solicitado.';
         $strings['InvalidAttachmentExtension'] = 'Solamente puedes subir ficheros de tipo: %s';
+        $strings['AttachmentUploadFailed'] = 'No se pudo subir el archivo %s. El tamaño máximo de subida es %s MB.';
         $strings['InvalidStartSlot'] = 'La fecha y hora de comienzo solicitada no es válida.';
         $strings['InvalidEndSlot'] = 'La fecha y hora de finalización solicitada no es válido.';
         $strings['MaxParticipantsError'] = '%s puede soportar %s participantes solamente.';

@@ -410,6 +410,7 @@ class pt_pt extends en_gb
         $strings['InstalledVersion'] = 'Esta agora a correr a versão %s do LibreBooking';
         $strings['InsufficientPermissionsError'] = 'Não tem permissão para aceder a este recurso';
         $strings['InvalidAttachmentExtension'] = 'Só pode fazer upload de arquivos do tipo: %s';
+        $strings['AttachmentUploadFailed'] = 'Não foi possível carregar o ficheiro %s. O tamanho máximo de carregamento é %s MB.';
         $strings['InvalidEmailDomain'] = 'O endereço de email não é de um domínio permitido';
         $strings['InvalidEndReminderTime'] = 'O horário final do lembrete não é válido.';
         $strings['InvalidEndSlot'] = 'A data e hora final solicitadas não são válidas.';
