@@ -3,7 +3,7 @@ name: Deploy to FTP
 on:
   push:
     branches:
-      - main # lub master, w zależności od domyślnej gałęzi
+      - development # lub master, w zależności od domyślnej gałęzi
 
 jobs:
   web-deploy:
