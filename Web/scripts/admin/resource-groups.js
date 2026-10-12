@@ -49,7 +49,7 @@ function ResourceGroupManagement(opts) {
 
   function wireUpTree(groups) {
     elements.groupDiv.tree({
-      data: groups,
+      data: decodeNames(groups),
       saveState: false,
       dragAndDrop: true,
       selectable: false,
@@ -234,7 +234,7 @@ function ResourceGroupManagement(opts) {
   function onGroupAdded(data) {
     var parentNode = null;
 
-    data = JSON.parse(data);
+    data = decodeNames([JSON.parse(data)])[0];
     if (data.parent_id && data.parent_id != null && data.parent_id != '') {
       parentNode = elements.groupDiv.tree('getNodeById', data.parent_id);
     }
