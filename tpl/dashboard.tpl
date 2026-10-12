@@ -42,3 +42,45 @@
 	</div>
 </div>
 {include file='globalfooter.tpl'}
+
+<script>
+$(document).ready(function() {
+    $('#dashboardList > div').each(function() {
+        var headerText = $(this).find('.accordion-button').text().trim();
+        var $target = $(this).find('[id="upcomingReservationsDashboard"]');
+
+        var keywords = ['grupy', 'zatwierdzenie', 'wymeldowania'];
+
+        if (keywords.some(keyword => headerText.includes(keyword))) {
+            $target.hide();
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    // 1. Poprawa zduplikowanych ID kontenerów głównych
+    $('#dashboardList > div').each(function() {
+        var headerText = $(this).find('.accordion-button').text().trim();
+        var $target = $(this).find('[id="upcomingReservationsDashboard"]');
+
+        if ($target.length) {
+            if (headerText.includes('Wcześniejsze rezerwacje')) {
+                 $target.attr('id', 'pastReservationsDashboard');
+            } else if (headerText.includes('Zbliżające się rezerwacje') && !headerText.includes('grupy')) {
+                 $target.attr('id', 'futureReservationsDashboard');
+            } else if (headerText.includes('grupy')) {
+                 $target.attr('id', 'groupReservationsDashboard');
+            } else if (headerText.includes('oczekujące')) {
+                 $target.attr('id', 'pendingReservationsDashboard');
+            } else if (headerText.includes('wymeldowania')) {
+                 $target.attr('id', 'missingCheckoutDashboard');
+            }
+        }
+    });
+
+    // 2. Kompleksowe zamknięcie wszystkich sekcji akordeonu (w tym #dashboardContents)
+    $('#dashboardList .accordion-collapse').removeClass('show');
+    $('#dashboardList .accordion-button').addClass('collapsed').attr('aria-expanded', 'false');
+});
+</script>

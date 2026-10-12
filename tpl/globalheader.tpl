@@ -351,7 +351,7 @@
                             </li>
                         {/if}
                         {if isset($CanViewAdmin) && $CanViewAdmin}
-                            <li class="nav-item dropdown" id="navHelpDropdown">
+                            <li class="nav-item dropdown" id="navSettingsDropdown">
                                 <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                     data-bs-toggle="dropdown">
                                     <span class="visually-hidden">Configuration</span>

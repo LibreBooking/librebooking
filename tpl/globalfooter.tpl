@@ -73,3 +73,23 @@
 	</body>
 
 </html>
+
+<script>
+document.addEventListener('change', function (e) {
+    if (e.target && e.target.id === 'beginTime') {
+        var endInput = document.getElementById('endTime');
+        if (endInput) {
+            var parts = e.target.value.split(':');
+            if (parts.length === 2) {
+                var d = new Date();
+                d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10) + 30); // Dodaj 30 min
+                var h = ('0' + d.getHours()).slice(-2);
+                var m = ('0' + d.getMinutes()).slice(-2);
+                endInput.value = h + ':' + m;
+                endInput.dispatchEvent(new Event('input', { bubbles: true }));
+                endInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+    }
+});
+</script>
