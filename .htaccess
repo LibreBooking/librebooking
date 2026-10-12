@@ -1,15 +1,6 @@
 RewriteEngine On
-# Set RewriteBase if your physical path is different from the URL. For example, if using an alias
 
-# Uncomment the following two lines to force HTTPS
-#RewriteCond %{HTTPS} off
-#RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Redirect requests that are not already under /Web to /Web.
-RewriteCond %{REQUEST_URI} !^/Web(/|$)
-RewriteRule ^(.*)$ /Web/$1 [R=301,L]
-
-#Header Set Access-Control-Allow-Origin "*"
-#Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
-#Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
-#php_value max_input_vars 10000
+# Do not redirect the read-only availability endpoint or its config/cache siblings.
+RewriteCond %{REQUEST_URI} !^/rezerwacje/Web(/|$)
+RewriteCond %{REQUEST_URI} !^/rezerwacje/availability\.
+RewriteRule ^(.*)$ /rezerwacje/Web/$1 [R=301,L]
