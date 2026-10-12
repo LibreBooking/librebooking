@@ -25,7 +25,7 @@
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.12.0",
     "prettier": "^3.9.8",
-    "stylelint": "^17.15.0",
-    "stylelint-config-standard": "^40.0.0"
+    "stylelint": "^7.7.0",
+    "stylelint-config-standard": "^15.0.1"
   }
 }
