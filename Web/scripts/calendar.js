@@ -394,7 +394,7 @@ function Calendar(opts) {
 
     var groupDiv = $('#resourceGroups');
     groupDiv.tree({
-      data: resourceGroups,
+      data: decodeNames(resourceGroups),
       saveState: 'resourceCalendar',
 
       onCreateLi: function (node, $li) {
