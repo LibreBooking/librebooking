@@ -13,15 +13,19 @@ interface IScheduleUserRepository
 
 class ScheduleUserRepository implements IScheduleUserRepository
 {
+    public function __construct(private readonly bool $includeAdminPermissions = true)
+    {
+    }
+
     public function GetUser($userId)
     {
         $userPermissions = $this->GetUserPermissions($userId);
         return new ScheduleUser(
-            $userId,
-            $userPermissions['full'],
-            $userPermissions['view'],
-            $this->GetGroupPermissions($userId),
-            $this->GetGroupAdminPermissions($userId)
+            userId: $userId,
+            userPermissionsFull: $userPermissions['full'],
+            userPermissionsView: $userPermissions['view'],
+            groupPermissions: $this->GetGroupPermissions($userId),
+            groupAdminPermissions: $this->includeAdminPermissions ? $this->GetGroupAdminPermissions($userId) : []
         );
     }
 

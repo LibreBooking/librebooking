@@ -302,7 +302,8 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertEquals(true, $this->page->_ReservationCreatedSuccessfully);
         $this->assertEquals($resource, $this->reservationCreateHandler->_LastSeries->Resource());
         $this->assertEquals($userAccount->UserId, $this->reservationCreateHandler->_LastSeries->UserId());
-        $this->assertEquals($userAccount, $this->reservationCreateHandler->_LastSeries->BookedBy());
+        $this->assertNotSame($userAccount, $this->reservationCreateHandler->_LastSeries->BookedBy());
+        $this->assertEquals($userAccount->WithoutAdminPrivileges(), $this->reservationCreateHandler->_LastSeries->BookedBy());
         $this->assertEquals($begin, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->StartDate());
         $this->assertEquals($end, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->EndDate());
     }
@@ -379,6 +380,89 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertFalse($registration->_RegisterCalled);
         $this->assertNull($userRepository->_UpdatedUser);
         $this->assertNull($userRepository->_LoginDataUpdatedUser);
+    }
+
+    public function testKioskPassesRestrictedCopyToRealHandlerWithoutChangingBrowserSession(): void
+    {
+        $source = new FakeUserSession(true);
+        $source->IsGroupAdmin = true;
+        $source->IsResourceAdmin = true;
+        $source->IsScheduleAdmin = true;
+        $source->Groups = [42];
+        $source->AdminGroups = [42];
+        $before = clone $source;
+        $this->fakeServer->UserSession = $source;
+        $this->guestUserService->_UserSession = $source;
+        Date::_SetNow(Date::Parse('2026-10-11 08:00', 'UTC'));
+        $this->page->_Username = $source->Email;
+        $this->page->_BeginTime = '10:00';
+        $this->page->_EndTime = '11:00';
+        $this->page->_BeginDate = '2026-10-11';
+        $this->page->_Timezone = 'UTC';
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->useRealHandlerExpectingRestrictedSession($source);
+
+        $this->presenter->Reserve();
+
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertSame(['NoResourcePermission'], $this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationRepository->_LastAddedReservation);
+        $this->assertSame($source, $this->fakeServer->UserSession);
+        $this->assertEquals($before, $source);
+    }
+
+    public function testNewGuestProviderSessionIsRestrictedBeforeBooking(): void
+    {
+        $source = new FakeUserSession(true);
+        $source->IsGroupAdmin = true;
+        $source->IsResourceAdmin = true;
+        $source->IsScheduleAdmin = true;
+        $before = clone $source;
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->once())->method('Login')->willReturn($source);
+        $users = new FakeUserRepository();
+        $users->_User = User::Null();
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($source->Email, $authentication, $users, $registration);
+        $presenter->reservationCreateHandler = null;
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_GUEST_RESERVATIONS, true);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
+        $this->useRealHandlerExpectingRestrictedSession($source);
+
+        $presenter->ProcessAction();
+
+        $this->assertTrue($registration->_RegisterCalled);
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertSame(['NoResourcePermission'], $this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationRepository->_LastAddedReservation);
+        $this->assertEquals($before, $source);
+    }
+
+    private function useRealHandlerExpectingRestrictedSession(UserSession $source): void
+    {
+        $factory = $this->createMock(IPreReservationFactory::class);
+        $factory->expects($this->once())->method('CreatePreAddService')
+            ->willReturnCallback(function (UserSession $session) use ($source) {
+                $this->assertNotSame($source, $session);
+                $this->assertSame($source->UserId, $session->UserId);
+                $this->assertSame($source->Groups, $session->Groups);
+                $this->assertSame($source->Email, $session->Email);
+                $this->assertSame($source->Timezone, $session->Timezone);
+                $this->assertSame($source->LanguageCode, $session->LanguageCode);
+                $this->assertFalse($session->IsAdmin);
+                $this->assertFalse($session->IsGroupAdmin);
+                $this->assertFalse($session->IsResourceAdmin);
+                $this->assertFalse($session->IsScheduleAdmin);
+                $this->assertFalse($session->AllowAdminPrivileges);
+                $this->assertSame([], $session->AdminGroups);
+                return (new PreReservationFactory())->CreatePreAddService($session);
+            });
+        $this->fakePluginManager->preResPlugin = $factory;
+        $notifications = $this->createMock(IPostReservationFactory::class);
+        $notifications->method('CreatePostAddService')->willReturn(new NullReservationNotificationService());
+        $this->fakePluginManager->postResPlugin = $notifications;
     }
 
     public function testWhenTheRegisteredAccountCheckFailsNothingIsReservedAndNoAccountIsTouched()

@@ -45,7 +45,7 @@ class ResourceDisplayPresenter extends ActionPresenter
     private $guestUserService;
 
     /**
-     * @var IReservationHandler
+     * @var IReservationHandler|null
      */
     public $reservationCreateHandler;
 
@@ -284,6 +284,10 @@ class ResourceDisplayPresenter extends ActionPresenter
             $this->page->SetReservationSaveResults(false, $resultCollector);
             return;
         }
+
+        // An email identifies the owner; it does not authenticate their admin privileges.
+        // Restrict both existing accounts and sessions returned after guest registration.
+        $userSession = $userSession->WithoutAdminPrivileges();
 
         $series = ReservationSeries::Create($userSession->UserId, $resource, Resources::GetInstance()->GetString('AdHocMeeting'), Resources::GetInstance()->GetString('AdHocMeeting'), $date, new RepeatNone(), $userSession);
 
