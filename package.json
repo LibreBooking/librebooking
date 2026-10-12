@@ -15,7 +15,10 @@
     "fix:js": "eslint --fix Web/scripts/",
     "fix:css": "stylelint --fix 'Web/css/**/*.css'",
     "fix:format": "prettier --write 'Web/scripts/**/*.js' 'Web/css/**/*.css'",
-    "fix:frontend": "npm run fix:format && npm run fix:js && npm run fix:css"
+    "fix:frontend": "npm run fix:format && npm run fix:js && npm run fix:css",
+    "test:e2e:docker": "docker compose -p lb-e2e-run -f tests/e2e/docker/docker-compose.yml down -v --remove-orphans && docker compose -p lb-e2e-run -f tests/e2e/docker/docker-compose.yml run --rm --build playwright; s=$?; docker compose -p lb-e2e-run -f tests/e2e/docker/docker-compose.yml down -v --remove-orphans; exit $s",
+    "test:e2e:up": "docker compose -f tests/e2e/docker/docker-compose.yml down -v --remove-orphans && docker compose -f tests/e2e/docker/docker-compose.yml -f tests/e2e/docker/docker-compose.host.yml up -d --build web",
+    "test:e2e:down": "docker compose -f tests/e2e/docker/docker-compose.yml down -v --remove-orphans && docker compose -p lb-e2e-run -f tests/e2e/docker/docker-compose.yml down -v --remove-orphans"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
