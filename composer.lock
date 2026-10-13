@@ -4013,16 +4013,16 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v5.8.4",
+            "version": "v5.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "94a27cbbc7820198d7adc17a2be8d457fb267753"
+                "reference": "0ae663525dcbc9e996feb2a867e43bc85f960938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/94a27cbbc7820198d7adc17a2be8d457fb267753",
-                "reference": "94a27cbbc7820198d7adc17a2be8d457fb267753",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/0ae663525dcbc9e996feb2a867e43bc85f960938",
+                "reference": "0ae663525dcbc9e996feb2a867e43bc85f960938",
                 "shasum": ""
             },
             "require": {
@@ -4077,7 +4077,7 @@
             "support": {
                 "forum": "https://github.com/smarty-php/smarty/discussions",
                 "issues": "https://github.com/smarty-php/smarty/issues",
-                "source": "https://github.com/smarty-php/smarty/tree/v5.8.4"
+                "source": "https://github.com/smarty-php/smarty/tree/v5.8.5"
             },
             "funding": [
                 {
@@ -4085,7 +4085,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-29T10:46:32+00:00"
+            "time": "2026-10-04T21:31:42+00:00"
         },
         {
             "name": "stduritemplate/stduritemplate",
