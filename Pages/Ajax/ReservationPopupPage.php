@@ -403,7 +403,7 @@ class ReservationPopupPresenter
         $user = $this->_userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
         $owner = $this->_userRepository->LoadById($reservation->OwnerId);
 
-        $this->UserResourcePermissions(ServiceLocator::GetServer()->GetUserSession()->UserId);
+        $this->UserResourcePermissions(ServiceLocator::GetServer()->GetUserSession()->UserId, $reservation);
         $this->_page->SetCurrentUserParticipating($this->IsCurrentUserParticipating(ServiceLocator::GetServer()->GetUserSession()->UserId));
         $this->_page->SetCurrentUserInvited($this->IsCurrentUserInvited(ServiceLocator::GetServer()->GetUserSession()->UserId));
 
@@ -426,9 +426,18 @@ class ReservationPopupPresenter
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
      * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * Public (not logged-in) users have no permission rows, so when public details are enabled
+     * they may see the resources of the reservation they opened.
      */
-    private function UserResourcePermissions($userId)
+    private function UserResourcePermissions($userId, $reservation)
     {
+        if (ReservationDetailsFilter::CanPublicViewDetails()) {
+            $this->_page->BindViewableResourceReservations(
+                array_map(fn ($resource) => $resource->GetResourceId(), $reservation->Resources)
+            );
+            return;
+        }
+
         $resourceRepo = new ResourceRepository();
         $resourceIds = [];
 
