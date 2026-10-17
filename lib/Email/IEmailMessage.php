@@ -46,7 +46,7 @@ interface IEmailMessage
      * @abstract
      * @param string $contents
      * @param string $fileName
-     * @param string|null $mimeType Full Content-Type value (e.g. 'text/calendar; method=REQUEST'). Null auto-detects from $fileName.
+     * @param string|null $mimeType Full Content-Type value (e.g. 'text/calendar; method=PUBLISH'). Null auto-detects from $fileName.
      */
     public function AddStringAttachment($contents, $fileName, ?string $mimeType = null);
 
