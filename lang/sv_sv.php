@@ -201,7 +201,7 @@ class sv_sv extends en_gb
         $strings['AddUser'] = 'Lägg till användare';
         $strings['Schedule'] = 'Schema';
         $strings['AddResource'] = 'Lägg till resurs'; // tjänst --> resurs
-        $strings['Capacity'] = 'Kapasitet';
+        $strings['Capacity'] = 'Kapacitet';
         $strings['Access'] = 'Tillträde';
         $strings['Duration'] = 'Längd';
         $strings['Active'] = 'Aktiv';
