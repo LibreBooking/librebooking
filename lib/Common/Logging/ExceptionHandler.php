@@ -26,6 +26,9 @@ abstract class ExceptionHandler
 
 class WebExceptionHandler extends ExceptionHandler
 {
+    private const ANSI_BOLD_RED = '1;31';
+    private const ANSI_DIM = '2';
+
     /**
      * @var callable
      */
@@ -38,10 +41,7 @@ class WebExceptionHandler extends ExceptionHandler
 
     public function HandleException($exception)
     {
-        error_log('Error: ' . $exception);
-        ob_start();
-        debug_print_backtrace();
-        error_log(ob_get_clean());
+        $this->WriteToStderr($exception);
 
         // Uncaught exceptions indicate a server-side failure.
         // Set 500 only while headers are still mutable.
@@ -60,6 +60,84 @@ class WebExceptionHandler extends ExceptionHandler
         }
 
         call_user_func($this->callback, $errorMessageId);
+    }
+
+    /**
+     * Written directly to stderr (not error_log()) so the trace keeps real
+     * newlines instead of Apache stamping its prefix on every line. Colors are
+     * only used when stderr is a terminal. Never throws.
+     */
+    private function WriteToStderr($exception): void
+    {
+        $stderr = false;
+        try {
+            $stderr = $this->OpenStderr();
+            $color = $stderr !== false && function_exists('stream_isatty') && stream_isatty($stderr);
+            $text = self::FormatException($exception, $color);
+            $written = $stderr === false ? false : fwrite($stderr, $text);
+            if ($written !== strlen($text)) {
+                // stderr unavailable or short write: plain text, never ANSI, to the PHP error log
+                error_log($color ? self::FormatException($exception) : $text);
+            }
+        } catch (Throwable $ignored) {
+            // logging must never prevent the error page from rendering
+            try {
+                error_log((string) $exception);
+            } catch (Throwable $alsoIgnored) {
+            }
+        } finally {
+            if (is_resource($stderr)) {
+                fclose($stderr);
+            }
+        }
+    }
+
+    /**
+     * @return resource|false
+     */
+    protected function OpenStderr()
+    {
+        return fopen('php://stderr', 'ab');
+    }
+
+    /**
+     * Formats an exception and its previous-exception chain for stderr.
+     * Control characters in messages are escaped so they cannot forge log
+     * lines or inject terminal escape sequences.
+     *
+     * @param Throwable $exception
+     * @param bool $color
+     * @return string
+     */
+    public static function FormatException($exception, $color = false): string
+    {
+        $style = static fn (string $code, string $text): string => $color ? "\033[{$code}m{$text}\033[0m" : $text;
+        // C0 controls except tab, DEL, C1 controls (U+0080-U+009F) and U+2028/U+2029, matched bytewise
+        // so invalid UTF-8 in a message cannot make the match fail.
+        $clean = static fn (string $text): string => preg_replace_callback(
+            '/[\x00-\x08\x0A-\x1F\x7F]|\xC2[\x80-\x9F]|\xE2\x80[\xA8\xA9]/',
+            static fn (array $m): string => $m[0] === "\n"
+                ? "\n    "
+                : implode('', array_map(static fn (string $b): string => sprintf('\\x%02X', ord($b)), str_split($m[0]))),
+            $text
+        ) ?? '[unprintable]';
+
+        $out = '';
+        for ($e = $exception, $label = 'Uncaught exception'; $e !== null; $e = $e->getPrevious(), $label = 'Caused by') {
+            $out .= $style(self::ANSI_BOLD_RED, sprintf(
+                '%s: %s: %s in %s:%d',
+                $label,
+                $clean(get_class($e)),
+                $clean($e->getMessage()),
+                $clean($e->getFile()),
+                $e->getLine()
+            )) . "\n";
+            foreach (explode("\n", $e->getTraceAsString()) as $line) {
+                $out .= $style(self::ANSI_DIM, ' => ' . $clean($line)) . "\n";
+            }
+        }
+
+        return $out;
     }
 }
 
