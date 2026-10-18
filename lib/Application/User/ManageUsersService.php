@@ -134,7 +134,7 @@ class ManageUsersService implements IManageUsersService
         $extraAttributes,
         $customAttributes
     ) {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may create accounts
             Log::Error('AddUser denied. UserId=%s is not an application administrator', $currentUser->UserId);
@@ -159,7 +159,7 @@ class ManageUsersService implements IManageUsersService
 
     public function ChangeAttribute($userId, $attributeValue)
     {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change user attributes
             Log::Error('ChangeAttribute denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
@@ -173,7 +173,7 @@ class ManageUsersService implements IManageUsersService
 
     public function ChangeAttributes($userId, $attributes)
     {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change user attributes
             Log::Error('ChangeAttributes denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
@@ -189,7 +189,7 @@ class ManageUsersService implements IManageUsersService
 
     public function DeleteUser($userId, $notify = true)
     {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may delete accounts
             Log::Error('DeleteUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
@@ -220,7 +220,7 @@ class ManageUsersService implements IManageUsersService
 
     public function UpdateUser($userId, $username, $email, $firstName, $lastName, $timezone, $extraAttributes, $customAttributes)
     {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may update accounts
             Log::Error('UpdateUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
@@ -279,7 +279,7 @@ class ManageUsersService implements IManageUsersService
 
     public function UpdatePassword($userId, $password)
     {
-        $currentUser = ServiceLocator::GetServer()->GetUserSession();
+        $currentUser = $this->CurrentUser();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change passwords
             Log::Error('UpdatePassword denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
@@ -298,5 +298,14 @@ class ManageUsersService implements IManageUsersService
     public function LoadUser($email)
     {
         return $this->userRepository->LoadByUsername($email);
+    }
+
+    /**
+     * The acting user: the API session in a web service request (ServiceLocator::GetServer() holds only the browser
+     * session, which an API request does not have), else the browser session.
+     */
+    private function CurrentUser(): UserSession
+    {
+        return ServiceLocator::GetUserSession() ?? new NullUserSession();
     }
 }
