@@ -217,3 +217,64 @@ function decodeNames(nodes) {
     return copy;
   });
 }
+
+/**
+ * Gets an existing Bootstrap Collapse instance or creates a new one.
+ *
+ * @param {HTMLElement} element The Collapse element.
+ * @returns {bootstrap.Collapse|null} The Collapse instance or null.
+ */
+window.getCollapseInstance = (element) => {
+  if (!element) {
+    return null;
+  }
+
+  return bootstrap.Collapse.getOrCreateInstance(element, {
+    toggle: false,
+  });
+};
+
+const collapseSyncGetters = new WeakMap();
+
+/**
+ * Synchronizes a Bootstrap Collapse element with its desired state.
+ *
+ * @param {HTMLElement} element The Collapse element.
+ * @param {Function} getShouldShow Returns whether the element should be shown.
+ */
+window.syncCollapse = (element, getShouldShow) => {
+  if (!element || typeof getShouldShow !== 'function') {
+    return;
+  }
+
+  const collapse = getCollapseInstance(element);
+
+  if (!collapse) {
+    return;
+  }
+
+  collapseSyncGetters.set(element, getShouldShow);
+
+  const sync = () => {
+    if (element.classList.contains('collapsing')) {
+      return;
+    }
+
+    const shouldShow = collapseSyncGetters.get(element)();
+    const isShown = element.classList.contains('show');
+
+    if (shouldShow && !isShown) {
+      collapse.show();
+    } else if (!shouldShow && isShown) {
+      collapse.hide();
+    }
+  };
+
+  if (!element.dataset.collapseSyncInitialized) {
+    element.addEventListener('shown.bs.collapse', sync);
+    element.addEventListener('hidden.bs.collapse', sync);
+    element.dataset.collapseSyncInitialized = 'true';
+  }
+
+  sync();
+};

@@ -35,6 +35,8 @@ export default [
         initializeAccordions: 'readonly',
         cookies: 'readonly',
         decodeNames: 'readonly',
+        getCollapseInstance: 'readonly',
+        syncCollapse: 'readonly',
 
         // AJAX helpers (ajax-helpers.js)
         ajaxPost: 'readonly',

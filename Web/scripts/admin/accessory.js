@@ -47,7 +47,7 @@ function AccessoryManagement(opts) {
     });
 
     elements.accessoryResourcesDialog.on('click', '.resourceCheckbox', function () {
-      handleAccessoryResourceClick($(this));
+      handleAccessoryResourceClick(this);
     });
 
     ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.add));
@@ -94,35 +94,40 @@ function AccessoryManagement(opts) {
   };
 
   function handleAccessoryResourceClick(checkbox) {
-    var quantities = checkbox.closest('div[resource-id]').find('.quantities');
+    const quantities = checkbox.closest('div[resource-id]').querySelector('.quantities');
 
-    if (checkbox.is(':checked')) {
-      quantities.removeClass('show');
-    } else {
-      quantities.addClass('show');
-    }
+    syncCollapse(quantities, () => checkbox.checked);
   }
 
   var showAccessoryResources = function () {
     var accessory = getActiveAccessory();
 
     $.get(opts.submitUrl + '?dr=accessoryResources&aid=' + accessory.id, function (data) {
-      elements.accessoryResourcesDialog.find(':checkbox').prop('checked', false);
-      elements.accessoryResourcesDialog.find('.collapse').removeClass('show');
+      const dialog = elements.accessoryResourcesDialog[0];
+
+      // Reset the initial state without triggering transitions.
+      dialog.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+        checkbox.checked = false;
+      });
+
+      dialog.querySelectorAll('.collapse').forEach(function (element) {
+        element.classList.remove('show');
+      });
 
       $.each(data, function (idx, resource) {
         var div = elements.accessoryResourcesDialog.find('[resource-id="' + resource.ResourceId + '"]');
-        var checkbox = div.find(':checkbox');
-        checkbox.prop('checked', true);
 
-        var collapseTarget = div.find('#quantitiesaccessoryResource' + resource.ResourceId);
-        if (checkbox.is(':checked')) {
-          collapseTarget.collapse('show');
-        } else {
-          collapseTarget.collapse('hide');
+        var checkbox = div.find(':checkbox')[0];
+
+        if (checkbox) {
+          checkbox.checked = true;
         }
 
-        handleAccessoryResourceClick(checkbox);
+        const collapseElement = div.find('.quantities')[0];
+
+        if (collapseElement) {
+          collapseElement.classList.add('show');
+        }
 
         div.find('[data-type="min-quantity"]').val(resource.MinQuantity);
         div.find('[data-type="max-quantity"]').val(resource.MaxQuantity);

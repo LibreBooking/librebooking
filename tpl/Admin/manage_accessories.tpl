@@ -250,18 +250,5 @@
 			//$('#add-accessory-panel').showHidePanel();
 		});
 	</script>
-	<script>
-		$(document).ready(function() {
-			$('.resourceCheckbox').on('change', function() {
-				var collapseTarget = $('#quantitiesaccessoryResource' + $(this).val());
-
-				if ($(this).is(':checked')) {
-					collapseTarget.collapse('show');
-				} else {
-					collapseTarget.collapse('hide');
-				}
-			});
-		});
-	</script>
 </div>
 {include file='globalfooter.tpl'}
