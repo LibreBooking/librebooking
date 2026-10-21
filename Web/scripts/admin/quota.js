@@ -5,10 +5,10 @@ function QuotaManagement(opts) {
     addForm: $('#addQuotaForm'),
     deleteForm: $('#deleteQuotaForm'),
     deleteDialog: $('#deleteDialog'),
-    enforceAllDayToggle: $('#enforce-all-day'),
-    enforceHoursTimes: $('#enforce-hours-times'),
-    enforceEveryDayToggle: $('#enforce-every-day'),
-    enforceDays: $('#enforce-days'),
+    enforceAllDayToggle: document.getElementById('enforce-all-day'),
+    enforceHoursTimes: document.getElementById('enforce-hours-times'),
+    enforceEveryDayToggle: document.getElementById('enforce-every-day'),
+    enforceDays: document.getElementById('enforce-days'),
     enforceStartTime: $('#enforce-time-start'),
     enforceEndTime: $('#enforce-time-end'),
   };
@@ -26,13 +26,18 @@ function QuotaManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    elements.enforceAllDayToggle.on('change', handleEnforceAllDayToggle);
+    wireCollapseToggle(elements.enforceAllDayToggle, elements.enforceHoursTimes, function () {
+      return !elements.enforceAllDayToggle.checked;
+    });
 
-    elements.enforceEveryDayToggle.on('change', handleEnforceEveryDayToggle);
+    wireCollapseToggle(elements.enforceEveryDayToggle, elements.enforceDays, function () {
+      return !elements.enforceEveryDayToggle.checked;
+    });
 
     ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.addQuota), null, handleAddError, {
       onBeforeSubmit: validateTimes,
     });
+
     ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.actions.deleteQuota), null, handleAddError);
   };
 
@@ -54,20 +59,19 @@ function QuotaManagement(opts) {
     return activeQuotaId;
   };
 
-  var handleEnforceAllDayToggle = function () {
-    if (elements.enforceAllDayToggle.is(':checked')) {
-      elements.enforceHoursTimes.collapse('hide');
-    } else {
-      elements.enforceHoursTimes.collapse('show');
+  var wireCollapseToggle = function (checkbox, collapseElement, getShouldShow) {
+    if (!checkbox || !collapseElement) {
+      return;
     }
-  };
 
-  var handleEnforceEveryDayToggle = function () {
-    if (elements.enforceEveryDayToggle.is(':checked')) {
-      elements.enforceDays.collapse('hide');
-    } else {
-      elements.enforceDays.collapse('show');
-    }
+    var sync = function () {
+      syncCollapse(collapseElement, getShouldShow);
+    };
+
+    checkbox.addEventListener('change', sync);
+
+    collapseElement.addEventListener('shown.bs.collapse', sync);
+    collapseElement.addEventListener('hidden.bs.collapse', sync);
   };
 
   var validateTimes = function () {

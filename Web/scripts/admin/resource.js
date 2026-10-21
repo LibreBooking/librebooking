@@ -66,11 +66,11 @@ function ResourceManagement(opts) {
     changeGroupForm: $('#changeGroupForm'),
     groupDiv: $('#resourceGroups'),
     autoAssign: $('#autoAssign'),
-    removeAllPermissions: $('#autoAssignRemoveAllPermissions'),
+    removeAllPermissions: document.getElementById('autoAssignRemoveAllPermissions'),
 
     enableCheckIn: $('#enableCheckIn'),
     autoReleaseMinutes: $('#autoReleaseMinutes'),
-    autoReleaseMinutesDiv: $('#autoReleaseMinutesDiv'),
+    autoReleaseMinutesDiv: document.getElementById('autoReleaseMinutesDiv'),
 
     colorForm: $('#colorForm'),
     reservationColor: $('#reservationColor'),
@@ -102,7 +102,7 @@ function ResourceManagement(opts) {
 
     checkAllowConcurrent: $('#allowConcurrentChk'),
     maxConcurrent: $('#maxConcurrentReservations'),
-    allowConcurrentDiv: $('#allowConcurrentDiv'),
+    allowConcurrentDiv: document.getElementById('allowConcurrentDiv'),
 
     toggleStatusChangeMessage: $('#toggleStatusChangeMessage'),
     sendStatusChangeMessageContent: $('#sendStatusChangeMessageContent'),
@@ -398,20 +398,19 @@ function ResourceManagement(opts) {
       changeGroupPermission(groupId, type);
     });
 
-    elements.autoAssign.on('click', function () {
-      elements.removeAllPermissions.find('input').prop('checked', false);
-      if (!elements.autoAssign.is(':checked')) {
-        elements.removeAllPermissions.collapse('show');
-      } else {
-        elements.removeAllPermissions.collapse('hide');
-      }
+    elements.autoAssign.on('change', function () {
+      elements.removeAllPermissions.querySelectorAll('input').forEach((input) => {
+        input.checked = false;
+      });
+
+      syncCollapse(elements.removeAllPermissions, () => !elements.autoAssign.is(':checked'));
     });
 
-    elements.enableCheckIn.on('click', function () {
+    elements.enableCheckIn.on('change', function () {
       showHideAutoRelease();
     });
 
-    elements.checkAllowConcurrent.on('click', function () {
+    elements.checkAllowConcurrent.on('change', function () {
       showHideConcurrent();
     });
 
@@ -758,7 +757,7 @@ function ResourceManagement(opts) {
 
     elements.autoAssign.prop('checked', resource.autoAssign && resource.autoAssign == '1');
 
-    elements.removeAllPermissions.addClass('collapse');
+    elements.removeAllPermissions.classList.add('collapse');
 
     elements.enableCheckIn.prop('checked', resource.enableCheckin && resource.enableCheckin == '1');
     elements.autoReleaseMinutes.val(resource.autoReleaseMinutes);
@@ -772,19 +771,11 @@ function ResourceManagement(opts) {
   };
 
   var showHideAutoRelease = function () {
-    if (!elements.enableCheckIn.is(':checked')) {
-      elements.autoReleaseMinutesDiv.collapse('hide');
-    } else {
-      elements.autoReleaseMinutesDiv.collapse('show');
-    }
+    syncCollapse(elements.autoReleaseMinutesDiv, () => elements.enableCheckIn.is(':checked'));
   };
 
   var showHideConcurrent = function () {
-    if (elements.checkAllowConcurrent.is(':checked')) {
-      elements.allowConcurrentDiv.collapse('show');
-    } else {
-      elements.allowConcurrentDiv.collapse('hide');
-    }
+    syncCollapse(elements.allowConcurrentDiv, () => elements.checkAllowConcurrent.is(':checked'));
   };
 
   var setDuration = function (container, resourceDuration) {
@@ -974,30 +965,37 @@ function ResourceManagement(opts) {
 
   function showHideConfiguration(attributeValue, attributeDisplayElement, attributeCheckbox) {
     attributeDisplayElement.val(attributeValue);
-    var selector = attributeCheckbox.attr('data-related-inputs');
-    var container = attributeCheckbox.closest('form');
-    var span = container.find(selector);
 
-    if (attributeValue == '' || attributeValue == undefined) {
-      attributeCheckbox.prop('checked', true);
-      span.collapse('hide');
-    } else {
-      attributeCheckbox.prop('checked', false);
-      span.collapse('show');
-    }
+    const selector = attributeCheckbox.attr('data-related-inputs');
+    const container = attributeCheckbox.closest('form');
+    const isEmpty = attributeValue === '' || attributeValue === null || attributeValue === undefined;
+    const collapseElement = container.find(selector)[0];
+
+    attributeCheckbox.prop('checked', isEmpty);
+
+    syncCollapse(collapseElement, () => !attributeCheckbox.is(':checked'));
   }
 
   function wireUpCheckboxToggle(container) {
     container.find(':checkbox').change(function () {
-      var selector = $(this).attr('data-related-inputs');
-      var span = container.find(selector);
+      const checkbox = this;
+      const selector = checkbox.getAttribute('data-related-inputs');
 
-      if ($(this).is(':checked')) {
-        span.find('input[type=text],input[type=number]').val('');
-        span.collapse('hide');
-      } else {
-        span.collapse('show');
+      if (!selector) {
+        return;
       }
+
+      const collapseElement = container.find(selector)[0];
+      if (!collapseElement) {
+        return;
+      }
+
+      if (checkbox.checked) {
+        collapseElement.querySelectorAll('input[type="text"], input[type="number"]').forEach(function (input) {
+          input.value = '';
+        });
+      }
+      syncCollapse(collapseElement, () => !checkbox.checked);
     });
   }
 
