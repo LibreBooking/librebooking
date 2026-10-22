@@ -110,6 +110,7 @@ jobs:
           config: 'docs/.markdownlint.yml'
           globs: |
             *.md
+            .github/**/*.md
 
   lint-php-files:
     runs-on: ubuntu-latest
