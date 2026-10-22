@@ -24,4 +24,19 @@ class ReservationDetailsFilter
         $converter = new BooleanConverter();
         return $converter->Convert($hideReservationDetails);
     }
+
+    /**
+     * Public (not logged-in) users have no resource permission rows, so
+     * they may open reservation details only when both settings allow it.
+     * @return bool
+     */
+    public static function CanPublicViewDetails()
+    {
+        $converter = new BooleanConverter();
+        $config = Configuration::Instance();
+
+        return !ServiceLocator::GetServer()->GetUserSession()->IsLoggedIn()
+            && $config->GetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, $converter)
+            && $config->GetKey(ConfigKeys::PRIVACY_VIEW_PUBLIC_RESERVATION_DETAILS, $converter);
+    }
 }

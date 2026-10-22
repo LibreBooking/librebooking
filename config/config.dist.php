@@ -545,6 +545,10 @@ return [
             # When false (default), public views show only that a slot is occupied with no content. (true/false)
             'view.reservations' => false,
 
+            # When true, public (unauthenticated) users can open reservation details from public views.
+            # Requires privacy.view.reservations. (true/false)
+            'view.public.reservation.details' => false,
+
             # When true, non-owner/non-admin users see "Private" instead of the organizer name and email (true/false)
             'hide.user.details' => false,
 

@@ -382,9 +382,17 @@ class ReservationDetailsBinder implements IReservationComponentBinder
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
      * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * Public users may see the resources of the reservation when public details are enabled.
      */
     private function UserResourcePermissions($userId)
     {
+        if (ReservationDetailsFilter::CanPublicViewDetails()) {
+            $this->page->BindViewableResourceReservations(
+                array_map(fn ($resource) => $resource->GetResourceId(), $this->reservationView->Resources)
+            );
+            return;
+        }
+
         $resourceRepo = new ResourceRepository();
         $resourceIds = [];
 
