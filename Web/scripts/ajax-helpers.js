@@ -266,7 +266,13 @@ function ClearAsyncErrors(element) {
 }
 
 function HtmlDecode(encoded) {
-  return $('<textarea/>').html(encoded).val();
+  // Setting innerHTML on a textarea parses the value as RCDATA, so entities
+  // are decoded but no elements are created. jQuery's .html() is not safe
+  // here: strings containing <script, <style or <link are parsed into real
+  // elements, which can run event handlers such as onerror.
+  var textarea = document.createElement('textarea');
+  textarea.innerHTML = encoded ?? '';
+  return textarea.value;
 }
 
 function ajaxPagination(element, callback) {
