@@ -12,6 +12,16 @@ We welcome many forms of contributions, including but not limited to:
 * Writing tutorials or blog posts
 * Submitting pull requests for bug fixes or new features
 
+## Join Us on Discord
+
+When you open an issue or pull request, we highly recommend joining the
+[LibreBooking Discord](https://discord.gg/4TGThPtmX8) to discuss it. Joining is
+not required, but you will likely get a faster and better response there.
+
+Discord conversations are not visible from GitHub, so if a decision is reached
+on Discord, please post a short summary on the related issue or pull request so
+it is not lost.
+
 ## Issue Management and Our Approach to Contributions
 
 We value every contribution and bug report. However, as an open-source project

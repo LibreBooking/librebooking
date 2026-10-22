@@ -41,6 +41,10 @@ jobs:
             solution, that would be fantastic.
             * Any significant update or active discussion indicating progress
             will also prevent closure.
+            * Join our [Discord](https://discord.gg/4TGThPtmX8) to discuss
+            this issue with maintainers and the community. Activity on
+            Discord does not keep this issue open, so please also comment
+            here.
 
             We value your input. If you can help provide a fix, we'd be happy
             to keep this issue open and support your efforts.
@@ -82,7 +86,9 @@ jobs:
           stale-pr-message: >
             This Pull Request (PR) was marked stale because it has been open 90 days
             with no activity.  Please remove the stale label or comment on this PR.
-            Otherwise, it will be closed in 15 days.
+            Otherwise, it will be closed in 15 days. Still interested? Join our
+            [Discord](https://discord.gg/4TGThPtmX8) to discuss this PR with
+            maintainers and the community.
           days-before-pr-stale: 90
           days-before-pr-close: 15
           close-pr-message: >
