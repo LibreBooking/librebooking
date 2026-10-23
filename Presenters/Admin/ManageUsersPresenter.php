@@ -180,22 +180,28 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function PageLoad()
     {
+        $this->LoadUsers(pageNumber: $this->page->GetPageNumber(), pageSize: null);
+    }
+
+    /**
+     * Binds the user list and the data the page needs alongside it.
+     * Null page number and size load every matching user.
+     */
+    private function LoadUsers(?int $pageNumber, ?int $pageSize): void
+    {
         if ($this->page->GetUserId() != null) {
             $userList = $this->userRepository->GetList(
-                1,
-                1,
-                null,
-                null,
-                new SqlFilterEquals(ColumnNames::USER_ID, $this->page->GetUserId())
+                pageNumber: 1,
+                pageSize: 1,
+                filter: new SqlFilterEquals(ColumnNames::USER_ID, $this->page->GetUserId())
             );
         } else {
             $userList = $this->userRepository->GetList(
-                $this->page->GetPageNumber(),
-                null,
-                $this->page->GetSortField(),
-                $this->page->GetSortDirection(),
-                null,
-                $this->page->GetFilterStatusId()
+                pageNumber: $pageNumber,
+                pageSize: $pageSize,
+                sortField: $this->page->GetSortField(),
+                sortDirection: $this->page->GetSortDirection(),
+                accountStatus: $this->page->GetFilterStatusId()
             );
         }
 
@@ -378,7 +384,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             return;
         }
 
-        $this->PageLoad();
+        $this->LoadUsers(pageNumber: null, pageSize: null);
         $this->page->ShowExportCsv();
     }
 

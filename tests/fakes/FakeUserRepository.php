@@ -23,6 +23,11 @@ class FakeUserRepository implements IUserRepository
     public $_Exists = null;
 
     /**
+     * @var array{0:mixed, 1:mixed}|null Page number and size passed to GetList()
+     */
+    public $_GetListPaging = null;
+
+    /**
      * @var UserDto
      */
     public $_UserDto;
@@ -153,6 +158,7 @@ class FakeUserRepository implements IUserRepository
         $filter = null,
         $accountStatus = AccountStatus::ALL
     ) {
+        $this->_GetListPaging = [$pageNumber, $pageSize];
         return $this->_UserList;
     }
 
