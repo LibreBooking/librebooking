@@ -13,6 +13,16 @@ function Schedule(opts, resourceGroups) {
   const ScheduleTall = '2';
   const ScheduleCondensed = '3';
 
+  // Labels mix values stored HTML-encoded and raw, so escape without re-encoding entities
+  function escapeLabel(label) {
+    return String(label ?? '')
+      .replace(/&(?!#\d+;|#x[0-9a-f]+;|[a-z][a-z0-9]*;)/gi, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function autoScrollToToday() {
     if (!scheduleOpts.autoScrollToday || hasAutoScrolledToday) {
       return;
@@ -276,7 +286,7 @@ function Schedule(opts, resourceGroups) {
                             data-resourceid="${reservation.ResourceId}"
                             data-start="${startSlot.data('min')}"
                             data-end="${endSlot.data('min')}"
-                            ${draggableAttribute}>${isNew} ${isUpdated} ${reservation.Label}</div>`);
+                            ${draggableAttribute}>${isNew} ${isUpdated} ${escapeLabel(reservation.Label)}</div>`);
       return div;
     }
 
@@ -498,7 +508,7 @@ function Schedule(opts, resourceGroups) {
                                     style="${color}"
                                     data-resid="${res.ReferenceNumber}">
                                     <span>${startTime}-${endTime}</span>
-                                    ${isNew} ${isUpdated} ${res.Label}</div>`);
+                                    ${isNew} ${isUpdated} ${escapeLabel(res.Label)}</div>`);
 
               t.append(div);
               if (res.IsReservation) {
@@ -656,7 +666,7 @@ function Schedule(opts, resourceGroups) {
                                     data-resourceid="${res.ResourceId}"
                                     data-start="${res.StartDate}"
                                     data-end="${res.EndDate}"
-                                    ${draggableAttribute}>${isNew} ${isUpdated} ${res.Label}</div>`);
+                                    ${draggableAttribute}>${isNew} ${isUpdated} ${escapeLabel(res.Label)}</div>`);
 
             if (res.IsReservation) {
               attachReservationEvents(div, res);

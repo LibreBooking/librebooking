@@ -299,6 +299,14 @@ function GroupManagement(opt) {
     elements.deleteDialog.modal('show');
   };
 
+  const buildUserItem = (actionLinkHtml, item) =>
+    $('<div/>').append(
+      actionLinkHtml,
+      ' ',
+      document.createTextNode(item.DisplayName),
+      $('<input type="hidden" class="id"/>').val(item.Id)
+    );
+
   //change group members
   var changeMembers = function () {
     const groupId = activeId;
@@ -310,7 +318,7 @@ function GroupManagement(opt) {
       if (data.Users) {
         data.Users.forEach((item) => {
           items.push(
-            `<div><a href="#" class="delete"><i class="bi bi-x-square-fill text-danger"></i></a> ${item.DisplayName}<input type="hidden" class="id" value="${item.Id}"/></div>`
+            buildUserItem('<a href="#" class="delete"><i class="bi bi-x-square-fill text-danger"></i></a>', item)
           );
           userIds[item.Id] = item.Id;
         });
@@ -319,7 +327,7 @@ function GroupManagement(opt) {
       elements.groupUserList.empty();
       elements.groupUserList.data('userIds', userIds);
 
-      $('<div/>', { html: items.join('') }).appendTo(elements.groupUserList);
+      $('<div/>').append(items).appendTo(elements.groupUserList);
     });
     elements.membersDialog.modal('show');
   };
@@ -353,18 +361,18 @@ function GroupManagement(opt) {
     if (allUserList) {
       allUserList.forEach((item) => {
         if (!elements.groupUserList.data('userIds')[item.Id]) {
-          items.push(
-            `<div><a class="add"><i class="bi bi-plus-square-fill text-success"></i></a> ${item.DisplayName}<input type="hidden" class="id" value="${item.Id}"/></div>`
-          );
+          items.push(buildUserItem('<a class="add"><i class="bi bi-plus-square-fill text-success"></i></a>', item));
         } else {
           items.push(
-            `<div><i class="bi bi-check-circle-fill me-1 text-info"></i><span>${item.DisplayName}</span></div>`
+            $('<div><i class="bi bi-check-circle-fill me-1 text-info"></i></div>').append(
+              $('<span/>').text(item.DisplayName)
+            )
           );
         }
       });
     }
 
-    $('<div/>', { html: items.join('') }).appendTo(elements.allUsersList);
+    $('<div/>').append(items).appendTo(elements.allUsersList);
     elements.browseUserDialog.modal('show');
   };
 
