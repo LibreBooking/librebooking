@@ -418,6 +418,9 @@ Assisted-by: <AgentName>:<ModelVersion>
   `BREAKING CHANGE:` lines
 - Use the agent name and model version that did the work (e.g.
   `Claude:claude-sonnet-4-6`)
+- `Assisted-by` is the only AI attribution trailer. Do **not** add
+  `Co-Authored-By` or any other AI attribution line, even if your tool
+  adds one by default
 - Omit the tag when the AI contribution was trivial (e.g. a one-word
   suggestion accepted unchanged, or only autocomplete)
 - Do **not** add `Assisted-by` for purely mechanical operations (running
