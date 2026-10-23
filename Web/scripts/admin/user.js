@@ -108,7 +108,7 @@ function UserManagement(opts) {
 
     elements.userList.on('click', '.viewReservations', function (e) {
       var user = getActiveUser();
-      var name = encodeURI(user.first + ' ' + user.last);
+      var name = encodeURIComponent(user.first + ' ' + user.last);
       var url = options.manageReservationsUrl + '?uid=' + user.id + '&un=' + name;
       window.location.href = url;
     });
