@@ -43,7 +43,7 @@ class GuestAccountCreationEmail extends EmailMessage
      */
     public function Body()
     {
-        $this->Set('EmailAddress', $this->user->EmailAddress());
+        $this->Set('EmailAddress', self::EscapeHtml($this->user->EmailAddress()));
         $this->Set('Password', $this->password);
         return $this->FetchTemplate('GuestAccountCreation.tpl');
     }

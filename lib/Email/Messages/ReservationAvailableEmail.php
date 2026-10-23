@@ -50,7 +50,7 @@ class ReservationAvailableEmail extends EmailMessage
         $format = Resources::GetInstance()->GetDateFormat('system_datetime');
 
         $this->Set('ResourceName', $this->resource->GetName());
-        $this->Set('FirstName', $this->user->FirstName());
+        $this->Set('FirstName', self::EscapeHtml($this->user->FirstName()));
         $this->Set('StartDate', $startDate);
         $this->Set('EndDate', $endDate);
         $this->Set('ReservationUrl', sprintf(

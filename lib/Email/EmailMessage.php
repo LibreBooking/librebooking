@@ -40,6 +40,15 @@ abstract class EmailMessage implements IEmailMessage
         $this->email->assign($var, $value);
     }
 
+    /**
+     * Escapes user-provided text for the HTML email body. Profile data is stored either
+     * HTML-encoded or raw, so existing entities are not encoded a second time.
+     */
+    public static function EscapeHtml(mixed $value): string
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+    }
+
     protected function FetchTemplate($templateName, $includeHeaders = true)
     {
         $header = $includeHeaders ? $this->email->fetch('Email/emailheader.tpl') : '';

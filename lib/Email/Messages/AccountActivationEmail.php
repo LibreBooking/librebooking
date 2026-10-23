@@ -47,8 +47,8 @@ class AccountActivationEmail extends EmailMessage
                 ->Add(Pages::ACTIVATION)
                 ->AddQueryString(QueryStringKeys::ACCOUNT_ACTIVATION_CODE, $this->activationCode);
 
-        $this->Set('FirstName', $this->user->FirstName());
-        $this->Set('EmailAddress', $this->user->EmailAddress());
+        $this->Set('FirstName', self::EscapeHtml($this->user->FirstName()));
+        $this->Set('EmailAddress', self::EscapeHtml($this->user->EmailAddress()));
         $this->Set('ActivationUrl', $activationUrl);
         return $this->FetchTemplate('AccountActivation.tpl');
     }

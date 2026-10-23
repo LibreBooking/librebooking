@@ -13,7 +13,7 @@ class ReservationApprovedEmail extends ReservationEmailMessage
     protected function PopulateTemplate()
     {
         parent::PopulateTemplate();
-        $this->Set('ApprovedBy', new FullName($this->reservationSeries->BookedBy()->FirstName, $this->reservationSeries->BookedBy()->LastName));
+        $this->Set('ApprovedBy', self::EscapeHtml(new FullName($this->reservationSeries->BookedBy()->FirstName, $this->reservationSeries->BookedBy()->LastName)));
     }
 
     /**
