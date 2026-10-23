@@ -165,6 +165,66 @@ class SmartyPageTest extends TestBase
         );
     }
 
+    #[DataProvider('replaceQueryStringValues')]
+    public function testReplaceQueryString(string $url, string $key, string|int $value, string $expected): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertSame($expected, $page->ReplaceQueryString($url, $key, $value));
+    }
+
+    /**
+     * @return array<string, array{0:string, 1:string, 2:string|int, 3:string}>
+     */
+    public static function replaceQueryStringValues(): array
+    {
+        return [
+            'adds to url without query' => ['/Web/admin/manage_users.php', 'page', 3, '/Web/admin/manage_users.php?page=3'],
+            'adds when only similar key present' => ['/users.php?pageSize=20', 'page', 3, '/users.php?pageSize=20&page=3'],
+            'replaces at beginning' => ['/users.php?page=2&pageSize=20&as=2', 'page', 3, '/users.php?page=3&pageSize=20&as=2'],
+            'replaces in middle' => ['/users.php?as=2&page=2&sort=name', 'page', 3, '/users.php?as=2&page=3&sort=name'],
+            'replaces at end' => ['/users.php?as=2&sort=name&dir=desc&page=2', 'page', 3, '/users.php?as=2&sort=name&dir=desc&page=3'],
+            'replaces page size' => ['/users.php?page=3&pageSize=20&as=2', 'pageSize', 50, '/users.php?page=3&pageSize=50&as=2'],
+            'ignores similar names' => ['/x.php?homepage=1&pageSize=20&page_x=4', 'page', 3, '/x.php?homepage=1&pageSize=20&page_x=4&page=3'],
+            'ignores key text in values' => ['/x.php?q=page%3D2&ref=page', 'page', 3, '/x.php?q=page%3D2&ref=page&page=3'],
+            'preserves absolute url' => ['https://example.com:8443/Web/users.php?page=1', 'page', 2, 'https://example.com:8443/Web/users.php?page=2'],
+            'preserves fragment' => ['/users.php?page=1#list', 'page', 2, '/users.php?page=2#list'],
+            'adds before fragment' => ['/users.php#list', 'page', 2, '/users.php?page=2#list'],
+            'fragment containing query characters' => ['/users.php?as=2#a?page=1&b', 'page', 2, '/users.php?as=2&page=2#a?page=1&b'],
+            'preserves unrelated fields' => [
+                '/x.php?q=a%20b+c&tag=1&tag=2&ids[]=4&ids%5B%5D=5&empty=&flag&a.b=1&page=1',
+                'page',
+                2,
+                '/x.php?q=a+b+c&tag=1&tag=2&ids%5B%5D=4&ids%5B%5D=5&empty=&flag&a.b=1&page=2',
+            ],
+            'treats plus as space' => ['/users.php?q=John+Smith&page=1', 'page', 2, '/users.php?q=John+Smith&page=2'],
+            'preserves literal plus' => ['/users.php?q=1%2B1&page=1', 'page', 2, '/users.php?q=1%2B1&page=2'],
+            'adds to empty query' => ['/Web/admin/manage_users.php?', 'page', 2, '/Web/admin/manage_users.php?page=2'],
+            'skips empty segments' => ['/x.php?&&as=2&&page=1', 'page', 2, '/x.php?as=2&page=2'],
+            'keeps empty-name fields with values' => ['/x.php?=keep&page=1', 'page', 2, '/x.php?=keep&page=2'],
+            'handles server url format' => [
+                '/users.php?' . http_build_query(['q' => 'John Smith', 'ids' => [4, 5], 'page' => 1]),
+                'page',
+                2,
+                '/users.php?q=John+Smith&ids%5B0%5D=4&ids%5B1%5D=5&page=2',
+            ],
+            'collapses repeated target' => ['/x.php?page=1&as=2&page=5', 'page', 3, '/x.php?page=3&as=2'],
+            'recognizes encoded target name' => ['/x.php?pag%65=1&as=2', 'page', 3, '/x.php?page=3&as=2'],
+            'encodes replacement value' => ['/x.php?as=2', 'q', 'a b&c=d"\'é', '/x.php?as=2&q=a+b%26c%3Dd%22%27%C3%A9'],
+            'preserves view all page size' => ['/users.php?page=2&pageSize=20', 'pageSize', -1, '/users.php?page=2&pageSize=-1'],
+        ];
+    }
+
+    public function testReplaceQueryStringUpdatesPageThenPageSize(): void
+    {
+        $page = new SmartyPage();
+
+        $url = $page->ReplaceQueryString('/users.php?page=2&pageSize=20&as=2', 'page', 3);
+        $url = $page->ReplaceQueryString($url, 'pageSize', 20);
+
+        $this->assertSame('/users.php?page=3&pageSize=20&as=2', $url);
+    }
+
     public function testEscapeCsvModifierIsRegistered(): void
     {
         $page = new SmartyPage();
