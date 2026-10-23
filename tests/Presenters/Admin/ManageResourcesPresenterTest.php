@@ -28,6 +28,7 @@ class ManageResourcesPresenterTest extends TestBase
         $attributeService->method('GetByCategory')->willReturn([]);
 
         $this->page->method('GetPageNumber')->willReturn(3);
+        $this->page->method('GetPageSize')->willReturn(20);
         $this->page->method('GetFilterValues')->willReturn(new ResourceFilterValues());
         $this->resourceRepository->method('GetResourceTypes')->willReturn([]);
         $this->resourceRepository->method('GetStatusReasons')->willReturn([]);
@@ -47,24 +48,24 @@ class ManageResourcesPresenterTest extends TestBase
 
     public function testPageLoadRequestsCurrentPage(): void
     {
-        $this->ExpectGetListPaging(expectedPageNumber: 3);
+        $this->ExpectGetListPaging(expectedPageNumber: 3, expectedPageSize: 20);
 
         $this->presenter->PageLoad();
     }
 
     public function testExportResourcesLoadsAllResources(): void
     {
-        $this->ExpectGetListPaging(expectedPageNumber: null);
+        $this->ExpectGetListPaging(expectedPageNumber: null, expectedPageSize: null);
         $this->page->expects($this->once())->method('ShowExportCsv');
 
         $this->presenter->ExportResources();
     }
 
-    private function ExpectGetListPaging(?int $expectedPageNumber): void
+    private function ExpectGetListPaging(?int $expectedPageNumber, ?int $expectedPageSize): void
     {
         $this->resourceRepository->expects($this->once())
             ->method('GetList')
-            ->with($this->identicalTo($expectedPageNumber), $this->isNull())
+            ->with($this->identicalTo($expectedPageNumber), $this->identicalTo($expectedPageSize))
             ->willReturn(new PageableData([]));
     }
 }

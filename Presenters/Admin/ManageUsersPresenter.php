@@ -180,7 +180,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function PageLoad()
     {
-        $this->LoadUsers(pageNumber: $this->page->GetPageNumber(), pageSize: null);
+        $this->LoadUsers(pageNumber: $this->page->GetPageNumber(), pageSize: $this->page->GetPageSize());
     }
 
     /**
@@ -262,7 +262,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition()
+        ];
 
         $user = $this->manageUsersService->AddUser(
             $this->page->GetUserName(),
@@ -306,7 +307,8 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $extraAttributes = [
             UserAttribute::Organization => $this->page->GetOrganization(),
             UserAttribute::Phone => $this->page->GetPhone(),
-            UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Position => $this->page->GetPosition()
+        ];
 
         $this->manageUsersService->UpdateUser(
             $this->page->GetUserId(),

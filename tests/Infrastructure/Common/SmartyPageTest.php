@@ -225,6 +225,61 @@ class SmartyPageTest extends TestBase
         $this->assertSame('/users.php?page=3&pageSize=20&as=2', $url);
     }
 
+    public function testCreatePaginationLinksKeepFiltersAndEscapeHref(): void
+    {
+        $this->fakeServer->Url = '/Web/admin/manage_users.php?' . http_build_query([
+            'page' => 2,
+            'pageSize' => 20,
+            'as' => 2,
+            'q' => "O'Brien & Sons",
+        ]);
+        $page = new SmartyPage();
+
+        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 2, 20)], $page);
+
+        $this->assertStringContainsString(
+            'href="/Web/admin/manage_users.php?page=3&amp;pageSize=20&amp;as=2&amp;q=O%27Brien+%26+Sons" data-page="3"',
+            $output
+        );
+        $this->assertStringNotContainsString('&amp;amp;', $output);
+
+        $queries = $this->GetPaginationLinkQueries($output);
+        $this->assertSame(['1', '1', '2', '3', '3'], array_column($queries, 'page'));
+        foreach ($queries as $query) {
+            $this->assertSame('2', $query['as']);
+            $this->assertSame("O'Brien & Sons", $query['q']);
+        }
+    }
+
+    public function testCreatePaginationViewAllLink(): void
+    {
+        $this->fakeServer->Url = '/Web/admin/manage_users.php?pageSize=20&as=2';
+        $page = new SmartyPage();
+
+        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 1, 20)], $page);
+
+        $this->assertStringContainsString(
+            '<a class="link-primary" href="/Web/admin/manage_users.php?pageSize=-1&amp;as=2&amp;page=1"',
+            $output
+        );
+    }
+
+    /**
+     * @return list<array<string, string>> Decoded query of each pagination link
+     */
+    private function GetPaginationLinkQueries(string $output): array
+    {
+        preg_match_all('/<li class="[^"]*page-item"><a [^>]*href="([^"]*)"/', $output, $matches);
+
+        $queries = [];
+        foreach ($matches[1] as $href) {
+            parse_str((string) parse_url(html_entity_decode($href, ENT_QUOTES, 'UTF-8'), PHP_URL_QUERY), $query);
+            $queries[] = $query;
+        }
+
+        return $queries;
+    }
+
     public function testEscapeCsvModifierIsRegistered(): void
     {
         $page = new SmartyPage();

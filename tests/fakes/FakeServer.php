@@ -11,6 +11,7 @@ class FakeServer extends Server
     public $Post = [];
     public $Get = [];
     public $Form = [];
+    public ?string $Url = null;
 
     public $_DeletedCookie;
     public $_EndedSession;
@@ -70,6 +71,11 @@ class FakeServer extends Server
     {
         $this->SetSession($name, null);
         $this->_EndedSession = $name;
+    }
+
+    public function GetUrl()
+    {
+        return $this->Url ?? parent::GetUrl();
     }
 
     public function SetQuerystring($name, $value)
