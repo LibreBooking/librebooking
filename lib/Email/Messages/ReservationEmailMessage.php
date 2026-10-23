@@ -98,7 +98,7 @@ abstract class ReservationEmailMessage extends EmailMessage
             attributeRepository: $this->attributeRepository
         );
 
-        $this->Set('UserName', $this->reservationOwner->FullName());
+        $this->Set('UserName', self::EscapeHtml($this->reservationOwner->FullName()));
         $this->Set('StartDate', $currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $currentInstance->EndDate()->ToTimezone($this->timezone));
         $this->Set('ScheduleId', $this->reservationSeries->ScheduleId());
@@ -142,7 +142,7 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $createdBy = $context->CreatedBy();
         if ($createdBy != null) {
-            $this->Set('CreatedBy', $createdBy);
+            $this->Set('CreatedBy', self::EscapeHtml($createdBy));
         }
 
         $minimumAutoRelease = null;
@@ -165,17 +165,17 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $participants = [];
         foreach ($currentInstance->Participants() as $id) {
-            $participants[] = $this->userRepository->GetById($id);
+            $participants[] = $this->EscapedUser($this->userRepository->GetById($id));
         }
         $this->Set('Participants', $participants);
-        $this->Set('ParticipatingGuests', $currentInstance->ParticipatingGuests());
+        $this->Set('ParticipatingGuests', array_map(self::EscapeHtml(...), $currentInstance->ParticipatingGuests()));
 
         $invitees = [];
         foreach ($currentInstance->Invitees() as $id) {
-            $invitees[] = $this->userRepository->GetById($id);
+            $invitees[] = $this->EscapedUser($this->userRepository->GetById($id));
         }
         $this->Set('Invitees', $invitees);
-        $this->Set('InvitedGuests', $currentInstance->InvitedGuests());
+        $this->Set('InvitedGuests', array_map(self::EscapeHtml(...), $currentInstance->InvitedGuests()));
 
         $this->Set('CreditsCurrent', $currentInstance->GetCreditsRequired());
         $this->Set('CreditsTotal', $this->reservationSeries->GetCreditsRequired());
@@ -224,5 +224,43 @@ abstract class ReservationEmailMessage extends EmailMessage
             fileName: 'reservation.ics',
             mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
         );
+    }
+
+    /**
+     * Wraps a user for the email templates: method calls and property reads are forwarded to the
+     * user and string results are escaped for HTML, so templates (including custom ones) keep
+     * working with any user member.
+     */
+    private function EscapedUser(?UserDto $user): ?object
+    {
+        if ($user === null) {
+            return null;
+        }
+
+        return new class ($user) {
+            public function __construct(private readonly UserDto $user)
+            {
+            }
+
+            public function __call(string $method, array $arguments): mixed
+            {
+                return $this->Escape($this->user->$method(...$arguments));
+            }
+
+            public function __get(string $property): mixed
+            {
+                return $this->Escape($this->user->$property);
+            }
+
+            public function __isset(string $property): bool
+            {
+                return isset($this->user->$property);
+            }
+
+            private function Escape(mixed $value): mixed
+            {
+                return is_string($value) ? EmailMessage::EscapeHtml($value) : $value;
+            }
+        };
     }
 }

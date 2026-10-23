@@ -46,6 +46,16 @@ class TestReservationSeries extends ReservationSeries
         $this->_bookedBy = $bookedBy;
     }
 
+    public function WithTitle($title)
+    {
+        $this->_title = $title;
+    }
+
+    public function WithDescription($description)
+    {
+        $this->_description = $description;
+    }
+
     public function WithAccessory(ReservationAccessory $accessory)
     {
         $this->AddAccessory($accessory);

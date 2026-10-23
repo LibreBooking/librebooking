@@ -49,7 +49,7 @@ class InviteUserEmail extends EmailMessage
         $registerUrl = new Url(Configuration::Instance()->GetScriptUrl());
         $registerUrl->Add(Pages::REGISTRATION);
 
-        $this->Set('FullName', $this->fullName->__toString());
+        $this->Set('FullName', self::EscapeHtml($this->fullName->__toString()));
         $this->Set('AppTitle', Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE));
         $this->Set('RegisterUrl', $registerUrl->ToString());
         return $this->FetchTemplate('InviteUser.tpl');

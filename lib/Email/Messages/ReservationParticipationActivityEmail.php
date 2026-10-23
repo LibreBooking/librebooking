@@ -60,14 +60,14 @@ class ReservationParticipationActivityEmail extends EmailMessage
     public function Body()
     {
         $currentInstance = $this->series->CurrentInstance();
-        $this->Set('UserName', $this->owner->FullName());
+        $this->Set('UserName', self::EscapeHtml($this->owner->FullName()));
         $this->Set('StartDate', $currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $currentInstance->EndDate()->ToTimezone($this->timezone));
         $this->Set('ResourceName', $this->series->Resource()->GetName());
         $this->Set('Title', $this->series->Title());
         $this->Set('Description', $this->series->Description());
         $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
-        $this->Set('ParticipantDetails', $this->participantDetails);
+        $this->Set('ParticipantDetails', self::EscapeHtml($this->participantDetails));
         $this->Set('InvitationAction', $this->invitationAction);
 
         $resourceNames = [];

@@ -81,7 +81,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
             attributeRepository: $this->attributeRepository
         );
 
-        $this->Set('UserName', $this->reservationOwner->FullName());
+        $this->Set('UserName', self::EscapeHtml($this->reservationOwner->FullName()));
 
         $currentInstance = $this->reservationSeries->CurrentInstance();
 
@@ -109,7 +109,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
 
         $createdBy = $context->CreatedBy();
         if ($createdBy != null) {
-            $this->Set('CreatedBy', $createdBy);
+            $this->Set('CreatedBy', self::EscapeHtml($createdBy));
         }
 
         $this->Set('ReferenceNumber', $this->reservationSeries->CurrentInstance()->ReferenceNumber());
