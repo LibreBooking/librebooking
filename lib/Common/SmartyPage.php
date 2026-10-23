@@ -843,9 +843,10 @@ class SmartyPage extends Smarty
         $newUrl = $this->ReplaceQueryString($url, QueryStringKeys::PAGE, $page);
         $newUrl = $this->ReplaceQueryString($newUrl, QueryStringKeys::PAGE_SIZE, $pageSize);
 
+        $href = htmlspecialchars($newUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $class = isset($params['class']) ? $params['class'] : 'page-link';
 
-        return sprintf('<a class="%s" href="%s" data-page="%s" data-page-size="%s">%s</a>', $class, $newUrl, $page, $pageSize, $text);
+        return sprintf('<a class="%s" href="%s" data-page="%s" data-page-size="%s">%s</a>', $class, $href, $page, $pageSize, $text);
     }
 
     /**
