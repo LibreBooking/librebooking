@@ -146,6 +146,7 @@ class TestBase extends TestCase
 
     public function teardown(): void
     {
+        ServiceLocator::SetApiServer(null);
         Configuration::SetInstance(null);
         PluginManager::SetInstance(null);
         Date::_ResetNow();
