@@ -34,6 +34,7 @@ export default [
         validateEmail: 'readonly',
         initializeAccordions: 'readonly',
         cookies: 'readonly',
+        decodeNames: 'readonly',
 
         // AJAX helpers (ajax-helpers.js)
         ajaxPost: 'readonly',
