@@ -1,0 +1,88 @@
+name: lb-e2e
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile.seed
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - ../../..:/app:ro
+    environment:
+      LB_TEST_DB_HOST: mariadb
+      LB_TEST_DB_PORT: "3306"
+      LB_TEST_DB_NAME: librebooking_test
+      LB_TEST_DB_USER: root
+      LB_TEST_DB_PASSWORD: root
+      LB_TEST_SAMPLE_DATA: /app/tests/e2e/seed/e2e-seed.sql
+    command: ["bash", "/app/tests/Integration/setup-test-database.sh"]
+
+  web:
+    build:
+      context: ../../..
+      dockerfile: tests/e2e/docker/Dockerfile.app
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    environment:
+      LB_DATABASE_HOSTSPEC: mariadb
+      LB_DATABASE_NAME: librebooking_test
+      LB_DATABASE_USER: root
+      LB_DATABASE_PASSWORD: root
+      LB_INSTALL_PASSWORD: e2e-install
+      LB_DEFAULT_TIMEZONE: UTC
+      LB_SCRIPT_URL: http://localhost:8080/Web
+      LB_EMAIL_ENABLED: "false"
+      LB_ENV: production
+    tmpfs:
+      - /config:mode=1777
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8080/Web/index.php') === false ? 1 : 0);"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  playwright:
+    # Keep in sync with @playwright/test in tests/e2e/package.json.
+    image: mcr.microsoft.com/playwright:v1.63.0-noble
+    # The app sets a Secure login cookie, which Chromium only keeps over http
+    # for localhost, so share the web container's network.
+    network_mode: "service:web"
+    working_dir: /work
+    user: "${LB_UID:-0}:${LB_GID:-0}"
+    depends_on:
+      web:
+        condition: service_healthy
+    volumes:
+      - ..:/work
+    environment:
+      HOME: /tmp
+      CI: "true"
+      PLAYWRIGHT_BASE_URL: http://localhost:8080/Web/
+    command:
+      - sh
+      - -c
+      - |
+        npm ci --no-audit --no-fund && npx playwright test
+        rc=$$?
+        # Hand files created as root back to the owner of the mounted directory.
+        if [ "$$(id -u)" = 0 ]; then
+          chown -R "$$(stat -c %u:%g /work)" /work/node_modules /work/.auth \
+            /work/test-results /work/playwright-report 2>/dev/null || true
+        fi
+        exit $$rc
