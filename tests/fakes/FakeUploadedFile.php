@@ -85,6 +85,11 @@ class FakeUploadedFile extends UploadedFile
         return $this->IsError;
     }
 
+    public function IsRejected()
+    {
+        return $this->IsError;
+    }
+
     public function Error()
     {
         $this->Error;
