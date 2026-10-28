@@ -39,7 +39,7 @@ class FakeConfig extends Configuration implements IConfiguration
         return $this->_ScriptUrl;
     }
 
-    public function EnableSubscription()
+    public function EnableSubscription(?string $configFilePath = null)
     {
     }
 
@@ -148,7 +148,7 @@ class FakeConfigFile extends ConfigurationFile implements IConfigurationFile
         return $this->_values;
     }
 
-    public function EnableSubscription()
+    public function EnableSubscription(?string $configFilePath = null)
     {
     }
 }

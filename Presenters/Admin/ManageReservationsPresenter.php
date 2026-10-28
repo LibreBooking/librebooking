@@ -208,13 +208,16 @@ class ManageReservationsPresenter extends ActionPresenter
             $missedCheckout
         );
 
+        // CSV exports contain every matching reservation, not just one page.
+        $isCsv = $this->page->GetFormat() == 'csv';
+
         $reservations = $this->manageReservationsService->LoadFiltered(
-            $this->page->GetPageNumber(),
-            null,
-            $this->page->GetSortField(),
-            $this->page->GetSortDirection(),
-            $filter,
-            $session
+            pageNumber: $isCsv ? null : $this->page->GetPageNumber(),
+            pageSize: null,
+            sortField: $this->page->GetSortField(),
+            sortDirection: $this->page->GetSortDirection(),
+            filter: $filter,
+            user: $session
         );
 
         /** @var ReservationItemView[] $reservationList */
@@ -228,7 +231,7 @@ class ManageReservationsPresenter extends ActionPresenter
             $seriesIds[] = $reservationItemView->SeriesId;
         }
 
-        if ($this->page->GetFormat() == 'csv') {
+        if ($isCsv) {
             $this->page->ShowCsv();
         } else {
             $this->page->ShowPage();

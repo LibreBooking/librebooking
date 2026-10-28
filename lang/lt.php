@@ -829,8 +829,8 @@ class lt extends en_gb
         $strings['QuotaExceeded'] = 'Quota limit exceeded.';
         $strings['MultiDayRule'] = '%s does not allow reservations across days.';
         $strings['InvalidReservationData'] = 'There were problems with your reservation request.';
-        $strings['PasswordError'] = 'Password must contain at least %s letters and at least %s numbers.';
-        $strings['PasswordErrorRequirements'] = 'Password must contain a combination of at least %s upper and lower case letters and %s numbers.';
+        $strings['PasswordError'] = 'Password must contain at least %s letters, %s numbers, and %s special characters.';
+        $strings['PasswordErrorRequirements'] = 'Password must contain a combination of at least %s upper and lower case letters, %s numbers, and %s special characters.';
         $strings['NoReservationAccess'] = 'You are not allowed to change this reservation.';
         $strings['PasswordControlledExternallyError'] = 'Jūsų slaptažodis kontroliuojamas išorinės sistemos ir čia negali būti pakeistas.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Accessory %s can only be booked with resources %s';

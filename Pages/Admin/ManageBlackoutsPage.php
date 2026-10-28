@@ -433,15 +433,9 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $this->pageablePage->GetPageNumber();
     }
 
-    /**
-     * @return int
-     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
-     */
-    public function GetPageSize()
+    public function GetPageSize(): int
     {
-        /* replaced by dataTable */
-        /*return $this->pageablePage->GetPageSize();*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        return $this->pageablePage->GetPageSize();
     }
 
     /**

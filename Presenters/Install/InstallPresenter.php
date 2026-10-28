@@ -27,14 +27,16 @@ class InstallPresenter
     {
         $this->CheckIfScriptUrlMayBeWrong();
 
-        if ($this->page->RunningInstall()) {
-            $this->RunInstall();
-            return;
-        }
+        if ($this->securityGuard->IsAuthenticated()) {
+            if ($this->page->RunningInstall()) {
+                $this->RunInstall();
+                return;
+            }
 
-        if ($this->page->RunningUpgrade()) {
-            $this->RunUpgrade();
-            return;
+            if ($this->page->RunningUpgrade()) {
+                $this->RunUpgrade();
+                return;
+            }
         }
 
         $dbname = Configuration::Instance()->GetKey(ConfigKeys::DATABASE_NAME);

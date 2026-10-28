@@ -165,8 +165,11 @@ composer phpunit
 composer phpunit -- --testsuite domain
 composer phpunit -- --testsuite application
 
-# Run integration tests (requires database)
+# Run integration tests (CI-only: the smoke test overwrites config/config.php)
 composer test:integration
+
+# Run only the database integration tests (safe locally; see "Test Database Setup")
+composer test:integration:db
 ```
 
 Configuration: `phpunit.xml.dist`
@@ -182,7 +185,9 @@ Test suites available:
 - `webservice` / `webservices` - API tests
 - `integration` - Integration tests (requires database setup)
 
-**Important**: Integration tests require a configured database. Set up config.php before running.
+**Important**: Integration tests require a database. The HTTP smoke test is
+CI-only; the database tests in `tests/Integration/Database/` can run locally
+(see "Test Database Setup").
 
 ### Combined Testing
 
@@ -347,7 +352,6 @@ per-PR tooling changes are needed when adding files there.
 **Important**: The main development branch is `develop`, NOT `main` or `master`.
 
 - **develop** - Active development, latest beta code
-- **master** - Stable releases only
 - Feature branches: `feature/description-of-feature`
 - Bugfix branches: `bugfix/issue-number-description`
 
@@ -383,7 +387,7 @@ Follow conventional commits format:
 
 **Rules**:
 
-- Header max 72 characters
+- Header, body and footer lines max 72 characters (enforced by commitlint)
 - Use imperative, present tense ("change" not "changed")
 - Reference GitHub issues in footer (e.g., `Closes: #123`)
 - Breaking changes: Start footer with `BREAKING CHANGE:`
@@ -414,6 +418,9 @@ Assisted-by: <AgentName>:<ModelVersion>
   `BREAKING CHANGE:` lines
 - Use the agent name and model version that did the work (e.g.
   `Claude:claude-sonnet-4-6`)
+- `Assisted-by` is the only AI attribution trailer. Do **not** add
+  `Co-Authored-By` or any other AI attribution line, even if your tool
+  adds one by default
 - Omit the tag when the AI contribution was trivial (e.g. a one-word
   suggestion accepted unchanged, or only autocomplete)
 - Do **not** add `Assisted-by` for purely mechanical operations (running
@@ -699,15 +706,39 @@ chmod 755 tpl_c tpl uploads
 - Require database setup
 - Test actual database interactions
 - Located in `/tests/Integration/`
-- Run separately with `composer test:integration`
+- Run separately with `composer test:integration` (CI) or
+  `composer test:integration:db` (database tests only, safe locally)
+- Database tests extend `tests/Integration/Database/DatabaseTestCase.php`,
+  connect using the `LB_TEST_DB_*` environment variables, never touch
+  `config/config.php`, and are skipped when `LB_TEST_DB_USER` is not set
 
 ### Test Database Setup
 
-For integration tests:
+`tests/Integration/setup-test-database.sh` drops and recreates the test
+database (schema, upgrades, base data and sample data). CI uses the same
+script. It only accepts database names ending in `_test`.
 
-1. Copy config template: `cp config/config.dist.php config/config.php`
-2. Configure test database credentials in config.php
-3. Run database setup scripts or use Phing
+To run the database tests locally:
+
+1. Create a test database user (as a MariaDB/MySQL admin):
+
+   ```sql
+   CREATE USER 'lbtest'@'localhost' IDENTIFIED BY 'lbtest';
+   CREATE USER 'lbtest'@'127.0.0.1' IDENTIFIED BY 'lbtest';
+   GRANT ALL ON librebooking_test.* TO 'lbtest'@'localhost', 'lbtest'@'127.0.0.1';
+   ```
+
+2. Set up the database and run the tests:
+
+   ```bash
+   export LB_TEST_DB_USER=lbtest LB_TEST_DB_PASSWORD=lbtest
+   tests/Integration/setup-test-database.sh
+   composer test:integration:db
+   ```
+
+Optional variables: `LB_TEST_DB_HOST` (default `127.0.0.1`),
+`LB_TEST_DB_NAME` (default `librebooking_test`) and `LB_TEST_DB_PORT`
+(default and only supported value `3306`).
 
 ### Coverage
 

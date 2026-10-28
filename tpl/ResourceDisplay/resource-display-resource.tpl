@@ -240,7 +240,7 @@
                                                     data-bs-dismiss="modal" id="reserveCancel">{translate key=Cancel}</a>
                                             </div>
 
-                                            <input type="hidden" {formname key=RESOURCE_ID} value="{$ResourceId}" />
+                                            <input type="hidden" {formname key=PUBLIC_RESOURCE_ID} value="{$PublicResourceId}" />
                                             <input type="hidden" {formname key=SCHEDULE_ID} value="{$ScheduleId}" />
                                             <input type="hidden" {formname key=TIMEZONE} value="{$Timezone}" />
                                             <input type="hidden" {formname key=BEGIN_DATE} value="{$ReservationDate}" />

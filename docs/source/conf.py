@@ -9,7 +9,7 @@
 project = "LibreBooking"
 copyright = "2025, The LibreBooking development team"
 author = "The LibreBooking development team"
-release = "5.3.0"
+release = "7.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -25,6 +25,7 @@ source_suffix = {
 
 templates_path = ["_templates"]
 exclude_patterns = []
+myst_enable_extensions = ["alert"]
 myst_heading_anchors = 2
 
 

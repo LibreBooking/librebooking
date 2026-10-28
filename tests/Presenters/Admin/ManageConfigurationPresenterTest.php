@@ -131,6 +131,82 @@ class ManageConfigurationPresenterTest extends TestBase
 
         $this->presenter->Update();
     }
+
+    public function testGeneratesIcsSubscriptionKeyWhenEnablingIcsWithoutExistingKey()
+    {
+        $this->page->_SubmittedSettings = [ConfigSetting::ParseForm('enabled|ics', 'true')];
+
+        $this->configSettings->method('GetSettings')->willReturn([]);
+        $this->configSettings->method('BuildConfig')->willReturn([
+            'ics' => ['enabled' => 'true', 'subscription.key' => ''],
+        ]);
+
+        $writtenSettings = null;
+        $this->configSettings->expects($this->once())
+                ->method('WriteSettings')
+                ->with(
+                    $this->equalTo($this->configFilePath),
+                    $this->callback(function ($settings) use (&$writtenSettings) {
+                        $writtenSettings = $settings;
+                        return true;
+                    })
+                );
+
+        $this->presenter->Update();
+
+        $this->assertNotEmpty($writtenSettings['ics']['subscription.key']);
+    }
+
+    public function testDoesNotOverwriteExistingIcsSubscriptionKeyWhenEnablingIcs()
+    {
+        $this->page->_SubmittedSettings = [ConfigSetting::ParseForm('enabled|ics', 'true')];
+
+        $this->configSettings->method('GetSettings')->willReturn([]);
+        $this->configSettings->method('BuildConfig')->willReturn([
+            'ics' => ['enabled' => 'true', 'subscription.key' => 'already-set-key'],
+        ]);
+
+        $writtenSettings = null;
+        $this->configSettings->expects($this->once())
+                ->method('WriteSettings')
+                ->with(
+                    $this->equalTo($this->configFilePath),
+                    $this->callback(function ($settings) use (&$writtenSettings) {
+                        $writtenSettings = $settings;
+                        return true;
+                    })
+                );
+
+        $this->presenter->Update();
+
+        $this->assertSame('already-set-key', $writtenSettings['ics']['subscription.key']);
+    }
+
+    public function testDoesNotGenerateIcsSubscriptionKeyWhenIcsRemainsDisabled()
+    {
+        $this->page->_SubmittedSettings = [ConfigSetting::ParseForm('enabled|ics', 'false')];
+
+        $this->configSettings->method('GetSettings')->willReturn([]);
+        $this->configSettings->method('BuildConfig')->willReturn([
+            'ics' => ['enabled' => 'false', 'subscription.key' => ''],
+        ]);
+
+        $writtenSettings = null;
+        $this->configSettings->expects($this->once())
+                ->method('WriteSettings')
+                ->with(
+                    $this->equalTo($this->configFilePath),
+                    $this->callback(function ($settings) use (&$writtenSettings) {
+                        $writtenSettings = $settings;
+                        return true;
+                    })
+                );
+
+        $this->presenter->Update();
+
+        $this->assertSame('', $writtenSettings['ics']['subscription.key']);
+    }
+
     private function getDefaultConfigValues()
     {
         $configFile = realpath(ROOT_DIR . 'config/config.dist.php');

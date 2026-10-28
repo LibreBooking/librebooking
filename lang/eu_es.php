@@ -604,8 +604,8 @@ class eu_es extends en_gb
         $strings['QuotaExceeded'] = 'Kuota gaindituta.';
         $strings['MultiDayRule'] = '%s ezin da erreserbatu egun bat baino gehiagorako.';
         $strings['InvalidReservationData'] = 'Arazoren bat egon da zure erreserba eskaerarekin.';
-        $strings['PasswordError'] = 'Pasahitzak gutxienez %s letra eta %s zenbaki eduki behar ditu.';
-        $strings['PasswordErrorRequirements'] = 'Pasahitzak gutxienez %s letra larri eta xehez eta %s zenbakiko konbinaketa behar du.';
+        $strings['PasswordError'] = 'Pasahitzak gutxienez %s letra, %s zenbaki eta %s karaktere berezi eduki behar ditu.';
+        $strings['PasswordErrorRequirements'] = 'Pasahitzak gutxienez %s letra larri eta xehez, %s zenbaki eta %s karaktere bereziko konbinaketa behar du.';
         $strings['NoReservationAccess'] = 'Ez duzu erreserba hau aldatzeko baimenik.';
         $strings['PasswordControlledExternallyError'] = 'Pasahitza kanpoko sistema batekin kontrolatzen da eta ezin da hemendik aldatu.';
         $strings['AccessoryResourceRequiredErrorMessage'] = '%s osagarria %s baliabidearekin batera baino ezin da erreserbatu';

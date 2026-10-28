@@ -98,13 +98,7 @@ class MySqlConnection implements IDbConnection
 
     public function Execute(ISqlCommand $sqlCommand)
     {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
-
-        if (Log::DebugEnabled()) {
-            Log::Sql('MySql Execute: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
-        }
-
-        mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
+        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql Execute: ');
 
         if ($sqlCommand->IsMultiQuery()) {
             $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
@@ -117,6 +111,36 @@ class MySqlConnection implements IDbConnection
             $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
         }
         $this->_handleError($result);
+    }
+
+    public function ExecuteAffectedRows(ISqlCommand $sqlCommand): int
+    {
+        if ($sqlCommand->IsMultiQuery()) {
+            throw new InvalidArgumentException(
+                sprintf('MySqlConnection::ExecuteAffectedRows does not support multi-query commands, got %s', get_debug_type($sqlCommand))
+            );
+        }
+
+        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql ExecuteAffectedRows: ');
+
+        $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
+        $this->_handleError($result);
+
+        // Read immediately after the statement, before any other query or Disconnect() resets it.
+        return (int)mysqli_affected_rows($this->_db);
+    }
+
+    private function _prepareExecute(ISqlCommand $sqlCommand, string $logPrefix): MySqlCommandAdapter
+    {
+        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
+
+        if (Log::DebugEnabled()) {
+            Log::Sql($logPrefix . str_replace('%', '%%', $mysqlCommand->GetQuery()));
+        }
+
+        mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
+
+        return $mysqlCommand;
     }
 
     public function GetLastInsertId()

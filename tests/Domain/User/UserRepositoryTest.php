@@ -298,6 +298,57 @@ class UserRepositoryTest extends TestBase
         $this->assertTrue($this->db->ContainsCommand($command));
     }
 
+    public function testUpdateLoginDataWritesOnlyLoginData()
+    {
+        $userId = 987;
+        $loginTime = '2026-10-01 12:00:00';
+        $language = 'en_gb';
+
+        $user = new User();
+        $user->WithId($userId);
+        $user->ChangePassword('password', 'salt');
+        $user->ChangeName('f', 'l');
+        $user->ChangeCurrentCredits(100);
+        $user->ChangePreference('pref', 'value');
+        $user->Login($loginTime, $language);
+
+        $repo = new UserRepository();
+        $repo->UpdateLoginData(user: $user, language: $language);
+
+        $expected = new UpdateLoginDataCommand(
+            userId: $userId,
+            lastLoginTime: $loginTime,
+            language: $language,
+            publicId: $user->GetPublicId()
+        );
+
+        $this->assertCount(1, $this->db->_Commands);
+        $this->assertEquals($expected, $this->db->_LastCommand);
+        $this->assertNotEmpty($user->GetPublicId(), 'Login() generates a public id when the user has none');
+    }
+
+    public function testUpdateLoginDataWithoutALanguageDoesNotWriteTheUsersLanguage()
+    {
+        $userId = 987;
+        $loginTime = '2026-10-01 12:00:00';
+
+        $user = new User();
+        $user->WithId($userId);
+        $user->Login($loginTime, 'en_gb');
+
+        $repo = new UserRepository();
+        $repo->UpdateLoginData(user: $user, language: null);
+
+        $expected = new UpdateLoginDataCommand(
+            userId: $userId,
+            lastLoginTime: $loginTime,
+            language: null,
+            publicId: $user->GetPublicId()
+        );
+
+        $this->assertEquals($expected, $this->db->_LastCommand);
+    }
+
     public function testAddsAndUpdatesUserPreferences()
     {
         $userId = 987;

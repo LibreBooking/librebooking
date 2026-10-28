@@ -1,6 +1,44 @@
 
 # Librebooking
 
+> [!WARNING]
+> **Security: upgrade to LibreBooking 7.1.0 or later immediately.**
+>
+> All versions before 7.1.0 contain a critical vulnerability that lets an
+> unauthenticated attacker sign in as another user, including an
+> administrator, by forging the "Remember Me" login cookie. Security fixes
+> are not backported, so no fix will be released for 7.0.x or earlier.
+>
+> LibreBooking 7.1.0 removes the "Remember Me" option. Users sign in again
+> once their session ends.
+>
+> If you cannot upgrade right away, configure your web server or reverse
+> proxy to remove the `persist_login` cookie from incoming requests. See the
+> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-mvjx-72w3-wqhp)
+> for details and for how to check whether an installation was compromised,
+> and get the
+> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
+>
+> If you have questions, join the
+> [Discord channel](https://discord.gg/4TGThPtmX8) or comment on the
+> [related issue](https://github.com/LibreBooking/librebooking/issues/1779).
+
+Previous security update
+
+> [!WARNING]
+> **Security: upgrade to LibreBooking 7.0.0 or later immediately.**
+>
+> All versions before 7.0.0 contain a critical vulnerability that lets an
+> unauthenticated attacker take over an administrator account. Security fixes
+> are not backported, so no fix will be released for 6.x or earlier.
+>
+> If you cannot upgrade right away, delete `Web/install/migrate.php` or block
+> access to it in your web server. See the
+> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-3356-vjx2-5pg8)
+> for details and for how to check whether an installation was compromised,
+> and get the
+> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
+
 [![GitHub issues](https://img.shields.io/github/issues/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/issues)
 [![Last commit](https://img.shields.io/github/last-commit/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/commits)
 [![GitHub release](https://img.shields.io/github/v/release/LibreBooking/librebooking?include_prereleases)](https://github.com/LibreBooking/librebooking/releases)

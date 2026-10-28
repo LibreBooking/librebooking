@@ -356,6 +356,32 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertFalse($this->page->_ShowedExportCsv);
     }
 
+    public function testPageLoadRequestsCurrentPage()
+    {
+        $this->page->_PageNumber = 3;
+        $this->userRepo->_UserList = new PageableData([]);
+        $this->userRepo->_User = new FakeUser();
+        $this->groupViewRepository->method('GetList')->willReturn(new PageableData([]));
+
+        $this->presenter->PageLoad();
+
+        $this->assertSame([3, null], $this->userRepo->_GetListPaging);
+    }
+
+    public function testExportUsersLoadsAllUsers()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $this->page->_PageNumber = 3;
+        $this->userRepo->_UserList = new PageableData([]);
+        $this->userRepo->_User = new FakeUser();
+        $this->groupViewRepository->method('GetList')->willReturn(new PageableData([]));
+
+        $this->presenter->ExportUsers();
+
+        $this->assertSame([null, null], $this->userRepo->_GetListPaging);
+        $this->assertTrue($this->page->_ShowedExportCsv);
+    }
+
     public function testImportUsersIsDeniedWhenNotApplicationAdmin()
     {
         $this->fakeUser->IsAdmin = false;

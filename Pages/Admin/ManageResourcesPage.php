@@ -533,18 +533,15 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     /**
      * @return int
-     * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
     {
-        /* Datatable now does pagination
         $pageSize = $this->pageablePage->GetPageSize();
 
         if ($pageSize > 10) {
             return 10;
         }
-        return $pageSize;*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        return $pageSize;
     }
 
     /**

@@ -10,6 +10,8 @@ require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
+use League\Uri\QueryString;
+use League\Uri\Uri;
 use Smarty\Smarty;
 
 class SmartyPage extends Smarty
@@ -214,6 +216,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('function', 'add_querystring', $this->AddQueryString(...));
         $this->registerPlugin('function', 'resource_image', $this->GetResourceImage(...));
         $this->registerPlugin('modifier', 'escapequotes', $this->EscapeQuotes(...));
+        $this->registerPlugin('modifier', 'escape_csv', $this->EscapeCsv(...));
         $this->registerPlugin('modifier', 'sanitize_rich_text', $this->SanitizeRichText(...));
         $this->registerPlugin('function', 'flush', $this->Flush(...));
         $this->registerPlugin('function', 'jsfile', $this->IncludeJavascriptFile(...));
@@ -767,24 +770,37 @@ class SmartyPage extends Smarty
         '
         );
     }
-    public function ReplaceQueryString($url, $key, $value)
+
+    /**
+     * Sets $key to $value in the query string of a raw (not HTML-escaped) URL.
+     * The query is parsed and rebuilt form-style (spaces as "+"), matching
+     * Server::GetUrl(). The result is a raw URL and must be escaped before
+     * being placed in HTML.
+     */
+    public function ReplaceQueryString(string $url, string $key, string|int $value): string
     {
-        $newUrl = $url;
-
-        if (!str_contains((string) $url, (string) $key)) { // does not have variable
-            if (!str_contains((string) $url, '?')) { // and does not have any query string
-                $newUrl = sprintf('%s?%s=%s', $url, $key, $value);
-            } else {
-                $newUrl = sprintf('%s&amp;%s=%s', $url, $key, $value); // and has existing query string
+        $uri = Uri::new($url);
+        $pairs = [];
+        $replaced = false;
+        foreach (QueryString::parse($uri->getQuery(), '&', PHP_QUERY_RFC1738) as [$name, $pairValue]) {
+            if ($name === '' && $pairValue === null) {
+                // Skip empty segments such as a bare "?" or "&&".
+                continue;
             }
-        } else {
-            $pattern = '/(\?|&)(' . $key . '=.*)/';
-            $replace = '${1}' . $key . '=' . $value;
 
-            $newUrl = preg_replace($pattern, $replace, (string) $url);
+            if ($name !== $key) {
+                $pairs[] = [$name, $pairValue];
+            } elseif (!$replaced) {
+                $pairs[] = [$key, (string) $value];
+                $replaced = true;
+            }
         }
 
-        return $newUrl;
+        if (!$replaced) {
+            $pairs[] = [$key, (string) $value];
+        }
+
+        return $uri->withQuery(QueryString::build($pairs, '&', PHP_QUERY_RFC1738))->toString();
     }
 
     public function CreateJavascriptArray($params, $smarty)
@@ -796,6 +812,9 @@ class SmartyPage extends Smarty
         return "[\"$string\"]";
     }
 
+    /**
+     * Pass csv=true to escape the name for a double-quoted CSV field instead of HTML.
+     */
     public function DisplayFullName($params, $smarty)
     {
         $config = Configuration::Instance();
@@ -803,6 +822,7 @@ class SmartyPage extends Smarty
         if (isset($params['ignorePrivacy']) && strtolower($params['ignorePrivacy'] == 'true')) {
             $ignorePrivacy = true;
         }
+        $csv = filter_var($params['csv'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         if (
             !$ignorePrivacy && $config->GetKey(
@@ -810,10 +830,15 @@ class SmartyPage extends Smarty
                 new BooleanConverter()
             ) && !ServiceLocator::GetServer()->GetUserSession()->IsAdmin
         ) {
-            return $this->Resources->GetString('Private');
+            $private = $this->Resources->GetString('Private');
+            return $csv ? $this->EscapeCsv($private) : $private;
         }
 
         $fullName = new FullName($params['first'], $params['last']);
+
+        if ($csv) {
+            return $this->EscapeCsv($fullName->__toString());
+        }
 
         return htmlspecialchars($fullName->__toString());
     }
@@ -842,6 +867,15 @@ class SmartyPage extends Smarty
     {
         $str = str_replace('\'', '&#39;', $var);
         return str_replace('"', '&quot;', $str);
+    }
+
+    /**
+     * Escapes a value for use inside a double-quoted CSV field (RFC 4180) by
+     * doubling embedded double quotes. The template supplies the enclosing quotes.
+     */
+    public function EscapeCsv(mixed $value): string
+    {
+        return str_replace(search: '"', replace: '""', subject: (string)$value);
     }
 
     public function SanitizeRichText(?string $html): string

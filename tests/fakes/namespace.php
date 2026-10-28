@@ -28,6 +28,7 @@ require_once(ROOT_DIR . 'tests/fakes/TestCustomAttribute.php');
 require_once(ROOT_DIR . 'tests/fakes/TestDateRange.php');
 require_once(ROOT_DIR . 'tests/fakes/TestReservation.php');
 require_once(ROOT_DIR . 'tests/fakes/TestReservationSeries.php');
+require_once(ROOT_DIR . 'tests/fakes/FakeEmailMessage.php');
 require_once(ROOT_DIR . 'tests/fakes/FakePluginManager.php');
 require_once(ROOT_DIR . 'tests/fakes/FakeRegistrationPage.php');
 require_once(ROOT_DIR . 'tests/fakes/FakeActivation.php');

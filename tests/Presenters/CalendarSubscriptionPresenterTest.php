@@ -162,6 +162,22 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->assertEquals(Resources::GetInstance()->GetString('MyCalendar'), $this->page->CalendarName);
     }
 
+    public function testUnknownUserWithScheduleStillUsesAllUserLevel()
+    {
+        $this->page->UserId = 'unknown';
+        $this->page->ScheduleId = '1';
+
+        $this->service->method('GetUser')->willReturn(new NullUser());
+        $this->service->method('GetSchedule')->willReturn(new FakeSchedule(999));
+
+        $this->repo->expects($this->once())
+                ->method('GetReservations')
+                ->with($this->anything(), $this->anything(), $this->isNull(), ReservationUserLevel::ALL, 999, $this->isNull())
+                ->willReturn([]);
+
+        $this->presenter->PageLoad();
+    }
+
     public function testGetsUserReservationsFilteredByResourceCombinesCalendarNameWithResourceName()
     {
         $userPublicId = '1';
@@ -231,6 +247,22 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+    }
+
+    public function testResourceGroupWithNoResourcesReturnsNoReservationsEvenWithScheduleId()
+    {
+        $this->page->ScheduleId = '1';
+        $this->page->ResourceGroupId = '2';
+
+        $this->service->method('GetSchedule')->willReturn(new FakeSchedule(999));
+        $this->service->method('GetResourcesInGroup')->willReturn([]);
+
+        $this->repo->method('GetReservations')
+                ->willReturn([new TestReservationItemView(1, Date::Now(), Date::Now(), 1)]);
+
+        $this->presenter->PageLoad();
+
+        $this->assertCount(0, $this->page->Reservations);
     }
 
     public function testGetsResourceGroupReservationsSetsCalendarNameFromGroup()

@@ -45,6 +45,7 @@ class EmailService implements IEmailService
     {
         $this->phpMailer->clearAllRecipients();
         $this->phpMailer->clearReplyTos();
+        $this->phpMailer->clearAttachments();
         $this->phpMailer->CharSet = $emailMessage->Charset();
         $this->phpMailer->Subject = $emailMessage->Subject();
         $this->phpMailer->Body = $emailMessage->Body();
@@ -78,7 +79,12 @@ class EmailService implements IEmailService
 
         if ($emailMessage->HasStringAttachment()) {
             Log::Debug('Adding email attachment %s', $emailMessage->AttachmentFileName());
-            $this->phpMailer->addStringAttachment($emailMessage->AttachmentContents(), $emailMessage->AttachmentFileName());
+            $this->phpMailer->addStringAttachment(
+                string: $emailMessage->AttachmentContents(),
+                filename: $emailMessage->AttachmentFileName(),
+                encoding: PHPMailer::ENCODING_BASE64,
+                type: $emailMessage->AttachmentMimeType() ?? ''
+            );
         }
 
         Log::Debug('Sending %s email to: %s from: %s', get_class($emailMessage), $toAddresses->ToString(), $this->phpMailer->From);

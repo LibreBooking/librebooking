@@ -15,8 +15,14 @@ class FakeGuestUserService implements IGuestUserService
      */
     private $_EmailExists = false;
 
+    public $_CreateOrLoadCalled = false;
+    public $_LastCreateOrLoadEmail = null;
+
     public function CreateOrLoad($email)
     {
+        $this->_CreateOrLoadCalled = true;
+        $this->_LastCreateOrLoadEmail = $email;
+
         return $this->_UserSession;
     }
 

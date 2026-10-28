@@ -3,6 +3,234 @@
 
 <!-- version list -->
 
+## v7.1.0 (2026-10-13)
+
+### Bug Fixes
+
+- **auth**: Persist only login data when a user logs in
+  ([`5d722d2`](https://github.com/LibreBooking/librebooking/commit/5d722d2ec617dfad5b391a76a0741968ad163436))
+
+- **auth**: Stop the resource display from logging users in
+  ([`5e47d6f`](https://github.com/LibreBooking/librebooking/commit/5e47d6f8f191c60bdad09d8bcf19ea8000cbc844))
+
+- **database**: Substitute query parameters in a single pass
+  ([`98480ae`](https://github.com/LibreBooking/librebooking/commit/98480aedb6c8a6dc38d4c6f8da10ab0a618eb2ea))
+
+- **schedule**: Skip empty days in wide view time range
+  ([`6433570`](https://github.com/LibreBooking/librebooking/commit/64335703927fc73160ab6ff543d02db8ac4014a3))
+
+- **security**: Only book display-enabled resources from the tablet view
+  ([`265aca3`](https://github.com/LibreBooking/librebooking/commit/265aca30dbc4f47736f8ba6a1c21ea1c4ab6c192))
+
+- **security**: Remove admin exemptions from kiosk bookings
+  ([`fa454d0`](https://github.com/LibreBooking/librebooking/commit/fa454d019a98e67d70a57b44efd8f5b403eacca0))
+
+### Documentation
+
+- Provide a notice about upcoming security release
+  ([`3ac590f`](https://github.com/LibreBooking/librebooking/commit/3ac590fd2019a29a235af5d5566d71567ea558c1))
+
+- Render GitHub alerts as admonitions in Sphinx
+  ([`8f04a8e`](https://github.com/LibreBooking/librebooking/commit/8f04a8ef2031dcc987ae35d8c94b1177ec0ed4af))
+
+- Replace upcoming security notice with 7.1.0 upgrade notice
+  ([`1707c7b`](https://github.com/LibreBooking/librebooking/commit/1707c7b45b23d7e3c295d07e1d338c40790dc1a4))
+
+- **contributing**: Describe automated versioning and releases
+  ([`f4ebfae`](https://github.com/LibreBooking/librebooking/commit/f4ebfae5b7354948f8abddadd287136d2eec0569))
+
+### Features
+
+- **security**: Remove remember-me login
+  ([`ddfd63f`](https://github.com/LibreBooking/librebooking/commit/ddfd63f7fe169e43eef5c2c74671bdfed4e6f436))
+
+### Testing
+
+- **integration**: Allow a custom sample data file in the setup script
+  ([`5894584`](https://github.com/LibreBooking/librebooking/commit/589458411655feb470fe5cbc7521dea19cbb5145))
+
+
+## v7.0.0 (2026-10-06)
+
+### Bug Fixes
+
+- **i18n**: Correct German check-in/check-out translations
+  ([`d134686`](https://github.com/LibreBooking/librebooking/commit/d1346868c603d5dc474ce03e5fc7d62446d3f9ec))
+
+- **install**: Remove the web-based phpScheduleIt migration
+  ([`c9a9297`](https://github.com/LibreBooking/librebooking/commit/c9a92971ff3dbe1b4fdcfad7b19e200e87b69960))
+
+- **schedule**: Decode entity-encoded names in resource filter
+  ([`76b4cef`](https://github.com/LibreBooking/librebooking/commit/76b4ceff560650e2d768fda42b862a6c87d7d60e))
+
+### Chores
+
+- **AGENTS.md**: Remove mention of master as stable branch
+  ([`26bfe22`](https://github.com/LibreBooking/librebooking/commit/26bfe22ef57943579a032c7efc11a71ea5eba68b))
+
+### Documentation
+
+- Clarify commit line length limit
+  ([`de1ff8a`](https://github.com/LibreBooking/librebooking/commit/de1ff8aaf872cae21c3abc5b7d0c96748cb4e915))
+
+- **security**: Clarify supported release and fix policy
+  ([`d9d07bf`](https://github.com/LibreBooking/librebooking/commit/d9d07bf032d73effb873bbf39f3f34addb282112))
+
+### Refactoring
+
+- **import**: Remove Quartzy import and import landing pages
+  ([`06207bb`](https://github.com/LibreBooking/librebooking/commit/06207bb35f071cacf681fda57988b79a64ef89e0))
+
+### Breaking Changes
+
+- **import**: Admin/quartzy_import.php and admin/import.php are removed; only admin/ics_import.php
+  remains.
+
+- **install**: The web migration from phpScheduleIt 1.2 is no longer available.
+
+
+## v6.1.0 (2026-10-03)
+
+### Bug Fixes
+
+- **calendar**: Honor resource group filter when the group empty
+  ([`c9920ea`](https://github.com/LibreBooking/librebooking/commit/c9920ea272d6212e87cb6ada7544914bb559ec91))
+
+- **csv**: Close header and add max concurrent column in resources export
+  ([`2c8772c`](https://github.com/LibreBooking/librebooking/commit/2c8772c03487591a4d0f0154eafcc3a6c396c3b5))
+
+- **csv**: Drop trailing comma from report CSV
+  ([`6fd7f1f`](https://github.com/LibreBooking/librebooking/commit/6fd7f1f515c8081cdbd3dfba8f93a9414eea3655))
+
+- **csv**: Escape double quotes correctly in user and resource exports
+  ([`209564f`](https://github.com/LibreBooking/librebooking/commit/209564ff2d71852c194bfbd8c4919dea94cdd34f))
+
+- **csv**: Escape group and reservation exports correctly
+  ([`40ae66b`](https://github.com/LibreBooking/librebooking/commit/40ae66bef9c4a6a97491038914aa489d5bbf1f65))
+
+- **csv**: Escape report CSV values and headers for CSV
+  ([`c6fe0e1`](https://github.com/LibreBooking/librebooking/commit/c6fe0e126c117fd9bf63326ff3a0c38e91262759))
+
+- **csv**: Fix quote escaping and avoid null admin group in exports csv
+  ([`9935df0`](https://github.com/LibreBooking/librebooking/commit/9935df0e6f3371698d3738920dfcea7c85f76dba))
+
+- **csv**: Separate custom attribute headers in users export
+  ([`1b51550`](https://github.com/LibreBooking/librebooking/commit/1b5155039ec8637bd8f534810a5a9581c2c7b9ca))
+
+- **embed**: Restore embed.css
+  ([`5f9e886`](https://github.com/LibreBooking/librebooking/commit/5f9e886d6d3dc7d83c5ce0a5cb54262989231c73))
+
+- **install**: Require install password before install and upgrade
+  ([`ab8b8cd`](https://github.com/LibreBooking/librebooking/commit/ab8b8cd23cd1d05a9ae8f13c358fd5e1e134b914))
+
+### Features
+
+- **database**: Add ExecuteAffectedRows() to database layer
+  ([`d561a22`](https://github.com/LibreBooking/librebooking/commit/d561a22bea116f570cb98536de95a95519e864f8))
+
+### Refactoring
+
+- **auth**: Move UserSession building into UserSessionBuilder
+  ([`ccb9b07`](https://github.com/LibreBooking/librebooking/commit/ccb9b077e163f575a15bef53b8e5960ff0b68862))
+
+- **calendar**: Simplify CalendarSubscriptionPresenter::PageLoad
+  ([`6e81e38`](https://github.com/LibreBooking/librebooking/commit/6e81e385a1c9d539b01624ec70c39ded0ee18954))
+
+- **csv**: Reformat group and reservation CSV templates
+  ([`d6fb663`](https://github.com/LibreBooking/librebooking/commit/d6fb6632bf9869cc1ec647a5ee76103d9d16be41))
+
+- **csv**: Reformat report CSV template
+  ([`ef3b61d`](https://github.com/LibreBooking/librebooking/commit/ef3b61d24ff800e95efc58a1eec7bc231940d583))
+
+- **csv**: Reformat user and resource CSV templates for readability
+  ([`523f775`](https://github.com/LibreBooking/librebooking/commit/523f77580624660cfdea5fb3fc13a7776afcde11))
+
+### Testing
+
+- **csv**: Add tests for group and reservation export templates
+  ([`2c9cba0`](https://github.com/LibreBooking/librebooking/commit/2c9cba0935d4da174264639b379067d2d7f8e9f6))
+
+- **csv**: Add tests for the report CSV export template
+  ([`5670f50`](https://github.com/LibreBooking/librebooking/commit/5670f501b4a86296d2f384833928080eabd1c3b9))
+
+- **csv**: Add tests for user and resource CSV export templates
+  ([`024b04f`](https://github.com/LibreBooking/librebooking/commit/024b04f9872df326e652470a498682eabfabce3f))
+
+- **integration**: Add database tests runnable locally and in CI
+  ([`5bf1f57`](https://github.com/LibreBooking/librebooking/commit/5bf1f57e612fda23abba153091c5ac8567fbeedb))
+
+
+## v6.0.0 (2026-10-01)
+
+### Bug Fixes
+
+- **calendar**: Disable subscription link during loading
+  ([`b0036e0`](https://github.com/LibreBooking/librebooking/commit/b0036e022a99899963ff91b40b3daee97b91c8e1))
+
+- **email**: Clear attachments before each send to stop them leaking
+  ([`8c74172`](https://github.com/LibreBooking/librebooking/commit/8c741725e1b1a6b730448c6d27437850d4c6e42b))
+
+- **i18n**: Extend and correct the Russian translation
+  ([`0439874`](https://github.com/LibreBooking/librebooking/commit/043987478b4739c8bd827bbe47db2555f9c12a30))
+
+- **ics**: Fix ICS subscription key generation if empty
+  ([`ccaa611`](https://github.com/LibreBooking/librebooking/commit/ccaa6116a1d26834644e793e4178e86f43eebdbd))
+
+- **lang**: Update HTML lang codes for multiple language files
+  ([`a156fc1`](https://github.com/LibreBooking/librebooking/commit/a156fc1e320ea6609233486557ac801d29a2c5c0))
+
+- **schedule**: Correct schedule style icons on mobile devices
+  ([`11f81db`](https://github.com/LibreBooking/librebooking/commit/11f81db494193615cd90e5b26f55bd37b0f8e29a))
+
+- **schedule**: Fix anonymous slots in SlotFactory for ics
+  ([`b676b6f`](https://github.com/LibreBooking/librebooking/commit/b676b6f86b52647cf95dd3018f413a4baf45e311))
+
+- **schedule**: Normalize phone schedule styles
+  ([`e40db27`](https://github.com/LibreBooking/librebooking/commit/e40db274ee2863cc78f0646e50455b4694e68a70))
+
+- **schedule**: Remove empty query strings
+  ([`7606a05`](https://github.com/LibreBooking/librebooking/commit/7606a054d9d407c77af777223d3a94398391851a))
+
+### Chores
+
+- Update DataTables suite to 3.0.1 and pdfmake 0.2.7
+  ([`cbeb5d5`](https://github.com/LibreBooking/librebooking/commit/cbeb5d52dc1f1d0da856b8650f13d5cd13127fd5))
+
+- Update select2 to 4.1.0
+  ([`dec67b9`](https://github.com/LibreBooking/librebooking/commit/dec67b92d8d06278f65de83a751a495b6d481e22))
+
+### Documentation
+
+- **security**: Direct vulnerability reports to private form
+  ([`3f92ba2`](https://github.com/LibreBooking/librebooking/commit/3f92ba22be6b3e0b1deeb3504851cd37dda6dab3))
+
+### Features
+
+- **calendar**: Show a descriptive name in ICS subscription feeds
+  ([`d4fbb90`](https://github.com/LibreBooking/librebooking/commit/d4fbb900064ad64f9784be21fdec1f8cfb321c96))
+
+- **email**: Enhance attachment handling with MIME type support
+  ([`913581c`](https://github.com/LibreBooking/librebooking/commit/913581c2c6f819d1d3b5f61fb03d80d1a69fb8d2))
+
+- **password**: Enhance password complexity requirements and validation
+  ([`d1d27d1`](https://github.com/LibreBooking/librebooking/commit/d1d27d1db7e42f37a9cbf5a1445a6312f1f99f8f))
+
+- **password**: Rename password minimum letters to minimum length
+  ([`c811eb1`](https://github.com/LibreBooking/librebooking/commit/c811eb1caed012dc45c968d9a0875bf6753a7b1f))
+
+### Refactoring
+
+- Restore GetPageSize method implementation
+  ([`01f8eef`](https://github.com/LibreBooking/librebooking/commit/01f8eef5549d1fc789a7462aca50c50f4f8dcee7))
+
+- **calendar**: Replace subscription link with button in calendars
+  ([`0c43a41`](https://github.com/LibreBooking/librebooking/commit/0c43a41d03a3779d40b9f150bc4c60e4114f80f4))
+
+### Breaking Changes
+
+- **password**: Config.php 'password.minimum letters' has been renamed to 'password.minimum length'
+
+
 ## v5.3.0 (2026-08-03)
 
 ### Bug Fixes

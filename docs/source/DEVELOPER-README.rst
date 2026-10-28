@@ -4,16 +4,17 @@ Developer Documentation
 Working on the project
 ----------------------
 
-| The ``develop`` branch contains the most current working code of the
-  Project and should be considered beta.
-| The ``master`` branch is the most current stable release of
-  LibreBooking.
+| The ``develop`` branch is the main branch of the project. It contains
+  the most current working code and should be considered beta.
+| Releases are tagged directly from the ``develop`` branch. The most
+  current release is listed on the `releases page
+  <https://github.com/LibreBooking/librebooking/releases/latest>`__.
 | You can automatically keep your fork up to date with the `pull GitHub
-  App <https://github.com/apps/pull>`__. which will sync the ``master``
-  (hardreset) and ``develop`` (rebase) branches for you. Please commit
-  bugfixes / features to a new branch prefixed ``bugfix-``, ``feature-``
-  so they can be looked over, and pull requested to the ``develop``
-  branch and will eventually end up in a release on ``master``.
+  App <https://github.com/apps/pull>`__, which will sync the ``develop``
+  branch for you. Please commit bugfixes / features to a new branch
+  prefixed ``bugfix-``, ``feature-`` so they can be looked over, and
+  pull requested to the ``develop`` branch, where they will end up in a
+  future release.
 
 Design philosophy
 -----------------

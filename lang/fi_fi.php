@@ -813,8 +813,8 @@ class fi_fi extends en_gb
         $strings['QuotaExceeded'] = 'Kiintiön limiitti ylitetty.';
         $strings['MultiDayRule'] = '%s ei salli useampipäiväisiä varauksia.';
         $strings['InvalidReservationData'] = 'Varauspyynnössäsi oli ongelma.';
-        $strings['PasswordError'] = 'Salasanassa on oltava vähintääm %s kirjainta ja vähintään %s numeroa.';
-        $strings['PasswordErrorRequirements'] = 'Salasanassa on oltava vähintään %s ISOA ja pientä kirjainta ja %s nunmeroa.';
+        $strings['PasswordError'] = 'Salasanassa on oltava vähintään %s kirjainta, %s numeroa ja %s erikoismerkkiä.';
+        $strings['PasswordErrorRequirements'] = 'Salasanassa on oltava vähintään %s ISOA ja pientä kirjainta, %s numeroa ja %s erikoismerkkiä.';
         $strings['NoReservationAccess'] = 'Et voi muuttaa tätä varausta.';
         $strings['PasswordControlledExternallyError'] = 'Salasanaasi hallitsee ulkoinen järjestelmä eikä sitä voi muuttaa täällä.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'Tarvike  %s voidaan varata vain resurssin %s kanssa';

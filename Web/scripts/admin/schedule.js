@@ -666,7 +666,7 @@ function ScheduleManagement(opts) {
         allDaySlot: false,
         initialDate: opts.calendarOptions.defaultDate,
         initialView: 'dayGridMonth',
-        locale: (document.documentElement.lang || 'en').replace('_', '-'),
+        locale: document.documentElement.lang.slice(0, 2) || 'en',
         views: {
           dayGridMonth: { buttonText: opts.calendarOptions.buttonText.month },
           timeGridWeek: { buttonText: opts.calendarOptions.buttonText.week },
