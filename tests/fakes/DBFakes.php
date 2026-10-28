@@ -12,15 +12,19 @@ class FakeDatabase extends Database
     public $_Commands = [];
     public $_ExpectedInsertId = 0;
     public $_ExpectedInsertIds = [];
+    public $_ExpectedAffectedRows = 0;
+    public $_ExpectedAffectedRowsList = [];
     public $_Limit = 0;
     public $_Offset = 0;
     private $readcount;
     private $executeInsertCount;
+    private $executeAffectedRowsCount;
 
     public function __construct()
     {
         $this->readcount = 0;
         $this->executeInsertCount = 0;
+        $this->executeAffectedRowsCount = 0;
 
         $this->reader[0] = new FakeReader([]);
     }
@@ -71,6 +75,20 @@ class FakeDatabase extends Database
 
         $this->executeInsertCount++;
         return $expectedId;
+    }
+
+    public function ExecuteAffectedRows(ISqlCommand $command): int
+    {
+        $this->_LastCommand = $command;
+        $this->_AddCommand($command);
+
+        $affectedRows = $this->_ExpectedAffectedRows;
+        if (isset($this->_ExpectedAffectedRowsList[$this->executeAffectedRowsCount])) {
+            $affectedRows = $this->_ExpectedAffectedRowsList[$this->executeAffectedRowsCount];
+        }
+
+        $this->executeAffectedRowsCount++;
+        return $affectedRows;
     }
 
     private function _AddCommand($command)
@@ -161,6 +179,9 @@ class FakeDBConnection implements IDbConnection
     public $_GetLastInsertIdCalled = false;
     public $_ExpectedInsertId = 0;
     public $_LimitQueryCalled = false;
+    public $_LastExecuteAffectedRowsCommand = null;
+    public $_ExpectedAffectedRows = 0;
+    public ?Throwable $_ExecuteAffectedRowsException = null;
 
     public function __construct()
     {
@@ -185,6 +206,17 @@ class FakeDBConnection implements IDbConnection
     public function Execute(ISqlCommand $command)
     {
         $this->_LastExecuteCommand = $command;
+    }
+
+    public function ExecuteAffectedRows(ISqlCommand $command): int
+    {
+        $this->_LastExecuteAffectedRowsCommand = $command;
+
+        if ($this->_ExecuteAffectedRowsException !== null) {
+            throw $this->_ExecuteAffectedRowsException;
+        }
+
+        return $this->_ExpectedAffectedRows;
     }
 
     public function GetLastInsertId()

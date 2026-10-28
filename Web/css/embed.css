@@ -1,0 +1,75 @@
+.booked-embedded-calendar-container {
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+}
+.booked-calendar-event {
+  border: solid 1px #d5ded9;
+  color: #000;
+  border-radius: 2px;
+  padding: 2px;
+  margin: 2px 0;
+  font-size: 0.7em;
+  display: block;
+  text-decoration: none;
+  background-color: #fff;
+}
+.booked-calendar-event:hover {
+  background-color: #e9e9e9;
+}
+.booked-agenda-date {
+  font-size: 0.9em;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+}
+.booked-agenda-date a,
+.booked-agenda-date a:visited {
+  color: #669999;
+}
+.booked-agenda-date a:hover {
+  color: #428181;
+}
+.booked-calendar-week,
+.booked-weekday-names {
+  display: table;
+  width: 100%;
+}
+.booked-week-date,
+.booked-weekday-name {
+  display: table-cell;
+  border: solid #bcbcbc;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left: none;
+  padding: 2px;
+}
+.booked-calendar-week > div:first-child,
+.booked-weekday-names > div:first-child {
+  border-left: solid 1px #bcbcbc;
+}
+.booked-week-date {
+  border-top: none;
+}
+.booked-week-date-title {
+  margin: -2px;
+  padding: 0 2px;
+  text-align: right;
+}
+.booked-week-date-title a,
+.booked-week-date-title a:visited {
+  color: #898989;
+  text-decoration: none;
+}
+.booked-week-date-title a:hover {
+  color: #353432;
+}
+.booked-weekday-name {
+  background-color: #f9f9f9;
+  border-bottom: solid 1px #bcbcbc;
+  text-align: center;
+}
+.booked-today a,
+.booked-today a:visited {
+  color: #353432;
+}
+.booked-day-events {
+  padding: 2px 0;
+}

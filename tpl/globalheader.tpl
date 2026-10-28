@@ -42,9 +42,9 @@
             {vendor_css src="trumbowyg/2.27.3/css/trumbowyg.min.css"}
         {/if}
         {if isset($DataTable) && $DataTable}
-            {vendor_css src="datatables/1.13.7/css/dataTables.bootstrap5.min.css"}
-            {vendor_css src="datatables-responsive/2.5.0/css/responsive.bootstrap5.min.css"}
-            {vendor_css src="datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css"}
+            {vendor_css src="datatables/3.0.1/css/dataTables.bootstrap5.min.css"}
+            {vendor_css src="datatables-responsive/4.0.1/css/responsive.bootstrap5.min.css"}
+            {vendor_css src="datatables-buttons/4.0.1/css/buttons.bootstrap5.min.css"}
         {/if}
     {else}
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/smoothness/jquery-ui.css" type="text/css" />
@@ -58,10 +58,9 @@
                 type="text/css" />
         {/if}
         {if isset($DataTable) && $DataTable}
-            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" type="text/css" />
-            <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-            <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"
-                type="text/css">
+            <link href="https://cdn.datatables.net/3.0.1/css/dataTables.bootstrap5.min.css" rel="stylesheet" integrity="sha384-OlHQFPrLwnmeXJfLPQ4jqFbOgPdCIW0hRoNKjPLyIZv7FxVwt3dythZstNHJQRtV" crossorigin="anonymous">
+            <link href="https://cdn.datatables.net/responsive/4.0.1/css/responsive.bootstrap5.min.css" rel="stylesheet" integrity="sha384-IccFVZxMebKzou2YAT+5kHCpRTtvbJKtU1WS6PmGGeO3LvfGhMNgmeDE5k59j9Qk" crossorigin="anonymous">
+            <link href="https://cdn.datatables.net/buttons/4.0.1/css/buttons.bootstrap5.min.css" rel="stylesheet" integrity="sha384-bYPwNBWmi1WFXmRpFZBo/GIeUEOJhbZ+Lcavx5JEeGMZVFxBtV7+FXUtsJZd/+yD" crossorigin="anonymous">
         {/if}
     {/if}
     {if isset($InlineEdit) && $InlineEdit}

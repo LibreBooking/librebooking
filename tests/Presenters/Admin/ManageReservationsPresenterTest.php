@@ -205,6 +205,40 @@ class ManageReservationsPresenterTest extends TestBase
         $this->presenter->PageLoad($userTimezone);
     }
 
+    public function testPageLoadRequestsCurrentPage()
+    {
+        $this->ExpectLoadFilteredPaging(format: null, expectedPageNumber: 3);
+
+        $this->page->expects($this->once())->method('ShowPage');
+
+        $this->presenter->PageLoad('America/Chicago');
+    }
+
+    public function testCsvExportLoadsAllReservations()
+    {
+        $this->ExpectLoadFilteredPaging(format: 'csv', expectedPageNumber: null);
+
+        $this->page->expects($this->once())->method('ShowCsv');
+        $this->page->expects($this->never())->method('ShowPage');
+
+        $this->presenter->PageLoad('America/Chicago');
+    }
+
+    private function ExpectLoadFilteredPaging(?string $format, ?int $expectedPageNumber): void
+    {
+        $this->page->method('GetFormat')->willReturn($format);
+        $this->page->method('GetPageNumber')->willReturn(3);
+        $this->page->method('FilterButtonPressed')->willReturn(true);
+        $this->page->method('GetAttributeFilters')->willReturn([]);
+        $this->resourceRepository->method('GetStatusReasons')->willReturn([]);
+        $this->attributeService->method('GetByCategory')->willReturn([]);
+
+        $this->reservationsService->expects($this->once())
+            ->method('LoadFiltered')
+            ->with($this->identicalTo($expectedPageNumber), $this->isNull())
+            ->willReturn(new PageableData([]));
+    }
+
     public function testUpdatesSingleResourceStatus()
     {
         $resourceId = 19191;

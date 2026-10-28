@@ -145,16 +145,23 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function PageLoad()
     {
+        $this->LoadResources(pageNumber: $this->page->GetPageNumber(), pageSize: null);
+    }
+
+    /**
+     * Binds the resource list and the data the page needs alongside it.
+     * Null page number and size load every matching resource.
+     */
+    private function LoadResources(?int $pageNumber, ?int $pageSize): void
+    {
         $resourceAttributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESOURCE);
 
         $filterValues = $this->page->GetFilterValues();
 
         $results = $this->resourceRepository->GetList(
-            $this->page->GetPageNumber(),
-            null,
-            null,
-            null,
-            $filterValues->AsFilter($resourceAttributes)
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            filter: $filterValues->AsFilter($resourceAttributes)
         );
         $resources = $results->Results();
         $this->page->BindResources($resources);
@@ -1091,7 +1098,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function ExportResources()
     {
-        $this->PageLoad();
+        $this->LoadResources(pageNumber: null, pageSize: null);
         $this->page->ShowExportCsv();
     }
 

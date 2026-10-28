@@ -745,10 +745,15 @@ Manual Database Upgrade
 Migrating from version 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| A migration from 1.2 to 2.0 is supported for MySQL only.
-| This can be run after the 2.0 installation.
-| To run the migration open ``/Web/install/migrate.php`` directory in a
-  web browser and follow the on-screen instructions.
+| The web-based migration from phpScheduleIt 1.2 (``/Web/install/migrate.php``)
+  has been removed for security reasons. The file remains only as a stub that
+  answers with HTTP 410 so that overwriting an existing installation disables
+  the old copy.
+| There is no longer a supported way to migrate directly from 1.2 to the
+  current version. If you still need to migrate a 1.2 database, first migrate
+  it with an earlier release that still includes the migration tool, on a
+  system that is not reachable from untrusted networks, and then follow the
+  upgrade instructions above to get to the current version.
 
 Getting Started
 ---------------

@@ -710,8 +710,8 @@ class th_th extends en_gb
         $strings['QuotaExceeded'] = 'เกินโควต้าแล้ว';
         $strings['MultiDayRule'] = '%s ไม่อนุญาตให้มีการจองข้ามวัน';
         $strings['InvalidReservationData'] = 'มีปัญหาเกี่ยวกับคำขอจองของคุณ';
-        $strings['PasswordError'] = 'รหัสผ่านต้องประกอบด้วย %s ตัวอักษรและอย่างน้อย %s ตัวเลข';
-        $strings['PasswordErrorRequirements'] = 'รหัสผ่านต้องประกอบด้วยตัวพิมพ์ใหญ่และตัวพิมพ์เล็กและ %s ตัวเลขเป็นอย่างน้อย';
+        $strings['PasswordError'] = 'รหัสผ่านต้องประกอบด้วยอย่างน้อย %s ตัวอักษร %s ตัวเลข และ %s อักขระพิเศษ';
+        $strings['PasswordErrorRequirements'] = 'รหัสผ่านต้องประกอบด้วยตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อย %s ตัวอักษร, %s ตัวเลข และ %s อักขระพิเศษ';
         $strings['NoReservationAccess'] = 'คุณไม่ได้รับอนุญาตให้เปลี่ยนการจองนี้';
         $strings['PasswordControlledExternallyError'] = 'รหัสผ่านของคุณถูกควบคุมโดยระบบภายนอกและไม่สามารถอัพเดตที่นี่ได้';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'อุปกรณ์เสริม %s สามารถจองได้เฉพาะกับทรัพยากร %s เท่านั้น';

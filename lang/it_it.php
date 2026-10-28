@@ -831,8 +831,8 @@ class it_it extends en_gb
         $strings['QuotaExceeded'] = 'Limite della quota superato.';
         $strings['MultiDayRule'] = '%s non permette prenotazioni su più giorni.';
         $strings['InvalidReservationData'] = 'Ci sono stati problemi con la tua richiesta di prenotazione.';
-        $strings['PasswordError'] = 'La password deve contenere almeno %s lettere ed %s numeri.';
-        $strings['PasswordErrorRequirements'] = 'La password deve contenere una combinazione di almeno %s maiuscole e minuscole e %s numeri.';
+        $strings['PasswordError'] = 'La password deve contenere almeno %s lettere, %s numeri e %s caratteri speciali.';
+        $strings['PasswordErrorRequirements'] = 'La password deve contenere una combinazione di almeno %s maiuscole e minuscole, %s numeri e %s caratteri speciali.';
         $strings['NoReservationAccess'] = 'Non sei abilitato a modificare questa prenotazione.';
         $strings['PasswordControlledExternallyError'] = 'La password è controllata da un sistema esterno e non può essere modificata localmente.';
         $strings['AccessoryResourceRequiredErrorMessage'] = 'L\'accessorio %s può essere richiesto solo con la risorsa %s';

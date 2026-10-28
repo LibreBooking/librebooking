@@ -520,8 +520,8 @@ class hr_hr extends en_gb
         $strings['QuotaExceeded'] = 'Quota limit exceeded.';
         $strings['MultiDayRule'] = '%s ne dopusta rezervacije preko dana';
         $strings['InvalidReservationData'] = 'Problem sa zahtjevom za rezervaciju.';
-        $strings['PasswordError'] = 'Lozinka mora sadrzavati najmanje %s slova i najmanje %s brojeva.';
-        $strings['PasswordErrorRequirements'] = 'Lozinka mora sadrzavati kombinaciju najmanje %s velikih i malih slova i %s brojeva.';
+        $strings['PasswordError'] = 'Lozinka mora sadrzavati najmanje %s slova, %s brojeva i %s posebnih znakova.';
+        $strings['PasswordErrorRequirements'] = 'Lozinka mora sadrzavati kombinaciju najmanje %s velikih i malih slova, %s brojeva i %s posebnih znakova.';
         // End Errors
 
         // Page Titles

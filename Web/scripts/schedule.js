@@ -1154,7 +1154,7 @@ function Schedule(opts, resourceGroups) {
     });
 
     groupDiv.tree({
-      data: resourceGroups,
+      data: decodeNames(resourceGroups),
       saveState: 'tree' + options.scheduleId,
 
       onCreateLi: function (node, $li) {
@@ -1230,6 +1230,18 @@ function RemoveResourceId(url) {
 
 function RemoveGroupId(url) {
   return url.replace(/&*gid=\d+/i, '');
+}
+
+// Names are stored entity-encoded (e.g. &#039;); jqTree escapes again, so decode once to plain text.
+function decodeNames(nodes) {
+  return _.map(nodes, function (n) {
+    const copy = _.extend({}, n);
+    _.each(['name', 'label'], function (k) {
+      if (typeof copy[k] === 'string') copy[k] = HtmlDecode(copy[k]);
+    });
+    if (n.children) copy.children = decodeNames(n.children);
+    return copy;
+  });
 }
 
 function ChangeGroup(node) {

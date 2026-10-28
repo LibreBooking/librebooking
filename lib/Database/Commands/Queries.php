@@ -210,10 +210,6 @@ class Queries
     public const CLEANUP_USER_SESSIONS =
         'DELETE FROM `user_session` WHERE utc_timestamp()>date_add(`last_modified`,interval 24 hour)';
 
-    public const COOKIE_LOGIN =
-        'SELECT `user_id`, `lastlogin`, `email`
-		FROM `users` WHERE `user_id` = @userid';
-
     public const DELETE_ACCESSORY = 'DELETE FROM `accessories` WHERE `accessory_id` = @accessoryid';
 
     public const DELETE_ACCESSORY_RESOURCES = 'DELETE FROM `resource_accessories` WHERE `accessory_id` = @accessoryid';
@@ -1089,7 +1085,15 @@ class Queries
 		SET `name` = @groupname, `admin_group_id` = @admin_group_id, `isdefault` = @isdefault
 		WHERE `group_id` = @groupid';
 
-    public const UPDATE_LOGINDATA = 'UPDATE `users` SET `lastlogin` = @lastlogin, `language` = @language WHERE `user_id` = @userid';
+    public const UPDATE_LOGINDATA =
+        'UPDATE `users`
+		SET
+			`lastlogin` = @lastlogin,
+			`language` = COALESCE(@language, `language`),
+			`public_id` = COALESCE(NULLIF(`public_id`, \'\'), @publicid),
+			`last_modified` = @dateModified
+		WHERE
+			`user_id` = @userid';
 
     public const UPDATE_FUTURE_RESERVATION_INSTANCES =
         'UPDATE `reservation_instances`

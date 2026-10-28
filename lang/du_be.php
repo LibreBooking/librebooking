@@ -481,6 +481,6 @@ class du_be extends en_gb
 
     protected function _GetHtmlLangCode()
     {
-        return 'en_us';
+        return 'nl-BE';
     }
 }

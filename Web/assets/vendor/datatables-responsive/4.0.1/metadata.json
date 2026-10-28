@@ -1,0 +1,8 @@
+{
+  "name": "datatables-responsive",
+  "version": "4.0.1",
+  "description": "Responsive extension for DataTables.",
+  "homepage": "https://datatables.net/extensions/responsive/",
+  "source": "https://cdn.datatables.net/responsive/4.0.1/",
+  "license": "MIT"
+}

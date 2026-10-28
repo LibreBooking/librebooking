@@ -28,7 +28,8 @@ class InstallSecurityGuard
      */
     public function ValidatePassword($installPassword)
     {
-        $validated = $installPassword == Configuration::Instance()->GetKey(ConfigKeys::INSTALL_PASSWORD);
+        $configured = (string)Configuration::Instance()->GetKey(ConfigKeys::INSTALL_PASSWORD);
+        $validated = $configured !== '' && hash_equals($configured, (string)$installPassword);
 
         if ($validated) {
             ServiceLocator::GetServer()->SetSession(SessionKeys::INSTALLATION, self::VALIDATED_INSTALL);
