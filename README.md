@@ -159,7 +159,7 @@ docker-compose up -d
   [docs/source/README.md](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/DEVELOPER-README.rst)
   for developer notes.
 - See [docs/source/API.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/API.rst)
-  for API notes.
+  for API notes, including JSON requests to create and update custom attributes.
 - See
   [docs/source/Oauth2-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/Oauth2-Configuration.rst)
   for Oauth2 configuration.
