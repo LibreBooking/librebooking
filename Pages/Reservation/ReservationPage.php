@@ -287,7 +287,10 @@ abstract class ReservationPage extends Page implements IReservationPage
             'referenceNumberLabel' => $this->Translate('ReferenceNumber'),
             'referenceNumber' => $this->SmartyVar('ReferenceNumber', ''),
             'userLabel' => $this->Translate('User'),
-            'reservationUserName' => $this->DecodeHtml($this->SmartyVar('ReservationUserName', '')),
+            // Mask the owner in the page data as the template already does on screen
+            'reservationUserName' => (bool)$this->SmartyVar('ShowUserDetails', false)
+                ? $this->DecodeHtml($this->SmartyVar('ReservationUserName', ''))
+                : $this->Translate('Private'),
             'showUserDetailsAndReservationDetails' => (bool)$this->SmartyVar('ShowUserDetails', false) && $showReservationDetails,
 
             'beginDateLabel' => $this->Translate('BeginDate'),

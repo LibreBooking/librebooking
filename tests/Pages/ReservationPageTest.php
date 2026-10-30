@@ -21,6 +21,7 @@ class ReservationPageTest extends TestBase
         $page->Set('ReferenceNumber', 'rn-1');
         // Accented strings exercise Unicode behavior for HTML decoding and JSON encoding.
         $page->Set('ReservationUserName', 'Ren&eacute;e O&#039;Connor');
+        $page->ShowUserDetails(true);
         $page->Set('ReservationTitle', 'Title &lt;/script&gt; x' . "\u{2028}" . 'y' . "\u{2029}" . 'z');
         $page->Set('Description', 'Description &amp; details');
         $page->Set('Resource', new ReservationPagePdfConfigResource());
@@ -48,6 +49,23 @@ class ReservationPageTest extends TestBase
         $this->assertSame('Description & details', $config['reservationDescription']);
         $this->assertTrue($config['showTermsAcceptance']);
         $this->assertSame(CustomAttributeTypes::CHECKBOX, $config['customAttributeTypeCheckbox']);
+    }
+
+    public function testReservationPdfConfigMasksUserNameWhenUserDetailsAreHidden(): void
+    {
+        $page = new TestableReservationPage();
+        $page->Set('ReservationUserName', 'Ren&eacute;e O&#039;Connor');
+        $page->ShowUserDetails(false);
+        $page->Set('Resource', new ReservationPagePdfConfigResource());
+        $page->Set('RepeatOptions', [
+            RepeatType::None => ['key' => 'DoesNotRepeat', 'everyKey' => ''],
+        ]);
+        $page->Set('RepeatType', RepeatType::None);
+
+        $config = json_decode($page->BuildReservationPdfConfigJson(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame('privé', $config['reservationUserName']);
+        $this->assertFalse($config['showUserDetailsAndReservationDetails']);
     }
 
     public function testReservationPdfConfigKeepsSmartyFormattingBehavior(): void
@@ -150,6 +168,7 @@ class ReservationPagePdfConfigResources extends FakeResources
     private array $strings = [
         'DoesNotRepeat' => 'no se repite',
         'ReservationDetails' => 'réservation spéciale',
+        'Private' => 'privé',
         'RepeatDaysPrompt' => 'días repetidos',
         'Weekly' => 'semanal',
         'weeks' => 'semanas',
