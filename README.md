@@ -2,21 +2,26 @@
 # Librebooking
 
 > [!WARNING]
-> We are planning on doing a security release for a high-impact security
-> vulnerability. The release is planned to happen on [Tuesday 13-October-2026 @
-> 9AM PDT (Pacific Daylight Time)](https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306).
+> **Security: upgrade to LibreBooking 7.1.0 or later immediately.**
 >
-> You can convert to your local time zone here:
-> [https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306](https://www.timeanddate.com/worldclock/meetingdetails.html?year=2026&month=10&day=13&hour=16&min=0&sec=0&p1=5306)
+> All versions before 7.1.0 contain a critical vulnerability that lets an
+> unauthenticated attacker sign in as another user, including an
+> administrator, by forging the "Remember Me" login cookie. Security fixes
+> are not backported, so no fix will be released for 7.0.x or earlier.
 >
-> If you have questions/comments feel free to join the
+> LibreBooking 7.1.0 removes the "Remember Me" option. Users sign in again
+> once their session ends.
+>
+> If you cannot upgrade right away, configure your web server or reverse
+> proxy to remove the `persist_login` cookie from incoming requests. See the
+> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-mvjx-72w3-wqhp)
+> for details and for how to check whether an installation was compromised,
+> and get the
+> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
+>
+> If you have questions, join the
 > [Discord channel](https://discord.gg/4TGThPtmX8) or comment on the
-> [related issue](https://github.com/LibreBooking/librebooking/issues/1779)
-> Though we will not disclose what the issue is until the release.
->
-> Regular backups are also recommended in case of any issues.
->
-> As always we invite people to join the [Discord channel](https://discord.gg/4TGThPtmX8)
+> [related issue](https://github.com/LibreBooking/librebooking/issues/1779).
 
 Previous security update
 

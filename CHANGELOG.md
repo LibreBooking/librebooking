@@ -3,6 +3,53 @@
 
 <!-- version list -->
 
+## v7.1.0 (2026-10-13)
+
+### Bug Fixes
+
+- **auth**: Persist only login data when a user logs in
+  ([`5d722d2`](https://github.com/LibreBooking/librebooking/commit/5d722d2ec617dfad5b391a76a0741968ad163436))
+
+- **auth**: Stop the resource display from logging users in
+  ([`5e47d6f`](https://github.com/LibreBooking/librebooking/commit/5e47d6f8f191c60bdad09d8bcf19ea8000cbc844))
+
+- **database**: Substitute query parameters in a single pass
+  ([`98480ae`](https://github.com/LibreBooking/librebooking/commit/98480aedb6c8a6dc38d4c6f8da10ab0a618eb2ea))
+
+- **schedule**: Skip empty days in wide view time range
+  ([`6433570`](https://github.com/LibreBooking/librebooking/commit/64335703927fc73160ab6ff543d02db8ac4014a3))
+
+- **security**: Only book display-enabled resources from the tablet view
+  ([`265aca3`](https://github.com/LibreBooking/librebooking/commit/265aca30dbc4f47736f8ba6a1c21ea1c4ab6c192))
+
+- **security**: Remove admin exemptions from kiosk bookings
+  ([`fa454d0`](https://github.com/LibreBooking/librebooking/commit/fa454d019a98e67d70a57b44efd8f5b403eacca0))
+
+### Documentation
+
+- Provide a notice about upcoming security release
+  ([`3ac590f`](https://github.com/LibreBooking/librebooking/commit/3ac590fd2019a29a235af5d5566d71567ea558c1))
+
+- Render GitHub alerts as admonitions in Sphinx
+  ([`8f04a8e`](https://github.com/LibreBooking/librebooking/commit/8f04a8ef2031dcc987ae35d8c94b1177ec0ed4af))
+
+- Replace upcoming security notice with 7.1.0 upgrade notice
+  ([`1707c7b`](https://github.com/LibreBooking/librebooking/commit/1707c7b45b23d7e3c295d07e1d338c40790dc1a4))
+
+- **contributing**: Describe automated versioning and releases
+  ([`f4ebfae`](https://github.com/LibreBooking/librebooking/commit/f4ebfae5b7354948f8abddadd287136d2eec0569))
+
+### Features
+
+- **security**: Remove remember-me login
+  ([`ddfd63f`](https://github.com/LibreBooking/librebooking/commit/ddfd63f7fe169e43eef5c2c74671bdfed4e6f436))
+
+### Testing
+
+- **integration**: Allow a custom sample data file in the setup script
+  ([`5894584`](https://github.com/LibreBooking/librebooking/commit/589458411655feb470fe5cbc7521dea19cbb5145))
+
+
 ## v7.0.0 (2026-10-06)
 
 ### Bug Fixes

@@ -69,7 +69,8 @@ interface IAuthenticationPromptOptions
     public function ShowPasswordPrompt();
 
     /**
-     * @abstract
+     * @deprecated Persistent login was removed. The result is no longer used; the method is
+     * kept so that existing authentication plugins continue to load.
      * @return bool
      */
     public function ShowPersistLoginPrompt();

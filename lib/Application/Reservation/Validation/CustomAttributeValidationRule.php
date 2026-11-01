@@ -25,8 +25,12 @@ class CustomAttributeValidationRule implements IReservationValidationRule
 
         $user = $this->userRepository->LoadById($reservationSeries->UserId());
         $bookedBy = $this->userRepository->LoadById($reservationSeries->BookedBy()->UserId);
-        $isResourceAdmin = $bookedBy->IsResourceAdminForOneOf($reservationSeries->AllResources());
-        $isAdminUser = $bookedBy->IsAdminFor($user) || $isResourceAdmin;
+        // Repository roles must not restore privileges removed from the booking context.
+        $isAdminUser = false;
+        if ($reservationSeries->BookedBy()->AllowAdminPrivileges) {
+            $isAdminUser = $bookedBy->IsAdminFor($user)
+                || $bookedBy->IsResourceAdminForOneOf($reservationSeries->AllResources());
+        }
 
         $result = $this->attributeService->Validate(CustomAttributeCategory::RESERVATION, $reservationSeries->AttributeValues(), [], false, $isAdminUser);
 

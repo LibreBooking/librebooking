@@ -92,16 +92,6 @@ class LoginPresenter
             return;
         }
 
-        $server = ServiceLocator::GetServer();
-        $loginCookie = $server->GetCookie(CookieKeys::PERSIST_LOGIN);
-
-        if ($this->IsCookieLogin($loginCookie)) {
-            if ($this->authentication->CookieLogin($loginCookie, new WebLoginContext(new LoginData(true)))) {
-                $this->_Redirect();
-                return;
-            }
-        }
-
         $allowRegistration = Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter());
         $allowAnonymousSchedule = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
         $allowGuestBookings = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_ALLOW_GUEST_RESERVATIONS, new BooleanConverter());
@@ -114,7 +104,6 @@ class LoginPresenter
         $showForgot = (!$resetDisabled && $this->authentication->ShowForgotPasswordPrompt() && !$hideLogin);
 
         $showPasswordPrompt   = ($this->authentication->ShowPasswordPrompt() && !$hideLogin);
-        $showPersistLogin     = ($this->authentication->ShowPersistLoginPrompt() && !$hideLogin);
         $showUsernamePrompt   = ($this->authentication->ShowUsernamePrompt() && !$hideLogin);
 
         $this->_page->SetShowRegisterLink($showRegisterLink);
@@ -122,7 +111,6 @@ class LoginPresenter
 
         $this->_page->ShowForgotPasswordPrompt($showForgot);
         $this->_page->ShowPasswordPrompt($showPasswordPrompt);
-        $this->_page->ShowPersistLoginPrompt($showPersistLogin);
         $this->_page->ShowUsernamePrompt($showUsernamePrompt);
         $registrationUrl = $this->authentication->GetRegistrationUrl();
         $this->_page->SetRegistrationUrl($showRegisterLink ? $registrationUrl : null);
@@ -163,7 +151,7 @@ class LoginPresenter
         }
 
         if ($isValid) {
-            $context = new WebLoginContext(new LoginData($this->_page->GetPersistLogin(), $this->_page->GetSelectedLanguage()));
+            $context = new WebLoginContext(new LoginData(language: $this->_page->GetSelectedLanguage()));
             $this->authentication->Login($id, $context);
             $this->_Redirect();
         } else {
@@ -236,11 +224,6 @@ class LoginPresenter
     private function _Redirect()
     {
         LoginRedirector::Redirect($this->_page);
-    }
-
-    private function IsCookieLogin($loginCookie)
-    {
-        return !empty($loginCookie);
     }
 
     private function SetSelectedLanguage()

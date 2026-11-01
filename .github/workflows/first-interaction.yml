@@ -1,0 +1,91 @@
+# Greets a contributor on their first issue or first pull request.
+#
+# This replaces actions/first-interaction, which (since v2) greets authors
+# on every pull request unless they have also opened an issue:
+# https://github.com/actions/first-interaction/issues/369
+name: 'Greet first-time contributors'
+on:
+  issues:
+    types: [opened]
+  # pull_request_target is needed so the token can comment on pull requests
+  # from forks. This is safe because the workflow never checks out or runs
+  # code from the pull request.
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v9.0.0
+        env:
+          ISSUE_MESSAGE: |
+            Thank you for opening your first issue in LibreBooking! 🎉
+
+            LibreBooking is maintained by volunteers. You will likely get a
+            faster and better response if you join our
+            [Discord](https://discord.gg/4TGThPtmX8) to discuss this issue.
+            If a decision is reached on Discord, please post a short summary
+            here so it is not lost.
+          PR_MESSAGE: |
+            Thank you for opening your first pull request in LibreBooking! 🎉
+
+            LibreBooking is maintained by volunteers. You will likely get a
+            faster and better review if you join our
+            [Discord](https://discord.gg/4TGThPtmX8) to discuss this pull
+            request. If a decision is reached on Discord, please post a short
+            summary here so it is not lost.
+        with:
+          script: |
+            const isPullRequest = context.eventName === 'pull_request_target';
+            const item = isPullRequest
+              ? context.payload.pull_request
+              : context.payload.issue;
+            const author = item.user;
+
+            if (author.type === 'Bot') {
+              core.info(`Skipping bot account ${author.login}.`);
+              return;
+            }
+
+            // The issues API returns both issues and pull requests; count
+            // only the kind that was just opened. The new item itself is
+            // included, so more than one means this is not their first.
+            let count = 0;
+            await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                creator: author.login,
+                state: 'all',
+                per_page: 100,
+              },
+              (response, done) => {
+                count += response.data.filter(
+                  (i) => Boolean(i.pull_request) === isPullRequest
+                ).length;
+                if (count > 1) {
+                  done();
+                }
+                return [];
+              }
+            );
+
+            if (count > 1) {
+              core.info(`${author.login} has contributed before; skipping.`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: item.number,
+              body: isPullRequest
+                ? process.env.PR_MESSAGE
+                : process.env.ISSUE_MESSAGE,
+            });

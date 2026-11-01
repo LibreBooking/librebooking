@@ -46,7 +46,6 @@ class LoginPresenterTest extends TestBase
 
         $this->page->_EmailAddress = 'nobody@localhost';
         $this->page->_Password = 'somepassword';
-        $this->page->_PersistLogin = true;
 
         $this->fakeServer->SetSession(SessionKeys::USER_SESSION, new UserSession(1));
 
@@ -70,11 +69,13 @@ class LoginPresenterTest extends TestBase
     public function testSuccessfulValidateCallsLogin()
     {
         $this->auth->_ValidateResult = true;
+        $this->page->_CurrentCode = 'en_gb';
         $this->presenter->Login();
 
         $this->assertEquals($this->page->_EmailAddress, $this->auth->_LastLogin);
         $data = $this->auth->_LastLoginContext->GetData();
-        $this->assertEquals($this->page->_PersistLogin, $data->Persist);
+        $this->assertFalse($data->Persist, 'persistent login is never requested');
+        $this->assertSame('en_gb', $data->Language);
     }
 
     public function testSuccessfulValidateCallsRedirectToNormalPageWhenNoRequestedPage()
@@ -188,7 +189,6 @@ class LoginPresenterTest extends TestBase
 
         $this->auth->_ShowUsernamePrompt = true;
         $this->auth->_ShowPasswordPrompt = true;
-        $this->auth->_ShowPersistLoginPrompt = true;
         $this->auth->_ShowForgotPasswordPrompt = true;
 
         $this->presenter->PageLoad();
@@ -197,7 +197,6 @@ class LoginPresenterTest extends TestBase
 
         $this->assertEquals(true, $this->page->_ShowUsernamePrompt);
         $this->assertEquals(true, $this->page->_ShowPasswordPrompt);
-        $this->assertEquals(true, $this->page->_ShowPersistLoginPrompt);
         $this->assertEquals(true, $this->page->_ShowForgotPasswordPrompt);
     }
 
@@ -279,29 +278,6 @@ class LoginPresenterTest extends TestBase
         $this->assertNull($this->page->_LoginErrorMessage);
     }
 
-    public function testAutoLoginIfCookieIsSet()
-    {
-        $this->page->_ResumeUrl = '/autologin/page/whatever.html';
-        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, 'part1|part2');
-        $this->fakeServer->SetCookie($cookie);
-
-        $this->auth->_CookieValidateResult = true;
-
-        $this->presenter->PageLoad();
-
-        $this->assertTrue($this->auth->_CookieLoginCalled, 'should try to auto login if persist cookie is set');
-        $this->assertEquals($cookie->Value, $this->auth->_LastLoginCookie);
-        $this->assertEquals($this->page->_ResumeUrl, $this->page->_LastRedirect);
-    }
-
-    public function testDoesNotAutoLoginIfCookieNotSet()
-    {
-        $this->page->_ResumeUrl = '/autologin/page/whatever.html';
-        $this->presenter->PageLoad();
-
-        $this->assertFalse($this->auth->_CookieLoginCalled, 'should not try to auto login without persist cookie');
-    }
-
     public function testCanChangeToKnownLanguage()
     {
         $this->page->_requestedLanguage = 'en_gb';
@@ -341,7 +317,6 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 {
     public $_EmailAddress;
     public $_Password;
-    public $_PersistLogin = false;
     public $_LastRedirect;
     public $_ShowRegisterLink;
     public $_PageLoadWasCalled = false;
@@ -356,7 +331,6 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_CurrentCode = '';
     public $_ShowUsernamePrompt = false;
     public $_ShowPasswordPrompt = false;
-    public $_ShowPersistLoginPrompt = false;
     public $_ShowForgotPasswordPrompt = false;
     public $_ShowScheduleLink = false;
     public $_Announcements;
@@ -399,11 +373,6 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public function GetPassword()
     {
         return $this->_Password;
-    }
-
-    public function GetPersistLogin()
-    {
-        return $this->_PersistLogin;
     }
 
     public function GetShowRegisterLink()
@@ -479,11 +448,6 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public function ShowPasswordPrompt($shouldShow)
     {
         $this->_ShowPasswordPrompt = $shouldShow;
-    }
-
-    public function ShowPersistLoginPrompt($shouldShow)
-    {
-        $this->_ShowPersistLoginPrompt = $shouldShow;
     }
 
     public function ShowForgotPasswordPrompt($shouldShow)

@@ -21,11 +21,6 @@ interface ILoginPage extends IPage, ILoginBasePage
      */
     public function GetPassword();
 
-    /**
-     * @return bool
-     */
-    public function GetPersistLogin();
-
     public function GetShowRegisterLink();
 
     public function SetShowRegisterLink($value);
@@ -63,11 +58,6 @@ interface ILoginPage extends IPage, ILoginBasePage
      * @param $shouldShow bool
      */
     public function ShowPasswordPrompt($shouldShow);
-
-    /**
-     * @param $shouldShow bool
-     */
-    public function ShowPersistLoginPrompt($shouldShow);
 
     /**
      * @param $shouldShow bool
@@ -169,11 +159,6 @@ class LoginPage extends Page implements ILoginPage
     public function GetPassword()
     {
         return strval($this->GetRawForm(FormKeys::PASSWORD));
-    }
-
-    public function GetPersistLogin()
-    {
-        return $this->GetCheckbox(FormKeys::PERSIST_LOGIN);
     }
 
     public function GetShowRegisterLink()
@@ -282,11 +267,6 @@ class LoginPage extends Page implements ILoginPage
     public function ShowPasswordPrompt($shouldShow)
     {
         $this->Set('ShowPasswordPrompt', $shouldShow);
-    }
-
-    public function ShowPersistLoginPrompt($shouldShow)
-    {
-        $this->Set('ShowPersistLoginPrompt', $shouldShow);
     }
 
     public function ShowForgotPasswordPrompt($shouldShow)

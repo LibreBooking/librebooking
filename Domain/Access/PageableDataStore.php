@@ -35,8 +35,12 @@ class PageableDataStore
                 $total = $row[ColumnNames::TOTAL];
             }
 
-            $pageNumber = empty($pageNumber) ? 1 : $pageNumber;
-            $pageSize = empty($pageSize) ? 1 : $pageSize;
+            // Never build a negative LIMIT or OFFSET from caller input.
+            $pageNumber = max(1, $pageNumber);
+            $pageSize = max(1, $pageSize);
+            // Keep (pageNumber - 1) * pageSize within an integer; an overflow
+            // becomes a float, which renders as an invalid OFFSET.
+            $pageNumber = min($pageNumber, intdiv(PHP_INT_MAX, $pageSize));
 
             $resultReader = $db->LimitQuery($command, $pageSize, ($pageNumber - 1) * $pageSize);
         }

@@ -155,9 +155,6 @@ class FakeWebAuthentication implements IWebAuthentication
      */
     public $_LastLoginContext;
     public $_LastLoginId;
-    public $_CookieLoginCalled = false;
-    public $_LastLoginCookie;
-    public $_CookieValidateResult = false;
     public $_LoginCalled = false;
 
     public $_ValidateResult = false;
@@ -197,15 +194,6 @@ class FakeWebAuthentication implements IWebAuthentication
     public function Logout(UserSession $user)
     {
         $this->_LogoutCalled = true;
-    }
-
-    public function CookieLogin($cookie, $context)
-    {
-        $this->_CookieLoginCalled = true;
-        $this->_LastLoginCookie = $cookie;
-        $this->_LastLoginContext = $context;
-
-        return $this->_CookieValidateResult;
     }
 
     public function AreCredentialsKnown()

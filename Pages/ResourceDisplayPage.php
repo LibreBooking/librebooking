@@ -2,6 +2,8 @@
 
 require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 
+use LibreBooking\Application\Authentication\UserSessionBuilder;
+
 interface IResourceDisplayPage extends IPage, IActionPage
 {
     public function DisplayLogin();
@@ -15,6 +17,13 @@ interface IResourceDisplayPage extends IPage, IActionPage
      * @return string
      */
     public function GetPublicResourceId();
+
+    /**
+     * The public id of the resource being booked, posted by the reservation form.
+     *
+     * @return string
+     */
+    public function GetReservationResourcePublicId();
 
     /**
      * @return string
@@ -154,13 +163,15 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
             new ScheduleRepository(),
             new DailyLayoutFactory(),
             new GuestUserService(
-                PluginManager::Instance()->LoadAuthentication(),
-                new GuestRegistration(
+                authentication: PluginManager::Instance()->LoadAuthentication(),
+                registration: new GuestRegistration(
                     new PasswordEncryption(),
                     new UserRepository(),
                     new GuestRegistrationNotificationStrategy(),
                     new GuestReservationPermissionStrategy($this)
-                )
+                ),
+                userRepository: new UserRepository(),
+                userSessionBuilder: new UserSessionBuilder(roleService: PluginManager::Instance()->LoadAuthorization())
             ),
             new AttributeService(new AttributeRepository(), new GuestPermissionService()),
             new ReservationRepository(),
@@ -240,6 +251,11 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
     }
 
+    public function GetReservationResourcePublicId()
+    {
+        return $this->GetForm(FormKeys::PUBLIC_RESOURCE_ID);
+    }
+
     public function GetStartDate()
     {
         $userTimezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
@@ -256,6 +272,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
     {
         $this->Set('ResourceName', $resource->GetName());
         $this->Set('ResourceId', $resource->GetId());
+        $this->Set('PublicResourceId', $resource->GetPublicId());
     }
 
     public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber)

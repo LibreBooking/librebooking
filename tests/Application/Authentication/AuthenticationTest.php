@@ -131,6 +131,22 @@ class AuthenticationTest extends TestBase
         $this->assertEquals($command, $this->db->_LastCommand);
     }
 
+    public function testLoginWithoutALanguageDoesNotSaveTheLoadedLanguage()
+    {
+        $this->userRepository->expects($this->once())
+            ->method('LoadByUsername')
+            ->with($this->equalTo($this->username))
+            ->willReturn($this->user);
+
+        $this->userRepository->expects($this->once())
+            ->method('UpdateLoginData')
+            ->with($this->equalTo($this->user), $this->isNull());
+
+        $actualSession = $this->auth->Login($this->username, new WebLoginContext(new LoginData()));
+
+        $this->assertSame($this->user->Language(), $actualSession->LanguageCode);
+    }
+
     public function testLoginGetsUserDataFromDatabase()
     {
         CSRFToken::$_Token = 'token';
@@ -146,8 +162,11 @@ class AuthenticationTest extends TestBase
         $this->user->Login(LoginTime::Now(), $language);
 
         $this->userRepository->expects($this->once())
-            ->method('Update')
-            ->with($this->equalTo($this->user));
+            ->method('UpdateLoginData')
+            ->with($this->equalTo($this->user), $this->equalTo($language));
+
+        $this->userRepository->expects($this->never())
+            ->method('Update');
 
         $this->authorization->expects($this->once())
             ->method('IsApplicationAdministrator')

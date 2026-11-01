@@ -8,7 +8,7 @@ is supported. Security vulnerabilities are fixed by publishing a new release;
 existing releases are not patched and fixes are not backported. Upgrade to the
 latest release to receive security fixes.
 
-supported_version: 7.0.0
+supported_version: 7.1.0
 
 ## Reporting a Vulnerability
 

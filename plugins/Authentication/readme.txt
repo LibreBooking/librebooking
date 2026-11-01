@@ -20,18 +20,17 @@ To create a new Authentication plugin:
 This class is intended to decorate an IAuthentication instance, so in most cases you would want to create a new Authentication() class in the constructor if one isn't supplied as a parameter.
 This class must support parameterless instantiation.
 
-There are three methods which need to be implemented:
+There are two methods which need to be implemented:
 
 1) Validate() accepts $username and $password as parameters.
 This method should go to the credential store and validate that this user has proper access.
 This method returns true or false depending on if the user is authorized or not.
 
-2) Login() accepts $username and $persist as parameters.
+2) Login() accepts $username and $loginContext as parameters.
 This method is only called if the result of Validate() was true.  Typically, this method would synchronize data between the source store and Booked Scheduler,
 although this is not required if the user account data already exists in LibreBooking.
 If synchronization is necessary, the account should be registered if it does not exist or updated if it does. The Ldap plugin illustrates how to accomplish this.
 The Login method should always call to the decorated Authentication classes Login() method. This ensures that any functionality required by LibreBooking is executed.
 
-3) CookieLogin() accepts $cookieValue as a parameter.
-This method will typically delegate directly to the decorated Authentication class. The intent of this method is to support persistent sign-on through cookies.
-This can be overridden with a no-op to suppress this behavior.
+Persistent sign-on through cookies ("Remember Me") has been removed. Plugins no longer implement CookieLogin(), and the
+Persist value of the login context is ignored. ShowPersistLoginPrompt() must still be implemented, but its result is not used.
