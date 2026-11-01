@@ -1,6 +1,7 @@
 <?php
 
 require_once(ROOT_DIR . 'Pages/Page.php');
+require_once(ROOT_DIR . 'Domain/Access/PageableDataStore.php');
 
 interface IPageable
 {
@@ -37,23 +38,23 @@ class PageablePage extends Page implements IPageable
     }
 
     /**
-     * @return int
+     * @return int The requested page, or 0 when none (or an invalid one) was requested
      */
     public function GetPageNumber()
     {
-        return intval($this->page->GetQuerystring(QueryStringKeys::PAGE));
+        return max(0, intval($this->page->GetQuerystring(QueryStringKeys::PAGE)));
     }
 
     /**
-     * @return int
+     * @return int The requested page size, PageInfo::All, or the configured default
      */
     public function GetPageSize()
     {
-        $size = $this->page->GetQuerystring(QueryStringKeys::PAGE_SIZE);
-        if (empty($size)) {
+        $size = intval($this->page->GetQuerystring(QueryStringKeys::PAGE_SIZE));
+        if ($size < 1 && $size != PageInfo::All) {
             return intval(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE));
         }
-        return intval($size);
+        return $size;
     }
 
     /**

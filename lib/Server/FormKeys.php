@@ -176,6 +176,12 @@ class FormKeys
     public const PEAK_BEGIN_TIME = 'PEAK_BEGIN_TIME';
     public const PEAK_END_TIME = 'PEAK_END_TIME';
     public const PEAK_DELETE = 'PEAK_DELETE';
+    /**
+     * @deprecated Persistent login was removed and no form field uses this key. It is kept
+     * because a login template compiled by an earlier release still resolves it: with
+     * template caching on, that compiled copy is used until tpl_c is cleared, and a missing
+     * key would make the login page fail.
+     */
     public const PERSIST_LOGIN = 'persistLogin';
     public const PHONE = 'phone';
     public const POSITION = 'position';
@@ -219,6 +225,7 @@ class FormKeys
     public const RESOURCE_CONTACT = 'resourceContact';
     public const RESOURCE_DESCRIPTION = 'resourceDescription';
     public const RESOURCE_ID = 'resourceId';
+    public const PUBLIC_RESOURCE_ID = 'publicResourceId';
     public const RESOURCE_IMAGE = 'resourceImage';
     public const RESOURCE_IMPORT_FILE = 'resourceImportFile';
     public const RESOURCE_LOCATION = 'resourceLocation';

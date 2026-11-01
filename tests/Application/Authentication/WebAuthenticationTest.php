@@ -55,99 +55,78 @@ class WebAuthenticationTest extends TestBase
         $this->assertEquals($user, $this->fakeServer->GetUserSession());
     }
 
-    public function testCanPersistLoginWhenValidLogin()
+    public function testLoginDoesNotSetAPersistentLoginCookie()
     {
-        $id = 100;
-        $now = mktime(10, 11, 12, 1, 2, 2000);
-        LoginTime::$Now = $now;
-
-        $hashedValue = sprintf('%s|%s', $id, $now);
-
-        $session = new UserSession($id);
-        $session->LoginTime = $now;
-        $this->fakeAuth->_Session = $session;
+        $this->fakeAuth->_Session = new FakeUserSession();
+        $this->assertTrue($this->loginContext->GetData()->Persist, 'The deprecated flag is set for this test');
 
         $this->webAuth->Login($this->username, $this->loginContext);
 
-        $expectedCookie = new Cookie(CookieKeys::PERSIST_LOGIN, $hashedValue);
-        $this->assertEquals($expectedCookie->Value, $this->fakeServer->GetCookie(CookieKeys::PERSIST_LOGIN));
-    }
-
-    public function testCanAutoLoginWithCookie()
-    {
-        $userid = 'userid';
-        $lastLogin = LoginTime::Now();
-        $email = 'email@address.com';
-        $cookie = new LoginCookie($userid, $lastLogin);
-
-        $rows = [
-            ColumnNames::USER_ID => $userid,
-            ColumnNames::LAST_LOGIN => $lastLogin,
-            ColumnNames::EMAIL => $email
-        ];
-        $this->db->SetRows([$rows]);
-
-        $user = new FakeUserSession();
-        $this->fakeAuth->_Session = $user;
-
-        $valid = $this->webAuth->CookieLogin($cookie->Value, $this->loginContext);
-
-        $cookieValidateCommand = new CookieLoginCommand($userid);
-
-        $this->assertTrue($valid, 'should be valid if cookie matches');
-        $this->assertEquals($cookieValidateCommand, $this->db->_LastCommand);
-        $this->assertEquals($email, $this->fakeAuth->_LastLogin);
-        $this->assertEquals($this->loginContext, $this->fakeAuth->_LastLoginContext);
-        $this->assertEquals($user, $this->fakeServer->GetUserSession());
-    }
-
-    public function testDoesNotAutoLoginIfLastLoginDateOnCookieDoesNotMatch()
-    {
-        $userid = 'userid';
-        $lastLogin = LoginTime::Now();
-        $email = 'email@address.com';
-        $cookie = new LoginCookie($userid, $lastLogin);
-
-        $rows = [[
-            ColumnNames::USER_ID => $userid,
-            ColumnNames::LAST_LOGIN => 'not the same thing',
-            ColumnNames::EMAIL => $email
-        ]];
-        $this->db->SetRows($rows);
-
-        $valid = $this->webAuth->CookieLogin($cookie->Value, $this->loginContext);
-
-        $this->assertFalse($valid, 'should not be valid if cookie does not match');
-        $this->assertEquals(1, count($this->db->_Commands));
-        $this->assertFalse($this->fakeAuth->_LoginCalled);
-        $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
-        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
-    }
-
-    public function testDoesNotAutoLoginIfCookieValueIsMalformed()
-    {
-        $valid = $this->webAuth->CookieLogin('malformed-cookie-value', $this->loginContext);
-
-        $this->assertFalse($valid, 'should not be valid if cookie cannot be parsed');
-        $this->assertEquals(0, count($this->db->_Commands));
-        $this->assertFalse($this->fakeAuth->_LoginCalled);
-        $this->assertEquals(new NullUserSession(), $this->fakeServer->GetUserSession());
-        $this->assertEquals(CookieKeys::PERSIST_LOGIN, $this->fakeServer->_DeletedCookie->Name);
+        $this->assertNull($this->fakeServer->GetCookie(CookieKeys::PERSIST_LOGIN));
+        $this->assertSame([], $this->fakeServer->Cookies);
     }
 
     public function testLogsUserOut()
     {
-        $userId = 100;
         $userSession = new FakeUserSession();
-        $userSession->UserId = $userId;
-
-        $loginCookie = new LoginCookie($userId, null);
+        $userSession->UserId = 100;
 
         $this->webAuth->Logout($userSession);
 
-        $this->assertEquals($loginCookie, $this->fakeServer->_DeletedCookie);
+        $this->assertPersistentLoginCookieWasExpired();
         $this->assertEquals(SessionKeys::USER_SESSION, $this->fakeServer->_EndedSession);
         $this->assertTrue($this->fakeAuth->_LogoutCalled);
+    }
+
+    public function testPostLogoutExpiresThePersistentLoginCookieAndEndsTheSession()
+    {
+        $this->assertFalse(method_exists($this->fakeAuth, 'postLogout'), 'The default fake has no postLogout() hook');
+
+        $this->webAuth->postLogout(new FakeUserSession());
+
+        $this->assertPersistentLoginCookieWasExpired();
+        $this->assertEquals(SessionKeys::USER_SESSION, $this->fakeServer->_EndedSession);
+    }
+
+    public function testPostLogoutCallsThePluginHookWhenItExists()
+    {
+        // postLogout() is not part of IAuthentication; only some plugins provide it.
+        $auth = new class () extends FakeAuth {
+            public ?UserSession $_PostLogoutUser = null;
+
+            public function postLogout(UserSession $user): void
+            {
+                $this->_PostLogoutUser = $user;
+            }
+        };
+        $userSession = new FakeUserSession();
+        $webAuth = new WebAuthentication($auth, $this->fakeServer);
+
+        $webAuth->postLogout($userSession);
+
+        $this->assertSame($userSession, $auth->_PostLogoutUser);
+        $this->assertEquals(SessionKeys::USER_SESSION, $this->fakeServer->_EndedSession);
+    }
+
+    public function testLogoutExpiresThePersistentLoginCookieWithoutAUserSession()
+    {
+        $this->webAuth->Logout(new NullUserSession());
+
+        $this->assertPersistentLoginCookieWasExpired();
+        $this->assertEquals(SessionKeys::USER_SESSION, $this->fakeServer->_EndedSession);
+    }
+
+    public function testLoggingOutRepeatedlyIsHarmless()
+    {
+        $userSession = new FakeUserSession();
+
+        $this->webAuth->Logout($userSession);
+        $this->webAuth->Logout($userSession);
+        $this->webAuth->postLogout($userSession);
+        $this->webAuth->postLogout($userSession);
+
+        $this->assertPersistentLoginCookieWasExpired();
+        $this->assertEquals(SessionKeys::USER_SESSION, $this->fakeServer->_EndedSession);
     }
 
     public function testHandlesLoginFailure()
@@ -156,5 +135,13 @@ class WebAuthenticationTest extends TestBase
         $this->webAuth->HandleLoginFailure($page);
 
         $this->assertTrue($this->fakeAuth->_HandleLoginFailureCalled);
+    }
+
+    private function assertPersistentLoginCookieWasExpired(): void
+    {
+        $deleted = $this->fakeServer->_DeletedCookie;
+        $this->assertInstanceOf(Cookie::class, $deleted);
+        $this->assertSame(CookieKeys::PERSIST_LOGIN, $deleted->Name);
+        $this->assertSame('', $deleted->Value);
     }
 }

@@ -19,6 +19,40 @@
                 </li>
             </ul>
 
+            <h2 class="mt-4 fs-4">Versions</h2>
+            <div class="table-responsive">
+                <table id="server-versions" class="table table-sm table-striped">
+                    <tbody>
+                        <tr><th scope="row">LibreBooking</th><td>{$appVersion}</td></tr>
+                        <tr><th scope="row">Database Schema</th><td>{$databaseSchemaVersion|escape}</td></tr>
+                        <tr><th scope="row">Database Server</th><td>{$databaseServerVersion|escape}</td></tr>
+                        <tr><th scope="row">Smarty</th><td>{$smartyVersion}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="mt-4 fs-4">PHP</h2>
+            <div class="table-responsive">
+                <table id="server-php-info" class="table table-sm table-striped">
+                    <tbody>
+                        {foreach from=$phpInfo key=label item=value}
+                            <tr><th scope="row">{$label}</th><td>{$value|escape}</td></tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="mt-4 fs-4">PHP Settings</h2>
+            <div class="table-responsive">
+                <table id="server-ini-settings" class="table table-sm table-striped">
+                    <tbody>
+                        {foreach from=$iniSettings key=name item=value}
+                            <tr><th scope="row"><code>{$name}</code></th><td>{$value|escape}</td></tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
             <h2 class="mt-4 fs-4">Plugins</h2>
             <ul class="indented">
                 {foreach from=$plugins key=category item=items}

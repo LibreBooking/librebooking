@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use LibreBooking\Application\Authentication\UserSessionBuilder;
+
 require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 require_once(ROOT_DIR . 'Pages/ResourceDisplayPage.php');
 
@@ -282,14 +284,13 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->page->_EndTime = '17:00';
         $this->page->_BeginDate = '2016-03-11';
         $this->page->_Timezone = 'America/New_York';
-        $this->page->_ResourceId = 292;
 
         $userAccount = new FakeUserSession(123);
         $this->guestUserService->_UserSession = $userAccount;
         $this->reservationCreateHandler->_Success = true;
 
-        $resource = new FakeBookableResource(122);
-        $this->resourceRepository->_Resource = $resource;
+        $resource = $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
 
         $begin = Date::Parse('2016-03-11 08:00', $this->page->_Timezone);
         $end = Date::Parse('2016-03-11 17:00', $this->page->_Timezone);
@@ -301,7 +302,8 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertEquals(true, $this->page->_ReservationCreatedSuccessfully);
         $this->assertEquals($resource, $this->reservationCreateHandler->_LastSeries->Resource());
         $this->assertEquals($userAccount->UserId, $this->reservationCreateHandler->_LastSeries->UserId());
-        $this->assertEquals($userAccount, $this->reservationCreateHandler->_LastSeries->BookedBy());
+        $this->assertNotSame($userAccount, $this->reservationCreateHandler->_LastSeries->BookedBy());
+        $this->assertEquals($userAccount->WithoutAdminPrivileges(), $this->reservationCreateHandler->_LastSeries->BookedBy());
         $this->assertEquals($begin, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->StartDate());
         $this->assertEquals($end, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->EndDate());
     }
@@ -314,15 +316,14 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->page->_EndTime = '17:00';
         $this->page->_BeginDate = '2016-03-11';
         $this->page->_Timezone = 'America/New_York';
-        $this->page->_ResourceId = 292;
 
         $userAccount = new FakeUserSession(123);
         $this->guestUserService->_UserSession = $userAccount;
         $this->reservationCreateHandler->_Success = false;
         $this->reservationCreateHandler->_Errors = ['one', 'two'];
 
-        $resource = new FakeBookableResource(122);
-        $this->resourceRepository->_Resource = $resource;
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
 
         $this->presenter->reservationCreateHandler = $this->reservationCreateHandler;
 
@@ -330,6 +331,317 @@ class ResourceDisplayPresenterTest extends TestBase
 
         $this->assertEquals(false, $this->page->_ReservationCreatedSuccessfully);
         $this->assertEquals($this->reservationCreateHandler->_Errors, $this->page->_ResultCollector->Errors);
+    }
+
+    public function testWhenTheAccountCannotBookNothingIsReserved()
+    {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Email = 'inactive@user.com';
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+
+        // A display-enabled resource, so the request is refused by the account check, not the
+        // resource check.
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
+
+        $this->guestUserService->_UserSession = new NullUserSession();
+        $this->presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        $this->presenter->Reserve();
+
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertFalse($this->page->_ResultCollector->Succeeded);
+        $this->assertNotEmpty($this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationCreateHandler->_LastSeries, 'no reservation should be attempted');
+    }
+
+    public function testReservingAsAnExistingAccountDoesNotLogItInOrChangeItEvenWhenTheBookingFails()
+    {
+        $email = 'some@user.com';
+        $userId = 123;
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->never())->method('Login');
+        $userRepository = new FakeUserRepository();
+        $userRepository->_User = new FakeUser($userId, $email);
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($email, $authentication, $userRepository, $registration);
+        $this->reservationCreateHandler->_Success = false;
+        $this->reservationCreateHandler->_Errors = ['booking refused'];
+
+        $presenter->ProcessAction();
+
+        $this->assertTrue($this->page->_Validators['guestdenied']->IsValid());
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertEquals(['booking refused'], $this->page->_ResultCollector->Errors);
+        $this->assertSame($userId, $this->reservationCreateHandler->_LastSeries->UserId(), 'the booking is still attributed to the named user');
+        $this->assertFalse($registration->_RegisterCalled);
+        $this->assertNull($userRepository->_UpdatedUser);
+        $this->assertNull($userRepository->_LoginDataUpdatedUser);
+    }
+
+    public function testKioskPassesRestrictedCopyToRealHandlerWithoutChangingBrowserSession(): void
+    {
+        $source = new FakeUserSession(true);
+        $source->IsGroupAdmin = true;
+        $source->IsResourceAdmin = true;
+        $source->IsScheduleAdmin = true;
+        $source->Groups = [42];
+        $source->AdminGroups = [42];
+        $before = clone $source;
+        $this->fakeServer->UserSession = $source;
+        $this->guestUserService->_UserSession = $source;
+        Date::_SetNow(Date::Parse('2026-10-11 08:00', 'UTC'));
+        $this->page->_Username = $source->Email;
+        $this->page->_BeginTime = '10:00';
+        $this->page->_EndTime = '11:00';
+        $this->page->_BeginDate = '2026-10-11';
+        $this->page->_Timezone = 'UTC';
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::FUTURE);
+        $this->useRealHandlerExpectingRestrictedSession($source);
+
+        $this->presenter->Reserve();
+
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertSame(['NoResourcePermission'], $this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationRepository->_LastAddedReservation);
+        $this->assertSame($source, $this->fakeServer->UserSession);
+        $this->assertEquals($before, $source);
+    }
+
+    public function testNewGuestProviderSessionIsRestrictedBeforeBooking(): void
+    {
+        $source = new FakeUserSession(true);
+        $source->IsGroupAdmin = true;
+        $source->IsResourceAdmin = true;
+        $source->IsScheduleAdmin = true;
+        $before = clone $source;
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->once())->method('Login')->willReturn($source);
+        $users = new FakeUserRepository();
+        $users->_User = User::Null();
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($source->Email, $authentication, $users, $registration);
+        $presenter->reservationCreateHandler = null;
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_GUEST_RESERVATIONS, true);
+        $this->fakeConfig->SetKey(ConfigKeys::RESERVATION_START_TIME_CONSTRAINT, ReservationStartTimeConstraint::NONE);
+        $this->useRealHandlerExpectingRestrictedSession($source);
+
+        $presenter->ProcessAction();
+
+        $this->assertTrue($registration->_RegisterCalled);
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertSame(['NoResourcePermission'], $this->page->_ResultCollector->Errors);
+        $this->assertNull($this->reservationRepository->_LastAddedReservation);
+        $this->assertEquals($before, $source);
+    }
+
+    private function useRealHandlerExpectingRestrictedSession(UserSession $source): void
+    {
+        $factory = $this->createMock(IPreReservationFactory::class);
+        $factory->expects($this->once())->method('CreatePreAddService')
+            ->willReturnCallback(function (UserSession $session) use ($source) {
+                $this->assertNotSame($source, $session);
+                $this->assertSame($source->UserId, $session->UserId);
+                $this->assertSame($source->Groups, $session->Groups);
+                $this->assertSame($source->Email, $session->Email);
+                $this->assertSame($source->Timezone, $session->Timezone);
+                $this->assertSame($source->LanguageCode, $session->LanguageCode);
+                $this->assertFalse($session->IsAdmin);
+                $this->assertFalse($session->IsGroupAdmin);
+                $this->assertFalse($session->IsResourceAdmin);
+                $this->assertFalse($session->IsScheduleAdmin);
+                $this->assertFalse($session->AllowAdminPrivileges);
+                $this->assertSame([], $session->AdminGroups);
+                return (new PreReservationFactory())->CreatePreAddService($session);
+            });
+        $this->fakePluginManager->preResPlugin = $factory;
+        $notifications = $this->createMock(IPostReservationFactory::class);
+        $notifications->method('CreatePostAddService')->willReturn(new NullReservationNotificationService());
+        $this->fakePluginManager->postResPlugin = $notifications;
+    }
+
+    public function testWhenTheRegisteredAccountCheckFailsNothingIsReservedAndNoAccountIsTouched()
+    {
+        $email = 'inactive@user.com';
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->never())->method('Login');
+        $user = new FakeUser(123, $email);
+        $user->SetStatus(AccountStatus::INACTIVE);
+        $userRepository = new FakeUserRepository();
+        $userRepository->_User = $user;
+        $registration = new FakeRegistration();
+        $presenter = $this->reservePresenterWithRealGuestUserService($email, $authentication, $userRepository, $registration);
+
+        $presenter->ProcessAction();
+
+        $this->assertFalse($this->page->_Validators['guestdenied']->IsValid());
+        $this->assertNull($this->page->_ReservationCreatedSuccessfully, 'Reserve() must not run when validation fails');
+        $this->assertNull($this->reservationCreateHandler->_LastSeries);
+        $this->assertFalse($registration->_RegisterCalled);
+        $this->assertSame(AccountStatus::INACTIVE, $user->StatusId());
+        $this->assertNull($userRepository->_UpdatedUser);
+        $this->assertNull($userRepository->_LoginDataUpdatedUser);
+    }
+
+    public function testReserveRejectsAnythingNotDisplayEnabled()
+    {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Email = 'some@user.com';
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+        // A session that would book successfully if the resource gate let the request through.
+        $this->guestUserService->_UserSession = new FakeUserSession(123);
+
+        // One resource is display-enabled under its public id; another exists but is not.
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->resourceRepository->_ResourcesByPublicId['not-enabled'] = new FakeBookableResource(133);
+
+        // Missing, unknown, an internal id in place of the public id, and a resource that
+        // exists but is not display-enabled are all refused, with no reservation created.
+        foreach (['', 'unknown-public-id', '122', 'not-enabled'] as $publicId) {
+            $handler = new FakeReservationHandler();
+            $handler->_Success = true;
+            $this->presenter->reservationCreateHandler = $handler;
+            $this->guestUserService->_CreateOrLoadCalled = false;
+            $this->page->_ReservationCreatedSuccessfully = null;
+            $this->page->_ReservationResourcePublicId = $publicId;
+
+            $this->presenter->Reserve();
+
+            $this->assertFalse($this->page->_ReservationCreatedSuccessfully, "public id [$publicId] must be rejected");
+            $this->assertNull($handler->_LastSeries, "public id [$publicId] must create no reservation");
+            $this->assertFalse($this->guestUserService->_CreateOrLoadCalled, "public id [$publicId] must not resolve or create an account");
+        }
+    }
+
+    public function testReserveForANonDisplayResourceCreatesNoGuestAccountAndNoReservation()
+    {
+        $email = 'new-guest@user.com';
+        $authentication = $this->createMock(IAuthentication::class);
+        $authentication->expects($this->never())->method('Login');
+        $userRepository = new FakeUserRepository();
+        $userRepository->_User = User::Null();
+        $registration = new FakeRegistration();
+
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        // The test page returns $_Username from GetEmail(), which is what Reserve() reads.
+        $this->page->_Username = $email;
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+        // A display-enabled resource exists, but under a different public id; the requested
+        // one is unknown, so the repository returns a Null resource.
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'unknown-public-id';
+
+        $presenter = new ResourceDisplayPresenter(
+            $this->page,
+            $this->resourceRepository,
+            $this->reservationService,
+            $this->authorizationService,
+            $this->authentication,
+            $this->scheduleRepository,
+            $this->dailyLayoutFactory,
+            new GuestUserService(
+                authentication: $authentication,
+                registration: $registration,
+                userRepository: $userRepository,
+                userSessionBuilder: new UserSessionBuilder(roleService: $this->authorizationService)
+            ),
+            $this->attributeService,
+            $this->reservationRepository,
+            $this->termsOfServiceRepository
+        );
+        $presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        $presenter->Reserve();
+
+        $this->assertFalse($this->page->_ReservationCreatedSuccessfully);
+        $this->assertNull($this->reservationCreateHandler->_LastSeries);
+        $this->assertFalse($registration->_RegisterCalled, 'no guest account may be created for a non-display resource');
+    }
+
+    public function testActivateStillUsesTheInternalResourceIdAndEnablesDisplay()
+    {
+        $resource = new FakeBookableResource(55);
+        $this->resourceRepository->_Resource = $resource;
+        $this->page->_ResourceId = 55;
+        $this->authorizationService->_CanEditForResource = true;
+
+        $this->presenter->Activate();
+
+        $this->assertTrue($resource->GetIsDisplayEnabled(), 'the setup flow still enables display by internal id');
+        $this->assertEquals($resource, $this->resourceRepository->_UpdatedResource);
+        $this->assertEquals($resource->GetPublicId(), $this->page->_ActivatedResourceId);
+    }
+
+    /**
+     * Builds a resource that is enabled for display (has a public id and allows calendar
+     * subscription) and registers it with the repository fake under that public id.
+     */
+    private function displayEnabledResource($resourceId, $publicId): FakeBookableResource
+    {
+        $resource = new FakeBookableResource($resourceId);
+        $resource->WithPublicId($publicId);
+        $resource->EnableSubscription();
+        $this->resourceRepository->_ResourcesByPublicId[$publicId] = $resource;
+
+        return $resource;
+    }
+
+    /**
+     * A presenter for the 'reserve' action that uses the real GuestUserService, with guest
+     * reservations disabled so the registered-account validator runs, and a page that runs
+     * its validators before the action as the real page does.
+     */
+    private function reservePresenterWithRealGuestUserService(
+        string $email,
+        IAuthentication $authentication,
+        FakeUserRepository $userRepository,
+        FakeRegistration $registration
+    ): ResourceDisplayPresenter {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Action = 'reserve';
+        $this->page->_RunValidators = true;
+        // The test page returns $_Username from GetEmail().
+        $this->page->_Username = $email;
+        $this->page->_BeginTime = '08:00';
+        $this->page->_EndTime = '17:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+        $this->fakeConfig->SetKey(ConfigKeys::TABLET_VIEW_ALLOW_GUEST_RESERVATIONS, 'false');
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
+
+        $presenter = new ResourceDisplayPresenter(
+            $this->page,
+            $this->resourceRepository,
+            $this->reservationService,
+            $this->authorizationService,
+            $this->authentication,
+            $this->scheduleRepository,
+            $this->dailyLayoutFactory,
+            new GuestUserService(
+                authentication: $authentication,
+                registration: $registration,
+                userRepository: $userRepository,
+                userSessionBuilder: new UserSessionBuilder(roleService: $this->authorizationService)
+            ),
+            $this->attributeService,
+            $this->reservationRepository,
+            $this->termsOfServiceRepository
+        );
+        $presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        return $presenter;
     }
 
     private function setupStandardExpectations($requiresCheckin = false, $checkinMin = 0)
@@ -377,6 +689,7 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public $_ResourceId;
     public $_ActivatedResourceId;
     public $_PublicResourceId;
+    public $_ReservationResourcePublicId;
     public $_DailyLayout;
     public $_BoundResource;
     public $_AvailableNow = false;
@@ -412,6 +725,26 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public $_RequiresCheckIn = false;
     public $_CheckinReferenceNumber;
     public $_TermsOfService;
+    public $_Action;
+    public $_RunValidators = false;
+
+    /**
+     * Runs the registered validators, as the real page does, when $_RunValidators is set.
+     */
+    public function IsValid()
+    {
+        if (!$this->_RunValidators) {
+            return parent::IsValid();
+        }
+
+        $isValid = true;
+        foreach ($this->_Validators as $validator) {
+            $validator->Validate();
+            $isValid = $isValid && $validator->IsValid();
+        }
+
+        return $isValid;
+    }
 
     public function TakingAction()
     {
@@ -420,7 +753,7 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
 
     public function GetAction()
     {
-        // TODO: Implement GetAction() method.
+        return $this->_Action;
     }
 
     public function RequestingData()
@@ -481,6 +814,11 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
     public function GetPublicResourceId()
     {
         return $this->_PublicResourceId;
+    }
+
+    public function GetReservationResourcePublicId()
+    {
+        return $this->_ReservationResourcePublicId;
     }
 
     public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber)

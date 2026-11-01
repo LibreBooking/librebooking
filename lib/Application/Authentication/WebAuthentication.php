@@ -31,13 +31,6 @@ interface IWebAuthentication extends IAuthenticationPromptOptions
     public function postLogout(UserSession $user);
 
     /**
-     * @param string $cookieValue authentication cookie value
-     * @param ILoginContext $loginContext
-     * @return bool If the login was successful
-     */
-    public function CookieLogin($cookieValue, $loginContext);
-
-    /**
      * @param ILoginPage $loginPage
      * @return void
      */
@@ -105,10 +98,6 @@ class WebAuthentication implements IWebAuthentication
     {
         $userSession = $this->authentication->Login($username, $loginContext);
         $this->server->SetUserSession($userSession);
-
-        if ($loginContext->GetData()->Persist) {
-            $this->SetLoginCookie($userSession->UserId, $userSession->LoginTime);
-        }
     }
 
     /**
@@ -120,7 +109,7 @@ class WebAuthentication implements IWebAuthentication
         $this->authentication->Logout($userSession);
         Log::Debug('Logout userId: %s', $userSession->UserId);
 
-        $this->DeleteLoginCookie($userSession->UserId);
+        $this->DeletePersistLoginCookie();
         ServiceLocator::GetServer()->EndSession(SessionKeys::USER_SESSION);
     }
 
@@ -130,68 +119,22 @@ class WebAuthentication implements IWebAuthentication
      */
     public function postLogout(UserSession $userSession)
     {
-        $this->authentication->postLogout($userSession);
+        // postLogout() is not part of IAuthentication; only some plugins provide it.
+        if (method_exists($this->authentication, 'postLogout')) {
+            $this->authentication->postLogout($userSession);
+        }
         Log::Debug('Logout userId: %s', $userSession->UserId);
 
-        $this->DeleteLoginCookie($userSession->UserId);
+        $this->DeletePersistLoginCookie();
         ServiceLocator::GetServer()->EndSession(SessionKeys::USER_SESSION);
     }
 
-    public function CookieLogin($cookieValue, $loginContext)
-    {
-        $loginCookie = LoginCookie::FromValue($cookieValue);
-        $valid = false;
-        $this->server->SetUserSession(new NullUserSession());
-
-        if (!is_null($loginCookie)) {
-            $validEmail = $this->ValidateCookie($loginCookie);
-            $valid = !is_null($validEmail);
-
-            if ($valid) {
-                $loginContext->GetData()->Persist = true;
-                $this->Login($validEmail, $loginContext);
-            } else {
-                $this->DeletePersistLoginCookie();
-            }
-        } else {
-            $this->DeletePersistLoginCookie();
-        }
-
-        Log::Debug('Cookie login. IsValid: %s', $valid);
-
-        return $valid;
-    }
-
     /**
-     * @param int $userid
-     * @param string $lastLogin
+     * Expires a persistent login cookie left over from an earlier release. Its value is never read.
      */
-    private function SetLoginCookie($userid, $lastLogin)
-    {
-        $cookie = new LoginCookie($userid, $lastLogin);
-        $this->server->SetCookie($cookie);
-    }
-
-    private function DeleteLoginCookie($userid)
-    {
-        ServiceLocator::GetServer()->DeleteCookie(new LoginCookie($userid, null));
-    }
-
-    private function DeletePersistLoginCookie()
+    private function DeletePersistLoginCookie(): void
     {
         $this->server->DeleteCookie(new Cookie(CookieKeys::PERSIST_LOGIN, ''));
-    }
-
-    private function ValidateCookie($loginCookie)
-    {
-        $valid = false;
-        $reader = ServiceLocator::GetDatabase()->Query(new CookieLoginCommand($loginCookie->UserID));
-
-        if ($row = $reader->GetRow()) {
-            $valid = $row[ColumnNames::LAST_LOGIN] == $loginCookie->LastLogin;
-        }
-
-        return $valid ? $row[ColumnNames::EMAIL] : null;
     }
 
     public function HandleLoginFailure(ILoginPage $loginPage)
@@ -214,6 +157,9 @@ class WebAuthentication implements IWebAuthentication
         return $this->authentication->ShowPasswordPrompt();
     }
 
+    /**
+     * @deprecated Persistent login was removed. The result is no longer used.
+     */
     public function ShowPersistLoginPrompt()
     {
         return $this->authentication->ShowPersistLoginPrompt();

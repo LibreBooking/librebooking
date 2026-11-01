@@ -33,6 +33,15 @@ interface IUserRepository extends IUserViewRepository
     public function Update(User $user);
 
     /**
+     * Persists only the data changed by a login: last login time, the language chosen at
+     * login and, if the user had none, the generated public id. Leaves all other columns
+     * untouched.
+     *
+     * @param string|null $language language chosen at login, or null to keep the stored language
+     */
+    public function UpdateLoginData(User $user, ?string $language): void;
+
+    /**
      * @param User $user
      * @return int
      */
@@ -549,6 +558,22 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         }
 
         $this->_cache->Remove($userId);
+    }
+
+    public function UpdateLoginData(User $user, ?string $language): void
+    {
+        // An existing public_id is never overwritten. If two first logins race, each may
+        // generate an id and only the first is stored; the other session then holds an
+        // id that was never persisted. The session's PublicId has no consumer that relies
+        // on it, so this is accepted rather than adding a read-back query to every login.
+        ServiceLocator::GetDatabase()->Execute(new UpdateLoginDataCommand(
+            userId: $user->Id(),
+            lastLoginTime: $user->LastLogin(),
+            language: $language,
+            publicId: $user->GetPublicId()
+        ));
+
+        $this->_cache->Remove($user->Id());
     }
 
     public function DeleteById($userId)
