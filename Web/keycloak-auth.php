@@ -5,11 +5,19 @@ define('ROOT_DIR', '../');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 //Checks if the user was authenticated by keycloak and redirects to external authentication page
-if (isset($_GET['code'])) {
-    $code = filter_input(INPUT_GET, 'code');
-    header('Location: ' . ROOT_DIR . 'Web/external-auth.php?type=keycloak&code=' . $code);
+$code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
+
+if (is_string($code) && $code !== '') {
+    $params = ['type' => 'keycloak', 'code' => $code];
+
+    $state = filter_input(INPUT_GET, 'state', FILTER_UNSAFE_RAW);
+    if (is_string($state) && $state !== '') {
+        $params['redirect'] = $state;
+    }
+
+    header('Location: ' . ROOT_DIR . 'Web/external-auth.php?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986));
     exit;
-} else {
-    header('Location:' . ROOT_DIR . 'Web');
-    exit();
 }
+
+header('Location:' . ROOT_DIR . 'Web');
+exit();
