@@ -2,6 +2,28 @@
 # Librebooking
 
 > [!WARNING]
+> **Security: upgrade to LibreBooking 7.2.0 or later immediately.**
+>
+> All versions before 7.2.0 contain a high-severity stored cross-site
+> scripting (XSS) vulnerability that lets any signed-in user take over an
+> administrator account. The user stores a script in their own profile,
+> through the REST API or the profile page, and it runs when an
+> administrator views a page that shows it. Security fixes are not
+> backported, so no fix will be released for 7.1.x or earlier.
+>
+> There is no complete workaround. Disabling the API (`api.enabled` set to
+> `false`, the default) blocks the attack described in the advisory, but
+> related issues fixed in 7.2.0 can be exploited without the API. See the
+> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-jg4x-fh83-8g8v)
+> for details, and get the
+> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
+>
+> If you have questions, join the
+> [Discord channel](https://discord.gg/4TGThPtmX8).
+
+Previous security update
+
+> [!WARNING]
 > **Security: upgrade to LibreBooking 7.1.0 or later immediately.**
 >
 > All versions before 7.1.0 contain a critical vulnerability that lets an
@@ -22,22 +44,6 @@
 > If you have questions, join the
 > [Discord channel](https://discord.gg/4TGThPtmX8) or comment on the
 > [related issue](https://github.com/LibreBooking/librebooking/issues/1779).
-
-Previous security update
-
-> [!WARNING]
-> **Security: upgrade to LibreBooking 7.0.0 or later immediately.**
->
-> All versions before 7.0.0 contain a critical vulnerability that lets an
-> unauthenticated attacker take over an administrator account. Security fixes
-> are not backported, so no fix will be released for 6.x or earlier.
->
-> If you cannot upgrade right away, delete `Web/install/migrate.php` or block
-> access to it in your web server. See the
-> [security advisory](https://github.com/LibreBooking/librebooking/security/advisories/GHSA-3356-vjx2-5pg8)
-> for details and for how to check whether an installation was compromised,
-> and get the
-> [latest release](https://github.com/LibreBooking/librebooking/releases/latest).
 
 [![GitHub issues](https://img.shields.io/github/issues/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/issues)
 [![Last commit](https://img.shields.io/github/last-commit/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/commits)
