@@ -83,7 +83,7 @@
                 {assign var=slots value=$DailyLayout->GetLayout($date, $User->UserId*-1)}
                 <tr class="slots">
                     <td class="resourcename">
-                        <span>{$User->FullName}</span>
+                        <span>{$User->FullName|escape:'html':'UTF-8':false}</span>
                     </td>
                     {foreach from=$slots item=slot}
                         {displaySlot Slot=$slot ResourceId=$User->UserId*-1}
@@ -94,7 +94,7 @@
                     {assign var=slots value=$DailyLayout->GetLayout($date, $participant->UserId*-1)}
                     <tr class="slots">
                         <td class="resourcename">
-                            <span>{$participant->FullName}</span>
+                            <span>{$participant->FullName|escape:'html':'UTF-8':false}</span>
                         </td>
                         {foreach from=$slots item=slot}
                             {displaySlot Slot=$slot ResourceId=$participant->UserId*-1}
@@ -106,7 +106,7 @@
                     {assign var=slots value=$DailyLayout->GetLayout($date, $invitee->UserId*-1)}
                     <tr class="slots">
                         <td class="resourcename">
-                            <span>{$invitee->FullName}</span>
+                            <span>{$invitee->FullName|escape:'html':'UTF-8':false}</span>
                         </td>
                         {foreach from=$slots item=slot}
                             {displaySlot Slot=$slot ResourceId=$invitee->UserId*-1}

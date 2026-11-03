@@ -116,11 +116,11 @@
                             <tr data-userId="{$id}">
                                 <td>{fullname first=$user->First|default:''|unescape:'html' last=$user->Last|default:''|unescape:'html' ignorePrivacy="true"}
                                 </td>
-                                <td>{$user->Username}</td>
-                                <td><a href="mailto:{$user->Email}" class="link-primary">{$user->Email}</a></td>
-                                <td>{$user->Phone}</td>
-                                <td>{$user->Organization}</td>
-                                <td>{$user->Position}</td>
+                                <td>{$user->Username|escape:'html':'UTF-8':false}</td>
+                                <td><a href="mailto:{$user->Email|escape:'html':'UTF-8':false}" class="link-primary">{$user->Email|escape:'html':'UTF-8':false}</a></td>
+                                <td>{$user->Phone|escape:'html':'UTF-8':false}</td>
+                                <td>{$user->Organization|escape:'html':'UTF-8':false}</td>
+                                <td>{$user->Position|escape:'html':'UTF-8':false}</td>
                                 <td
                                     data-order="{format_date date=$user->DateCreated format='Y-m-d H:i' timezone=$Timezone}">
                                     {format_date date=$user->DateCreated key=short_datetime timezone=$Timezone}</td>
@@ -238,7 +238,7 @@
                                             {elseif $attribute->AppliesToEntity($id)}
                                                 <div class="mb-0 d-inline-block">
                                                     <label class="inline fw-bold">{$attribute->Label()}</label>
-                                                    {$user->GetAttributeValue($attribute->Id())|escape}
+                                                    {$user->GetAttributeValue($attribute->Id())|escape:'html':'UTF-8':false}
                                                 </div>
                                             {/if}
                                         {/foreach}
@@ -762,15 +762,15 @@
             {foreach from=$users item=user}
                 var user = {
                     id: {$user->Id},
-                    first: '{$user->First|escape:"javascript"}',
-                    last: '{$user->Last|escape:"javascript"}',
+                    first: '{$user->First|unescape:'html'|escape:'javascript'}',
+                    last: '{$user->Last|unescape:'html'|escape:'javascript'}',
                     isActive: '{$user->IsActive()}',
-                    username: '{$user->Username|escape:"javascript"}',
-                    email: '{$user->Email|escape:"javascript"}',
+                    username: '{$user->Username|unescape:'html'|escape:'javascript'}',
+                    email: '{$user->Email|unescape:'html'|escape:'javascript'}',
                     timezone: '{$user->Timezone}',
-                    phone: '{$user->Phone|escape:"javascript"}',
-                    organization: '{$user->Organization|escape:"javascript"}',
-                    position: '{$user->Position|escape:"javascript"}',
+                    phone: '{$user->Phone|unescape:'html'|escape:'javascript'}',
+                    organization: '{$user->Organization|unescape:'html'|escape:'javascript'}',
+                    position: '{$user->Position|unescape:'html'|escape:'javascript'}',
                     reservationColor: '{$user->ReservationColor|escape:"javascript"}'
                 };
                 userManagement.addUser(user);

@@ -21,7 +21,7 @@
                     <td data-order="{formatdate date=$log->TransactionDate timezone=$Timezone format='Y-m-d H:i:s'}">
                         {formatdate date=$log->TransactionDate timezone=$Timezone key='general_datetime'}
                     </td>
-                    <td>{$log->UserFullName}</td>
+                    <td>{$log->UserFullName|escape:'html':'UTF-8':false}</td>
                     <td>{$log->Status}</td>
                     <td>{formatcurrency amount=$log->Total currency=$log->Currency}</td>
                     <td>{formatcurrency amount=$log->Fee currency=$log->Currency}</td>

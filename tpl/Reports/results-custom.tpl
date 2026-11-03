@@ -34,8 +34,9 @@
 						{foreach from=$Report->GetData()->Rows() item=row}
 							<tr>
 								{foreach from=$Definition->GetRow($row) item=cell}
-									<td chart-value="{$cell->ChartValue()}" chart-column-type="{$cell->GetChartColumnType()}"
-										chart-group="{$cell->GetChartGroup()}">{$cell->Value()}</td>
+									<td chart-value="{$cell->ChartValue()|escape:'html':'UTF-8':false}"
+										chart-column-type="{$cell->GetChartColumnType()|escape:'html':'UTF-8':false}"
+										chart-group="{$cell->GetChartGroup()|escape:'html':'UTF-8':false}">{$cell->Value()|escape:'html':'UTF-8':false}</td>
 								{/foreach}
 							</tr>
 						{/foreach}

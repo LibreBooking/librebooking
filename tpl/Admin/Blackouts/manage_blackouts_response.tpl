@@ -55,7 +55,7 @@
 				<tbody>
 					{foreach from=$Reservations item=reservation}
 						<tr class="editable" data-refnum="{$reservation->ReferenceNumber|escape:'html'}">
-							<td>{$reservation->FirstName|escape:'html'} {$reservation->LastName|escape:'html'}</td>
+							<td>{$reservation->FirstName|escape:'html':'UTF-8':false} {$reservation->LastName|escape:'html':'UTF-8':false}</td>
 							<td>
 								<span class="reservationTitle" data-bs-custom-class="respopup-tooltip" data-bs-html="true">
 									{if !empty($reservation->Title)}{$reservation->Title|escape:'html'}{else}{translate key='NoTitleLabel'}{/if}

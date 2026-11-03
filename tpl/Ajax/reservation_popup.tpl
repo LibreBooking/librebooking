@@ -21,7 +21,7 @@
                 {if ($hideUserInfo || $hideDetails) || !$isResourcePermitted}
                     {translate key=Private}
                 {else}
-                    {$fullName|escape:'html'}
+                    {$fullName|escape:'html':'UTF-8':false}
                 {/if}
             </div>
         {/capture}
@@ -30,7 +30,7 @@
         {capture "email"}
             <div class="email">
                 {if !$hideUserInfo && !$hideDetails && $isResourcePermitted}
-                    {$email|escape:'html'}
+                    {$email|escape:'html':'UTF-8':false}
                 {/if}
             </div>
         {/capture}
@@ -39,7 +39,7 @@
         {capture "phone"}
             <div class="phone">
                 {if !$hideUserInfo && !$hideDetails && $isResourcePermitted}
-                    {$phone|escape:'html'}
+                    {$phone|escape:'html':'UTF-8':false}
                 {/if}
             </div>
         {/capture}

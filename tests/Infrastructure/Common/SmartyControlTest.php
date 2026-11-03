@@ -58,10 +58,37 @@ class SmartyControlTest extends TestBase
         $this->assertEquals($expectedHtml, $textbox->Html());
     }
 
-    private function BuildExpectedSmartyTextbox($type = 'text')
+    public function testSmartyTextboxEscapesRawValue()
+    {
+        $this->_smarty->_Value = '"><script>alert(1)</script>';
+
+        $textbox = new SmartyTextbox($this->_formKey, null, $this->_id, $this->_templateVar, $this->_attributes, false, $this->_smarty);
+
+        $this->assertEquals($this->BuildExpectedSmartyTextbox('text', '&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;'), $textbox->Html());
+    }
+
+    public function testSmartyTextboxDoesNotDoubleEncodeStoredValue()
+    {
+        $this->_smarty->_Value = 'Smith &amp; O&#039;Brien';
+
+        $textbox = new SmartyTextbox($this->_formKey, null, $this->_id, $this->_templateVar, $this->_attributes, false, $this->_smarty);
+
+        $this->assertEquals($this->BuildExpectedSmartyTextbox('text', 'Smith &amp; O&#039;Brien'), $textbox->Html());
+    }
+
+    public function testSmartyTextboxSubstitutesInvalidUtf8()
+    {
+        $this->_smarty->_Value = "Jos\xE9";
+
+        $textbox = new SmartyTextbox($this->_formKey, null, $this->_id, $this->_templateVar, $this->_attributes, false, $this->_smarty);
+
+        $this->assertEquals($this->BuildExpectedSmartyTextbox('text', "Jos\u{FFFD}"), $textbox->Html());
+    }
+
+    private function BuildExpectedSmartyTextbox($type = 'text', $expectedValue = null)
     {
         $expectedName = $this->_expectedName;
-        $expectedValue = $this->_expectedValue;
+        $expectedValue = $expectedValue ?? $this->_expectedValue;
         $expectedStyle = $this->_expectedStyle;
         return "<input type=\"$type\" name=\"$expectedName\" id=\"{$this->_id}\" value=\"$expectedValue\" style=\"font-size:12px;\" class=\"something\" />";
     }

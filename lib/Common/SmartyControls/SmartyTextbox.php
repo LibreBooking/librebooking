@@ -23,7 +23,8 @@ class SmartyTextbox
 
     public function Html()
     {
-        $value = $this->GetValue();
+        // Values are stored either HTML-encoded or raw, so do not encode existing entities
+        $value = htmlspecialchars($this->GetValue(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
         $style = empty($this->style) ? '' : " style=\"{$this->style}\"";
         $required = $this->required ? ' required="required" ' : '';
 

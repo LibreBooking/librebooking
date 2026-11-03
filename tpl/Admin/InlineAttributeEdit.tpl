@@ -30,7 +30,7 @@
 		</a>
 
 		<span class="{$inlineClass} update" id="{$attributeId}" data-type="{$datatype}" data-pk="{$id}"
-			data-value="{$pickerValue|escape:'html'}" data-name="{FormKeys::ATTRIBUTE_PREFIX}{$attribute->Id()}"
+			data-value="{$pickerValue|escape:'html':'UTF-8':false}" data-name="{FormKeys::ATTRIBUTE_PREFIX}{$attribute->Id()}"
 			{if $type == CustomAttributeTypes::SELECT_LIST}
 				{assign var=possibleValuesCount value=$attribute->PossibleValueList()|@count}
 				data-source='[{if !$attribute->Required()}{ldelim}"value":"","text":""{rdelim}{if $possibleValuesCount > 0},{/if}{/if}{foreach from=$attribute->PossibleValueList() item=v name=vals}{ldelim}"value":"{$v|escape:'javascript'}","text":"{$v|escape:'javascript'}"{rdelim}{if not $smarty.foreach.vals.last},{/if}{/foreach}]'

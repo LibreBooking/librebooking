@@ -10,7 +10,7 @@
             {/if}</label>
     {/if}
     {if $readonly}
-        <span class="attributeValue {$class}">{$attribute->Value()}</span>
+        <span class="attributeValue {$class}">{$attribute->Value()|escape:'html':'UTF-8':false}</span>
     {else}
         <select id="{$attributeId}" name="{$attributeName}"
             class="customAttribute form-select form-select-sm {if !$searchmode && $attribute->Required()}has-feedback{/if}"

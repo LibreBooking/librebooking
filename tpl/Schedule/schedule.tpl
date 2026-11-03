@@ -318,7 +318,7 @@
                                         <div class="form-group mb-2">
                                             <label for="ownerFilter" class="fw-bold">{translate key=Owner}</label>
                                             <input type='search' id='ownerFilter' class="form-control form-control-sm search"
-                                                {formname key=OWNER_TEXT} value="{if isset($OwnerText)}{$OwnerText}{/if}" />
+                                                {formname key=OWNER_TEXT} value="{if isset($OwnerText)}{$OwnerText|escape:'html':'UTF-8':false}{/if}" />
                                             <input {formname key=USER_ID} id="ownerId" type="hidden" value="{$OwnerId}" />
                                             <span class="searchclear searchclear-label" ref="ownerFilter,ownerId"></span>
                                         </div>
@@ -327,7 +327,7 @@
                                                 <label for="participantFilter" class="fw-bold">{translate key=Participant}</label>
                                                 <input type='search' id='participantFilter' class="form-control form-control-sm search"
                                                     {formname key=PARTICIPANT_TEXT}
-                                                    value="{if isset($ParticipantText)}{$ParticipantText}{/if}" />
+                                                    value="{if isset($ParticipantText)}{$ParticipantText|escape:'html':'UTF-8':false}{/if}" />
                                                 <input {formname key=PARTICIPANT_ID} id="participantId" type="hidden"
                                                     value="{$ParticipantId}" />
                                                 <span class="searchclear searchclear-label"

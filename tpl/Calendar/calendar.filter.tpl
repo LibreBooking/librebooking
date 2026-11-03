@@ -33,14 +33,14 @@
                 <label class="input-group-text fw-bold" for="ownerFilter">{translate key=Owner}</label>
                 <input {formname key=USER_ID} id="ownerId" type="hidden" value="{$OwnerId}" />
                 <input type='search' id='ownerFilter' class="form-control input-sm search" {formname key=OWNER_TEXT}
-                    value="{$OwnerText}" />
+                    value="{$OwnerText|escape:'html':'UTF-8':false}" />
             </div>
             {if $AllowParticipation}
                 <div class="input-group me-3">
                     <label class="input-group-text fw-bold" for="participantFilter">{translate key=Participant}</label>
                     <input {formname key=PARTICIPANT_ID} id="participantId" type="hidden" value="{$ParticipantId}" /> <input
                         type='search' id='participantFilter' class="form-control input-sm search"
-                        {formname key=PARTICIPANT_TEXT} value="{$ParticipantText}" />
+                        {formname key=PARTICIPANT_TEXT} value="{$ParticipantText|escape:'html':'UTF-8':false}" />
                 </div>
             {/if}
             <div class="">

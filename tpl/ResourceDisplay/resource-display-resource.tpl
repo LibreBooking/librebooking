@@ -7,7 +7,7 @@
                     – {format_date date=$reservation->EndDate() key=res_popup_time timezone=$Timezone}
                 </small>
                 <span class="badge bg-primary">
-                    {$reservation->GetUserName()}
+                    {$reservation->GetUserName()|escape:'html':'UTF-8':false}
                 </span>
             </div>
             <div class="fw-bold text-truncate" title="{$reservation->GetTitle()|default:$NoTitle}">
