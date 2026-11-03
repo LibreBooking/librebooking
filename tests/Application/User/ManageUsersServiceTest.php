@@ -261,6 +261,52 @@ class ManageUsersServiceTest extends TestBase
         $this->assertNull($actualUser);
     }
 
+    public function testAddsUserForApiAdministratorWithoutBrowserSession()
+    {
+        $this->fakeServer->SetUserSession(new NullUserSession());
+        $apiServer = new FakeRestServer();
+        $apiServer->session->IsAdmin = true;
+        ServiceLocator::SetApiServer($apiServer);
+
+        $this->registration->expects($this->once())
+                           ->method('Register')
+                           ->willReturn(new FakeUser(99889));
+
+        $actualUser = $this->service->AddUser('un', 'e@mail.com', 'f', 'l', 'pw', 'America/Chicago', 'en_us', 1, [], []);
+
+        $this->assertEquals(99889, $actualUser->Id());
+    }
+
+    public function testApiRequestIsJudgedByApiSessionNotBrowserSession()
+    {
+        $this->fakeUser->IsAdmin = true;
+        $apiServer = new FakeRestServer();
+        $apiServer->session->IsAdmin = false;
+        ServiceLocator::SetApiServer($apiServer);
+
+        $this->registration->expects($this->never())
+                           ->method('Register');
+
+        $actualUser = $this->service->AddUser('un', 'e@mail.com', 'f', 'l', 'pw', 'America/Chicago', 'en_us', 1, [], []);
+
+        $this->assertNull($actualUser);
+    }
+
+    public function testDeleteUserForApiAdministratorWithoutBrowserSession()
+    {
+        $this->fakeServer->SetUserSession(new NullUserSession());
+        $apiServer = new FakeRestServer();
+        $apiServer->session->IsAdmin = true;
+        ServiceLocator::SetApiServer($apiServer);
+
+        $userId = 809;
+        $this->userRepo->_User = new FakeUser($userId);
+
+        $this->service->DeleteUser($userId, false);
+
+        $this->assertEquals($userId, $this->userRepo->_DeletedUserId);
+    }
+
     public function testChangeGroupsIgnoresNullUser()
     {
         $this->groupRepo->expects($this->never())

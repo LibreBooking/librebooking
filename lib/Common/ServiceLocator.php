@@ -53,7 +53,7 @@ class ServiceLocator
         return self::$_apiServer;
     }
 
-    public static function SetApiServer(IRestServer $apiServer)
+    public static function SetApiServer(?IRestServer $apiServer)
     {
         self::$_apiServer = $apiServer;
     }
@@ -120,18 +120,25 @@ class ServiceLocator
         self::$_fileSystem = $fileSystem;
     }
 
+    /**
+     * The session of the current user. In a web service request, the session authenticated by the API token comes
+     * first: a browser session cookie sent along with the request must not decide what the API caller may do.
+     */
     public static function GetUserSession(): UserSession|null
     {
+        if (!is_null(self::$_apiServer)) {
+            $apiSession = self::$_apiServer->GetSession();
+            if (!is_null($apiSession)) {
+                return $apiSession;
+            }
+        }
         if (!is_null(self::$_server)) {
             $userSession = self::$_server->GetUserSession();
             if (!$userSession instanceof NullUserSession) {
                 return $userSession;
             }
         }
-        if (is_null(self::$_apiServer)) {
-            return null;
-        }
-        return self::$_apiServer->GetSession();
+        return null;
     }
 
 }
