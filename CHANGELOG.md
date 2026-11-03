@@ -3,6 +3,72 @@
 
 <!-- version list -->
 
+## v7.2.0 (2026-11-03)
+
+### Bug Fixes
+
+- **email**: Escape profile data in notification emails
+  ([`b094ea9`](https://github.com/LibreBooking/librebooking/commit/b094ea9b81067522918bfb2fd53d5099cacf72f5))
+
+- **i18n**: Correct and complete Hungarian localization
+  ([`fa963cc`](https://github.com/LibreBooking/librebooking/commit/fa963ccc2ab33510e303888ea455eed414f1e5b4))
+
+- **pagination**: Rewrite ReplaceQueryString with league/uri
+  ([`7e4b8b7`](https://github.com/LibreBooking/librebooking/commit/7e4b8b7ff5d5913fef16a9104e5fc032e445b4fa))
+
+- **paging**: Reject invalid page numbers and page sizes
+  ([`e42139f`](https://github.com/LibreBooking/librebooking/commit/e42139f60ce4d173b896dfd6387a2dafd8c19f75))
+
+- **reservation**: Prevent XSS when rendering user names in reservation
+  ([`3840222`](https://github.com/LibreBooking/librebooking/commit/384022262820311d52c439b7aaff7607d8f5120b))
+
+- **reservations**: Match LoadFiltered() parameter name to interface
+  ([`0bcaf18`](https://github.com/LibreBooking/librebooking/commit/0bcaf18e22781190650aa77447e04cf4b99f2add))
+
+- **security**: Prevent XSS from profile data in templates
+  ([`44b5446`](https://github.com/LibreBooking/librebooking/commit/44b5446c1cb09c13f8f84b170a4968901240d0cb))
+
+- **security**: Prevent XSS from user names in schedule and groups
+  ([`e8443fe`](https://github.com/LibreBooking/librebooking/commit/e8443feddfe5c2b5d9a42b7aa1e61bbf1d501d56))
+
+### Chores
+
+- Have readthedocs build use Python 3.14
+  ([`0214942`](https://github.com/LibreBooking/librebooking/commit/021494254924bea43f2fcbade6e6d551fbe81657))
+
+### Continuous Integration
+
+- Greet first-time contributors and point them to Discord
+  ([`e818463`](https://github.com/LibreBooking/librebooking/commit/e818463bc6dbb0480e04662eaec67ad9735cf839))
+
+### Documentation
+
+- Add 7.2.0 security upgrade notice
+  ([`0572f3f`](https://github.com/LibreBooking/librebooking/commit/0572f3ff6b2c80c9dc32de8473acffd659074f6d))
+
+- Encourage contributors to join Discord
+  ([`ca1664f`](https://github.com/LibreBooking/librebooking/commit/ca1664fe1dacc5ff2fd64922a5fe054605d78c58))
+
+- Point contributors to Discord in CONTRIBUTING and stale bot
+  ([`05584a5`](https://github.com/LibreBooking/librebooking/commit/05584a55f7f52d96ce9eb2240cc4f70473280c28))
+
+- Use only Assisted-by for AI attribution
+  ([`8731106`](https://github.com/LibreBooking/librebooking/commit/8731106033f6374606e775a8c885940b6e4c543b))
+
+### Features
+
+- **admin**: Show versions and PHP details on Server Settings page
+  ([`e585f60`](https://github.com/LibreBooking/librebooking/commit/e585f60e1d637bd0e2ff4e26ccf3e84bc416c825))
+
+### Refactoring
+
+- Update Swedish translations for resources
+  ([`4ccadeb`](https://github.com/LibreBooking/librebooking/commit/4ccadeb2b690f3dcaa13241e5ea28cfb0ca184ac))
+
+- **export**: Load all rows for CSV exports explicitly
+  ([`1010913`](https://github.com/LibreBooking/librebooking/commit/101091340a7171fdd685a7baa8fbe34125e119ca))
+
+
 ## v7.1.0 (2026-10-13)
 
 ### Bug Fixes
