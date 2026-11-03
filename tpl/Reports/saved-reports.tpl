@@ -86,7 +86,7 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label class="fw-bold" for="emailTo">{translate key=Email}</label>
-							<input id="emailTo" {formname key=EMAIL} value="{$UserEmail}" class="form-control" />
+							<input id="emailTo" {formname key=EMAIL} value="{$UserEmail|escape:'html':'UTF-8':false}" class="form-control" />
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-outline-secondary cancel"

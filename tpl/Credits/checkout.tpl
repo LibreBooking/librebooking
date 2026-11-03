@@ -163,7 +163,7 @@
 								zipCode: true,
 								locale: 'auto',
 								currency: '{$Currency}',
-								email: '{$Email}',
+								email: '{$Email|unescape:'html'|escape:'javascript'}',
 								token: function(token) {
 									var data = {
 										CSRF_TOKEN: $('#csrf_token').val(),

@@ -10,12 +10,12 @@
             {/if}</label>
     {/if}
     {if $readonly}
-        <span class="attributeValue {$class}">{$attribute->Value()|nl2br}</span>
+        <span class="attributeValue {$class}">{$attribute->Value()|escape:'html':'UTF-8':false|nl2br}</span>
     {else}
         <div class="position-relative">
             <textarea id="{$attributeId}" name="{$attributeName}" rows="2"
                 class="customAttribute form-control form-control-sm w-100"
-                {if $attribute->Required() && !$searchmode}required{/if}>{$attribute->Value()}</textarea>
+                {if $attribute->Required() && !$searchmode}required{/if}>{$attribute->Value()|escape:'html':'UTF-8':false}</textarea>
             {if $searchmode}
                 <span class="searchclear searchclear-label bi bi-x-circle-fill" ref="{$attributeId}"></span>
             {/if}

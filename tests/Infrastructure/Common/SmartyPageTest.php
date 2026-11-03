@@ -225,6 +225,37 @@ class SmartyPageTest extends TestBase
         $this->assertSame('/users.php?page=3&pageSize=20&as=2', $url);
     }
 
+    public function testDisplayFullNameDoesNotDoubleEncodeStoredNames(): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            'Smith &amp; Sons &lt;b&gt;',
+            $page->DisplayFullName(['first' => 'Smith &amp; Sons', 'last' => '<b>'], $page)
+        );
+    }
+
+    public function testDisplayFullNameSubstitutesInvalidUtf8(): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            "Jos\u{FFFD} &lt;b&gt;",
+            $page->DisplayFullName(['first' => "Jos\xE9", 'last' => '<b>'], $page)
+        );
+    }
+
+    public function testEscapeWithoutDoubleEncodeEscapesRawAndKeepsStoredEntities(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('value', '<b>Smith &amp; Sons</b>');
+
+        $this->assertSame(
+            '&lt;b&gt;Smith &amp; Sons&lt;/b&gt;',
+            $page->fetch("string:{\$value|escape:'html':'UTF-8':false}")
+        );
+    }
+
     public function testEscapeCsvModifierIsRegistered(): void
     {
         $page = new SmartyPage();

@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <label class="fw-bold">{translate key='User'}</label>
                         {if $ShowUserDetails && $ShowReservationDetails && $isResourcePermitted}
-                            <a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName}</a>
+                            <a href="#" class="bindableUser link-primary" data-userid="{$UserId}">{$ReservationUserName|escape:'html':'UTF-8':false}</a>
                             <input id="userId" type="hidden" value="{$UserId}" />
                         {else}
                             {translate key=Private}
@@ -222,7 +222,7 @@
                                     <label class="fw-bold">{translate key='ParticipantList'}</label>
                                     {foreach from=$Participants item=participant}
                                         <div><a href="#" class="bindableUser link-primary"
-                                                data-userid="{$participant->UserId}">{$participant->FullName}</a></div>
+                                                data-userid="{$participant->UserId}">{$participant->FullName|escape:'html':'UTF-8':false}</a></div>
                                     {foreachelse}
                                         <div class="no-data fst-italic">{translate key='None'}</div>
                                     {/foreach}
@@ -231,7 +231,7 @@
                                     <label class="fw-bold">{translate key='InvitationList'}</label>
                                     {foreach from=$Invitees item=invitee}
                                         <div><a href="#" class="bindableUser link-primary"
-                                                data-userid="{$invitee->UserId}">{$invitee->FullName}</a></div>
+                                                data-userid="{$invitee->UserId}">{$invitee->FullName|escape:'html':'UTF-8':false}</a></div>
                                     {foreachelse}
                                         <div class="no-data fst-italic">{translate key='None'}</div>
                                     {/foreach}

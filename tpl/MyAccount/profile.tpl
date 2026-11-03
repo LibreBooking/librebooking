@@ -37,8 +37,8 @@
                             {if $AllowUsernameChange}
                                 {textbox name="USERNAME" value="Username" required="required" data-bv-notempty="true" autofocus="autofocus" data-bv-notempty-message="{translate key=UserNameRequired}"}
                             {else}
-                                <span>{$Username}</span>
-                                <input type="hidden" {formname key=USERNAME} value="{$Username}" />
+                                <span>{$Username|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=USERNAME} value="{$Username|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -51,8 +51,8 @@
                                 data-bv-emailaddress="true"
                                 data-bv-emailaddress-message="{translate key=ValidEmailRequired}" }
                             {else}
-                                <span>{$Email}</span>
-                                <input type="hidden" {formname key=EMAIL} value="{$Email}" />
+                                <span>{$Email|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=EMAIL} value="{$Email|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                             {if $AllowNameChange}
                                 {textbox name="FIRST_NAME" class="input" value="FirstName" required="required" data-bv-notempty="true" data-bv-notempty-message="{translate key=FirstNameRequired}"}
                             {else}
-                                <span>{$FirstName}</span>
-                                <input type="hidden" {formname key=FIRST_NAME} value="{$FirstName}" />
+                                <span>{$FirstName|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=FIRST_NAME} value="{$FirstName|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -75,8 +75,8 @@
                             {if $AllowNameChange} {$Language}
                                 {textbox name="LAST_NAME" class="input" value="LastName" required="required" data-bv-notempty="true" data-bv-notempty-message="{translate key=LastNameRequired}"}
                             {else}
-                                <span>{$LastName}</span>
-                                <input type="hidden" {formname key=LAST_NAME} value="{$LastName}" />
+                                <span>{$LastName|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=LAST_NAME} value="{$LastName|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -104,11 +104,11 @@
                             <label class="reg fw-bold" for="phone">{translate key="Phone"}</label>
                             {if $AllowPhoneChange}
                                 <input type="text" id="phone" {formname key="PHONE"} class="form-control form-control-sm"
-                                    size="20" value="{$Phone}" {if $RequirePhone}required="required" data-bv-notempty="true"
+                                    size="20" value="{$Phone|escape:'html':'UTF-8':false}" {if $RequirePhone}required="required" data-bv-notempty="true"
                                     data-bv-notempty-message="{translate key=PhoneRequired}" {/if} />
                             {else}
-                                <span>{$Phone}</span>
-                                <input type="hidden" {formname key=PHONE} value="{$Phone}" />
+                                <span>{$Phone|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=PHONE} value="{$Phone|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -118,12 +118,12 @@
                             <label class="reg fw-bold" for="txtOrganization">{translate key="Organization"}</label>
                             {if $AllowOrganizationChange}
                                 <input type="text" id="txtOrganization" {formname key="ORGANIZATION"}
-                                    class="form-control form-control-sm" size="20" value="{$Organization}"
+                                    class="form-control form-control-sm" size="20" value="{$Organization|escape:'html':'UTF-8':false}"
                                     {if $RequireOrganization}required="required" data-bv-notempty="true"
                                     data-bv-notempty-message="{translate key=OrganizationRequired}" {/if} />
                             {else}
-                                <span>{$Organization}</span>
-                                <input type="hidden" {formname key=ORGANIZATION} value="{$Organization}" />
+                                <span>{$Organization|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=ORGANIZATION} value="{$Organization|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>
@@ -133,12 +133,12 @@
                             <label class="reg fw-bold" for="txtPosition">{translate key="Position"}</label>
                             {if $AllowPositionChange}
                                 <input type="text" id="txtPosition" {formname key="POSITION"}
-                                    class="form-control form-control-sm" size="20" value="{$Position}"
+                                    class="form-control form-control-sm" size="20" value="{$Position|escape:'html':'UTF-8':false}"
                                     {if $RequirePosition}required="required" data-bv-notempty="true"
                                     data-bv-notempty-message="{translate key=PositionRequired}" {/if} />
                             {else}
-                                <span>{$Position}</span>
-                                <input type="hidden" {formname key=POSITION} value="{$Position}" />
+                                <span>{$Position|escape:'html':'UTF-8':false}</span>
+                                <input type="hidden" {formname key=POSITION} value="{$Position|escape:'html':'UTF-8':false}" />
                             {/if}
                         </div>
                     </div>

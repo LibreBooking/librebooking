@@ -1,7 +1,7 @@
 {include file='globalheader.tpl' DataTable=true}
 
 <div id="page-admin-credit-log" class="admin-page">
-    <h1 class="border-bottom mb-3">{translate key=CreditHistory} - {$UserName}</h1>
+    <h1 class="border-bottom mb-3">{translate key=CreditHistory} - {$UserName|escape:'html':'UTF-8':false}</h1>
 
     {if $ShowError}
         <div class="alert alert-danger">

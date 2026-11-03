@@ -840,7 +840,8 @@ class SmartyPage extends Smarty
             return $this->EscapeCsv($fullName->__toString());
         }
 
-        return htmlspecialchars($fullName->__toString());
+        // Names are stored either HTML-encoded or raw, so do not encode existing entities
+        return htmlspecialchars($fullName->__toString(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
     public function AddQueryString($params, $smarty)

@@ -11,10 +11,10 @@
 			{/if}</label>
 	{/if}
 	{if isset($readonly) && $readonly}
-		<span class="attributeValue {$class}">{$attribute->Value()}</span>
+		<span class="attributeValue {$class}">{$attribute->Value()|escape:'html':'UTF-8':false}</span>
 	{else}
 		<div class="position-relative">
-			<input id="{$attributeId}" name="{$attributeName}" value="{$attribute->Value()}" class="customAttribute form-control form-control-sm
+			<input id="{$attributeId}" name="{$attributeName}" value="{$attribute->Value()|escape:'html':'UTF-8':false}" class="customAttribute form-control form-control-sm
 		{if !$searchmode && $attribute->Required()}has-feedback{/if}"
 				{if $attribute->Required() && !$searchmode}required="required" {/if} />
 			{if $searchmode}

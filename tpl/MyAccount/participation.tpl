@@ -37,7 +37,7 @@
 									- {formatdate date=$reservation->EndDate->ToTimezone($Timezone) key=dashboard}</a>
 							</td>
 							<td>
-								{$reservation->OwnerFirstName} {$reservation->OwnerLastName}
+								{$reservation->OwnerFirstName|escape:'html':'UTF-8':false} {$reservation->OwnerLastName|escape:'html':'UTF-8':false}
 							</td>
 							<td>
 								{$reservation->ResourceName}

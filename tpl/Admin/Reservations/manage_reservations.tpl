@@ -73,7 +73,7 @@
 							<label for="userFilter" class="fw-bold">{translate key=User}</label>
 							<div class="position-relative">
 								<input id="userFilter" type="text" class="form-control form-control-sm"
-									value="{$UserNameFilter}" placeholder="{translate key=User}" />
+									value="{$UserNameFilter|escape:'html':'UTF-8':false}" placeholder="{translate key=User}" />
 								<input id="userId" type="hidden" value="{$UserIdFilter}" />
 								<span class="searchclear bi bi-x-circle-fill" ref="userFilter,userId"></span>
 							</div>
