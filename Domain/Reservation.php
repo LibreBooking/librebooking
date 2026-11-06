@@ -719,15 +719,25 @@ class Reservation
 class ReferenceNumberGenerator
 {
     /**
+     * Number of random bytes in a generated reference number. Each byte is
+     * hex encoded, so the reference number is twice this many characters.
+     */
+    public const RANDOM_BYTE_LENGTH = 16;
+
+    /**
      * Just for testing
      * @var string|null
      */
     public static $__referenceNumber = null;
 
-    public static function Generate()
+    /**
+     * Reference numbers are the only handle needed to look up a reservation
+     * in several places, so they must be unguessable.
+     */
+    public static function Generate(): string
     {
         if (self::$__referenceNumber == null) {
-            return str_replace('.', '', uniqid('', true));
+            return bin2hex(random_bytes(length: self::RANDOM_BYTE_LENGTH));
         }
 
         return self::$__referenceNumber;
