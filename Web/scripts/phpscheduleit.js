@@ -63,67 +63,7 @@ function getQueryStringValue(name) {
 }
 
 function init() {}
-/* Replaced by initializeAccordions function
-$.fn.showHidePanel = function () {
-    var panel = $(this);
 
-    function setIcon(panel, targetIcon) {
-        var iconSpan = panel.find('.show-hide');
-        iconSpan.removeClass('bi-chevron-up');
-        iconSpan.removeClass('bi-chevron-down');
-        iconSpan.addClass(targetIcon);
-    }
-
-    var visibility = readCookie(panel.attr('id'));
-    if (visibility && visibility == '0') {
-        panel.find('.card-body, .card-footer').hide();
-        setIcon(panel, 'bi-chevron-down');
-    } else {
-        setIcon(panel, 'bi-chevron-up');
-    }
-
-    panel.find('.show-hide').click(function (e) {
-        e.preventDefault();
-        var id = panel.attr('id');
-
-        var dashboard = panel.find('.card-body, .card-footer');
-        if (dashboard.css('display') == 'none') {
-            createCookie(id, '1', 30);
-            dashboard.show();
-            setIcon(panel, 'bi-chevron-up');
-        } else {
-            createCookie(id, '0', 30);
-            dashboard.hide();
-            setIcon(panel, 'bi-chevron-down');
-        }
-    });
-};
-*/
-
-/* Replaced by type="search"
-$.fn.clearable = function () {
-    var textbox = $(this);
-
-    textbox.closest('div').addClass('form-group has-feedback');
-    textbox.addClass('hasclear form-control');
-    if (textbox.next('.clearer').length === 0) {
-        $('<i/>', { class: 'clearer bi bi-remove-circle form-control-feedback' }).insertAfter(textbox);
-    }
-
-    textbox.keyup(function () {
-        var t = $(this);
-        t.next('.clearer').toggle(Boolean(t.val()));
-    });
-
-    var $clearer = $(".clearer");
-    $clearer.hide($(this).prev('input').val());
-
-    $clearer.on('click', function () {
-        $(this).siblings('input').val('').focus();
-        $(this).hide();
-    });
-};
-*/
 function validateEmail(email) {
   var re =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -183,43 +123,36 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initializeAccordions() {
-  // Get all elements with the class 'accordion-item' (representing the accordions)
-  var accordionItems = document.querySelectorAll('.accordion-item');
-  // Create an array to store the IDs of the accordions
-  var accordionIds = [];
-  // Iterate over each 'accordion-item' element
-  accordionItems.forEach(function (item) {
-    // Get the ID of each accordion and add it to the array
-    var accordionId = item.getAttribute('id');
-    accordionIds.push(accordionId);
-  });
+  document.querySelectorAll('.accordion-item').forEach((item) => {
+    const id = item.id;
+    const collapse = item.querySelector('.accordion-collapse');
+    const button = item.querySelector('.accordion-button');
+    if (!id || !collapse) return;
 
-  // Iterate over each accordion
-  accordionIds.forEach(function (accordionId) {
-    var accordionState = localStorage.getItem(accordionId); // Get the accordion state from localStorage
-    if (accordionState === 'collapsed') {
-      $('#' + accordionId + ' .accordion-collapse').collapse('hide'); // Collapse the accordion if it's saved as "collapsed"
-    } else {
-      $('#' + accordionId + ' .accordion-collapse').collapse('show'); // Expand the accordion if it's saved as "expanded"
+    // Restore saved state
+    const state = localStorage.getItem(id);
+    const expanded = state !== 'collapsed';
+    collapse.classList.toggle('show', expanded);
+    if (button) {
+      button.classList.toggle('collapsed', !expanded);
+      button.setAttribute('aria-expanded', expanded);
     }
+
+    // Save the state when it finishes opening or closing
+    collapse.addEventListener('shown.bs.collapse', (e) => {
+      if (e.target === collapse) localStorage.setItem(id, 'expanded');
+    });
+    collapse.addEventListener('hidden.bs.collapse', (e) => {
+      if (e.target === collapse) localStorage.setItem(id, 'collapsed');
+    });
   });
 }
 
-// Function to save the state of accordions when they are collapsed or expanded
-$('.accordion-collapse').on('hidden.bs.collapse', function () {
-  var accordionId = $(this).closest('.accordion-item').attr('id'); // Get the unique identifier of the accordion
-  localStorage.setItem(accordionId, 'collapsed'); // Save the "collapsed" state in localStorage
-});
-
-$('.accordion-collapse').on('shown.bs.collapse', function () {
-  var accordionId = $(this).closest('.accordion-item').attr('id'); // Get the unique identifier of the accordion
-  localStorage.setItem(accordionId, 'expanded'); // Save the "expanded" state in localStorage
-});
-
-// Call the function to initialize the accordions when the page is fully loaded
-document.addEventListener('DOMContentLoaded', function () {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeAccordions);
+} else {
   initializeAccordions();
-});
+}
 
 // Exposed on window because it's invoked from inline onclick="" handlers in
 // Smarty templates, which ESLint has no visibility into for usage checks.
