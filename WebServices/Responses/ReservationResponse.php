@@ -76,12 +76,14 @@ class ReservationResponse extends RestResponse
      * @param IRestServer $server
      * @param ReservationView $reservation
      * @param IPrivacyFilter $privacyFilter
+     * @param IReservationAuthorization $reservationAuthorization
      * @param array|CustomAttribute[] $attributes
      */
     public function __construct(
         IRestServer $server,
         ReservationView $reservation,
         IPrivacyFilter $privacyFilter,
+        IReservationAuthorization $reservationAuthorization,
         $attributes = []
     ) {
         $this->owner = ReservationUserResponse::Masked();
@@ -119,8 +121,10 @@ class ReservationResponse extends RestResponse
                     $reservation->GetAttributeValue($attribute->Id())
                 );
             }
-            foreach ($reservation->Attachments as $attachment) {
-                $this->attachments[] = new AttachmentResponse($server, $attachment->FileId(), $attachment->FileName(), $reservation->ReferenceNumber);
+            if ($reservationAuthorization->CanViewAttachments($reservation, $server->GetSession())) {
+                foreach ($reservation->Attachments as $attachment) {
+                    $this->attachments[] = new AttachmentResponse($server, $attachment->FileId(), $attachment->FileName(), $reservation->ReferenceNumber);
+                }
             }
         }
 

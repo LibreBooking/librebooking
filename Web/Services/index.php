@@ -129,7 +129,14 @@ function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $regi
 
 function RegisterReservations(SlimServer $server, SlimWebServiceRegistry $registry)
 {
-    $readService = new ReservationsWebService($server, new ReservationViewRepository(), new PrivacyFilter(new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization())), new AttributeService(new AttributeRepository()));
+    $reservationAuthorization = new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization());
+    $readService = new ReservationsWebService(
+        server: $server,
+        reservationViewRepository: new ReservationViewRepository(),
+        privacyFilter: new PrivacyFilter($reservationAuthorization),
+        attributeService: new AttributeService(new AttributeRepository()),
+        reservationAuthorization: $reservationAuthorization,
+    );
     $writeService = new ReservationWriteWebService($server, new ReservationSaveController(new ReservationPresenterFactory()));
 
     $roGroupId = GetConfigGroup(ConfigKeys::API_RESERVATIONS_RO_GROUP);

@@ -24,6 +24,8 @@ class ReservationsWebServiceTest extends TestBase
 
     private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
 
+    private IReservationAuthorization&\PHPUnit\Framework\MockObject\MockObject $reservationAuthorization;
+
     /**
      * @var WebServiceUserSession
      */
@@ -56,13 +58,15 @@ class ReservationsWebServiceTest extends TestBase
         $this->privacyFilter = $this->createMock('IPrivacyFilter');
         $this->attributeService = $this->createMock('IAttributeService');
         $this->resourceRepository = $this->createMock('IResourceRepository');
+        $this->reservationAuthorization = $this->createMock('IReservationAuthorization');
 
         $this->service = new ReservationsWebService(
-            $this->server,
-            $this->reservationViewRepository,
-            $this->privacyFilter,
-            $this->attributeService,
-            $this->resourceRepository
+            server: $this->server,
+            reservationViewRepository: $this->reservationViewRepository,
+            privacyFilter: $this->privacyFilter,
+            attributeService: $this->attributeService,
+            reservationAuthorization: $this->reservationAuthorization,
+            resourceRepository: $this->resourceRepository,
         );
     }
 
@@ -166,7 +170,13 @@ class ReservationsWebServiceTest extends TestBase
 
         $this->service->GetReservation($referenceNumber);
 
-        $expectedResponse = new ReservationResponse($this->server, $reservation, $this->privacyFilter, $attributes);
+        $expectedResponse = new ReservationResponse(
+            server: $this->server,
+            reservation: $reservation,
+            privacyFilter: $this->privacyFilter,
+            reservationAuthorization: $this->reservationAuthorization,
+            attributes: $attributes,
+        );
 
         $this->assertEquals($expectedResponse, $this->server->_LastResponse);
     }
@@ -276,6 +286,50 @@ class ReservationsWebServiceTest extends TestBase
         $this->service->GetReservation('abc');
 
         $this->assertInstanceOf(ReservationResponse::class, $this->server->_LastResponse);
+    }
+
+    public function testGetReservationIncludesAttachmentsWhenUserCanViewAttachments()
+    {
+        $this->ArrangeReservationWithAttachment();
+        $this->reservationAuthorization->method('CanViewAttachments')->willReturn(true);
+
+        $this->service->GetReservation('abc');
+
+        /** @var ReservationResponse $response */
+        $response = $this->server->_LastResponse;
+        $this->assertInstanceOf(ReservationResponse::class, $response);
+        $this->assertCount(1, $response->attachments);
+        $this->assertSame('agenda.pdf', $response->attachments[0]->fileName);
+    }
+
+    public function testGetReservationOmitsAttachmentsWhenUserCannotViewAttachments()
+    {
+        $reservation = $this->ArrangeReservationWithAttachment();
+        $this->reservationAuthorization->expects($this->once())
+            ->method('CanViewAttachments')
+            ->with($this->identicalTo($reservation), $this->identicalTo($this->userSession))
+            ->willReturn(false);
+
+        $this->service->GetReservation('abc');
+
+        /** @var ReservationResponse $response */
+        $response = $this->server->_LastResponse;
+        $this->assertInstanceOf(ReservationResponse::class, $response);
+        $this->assertSame('reservation title', $response->title);
+        $this->assertSame([], $response->attachments);
+    }
+
+    private function ArrangeReservationWithAttachment(): ReservationView
+    {
+        $reservation = $this->NewReservation('abc', ownerId: 999, resourceId: 5);
+        $reservation->Title = 'reservation title';
+        $reservation->AddAttachment(new ReservationAttachmentView(fileId: 10, seriesId: 1, fileName: 'agenda.pdf'));
+        $this->resourceRepository->method('GetUserResourceIdList')->willReturn([5]);
+        $this->attributeService->method('GetByCategory')->willReturn([]);
+        $this->privacyFilter->method('CanViewDetails')->willReturn(true);
+        $this->reservationViewRepository->method('GetReservationForEditing')->willReturn($reservation);
+
+        return $reservation;
     }
 
     private function NewReservation(string $referenceNumber, int $ownerId, int $resourceId): ReservationView
