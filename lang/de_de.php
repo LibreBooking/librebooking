@@ -507,6 +507,9 @@ class de_de extends en_gb
         $strings['AddReservationColorRule'] = 'Regel für Reservierungsfarbe hinzufügen';
         $strings['LimitAttributeScope'] = 'In speziellen Fällen sammeln';
         $strings['CollectFor'] = 'Sammeln für';
+        $strings['AdminOnlyHelp'] = 'Nur Administratoren können diesen Attributwert einsehen und bearbeiten';
+        $strings['PrivateHelp'] = 'Dieser Attributwert ist nur für den Besitzer der Reservierung und Administratoren sichtbar';
+        $strings['LimitAttributeScopeHelp'] = 'Dieses Attribut nur für die ausgewählten Benutzer, Ressourcen oder Ressourcentypen erfassen';
         $strings['SignIn'] = 'Anmelden';
         $strings['AllParticipants'] = 'Alle Teilnehmer';
         $strings['RegisterANewAccount'] = 'Ein neues Benutzerkonto registrieren';

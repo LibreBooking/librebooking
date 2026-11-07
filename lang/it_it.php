@@ -466,6 +466,9 @@ class it_it extends en_gb
         $strings['AddReservationColorRule'] = 'Aggiungi un colore di ruolo per la prenotazione';
         $strings['LimitAttributeScope'] = 'Limitata l\'attributo a...';
         $strings['CollectFor'] = 'Limitato a';
+        $strings['AdminOnlyHelp'] = 'Solo gli amministratori possono vedere e modificare questo valore di attributo';
+        $strings['PrivateHelp'] = 'Questo valore di attributo è visibile solo all\'utente che possiede la prenotazione e agli amministratori';
+        $strings['LimitAttributeScopeHelp'] = 'Raccogliere questo attributo solo per gli utenti, le risorse o i tipi di risorsa selezionati';
         $strings['SignIn'] = 'Iscriviti';
         $strings['AllParticipants'] = 'Tutti i partecipanti';
         $strings['RegisterANewAccount'] = 'Crea un nuovo profilo';
