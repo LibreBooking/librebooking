@@ -345,10 +345,13 @@ function AttributeManagement(opts) {
       $('.secondaryEntities, .attributeSecondary').addClass('d-none');
       $('.secondaryEntities').removeClass('d-none');
       $('.attributeIsPrivate').show();
+      $('.attributeAdminOnlyHelp').show();
     } else {
       $('.attributeUnique').show();
       $('.secondaryEntities, .attributeSecondary').addClass('d-none');
       $('.attributeIsPrivate').hide();
+      // "Admin only" is only enforced for reservation attributes so far
+      $('.attributeAdminOnlyHelp').hide();
     }
   };
 
