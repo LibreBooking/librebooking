@@ -89,6 +89,5 @@ Részt vesz? <a href="{$ScriptUrl}/{$AcceptUrl}">Igen</a> <a href="{$ScriptUrl}/
 
 <a href="{$ScriptUrl}/{$ReservationUrl}">A foglalás megtekintése</a> |
 <a href="{$ScriptUrl}/{$ICalUrl}">Naptárhoz adás</a> |
-<a href="http://www.google.com/calendar/event?action=TEMPLATE&text={$Title|escape:'url'}&dates={formatdate date=$StartDate->ToUtc() key=google}/{formatdate date=$EndDate->ToUtc() key=google}&ctz={$StartDate->Timezone()}&details={$Description|escape:'url'}&location={$ResourceName|escape:'url'}&trp=false&sprop=&sprop=name:"
-   target="_blank" rel="nofollow">Hozzáadás a Google Naptárhoz</a> |
+<a href="{$GoogleCalendarUrl}" target="_blank" rel="nofollow">Hozzáadás a Google Naptárhoz</a> |
 <a href="{$ScriptUrl}">Bejelentkezés ide: {$AppTitle}</a>
