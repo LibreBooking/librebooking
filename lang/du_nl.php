@@ -473,6 +473,9 @@ class du_nl extends en_gb
         $strings['AddReservationColorRule'] = 'Voeg reserverings kleur regel toe';
         $strings['LimitAttributeScope'] = 'Verzamel in specifieke gevallen';
         $strings['CollectFor'] = 'Verzamel voor';
+        $strings['AdminOnlyHelp'] = 'Alleen beheerders kunnen deze attribuutwaarde bekijken en bewerken';
+        $strings['PrivateHelp'] = 'Deze attribuutwaarde is alleen zichtbaar voor de gebruiker die de reservering bezit en beheerders';
+        $strings['LimitAttributeScopeHelp'] = 'Dit attribuut alleen verzamelen voor de geselecteerde gebruikers, bronnen of brontypes';
         $strings['SignIn'] = 'Log in';
         $strings['AllParticipants'] = 'Alle deelnemers';
         $strings['RegisterANewAccount'] = 'Registreer een nieuw account';
