@@ -46,10 +46,6 @@ function AccessoryManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').dialog('close');
-    });
-
     elements.accessoryResourcesDialog.on('click', '.resourceCheckbox', function () {
       handleAccessoryResourceClick($(this));
     });

@@ -59,10 +59,6 @@ function AnnouncementManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').modal('hide');
-    });
-
     ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.add));
     ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.actions.deleteAnnouncement));
     ConfigureAsyncForm(elements.form, function () {

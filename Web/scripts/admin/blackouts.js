@@ -39,10 +39,6 @@ function BlackoutManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.modal').modal('hide');
-    });
-
     $('#result').on('click', '.reload', function (e) {
       location.reload();
     });

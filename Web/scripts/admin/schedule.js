@@ -225,10 +225,6 @@ function ScheduleManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').dialog('close');
-    });
-
     elements.quickLayoutConfig.change(function () {
       createQuickLayout();
     });

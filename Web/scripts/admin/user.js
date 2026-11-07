@@ -188,10 +188,6 @@ function UserManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').dialog('close');
-    });
-
     $('.clearform').click(function () {
       $(this).closest('form')[0].reset();
     });
