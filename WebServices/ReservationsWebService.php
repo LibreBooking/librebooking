@@ -27,6 +27,8 @@ class ReservationsWebService
      */
     private $attributeService;
 
+    private IReservationAuthorization $reservationAuthorization;
+
     private ?IResourceRepository $resourceRepository;
 
     public function __construct(
@@ -34,8 +36,10 @@ class ReservationsWebService
         IReservationViewRepository $reservationViewRepository,
         IPrivacyFilter $privacyFilter,
         IAttributeService $attributeService,
+        IReservationAuthorization $reservationAuthorization,
         ?IResourceRepository $resourceRepository = null
     ) {
+        $this->reservationAuthorization = $reservationAuthorization;
         $this->resourceRepository = $resourceRepository;
         $this->server = $server;
         $this->reservationViewRepository = $reservationViewRepository;
@@ -110,7 +114,13 @@ class ReservationsWebService
 
         if (!empty($reservation->ReferenceNumber)) {
             $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESERVATION);
-            $response = new ReservationResponse($this->server, $reservation, $this->privacyFilter, $attributes);
+            $response = new ReservationResponse(
+                server: $this->server,
+                reservation: $reservation,
+                privacyFilter: $this->privacyFilter,
+                reservationAuthorization: $this->reservationAuthorization,
+                attributes: $attributes,
+            );
             $this->server->WriteResponse($response);
         } else {
             $this->server->WriteResponse($response = RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
