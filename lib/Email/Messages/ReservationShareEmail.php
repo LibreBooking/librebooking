@@ -24,6 +24,12 @@ class ReservationShareEmail extends ReservationEmailMessage
         return [new EmailAddress($this->emailToShare)];
     }
 
+    protected function GetIcsAttendeeParams(): array
+    {
+        // a share only informs the recipient
+        return ['ROLE' => 'NON-PARTICIPANT', 'PARTSTAT' => 'NEEDS-ACTION'];
+    }
+
     public function Subject()
     {
         return $this->Translate('ReservationShareSubject', [$this->reservationSeries->BookedBy()->FullName(), $this->primaryResource->GetName()]);

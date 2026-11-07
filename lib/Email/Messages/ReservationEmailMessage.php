@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
@@ -215,14 +217,51 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
-        $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
+        // BookedBy() is null for series from ReservationRepository::BuildSeries(); use the
+        // owner, with a timezone for the {startdate}/{enddate} summary placeholders.
+        $currentUser = $this->reservationSeries->BookedBy();
+        if ($currentUser === null) {
+            $currentUser = new UserSession($this->reservationOwner->Id());
+            $currentUser->Timezone = $this->timezone;
+        }
+        $icsView = new iCalendarReservationView($rv, $currentUser, new NullPrivacyFilter());
+
+        // RFC 5546: whoever sends the email organizes, as EmailService picks the sender
+        $defaultFromAddress = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
+        $defaultFromName = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_NAME);
+        $from = $this->From();
+        $icsView->OrganizerEmail = empty($defaultFromAddress) ? $from->Address() : $defaultFromAddress;
+        $icsView->Organizer = empty($defaultFromName) ? $from->Name() : $defaultFromName;
+        $icsView->OrganizerSentBy = null;
+
+        // the attendee is whoever the email goes to: the owner, or an invitee, guest or share recipient
+        $recipient = $this->To();
+        $recipient = is_array($recipient) ? $recipient[0] : $recipient;
+        $icsView->AttendeeName = $recipient->Name();
+        $icsView->AttendeeEmail = $recipient->Address();
+        $icsView->AttendeeParams = $this->GetIcsAttendeeParams();
+
+        $method = $this->GetIcsMethod();
 
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
+        $icsContents = $display->Render(reservations: [$icsView], method: $method);
         $this->AddStringAttachment(
             contents: $icsContents,
             fileName: 'reservation.ics',
-            mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
+            mimeType: "text/calendar; charset=UTF-8; method={$method->value}"
         );
+    }
+
+    protected function GetIcsMethod(): IcsMethod
+    {
+        return IcsMethod::REQUEST;
+    }
+
+    /**
+     * @return array<string, string> ROLE and PARTSTAT of the recipient
+     */
+    protected function GetIcsAttendeeParams(): array
+    {
+        return ['ROLE' => 'REQ-PARTICIPANT', 'PARTSTAT' => 'NEEDS-ACTION'];
     }
 }

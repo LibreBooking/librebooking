@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
 
 class ReservationDeletedEmail extends ReservationEmailMessage
@@ -24,5 +26,10 @@ class ReservationDeletedEmail extends ReservationEmailMessage
     protected function GetTemplateName()
     {
         return 'ReservationDeleted.tpl';
+    }
+
+    protected function GetIcsMethod(): IcsMethod
+    {
+        return IcsMethod::CANCEL;
     }
 }
