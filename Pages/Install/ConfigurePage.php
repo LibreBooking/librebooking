@@ -71,7 +71,9 @@ class ConfigurePage extends Page implements IConfgurePage
 
     public function GetInstallPassword()
     {
-        return $this->GetForm(FormKeys::INSTALL_PASSWORD);
+        $password = $this->GetRawForm(FormKeys::INSTALL_PASSWORD);
+
+        return is_string($password) ? $password : '';
     }
 
     public function SetShowPasswordPrompt($showPrompt)
