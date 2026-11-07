@@ -172,14 +172,16 @@ class AttributeSaveController implements IAttributeSaveController
         if ($request->type != CustomAttributeTypes::CHECKBOX &&
                 $request->type != CustomAttributeTypes::MULTI_LINE_TEXTBOX &&
                 $request->type != CustomAttributeTypes::SELECT_LIST &&
-                $request->type != CustomAttributeTypes::SINGLE_LINE_TEXTBOX
+                $request->type != CustomAttributeTypes::SINGLE_LINE_TEXTBOX &&
+                $request->type != CustomAttributeTypes::DATETIME
         ) {
             $errors[] = sprintf(
-                'type is invalid. Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line)',
+                'type is invalid. Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line), %s (datetime)',
                 CustomAttributeTypes::CHECKBOX,
                 CustomAttributeTypes::MULTI_LINE_TEXTBOX,
                 CustomAttributeTypes::SELECT_LIST,
-                CustomAttributeTypes::SINGLE_LINE_TEXTBOX
+                CustomAttributeTypes::SINGLE_LINE_TEXTBOX,
+                CustomAttributeTypes::DATETIME
             );
         }
 

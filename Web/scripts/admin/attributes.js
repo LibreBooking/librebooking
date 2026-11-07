@@ -158,10 +158,7 @@ function AttributeManagement(opts) {
     });
 
     elements.limitScope.change(function () {
-      elements.attributeSecondary.addClass('d-none');
-      if (elements.limitScope.is(':checked')) {
-        elements.attributeSecondary.removeClass('d-none');
-      }
+      elements.attributeSecondary.toggleClass('d-none', !$(this).is(':checked'));
     });
 
     elements.secondaryAttributeCategory.change(function (e) {
@@ -298,7 +295,7 @@ function AttributeManagement(opts) {
     }
 
     var limitScope = $('#editAttributeLimitScope');
-    limitScope.prop('checked', false);
+    limitScope.prop('checked', false).trigger('change');
 
     $('#editAttributeSecondaryEntityId').val('');
     elements.secondaryPrompt.text(options.allText);
@@ -340,17 +337,22 @@ function AttributeManagement(opts) {
   }
 
   var showRelevantCategoryOptions = function () {
-    if (elements.attributeCategory.val() == options.categories.reservation) {
-      $('.attributeUnique').hide();
-      $('.attributeAdminOnly').show();
-      $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-      $('.secondaryEntities').removeClass('d-none');
-      $('.attributeIsPrivate').show();
-    } else {
-      $('.attributeUnique').show();
-      //$('.attributeAdminOnly').hide();
-      $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-      $('.attributeIsPrivate').hide();
+    var category = elements.attributeCategory.val();
+    var isReservation = category == options.categories.reservation;
+    var isResource = category == options.categories.resource;
+
+    $('.attributeUnique').toggle(!isReservation);
+    $('.attributeIsPrivate').toggle(isReservation);
+    $('.secondaryEntities, .attributeSecondary').addClass('d-none');
+    $('.secondaryEntities').toggleClass('d-none', !isReservation && !isResource);
+
+    // Resource attributes can only be limited to resource types, specific resources use "Applies To"
+    $('.secondaryAttributeCategory option').each(function () {
+      var hidden = isResource && $(this).val() != options.categories.resource_type;
+      $(this).prop({ hidden: hidden, disabled: hidden });
+    });
+    if (isResource) {
+      elements.secondaryAttributeCategory.val(options.categories.resource_type);
     }
   };
 

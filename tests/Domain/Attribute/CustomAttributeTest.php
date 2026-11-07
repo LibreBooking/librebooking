@@ -76,4 +76,44 @@ class CustomAttributeTest extends TestBase
         $this->assertTrue(in_array('1abc3', $list));
         $this->assertEquals(1, $attribute->SortOrder());
     }
+
+    public function testResourceAttributesCanBeLimitedToResourceTypes()
+    {
+        $attribute = CustomAttribute::Create('', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, null, false, null, 0);
+        $attribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, '3,4');
+
+        $this->assertTrue($attribute->AppliesToResourceType(3));
+        $this->assertTrue($attribute->AppliesToResourceType('4'));
+        $this->assertFalse($attribute->AppliesToResourceType(5));
+        $this->assertFalse($attribute->AppliesToResourceType(null));
+    }
+
+    public function testResourceAttributesCannotBeLimitedToOtherCategories()
+    {
+        $attribute = CustomAttribute::Create('', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, null, false, null, 0);
+        $attribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, '3');
+        $attribute->WithSecondaryEntities(CustomAttributeCategory::USER, '3');
+
+        $this->assertFalse($attribute->HasSecondaryEntities());
+        $this->assertTrue($attribute->AppliesToResourceType(5));
+    }
+
+    public function testResourceTypeScopeCanBeRemoved()
+    {
+        $attribute = CustomAttribute::Create('', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, null, false, null, 0);
+        $attribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, '3');
+        $attribute->WithSecondaryEntities(null, null);
+
+        $this->assertFalse($attribute->HasSecondaryEntities());
+        $this->assertTrue($attribute->AppliesToResourceType(5));
+    }
+
+    public function testOnlyResourceAttributesAreScopedByResourceType()
+    {
+        $attribute = CustomAttribute::Create('', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $attribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, '3');
+
+        $this->assertTrue($attribute->HasSecondaryEntities());
+        $this->assertTrue($attribute->AppliesToResourceType(5));
+    }
 }

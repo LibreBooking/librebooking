@@ -102,6 +102,18 @@ class AttributeServiceTest extends TestBase
         $this->assertEquals(3, count($result->Errors()));
     }
 
+    public function testOptionalAttributeWithRegexCanBeLeftEmpty()
+    {
+        $optional = new CustomAttribute(1, 'optional', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, '/^\\d+$/', false, null, 0);
+        $required = new CustomAttribute(2, 'required', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, '/^\\d+$/', true, null, 0);
+        $this->attributeRepository->_CustomAttributes = [$optional, $required];
+
+        $result = $this->attributeService->Validate(CustomAttributeCategory::RESERVATION, [new AttributeValue(1, ''), new AttributeValue(2, '')]);
+
+        $this->assertFalse($result->IsValid());
+        $this->assertEquals([Resources::GetInstance()->GetString('CustomAttributeRequired', 'required')], $result->Errors());
+    }
+
     public function testWhenUserIsNotAdminButAttributeIsAdminOnly_ThenDoNotValidate()
     {
         $category = CustomAttributeCategory::RESERVATION;

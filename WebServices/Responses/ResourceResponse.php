@@ -74,7 +74,10 @@ class ResourceResponse extends RestResponse
 
         $i = 0;
         foreach ($attributeValues as $av) {
-            $this->customAttributes[] = new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
+            if (!$av->AppliesToResourceType($this->typeId)) {
+                continue;
+            }
+            $this->customAttributes[] =new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
             $i++;
         }
 
