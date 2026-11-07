@@ -22,11 +22,22 @@ class ReservationAttachmentPresenter
      */
     private $permissionService;
 
-    public function __construct(IReservationAttachmentPage $page, IReservationRepository $reservationRepository, IPermissionService $permissionService)
-    {
+    private IReservationViewRepository $reservationViewRepository;
+
+    private IReservationAuthorization $reservationAuthorization;
+
+    public function __construct(
+        IReservationAttachmentPage $page,
+        IReservationRepository $reservationRepository,
+        IPermissionService $permissionService,
+        IReservationViewRepository $reservationViewRepository,
+        IReservationAuthorization $reservationAuthorization
+    ) {
         $this->page = $page;
         $this->reservationRepository = $reservationRepository;
         $this->permissionService = $permissionService;
+        $this->reservationViewRepository = $reservationViewRepository;
+        $this->reservationAuthorization = $reservationAuthorization;
     }
 
     public function PageLoad(UserSession $currentUser)
@@ -64,6 +75,11 @@ class ReservationAttachmentPresenter
 
         if (!$this->permissionService->CanAccessResource(new ReservationResource($reservation->ResourceId()), $currentUser)) {
             Log::Error('Error loading resource attachment, insufficient permissions');
+            return false;
+        }
+
+        if (!$this->reservationAuthorization->CanViewAttachments($this->reservationViewRepository->GetReservationForEditing($referenceNumber), $currentUser)) {
+            Log::Error('Error loading resource attachment, user is not owner, participant, invitee or administrator of the reservation');
             return false;
         }
 
