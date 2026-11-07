@@ -193,7 +193,7 @@ class AttributeService implements IAttributeService
                 $invalidAttributes[] = new InvalidAttribute($attribute, $error);
             }
 
-            if (!$attribute->SatisfiesConstraint($value)) {
+            if ($value !== '' && !$attribute->SatisfiesConstraint($value)) {
                 $isValid = false;
                 $error = $resources->GetString('CustomAttributeInvalid', $label);
                 $errors[] = $error;
