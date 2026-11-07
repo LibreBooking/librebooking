@@ -239,6 +239,35 @@ class ReservationEmailTemplateContextTest extends TestBase
         $this->assertSame(Date::Parse($dateString)->Format($dateFormat), $rowsByLabel['Date String']);
     }
 
+    public function testResourcesOnlyIncludeAttributesForTheResourceType(): void
+    {
+        $owner = new FakeUser(10);
+        $primaryResource = new FakeBookableResource(100, 'Primary');
+        $primaryResource->SetScheduleId(1);
+        $primaryResource->SetResourceTypeId(7);
+
+        $series = new TestReservationSeries();
+        $series->WithOwnerId($owner->Id());
+        $series->WithResource($primaryResource);
+
+        $forResourceType = $this->createResourceAttribute(31, [], false, label: 'For Type');
+        $forResourceType->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, [7]);
+        $forOtherResourceType = $this->createResourceAttribute(32, [], false, label: 'For Other Type');
+        $forOtherResourceType->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, [8]);
+
+        $attributeRepository = new FakeAttributeRepository();
+        $attributeRepository->_CustomAttributes = [$forResourceType, $forOtherResourceType];
+
+        $scheduleRepository = new FakeScheduleRepository();
+        $scheduleRepository->_Schedules = [new Schedule(1, 'Schedule One', true, 0, 7)];
+
+        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, $attributeRepository, $scheduleRepository);
+
+        $labels = array_column($context->Resources(false)[0]['attributeRows'], 'label');
+
+        $this->assertSame(['For Type'], $labels);
+    }
+
     public function testRepeatVariablesReturnsEmptyListsForNonRecurringSeries(): void
     {
         $owner = new FakeUser(10);

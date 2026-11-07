@@ -578,7 +578,7 @@
 													{if $AttributeList|default:array()|count > 0}
 														{assign var="hasResults" value=false}
 														{foreach from=$AttributeList item=attribute name=attrLoop}
-															{if $attribute->AppliesToEntity($id)}
+															{if $attribute->AppliesToEntity($id) && $attribute->AppliesToResourceType($resource->GetResourceTypeId())}
 																{if !$hasResults}
 																	{assign var="hasResults" value=true}
 																	{* Content at the start of the iteration *}
