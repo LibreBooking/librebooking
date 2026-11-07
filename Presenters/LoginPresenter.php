@@ -125,11 +125,14 @@ class LoginPresenter
         $keycloakEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter());
         $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
-        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl($this->_page->GetResumeUrl()) : null);
-        $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl($this->_page->GetResumeUrl()) : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
-        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl($this->_page->GetResumeUrl()) : null);
-        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url($this->_page->GetResumeUrl()) : null);
+
+        $oauthState = $this->GetOAuthState();
+
+        $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl(state: $oauthState) : null);
+        $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl(state: $oauthState) : null);
+        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl(state: $oauthState) : null);
+        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url(state: $oauthState) : null);
         $this->_page->SetOauth2Name($oauth2Enabled ? Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME) : null);
     }
 
@@ -257,6 +260,26 @@ class LoginPresenter
         if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter())) {
             $this->_page->RegisterValidator('captcha', new CaptchaValidator($this->_page->GetCaptcha(), $this->captchaService));
         }
+    }
+
+    /**
+     * Returns the resume URL to carry through an OAuth round trip as `state`,
+     * or null when there is none.
+     *
+     * LoginPage::GetResumeUrl() returns an HTML-escaped value. On the way back,
+     * ExternalAuthLoginPage::GetResumeUrl() escapes it again and
+     * RedirectUrlSanitizer decodes only once, so the value must be decoded
+     * here (as Logout() already does). Otherwise "&" survives as "&amp;" and
+     * query parameters are lost.
+     */
+    private function GetOAuthState(): ?string
+    {
+        $resumeUrl = $this->_page->GetResumeUrl();
+        if (!is_string($resumeUrl) || $resumeUrl === '') {
+            return null;
+        }
+
+        return htmlspecialchars_decode(string: $resumeUrl);
     }
 
     private function buildRedirectUri(string $configuredPath): string

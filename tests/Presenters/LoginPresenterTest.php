@@ -10,6 +10,13 @@ require_once(ROOT_DIR . 'lib/Common/namespace.php');
 class LoginPresenterTest extends TestBase
 {
     /**
+     * Resume URL with more than one query parameter. FakeLoginPage, like the
+     * real LoginPage, returns it HTML-escaped (& becomes &amp;), so this
+     * exercises the decoding along every redirect path.
+     */
+    private const MULTI_PARAM_RESUME_URL = '/Web/reservation.php?rn=123&sd=2026-01-01';
+
+    /**
      * @var FakeWebAuthentication
      */
     private $auth;
@@ -138,6 +145,16 @@ class LoginPresenterTest extends TestBase
         $this->assertEquals($redirect, $this->page->_LastRedirect);
     }
 
+    public function testRedirectsToRequestedPageWithMultipleQueryParams()
+    {
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(self::MULTI_PARAM_RESUME_URL, $this->page->_LastRedirect);
+    }
+
     public function testRedirectsToSameOriginAbsoluteRequestedPage()
     {
         $redirect = 'https://booked.example/Web/someurl/something.php';
@@ -196,6 +213,21 @@ class LoginPresenterTest extends TestBase
         );
     }
 
+    public function testMicrosoftUrlStateIsHtmlDecodedResumeUrl()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID, 'tenant');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI, 'https://booked.example/Web/external-auth.php');
+
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_MicrosoftUrl);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
+    }
+
     public function testMicrosoftUrlOmitsStateWhenNoResumeUrl()
     {
         $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
@@ -223,12 +255,12 @@ class LoginPresenterTest extends TestBase
     public function testGoogleUrlIncludesResumeUrlAsState()
     {
         $this->enableGoogleLogin();
-        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
 
         $this->presenter->PageLoad();
 
         $params = $this->getQueryParams(url: $this->page->_GoogleUrl);
-        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
     }
 
     public function testGoogleUrlHasEmptyStateWhenNoResumeUrl()
@@ -256,12 +288,12 @@ class LoginPresenterTest extends TestBase
     public function testKeycloakUrlIncludesResumeUrlAsState()
     {
         $this->enableKeycloakLogin();
-        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
 
         $this->presenter->PageLoad();
 
         $params = $this->getQueryParams(url: $this->page->_KeycloakUrl);
-        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
     }
 
     public function testKeycloakUrlOmitsStateWhenNoResumeUrl()
@@ -288,12 +320,12 @@ class LoginPresenterTest extends TestBase
     public function testOauth2UrlIncludesResumeUrlAsState()
     {
         $this->enableOauth2Login();
-        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123&sd=2026-01-01';
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
 
         $this->presenter->PageLoad();
 
         $params = $this->getQueryParams(url: $this->page->_Oauth2Url);
-        $this->assertSame('/Web/reservation.php?rn=123&sd=2026-01-01', $params['state']);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
     }
 
     public function testOauth2UrlOmitsStateWhenNoResumeUrl()
@@ -555,9 +587,18 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
         $this->_ResumeUrl = $value;
     }
 
+    /**
+     * Mirrors LoginPage::GetResumeUrl(), which reads the value through
+     * Server::GetForm()/GetQuerystring() and so returns it trimmed and
+     * HTML-escaped. Tests set the raw URL in _ResumeUrl.
+     */
     public function GetResumeUrl()
     {
-        return $this->_ResumeUrl;
+        if ($this->_ResumeUrl === null || $this->_ResumeUrl === '') {
+            return '';
+        }
+
+        return htmlspecialchars(trim($this->_ResumeUrl));
     }
 
     public function SetShowLoginError()
