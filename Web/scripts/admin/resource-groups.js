@@ -26,10 +26,6 @@ function ResourceGroupManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.modal').modal('hide');
-    });
-
     wireUpTree(groups);
     wireUpContextMenu();
 

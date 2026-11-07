@@ -76,7 +76,6 @@ function GroupManagement(opt) {
 
     //main interface
     $('.save').click((e) => $(e.currentTarget).closest('form').submit());
-    $('.cancel').click((e) => $(e.currentTarget).closest('.modal').modal('hide'));
 
     $('#add-group').click((e) => {
       e.preventDefault();

@@ -26,10 +26,6 @@ function QuotaManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').modal('hide');
-    });
-
     elements.enforceAllDayToggle.on('change', handleEnforceAllDayToggle);
 
     elements.enforceEveryDayToggle.on('change', handleEnforceEveryDayToggle);

@@ -29,10 +29,6 @@ function ReservationColorManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.modal').modal('hide');
-    });
-
     $('#addRuleButton').click(function (e) {
       var attrId = '#attribute' + elements.attributeOption.val();
       $('#attributeFillIn').empty();

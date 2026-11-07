@@ -59,10 +59,6 @@ function ResourceTypeManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').dialog('close');
-    });
-
     var attributesHandler = function (responseText, form) {
       if (responseText.ErrorIds && responseText.Messages.attributeValidator) {
         var messages = responseText.Messages.attributeValidator.join('</li><li>');

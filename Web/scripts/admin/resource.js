@@ -253,10 +253,6 @@ function ResourceManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.modal').modal('hide');
-    });
-
     elements.addResourceButtons.click(function (e) {
       e.preventDefault();
       elements.addResourceDialog.modal('show');

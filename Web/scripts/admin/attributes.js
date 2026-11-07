@@ -59,10 +59,6 @@ function AttributeManagement(opts) {
       $(this).closest('form').submit();
     });
 
-    $('.cancel').click(function () {
-      $(this).closest('.dialog').dialog('close');
-    });
-
     RefreshAttributeList();
 
     elements.attributeCategory.change(function () {
