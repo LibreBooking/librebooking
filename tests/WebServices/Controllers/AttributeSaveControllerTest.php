@@ -59,6 +59,19 @@ class AttributeSaveControllerTest extends TestBase
         $this->assertEquals($expected, $this->attributeRepository->_Added);
     }
 
+    public function testAddsDateTimeAttribute()
+    {
+        $request = new CustomAttributeRequest();
+        $request->label = 'attributename';
+        $request->type = CustomAttributeTypes::DATETIME;
+        $request->categoryId = CustomAttributeCategory::RESERVATION;
+
+        $result = $this->controller->Create($request, $this->session);
+
+        $this->assertEquals(true, $result->WasSuccessful());
+        $this->assertEquals(CustomAttributeTypes::DATETIME, $this->attributeRepository->_Added->Type());
+    }
+
     public function testWhenAddRequestIsInvalid()
     {
         $request = new CustomAttributeRequest();
