@@ -443,6 +443,12 @@ Gets the currently authenticated user's account information
 Attributes
 ----------
 
+Create and update endpoints accept JSON objects. For a free-text attribute,
+``label``, ``type`` and ``categoryId`` are sufficient; optional fields may be
+omitted. For example, ``{"label":"Purpose","type":1,"categoryId":1}``
+creates a single-line reservation attribute. Both endpoints return HTTP 201
+on success and HTTP 400 for validation errors.
+
 .. _post-endpoints-attributes:
 
 POST Endpoints
