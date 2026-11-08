@@ -8,6 +8,9 @@
 		{/if}
 		<div><a class="link-primary" href="https://github.com/LibreBooking/librebooking">LibreBooking - GPLv3 -
 				{$DisplayVersion}</a></div>
+		{if isset($ShowTemplateEngine) && $ShowTemplateEngine}
+			<div id="template-engine" class="small text-muted">Template engine: Smarty</div>
+		{/if}
 	</footer>
 
 	<div class="toast-container position-fixed bottom-0 end-0 p-3">

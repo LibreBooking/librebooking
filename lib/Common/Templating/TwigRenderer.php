@@ -105,6 +105,10 @@ class TwigRenderer implements TemplateRenderer
 
     public function fetch(string $templateName): string
     {
+        if (!TemplateEngineOverride::TwigAllowed()) {
+            return $this->smartyFallback()->fetch($templateName);
+        }
+
         // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
         $twigCandidate = str_ends_with($templateName, '.tpl')
             ? substr($templateName, 0, -4) . '.twig'
@@ -147,6 +151,10 @@ class TwigRenderer implements TemplateRenderer
         bool $enforceCustomTemplate,
         ?string $languageCode = null
     ): string {
+        if (!TemplateEngineOverride::TwigAllowed()) {
+            return $this->smartyFallback()->fetchLocalized($templateName, $enforceCustomTemplate);
+        }
+
         if ($languageCode === null || $languageCode === '') {
             // Like SmartyPage::FetchLocalized: without a language the en_us fallback below applies,
             // not the language of whoever triggered the email
@@ -217,6 +225,10 @@ class TwigRenderer implements TemplateRenderer
 
     public function renderControlTemplate(string $templateName, array $vars): string
     {
+        if (!TemplateEngineOverride::TwigAllowed()) {
+            return $this->smartyFallback()->renderControlTemplate($templateName, $vars);
+        }
+
         // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
         $twigCandidate = str_ends_with($templateName, '.tpl')
             ? substr($templateName, 0, -4) . '.twig'
@@ -247,6 +259,10 @@ class TwigRenderer implements TemplateRenderer
      */
     public function renderPartial(string $templateName, array $vars): string
     {
+        if (!TemplateEngineOverride::TwigAllowed()) {
+            return $this->smartyFallback()->render($templateName, $vars);
+        }
+
         // Compute the .twig candidate: replace trailing .tpl with .twig, or use as-is.
         $twigCandidate = str_ends_with($templateName, '.tpl')
             ? substr($templateName, 0, -4) . '.twig'
