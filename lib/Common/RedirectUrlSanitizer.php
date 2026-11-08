@@ -13,6 +13,12 @@ class RedirectUrlSanitizer
             return $fallback;
         }
 
+        // Browsers treat "\" as "/" and strip tab/CR/LF inside URLs, so values
+        // such as "/\evil.com" or "/\t/evil.com" become "//evil.com".
+        if (str_contains($url, '\\') || preg_match('/[\x00-\x1F\x7F]/', $url)) {
+            return $fallback;
+        }
+
         $parts = parse_url($url);
         if ($parts === false) {
             return $fallback;
