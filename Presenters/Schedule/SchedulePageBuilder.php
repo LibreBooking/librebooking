@@ -63,12 +63,6 @@ interface ISchedulePageBuilder
     /**
      * @param int $scheduleId
      * @param ISchedulePage $page
-     */
-    public function GetGroupId($scheduleId, ISchedulePage $page): ?int;
-
-    /**
-     * @param int $scheduleId
-     * @param ISchedulePage $page
      * @return ScheduleResourceFilter
      */
     public function GetResourceFilter($scheduleId, ISchedulePage $page);
@@ -296,35 +290,6 @@ class SchedulePageBuilder implements ISchedulePageBuilder
     public function BindResourceGroups(ISchedulePage $page, ResourceGroupTree $resourceGroupTree)
     {
         $page->SetResourceGroupTree($resourceGroupTree);
-    }
-
-    public function GetGroupId($scheduleId, ISchedulePage $page): ?int
-    {
-        $groupId = $page->GetGroupId();
-        if (!empty($groupId)) {
-            return $groupId;
-        }
-
-        $cookie = $this->getTreeCookie($scheduleId);
-
-        if (!empty($cookie)) {
-            if (strpos($cookie, '-') === false) {
-                return $groupId;
-            }
-        }
-
-        return null;
-    }
-
-    private function getTreeCookie($scheduleId)
-    {
-        $cookie = ServiceLocator::GetServer()->GetCookie('tree' . $scheduleId);
-        if (!empty($cookie)) {
-            $val = json_decode($cookie, true);
-            return $val['selected_node'];
-        }
-
-        return null;
     }
 
     public function BindResourceTypes(ISchedulePage $page, $resourceTypes)
