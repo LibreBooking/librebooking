@@ -58,7 +58,7 @@ class ScheduleAdminManageScheduleService extends ManageScheduleService
         return $this->scheduleRepo->GetAll();
     }
 
-    public function GetResources()
+    public function GetResources(): array
     {
         $resources = [];
 

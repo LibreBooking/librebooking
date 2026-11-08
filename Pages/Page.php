@@ -381,6 +381,32 @@ abstract class Page implements IPage
     }
 
     /**
+     * Reads a query string value that must be a non-negative integer ID.
+     *
+     * @return int|null null when the value is missing, empty, not made up
+     *                  only of digits, larger than PHP_INT_MAX, or submitted
+     *                  as an array
+     */
+    protected function GetQuerystringInt(string $key): ?int
+    {
+        $value = $this->GetQuerystring($key);
+        if (!is_string($value) || !ctype_digit($value)) {
+            return null;
+        }
+
+        // Leading zeros are accepted; compare without them so the round trip
+        // detects values that (int) would clamp to PHP_INT_MAX.
+        $digits = ltrim($value, '0');
+        if ($digits === '') {
+            return 0;
+        }
+
+        $intValue = (int)$digits;
+
+        return (string)$intValue === $digits ? $intValue : null;
+    }
+
+    /**
      * @param string $key
      * @return null|UploadedFile
      */

@@ -218,9 +218,9 @@ class ManageGroupsPresenter extends ActionPresenter
     }
 
     /**
-     * @return int[] all resource ids the user has permission to
+     * @return array{full: int[], view: int[]} resource IDs the group has full or view permission to
      */
-    public function GetGroupResourcePermissions()
+    public function GetGroupResourcePermissions(): array
     {
         $group = $this->groupRepository->LoadById($this->page->GetGroupId());
         return ['full' => $group->AllowedResourceIds(), 'view' => $group->AllowedViewResourceIds()];

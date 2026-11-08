@@ -20,10 +20,7 @@ class ProfilePresenter extends ActionPresenter
      */
     private $page;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private IUserRepository $userRepository;
 
     /**
      * @var IAttributeService

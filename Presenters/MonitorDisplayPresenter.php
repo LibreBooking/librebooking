@@ -25,10 +25,7 @@ class MonitorDisplayPresenter extends ActionPresenter
      * @var IScheduleService
      */
     private $scheduleService;
-    /**
-     * @var IDailyLayoutFactory
-     */
-    private $layoutFactory;
+    private ILayoutFactory $layoutFactory;
 
     public function __construct(
         IMonitorDisplayPage $page,

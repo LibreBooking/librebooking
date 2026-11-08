@@ -63,9 +63,8 @@ interface ISchedulePageBuilder
     /**
      * @param int $scheduleId
      * @param ISchedulePage $page
-     * @return int
      */
-    public function GetGroupId($scheduleId, ISchedulePage $page);
+    public function GetGroupId($scheduleId, ISchedulePage $page): ?int;
 
     /**
      * @param int $scheduleId
@@ -299,7 +298,7 @@ class SchedulePageBuilder implements ISchedulePageBuilder
         $page->SetResourceGroupTree($resourceGroupTree);
     }
 
-    public function GetGroupId($scheduleId, ISchedulePage $page)
+    public function GetGroupId($scheduleId, ISchedulePage $page): ?int
     {
         $groupId = $page->GetGroupId();
         if (!empty($groupId)) {

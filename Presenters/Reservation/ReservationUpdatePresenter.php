@@ -22,10 +22,7 @@ class ReservationUpdatePresenter implements IReservationUpdatePresenter
      */
     private $page;
 
-    /**
-     * @var UpdateReservationPersistenceService
-     */
-    private $persistenceService;
+    private IUpdateReservationPersistenceService $persistenceService;
 
     /**
      * @var IReservationHandler

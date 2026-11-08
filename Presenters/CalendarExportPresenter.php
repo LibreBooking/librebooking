@@ -21,10 +21,7 @@ class CalendarExportPresenter
      */
     private $validator;
 
-    /**
-     * @var IReservationAuthorization
-     */
-    private $privacyFilter;
+    private IPrivacyFilter $privacyFilter;
 
     public function __construct(
         ICalendarExportPage $page,

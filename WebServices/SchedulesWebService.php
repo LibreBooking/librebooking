@@ -142,7 +142,7 @@ class ScheduleWebServicePageBuilder extends SchedulePageBuilder
         // no op
     }
 
-    public function GetGroupId($scheduleId, ISchedulePage $page)
+    public function GetGroupId($scheduleId, ISchedulePage $page): ?int
     {
         // no op
         return 0;

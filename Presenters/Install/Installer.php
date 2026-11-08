@@ -194,9 +194,10 @@ class Installer
     }
 
     /**
-     * @return float
+     * Returns the installed database version, or false when the database
+     * cannot be reached or is not installed.
      */
-    public function GetVersion()
+    public function GetVersion(): float|string|false
     {
         // if dbversion table does not exist or version in db is less than current
 
