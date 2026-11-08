@@ -57,7 +57,7 @@ class FakeFileSystem implements \Booked\IFileSystem
         return $this->_Saved;
     }
 
-    public function GetFileContents($fullPath)
+    public function GetFileContents(string $fullPath): ?string
     {
         $this->_ContentsPath = $fullPath;
         return is_array($this->_ExpectedContents) ? $this->_ExpectedContents[$fullPath] : $this->_ExpectedContents;

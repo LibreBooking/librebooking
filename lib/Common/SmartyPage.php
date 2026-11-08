@@ -50,17 +50,17 @@ class SmartyPage extends Smarty
 
         $this->debugging = isset($_GET['debug']);
         $this->AddTemplateDirectory($base . 'tpl');
-        $this->compile_dir = $base . 'tpl_c';
-        $this->config_dir = $base . 'configs';
-        $this->cache_dir = $base . 'cache';
+        $this->setCompileDir($base . 'tpl_c');
+        $this->setConfigDir($base . 'configs');
+        $this->setCacheDir($base . 'cache');
         $this->plugins_dir = $base . 'vendor/smarty/smarty/libs/plugins';
         //$this->error_reporting = E_ALL & ~E_NOTICE;
         $this->muteUndefinedOrNullWarnings();
 
         $cacheTemplates = Configuration::Instance()->GetKey(ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
 
-        $this->caching = false;
-        $this->compile_check = !$cacheTemplates;
+        $this->caching = Smarty::CACHING_OFF;
+        $this->compile_check = $cacheTemplates ? Smarty::COMPILECHECK_OFF : Smarty::COMPILECHECK_ON;
         $this->force_compile = !$cacheTemplates;
 
         if (is_null($resources)) {

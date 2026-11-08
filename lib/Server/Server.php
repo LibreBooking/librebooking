@@ -95,10 +95,9 @@ class Server
     }
 
     /**
-     * @param string $name
-     * @return string|null
+     * Returns an array when the parameter is submitted as name[].
      */
-    public function GetQuerystring($name)
+    public function GetQuerystring(string $name): string|array|null
     {
         if (isset($_GET[$name])) {
             $value = $_GET[$name];
@@ -123,10 +122,9 @@ class Server
     }
 
     /**
-     * @param string $name
-     * @return string|null
+     * Returns an array when the field is submitted as name[].
      */
-    public function GetForm($name)
+    public function GetForm(string $name): string|array|null
     {
         $value = $this->GetRawForm($name);
         if (!empty($value) && !is_array($value)) {
@@ -142,10 +140,9 @@ class Server
     }
 
     /**
-     * @param string $name
-     * @return string|null
+     * Returns an array when the field is submitted as name[].
      */
-    public function GetRawForm($name)
+    public function GetRawForm(string $name): string|array|null
     {
         if (isset($_POST[$name])) {
             if (is_array($_POST[$name])) {
@@ -250,9 +247,9 @@ class Server
     }
 
     /**
-     * @return string
+     * Returns null when no usable Accept-Language header is sent.
      */
-    public function GetLanguage()
+    public function GetLanguage(): ?string
     {
         $lang = $this->GetHeader('HTTP_ACCEPT_LANGUAGE');
         if (strlen($lang) > 4) {

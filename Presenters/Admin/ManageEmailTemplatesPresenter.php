@@ -16,10 +16,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
      */
     private $page;
 
-    /**
-     * @var \Booked\FileSystem
-     */
-    private $filesystem;
+    private \Booked\IFileSystem $filesystem;
 
     public function __construct(IManageEmailTemplatesPage $page)
     {
