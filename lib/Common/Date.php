@@ -208,10 +208,8 @@ class Date
 
     /**
      * Formats the Date into a format that is accepted by the database
-     *
-     * @return string
      */
-    public function ToDatabase()
+    public function ToDatabase(): ?string
     {
         return $this->ToUtc()->Format('Y-m-d H:i:s');
     }
@@ -656,9 +654,9 @@ class Date
     }
 
     /**
-     * @return int
+     * Returns the ISO-8601 week number, zero-padded (for example "05").
      */
-    public function WeekNumber()
+    public function WeekNumber(): string
     {
         return $this->Format('W');
     }
@@ -808,7 +806,7 @@ class NullDate extends Date
         return '';
     }
 
-    public function ToDatabase()
+    public function ToDatabase(): ?string
     {
         return null;
     }

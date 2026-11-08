@@ -27,6 +27,18 @@ class LayoutValidatorTest extends TestBase
         $this->assertFalse($overlap->IsValid());
     }
 
+    public function testEmptyLayoutIsInvalid(): void
+    {
+        $empty = new LayoutValidator(reservableSlots: '', blockedSlots: '');
+        $blankLines = new LayoutValidator(reservableSlots: "\n", blockedSlots: "\n");
+
+        $empty->Validate();
+        $blankLines->Validate();
+
+        $this->assertFalse($empty->IsValid());
+        $this->assertFalse($blankLines->IsValid());
+    }
+
     public function testValidWhenFullDayIsProvided()
     {
         $v1 = new LayoutValidator("00:00-08:00\n08:00-14:00\n14:30-21:00", "21:00-00:00\n14:00-14:30");

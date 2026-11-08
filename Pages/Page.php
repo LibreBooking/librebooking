@@ -330,40 +330,23 @@ abstract class Page implements IPage
         return $this->smarty->getTemplateVars($var);
     }
 
-    /**
-     * @param string $var
-     * @return null|string
-     */
-    protected function GetForm($var)
+    protected function GetForm(string $var): string|array|null
     {
         return $this->server->GetForm($var);
     }
 
-    /**
-     * @param string $var
-     * @return bool
-     */
-    protected function GetCheckbox($var)
+    protected function GetCheckbox(string $var): bool
     {
         $val = $this->server->GetForm($var);
         return !empty($val);
     }
 
-    /**
-     * @param string $var
-     * @return null
-     */
-    protected function GetRawForm($var)
+    protected function GetRawForm(string $var): string|array|null
     {
         return $this->server->GetRawForm($var);
     }
 
-    /**
-     * @param string $key
-     * @param bool $forceArray
-     * @return null|string|array
-     */
-    protected function GetQuerystring($key, $forceArray = false)
+    protected function GetQuerystring(string $key, bool $forceArray = false): string|array|null
     {
         $val = $this->server->GetQuerystring($key);
         if (!$forceArray) {

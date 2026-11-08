@@ -20,10 +20,9 @@ namespace Booked {
         public function Save($path, $fileName, $fileContents);
 
         /**
-         * @param $fullPath string
-         * @return string
+         * Returns null when the file cannot be read.
          */
-        public function GetFileContents($fullPath);
+        public function GetFileContents(string $fullPath): ?string;
 
         /**
          * @param $fullPath string
@@ -69,7 +68,7 @@ namespace Booked {
             return true;
         }
 
-        public function GetFileContents($fullPath)
+        public function GetFileContents(string $fullPath): ?string
         {
             $contents = file_get_contents($fullPath);
             if ($contents === false) {

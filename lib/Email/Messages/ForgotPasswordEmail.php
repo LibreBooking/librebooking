@@ -23,10 +23,7 @@ class ForgotPasswordEmail extends EmailMessage
         $this->temporaryPassword = $temporaryPassword;
     }
 
-    /**
-     * @return EmailAddress[]
-     */
-    public function To()
+    public function To(): EmailAddress
     {
         return new EmailAddress($this->user->EmailAddress(), $this->user->FullName());
     }

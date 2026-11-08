@@ -58,19 +58,17 @@ class LayoutValidator extends ValidatorBase implements IValidator
                 }
                 $slots = $layout->GetLayout(Date::Now()->AddDays($day)->ToUtc());
 
-                /** @var Date $firstDate */
+                if (count($slots) == 0) {
+                    Log::Debug('Layout has no slots');
+                    $this->isValid = false;
+                    return;
+                }
+
                 $firstDate = $slots[0]->BeginDate();
-                /** @var Date $lastDate */
                 $lastDate = $slots[count($slots) - 1]->EndDate();
                 if (!$firstDate->IsMidnight() || !$lastDate->IsMidnight()) {
                     Log::Debug('Dates are not midnight');
                     $this->isValid = false;
-                }
-
-                if (count($slots) == 0 && $slots[0]->BeginDate()->IsMidnight() && $slots[0]->EndDate()->IsMidnight()) {
-                    Log::Debug('Both dates are midnight');
-                    $this->isValid = true;
-                    return;
                 }
 
                 for ($i = 0; $i < count($slots) - 1; $i++) {

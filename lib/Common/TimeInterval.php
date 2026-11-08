@@ -2,10 +2,7 @@
 
 class TimeInterval
 {
-    /**
-     * @var DateDiff
-     */
-    private $interval = null;
+    private ?DateDiff $interval = null;
 
     /**
      * @param int $seconds

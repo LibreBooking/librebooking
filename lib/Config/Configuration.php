@@ -20,11 +20,7 @@ interface IConfiguration extends IConfigurationFile
      */
     public function Register($configFile, $envFile, $configId, $overwrite = false, $configKeysClass = null);
 
-    /**
-     * @param string $configId
-     * @return Configuration
-     */
-    public function File($configId);
+    public function File(string $configId): ConfigurationFile;
 }
 
 interface IConfigurationFile
@@ -79,9 +75,9 @@ interface IConfigurationFile
 class Configuration implements IConfiguration
 {
     /**
-     * @var array|Configuration[]
+     * @var array<string, ConfigurationFile>
      */
-    protected $_configs = [];
+    protected array $_configs = [];
 
     /**
      * @var Configuration
@@ -163,10 +159,8 @@ class Configuration implements IConfiguration
 
     /**
      * Returns the configuration file for the given configId.
-     * @param string $configId
-     * @return ConfigurationFile
      */
-    public function File($configId)
+    public function File(string $configId): ConfigurationFile
     {
         return $this->_configs[$configId];
     }

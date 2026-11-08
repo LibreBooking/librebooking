@@ -22,10 +22,7 @@ class ServiceLocator
      */
     private static $_emailService = null;
 
-    /**
-     * @var \Booked\IFileSystem
-     */
-    private static $_fileSystem = null;
+    private static ?\Booked\IFileSystem $_fileSystem = null;
 
     /**
      * @return Database
@@ -100,11 +97,7 @@ class ServiceLocator
         self::$_emailService = $emailService;
     }
 
-    /**
-     * @static
-     * @return \Booked\FileSystem
-     */
-    public static function GetFileSystem()
+    public static function GetFileSystem(): \Booked\IFileSystem
     {
         require_once(ROOT_DIR . 'lib/FileSystem/namespace.php');
 
