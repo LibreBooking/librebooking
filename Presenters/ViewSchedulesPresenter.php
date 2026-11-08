@@ -53,9 +53,9 @@ class ViewSchedulesPresenter
     }
 
     /**
-     * @return BookableResource[] resources indexed by scheduleId
+     * @return array<int, BookableResource[]> resources grouped by schedule ID
      */
-    public function GetResources()
+    public function GetResources(): array
     {
         $resources = [];
 

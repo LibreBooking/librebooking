@@ -82,20 +82,11 @@ interface ICommonCalendarPage extends IActionPage
      */
     public function BindFilters($filters);
 
-    /**
-     * @return null|int
-     */
-    public function GetScheduleId();
+    public function GetScheduleId(): ?int;
 
-    /**
-     * @return null|int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
-    /**
-     * @return null|int
-     */
-    public function GetGroupId();
+    public function GetGroupId(): ?int;
 
     /**
      * @param $scheduleId null|int
@@ -109,15 +100,9 @@ interface ICommonCalendarPage extends IActionPage
 
     public function RenderSubscriptionDetails();
 
-    /**
-     * @return null|int
-     */
-    public function GetUserId();
+    public function GetUserId(): ?int;
 
-    /**
-     * @return null|int
-     */
-    public function GetParticipantId();
+    public function GetParticipantId(): ?int;
 }
 
 abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarPage
@@ -180,29 +165,29 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
         ;
     }
 
-    public function GetScheduleId()
+    public function GetScheduleId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::SCHEDULE_ID);
     }
 
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_ID);
     }
 
-    public function GetGroupId()
+    public function GetGroupId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::GROUP_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::GROUP_ID);
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::USER_ID);
     }
 
-    public function GetParticipantId()
+    public function GetParticipantId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::PARTICIPANT_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::PARTICIPANT_ID);
     }
 
     /**

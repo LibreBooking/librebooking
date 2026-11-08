@@ -8,10 +8,7 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ReservationAttributesPrintPresenter
 {
-    /**
-     * @var IReservationAttributesPage
-     */
-    private $page;
+    private IReservationAttributesPrintPage $page;
 
     /**
      * @var IAttributeService

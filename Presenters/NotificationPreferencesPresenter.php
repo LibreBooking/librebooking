@@ -11,10 +11,7 @@ class NotificationPreferencesPresenter
      */
     private $page;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private IUserRepository $userRepository;
 
     public function __construct(INotificationPreferencesPage $page, IUserRepository $userRepository)
     {

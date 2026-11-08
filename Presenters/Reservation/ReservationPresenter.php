@@ -34,10 +34,7 @@ class ReservationPresenter extends ReservationPresenterBase
      */
     private $initializationFactory;
 
-    /**
-     * @var IReservationPreconditionService
-     */
-    private $preconditionService;
+    private INewReservationPreconditionService $preconditionService;
 
     public function __construct(
         INewReservationPage $page,

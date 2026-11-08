@@ -29,9 +29,9 @@ class SearchAvailabilityPresenter extends ActionPresenter
     private $scheduleService;
 
     /**
-     * @var ScheduleLayout[]
+     * @var array<string, IScheduleLayout>
      */
-    private $_layouts = [];
+    private array $_layouts = [];
 
     public function __construct(
         ISearchAvailabilityPage $page,

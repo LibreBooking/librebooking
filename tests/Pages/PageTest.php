@@ -183,4 +183,51 @@ class PageTest extends TestBase
             'ico' => ['ico'],
         ];
     }
+
+    #[DataProvider('querystringIntProvider')]
+    public function testGetQuerystringIntAcceptsOnlyIntegerIds(mixed $value, ?int $expected): void
+    {
+        $this->fakeServer->SetQuerystring('id', $value);
+        $page = new class () extends Page {
+            public function __construct()
+            {
+                $this->server = ServiceLocator::GetServer();
+            }
+
+            public function PageLoad()
+            {
+            }
+
+            public function ReadInt(string $key): ?int
+            {
+                return $this->GetQuerystringInt(key: $key);
+            }
+        };
+
+        $this->assertSame($expected, $page->ReadInt(key: 'id'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: int|null}>
+     */
+    public static function querystringIntProvider(): array
+    {
+        return [
+            'integer ID' => ['42', 42],
+            'zero' => ['0', 0],
+            'leading zeros' => ['007', 7],
+            'multiple zeros' => ['000', 0],
+            'largest integer' => [(string)PHP_INT_MAX, PHP_INT_MAX],
+            'largest integer with leading zeros' => ['00' . PHP_INT_MAX, PHP_INT_MAX],
+            'one past largest integer' => ['9223372036854775808', null],
+            'very long digit string' => [str_repeat('9', 40), null],
+            'missing' => [null, null],
+            'empty' => ['', null],
+            'negative' => ['-1', null],
+            'decimal' => ['1.5', null],
+            'prefixed' => ['r12', null],
+            'trailing text' => ['12abc', null],
+            'array' => [['1'], null],
+        ];
+    }
 }

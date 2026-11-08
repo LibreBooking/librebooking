@@ -172,9 +172,9 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function GetDeletePeakTimes();
 
     /**
-     * @param BookableResource[] $resources
+     * @param array<int, BookableResource[]> $resources resources grouped by schedule ID
      */
-    public function BindResources($resources);
+    public function BindResources(array $resources): void;
 
     /**
      * @return bool
@@ -555,7 +555,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $delete == '1';
     }
 
-    public function BindResources($resources)
+    public function BindResources(array $resources): void
     {
         $this->Set('Resources', $resources);
     }

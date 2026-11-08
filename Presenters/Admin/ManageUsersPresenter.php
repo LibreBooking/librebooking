@@ -46,10 +46,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
      */
     private $userRepository;
 
-    /**
-     * @var ResourceRepository
-     */
-    private $resourceRepository;
+    private IResourceRepository $resourceRepository;
 
     /**
      * @var PasswordEncryption
@@ -113,10 +110,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $this->manageUsersService = $manageUsersService;
     }
 
-    /**
-     * @param ResourceRepository $resourceRepository
-     */
-    public function SetResourceRepository($resourceRepository)
+    public function SetResourceRepository(IResourceRepository $resourceRepository): void
     {
         $this->resourceRepository = $resourceRepository;
     }
