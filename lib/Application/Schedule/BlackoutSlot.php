@@ -121,10 +121,7 @@ class BlackoutSlot implements IReservationSlot
         return $this->periodSpan;
     }
 
-    /**
-     * @return string
-     */
-    public function Label()
+    public function Label(): ?string
     {
         return $this->blackout->Title;
     }
@@ -180,7 +177,7 @@ class BlackoutSlot implements IReservationSlot
         return $this->endSlotId;
     }
 
-    public function Color()
+    public function Color(): ?string
     {
         return null;
     }
@@ -190,7 +187,7 @@ class BlackoutSlot implements IReservationSlot
         return false;
     }
 
-    public function TextColor()
+    public function TextColor(): ?string
     {
         return null;
     }
@@ -205,12 +202,12 @@ class BlackoutSlot implements IReservationSlot
         return false;
     }
 
-    public function AutoReleaseMinutes()
+    public function AutoReleaseMinutes(): ?int
     {
         return null;
     }
 
-    public function AutoReleaseMinutesRemaining()
+    public function AutoReleaseMinutesRemaining(): ?int
     {
         return null;
     }

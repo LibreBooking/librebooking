@@ -22,7 +22,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
     /**
      * @var bool
      */
-    private $isHighlighted = false;
+    private bool $isHighlighted = false;
 
     /**
      * @var array|CalendarReservation[]
@@ -54,10 +54,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
         return $this->date->Weekday();
     }
 
-    /**
-     * @return int
-     */
-    public function IsHighlighted()
+    public function IsHighlighted(): bool
     {
         return $this->isHighlighted;
     }

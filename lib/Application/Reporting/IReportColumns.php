@@ -35,5 +35,5 @@ interface IReportColumns
     /**
      * @return AttributeReportColumn[]
      */
-    public function GetCustomAttributes();
+    public function GetCustomAttributes(): array;
 }

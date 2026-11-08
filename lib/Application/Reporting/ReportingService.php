@@ -39,7 +39,7 @@ interface IReportingService
      * @param int $reportId
      * @param int $userId
      * @param string $timezone
-     * @return IGeneratedSavedReport
+     * @return IGeneratedSavedReport|null null when the user has no saved report with that ID
      */
     public function GenerateSavedReport($reportId, $userId, $timezone);
 
@@ -135,7 +135,7 @@ class ReportingService implements IReportingService
         return $this->repository->LoadSavedReportsForUser($userId);
     }
 
-    public function GenerateSavedReport($reportId, $userId, $timezone)
+    public function GenerateSavedReport($reportId, $userId, $timezone): ?IGeneratedSavedReport
     {
         $savedReport = $this->repository->LoadSavedReportForUser($reportId, $userId);
 

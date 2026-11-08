@@ -16,16 +16,16 @@ interface IWebServiceAuthentication
     /**
      * @abstract
      * @param string $username
-     * @return WebServiceUserSession
+     * @return WebServiceUserSession|NullUserSession NullUserSession when login fails
      */
-    public function Login($username);
+    public function Login($username): UserSession;
 
     /**
-     * @param string $publicUserId
+     * @param int|string $userId internal user ID returned at sign-in
      * @param string $sessionToken
      * @return void
      */
-    public function Logout($publicUserId, $sessionToken);
+    public function Logout($userId, $sessionToken);
 }
 
 class WebServiceAuthentication implements IWebServiceAuthentication
@@ -55,9 +55,9 @@ class WebServiceAuthentication implements IWebServiceAuthentication
 
     /**
      * @param string $username
-     * @return WebServiceUserSession
+     * @return WebServiceUserSession|NullUserSession
      */
-    public function Login($username)
+    public function Login($username): UserSession
     {
         Log::Debug('Web Service Login with username: %s', $username);
         $userSession = $this->authentication->Login($username, new WebServiceLoginContext());
@@ -78,7 +78,7 @@ class WebServiceAuthentication implements IWebServiceAuthentication
     }
 
     /**
-     * @param int $userId
+     * @param int|string $userId
      * @param string $sessionToken
      * @return void
      */

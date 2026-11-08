@@ -33,10 +33,7 @@ interface IReservationSlot
      */
     public function PeriodSpan();
 
-    /**
-     * @return string
-     */
-    public function Label();
+    public function Label(): ?string;
 
     /**
      * @return bool
@@ -64,15 +61,9 @@ interface IReservationSlot
      */
     public function RequiresCheckin();
 
-    /**
-     * @return int
-     */
-    public function AutoReleaseMinutes();
+    public function AutoReleaseMinutes(): ?int;
 
-    /**
-     * @return int
-     */
-    public function AutoReleaseMinutesRemaining();
+    public function AutoReleaseMinutesRemaining(): ?int;
 
     /**
      * @param string $timezone
@@ -107,15 +98,9 @@ interface IReservationSlot
      */
     public function HasCustomColor();
 
-    /**
-     * @return string
-     */
-    public function Color();
+    public function Color(): ?string;
 
-    /**
-     * @return string
-     */
-    public function TextColor();
+    public function TextColor(): ?string;
 
     /**
      * @param Date $date
