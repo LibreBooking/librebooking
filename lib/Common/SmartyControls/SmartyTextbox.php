@@ -28,7 +28,11 @@ class SmartyTextbox
         $style = empty($this->style) ? '' : " style=\"{$this->style}\"";
         $required = $this->required ? ' required="required" ' : '';
 
-        return "<input type=\"{$this->GetInputType()}\" name=\"{$this->name}\" id=\"{$this->id}\" value=\"$value\"{$required} $this->attributes />";
+        $type = htmlspecialchars($this->GetInputType(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+        $name = htmlspecialchars($this->name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+        $id = htmlspecialchars($this->id, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+
+        return "<input type=\"$type\" name=\"$name\" id=\"$id\" value=\"$value\"{$required} $this->attributes />";
     }
 
     protected function GetInputType()
