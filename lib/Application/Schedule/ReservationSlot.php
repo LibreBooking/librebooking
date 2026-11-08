@@ -54,7 +54,7 @@ class ReservationSlot implements IReservationSlot
      * @param SchedulePeriod $end
      * @param Date $displayDate
      * @param int $periodSpan
-     * @param IReservedItemView $reservation
+     * @param ReservationItemView $reservation
      */
     public function __construct(
         SchedulePeriod $begin,
@@ -126,9 +126,8 @@ class ReservationSlot implements IReservationSlot
 
     /**
      * @param SlotLabelFactory|null $factory
-     * @return string
      */
-    public function Label($factory = null)
+    public function Label($factory = null): string
     {
         if (empty($factory)) {
             return SlotLabelFactory::Create($this->_reservation);
@@ -161,12 +160,12 @@ class ReservationSlot implements IReservationSlot
         return $this->_reservation->RequiresCheckin();
     }
 
-    public function AutoReleaseMinutes()
+    public function AutoReleaseMinutes(): int
     {
         return empty($this->_reservation->AutoReleaseMinutes) ? 0 : $this->_reservation->AutoReleaseMinutes;
     }
 
-    public function AutoReleaseMinutesRemaining()
+    public function AutoReleaseMinutesRemaining(): int
     {
         $min = $this->AutoReleaseMinutes();
         if (empty($min)) {
@@ -219,12 +218,12 @@ class ReservationSlot implements IReservationSlot
         return !empty($color);
     }
 
-    public function Color()
+    public function Color(): ?string
     {
         return $this->_reservation->GetColor();
     }
 
-    public function TextColor()
+    public function TextColor(): string
     {
         return $this->_reservation->GetTextColor();
     }

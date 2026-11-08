@@ -33,24 +33,24 @@ class ReservationListing implements IMutableReservationListing
     protected $max;
 
     /**
-     * @var array|ReservationItemView[]
+     * @var ReservationListItem[]
      */
-    protected $_reservations = [];
+    protected array $_reservations = [];
 
     /**
-     * @var array|ReservationItemView[]
+     * @var array<int, ReservationListItem[]>
      */
-    protected $_reservationByResource = [];
+    protected array $_reservationByResource = [];
 
     /**
-     * @var array|ReservationItemView[]
+     * @var array<string, ReservationListItem[]> keyed by Ymd date
      */
-    protected $_reservationsByDate = [];
+    protected array $_reservationsByDate = [];
 
     /**
-     * @var array|ReservationItemView[]
+     * @var array<string, ReservationListItem[]> keyed by "Ymd|resourceId"
      */
-    protected $_reservationsByDateAndResource = [];
+    protected array $_reservationsByDateAndResource = [];
 
     public function Add($reservation)
     {
@@ -152,7 +152,7 @@ class ReservationListing implements IMutableReservationListing
         return new ReservationListing($this->timezone, new DateRange($this->min, $this->max));
     }
 
-    public function OnDateForResource(Date $date, $resourceId)
+    public function OnDateForResource(Date $date, $resourceId): array
     {
         $key = $date->Format('Ymd') . '|' . $resourceId;
 

@@ -96,8 +96,8 @@ class EmptyReservationListing implements IReservationListing
     /**
      * @inheritDoc
      */
-    public function OnDateForResource(Date $date, $resourceId)
+    public function OnDateForResource(Date $date, $resourceId): array
     {
-        return new EmptyReservationListing();
+        return [];
     }
 }

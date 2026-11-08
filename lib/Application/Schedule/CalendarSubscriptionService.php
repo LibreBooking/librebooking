@@ -100,10 +100,7 @@ class CalendarSubscriptionDetails
         return !empty($key);
     }
 
-    /**
-     * @return string
-     */
-    public function Url()
+    public function Url(): ?string
     {
         if (is_null($this->url)) {
             return null;

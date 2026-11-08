@@ -233,9 +233,8 @@ class ScheduleReservationList implements IScheduleReservationList
 
     /**
      * @param Date $beginTime
-     * @return ReservationListItem
      */
-    private function GetItemStartingAt(Date $beginTime)
+    private function GetItemStartingAt(Date $beginTime): ?ReservationListItem
     {
         $timeKey = $beginTime->Timestamp();
         if (array_key_exists($timeKey, $this->_itemsByStartTime)) {
@@ -263,9 +262,10 @@ class ScheduleReservationList implements IScheduleReservationList
 
     /**
      * @param ReservationListItem $item
-     * @return SchedulePeriod which has the closest starting time to $endingTime without going prior to it
+     * Returns the period with the closest starting time before the item starts,
+     * or null when no period fits.
      */
-    private function FindClosestLayoutIndexBeforeStartingTime(ReservationListItem $item)
+    private function FindClosestLayoutIndexBeforeStartingTime(ReservationListItem $item): ?SchedulePeriod
     {
         for ($i = count($this->_layoutItems) - 1; $i >= 0; $i--) {
             $currentItem = $this->_layoutItems[$i];

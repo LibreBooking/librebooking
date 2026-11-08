@@ -14,10 +14,9 @@ class ReservationPersistenceFactory implements IReservationPersistenceFactory
     }
 
     /**
-     * @param string $reservationAction
-     * @return IReservationPersistenceService
+     * @param string $reservationAction one of the ReservationAction constants
      */
-    public function Create($reservationAction)
+    public function Create(string $reservationAction): IReservationPersistenceService
     {
         if (!array_key_exists($reservationAction, $this->services)) {
             $this->AddCachedService($reservationAction);

@@ -62,10 +62,7 @@ interface IReservationComponentInitializer
      */
     public function CurrentUser();
 
-    /**
-     * @return ResourceDto
-     */
-    public function PrimaryResource();
+    public function PrimaryResource(): ?IBookableResource;
 
     /**
      * @param $canChangeUser bool
@@ -151,10 +148,7 @@ interface IReservationComponentInitializer
 
 abstract class ReservationInitializerBase implements IReservationInitializer, IReservationComponentInitializer
 {
-    /**
-     * @var ResourceDto
-     */
-    protected $primaryResource;
+    protected ?IBookableResource $primaryResource = null;
 
     /**
      * @var IReservationPage
@@ -333,10 +327,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         return $this->currentUser;
     }
 
-    /**
-     * @return ResourceDto
-     */
-    public function PrimaryResource()
+    public function PrimaryResource(): ?IBookableResource
     {
         return $this->primaryResource;
     }

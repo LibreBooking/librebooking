@@ -20,10 +20,7 @@ class iCalendarReservationView
     public $IsPending;
     public $ExtraIcalLines;
 
-    /**
-     * @var ExportFactory
-     */
-    private $ExportFactory;
+    private IExportFactory $ExportFactory;
 
     /**
      * @var ReservationItemView

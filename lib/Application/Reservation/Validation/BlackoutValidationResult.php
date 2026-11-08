@@ -35,9 +35,9 @@ class BlackoutValidationResult implements IBlackoutValidationResult
         return empty($this->conflictingBlackouts) && empty($this->conflictingReservations);
     }
 
-    public function Message()
+    public function Message(): string
     {
-        return null;
+        return '';
     }
 
     /**

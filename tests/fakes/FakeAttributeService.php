@@ -5,7 +5,7 @@ declare(strict_types=1);
 class FakeAttributeService implements IAttributeService
 {
     /**
-     * @var Attribute[]
+     * @var LBAttribute[]
      */
     public $_ReservationAttributes = [];
 
@@ -64,9 +64,9 @@ class FakeAttributeService implements IAttributeService
      * @param UserSession $userSession
      * @param ReservationView $reservationView
      * @param int $requestedUserId
-     * @return Attribute[]
+     * @return LBAttribute[]
      */
-    public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = [])
+    public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = []): array
     {
         return $this->_ReservationAttributes;
     }

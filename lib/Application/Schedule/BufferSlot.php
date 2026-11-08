@@ -104,7 +104,7 @@ class BufferSlot implements IReservationSlot
         return $this->_periodSpan;
     }
 
-    public function Label($factory = null)
+    public function Label($factory = null): ?string
     {
         return null;
     }
@@ -176,12 +176,12 @@ class BufferSlot implements IReservationSlot
         return false;
     }
 
-    public function Color()
+    public function Color(): ?string
     {
         return null;
     }
 
-    public function TextColor()
+    public function TextColor(): ?string
     {
         return null;
     }
@@ -197,12 +197,12 @@ class BufferSlot implements IReservationSlot
         return false;
     }
 
-    public function AutoReleaseMinutes()
+    public function AutoReleaseMinutes(): ?int
     {
         return null;
     }
 
-    public function AutoReleaseMinutesRemaining()
+    public function AutoReleaseMinutesRemaining(): ?int
     {
         return null;
     }

@@ -81,9 +81,9 @@ class ReservationListItem
     }
 
     /**
-     * @return int
+     * Subclasses such as BufferItem use string IDs.
      */
-    public function Id()
+    public function Id(): int|string
     {
         return $this->item->GetId();
     }
@@ -374,7 +374,7 @@ class BufferItem extends ReservationListItem
         return $this->reservationItem->OccursOn($date);
     }
 
-    public function Id()
+    public function Id(): string
     {
         return $this->reservationItem->Id() . 'buffer_' . $this->location;
     }
@@ -389,9 +389,9 @@ class BufferItem extends ReservationListItem
         return false;
     }
 
-    public function BufferTime()
+    public function BufferTime(): ?TimeInterval
     {
-        return 0;
+        return null;
     }
 }
 
@@ -426,15 +426,15 @@ class BlackoutListItem extends ReservationListItem
 class ReservationListItemDto
 {
     /**
-     * @var Date
+     * @var int Unix timestamp
      */
     public $StartDate;
     /**
-     * @var Date
+     * @var int Unix timestamp
      */
     public $EndDate;
     /**
-     * @var int
+     * @var int|string buffer entries use string IDs
      */
     public $Id;
     /**
@@ -514,11 +514,11 @@ class ReservationListItemDto
      */
     public $IsAdmin;
     /**
-     * @var string|null
+     * @var int|null Unix timestamp
      */
     public $BufferedStartDate;
     /**
-     * @var string|null
+     * @var int|null Unix timestamp
      */
     public $BufferedEndDate;
     /**

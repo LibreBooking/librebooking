@@ -93,7 +93,7 @@ class EmptyReservationSlot implements IReservationSlot
         return 1;
     }
 
-    public function Label()
+    public function Label(): string
     {
         return '';
     }
@@ -148,7 +148,7 @@ class EmptyReservationSlot implements IReservationSlot
         return $this->_endSlotId;
     }
 
-    public function Color()
+    public function Color(): ?string
     {
         return null;
     }
@@ -158,7 +158,7 @@ class EmptyReservationSlot implements IReservationSlot
         return false;
     }
 
-    public function TextColor()
+    public function TextColor(): ?string
     {
         return null;
     }
@@ -178,12 +178,12 @@ class EmptyReservationSlot implements IReservationSlot
         return false;
     }
 
-    public function AutoReleaseMinutes()
+    public function AutoReleaseMinutes(): ?int
     {
         return null;
     }
 
-    public function AutoReleaseMinutesRemaining()
+    public function AutoReleaseMinutesRemaining(): ?int
     {
         return null;
     }

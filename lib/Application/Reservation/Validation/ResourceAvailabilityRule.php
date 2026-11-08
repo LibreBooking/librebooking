@@ -10,10 +10,7 @@ class ResourceAvailabilityRule implements IReservationValidationRule
      */
     protected $timezone;
 
-    /**
-     * @var ReservationConflictIdentifier
-     */
-    private $conflictIdentifier;
+    private IReservationConflictIdentifier $conflictIdentifier;
 
     public function __construct(IReservationConflictIdentifier $conflictIdentifier, $timezone)
     {
