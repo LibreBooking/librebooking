@@ -13,6 +13,7 @@ require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 use League\Uri\QueryString;
 use League\Uri\Uri;
 use Smarty\Smarty;
+use Smarty\Template;
 
 class SmartyPage extends Smarty
 {
@@ -981,65 +982,65 @@ class SmartyPage extends Smarty
         flush();
     }
 
-    public function IncludeJavascriptFile($params, $smarty)
+    public function IncludeJavascriptFile(array $params, Template $template): string
     {
         $versionNumber = Configuration::VERSION;
         $async = isset($params['async']) ? ' async' : '';
-        echo "<script type=\"text/javascript\" src=\"{$this->RootPath}scripts/{$params['src']}?v=$versionNumber\"{$async}></script>";
+        return "<script type=\"text/javascript\" src=\"{$this->RootPath}scripts/{$params['src']}?v=$versionNumber\"{$async}></script>";
     }
 
-    public function IncludeCssFile($params, $smarty)
+    public function IncludeCssFile(array $params, Template $template): string
     {
         $versionNumber = Configuration::VERSION;
         $src = $params['src'];
         if (!BookedStringHelper::Contains($src, '/')) {
             $src = "css/{$src}";
         }
-        echo "<link rel='stylesheet' type='text/css' href='{$this->RootPath}{$src}?v=$versionNumber'/>";
+        return "<link rel='stylesheet' type='text/css' href='{$this->RootPath}{$src}?v=$versionNumber'/>";
     }
 
-    public function IncludeVendorJavascriptFile(array $params, $smarty): void
+    public function IncludeVendorJavascriptFile(array $params, Template $template): string
     {
         $versionNumber = Configuration::VERSION;
         $async = isset($params['async']) ? ' async' : '';
-        echo "<script type=\"text/javascript\" src=\"{$this->RootPath}assets/vendor/{$params['src']}?v=$versionNumber\"{$async}></script>";
+        return "<script type=\"text/javascript\" src=\"{$this->RootPath}assets/vendor/{$params['src']}?v=$versionNumber\"{$async}></script>";
     }
 
-    public function IncludeVendorCssFile(array $params, $smarty): void
+    public function IncludeVendorCssFile(array $params, Template $template): string
     {
         $versionNumber = Configuration::VERSION;
         $src = $params['src'];
-        echo "<link rel='stylesheet' type='text/css' href='{$this->RootPath}assets/vendor/{$src}?v=$versionNumber'/>";
+        return "<link rel='stylesheet' type='text/css' href='{$this->RootPath}assets/vendor/{$src}?v=$versionNumber'/>";
     }
 
-    public function DisplayIndicator($params, $smarty)
+    public function DisplayIndicator(array $params, Template $template): string
     {
         $id = $params['id'] ?? '';
         $size = isset($params['size']) ? "spinner-border-{$params['size']}" : 'spinner-border-sm';
         $show = isset($params['show']) ? '' : 'd-none';
         $class = $params['class'] ?? 'indicator';
 
-        echo "<span id=\"$id\" class=\"spinner-border $size $class $show\"></span>";
+        return "<span id=\"$id\" class=\"spinner-border $size $class $show\"></span>";
     }
 
-    public function ReadOnlyAttribute($params, $smarty)
+    public function ReadOnlyAttribute(array $params, Template $template): string
     {
         $attrVal = $params['value'];
         $attribute = $params['attribute'];
         if ($attribute->Type() == CustomAttributeTypes::CHECKBOX) {
             if ($attrVal == 1) {
-                echo Resources::GetInstance()->GetString('Yes');
+                return Resources::GetInstance()->GetString('Yes');
             } else {
-                echo Resources::GetInstance()->GetString('No');
+                return Resources::GetInstance()->GetString('No');
             }
         } else {
-            echo $attrVal;
+            return (string) $attrVal;
         }
     }
 
-    public function CSRFToken($params, $smarty)
+    public function CSRFToken(array $params, Template $template): string
     {
-        echo '<input type="hidden" id="csrf_token" name="' . FormKeys::CSRF_TOKEN . '" value="' .
+        return '<input type="hidden" id="csrf_token" name="' . FormKeys::CSRF_TOKEN . '" value="' .
             ServiceLocator::GetServer()->GetUserSession()->CSRFToken . '"/>';
     }
 
@@ -1049,26 +1050,26 @@ class SmartyPage extends Smarty
         return $this->AppendAttributes($params, $knownAttributes);
     }
 
-    public function CancelButton($params, $smarty)
+    public function CancelButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Cancel';
         $class = $params['class'] ?? '';
-        echo '<button type="button" class="btn btn-outline-secondary btn-sm cancel ' . $class . '" data-bs-dismiss="modal" ' . $this->GetButtonAttributes($params) . '>' .
+        return '<button type="button" class="btn btn-outline-secondary btn-sm cancel ' . $class . '" data-bs-dismiss="modal" ' . $this->GetButtonAttributes($params) . '>' .
             Resources::GetInstance()->GetString($key) . '</button>';
     }
 
-    public function UpdateButton($params, $smarty)
+    public function UpdateButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Update';
         $class = isset($params['class']) ? ' ' . $params['class'] . ' ' : '';
         $type = isset($params['submit']) ? 'submit' : 'button';
         $save = $type == 'submit' ? '' : ' save ';
 
-        echo '<button type="' . $type . '" class="btn btn-primary btn-sm' . $save . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
+        return '<button type="' . $type . '" class="btn btn-primary btn-sm' . $save . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function AddButton($params, $smarty)
+    public function AddButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Add';
         $class = $params['class'] ?? '';
@@ -1078,11 +1079,11 @@ class SmartyPage extends Smarty
             $type = 'submit';
         }
 
-        echo '<button type="' . $type . '" class="btn btn-primary btn-sm save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
+        return '<button type="' . $type . '" class="btn btn-primary btn-sm save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function DeleteButton($params, $smarty)
+    public function DeleteButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Delete';
         $class = $params['class'] ?? '';
@@ -1091,41 +1092,41 @@ class SmartyPage extends Smarty
         if ($submit) {
             $type = 'submit';
         }
-        echo '<button type="' . $type . '" class="btn btn-danger btn-sm save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-trash3-fill"></i> ' . Resources::GetInstance()
+        return '<button type="' . $type . '" class="btn btn-danger btn-sm save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-trash3-fill"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function ResetButton($params, $smarty)
+    public function ResetButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Reset';
         $class = $params['class'] ?? '';
-        echo '<button type="reset" class="btn btn-outline-secondary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-arrow-counterclockwise me-1"></i>' . Resources::GetInstance()
+        return '<button type="reset" class="btn btn-outline-secondary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-arrow-counterclockwise me-1"></i>' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function FilterButton($params, $smarty)
+    public function FilterButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'Filter';
         $class = $params['class'] ?? '';
-        echo '<button type="submit" class="btn btn-primary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-search"></i> ' . Resources::GetInstance()
+        return '<button type="submit" class="btn btn-primary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-search"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function OkButton($params, $smarty)
+    public function OkButton(array $params, Template $template): string
     {
         $key = $params['key'] ?? 'OK';
         $class = $params['class'] ?? '';
-        echo '<button type="button" class="btn btn-primary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
+        return '<button type="button" class="btn btn-primary btn-sm ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
             ->GetString($key) . '</button>';
     }
 
-    public function ShowHideIcon($params, $smarty)
+    public function ShowHideIcon(array $params, Template $template): string
     {
         $class = $params['class'] ?? '';
-        echo '<a class="link-primary" href="#"><i class="show-hide bi ' . $class . '"></i><span class="visually-hidden">Show/Hide</span></a>';
+        return '<a class="link-primary" href="#"><i class="show-hide bi ' . $class . '"></i><span class="visually-hidden">Show/Hide</span></a>';
     }
 
-    public function SortColumn($params, $smarty)
+    public function SortColumn(array $params, Template $template): string
     {
         $server = ServiceLocator::GetServer();
         $url = $server->GetRequestUri();
@@ -1160,23 +1161,23 @@ class SmartyPage extends Smarty
             $url = "$url&$sf=$sortField";
         }
 
-        echo '<a href="' . $url . '">' . $this->Resources->GetString($params['key']) . ' ' . $indicator . '</a>';
+        return '<a href="' . $url . '">' . $this->Resources->GetString($params['key']) . ' ' . $indicator . '</a>';
     }
 
-    public function FormatCurrency($params, $smarty)
+    public function FormatCurrency(array $params, Template $template): string
     {
         $amount = isset($params['amount']) && is_numeric($params['amount']) ? floatval($params['amount']) : 0.0;
         $currency = $params['currency'] ?? 'USD';
 
         if (!class_exists('NumberFormatter')) {
             if ($currency == 'USD') {
-                echo '$' . number_format($amount, 2) . ' USD';
+                return '$' . number_format($amount, 2) . ' USD';
             } else {
-                echo 'We cannot format this currency. <a href="http://php.net/manual/en/book.intl.php">You must enable internationalization</a>.';
+                return 'We cannot format this currency. <a href="http://php.net/manual/en/book.intl.php">You must enable internationalization</a>.';
             }
         } else {
             $fmt = new NumberFormatter($this->Resources->CurrentLanguage, NumberFormatter::CURRENCY);
-            echo $fmt->formatCurrency($amount, $currency);
+            return (string) $fmt->formatCurrency($amount, $currency);
         }
     }
 

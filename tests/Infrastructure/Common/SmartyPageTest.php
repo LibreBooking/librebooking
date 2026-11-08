@@ -8,6 +8,60 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class SmartyPageTest extends TestBase
 {
+    #[DataProvider('renderingPluginProvider')]
+    public function testRenderingPluginsReturnOutputForModifiers(string $plugin, string $arguments, string $expectedFragment): void
+    {
+        $page = new SmartyPage();
+        $this->fakeResources->CurrentLanguage = 'en_US';
+        $this->fakeUser->CSRFToken = 'test-token';
+        $attribute = $this->createMock(CustomAttribute::class);
+        $attribute->method('Type')->willReturn(CustomAttributeTypes::CHECKBOX);
+        $page->assign('attribute', $attribute);
+        $page->registerPlugin('modifier', 'wrap_output', static fn ($value): string => '[' . $value . ']');
+
+        $output = $page->fetch('string:{' . $plugin . ' ' . $arguments . '}');
+        $this->assertStringContainsString($expectedFragment, $output);
+        $this->assertSame(
+            '[' . $output . ']',
+            $page->fetch('string:{' . $plugin . '|wrap_output ' . $arguments . '}')
+        );
+    }
+
+    public static function renderingPluginProvider(): array
+    {
+        return [
+            'JavaScript' => ['jsfile', 'src="app.js" async=true', 'scripts/app.js?v='],
+            'CSS' => ['cssfile', 'src="app.css"', 'css/app.css?v='],
+            'vendor JavaScript' => ['vendor_js', 'src="app.js" async=true', 'assets/vendor/app.js?v='],
+            'vendor CSS' => ['vendor_css', 'src="app.css"', 'assets/vendor/app.css?v='],
+            'indicator' => ['indicator', '', 'spinner-border-sm indicator d-none'],
+            'checked attribute' => ['read_only_attribute', 'attribute=$attribute value=1', 'Yes'],
+            'CSRF token' => ['csrf_token', '', 'value="test-token"'],
+            'cancel button' => ['cancel_button', '', 'Cancel</button>'],
+            'update button' => ['update_button', '', 'Update</button>'],
+            'add button' => ['add_button', '', 'Add</button>'],
+            'delete button' => ['delete_button', '', 'Delete</button>'],
+            'reset button' => ['reset_button', '', 'Reset</button>'],
+            'filter button' => ['filter_button', '', 'Filter</button>'],
+            'OK button' => ['ok_button', '', 'OK</button>'],
+            'show/hide icon' => ['showhide_icon', '', 'Show/Hide</span>'],
+            'sort column' => ['sort_column', 'field="name" key="Name"', '>Name </a>'],
+            'currency' => ['formatcurrency', 'amount=12.50 currency="USD"', '12.50'],
+        ];
+    }
+
+    public function testReadOnlyTextAttributeReturnsStringWithoutOutput(): void
+    {
+        $page = new SmartyPage();
+        $template = $page->createTemplate('string:');
+        $attribute = $this->createMock(CustomAttribute::class);
+        $attribute->method('Type')->willReturn(CustomAttributeTypes::SINGLE_LINE_TEXTBOX);
+        $this->expectOutputString('');
+
+        $this->assertSame('42', $page->ReadOnlyAttribute(['attribute' => $attribute, 'value' => 42], $template));
+        $this->assertSame('', $page->ReadOnlyAttribute(['attribute' => $attribute, 'value' => null], $template));
+    }
+
     public function testHtmlLinkEscapesTextAndAttributes(): void
     {
         $page = new SmartyPage();
