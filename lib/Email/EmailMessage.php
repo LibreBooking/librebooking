@@ -63,7 +63,7 @@ abstract class EmailMessage implements IEmailMessage
         if (!is_array($args)) {
             $args = [$args];
         }
-        return $this->email->SmartyTranslate(['key' => $key, 'args' => implode(',', $args)], $this->email);
+        return $this->email->SmartyTranslate(['key' => $key, 'args' => implode(',', $args)], $this->email->createTemplate('string:'));
     }
 
     public function ReplyTo()

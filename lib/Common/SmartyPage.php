@@ -286,7 +286,7 @@ class SmartyPage extends Smarty
         $this->failedValidators[$id] = $validator;
     }
 
-    private function AppendAttributes($params, $knownAttributes)
+    private function AppendAttributes(array $params, array $knownAttributes): string
     {
         $extraKeys = array_diff(array_keys($params), $knownAttributes);
 
@@ -305,7 +305,7 @@ class SmartyPage extends Smarty
         return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
-    public function PrintLink($params, $smarty)
+    public function PrintLink(array $params, Template $template): string
     {
         $string = $this->Resources->GetString($params['key']);
         if (!isset($params['title'])) {
@@ -330,7 +330,7 @@ class SmartyPage extends Smarty
         return "<a href=\"$href\" class=\"link-primary\" title=\"$title\" $attributes><i class=\"bi bi-people-fill me-1\"></i>$string</a>";
     }
 
-    public function SmartyTranslate($params, $smarty)
+    public function SmartyTranslate(array $params, Template $template): string
     {
         if (!isset($params['args'])) {
             return $this->Resources->GetString($params['key'], '');
@@ -338,7 +338,7 @@ class SmartyPage extends Smarty
         return $this->Resources->GetString($params['key'], explode(',', $params['args']));
     }
 
-    public function FormatDate($params, $smarty)
+    public function FormatDate(array $params, Template $template): string
     {
         if (!isset($params['date']) || empty($params['date'])) {
             return '';
@@ -370,7 +370,7 @@ class SmartyPage extends Smarty
         return $formatted;
     }
 
-    public function DisplayControl($params, $smarty)
+    public function DisplayControl(array $params, Template $template): void
     {
         $type = $params['type'];
         require_once(ROOT_DIR . "Controls/$type.php");
@@ -387,7 +387,7 @@ class SmartyPage extends Smarty
         $control->PageLoad();
     }
 
-    public function ValidationGroup($params, $content, $smarty, &$repeat)
+    public function ValidationGroup(array $params, ?string $content, Template $template, bool &$repeat): string
     {
         $class = 'error';
 
@@ -410,12 +410,12 @@ class SmartyPage extends Smarty
         return '';
     }
 
-    public function Validator($params, $smarty)
+    public function Validator(array $params, Template $template): string
     {
         $validator = $this->Validators->Get($params['id']);
         if (!$validator->IsValid()) {
             if (isset($params['key']) && !empty($params['key'])) {
-                return '<li>' . $this->SmartyTranslate(['key' => $params['key']], $smarty) . '</li>';
+                return '<li>' . $this->SmartyTranslate(['key' => $params['key']], $template) . '</li>';
             }
 
             $messages = $validator->Messages();
@@ -431,16 +431,16 @@ class SmartyPage extends Smarty
         return '';
     }
 
-    public function AsyncValidator($params, $smarty)
+    public function AsyncValidator(array $params, Template $template): string
     {
         $message = '';
         if (isset($params['key']) && !empty($params['key'])) {
-            $message = $this->SmartyTranslate(['key' => $params['key']], $smarty);
+            $message = $this->SmartyTranslate(['key' => $params['key']], $template);
         }
         return sprintf('<li class="asyncValidation" id="%s">%s</li>', $params['id'], $message);
     }
 
-    public function Textbox($params, $smarty)
+    public function Textbox(array $params, Template $template): string
     {
         $class = null;
         $value = null;
@@ -490,15 +490,15 @@ class SmartyPage extends Smarty
         $attributes = $this->AppendAttributes($params, $knownAttributes);
 
         if ($type == 'password') {
-            $textbox = new SmartyPasswordbox($params['name'], 'password', $id, $value, $attributes, $required, $smarty);
+            $textbox = new SmartyPasswordbox($params['name'], 'password', $id, $value, $attributes, $required, $template);
         } else {
-            $textbox = new SmartyTextbox($params['name'], $type, $id, $value, $attributes, $required, $smarty);
+            $textbox = new SmartyTextbox($params['name'], $type, $id, $value, $attributes, $required, $template);
         }
 
         return $textbox->Html();
     }
 
-    public function ObjectHtmlOptions($params, $smarty)
+    public function ObjectHtmlOptions(array $params, Template $template): string
     {
         $key = $params['key'];
         $label = $params['label'];
@@ -524,13 +524,13 @@ class SmartyPage extends Smarty
         return $builder->ToString();
     }
 
-    public function SetFocus($params, $smarty)
+    public function SetFocus(array $params, Template $template): string
     {
         $id = isset($params['key']) ? FormKeys::Evaluate($params['key']) : $params['id'];
         return "<script type=\"text/javascript\">document.getElementById('$id').focus();</script>";
     }
 
-    public function GetFormName($params, $smarty)
+    public function GetFormName(array $params, Template $template): string
     {
         $append = '';
 
@@ -540,7 +540,7 @@ class SmartyPage extends Smarty
         return 'name=\'' . FormKeys::Evaluate($params['key']) . $append . '\'';
     }
 
-    public function CreateUrl($url)
+    public function CreateUrl(mixed $url): string
     {
         // credit to WordPress wp-includes/formatting.php
         $make_url_clickable = function ($matches) {
@@ -640,14 +640,14 @@ class SmartyPage extends Smarty
         return $validator->isValid($email, $rule);
     }
 
-    private function GetDefaultDataTablePageSize()
+    private function GetDefaultDataTablePageSize(): int
     {
         $defaultPageSize = intval(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE));
 
         return $defaultPageSize > 0 ? $defaultPageSize : 50;
     }
 
-    private function BuildDataTableLengthMenu($allText)
+    private function BuildDataTableLengthMenu(string $allText): string
     {
         $defaultPageSize = $this->GetDefaultDataTablePageSize();
 
@@ -668,7 +668,7 @@ class SmartyPage extends Smarty
         );
     }
 
-    public function CreateDataTable($params)
+    public function CreateDataTable(array $params, Template $template): string
     {
         $tableId = $params['tableId'];
         $searchText = $this->Resources->GetString('Filter');
@@ -741,7 +741,7 @@ class SmartyPage extends Smarty
         '
         );
     }
-    public function CreateDataTableFilter($params)
+    public function CreateDataTableFilter(array $params, Template $template): string
     {
         $tableId = $params['tableId'];
         $searchText = $this->Resources->GetString('Filter');
@@ -781,10 +781,10 @@ class SmartyPage extends Smarty
     /**
      * Create pagination links
      * @param array $params Contains 'pageInfo' (PageInfo object)
-     * @param $smarty
+     * @param Template $template
      * @return string HTML pagination markup
      */
-    public function CreatePagination($params, $smarty)
+    public function CreatePagination(array $params, Template $template): string
     {
         /** @var PageInfo $pageInfo */
         $pageInfo = $params['pageInfo'];
@@ -803,7 +803,7 @@ class SmartyPage extends Smarty
             $sb->Append(": {$pageInfo->ResultsStart} - {$pageInfo->ResultsEnd} ({$pageInfo->Total})");
             $sb->Append('<span>&nbsp;</span>');
             if ($pageInfo->TotalPages != 1) {
-                $sb->Append($this->CreatePageLink(['class' => 'link-primary', 'page' => 1, 'size' => -1, 'text' => $viewAllText], $smarty));
+                $sb->Append($this->CreatePageLink(['class' => 'link-primary', 'page' => 1, 'size' => -1, 'text' => $viewAllText], $template));
             }
             $sb->Append('</div>');
         }
@@ -814,7 +814,7 @@ class SmartyPage extends Smarty
         $sb->Append('<li class="page-item">');
         $sb->Append($this->CreatePageLink(
             ['page' => max(1, $currentPage - 1), 'size' => $size, 'text' => '&laquo;', 'class' => 'page-link'],
-            $smarty
+            $template
         ));
         $sb->Append('</li>');
 
@@ -825,13 +825,13 @@ class SmartyPage extends Smarty
             } else {
                 $sb->Append('<li class="page-item">');
             }
-            $sb->Append($this->CreatePageLink(['page' => $i, 'size' => $size], $smarty));
+            $sb->Append($this->CreatePageLink(['page' => $i, 'size' => $size], $template));
             $sb->Append('</li>');
         }
         $sb->Append('<li class="page-item">');
         $sb->Append($this->CreatePageLink(
             ['page' => min($pageInfo->TotalPages, $currentPage + 1), 'size' => $size, 'text' => '&raquo;'],
-            $smarty
+            $template
         ));
         $sb->Append('</li>');
         $sb->Append('</ul>');
@@ -842,10 +842,10 @@ class SmartyPage extends Smarty
     /**
      * Create a single pagination link
      * @param array $params Contains 'page', 'size', optional 'text'
-     * @param $smarty
+     * @param Template $template
      * @return string HTML link
      */
-    private function CreatePageLink($params, $smarty)
+    private function CreatePageLink(array $params, Template $template): string
     {
         $url = ServiceLocator::GetServer()->GetUrl();
         $page = $params['page'];
@@ -893,7 +893,7 @@ class SmartyPage extends Smarty
         return $uri->withQuery(QueryString::build($pairs, '&', PHP_QUERY_RFC1738))->toString();
     }
 
-    public function CreateJavascriptArray($params, $smarty)
+    public function CreateJavascriptArray(array $params, Template $template): string
     {
         // Keep the existing string-array contract, including for keyed input arrays.
         $values = array_map(static fn ($value): string => (string) $value, array_values($params['array']));
@@ -907,7 +907,7 @@ class SmartyPage extends Smarty
     /**
      * Pass csv=true to escape the name for a double-quoted CSV field instead of HTML.
      */
-    public function DisplayFullName($params, $smarty)
+    public function DisplayFullName(array $params, Template $template): string
     {
         $config = Configuration::Instance();
         $ignorePrivacy = false;
@@ -936,7 +936,7 @@ class SmartyPage extends Smarty
         return htmlspecialchars($fullName->__toString(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
-    public function AddQueryString($params, $smarty)
+    public function AddQueryString(array $params, Template $template): string
     {
         $url = new Url(ServiceLocator::GetServer()->GetUrl());
         $name = constant(sprintf('QueryStringKeys::%s', $params['key']));
@@ -945,7 +945,7 @@ class SmartyPage extends Smarty
         return $url->ToString();
     }
 
-    public function GetResourceImage($params, $smarty)
+    public function GetResourceImage(array $params, Template $template): string
     {
         $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
 
@@ -956,7 +956,7 @@ class SmartyPage extends Smarty
         return "$imageUrl/{$params['image']}";
     }
 
-    public function EscapeQuotes($var)
+    public function EscapeQuotes(mixed $var): string|array
     {
         $str = str_replace('\'', '&#39;', $var);
         return str_replace('"', '&quot;', $str);
@@ -976,7 +976,7 @@ class SmartyPage extends Smarty
         return RichTextHtmlSanitizer::Sanitize($html);
     }
 
-    public function Flush($params, $smarty)
+    public function Flush(array $params, Template $template): void
     {
         echo '<!-- flushing -->';
         flush();
@@ -1044,7 +1044,7 @@ class SmartyPage extends Smarty
             ServiceLocator::GetServer()->GetUserSession()->CSRFToken . '"/>';
     }
 
-    private function GetButtonAttributes($params)
+    private function GetButtonAttributes(array $params): string
     {
         $knownAttributes = ['key', 'class'];
         return $this->AppendAttributes($params, $knownAttributes);
@@ -1181,12 +1181,12 @@ class SmartyPage extends Smarty
         }
     }
 
-    public function LineBreak($params, $smarty)
+    public function LineBreak(array $params, Template $template): string
     {
         return "\n";
     }
 
-    public function UrlEncode($url)
+    public function UrlEncode(mixed $url): string
     {
         return urlencode((string) $url);
     }
@@ -1206,17 +1206,17 @@ class SmartyPage extends Smarty
         return count($value, $mode);
     }
 
-    public function HtmlEntityDecode($string)
+    public function HtmlEntityDecode(mixed $string): string
     {
         return html_entity_decode((string) $string);
     }
 
-    public function Intval($string)
+    public function Intval(mixed $string): int
     {
         return intval($string);
     }
 
-    public function Strtolower($string)
+    public function Strtolower(mixed $string): string
     {
         return strtolower((string) $string);
     }

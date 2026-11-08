@@ -8,6 +8,30 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class SmartyPageTest extends TestBase
 {
+    public function testValidationGroupHandlesOpeningAndClosingCalls(): void
+    {
+        $page = new SmartyPage();
+
+        $output = $page->fetch('string:{validation_group}<li>Required</li>{/validation_group}');
+
+        $this->assertStringContainsString('<ul class="list-unstyled"><li>Required</li></ul>', $output);
+        $this->assertSame('', $page->fetch('string:{validation_group}{/validation_group}'));
+    }
+
+    public function testDataTableHelpersAcceptSmartyTemplateArgument(): void
+    {
+        $page = new SmartyPage();
+
+        $this->assertStringContainsString(
+            'new DataTable("#report-results"',
+            $page->fetch('string:{datatable tableId="report-results"}')
+        );
+        $this->assertStringContainsString(
+            'new DataTable("#resources"',
+            $page->fetch('string:{datatablefilter tableId="resources"}')
+        );
+    }
+
     #[DataProvider('renderingPluginProvider')]
     public function testRenderingPluginsReturnOutputForModifiers(string $plugin, string $arguments, string $expectedFragment): void
     {
@@ -119,8 +143,8 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(['"', '</script><script>alert(1)</script>', "line\nnext", 'a\\b', '7'], json_decode($output, true, flags: JSON_THROW_ON_ERROR));
         $this->assertStringNotContainsString('<', $output);
-        $this->assertSame('[]', $page->CreateJavascriptArray(['array' => []], null));
-        $this->assertSame(["Jos\u{FFFD}"], json_decode($page->CreateJavascriptArray(['array' => ["Jos\xE9"]], null), true));
+        $this->assertSame('[]', $page->CreateJavascriptArray(['array' => []], $page->createTemplate('string:')));
+        $this->assertSame(["Jos\u{FFFD}"], json_decode($page->CreateJavascriptArray(['array' => ["Jos\xE9"]], $page->createTemplate('string:')), true));
     }
 
     public function testGlobalHeaderDisplaysWarningWhenScriptUrlIsEmpty(): void
@@ -254,7 +278,7 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(
             'Mary &#039;Mae&#039; &quot;O&quot;',
-            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"'], $page)
+            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"'], $page->createTemplate('string:'))
         );
     }
 
@@ -264,7 +288,7 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(
             'Mary \'Mae\' ""O""',
-            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"', 'csv' => true], $page)
+            $page->DisplayFullName(['first' => "Mary 'Mae'", 'last' => '"O"', 'csv' => true], $page->createTemplate('string:'))
         );
     }
 
@@ -276,7 +300,7 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(
             'Private',
-            $page->DisplayFullName(['first' => 'Mary', 'last' => 'Smith', 'csv' => true], $page)
+            $page->DisplayFullName(['first' => 'Mary', 'last' => 'Smith', 'csv' => true], $page->createTemplate('string:'))
         );
     }
 
@@ -346,7 +370,7 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(
             'Smith &amp; Sons &lt;b&gt;',
-            $page->DisplayFullName(['first' => 'Smith &amp; Sons', 'last' => '<b>'], $page)
+            $page->DisplayFullName(['first' => 'Smith &amp; Sons', 'last' => '<b>'], $page->createTemplate('string:'))
         );
     }
 
@@ -356,7 +380,7 @@ class SmartyPageTest extends TestBase
 
         $this->assertSame(
             "Jos\u{FFFD} &lt;b&gt;",
-            $page->DisplayFullName(['first' => "Jos\xE9", 'last' => '<b>'], $page)
+            $page->DisplayFullName(['first' => "Jos\xE9", 'last' => '<b>'], $page->createTemplate('string:'))
         );
     }
 
@@ -389,7 +413,7 @@ class SmartyPageTest extends TestBase
         ]);
         $page = new SmartyPage();
 
-        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 2, 20)], $page);
+        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 2, 20)], $page->createTemplate('string:'));
 
         $this->assertStringContainsString(
             'href="/Web/admin/manage_users.php?page=3&amp;pageSize=20&amp;as=2&amp;q=O%27Brien+%26+Sons" data-page="3"',
@@ -410,7 +434,7 @@ class SmartyPageTest extends TestBase
         $this->fakeServer->Url = '/Web/admin/manage_users.php?pageSize=20&as=2';
         $page = new SmartyPage();
 
-        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 1, 20)], $page);
+        $output = $page->CreatePagination(['pageInfo' => new PageInfo(45, 1, 20)], $page->createTemplate('string:'));
 
         $this->assertStringContainsString(
             '<a class="link-primary" href="/Web/admin/manage_users.php?pageSize=-1&amp;as=2&amp;page=1"',
