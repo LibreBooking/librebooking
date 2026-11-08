@@ -1,0 +1,41 @@
+    Detalji o rezervaciji:
+    <br/>
+    <br/>
+
+    Korisnik: {{ UserName|raw }}<br/>
+    Pocetak: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Kraj: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Tereni:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Tereni: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Naziv: {{ Title|escape_once }}<br/>
+    Opis: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Navedeni datumi su obrisani:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Dodatno:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+    <br/>
+    <a href="{{ ScriptUrl|raw }}">Ulogiraj se</a>

@@ -1,0 +1,139 @@
+<p>{{ UserName|raw }},</p>
+<p>ha effettuato una nuova prenotazione.</p>
+<p>Dettagli della prenotazione:</p>
+<p>
+    <strong>Inizio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br />
+      <strong>Fine:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br />
+      <strong>Titolo:</strong> {{ Title|escape_once }}<br />
+      <strong>Descrizione:</strong> {{ Description|escape_once|nl2br }}
+</p>
+{% if Attributes|default([])|length > 0 %}
+    <p>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    </p>
+{% endif %}
+<p>
+    {% if Resources|default([])|length > 1 %}
+        <strong>Risorse ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>Risorsa:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Pianificazione:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>ID risorsa:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Posizione:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Contatto:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Descrizione:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Note:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Amministratore della risorsa:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Dettagli risorsa:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+{% if RequiresApproval %}
+      <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarrà in sospeso fino a quando non verrà approvata. *</p>
+{% endif %}
+{% if CheckInEnabled %}
+      <p>
+        Almeno una delle risorse prenotate richiede il check-in e il check-out della prenotazione.
+        {% if AutoReleaseMinutes is not null %}
+                <br />Questa prenotazione verrà cancellata a meno che non sia fatto il check-in entro {{ AutoReleaseMinutes|raw }} minuti entro l'inizio della prenotazione.
+        {% endif %}
+      </p>
+{% endif %}
+{% if RepeatRanges|length > 0 %}
+    <p>
+        La prenotazione riguarda le seguenti ({{ RepeatRanges|default([])|length }}) date:
+        {% for date in RepeatRanges %}
+            <br />
+                    {{ formatdate(date: date.GetBegin()) }}
+              {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+          {% endfor %}
+      </p>
+{% endif %}
+{% if Participants|default([])|length > 0 %}
+    <p>
+        <strong>Partecipanti ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+        {% for user in Participants %}
+                <br />
+            {{ user.FullName()|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if ParticipatingGuests|default([])|length > 0 %}
+    <p>
+        {% for email in ParticipatingGuests %}
+                <br />
+            {{ email|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if Invitees|default([])|length > 0 %}
+    <p>
+        <strong>Invitati ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+        {% for user in Invitees %}
+                <br />
+            {{ user.FullName()|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if InvitedGuests|default([])|length > 0 %}
+    <p>
+        {% for email in InvitedGuests %}
+                <br />
+            {{ email|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if Accessories|default([])|length > 0 %}
+    <p>
+        <strong>Accessori ({{ Accessories|default([])|length }}):</strong>
+        {% for accessory in Accessories %}
+                <br />
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if CreditsCurrent > 0 %}
+    <p>
+          Questa prenotazione costa {{ CreditsCurrent|raw }} crediti.<br />
+        {% if CreditsCurrent != CreditsTotal %}
+              Questa serie di prenotazioni costa {{ CreditsTotal|raw }} crediti.
+        {% endif %}
+    </p>
+{% endif %}
+{% if CreatedBy %}
+      <p><strong>Creata da:</strong> {{ CreatedBy|raw }}</p>
+{% endif %}
+{% if ApprovedBy %}
+      <p><strong>Approvata da:</strong> {{ ApprovedBy|raw }}</p>
+{% endif %}
+<p><strong>Numero riferimento:</strong> {{ ReferenceNumber|raw }}</p>
+<p>&nbsp;</p>
+<p>
+    {% if not Deleted %}
+          <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Dettagli di questa prenotazione</a> |
+          <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Aggiungere prenotazione al calendario</a>    |
+          <a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Aggiungere al calendario di Google</a>    |
+    {% endif %}
+    <a href="{{ ScriptUrl|raw }}">Login su LibreBooking</a>
+</p>

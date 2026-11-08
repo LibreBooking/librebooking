@@ -1,0 +1,18 @@
+<p>Χάσατε το check in σας.</p>
+<p><strong>Πληροφορίες κράτησης:</strong></p>
+<p>
+    <strong>Έναρξη:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Λήξη:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Πόρος:</strong> {{ ResourceName|escape_once }}<br/>
+    <strong>Τίτλος:</strong> {{ Title|escape_once }}<br/>
+    <strong>Περιγραφή:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+{% if IsAutoRelease %}
+    <p>Αν δεν κάνετε check in, η κράτηση θα ακυρωθεί αυτόματα στις {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}</p>
+{% endif %}
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Δείτε την κράτηση</a> |
+    <a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>
+</p>

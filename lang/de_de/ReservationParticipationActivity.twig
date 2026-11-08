@@ -1,0 +1,62 @@
+Hallo,<br/>
+die folgende Reservierung wurde aktualisiert.<br/>
+<p>{{ ParticipantDetails|raw }}
+    {% if (InvitationAction == constant('InvitationAction::Decline') or InvitationAction == constant('InvitationAction::CancelAll') or InvitationAction == constant('InvitationAction::CancelInstance')) %}
+        hat Ihre Einladung abgelehnt.
+    {% elseif (InvitationAction == constant('InvitationAction::Join') or InvitationAction == constant('InvitationAction::JoinAll')) %}
+        ist Ihrer Reservierung beigetreten.
+    {% else %}
+        hat Ihrer Einladung zugestimmt.
+    {% endif %}
+</p>
+<p><strong>Reservierungsdetails:</strong></p>
+
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Ende:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Titel:</strong> {{ Title|escape_once }}<br/>
+    <strong>Beschreibung:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+    <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Ressourcen ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Ressource:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+<p>
+    {% if Accessories|default([])|length > 0 %}
+        <strong>Zubeh&ouml;r:</strong>
+        <br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+            <br/>
+        {% endfor %}
+    {% endif %}
+</p>
+
+<p><strong>Referenznummer:</strong> {{ ReferenceNumber|raw }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reservierung ansehen</a> |
+    <a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a>
+</p>

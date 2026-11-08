@@ -1,0 +1,45 @@
+<p>{{ UserName|raw }},</p>
+<p>{{ ParticipantDetails|raw }}
+    {% if (InvitationAction == constant('InvitationAction::Decline') or InvitationAction == constant('InvitationAction::CancelAll') or InvitationAction == constant('InvitationAction::CancelInstance')) %}
+        ha declinato l'invito alla sua prenotazione.
+    {% elseif (InvitationAction == constant('InvitationAction::Join') or InvitationAction == constant('InvitationAction::JoinAll')) %}
+        si è unito alla sua prenotazione.
+    {% else %}
+            ha accettato l'invito alla sua prenotazione.
+    {% endif %}
+</p>
+<p>Dettagli della prenotazione:</p>
+<p>
+    <strong>Inizio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br />
+    <strong>Fine:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br />
+    <strong>Titolo:</strong> {{ Title|escape_once }}<br />
+    <strong>Descrizione:</strong> {{ Description|escape_once|nl2br }}
+</p>
+{% if Attributes|default([])|length > 0 %}
+    <p>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    </p>
+{% endif %}
+{% if ResourceNames|default([])|length > 1 %}
+    <p>
+        <strong>Risorse ({{ ResourceNames|default([])|length }}):</strong><br />
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br />
+        {% endfor %}
+        </p>
+{% else %}
+    <p>
+        <strong>Risorsa:</strong> {{ ResourceName|escape_once }}<br />
+      </p>
+{% endif %}
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+<p><strong>Numero riferimento:</strong> {{ ReferenceNumber|raw }}</p>
+<p>&nbsp;</p>
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Dettagli di questa prenotazione</a> |
+    <a href="{{ ScriptUrl|raw }}">Login su LibreBooking</a>
+</p>

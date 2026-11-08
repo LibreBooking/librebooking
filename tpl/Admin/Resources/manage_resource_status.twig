@@ -1,0 +1,200 @@
+{% macro displayReason(reason) %}
+    <div class="list-group-item list-group-item-action reason-item" reasonId="{{ reason.Id() }}">
+        <div class="clearfix">
+            <span class="float-start reason-description">{{ reason.Description()|escape_once }}</span>
+            <div class="float-end d-flex align-items-center gap-1">
+                <a href="#" class="update edit link-primary"><i
+                        class="bi bi-pencil-square me-1"></i>{{ translate('Edit') }}</a>
+                <div class="vr"></div>
+                <a href="#" class="update delete link-danger link-underline link-underline-opacity-0"><i
+                        class="bi bi-trash3-fill me-1"></i>{{ translate('Delete') }}</a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{{ include('globalheader.twig') }}
+
+<div id="page-manage-resource-status" class="admin-page">
+
+    {{ include('Admin/Resources/manage_resource_menu.twig', {ResourcePageTitleKey: 'ManageResourceStatus'}) }}
+
+    <div id="globalError" class="error" style="display:none"></div>
+
+    <div class="accordion">
+        <div>
+            <div class="accordion-item shadow mb-3 resource-status-list" id="resource-status-list-available">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelAvailable" aria-expanded="true" aria-controls="panelAvailable">
+                        <i class="bi bi-check-circle-fill text-success me-1"></i>{{ translate('Available') }}
+                    </button>
+                </h2>
+                <div id="panelAvailable" class="accordion-collapse collapse">
+                    <div class="accordion-body add-contents">
+                        <a href="#" add-to="{{ constant('ResourceStatus::AVAILABLE') }}" class="add-link btn btn-primary btn-sm mb-2">
+                            <i class="bi bi-plus-circle-fill me-1 icon add"></i>{{ translate('Add') }}
+                        </a>
+                        <div class="list-group">
+                            {% for reason in StatusReasons[constant('ResourceStatus::AVAILABLE')] %}
+                                {{ _self.displayReason(reason) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="accordion-item shadow mb-3 resource-status-list" id="resource-status-list-unavailable">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelUnavailable" aria-expanded="true" aria-controls="panelUnavailable">
+                        <i class="bi bi-exclamation-circle-fill text-warning me-1"></i>{{ translate('Unavailable') }}
+                    </button>
+                </h2>
+                <div id="panelUnavailable" class="accordion-collapse collapse">
+                    <div class="accordion-body add-contents">
+                        <a href="#" add-to="{{ constant('ResourceStatus::UNAVAILABLE') }}"
+                            class="add-link btn btn-primary btn-sm mb-2"><i
+                                class="bi bi-plus-circle-fill me-1 icon add"></i>{{ translate('Add') }}
+                        </a>
+                        <div class="list-group">
+                            {% for reason in StatusReasons[constant('ResourceStatus::UNAVAILABLE')] %}
+                                {{ _self.displayReason(reason) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="accordion-item shadow mb-3 resource-status-list" id="resource-status-list-hidden">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelHidden" aria-expanded="true" aria-controls="panelHidden">
+                        <i class="bi bi-x-circle-fill text-danger me-1"></i>{{ translate('Hidden') }}
+                    </button>
+                </h2>
+                <div id="panelHidden" class="accordion-collapse collapse">
+                    <div class="accordion-body add-contents">
+                        <a href="#" add-to="{{ constant('ResourceStatus::HIDDEN') }}" class="add-link btn btn-primary btn-sm mb-2">
+                            <i class="bi bi-plus-circle-fill me-1 icon add"></i>{{ translate('Add') }}
+                        </a>
+                        <div class="list-group">
+                            {% for reason in StatusReasons[constant('ResourceStatus::HIDDEN')] %}
+                                {{ _self.displayReason(reason) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="activeId" value="" />
+
+    <div class="modal fade" id="addDialog" tabindex="-1" role="dialog" aria-labelledby="addDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="addForm" method="post" ajaxAction="{{ constant('ManageResourceStatusActions::Add') }}" class="was-validated">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDialogLabel">{{ translate('Add') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label class="fw-bold" for="add-reason-description">{{ translate('Name') }}</label><br />
+                            <input type="text" class="form-control form-control-sm required" required
+                                id="add-reason-description" {{ formname(key: 'RESOURCE_STATUS_REASON') }} />
+                            <input type="hidden" id="add-reason-status" {{ formname(key: 'RESOURCE_STATUS_ID') }} />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ add_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="editForm" method="post" ajaxAction="{{ constant('ManageResourceStatusActions::Update') }}" class="was-validated">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDialogLabel">{{ translate('Edit') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label class="fw-bold" for="edit-reason-description">{{ translate('Name') }}</label>
+                            <input type="text" class="form-control required" required id="edit-reason-description"
+                                {{ formname(key: 'RESOURCE_STATUS_REASON') }} />
+                            <input type="hidden" id="add-reason-status" {{ formname(key: 'RESOURCE_STATUS_ID') }} />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourceStatusActions::Delete') }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{ csrf_token() }}
+    {{ include('javascript-includes.twig') }}
+    {{ jsfile('ajax-helpers.js') }}
+    {{ jsfile('admin/resource-status.js') }}
+    {{ vendor_js('jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var opts = {
+                submitUrl: '{{ server.SCRIPT_NAME }}',
+                saveRedirect: '{{ server.SCRIPT_NAME }}'
+            };
+
+            var resourceStatus = new ResourceStatusManagement(opts);
+            resourceStatus.init();
+
+            /*$('#resource-status-list-available').showHidePanel();
+            $('#resource-status-list-unavailable').showHidePanel();
+            $('#resource-status-list-hidden').showHidePanel();*/
+        })
+    </script>
+
+</div>
+
+{{ include('globalfooter.twig') }}

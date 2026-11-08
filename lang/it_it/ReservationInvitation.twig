@@ -1,0 +1,108 @@
+<p>{{ UserName|raw }},</p>
+{% if Deleted %}
+    <p>{{ UserName|raw }} ha cancellato una prenotazione.</p>
+{% else %}
+    <p>{{ UserName|raw }} l'ha invitata ad una prenotazione.</p>
+{% endif %}
+{% if DeleteReason %}
+    <p><strong>Motivazione:</strong> <em>{{ DeleteReason|escape_once|nl2br }}</em></p>
+{% endif %}
+<p>Dettagli della prenotazione:</p>
+<p>
+    <strong>Inizio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br />
+    <strong>Fine:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br />
+    <strong>Titolo:</strong> {{ Title|escape_once }}<br />
+    <strong>Descrizione:</strong> {{ Description|escape_once|nl2br }}
+</p>
+{% if Attributes|default([])|length > 0 %}
+    <p>
+        {% for attribute in Attributes %}
+              <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+      </p>
+{% endif %}
+{% if ResourceNames|default([])|length > 1 %}
+    <p>
+            <strong>Risorse ({{ ResourceNames|default([])|length }}):</strong>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br />
+        {% endfor %}
+    </p>
+{% else %}
+    <p>
+            <strong>Risorsa:</strong> {{ ResourceName|escape_once }}<br />
+    </p>
+{% endif %}
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+{% if RequiresApproval and not Deleted %}
+    <p>* Almeno una delle risorse prenotate richiede approvazione. Questa prenotazione rimarrà in sospeso fino a quando non verrà approvata. *</p>
+{% endif %}
+{% if RepeatRanges|length > 0 %}
+    <p>
+        La prenotazione riguarda le seguenti ({{ RepeatRanges|default([])|length }}) date:
+        {% for date in RepeatRanges %}
+            <br />
+                    {{ formatdate(date: date.GetBegin()) }}
+              {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+          {% endfor %}
+      </p>
+{% endif %}
+{% if Participants|default([])|length > 0 %}
+    <p>
+        <strong>Partecipanti ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+        {% for user in Participants %}
+                <br />
+            {{ user.FullName()|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if ParticipatingGuests|default([])|length > 0 %}
+    <p>
+        {% for email in ParticipatingGuests %}
+                <br />
+            {{ email|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if Invitees|default([])|length > 0 %}
+    <p>
+        <strong>Invitati ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+        {% for user in Invitees %}
+                <br />
+            {{ user.FullName()|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if InvitedGuests|default([])|length > 0 %}
+    <p>
+        {% for email in InvitedGuests %}
+                <br />
+            {{ email|raw }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if Accessories|default([])|length > 0 %}
+    <p>
+        <strong>Accessori ({{ Accessories|default([])|length }}):</strong>
+        {% for accessory in Accessories %}
+                <br />
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        {% endfor %}
+      </p>
+{% endif %}
+{% if not Deleted and not Updated %}
+<p>
+    <strong>Accetta?</strong> <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Sì</a> | <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">No</a>
+</p>
+{% endif %}
+<p>&nbsp;</p>
+<p>
+    {% if not Deleted %}
+          <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Dettagli di questa prenotazione</a> |
+          <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Aggiungere prenotazione al calendario</a>    |
+          <a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Aggiungere al calendario di Google</a>    |
+    {% endif %}
+    <a href="{{ ScriptUrl|raw }}">Login su LibreBooking</a>
+</p>

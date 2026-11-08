@@ -1,0 +1,56 @@
+Hallo,<br/>
+Sie wurden zu einer Reservierung in {{ AppTitle|raw }} eingeladen.<br/>
+<br/>
+    Reservierungsdetails:
+    <br/>
+    <br/>
+
+    Beginn: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Ende: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Ressourcen:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Ressource: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Titel: {{ Title|escape_once }}<br/>
+    Beschreibung: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Die Reservierung gilt f&uuml;r den/die folgenden Tag(e):
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Zubeh&ouml;r:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Eine oder mehrere Ressourcen ben&ouml;tigen eine Genehmigung.
+        Diese Reservierung wird zur&uuml;ckgehalten, bis sie genehmigt ist.
+    {% endif %}
+
+    <br/>
+    M&ouml;chten Sie teilnehmen? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ja</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Nein</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reservierung ansehen</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Zum Kalender hinzuf&uuml;gen</a> |
+    <a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a>

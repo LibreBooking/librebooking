@@ -1,0 +1,109 @@
+{% if Deleted %}
+    <p>Ο/Η {{ UserName|raw }} διέγραψε μια κράτηση</p>
+    {% else %}
+    <p>Ο/Η {{ UserName|raw }} σας πρόσθεσε σε μια κράτηση</p>
+{% endif %}
+
+{% if DeleteReason %}
+    <p><strong>Αιτία διαγραφής:</strong>{{ DeleteReason|escape_once|nl2br }}</p>
+{% endif %}
+
+<p><strong>Πληροφορίες κράτησης:</strong></p>
+
+<p>
+    <strong>Έναρξη:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Λήξη: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+</p>
+
+<p>
+{% if ResourceNames|default([])|length > 1 %}
+    <strong>Πόροι ({{ ResourceNames|default([])|length }}):</strong> <br />
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}<br/>
+    {% endfor %}
+{% else %}
+    <strong>Πόρος:</strong> {{ ResourceName|escape_once }}<br/>
+{% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+{% if RequiresApproval and not Deleted %}
+    <p>* Τουλάχιστον ένας από τους κρατημένους πόρους απαιτεί έγκριση πριν τη χρήση του. Η κράτηση θα είναι σε εκκρεμότητα μέχρι να εγκριθεί. *</p>
+{% endif %}
+
+<p>
+    <strong>Τίτλος:</strong> {{ Title|escape_once }}<br/>
+    <strong>Περιγραφή:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    <strong>Η κράτηση ισχύει για τις εξής ημερομηνίες  ({{ RepeatRanges|default([])|length }}):</strong>
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Participants|default([])|length > 0 %}
+    <br />
+    <strong>Συμμετέχοντες ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+    <br />
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br />
+    <strong>Invitees ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+    <br />
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br />
+       <strong>Εξοπλισμός ({{ Accessories|default([])|length }}):</strong>
+       <br />
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if not Deleted and not Updated %}
+<p>
+    <strong>Θα παρακολουθήσετε;</strong> <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ναι</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Όχι</a>
+</p>
+{% endif %}
+
+{% if not Deleted %}
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Δείτε την κράτηση</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Προσθήκη στο Ημερολόγιο</a> |
+<a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Προσθήκη στο Google Calendar</a> |
+{% endif %}
+<a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο  {{ AppTitle|raw }}</a>

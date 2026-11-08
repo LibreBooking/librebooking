@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>บัญชีสำหรับ {{ AppTitle|raw }} ถูกสร้างขึ้นสำหรับคุณโดยมีรายละเอียดดังต่อไปนี้:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+ชื่อ: {{ FullName|raw }}<br/>
+โทรศัพท์: {{ Phone|raw }}<br/>
+หน่วยงาน: {{ Organization|raw }}<br/>
+ตำแหน่ง: {{ Position|raw }}<br/>
+รหัสผ่าน: {{ Password }}</p>
+{% if CreatedBy %}
+    สร้างโดย: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">เข้าสู่ระบบเพื่อ {{ AppTitle|raw }}</a>

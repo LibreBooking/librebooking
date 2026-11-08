@@ -1,0 +1,51 @@
+Broneeringu detailid:
+<br/>
+<br/>
+
+Kasutaja: {{ UserName|raw }}<br/>
+Algus: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Lõpp: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Väljakud:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Väljak: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Pealkiri: {{ Title|escape_once }}<br/>
+Kirjeldus: {{ Description|escape_once|nl2br }}
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Järgnevad ajad on tühistatud:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Accessories:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">Logi sisse Rannahalli kalendrisse</a>

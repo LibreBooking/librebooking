@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>Er is een account aangemaakt voor {{ AppTitle|raw }} met de volgende details:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Naam: {{ FullName|raw }}<br/>
+Telefoonnummer: {{ Phone|raw }}<br/>
+Organisatie: {{ Organization|raw }}<br/>
+Positie: {{ Position|raw }}<br/>
+Wachtwoord: {{ Password }}</p>
+{% if CreatedBy %}
+    Gemaakt door: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Login bij {{ AppTitle|raw }}</a>

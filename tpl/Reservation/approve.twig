@@ -1,0 +1,110 @@
+{% extends 'Reservation/view.twig' %}
+
+{% block header %}
+    {{ include('globalheader.twig', {TitleKey: 'EditReservationHeading'}) }}
+{% endblock %}
+
+{% block reservationHeader %}
+    {{ translate('EditReservationHeading') }}
+{% endblock %}
+
+{% block deleteButtons %}
+    <div class="btn-group">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            {{ translate('More') }}
+        </button>
+
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                {% set icsUrl %}{{ Path }}export/{{ constant('Pages::CALENDAR_EXPORT') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}{% endset %}
+                <a href="{{ icsUrl }}" download="{{ icsUrl }}" class="dropdown-item">
+                    <i class="bi bi-calendar3 me-1"></i>{{ translate('AddToOutlook') }}</a>
+            </li>
+            <li><a href="#" class="btnPrint dropdown-item">
+                    <i class="bi bi-printer me-1"></i>{{ translate('Print') }}</a>
+            </li>
+            <li><a href="#" class="btnPDF dropdown-item">
+                    <i class="bi bi-filetype-pdf me-1"></i>PDF</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="deleteButtonPrompt" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateButtonsLabel">{{ translate('Reject') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div>{{ translate('DeleteReminderWarning') }}</div>
+                    <div>
+                        <label for="deleteReason" class="fw-bold">{{ translate('Reason') }} ({{ translate('Optional') }})</label>
+                        <textarea id="deleteReason" class="deleteReason form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ cancel_button(class: 'cancelDelete cancel') }}
+                    {{ delete_button(key: 'Reject', class: 'confirmDelete delete save') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updateButtons" tabindex="-1" role="dialog" aria-labelledby="updateButtonsLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateButtonsLabel">{{ translate('ApplyUpdatesTo') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="deleteRecurringButtons" class="no-show margin-bottom-15">
+                        <div>{{ translate('DeleteReminderWarning') }}</div>
+                        <div>
+                            <label for="deleteReasonRecurring">{{ translate('Reason') }} ({{ translate('Optional') }})</label>
+                            <textarea class="deleteReasonRecurring form-control"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary save btnUpdateThisInstance">
+                        <i class="bi bi-check-lg me-1"></i>{{ translate('ThisInstance') }}
+                    </button>
+                    <button type="button" class="btn btn-primary save btnUpdateAllInstances">
+                        <i class="bi bi-check-square-fill"></i>{{ translate('AllInstances') }}
+                    </button>
+                    <button type="button" class="btn btn-primary save btnUpdateFutureInstances">
+                        <i class="bi bi-check2-square me-1"></i>{{ translate('FutureInstances') }}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                        {{ translate('Cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block submitButtons %}
+    <a href="{{ SCRIPT_NAME }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}&update=1&{{ constant('QueryStringKeys::REDIRECT') }}={{ ReturnUrl|urlencode }}"
+        class="btn btn-outline-secondary" id="btnApprovalUpdate">
+        <span class=""></span>
+        {{ translate('Update') }}
+    </a>
+    <button type="button"
+        class="btn btn-danger {% if IsRecurring %}delete prompt{% else %}triggerDeletePrompt delete prompt-single{% endif %}">
+        <span class="bi bi-x-lg"></span>
+        {{ translate('Reject') }}
+    </button>
+    <button type="button" class="btn btn-primary" id="btnApprove">
+        <span class="bi bi-check-circle"></span>
+        {{ translate('Approve') }}
+    </button>
+{% endblock %}
+
+{% block ajaxMessage %}
+    {{ translate('UpdatingReservation') }}...
+    <br />
+{% endblock %}

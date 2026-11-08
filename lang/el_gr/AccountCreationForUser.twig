@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>Δημιουργήθηκε ένας λογαριασμός για εσάς για το {{ AppTitle|raw }} με τις εξής πληροφορίες:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Όνομα: {{ FullName|raw }}<br/>
+Τηλέφωνο: {{ Phone|raw }}<br/>
+Οργανισμός: {{ Organization|raw }}<br/>
+Θέση: {{ Position|raw }}<br/>
+Συνθηματικό: {{ Password }}</p>
+{% if CreatedBy %}
+    Δημιουργήθηκε από: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>

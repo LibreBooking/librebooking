@@ -1,0 +1,18 @@
+<p>
+    Hallo,<br/>
+    Ihre Serien-Reservierung f&uuml;r {{ ResourceName|escape_once }} endet am {{ formatdate(date: StartDate, key: 'reservation_email') }}.
+</p>
+
+<p><strong>Reservierungsdetails:</strong></p>
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Ende:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Ressource:</strong> {{ ResourceName|escape_once }}<br/>
+    <strong>Titel:</strong> {{ Title|escape_once }}<br/>
+    <strong>Beschreibung:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reservierung ansehen</a> |
+    <a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a>
+</p>

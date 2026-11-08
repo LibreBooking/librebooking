@@ -1,12 +1,12 @@
 {
-    "recommendations": [
-        "aswinkumar863.smarty-template-support",
-        "bmewburn.vscode-intelephense-client",
-        "felixfbecker.php-debug",
-        "tombonnike.vscode-status-bar-format-toggle",
-        "howardzuo.vscode-favorites",
-        "aaron-bond.better-comments",
-        "vikyd.vscode-fold-level",
-        "pomber.git-file-history"
-    ]
+  "recommendations": [
+    "bmewburn.vscode-intelephense-client",
+    "felixfbecker.php-debug",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "howardzuo.vscode-favorites",
+    "aaron-bond.better-comments",
+    "vikyd.vscode-fold-level",
+    "pomber.git-file-history",
+    "mblode.twig-language-2"
+  ]
 }

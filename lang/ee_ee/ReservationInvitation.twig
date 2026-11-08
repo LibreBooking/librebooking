@@ -1,0 +1,52 @@
+    Reservation Details:
+    <br/>
+    <br/>
+
+    Starting: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Ending: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Resources:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Resource: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Title: {{ Title|escape_once }}<br/>
+    Description: {{ Description|escape_once|nl2br }}
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        The reservation occurs on the following dates:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Accessories:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        One or more of the resources reserved require approval before usage.  This reservation will be pending until it is approved.
+    {% endif %}
+
+    <br/>
+    Attending? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Yes</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">No</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">View this reservation</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Add to Calendar</a> |
+    <a href="{{ ScriptUrl|raw }}">Log in to LibreBooking</a>

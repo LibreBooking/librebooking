@@ -1,0 +1,120 @@
+<div id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDiv" class="repeat-div">
+    <div class="form-group">
+        <div class="d-flex align-items-center mb-2">
+            <label class="fw-bold"
+                for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatOptions">{{ translate('RepeatPrompt') }}</label>
+            <select id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatOptions" {{ formname(key: 'repeat_options') }}
+                class="form-select form-select-sm repeat-drop w-auto">
+                {% for k, v in RepeatOptions %}
+                    <option value="{{ k }}">{{ translate(v.key) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="d-flex align-items-center flex-wrap mb-2">
+            <div id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatEveryDiv"
+                class="recur-toggle d-none days weeks months years d-flex align-items-center flex-wrap">
+                <label class="fw-bold"
+                    for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatInterval">{{ translate('RepeatEveryPrompt') }}</label>
+                <div class="input-group-sm d-flex align-items-center flex-wrap gap-1">
+                    <select id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatInterval" {{ formname(key: 'repeat_every') }}
+                        class="form-select repeat-interval-drop w-auto">
+                        {{ html_options(values: RepeatEveryOptions, output: RepeatEveryOptions) }}
+                    </select>
+                    <span class="days">{{ translate(RepeatOptions.daily.everyKey) }}</span>
+                    <span class="weeks">{{ translate(RepeatOptions.weekly.everyKey) }}</span>
+                    <span class="months">{{ translate(RepeatOptions.monthly.everyKey) }}</span>
+                    <span class="years">{{ translate(RepeatOptions.yearly.everyKey) }}</span>
+                </div>
+            </div>
+
+            <div id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatOnWeeklyDiv" class="recur-toggle weeks d-none ms-2">
+                <div class="btn-group-sm" data-bs-toggle="buttons">
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay0"
+                        {{ formname(key: 'repeat_sunday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay0">
+                        {{ translate('DaySundayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay1"
+                        {{ formname(key: 'repeat_monday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay1">
+                        {{ translate('DayMondayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay2"
+                        {{ formname(key: 'repeat_tuesday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay2">
+                        {{ translate('DayTuesdayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay3"
+                        {{ formname(key: 'repeat_wednesday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay3">
+                        {{ translate('DayWednesdayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay4"
+                        {{ formname(key: 'repeat_thursday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay4">
+                        {{ translate('DayThursdayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay5"
+                        {{ formname(key: 'repeat_friday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay5">
+                        {{ translate('DayFridayAbbr') }}
+                    </label>
+
+                    <input type="checkbox" class="btn-check" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay6"
+                        {{ formname(key: 'repeat_saturday') }} />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatDay6">
+                        {{ translate('DaySaturdayAbbr') }}
+                    </label>
+                </div>
+            </div>
+
+            <div id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatOnMonthlyDiv" class="recur-toggle months d-none ms-2">
+                <div class="btn-group-sm" data-bs-toggle="buttons">
+                    <input type="radio" class="btn-check" {{ formname(key: 'REPEAT_MONTHLY_TYPE') }}
+                        value="{{ constant('RepeatMonthlyType::DayOfMonth') }}" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatMonthDay"
+                        checked />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatMonthDay">
+                        {{ translate('repeatDayOfMonth') }}
+                    </label>
+
+                    <input type="radio" class="btn-check" {{ formname(key: 'REPEAT_MONTHLY_TYPE') }}
+                        value="{{ constant('RepeatMonthlyType::DayOfWeek') }}" id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatMonthWeek" />
+                    <label class="btn btn-outline-primary" for="{% if prefix is defined %}{{ prefix }}{% endif %}repeatMonthWeek">
+                        {{ translate('repeatDayOfWeek') }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="{% if prefix is defined %}{{ prefix }}{% endif %}repeatUntilDiv" class="d-none recur-toggle d-flex align-items-center">
+            <label class="fw-bold"
+                for="{% if prefix is defined %}{{ prefix }}{% endif %}EndRepeat">{{ translate('RepeatUntilPrompt') }} <i
+                    class="bi bi-asterisk text-danger align-top text-small required-asterisk d-none"></i></label>
+            <input type="text" id="{% if prefix is defined %}{{ prefix }}{% endif %}EndRepeat" {{ formname(key: 'end_repeat_date') }}
+                class="form-control form-control-sm repeat-termination" />
+        </div>
+
+        <div id="{% if prefix is defined %}{{ prefix }}{% endif %}customDatesDiv" class="d-none specific-dates">
+            <div class="d-flex align-items-center flex-wrap mb-2">
+                <label class="fw-bold"
+                    for="{% if prefix is defined %}{{ prefix }}{% endif %}RepeatDate">{{ translate('RepeatOn') }}</label>
+                <div class="input-group input-group-sm w-auto">
+                    <input type="text" id="{% if prefix is defined %}{{ prefix }}{% endif %}RepeatDate"
+                        class="form-control form-control-sm" />
+                    <button class="btn btn-primary" role="button"
+                        id="{% if prefix is defined %}{{ prefix }}{% endif %}AddDate">{{ translate('AddDate') }} <i
+                            class="bi bi-plus-square-fill"></i></button>
+                </div>
+            </div>
+            <div class="repeat-date-list rounded border bg-white my-2 p-2">
+
+            </div>
+        </div>
+    </div>
+</div>

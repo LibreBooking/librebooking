@@ -1,0 +1,133 @@
+<p><strong>Πληροφορίες κράτησης:</strong></p>
+
+<p>
+    <strong>Χρήστης:</strong> {{ UserName|raw }}<br/>
+    {% if CreatedBy %}
+        <strong>Δημιουργήθηκε από:</strong>
+        {{ CreatedBy|raw }}
+        <br/>
+    {% endif %}
+    <strong>Έναρξη:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Λήξη:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Τίτλος:</strong> {{ Title|escape_once }}<br/>
+    <strong>Περιγραφή:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+        <br/>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+</p>
+
+<p>
+
+    {% if Resources|default([])|length > 1 %}
+    <strong>Πόροι ({{ Resources|default([])|length }}):</strong>
+    <br/>
+    {% else %}
+    <strong>Πόρος:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Χρονοδιάγραμμα:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>Αναγνωριστικό πόρου:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Τοποθεσία:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Επικοινωνία:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Περιγραφή:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Σημειώσεις:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Διαχειριστής πόρου:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Λεπτομέρειες πόρου:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+
+{% if RequiresApproval %}
+    <p>* Τουλάχιστον ένας από τους κρατημένους πόρους απαιτεί έγκριση πριν τη χρήση του. Παρακαλώ βεβαιωθείτε ότι η αίτηση για την κράτηση θα εγκριθεί ή απορριφθεί. *</p>
+{% endif %}
+
+{% if CheckInEnabled %}
+    <p>
+        Τουλάχιστον ένας από τους κρατημένους πόρους απαιτεί από το χρήστη να κάνει check in και check out στην κράτηση.
+        {% if AutoReleaseMinutes is not null %}
+            Η κράτηση θα ακυρωθεί αυτόματα εκτός αν ο χρήστης δεν κάνει check in μέσα σε διάστημα {{ AutoReleaseMinutes|raw }} λεπτών μετά την προγραμματισμένη έναρξη.
+        {% endif %}
+    </p>
+{% endif %}
+
+{% if RepeatRanges|length > 0 %}
+    <p>
+        Η κράτηση θα ισχύει για τις εξής ημερομηνίες ({{ RepeatRanges|default([])|length }}):
+        <br/>
+        {% for date in RepeatRanges %}
+            {{ formatdate(date: date.GetBegin()) }}
+            {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+            <br/>
+        {% endfor %}
+    </p>
+{% endif %}
+
+{% if Participants|default([])|length > 0 %}
+    <br/>
+    <strong>Συμμετέχοντες ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+    <br/>
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br/>
+    <strong>Προσκαλεσμένοι ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+    <br/>
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    <strong>Εξοπλισμός ({{ Accessories|default([])|length }}):</strong>
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<p><strong>Αριθμός Αναφοράς:</strong> {{ ReferenceNumber|raw }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Δείτε την κράτηση</a> | <a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>
+</p>

@@ -1,0 +1,13 @@
+Foglalása hamarosan befejeződik.<br/>
+A foglalás részletei:
+    <br/>
+    <br/>
+    Kezdés: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Befejezés: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Elem: {{ ResourceName|escape_once }}<br/>
+    Megnevezés: {{ Title|escape_once }}<br/>
+    Leírás: {{ Description|escape_once|nl2br }}
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ezen foglalás megtekintése</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Naptárhoz adás</a> |
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

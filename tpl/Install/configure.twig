@@ -1,0 +1,52 @@
+{{ include('globalheader.twig') }}
+
+<div class="card shadow">
+    <div class="card-body">
+        <h1 class="border-bottom text-center mb-3">{{ translate('ConfigureApplication') }}</h1>
+
+        <form class="register" method="post" action="{{ server.SCRIPT_NAME }}">
+
+            {% if ShowInvalidPassword is defined and ShowInvalidPassword %}
+                <div class="error alert alert-danger">{{ translate('IncorrectInstallPassword') }}</div>
+            {% endif %}
+
+            {% if InstallPasswordMissing is defined and InstallPasswordMissing %}
+                <div class="error alert alert-info">
+                    <p>{{ translate('SetInstallPassword') }}</p>
+                    <p>{{ translate('InstallPasswordInstructions', [ConfigPath, ConfigSetting, SuggestedInstallPassword]) }}
+                    </p>
+                </div>
+            {% endif %}
+
+            {% if ShowPasswordPrompt is defined and ShowPasswordPrompt %}
+                <ul class="no-style">
+                    <li>{{ translate('ProvideInstallPassword') }}</li>
+                    <li>{{ translate('InstallPasswordLocation', [ConfigPath, ConfigSetting]) }}</li>
+                    <li>{{ textbox(type: 'password', name: 'INSTALL_PASSWORD', class: 'textbox', attributes: {size: '20'}) }}
+                        <button type="submit" name="" class="btn btn-outline-secondary mt-2"
+                            value="submit">{{ translate('Next') }}<i class="bi bi-arrow-right-circle-fill ms-1"></i></button>
+                    </li>
+                </ul>
+            {% endif %}
+
+            {% if ShowConfigSuccess is defined and ShowConfigSuccess %}
+                <h3>{{ translate('ConfigUpdateSuccess') }} <a class="link-primary"
+                        href="{{ Path }}{{ constant('Pages::LOGIN') }}">{{ translate('Login') }}</a></h3>
+            {% endif %}
+
+            {% if ShowManualConfig is defined and ShowManualConfig %}
+                {{ translate('ConfigUpdateFailure') }}
+
+                <div class="alert alert-secondary" style="font-family: courier;">
+                    &lt;?php<br />
+                    error_reporting(E_ALL & ~E_NOTICE);<br />
+                    {{ ManualConfig|raw|nl2br }}
+                    ?&gt;
+                </div>
+            {% endif %}
+
+        </form>
+    </div>
+</div>
+{{ include('javascript-includes.twig') }}
+{{ include('globalfooter.twig') }}

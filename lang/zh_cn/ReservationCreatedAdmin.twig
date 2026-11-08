@@ -1,0 +1,99 @@
+预约详情:
+<br/>
+<br/>
+
+用户: {{ UserName|raw }}<br/>
+{% if CreatedBy %}
+    创建者: {{ CreatedBy|raw }}
+    <br/>
+{% endif %}
+开始时间: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+结束时间: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+<p>
+    {% if Resources|default([])|length > 1 %}
+    <strong>资源 ({{ Resources|default([])|length }}):</strong>
+    <br/>
+    {% else %}
+    <strong>资源:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>日程:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>资源 ID:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>位置:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>联系人:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>说明:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>备注:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>资源管理员:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>资源详情:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+
+预约名称: {{ Title|escape_once }}<br/>
+预约说明: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    The reservation occurs on the following dates:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    自主添加的附件列表:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+        <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    至少有一个预约的资源在使用之前需要批准。请确认当前请求的预约是否批准。
+{% endif %}
+
+{% if CheckInEnabled %}
+    <br/>
+    预订的资源中至少有一个需要用户进行Check in 或者 Check out操作。
+    {% if AutoReleaseMinutes is not null %}
+        除非您在预约开始之后的 {{ AutoReleaseMinutes|raw }} 分钟内进行Check in，否则此预约将被取消。
+    {% endif %}
+{% endif %}
+
+<br/>
+参考数字: {{ ReferenceNumber|raw }}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">查看此预约</a> | <a href="{{ ScriptUrl|raw }}">登录到 CVC Rental</a>

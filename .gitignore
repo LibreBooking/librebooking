@@ -24,6 +24,9 @@
 /tpl_c/*
 !/tpl_c/index.html
 
+# Twig compiled templates cache
+tpl_c/twig/
+
 # Customization Files
 /Web/custom-favicon.png
 /Web/img/custom-logo.png
@@ -69,3 +72,6 @@ php8-report.log
 # phpunit cache
 .phpunit.cache/
 .env
+
+# twig-cs-fixer
+.twig-cs-fixer.cache

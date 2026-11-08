@@ -1,0 +1,33 @@
+<div style="overflow-x:auto;">
+    {% set tableId = 'transaction-log-list' %}
+    <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+        <thead>
+            <tr>
+                <th>{{ translate('Date') }}</th>
+                <th>{{ translate('Status') }}</th>
+                <th>{{ translate('Total') }}</th>
+                <th>{{ translate('TransactionFee') }}</th>
+                <th>{{ translate('AmountRefunded') }}</th>
+                <th>{{ translate('InvoiceNumber') }}</th>
+                <th>{{ translate('TransactionId') }}</th>
+                <th>{{ translate('Gateway') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in TransactionLog %}
+                <tr>
+                    <td>{{ format_date(date: log.TransactionDate, timezone: Timezone, key: 'general_datetime') }}</td>
+                    <td>{{ log.Status }}</td>
+                    <td>{{ formatcurrency(amount: log.Total, currency: log.Currency) }}</td>
+                    <td>{{ formatcurrency(amount: log.Fee, currency: log.Currency) }}</td>
+                    <td>{{ formatcurrency(amount: log.AmountRefunded, currency: log.Currency) }}</td>
+                    <td>{{ log.InvoiceNumber }}</td>
+                    <td>{{ log.TransactionId }}</td>
+                    <td>{{ log.GatewayName }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ pagination(PageInfo) }}
+</div>
+{{ datatable(tableId: tableId) }}

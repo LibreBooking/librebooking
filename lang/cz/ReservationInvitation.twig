@@ -1,0 +1,51 @@
+    Pozvánka do vytvořené rezervace:
+    <br/>
+    <br/>
+
+    Začátek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+    Zdroje:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+    Zdroj: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Nadpis: {{ Title|escape_once }}<br/>
+    Popis: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Byly rezervovány všechny tyto termíny:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Příslušenství:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+    {% if RequiresApproval %}
+        <br/>
+        Jedna nebo více rezervací vyžaduje schválení od administrátora. Do té doby bude Vaše rezervace ve stavu schvalování.
+    {% endif %}
+
+    <br/>
+    Účastnit se? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ano</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Ne</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Zobrazit tuto rezervaci v systému</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Přidat do Outlook</a> |
+    <a href="{{ ScriptUrl|raw }}">Přihlásit se do rezervačního systému</a>

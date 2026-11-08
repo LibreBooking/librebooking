@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>以下是新注册用户的具体信息：<br/>
+邮件: {{ EmailAddress|raw }}<br/>
+名字: {{ FullName|raw }}<br/>
+电话: {{ Phone|raw }}<br/>
+单位: {{ Organization|raw }}<br/>
+职位: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    创建者: {{ CreatedBy|raw }}
+{% endif %}

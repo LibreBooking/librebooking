@@ -1,0 +1,99 @@
+{#
+  Shared slot-display macros for the CONDENSED week schedule grid.
+
+  These correspond to the Smarty {function name=display*Condensed} blocks
+  previously defined inline in tpl/Schedule/schedule-week-condensed.tpl.
+
+  DisplaySlotFactory (non-static) returns one of eight possible names with
+  suffix 'Condensed' for this context.  However, since the schedule view only
+  uses DisplaySlotFactory (not StaticDisplaySlotFactory), only the following
+  names can be returned:
+    displayRestrictedCondensed, displayPastTimeCondensed,
+    displayReservableCondensed, displayUnreservableCondensed
+
+  Additionally, StaticDisplaySlotFactory could return the reserved-state names
+  with suffix 'Condensed' if this grid were used in that context (it is not
+  in production, but the full name set is implemented for completeness and
+  correctness):
+    displayAdminReservedCondensed, displayMyReservedCondensed,
+    displayMyParticipatingCondensed, displayReservedCondensed
+
+  Dynamic dispatch: dispatch() is an {% if/elseif %} chain over the finite
+  name set.  _self.<literalName>() resolves to this file's own macros even
+  when imported from another template (verified in Twig 3.28).
+#}
+
+{% macro displayGeneralReserved(Slot, OwnershipClass, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {% set class = '' %}
+    {% set color = '' %}
+    {% if Slot.IsPending() %}
+        {% set class = 'pending' %}
+    {% endif %}
+    {% if Slot.HasCustomColor() %}
+        {% set color = 'style="background-color:' ~ Slot.Color() ~ ' !important;color:' ~ Slot.TextColor() ~ ' !important;border-color:' ~ Slot.BorderColor() ~ ' !important;"' %}
+    {% endif %}
+    <div class="reserved {{ class }} {{ OwnershipClass }} clickres" resid="{{ Slot.Id() }}" {{ color|raw }}
+        id="{{ Slot.Id() }}|{{ Slot.Date().Format('Ymd') }}">
+        {{ DisplaySlotFactory.GetCondensedPeriodLabel(Periods, Slot.BeginDate(), Slot.EndDate())|escape_once }}
+        {{ Slot.Label(SlotLabelFactory)|escape_once }}</div>
+{% endmacro %}
+
+{% macro displayAdminReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'admin', Periods, SlotLabelFactory, DisplaySlotFactory) }}
+{% endmacro %}
+
+{% macro displayMyReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'mine', Periods, SlotLabelFactory, DisplaySlotFactory) }}
+{% endmacro %}
+
+{% macro displayMyParticipating(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'participating', Periods, SlotLabelFactory, DisplaySlotFactory) }}
+{% endmacro %}
+
+{% macro displayReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {{ _self.displayGeneralReserved(Slot, '', Periods, SlotLabelFactory, DisplaySlotFactory) }}
+{% endmacro %}
+
+{% macro displayPastTime(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+{% endmacro %}
+
+{% macro displayReservable(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+{% endmacro %}
+
+{% macro displayRestricted(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+{% endmacro %}
+
+{% macro displayUnreservable(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    <div class="unreservable" resid="{{ Slot.Id() }}" id="{{ Slot.Id() }}|{{ Slot.Date().Format('Ymd') }}">
+        {{ formatdate(Slot.BeginDate(), null, null, 'period_time') }} - {{ formatdate(Slot.EndDate(), null, null, 'period_time') }}
+        {{ Slot.Label(SlotLabelFactory)|escape_once }}</div>
+{% endmacro %}
+
+{#
+  Dispatch the computed function name (with 'Condensed' suffix stripped by the
+  caller passing the base name, or with suffix still present — both styles are
+  handled).
+
+  The caller passes DisplaySlotFactory.GetFunction(Slot, AccessAllowed, '') so
+  names arrive without suffix; the dispatch chain matches base names.
+  The common args forwarded are the superset needed by any leaf macro.
+#}
+{% macro dispatch(fnName, Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) %}
+    {%- if fnName == 'displayAdminReserved' or fnName == 'displayAdminReservedCondensed' -%}
+        {{ _self.displayAdminReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayMyReserved' or fnName == 'displayMyReservedCondensed' -%}
+        {{ _self.displayMyReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayMyParticipating' or fnName == 'displayMyParticipatingCondensed' -%}
+        {{ _self.displayMyParticipating(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayReserved' or fnName == 'displayReservedCondensed' -%}
+        {{ _self.displayReserved(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayRestricted' or fnName == 'displayRestrictedCondensed' -%}
+        {{ _self.displayRestricted(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayPastTime' or fnName == 'displayPastTimeCondensed' -%}
+        {{ _self.displayPastTime(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- elseif fnName == 'displayReservable' or fnName == 'displayReservableCondensed' -%}
+        {{ _self.displayReservable(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- else -%}
+        {{ _self.displayUnreservable(Slot, Href, Periods, SlotLabelFactory, DisplaySlotFactory) }}
+    {%- endif -%}
+{% endmacro %}

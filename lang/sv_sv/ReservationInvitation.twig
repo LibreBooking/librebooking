@@ -1,0 +1,37 @@
+    Bokningsdetaljer:
+    <br/>
+    <br/>
+
+    Bokningen börjar: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Bokningen slutar: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Bokning: {{ ResourceName|escape_once }}<br/>
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Rubrik: {{ Title|escape_once }}<br/>
+    Beskrivning: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Bokning har gjorts följande datum:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Denna bokning behöver godkännas innan den börjar gälla.  Denna bokning är reserverad tills den är godkänd.
+    {% endif %}
+
+    <br/>
+    Deltar? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ja</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Nej</a>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Visa denna bokning</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Lägg till i Outlook</a> |
+    <a href="{{ ScriptUrl|raw }}">Logga in i Bokningsprogrammet</a>

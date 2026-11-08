@@ -1,0 +1,42 @@
+{% set checkin = reservation.IsCheckinEnabled() and reservation.RequiresCheckin() %}
+{% set checkout = reservation.IsCheckinEnabled() and reservation.RequiresCheckout() %}
+{% set class = reservation.RequiresApproval ? 'pending' : '' %}
+<div class="reservation row gx-0 {{ class }} border-bottom p-2 border-bottom align-items-center {% if orangePending is defined %}bg-white{% endif %}"
+    id="{{ reservation.ReferenceNumber }}">
+    {# doesn't show pending approval reservations as orange in the Pending Approval Reservations displayer in the dashboard #}
+    <div class="col-sm-3 col-12"><span class="reservationTitle" data-bs-custom-class="respopup-tooltip"
+            data-bs-html="true">{{ (reservation.Title is not empty ? reservation.Title : DefaultTitle)|escape_once }}</span></div>
+    <div class="col-sm-3 col-12">
+        {{ fullname(first: reservation.FirstName|html_entity_decode, last: reservation.LastName|html_entity_decode, ignorePrivacy: reservation.IsUserOwner(UserId)) }}
+        {% if not reservation.IsUserOwner(UserId) %}<i class="bi bi-people-fill"></i> {% endif %}</div>
+    <div class="col-sm-3 col-6">{{ formatdate(date: reservation.StartDate.ToTimezone(Timezone), key: 'dashboard') }} -
+        {{ formatdate(date: reservation.EndDate.ToTimezone(Timezone), key: 'dashboard') }}</div>
+    {# <div class="col-sm-2 col-6">{{ formatdate(date=reservation.EndDate.ToTimezone(Timezone), key='dashboard') }}</div> #}
+    <div class="col-sm-{% if checkin or checkout %}2{% else %}3{% endif %} col-12">{{ reservation.ResourceNames|join(', ')|escape_once }}</div>
+    {% if allowCheckin %}
+        {% if checkin %}
+            <div class="col-sm-1 col-12">
+                <button title="{{ translate('CheckIn') }}" type="button"
+                    class="btn btn-sm col-12 btn-warning text-white btnCheckin"
+                    data-referencenumber="{{ reservation.ReferenceNumber }}"
+                    data-url="ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkin') }}"><i
+                        class="bi bi-box-arrow-in-right"></i>
+                    {{ translate('CheckIn') }}
+                </button>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% if allowCheckout %}
+        {% if checkout %}
+            <div class="col-sm-1 col-12">
+                <button title="{{ translate('CheckOut') }}" type="button"
+                    class="btn btn-sm col-12 btn-warning text-white btnCheckin"
+                    data-referencenumber="{{ reservation.ReferenceNumber }}"
+                    data-url="ajax/reservation_checkin.php?action={{ constant('ReservationAction::Checkout') }}"><i
+                        class="bi bi-box-arrow-in-left"></i>
+                    {{ translate('CheckOut') }}
+                </button>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,51 @@
+Foglalás részletei:
+<br/>
+<br/>
+
+Felhasználó: {{ UserName|raw }}<br/>
+Kezdés: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Befejezés: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Elemek:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Elem: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Megnevezés: {{ Title|escape_once }}<br/>
+Leírás: {{ Description|escape_once|nl2br }}<br/>
+Törlés oka: {{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    Az alábbi dátumok eltávolításra kerültek:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Kiegészítők:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

@@ -1,0 +1,1 @@
+{% autoescape false %}email,resource names,title,description,begin,end{% for attribute in Attributes %},{{ attribute.Label()|replace({("'"): "\\'"}) }}{% endfor %}{% endautoescape %}

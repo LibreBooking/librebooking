@@ -1,0 +1,365 @@
+{% set Select2 = true %}{% set DataTable = true %}{% set Trumbowyg = true %}{{ include('globalheader.twig') }}
+
+<div id="page-manage-announcements" class="admin-page">
+    <h1 class="border-bottom mb-3">{{ translate('ManageAnnouncements') }}</h1>
+
+    <form id="addForm" class="form-inline" role="form" method="post">
+        <div class="accordion">
+            <div class="accordion-item shadow mb-2 panel-default" id="add-announcement-panel">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed link-primary fw-bold" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#add-announcement-content" aria-expanded="false"
+                        aria-controls="add-announcement-content">
+                        <i class="bi bi-plus-circle-fill me-1"></i>{{ translate('AddAnnouncement') }}
+                    </button>
+                </h2>
+                <div id="add-announcement-content" class="accordion-collapse collapse">
+                    <div class="accordion-body add-contents">
+                        <div class="row gy-2 mb-2">
+                            <div id="addResults" class="error d-none"></div>
+                            <div class="form-group col-12">
+                                <label class="fw-bold" for="addAnnouncement">{{ translate('Announcement') }}<i
+                                        class="bi bi-asterisk text-danger align-top form-control-feedback"
+                                        style="font-size: 0.5rem;"></i></label>
+                                <textarea class="form-control has-feedback required" {{ formname('ANNOUNCEMENT_TEXT') }}
+                                    id="addAnnouncement"></textarea>
+                            </div>
+                            <div class="form-group col-sm-2 col-6 d-flex flex-column">
+                                <label class="fw-bold" for="BeginDate">{{ translate('BeginDate') }}</label>
+                                <input type="text" id="BeginDate" class="form-control form-control-sm"
+                                    {{ formname('ANNOUNCEMENT_START') }} />
+                            </div>
+                            <div class="form-group col-sm-2 col-6 d-flex flex-column">
+                                <label class="fw-bold" for="EndDate">{{ translate('EndDate') }}</label>
+                                <input type="text" id="EndDate" class="form-control form-control-sm"
+                                    {{ formname('ANNOUNCEMENT_END') }} />
+                            </div>
+                            <div class="form-group col-sm-2 col-6">
+                                <label class="fw-bold" for="addPriority">{{ translate('Priority') }}</label>
+                                <input type="number" min="0" step="1" class="form-control form-control-sm"
+                                    {{ formname('ANNOUNCEMENT_PRIORITY') }} id="addPriority" />
+                            </div>
+                            <div class="form-group col-sm-3 col-6">
+                                <label class="fw-bold" for="addPage">{{ translate('DisplayPage') }}</label>
+                                <select id="addPage" class="form-select form-select-sm" {{ formname('DISPLAY_PAGE') }}>
+                                    <option value="1">{{ translate('Dashboard') }}</option>
+                                    <option value="5">{{ translate('Login') }}</option>
+                                </select>
+                            </div>
+                            <div id="moreOptions">
+                                <a href="#" class="link-primary" data-bs-toggle="collapse"
+                                    data-bs-target="#advancedAnnouncementOptions"><i
+                                        class="bi bi-plus-circle-fill me-1"></i>{{ translate('MoreOptions') }}</a>
+                                <div id="advancedAnnouncementOptions" class="collapse row gy-2">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label for="announcementGroups"
+                                            class="visually-hidden">{{ translate('UsersInGroups') }}</label>
+                                        <select id="announcementGroups" class="form-select" multiple="multiple"
+                                            style="width:100%" {{ formname('GROUP_ID', multi: true) }}>
+                                            {% for group in Groups %}
+                                                <option value="{{ group.Id }}">{{ group.Name|escape_once }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label for="resourceGroups"
+                                            class="visually-hidden">{{ translate('UsersWithAccessToResources') }}</label>
+                                        <select id="resourceGroups" class="form-select" multiple="multiple"
+                                            style="width:100%" {{ formname('RESOURCE_ID', multi: true) }}>
+                                            {% for resource in Resources %}
+                                                <option value="{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <div class="form-check no-padding-left">
+                                            <input class="form-check-input" type="checkbox" id="sendAsEmail"
+                                                {{ formname('SEND_AS_EMAIL') }} />
+                                            <label class="form-check-label"
+                                                for="sendAsEmail">{{ translate('SendAsEmail') }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-footer border-top pt-3">
+                            {{ add_button() }}
+                            {{ reset_button() }}
+                            {{ indicator() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card shadow">
+        <div class="card-body">
+            {% set tableId = 'announcementList' %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover border-top w-100 align-middle" id="{{ tableId }}">
+                    <thead>
+                        <tr>
+                            <th>{{ translate('Announcement') }}</th>
+                            <th>{{ translate('Priority') }}</th>
+                            <th>{{ translate('BeginDate') }}</th>
+                            <th>{{ translate('EndDate') }}</th>
+                            <th>{{ translate('Groups') }}</th>
+                            <th>{{ translate('Resources') }}</th>
+                            <th>{{ translate('DisplayPage') }}</th>
+                            <th class="action">{{ translate('Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set pageNames = {1: 'Dashboard', 2: 'Schedule', 3: 'MyCalendar', 4: 'ResourceCalendar', 5: 'Login'} %}
+                        {% for announcement in announcements %}
+                            <tr data-announcement-id="{{ announcement.Id() }}">
+                                <td class="announcementText">{{ announcement.Text()|sanitize_rich_text|raw }}</td>
+                                <td class="announcementPriority">{{ announcement.Priority() }}</td>
+                                <td class="announcementStart" data-order="{{ announcement.Start().Format('Y-m-d H:i') }}">
+                                    {{ formatdate(date: announcement.Start().ToTimezone(timezone)) }}
+                                </td>
+                                <td class="announcementEnd" data-order="{{ announcement.End().Format('Y-m-d H:i') }}">
+                                    {{ formatdate(date: announcement.End().ToTimezone(timezone)) }}
+                                </td>
+                                <td class="announcementGroups">
+                                    {% for groupId in announcement.GroupIds() %}{{ Groups[groupId].Name|escape_once }}
+                                    {% endfor %}
+                                </td>
+                                <td class="announcementResources">
+                                    {% for resourceId in announcement.ResourceIds() %}{{ Resources[resourceId].GetName()|escape_once }}
+                                    {% endfor %}</td>
+                                <td class="announcementDisplayPage">
+                                    {{ translate(pageNames[announcement.DisplayPage()]) }}
+                                </td>
+                                <td class="action announcementActions">
+                                    <a href="#" title="{{ translate('Edit') }}" class="update edit link-primary"><span
+                                            class="bi bi-pencil-square icon"></span></a>
+                                    <div class="vr mx-1"></div>
+                                    {% if announcement.CanEmail() %}
+                                        <a href="#" title="{{ translate('Email') }}" class="update sendEmail link-primary"><span
+                                                class="bi bi-envelope icon"></span></a>
+                                        <div class="vr mx-1"></div>
+                                    {% endif %}
+                                    <a href="#" title="{{ translate('Delete') }}" class="update delete"><span
+                                            class="bi bi-trash3-fill text-danger icon remove"></span></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeId" />
+
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <div>{{ translate('DeleteWarning') }}</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
+        aria-hidden="true" data-bs-focus="false" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <form id="editForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDialogLabel">{{ translate('Edit') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body row gy-2">
+                        <div class="form-group mb-2">
+                            <label class="fw-bold" for="editText">{{ translate('Announcement') }}<i
+                                    class="bi bi-asterisk text-danger align-top form-control-feedback"
+                                    style="font-size: 0.5rem;"></i></label>
+                            <textarea id="editText" class="form-control has-feedback required" rows="5"
+                                {{ formname('ANNOUNCEMENT_TEXT') }}></textarea>
+                        </div>
+                        <div class="form-group col-md-6 mb-2 d-flex flex-column">
+                            <label class="fw-bold" for="editBegin">{{ translate('BeginDate') }}</label>
+                            <input type="text" id="editBegin" class="form-control form-control-sm"
+                                {{ formname('ANNOUNCEMENT_START') }} />
+                        </div>
+                        <div class="form-group col-md-6 mb-2 d-flex flex-column">
+                            <label class="fw-bold" for="editEnd">{{ translate('EndDate') }}</label>
+                            <input type="text" id="editEnd" class="form-control form-control-sm"
+                                {{ formname('ANNOUNCEMENT_END') }} />
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="fw-bold" for="editPriority">{{ translate('Priority') }}</label>
+                            <input type="number" min="0" step="1" id="editPriority" class="form-control form-control-sm"
+                                {{ formname('ANNOUNCEMENT_PRIORITY') }} />
+                        </div>
+                        <div class="form-group mb-2" id="editUserGroupsDiv">
+                            <label for="editUserGroups" class="visually-hidden">{{ translate('UsersInGroups') }}</label>
+                            <select id="editUserGroups" class="form-select form-select-sm" multiple="multiple"
+                                {{ formname('GROUP_ID', multi: true) }} style="width: 100%;">
+                                {% for group in Groups %}
+                                    <option value="{{ group.Id }}">{{ group.Name|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mb-2" id="editResourceGroupsDiv">
+                            <label for="editResourceGroups"
+                                class="visually-hidden">{{ translate('UsersWithAccessToResources') }}</label>
+                            <select id="editResourceGroups" class="form-select form-select-sm" multiple="multiple"
+                                {{ formname('RESOURCE_ID', multi: true) }} style="width: 100%;">
+                                {% for resource in Resources %}
+                                    <option value="{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button() }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="emailDialog" tabindex="-1" role="dialog" aria-labelledby="emailDialogLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="emailForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emailDialogLabel">{{ translate('SendAsEmail') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info"><span id="emailCount" class="fw-bold"></span>
+                            {{ translate('AnnouncementEmailNotice') }}</div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ cancel_button() }}
+                        {{ update_button(key: 'SendAsEmail') }}
+                        {{ indicator() }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% set Select2 = true %}{% set DataTable = true %}{% set Trumbowyg = true %}{% set Resizimg = true %}{{ include('javascript-includes.twig') }}
+    {{ datatable(tableId) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'BeginDate'}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'EndDate'}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'editBegin'}) }}
+    {{ control('DatePickerSetupControl', {ControlId: 'editEnd'}) }}
+
+    {{ csrf_token() }}
+
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'admin/announcement.js') }}
+    {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const defaultTrumbowygOptions = {
+                btns: [
+                    ['viewHTML'],
+                    ['undo', 'redo'],
+                    ['formatting'],
+                    ['strong', 'em', 'del'],
+                    ['link'],
+                    ['insertImage'],
+                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                    ['unorderedList', 'orderedList']
+                ],
+                tagsToRemove: ['script', 'link'],
+                removeformatPasted: true,
+                urlProtocol: true
+            };
+
+            $('#addAnnouncement').trumbowyg(defaultTrumbowygOptions);
+
+            $(document).on('shown.bs.modal', '#editDialog', function() {
+                // Obtaining and sanitizing content
+                const rawContent = $('#editText').val();
+                const sanitizedHtml = DOMPurify.sanitize(rawContent);
+
+                // Initialize editor
+                $('#editText').trumbowyg(defaultTrumbowygOptions)
+                    .trumbowyg('html', sanitizedHtml);
+            });
+
+            $(document).on('hidden.bs.modal', '#editDialog', function() {
+                if ($('#editText').data('trumbowyg')) {
+                    $('#editText').trumbowyg('destroy');
+                }
+            });
+
+            var actions = {
+                add: '{{ constant('ManageAnnouncementsActions::Add')|raw }}', {# raw: JS string context #}
+                edit: '{{ constant('ManageAnnouncementsActions::Change')|raw }}', {# raw: JS string context #}
+                deleteAnnouncement: '{{ constant('ManageAnnouncementsActions::Delete')|raw }}', {# raw: JS string context #}
+                email: '{{ constant('ManageAnnouncementsActions::Email')|raw }}' {# raw: JS string context #}
+            };
+
+            var accessoryOptions = {
+                submitUrl: '{{ server.SCRIPT_NAME|raw }}', {# raw: JS string context #}
+                saveRedirect: '{{ server.SCRIPT_NAME|raw }}', {# raw: JS string context #}
+                getEmailCountUrl: '{{ server.SCRIPT_NAME|raw }}?dr=emailCount', {# raw: JS string context #}
+                actions: actions
+            };
+
+            var announcementManagement = new AnnouncementManagement(accessoryOptions);
+            announcementManagement.init();
+
+            {% for announcement in announcements %}
+                announcementManagement.addAnnouncement(
+                    '{{ announcement.Id()|raw }}', {# raw: JS string context #}
+                    DOMPurify.sanitize('{{ announcement.Text()|escape_js }}'),
+                    '{{ announcement.Start().ToTimezone(timezone).Format('Y-m-d')|raw }}', {# raw: JS string context #}
+                    '{{ announcement.End().ToTimezone(timezone).Format('Y-m-d')|raw }}', {# raw: JS string context #}
+                    '{{ announcement.Priority()|raw }}', {# raw: JS string context #}
+                    [{% for id in announcement.GroupIds() %}{{ id }},{% endfor %}],
+                    [{% for id in announcement.ResourceIds() %}{{ id }},{% endfor %}],
+                    {{ announcement.DisplayPage() }}
+                );
+            {% endfor %}
+
+            $('#announcementGroups').select2({
+                placeholder: '{{ translate('UsersInGroups')|escape_js }}'
+            });
+
+            $('#editUserGroups').select2({
+                placeholder: '{{ translate('UsersInGroups')|escape_js }}',
+                dropdownParent: $('#editDialog')
+            });
+
+            $('#resourceGroups').select2({
+                placeholder: '{{ translate('UsersWithAccessToResources')|escape_js }}'
+            });
+
+            $('#editResourceGroups').select2({
+                placeholder: '{{ translate('UsersWithAccessToResources')|escape_js }}',
+                dropdownParent: $('#editDialog')
+            });
+        });
+    </script>
+</div>
+{{ include('globalfooter.twig') }}

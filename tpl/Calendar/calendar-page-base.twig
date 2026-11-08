@@ -1,0 +1,109 @@
+{{ include('globalheader.twig', {Select2: true, Fullcalendar: true, cssFiles: 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css', printCssFiles: 'css/calendar.print.css'}) }}
+
+<div id="page-{{ pageIdSuffix }}">
+    {{ include('Calendar/calendar.filter.twig') }}
+
+    <div id="subscriptionContainer">
+        {{ render_partial('Calendar/' ~ subscriptionTpl, {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl}) }}
+    </div>
+
+    <div id="calendar" class="mt-4"></div>
+
+    <div id="dayDialog" class="card shadow bg-secondary-subtle position-absolute d-none p-0" style="z-index: 2000;">
+        <div class="card-body">
+            {% if HideCreate is not defined or not HideCreate %}
+                <a href=" #" id="dayDialogCreate" class="link-success me-2"><i
+                        class="bi bi-check-lg me-1"></i>{{ translate('CreateReservation') }}</a>
+            {% endif %}
+            <a href="#" id="dayDialogView" class="link-secondary me-2"><i
+                    class="bi bi-search me-1"></i>{{ translate('ViewDay') }}</a>
+            <a href="#" id="dayDialogCancel" class="link-danger"><i
+                    class="bi bi-dash-circle me-1"></i>{{ translate('Cancel') }}</a>
+        </div>
+    </div>
+
+    <div class="modal fade" id="moveErrorDialog" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">{{ translate('ErrorMovingReservation') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <ul id="moveErrorsList"></ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ ok_button(attributes: {id: 'moveErrorOk'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="moveReservationForm">
+        <input id="moveReferenceNumber" type="hidden" {{ formname('REFERENCE_NUMBER') }} />
+        <input id="moveStartDate" type="hidden" {{ formname('BEGIN_DATE') }} />
+        <input id="moveResourceId" type="hidden" {{ formname('RESOURCE_ID') }} value="0" />
+        <input id="moveSourceResourceId" type="hidden" {{ formname('ORIGINAL_RESOURCE_ID') }} value="0" />
+    </form>
+
+    {{ csrf_token() }}
+
+    {{ include('javascript-includes.twig', {Select2: true, Fullcalendar: true}) }}
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'calendar.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ vendor_js(src: 'jqtree/1.8.11/js/tree.jquery.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var options = {
+                view: '{{ CalendarType|escape_js }}', {# raw: JS string context #}
+                defaultDate: '{{ DisplayDate.Format('Y-m-d')|raw }}', {# raw: JS string context, developer-controlled date format #}
+                todayText: '{{ translate('Today')|escape_js }}', {# raw: JS string context #}
+                dayText: '{{ translate('Day')|escape_js }}', {# raw: JS string context #}
+                monthText: '{{ translate('Month')|escape_js }}', {# raw: JS string context #}
+                weekText: '{{ translate('Week')|escape_js }}', {# raw: JS string context #}
+                listText: '{{ translate('List')|escape_js }}', {# raw: JS string context #}
+                dayClickUrl: '{{ pageUrl|raw }}?ct={{ constant('CalendarTypes::Day')|raw }}&sid={{ ScheduleId|escape_js }}&rid={{ ResourceId|escape_js }}&gid={% if GroupId is defined %}{{ GroupId|escape_js }}{% endif %}', {# raw: JS string context #}
+                dayClickUrlTemplate: '{{ pageUrl|raw }}?ct={{ constant('CalendarTypes::Day')|raw }}&sid=[sid]&rid=[rid]&gid=[gid]', {# raw: JS string context, developer-controlled #}
+                dayNames: {{ js_array(array: DayNames) }},
+                dayNamesShort: {{ js_array(array: DayNamesShort) }},
+                monthNames: {{ js_array(array: MonthNames) }},
+                monthNamesShort: {{ js_array(array: MonthNamesShort) }},
+                timeFormat: '{{ TimeFormat|raw }}', {# raw: JS string context, developer-controlled format #}
+                dayMonth: '{{ DateFormat|raw }}', {# raw: JS string context, developer-controlled format #}
+                firstDay: {{ FirstDay }},
+                reservationUrl: '{{ CreateReservationPage|raw }}?sid={{ ScheduleId|escape_js }}&rid={{ ResourceId|escape_js }}', {# raw: JS string context #}
+                reservationUrlTemplate: '{{ CreateReservationPage|raw }}?sid=[sid]&rid=[rid]', {# raw: JS string context, developer-controlled #}
+                reservable: true,
+                eventsUrl: '{{ pageUrl|raw }}', {# raw: JS string context, developer-controlled #}
+                eventsData: {
+                    dr: 'events',
+                    sid: '{{ ScheduleId|escape_js }}', {# raw: JS string context #}
+                    rid: '{{ ResourceId|escape_js }}', {# raw: JS string context #}
+                    gid: '{% if GroupId is defined %}{{ GroupId|escape_js }}{% endif %}' {# raw: JS string context #}
+                },
+                getSubscriptionUrl: '{{ pageUrl|raw }}?dr=subscription', {# raw: JS string context, developer-controlled #}
+                subscriptionEnableUrl: '{{ pageUrl|raw }}?{{ constant('QueryStringKeys::ACTION')|raw }}={{ constant('CalendarActions::ActionEnableSubscription')|raw }}', {# raw: JS string context, developer-controlled #}
+                subscriptionDisableUrl: '{{ pageUrl|raw }}?{{ constant('QueryStringKeys::ACTION')|raw }}={{ constant('CalendarActions::ActionDisableSubscription')|raw }}', {# raw: JS string context, developer-controlled #}
+                moveReservationUrl: "{{ Path|raw }}ajax/reservation_move.php", {# raw: JS string context, developer-controlled #}
+                returnTo: '{{ pageUrl|raw }}', {# raw: JS string context, developer-controlled #}
+                autocompleteUrl: "{{ Path|raw }}ajax/autocomplete.php?type={{ constant('AutoCompleteType::User')|raw }}", {# raw: JS string context, developer-controlled #}
+                showWeekNumbers: {{ ShowWeekNumbers ? 'true' : 'false' }}
+            };
+
+            var calendar = new Calendar(options);
+            calendar.init();
+
+            calendar.bindResourceGroups({{ ResourceGroupsAsJson|raw }}, {{ SelectedGroupNode is defined ? SelectedGroupNode : 0 }});
+
+        });
+    </script>
+</div>
+{{ include('globalfooter.twig') }}

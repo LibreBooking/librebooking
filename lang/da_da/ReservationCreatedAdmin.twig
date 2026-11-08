@@ -1,0 +1,132 @@
+Oplysninger om reservation:
+<br/>
+<br/>
+
+Bruger: {{ UserName|raw }}<br/>
+{% if CreatedBy %}
+    Oprettet af: {{ CreatedBy|raw }}
+    <br/>
+{% endif %}
+Begynder: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Slutter: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+<p>
+    {% if Resources|default([])|length > 1 %}
+    <strong>Faciliteter ({{ Resources|default([])|length }}):</strong>
+    <br/>
+    {% else %}
+    <strong>Facilitet:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Tidsplan:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>Facilitets-ID:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Placering:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Kontakt:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Beskrivelse:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Noter:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Facilitetsadministrator:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Facilitetsdetaljer:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+</p>
+
+Overskrift: {{ Title|escape_once }}<br/>
+Beskrivelse: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    Reservationen gælder for følgende datoer:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Participants|default([])|length > 0 %}
+    <br/>
+    Deltagere:
+    {% for user in Participants %}
+        {{ user.FullName()|raw }} <a href="mailto:{{ user.EmailAddress()|raw }}">{{ user.EmailAddress()|raw }}</a>
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        <a href="mailto:{{ email|raw }}">{{ email|raw }}</a>
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br/>
+    Inviterede:
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }} <a href="mailto:{{ user.EmailAddress()|raw }}">{{ user.EmailAddress()|raw }}</a>
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        <a href="mailto:{{ email|raw }}">{{ email|raw }}</a>
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Udstyr:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+        <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    Mindst én af reservationerne skal godkendes. Husk at godkende eller afvise anmodningen.
+{% endif %}
+
+{% if CheckInEnabled %}
+    <br/>
+
+  For mindst én af reservationerne, er det påkrævet, at brugeren tjekker ind og ud.
+    {% if AutoReleaseMinutes is not null %}
+        Reservationen annulleres, hvis brugeren ikke foretager tjek ind, senest {{ AutoReleaseMinutes|raw }} minutter efter det planlagte starttidspunkt.
+    {% endif %}
+{% endif %}
+
+<br/>
+Referencenummer: {{ ReferenceNumber|raw }}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Se denne reservation</a> | <a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

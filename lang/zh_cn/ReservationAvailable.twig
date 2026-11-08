@@ -1,0 +1,6 @@
+{{ FirstName|raw }},<br/>
+目前，{{ ResourceName|escape_once }}在{{ formatdate(date: StartDate, key: 'res_popup') }}和{{ formatdate(date: EndDate, key: 'res_popup') }}之间可被预约。
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">立即预约</a> |
+<a href="{{ ScriptUrl|raw }}">登录到 CVC Rental</a>

@@ -1,0 +1,43 @@
+{# monitor-display-schedule.twig — monitor schedule host (Format 1 = static grid, else day list) #}
+{#
+  The shared slot macros are imported (per the slot-dispatch design) so this host
+  and the static grid it renders share one macro definition.  Alias is NOT 'slot'
+  because the Format=2 day-list loop below binds a loop variable named `slot`, and
+  a `{% import ... as slot %}` alias would be resolved as a macro call rather than
+  the loop variable.  The actual dispatch happens inside the static grid partial.
+#}
+{% import 'MonitorDisplay/_slot_macros_monitor.twig' as slotMacros %}
+
+<h1 id="scheduleName" class="text-center"></h1>
+
+{% if Format == 1 %}
+    {{ render_partial('Schedule/schedule-reservations-grid-static.tpl', _context) }}
+{% else %}
+    {% set TodaysDate = now() %}
+    {% for date in BoundDates %}
+        <div class="alert alert-light">
+            <div class="monitor-display-date fw-bold fs-5">{{ formatdate(date) }}</div>
+            {% for resource in Resources %}
+                {% set style = '' %}
+                {% if resource.HasColor() %}
+                    {% set style = 'color:' ~ resource.GetTextColor() ~ '!important;background-color:' ~ resource.GetColor() ~ ' !important;' %}
+                {% endif %}
+                <div class="monitor-display-resource-name fw-bold fs-6">{{ resource.Name|escape_once }}</div>
+                {% set slots = DailyLayout.GetLayout(date, resource.Id) %}
+                {% for slot in slots %}
+                    {% if slot.IsReserved() %}
+                        <div class="reserved rounded-1 p-1 mb-1" style="{{ style }}">
+                            {{ formatdate(slot.BeginDate(), null, null, 'period_time') }} -
+                            {% set slotformat = 'period_time' %}
+                            {% if not slot.BeginDate().DateEquals(slot.EndDate()) %}
+                                {% set slotformat = 'short_reservation_date' %}
+                            {% endif %}
+                            {{ formatdate(slot.EndDate(), null, null, slotformat) }}
+                            {{ slot.Label(SlotLabelFactory)|escape_once }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endif %}

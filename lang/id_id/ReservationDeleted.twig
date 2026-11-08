@@ -1,0 +1,49 @@
+Rincian Reservasi:
+<br/>
+<br/>
+
+Nama Pengguna: {{ UserName|raw }}
+Mulai: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Akhir: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Resources:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Resource: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Judul: {{ Title|escape_once }}<br/>
+Penjeasan: {{ Description|escape_once|nl2br }}<br/>
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Tanggal-tanggal berikut telah dihapus:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Akesoris:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Masuk LibreBooking</a>

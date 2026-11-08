@@ -1,0 +1,6 @@
+{% if pageUrl is not defined or pageUrl is null %}
+    {% set pageUrl = constant('Pages::CALENDAR') %}
+{% endif %}
+{% set pageIdSuffix = 'calendar' %}
+{% set subscriptionTpl = 'calendar.subscription.tpl' %}
+{{ include('Calendar/calendar-page-base.twig') }}

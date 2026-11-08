@@ -32,6 +32,9 @@
     <testsuite name="webservices">
       <directory>./tests/WebServices</directory>
     </testsuite>
+    <testsuite name="golden">
+      <directory>./tests/Golden</directory>
+    </testsuite>
     <testsuite name="integration">
       <directory>./tests/Integration</directory>
     </testsuite>

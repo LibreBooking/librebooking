@@ -7,7 +7,7 @@ class AnnouncementsControl extends DashboardItem implements IAnnouncementsContro
 {
     private $presenter;
 
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new AnnouncementPresenter($this, new AnnouncementRepository(), PluginManager::Instance()->LoadPermission());

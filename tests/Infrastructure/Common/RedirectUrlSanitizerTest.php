@@ -64,6 +64,16 @@ class RedirectUrlSanitizerTest extends TestBase
             'same host different scheme' => ['http://booked.example/Web/schedule.php'],
             'same host different port' => ['https://booked.example:8443/Web/schedule.php'],
             'malformed absolute url' => ['https://[broken'],
+            'backslash after slash' => ['/\\evil.com'],
+            'double backslash' => ['\\\\evil.com'],
+            'tab inside protocol-relative' => ["/\t/evil.com"],
+            'newline inside protocol-relative' => ["/\n/evil.com"],
+            'html-encoded backslash' => ['/&#92;evil.com'],
+            'triple slash' => ['///evil.com'],
+            'scheme without slashes' => ['https:evil.com'],
+            'trusted host as userinfo' => ['https://booked.example@evil.com'],
+            'trusted host as subdomain prefix' => ['https://booked.example.evil.com'],
+            'mixed-case javascript scheme' => ['jAvAsCrIpT:alert(1)'],
         ];
     }
 }

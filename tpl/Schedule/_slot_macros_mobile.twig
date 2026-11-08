@@ -1,0 +1,99 @@
+{#
+  Shared slot-display macros for the MOBILE schedule grid.
+
+  These correspond to the Smarty {function name=display*Mobile} blocks
+  previously defined inline in tpl/Schedule/schedule-mobile.tpl.
+
+  DisplaySlotFactory (non-static) returns one of these names with suffix
+  'Mobile' for this context:
+    displayRestrictedMobile, displayPastTimeMobile,
+    displayReservableMobile, displayUnreservableMobile
+
+  Additionally, StaticDisplaySlotFactory could return reserved-state names
+  with suffix 'Mobile' if used in that context; the full name set is
+  implemented for correctness:
+    displayAdminReservedMobile, displayMyReservedMobile,
+    displayMyParticipatingMobile, displayReservedMobile
+
+  Dynamic dispatch: dispatch() is an {% if/elseif %} chain over the finite
+  name set.  _self.<literalName>() resolves to this file's own macros even
+  when imported from another template (verified in Twig 3.28).
+#}
+
+{% macro displayGeneralReserved(Slot, OwnershipClass, SlotLabelFactory) %}
+    {% set badge = '' %}
+    {% if Slot.IsNew() %}
+        {% set badge = '<span class="reservation-new">' ~ translate('New') ~ '</span>' %}
+    {% endif %}
+    {% if Slot.IsUpdated() %}
+        {% set badge = '<span class="reservation-updated">' ~ translate('Updated') ~ '</span>' %}
+    {% endif %}
+    {% set class = '' %}
+    {% set color = '' %}
+    {% if Slot.IsPending() %}
+        {% set class = 'pending' %}
+    {% elseif Slot.HasCustomColor() %}
+        {% set color = 'style="background-color:' ~ Slot.Color() ~ ' !important;color:' ~ Slot.TextColor() ~ ' !important;"' %}
+    {% endif %}
+    <div class="reserved {{ class }} {{ OwnershipClass }} clickres" resid="{{ Slot.Id() }}" {{ color|raw }}
+        id="{{ Slot.Id() }}|{{ Slot.Date().Format('Ymd') }}"><i class="bi bi-info-circle-fill"></i>
+        {{ formatdate(Slot.BeginDate(), null, null, 'period_time') }} - {{ formatdate(Slot.EndDate(), null, null, 'period_time') }}
+        {{ badge|raw }}{{ Slot.Label(SlotLabelFactory)|escape_once }}</div>
+{% endmacro %}
+
+{% macro displayAdminReserved(Slot, Href, SlotRef, SlotLabelFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'admin', SlotLabelFactory) }}
+{% endmacro %}
+
+{% macro displayMyReserved(Slot, Href, SlotRef, SlotLabelFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'mine', SlotLabelFactory) }}
+{% endmacro %}
+
+{% macro displayMyParticipating(Slot, Href, SlotRef, SlotLabelFactory) %}
+    {{ _self.displayGeneralReserved(Slot, 'participating', SlotLabelFactory) }}
+{% endmacro %}
+
+{% macro displayReserved(Slot, Href, SlotRef, SlotLabelFactory) %}
+    {{ _self.displayGeneralReserved(Slot, '', SlotLabelFactory) }}
+{% endmacro %}
+
+{% macro displayPastTime(Slot, Href, SlotRef, SlotLabelFactory) %}
+{% endmacro %}
+
+{% macro displayReservable(Slot, Href, SlotRef, SlotLabelFactory) %}
+{% endmacro %}
+
+{% macro displayRestricted(Slot, Href, SlotRef, SlotLabelFactory) %}
+{% endmacro %}
+
+{% macro displayUnreservable(Slot, Href, SlotRef, SlotLabelFactory) %}
+    <div class="unreservable" resid="{{ Slot.Id() }}" id="{{ Slot.Id() }}|{{ Slot.Date().Format('Ymd') }}"><i
+            class="bi bi-info-circle-fill"></i>
+        {{ formatdate(Slot.BeginDate(), null, null, 'period_time') }} - {{ formatdate(Slot.EndDate(), null, null, 'period_time') }}
+        {{ Slot.Label(SlotLabelFactory)|escape_once }}</div>
+{% endmacro %}
+
+{#
+  Dispatch the computed function name (with or without 'Mobile' suffix).
+  The caller passes DisplaySlotFactory.GetFunction(Slot, AccessAllowed, '') so
+  names arrive without suffix; the dispatch chain matches both forms.
+#}
+{% macro dispatch(fnName, Slot, Href, SlotRef, SlotLabelFactory) %}
+    {%- if fnName == 'displayAdminReserved' or fnName == 'displayAdminReservedMobile' -%}
+        {{ _self.displayAdminReserved(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayMyReserved' or fnName == 'displayMyReservedMobile' -%}
+        {{ _self.displayMyReserved(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayMyParticipating' or fnName == 'displayMyParticipatingMobile' -%}
+        {{ _self.displayMyParticipating(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayReserved' or fnName == 'displayReservedMobile' -%}
+        {{ _self.displayReserved(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayRestricted' or fnName == 'displayRestrictedMobile' -%}
+        {{ _self.displayRestricted(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayPastTime' or fnName == 'displayPastTimeMobile' -%}
+        {{ _self.displayPastTime(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- elseif fnName == 'displayReservable' or fnName == 'displayReservableMobile' -%}
+        {{ _self.displayReservable(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- else -%}
+        {{ _self.displayUnreservable(Slot, Href, SlotRef, SlotLabelFactory) }}
+    {%- endif -%}
+{% endmacro %}

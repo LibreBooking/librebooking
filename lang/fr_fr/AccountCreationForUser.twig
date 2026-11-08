@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>Le compte {{ AppTitle|raw }} a été créé pour vous avec les informations suivantes:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Nom: {{ FullName|raw }}<br/>
+Téléphone: {{ Phone|raw }}<br/>
+Organisation: {{ Organization|raw }}<br/>
+Position: {{ Position|raw }}<br/>
+Mot de passe: {{ Password }}</p>
+{% if CreatedBy %}
+    Créé par: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Connexion à {{ AppTitle|raw }}</a>

@@ -1,0 +1,35 @@
+<h5 class="mt-2">
+    <span id="totalUsers">{{ Users|default([])|length }}</span>
+    {{ translate('Users') }} <span class="d-none user-permission-spinner">
+        <div class="spinner-border spinner-border-sm" role="status"></div>
+    </span>
+</h5>
+<table class="table table-striped">
+    <tbody>
+        {% for u in Users|default([]) %}
+            <tr>
+                <td>
+                    <div class="form-group clearfix">
+                        <label for="permission{{ u.Id }}" class="float-start">{{ fullname(first: u.First|html_entity_decode, last: u.Last|html_entity_decode) }}</label>
+                        <select class="change-permission-type float-end form-select form-select-sm" style="width:auto;"
+                            id="permission{{ u.Id }}" data-user-id="{{ u.Id }}">
+                            <option value="{{ constant('ResourcePermissionType::None') }}" class="none"
+                                {% if u.PermissionType == constant('ResourcePermissionType::None') %}selected="selected" {% endif %}>
+                                {{ translate('None') }}
+                            </option>
+                            <option value="{{ constant('ResourcePermissionType::Full') }}" class="full"
+                                {% if u.PermissionType == constant('ResourcePermissionType::Full') %}selected="selected" {% endif %}>
+                                {{ translate('FullAccess') }}
+                            </option>
+                            <option value="{{ constant('ResourcePermissionType::View') }}" class="view"
+                                {% if u.PermissionType == constant('ResourcePermissionType::View') %}selected="selected" {% endif %}>
+                                {{ translate('ViewOnly') }}
+                            </option>
+                        </select>
+                        <input type="hidden" class="id" value="{{ u.Id }}" />
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

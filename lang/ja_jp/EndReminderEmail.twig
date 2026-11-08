@@ -1,0 +1,13 @@
+予約が間もなく終了します。<br/>
+予約の詳細:
+    <br/>
+    <br/>
+    開始: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    終了: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    リソース: {{ ResourceName|escape_once }}<br/>
+    件名: {{ Title|escape_once }}<br/>
+    説明: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">予約の表示</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">カレンダーへ追加</a> |
+<a href="{{ ScriptUrl|raw }}">LibreBooking へログイン</a>

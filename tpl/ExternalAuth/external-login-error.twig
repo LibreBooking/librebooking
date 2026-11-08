@@ -1,0 +1,14 @@
+{{ include('globalheader.twig') }}
+
+<div id="page-external-auth-login-error">
+    <div id="externalLoginError" class="alert alert-danger">
+        {% for error in Errors %}
+            <div>{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ ScriptUrl }}" class="btn btn-outline-secondary col-12">{{ translate('Login') }}</a>
+</div>
+
+{{ include('javascript-includes.twig') }}
+{{ include('globalfooter.twig') }}

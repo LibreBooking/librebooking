@@ -1,0 +1,98 @@
+{{ include('globalheader.twig') }}
+
+<div id="page-import-ics" class="admin-page">
+
+    <div class="card shadow col-12 col-sm-8 mx-auto">
+        <div class="card-body">
+            <h1 class="border-bottom mb-3">{{ translate('ImportICS') }}</h1>
+
+            <div>
+                <div class="alert alert-info fst-italic">
+                    <div class="note">{{ translate('OnlyIcs') }}</div>
+                    <div class="note">{{ translate('IcsLocationsAsResources') }}</div>
+                    <div class="note">{{ translate('IcsMissingOrganizer') }}</div>
+                </div>
+                <div class="alert alert-warning">{{ translate('IcsWarning') }}</div>
+            </div>
+
+            <div class="">
+
+                <div id="importErrors" class="alert alert-danger d-none"></div>
+                <div id="importResult" class="alert alert-success d-none">
+                    <span>{{ translate('RowsImported') }}</span>
+
+                    <span id="importCount" class="fw-bold"></span>
+                    <span>{{ translate('RowsSkipped') }}</span>
+
+                    <span id="importSkipped" class="fw-bold"></span>
+                    <a href="{{ server.SCRIPT_NAME }}" class="alert-link">{{ translate('Done') }}</a>
+                </div>
+                <form id="icsImportForm" method="post" enctype="multipart/form-data" ajaxAction="importIcs">
+                    <div class="validationSummary alert alert-danger d-none">
+                        <ul>
+                            {{ async_validator('fileExtensionValidator', '') }}
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <label for="importFile" class="visually-hidden">Import File</label>
+                        <input type="file" {{ formname('ICS_IMPORT_FILE') }} id="importFile"
+                            class="form-control form-control-sm" accept=".ics" />
+                    </div>
+
+                    <div class="admin-update-buttons ">
+                        <button id="btnUpload" type="button" class="btn btn-primary btn-sm save"><i
+                                class="bi bi-upload"></i>
+                            {{ translate('Import') }}</button>
+                        {{ indicator() }}
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{{ csrf_token() }}
+
+{{ render_partial('javascript-includes.tpl', _context) }}
+{{ jsfile('ajax-helpers.js') }}
+{{ vendor_js('jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var importForm = $('#icsImportForm');
+
+        var defaultSubmitCallback = function(form) {
+            return function() {
+                return '{{ server.SCRIPT_NAME|raw }}{# raw: JS string context #}?action=' + form.attr('ajaxAction');
+            };
+        };
+
+        var importHandler = function(responseText, form) {
+            if (!responseText) {
+                return;
+            }
+
+            $('#importCount').text(responseText.importCount);
+            $('#importSkipped').text(responseText.skippedRows);
+            $('#importResult').removeClass('d-none');
+
+            var errors = $('#importErrors');
+            errors.empty();
+            if (responseText.messages && responseText.messages.length > 0) {
+                var messages = responseText.messages.join('</li><li>');
+                errors.html('<div>' + messages + '</div>').removeClass('d-none');
+            }
+        };
+
+        $('#btnUpload').click(function(e) {
+            e.preventDefault();
+            importForm.submit();
+        });
+
+        ConfigureAsyncForm(importForm, defaultSubmitCallback(importForm), importHandler);
+    });
+</script>
+
+{{ include('globalfooter.twig') }}

@@ -1,0 +1,235 @@
+{% if attribute.AppliesToEntity(id) %}
+    {% set type = attribute.Type() %}
+    {% set attributeId = 'inline' ~ attribute.Id() ~ id %}
+    {% set datatype = 'text' %}
+    {% set inlineClass = 'inlineAttribute' %}
+    {% set pickerValue = value %}
+
+    {% if type == constant('CustomAttributeTypes::CHECKBOX') %}
+        {% set datatype = 'checklist' %}
+    {% elseif type == constant('CustomAttributeTypes::MULTI_LINE_TEXTBOX') %}
+        {% set datatype = 'textarea' %}
+    {% elseif type == constant('CustomAttributeTypes::SELECT_LIST') %}
+        {% set datatype = 'select' %}
+    {% elseif type == constant('CustomAttributeTypes::DATETIME') %}
+        {% set AltFormat = 'short_datetime' %}
+        {% set pickerControlId = 'inlinePickerInput' ~ attributeId %}
+        {% set inlineClass = 'inlineAttributeDateTime' %}
+        {% if value != '' %}
+            {% set pickerValue = formatdate(date: value, format: 'Y-m-d H:i') %}
+        {% endif %}
+    {% endif %}
+
+    <div class="updateCustomAttribute mb-0 d-inline-block">
+        <label class="inline fw-bold">{{ attribute.Label()|escape_once }}</label>
+
+        <a class="update {% if type == constant('CustomAttributeTypes::DATETIME') %}changeAttributeDateTime{% else %}changeAttribute{% endif %} link-primary"
+            title="{{ translate('Edit') }}" href="#">
+            <span class="bi bi-pencil-square"></span>
+            <span class="visually-hidden">{{ translate('Edit') }}</span>
+        </a>
+
+        <span class="{{ inlineClass }} update" id="{{ attributeId }}" data-type="{{ datatype }}" data-pk="{{ id }}"
+            data-value="{{ pickerValue|escape_once }}" data-name="{{ constant('FormKeys::ATTRIBUTE_PREFIX') }}{{ attribute.Id() }}"
+            {% if type == constant('CustomAttributeTypes::SELECT_LIST') %}
+                {% set source = attribute.Required() ? [] : [{value: '', text: ''}] %}
+                {% for v in attribute.PossibleValueList() %}
+                    {% set source = source|merge([{value: v|html_entity_decode, text: v|html_entity_decode}]) %}
+                {% endfor %}
+                data-source='{{ source|json_encode }}'{# HEX flags: no ' < > & in the output #}
+            {% endif %}
+            {% if type == constant('CustomAttributeTypes::CHECKBOX') %}
+            data-source='[{value:"1",text:"{{ translate('Yes') }}"}]' {% endif %}>
+        {% if type == constant('CustomAttributeTypes::DATETIME') %}
+            {% if value != '' %}{{ formatdate(date: value, key: AltFormat) }}{% else %}-{% endif %}
+        {% endif %}
+    </span>
+
+    {% if type == constant('CustomAttributeTypes::DATETIME') %}
+        <div class="d-none position-absolute border rounded bg-body shadow p-2 z-3 update" id="inlinePicker{{ attributeId }}">
+
+            <input type="text" id="{{ pickerControlId }}" class="form-control form-control-sm" autocomplete="off">
+        </div>
+
+        {{ control('DatePickerSetupControl', {ControlId: pickerControlId, HasTimepicker: true, Inline: true, DefaultDate: pickerValue, AltFormat: AltFormat}) }}
+
+        <script>
+            (function() {
+                const display = document.getElementById('{{ attributeId|raw }}'); {# raw: JS string context #}
+                const container = document.getElementById('inlinePicker{{ attributeId|raw }}'); {# raw: JS string context #}
+                const input = document.getElementById('{{ pickerControlId|raw }}'); {# raw: JS string context #}
+                const button = display.closest('.updateCustomAttribute').querySelector('.changeAttributeDateTime');
+                const namespace = 'picker{{ attributeId|raw }}'; {# raw: JS string context #}
+                let pendingValue = display.dataset.value || '';
+                let isSaving = false;
+
+                // DatePickerSetupControl initializes flatpickr synchronously (whenFlatpickrReady
+                // runs inline callbacks immediately when window.flatpickr is already loaded).
+                // whenPickerReady is only a fallback for deferred script loading.
+                function whenPickerReady(cb, retries = 60) {
+                    if (input._flatpickr) {
+                        cb(input._flatpickr);
+                        return;
+                    }
+
+                    let attempts = 0;
+                    const id = setInterval(() => {
+                        if (input._flatpickr) {
+                            clearInterval(id);
+                            cb(input._flatpickr);
+                            return;
+                        }
+
+                        attempts += 1;
+                        if (attempts >= retries) {
+                            clearInterval(id);
+                            console.warn('InlineAttributeEdit: flatpickr not initialized for {{ pickerControlId|raw }}'); {# raw: JS string context #}
+                        }
+                    }, 50);
+                }
+
+                function show() { container.classList.remove('d-none'); }
+
+                function hide() { container.classList.add('d-none'); }
+
+                function extractErrorMessage(errors) {
+                    if (!errors) {
+                        return 'Error saving value';
+                    }
+
+                    if (typeof errors === 'string') {
+                        return errors;
+                    }
+
+                    if (Array.isArray(errors)) {
+                        return errors.join('\n');
+                    }
+
+                    if (typeof errors === 'object') {
+                        const messages = [];
+                        for (const key in errors) {
+                            if (!Object.prototype.hasOwnProperty.call(errors, key)) {
+                                continue;
+                            }
+
+                            const value = errors[key];
+                            if (Array.isArray(value)) {
+                                messages.push(value.join(', '));
+                            } else {
+                                messages.push(String(value));
+                            }
+                        }
+
+                        return messages.length ? messages.join('\n') : 'Error saving value';
+                    }
+
+                    return 'Error saving value';
+                }
+
+                function save(value) {
+                    const body = new URLSearchParams({
+                        pk: '{{ id|raw }}', {# raw: JS string context #}
+                        name: '{{ constant('FormKeys::ATTRIBUTE_PREFIX')|raw }}{{ attribute.Id()|raw }}', {# raw: JS string context #}
+                        value: value,
+                        CSRF_TOKEN: (document.getElementById('csrf_token') || {}).value || ''
+                    });
+
+                    fetch("{{ url|raw }}", { method: 'POST', body }) {# raw: JS string context #}
+                    .then(function(response) {
+                            if (!response.ok) {
+                                throw new Error('HTTP ' + response.status);
+                            }
+
+                            return response.text();
+                        })
+                        .then(function(rawBody) {
+                            const trimmedBody = rawBody ? rawBody.trim() : '';
+                            if (trimmedBody !== '') {
+                                let payload;
+                                try {
+                                    payload = JSON.parse(trimmedBody);
+                                } catch (e) {
+                                    payload = null;
+                                }
+
+                                if (payload && typeof payload === 'object' && payload.errors) {
+                                    throw new Error(extractErrorMessage(payload.errors));
+                                }
+                            }
+
+                            const text = value === '' ? '-' : (input._flatpickr?.altInput?.value || value);
+                            display.textContent = text;
+                            display.dataset.value = value;
+                            pendingValue = value;
+                            isSaving = false;
+                            hide();
+                        })
+                        .catch(function(error) {
+                            isSaving = false;
+                            alert((error && error.message) ? error.message : 'Error saving value');
+                        });
+                }
+
+                function saveIfChanged() {
+                    if (isSaving) {
+                        return;
+                    }
+
+                    const currentValue = display.dataset.value || '';
+                    if (pendingValue === currentValue) {
+                        hide();
+                        return;
+                    }
+
+                    isSaving = true;
+                    save(pendingValue);
+                }
+
+                whenPickerReady(function(picker) {
+                    picker.config.onChange.push(function(_, dateStr) {
+                        pendingValue = dateStr;
+                    });
+                });
+
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    pendingValue = display.dataset.value || '';
+                    show();
+                    if (input._flatpickr) {
+                        input._flatpickr.setDate(display.dataset.value || null, false);
+                    }
+                });
+
+                // Close on outside click / ESC — keyed registry avoids duplicate listeners
+                // when multiple pickers are rendered on the same page
+                if (!document._pickerHandlers) document._pickerHandlers = {};
+
+                if (document._pickerHandlers[namespace + '_mousedown']) {
+                    document.removeEventListener('mousedown', document._pickerHandlers[namespace + '_mousedown']);
+                }
+                document._pickerHandlers[namespace + '_mousedown'] = function(e) {
+                    if (container.classList.contains('d-none')) return;
+                    if (container.contains(e.target) || button.contains(e.target)) return;
+                    saveIfChanged();
+                };
+                document.addEventListener('mousedown', document._pickerHandlers[namespace + '_mousedown']);
+
+                if (document._pickerHandlers[namespace + '_keydown']) {
+                    document.removeEventListener('keydown', document._pickerHandlers[namespace + '_keydown']);
+                }
+                document._pickerHandlers[namespace + '_keydown'] = function(e) {
+                    if (e.key !== 'Escape') return;
+                    if (container.classList.contains('d-none')) return;
+                    pendingValue = display.dataset.value || '';
+                    if (input._flatpickr) {
+                        input._flatpickr.setDate(display.dataset.value || null, false);
+                    }
+                    hide();
+                };
+                document.addEventListener('keydown', document._pickerHandlers[namespace + '_keydown']);
+            })();
+        </script>
+    {% endif %}
+</div>
+{% endif %}

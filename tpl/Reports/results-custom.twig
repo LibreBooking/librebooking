@@ -1,0 +1,56 @@
+<div class="card shadow">
+    <div class="card-body">
+        {% if Report.ResultCount() > 0 %}
+            <div id="report-actions" class="text-center">
+                <div class="btn-group btn-group-sm">
+                    <a href="#" class="btn btn-primary" id="btnChart"><i
+                            class="bi bi-graph-up me-1"></i>{{ translate('ViewAsChart') }}</a>
+                    {% if not (HideSave is defined and HideSave) %}
+                        <a href="#" class="btn btn-primary" id="btnSaveReportPrompt" data-bs-toggle="modal"
+                            data-bs-target="#saveDialog"><i class="bi bi-floppy me-1"></i>{{ translate('SaveThisReport') }}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="table-responsive mt-3">
+                {% set tableId = 'report-results' %}
+                <table id="{{ tableId }}" chart-type="{{ Definition.GetChartType() }}"
+                    class="table table-striped table-hover border-top w-100">
+                    <thead>
+                        <tr>
+                            {% for column in Definition.GetColumnHeaders() %}
+                                {% set columnTitle %} {% if column.HasTitle() %}{{ column.Title()|escape_once }}{% else %}{{ translate(column.TitleKey()) }}{% endif %} {% endset %}
+                                <th data-columnTitle="{{ columnTitle }}">
+                                    {{ columnTitle }}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in Report.GetData().Rows() %}
+                            <tr>
+                                {% for cell in Definition.GetRow(row) %}
+                                    <td chart-value="{{ cell.ChartValue()|escape_once }}"
+                                        chart-column-type="{{ cell.GetChartColumnType()|escape_once }}"
+                                        chart-group="{{ cell.GetChartGroup()|escape_once }}">{{ cell.Value()|escape_once }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{ datatable(tableId) }}
+            <h4>{{ Report.ResultCount() }} {{ translate('Rows') }}
+                {% if Definition.GetTotal() != '' %}
+                    | {{ Definition.GetTotal() }} {{ translate('Total') }}
+                {% endif %}
+            </h4>
+        {% else %}
+            <h2 id="report-no-data" class="no-data fs-2 fs-italic text-center">{{ translate('NoResultsFound') }}</h2>
+        {% endif %}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#report-no-data, #report-results').trigger('loaded');
+    });
+</script>

@@ -1,0 +1,33 @@
+{% if Layout.HasPeakTimesDefined() %}
+    {% set p = Layout.GetPeakTimes() %}
+
+    <div class="peakTimes" data-all-day="{{ p.IsAllDay() ? 1 : '' }}" data-start-time="{{ p.GetBeginTime() }}"
+        data-end-time="{{ p.GetEndTime() }}">
+        {% if p.IsAllDay() %}
+            {{ translate('AllDay') }}
+        {% else %}
+            {{ translate('Between') }}
+            {{ formatdate(p.GetBeginTime(), null, null, 'period_time') }} - {{ formatdate(p.GetEndTime(), null, null, 'period_time') }}
+        {% endif %}
+    </div>
+
+    <div class="peakDays" data-everyday="{{ p.IsEveryDay() ? 1 : '' }}" data-weekdays="{{ p.GetWeekdays()|join(',') }}">
+        {% if p.IsEveryDay() %}
+            {{ translate('Everyday') }}
+        {% else %}
+            {% for day in p.GetWeekdays() %}{{ DayNames[day] }} {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="peakMonths" data-all-year="{{ p.IsAllYear() ? 1 : '' }}" data-begin-month="{{ p.GetBeginMonth() }}"
+        data-begin-day="{{ p.GetBeginDay() }}" data-end-month="{{ p.GetEndMonth() }}" data-end-day="{{ p.GetEndDay() }}">
+        {% if p.IsAllYear() %}
+            {{ translate('AllYear') }}
+        {% else %}
+            {{ Months[p.GetBeginMonth() - 1] }} {{ p.GetBeginDay() }} - {{ Months[p.GetEndMonth() - 1] }} {{ p.GetEndDay() }}
+        {% endif %}
+    </div>
+
+{% else %}
+    <span class="propertyValue">{{ translate('None') }}</span>
+{% endif %}

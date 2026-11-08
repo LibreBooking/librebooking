@@ -17,7 +17,7 @@ class PageValidators
      */
     private $page;
 
-    public function __construct(SmartyPage $page)
+    public function __construct(SmartyPage|TwigRenderer $page)
     {
         $this->page = $page;
     }

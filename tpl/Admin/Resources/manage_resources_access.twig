@@ -1,0 +1,83 @@
+<div class="startNoticeAdd"
+     data-value="{{ resource.GetMinNoticeAdd() }}"
+     data-days="{{ resource.GetMinNoticeAdd().Days() }}"
+     data-hours="{{ resource.GetMinNoticeAdd().Hours() }}"
+     data-minutes="{{ resource.GetMinNoticeAdd().Minutes() }}">
+    {% if resource.HasMinNoticeAdd() %}
+        {{ translate('ResourceMinNotice', resource.GetMinNoticeAdd()) }}
+    {% else %}
+        {{ translate('ResourceMinNoticeNone') }}
+    {% endif %}
+</div>
+<div class="startNoticeUpdate"
+     data-value="{{ resource.GetMinNoticeUpdate() }}"
+     data-days="{{ resource.GetMinNoticeUpdate().Days() }}"
+     data-hours="{{ resource.GetMinNoticeUpdate().Hours() }}"
+     data-minutes="{{ resource.GetMinNoticeUpdate().Minutes() }}">
+    {% if resource.HasMinNoticeUpdate() %}
+        {{ translate('ResourceMinNoticeUpdate', resource.GetMinNoticeUpdate()) }}
+    {% else %}
+        {{ translate('ResourceMinNoticeNoneUpdate') }}
+    {% endif %}
+</div>
+<div class="startNoticeDelete"
+     data-value="{{ resource.GetMinNoticeDelete() }}"
+     data-days="{{ resource.GetMinNoticeDelete().Days() }}"
+     data-hours="{{ resource.GetMinNoticeDelete().Hours() }}"
+     data-minutes="{{ resource.GetMinNoticeDelete().Minutes() }}">
+    {% if resource.HasMinNoticeDelete() %}
+        {{ translate('ResourceMinNoticeDelete', resource.GetMinNoticeDelete()) }}
+    {% else %}
+        {{ translate('ResourceMinNoticeNoneDelete') }}
+    {% endif %}
+</div>
+<div class="endNotice"
+     data-value="{{ resource.GetMaxNotice() }}"
+     data-days="{{ resource.GetMaxNotice().Days() }}"
+     data-hours="{{ resource.GetMaxNotice().Hours() }}"
+     data-minutes="{{ resource.GetMaxNotice().Minutes() }}">
+    {% if resource.HasMaxNotice() %}
+        {{ translate('ResourceMaxNotice', resource.GetMaxNotice()) }}
+    {% else %}
+        {{ translate('ResourceMaxNoticeNone') }}
+    {% endif %}
+</div>
+<div class="requiresApproval"
+     data-value="{{ resource.GetRequiresApproval() }}">
+    {% if resource.GetRequiresApproval() %}
+        {{ translate('ResourceRequiresApproval') }}
+    {% else %}
+        {{ translate('ResourceRequiresApprovalNone') }}
+    {% endif %}
+</div>
+<div class="autoAssign"
+     data-value="{{ resource.GetAutoAssign() }}">
+    {% if resource.GetAutoAssign() %}
+        {{ translate('ResourcePermissionAutoGranted') }}
+    {% else %}
+        {{ translate('ResourcePermissionNotAutoGranted') }}
+    {% endif %}
+</div>
+<div class="enableCheckin"
+     data-value="{{ resource.IsCheckInEnabled() }}">
+    {% if resource.IsCheckInEnabled() %}
+        {{ translate('RequiresCheckInNotification') }}
+    {% else %}
+        {{ translate('NoCheckInRequiredNotification') }}
+    {% endif %}
+</div>
+<div class="autoRelease"
+     data-value="{{ resource.GetAutoReleaseMinutes() }}">
+    {% if resource.IsAutoReleased() %}
+        {{ translate('AutoReleaseNotification', resource.GetAutoReleaseMinutes()) }}
+    {% endif %}
+</div>
+<div class="allowConcurrent"
+     data-allow-concurrent="{{ resource.GetAllowConcurrentReservations() }}"
+     data-max-concurrent="{{ resource.GetMaxConcurrentReservations() }}">
+    {% if resource.GetAllowConcurrentReservations() %}
+        {{ translate('ResourceConcurrentReservations', resource.GetMaxConcurrentReservations()) }}
+    {% else %}
+        {{ translate('ResourceConcurrentReservationsNone') }}
+    {% endif %}
+</div>

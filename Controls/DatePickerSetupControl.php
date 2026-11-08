@@ -67,7 +67,7 @@ require_once(ROOT_DIR . 'Controls/Control.php');
 
 class DatePickerSetupControl extends Control
 {
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
     }

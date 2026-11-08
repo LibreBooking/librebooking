@@ -1,0 +1,20 @@
+{% set attributeValue = attribute.Value() %}
+<div class="form-group {{ class }}">
+    {% if readonly and tooltip is defined and tooltip %}
+        <span class="customAttribute readonly">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}:</span>
+    {% else %}
+        <label class="customAttribute d-block {% if readonly %}readonly{% elseif searchmode %}search{% else %}standard{% endif %} fw-bold"
+            for="{{ attributeId }}">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}</label>
+    {% endif %}
+    {% if readonly %}
+        <span class="attributeValue {{ class }}">{{ formatdate(date: attributeValue, key: 'general_datetime') }}</span>
+    {% else %}
+        <input type="text" id="{{ attributeId }}" name="{{ attributeName }}"
+            class="customAttribute form-control form-control-sm {% if not searchmode and attribute.Required() %}has-feedback{% endif %} {{ class }}" />
+        {{ control('DatePickerSetupControl', {ControlId: attributeId, DefaultDate: attributeValue, HasTimepicker: true}) }}
+    {% endif %}
+</div>

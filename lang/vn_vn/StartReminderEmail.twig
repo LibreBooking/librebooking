@@ -1,0 +1,14 @@
+Your reservation is starting soon.<br/>
+Reservation Details:
+    <br/>
+    <br/>
+    Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    End: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Resource: {{ ResourceName|escape_once }}<br/>
+    Title: {{ Title|escape_once }}<br/>
+    Description: {{ Description|escape_once|nl2br }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">View this reservation</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Add to Calendar</a> |
+<a href="{{ ScriptUrl|raw }}">Log in to LibreBooking</a>

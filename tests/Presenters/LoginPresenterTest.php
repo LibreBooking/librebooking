@@ -10,6 +10,13 @@ require_once(ROOT_DIR . 'lib/Common/namespace.php');
 class LoginPresenterTest extends TestBase
 {
     /**
+     * Resume URL with more than one query parameter. FakeLoginPage, like the
+     * real LoginPage, returns it HTML-escaped (& becomes &amp;), so this
+     * exercises the decoding along every redirect path.
+     */
+    private const MULTI_PARAM_RESUME_URL = '/Web/reservation.php?rn=123&sd=2026-01-01';
+
+    /**
      * @var FakeWebAuthentication
      */
     private $auth;
@@ -58,6 +65,43 @@ class LoginPresenterTest extends TestBase
         parent::teardown();
     }
 
+    private function enableGoogleLogin(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_CLIENT_SECRET, 'secret');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_REDIRECT_URI, 'https://booked.example/Web/google-auth.php');
+    }
+
+    private function enableKeycloakLogin(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL, 'https://keycloak.example');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM, 'realm');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI, '/Web/keycloak-auth.php');
+    }
+
+    private function enableOauth2Login(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE, 'https://oauth2.example/authorize');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI, '/Web/oauth2-auth.php');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getQueryParams(string $url): array
+    {
+        $query = parse_url(url: $url, component: PHP_URL_QUERY);
+        $this->assertIsString($query);
+        parse_str(string: $query, result: $params);
+
+        return $params;
+    }
+
     public function testLoginCallsAuthValidate()
     {
         $this->presenter->Login();
@@ -99,6 +143,16 @@ class LoginPresenterTest extends TestBase
         $this->presenter->Login();
 
         $this->assertEquals($redirect, $this->page->_LastRedirect);
+    }
+
+    public function testRedirectsToRequestedPageWithMultipleQueryParams()
+    {
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->auth->_ValidateResult = true;
+        $this->presenter->Login();
+
+        $this->assertEquals(self::MULTI_PARAM_RESUME_URL, $this->page->_LastRedirect);
     }
 
     public function testRedirectsToSameOriginAbsoluteRequestedPage()
@@ -159,6 +213,21 @@ class LoginPresenterTest extends TestBase
         );
     }
 
+    public function testMicrosoftUrlStateIsHtmlDecodedResumeUrl()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_TENANT_ID, 'tenant');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_CLIENT_ID, 'client');
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_REDIRECT_URI, 'https://booked.example/Web/external-auth.php');
+
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_MicrosoftUrl);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
+    }
+
     public function testMicrosoftUrlOmitsStateWhenNoResumeUrl()
     {
         $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, 'true');
@@ -181,6 +250,103 @@ class LoginPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertNull($this->page->_MicrosoftUrl);
+    }
+
+    public function testGoogleUrlIncludesResumeUrlAsState()
+    {
+        $this->enableGoogleLogin();
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_GoogleUrl);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
+    }
+
+    public function testGoogleUrlHasEmptyStateWhenNoResumeUrl()
+    {
+        $this->enableGoogleLogin();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        // Google\Client always emits a bare "state" key; it must carry no value.
+        $params = $this->getQueryParams(url: $this->page->_GoogleUrl);
+        $this->assertEmpty($params['state'] ?? null);
+    }
+
+    public function testGoogleUrlNotSetWhenGoogleLoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_GoogleUrl);
+    }
+
+    public function testKeycloakUrlIncludesResumeUrlAsState()
+    {
+        $this->enableKeycloakLogin();
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_KeycloakUrl);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
+    }
+
+    public function testKeycloakUrlOmitsStateWhenNoResumeUrl()
+    {
+        $this->enableKeycloakLogin();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_KeycloakUrl);
+        $this->assertArrayNotHasKey('state', $params);
+    }
+
+    public function testKeycloakUrlNotSetWhenKeycloakLoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_KeycloakUrl);
+    }
+
+    public function testOauth2UrlIncludesResumeUrlAsState()
+    {
+        $this->enableOauth2Login();
+        $this->page->_ResumeUrl = self::MULTI_PARAM_RESUME_URL;
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_Oauth2Url);
+        $this->assertSame(self::MULTI_PARAM_RESUME_URL, $params['state']);
+    }
+
+    public function testOauth2UrlOmitsStateWhenNoResumeUrl()
+    {
+        $this->enableOauth2Login();
+        $this->page->_ResumeUrl = '';
+
+        $this->presenter->PageLoad();
+
+        $params = $this->getQueryParams(url: $this->page->_Oauth2Url);
+        $this->assertArrayNotHasKey('state', $params);
+    }
+
+    public function testOauth2UrlNotSetWhenOauth2LoginDisabled()
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, 'false');
+        $this->page->_ResumeUrl = '/Web/reservation.php?rn=123';
+
+        $this->presenter->PageLoad();
+
+        $this->assertNull($this->page->_Oauth2Url);
     }
 
     public function testPageLoadSetsVariablesCorrectly()
@@ -324,6 +490,9 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_UseLogonName = false;
     public $_ResumeUrl = '';
     public $_MicrosoftUrl;
+    public $_GoogleUrl;
+    public $_KeycloakUrl;
+    public $_Oauth2Url;
     public $_ShowLoginError = false;
     public $_LoginErrorMessage = null;
     public $_requestedLanguage;
@@ -337,6 +506,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function SetGoogleUrl($URL)
     {
+        $this->_GoogleUrl = $URL;
     }
 
     public function SetMicrosoftUrl($URL)
@@ -350,10 +520,12 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
 
     public function SetKeycloakUrl($URL)
     {
+        $this->_KeycloakUrl = $URL;
     }
 
     public function SetOauth2Url($URL)
     {
+        $this->_Oauth2Url = $URL;
     }
 
     public function SetOauth2Name($Name)
@@ -415,9 +587,18 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
         $this->_ResumeUrl = $value;
     }
 
+    /**
+     * Mirrors LoginPage::GetResumeUrl(), which reads the value through
+     * Server::GetForm()/GetQuerystring() and so returns it trimmed and
+     * HTML-escaped. Tests set the raw URL in _ResumeUrl.
+     */
     public function GetResumeUrl()
     {
-        return $this->_ResumeUrl;
+        if ($this->_ResumeUrl === null || $this->_ResumeUrl === '') {
+            return '';
+        }
+
+        return htmlspecialchars(trim($this->_ResumeUrl));
     }
 
     public function SetShowLoginError()

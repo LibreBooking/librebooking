@@ -1,0 +1,74 @@
+{# schedule-flipped.tpl #}
+{% extends 'Schedule/schedule.twig' %}
+
+{% block reservations %}
+{% import 'Schedule/_slot_macros.twig' as slot %}
+
+{% set TodaysDate = now() %}
+
+{% set resources_header %}
+    <tr>
+        <td class="resourcename">&nbsp;</td>
+        {% for resource in Resources %}
+            {% set resourceId = resource.Id %}
+            {% set href = constant('Pages::RESERVATION') ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId %}
+            <td class="resourcename" resourceId="{{ resource.Id }}"
+                {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
+                {% if resource.CanAccess %}
+                    <span resourceId="{{ resourceId }}" class="d-sm-inline-block d-md-none resourceNameSelector bi bi-info-circle-fill"
+                        data-show-event="click" {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                        {% endif %}></span>
+                    <a href="{{ href|raw }}" resourceId="{{ resourceId }}" class="resourceNameSelector"
+                        {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}>{{ resource.Name|escape_once }}</a>
+
+                {% else %}
+                    <span resourceId="{{ resourceId }}" class="resourceNameSelector"
+                        {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                        {% endif %}>{{ resource.Name|escape_once }}</span>
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tr>
+{% endset %}
+
+{% for date in BoundDates %}
+    {% set datePeriods = DailyLayout.GetPeriods(date, false) %}
+    {% set count = datePeriods|default([])|length %}
+    {% if count != 0 %}{# dont show if there are no slots #}
+        {% set min = datePeriods[0].BeginDate().TimeStamp() %}
+        {% set max = datePeriods[count - 1].EndDate().TimeStamp() %}
+        <table class="reservations reservations-tall" border="1" cellpadding="0" width="100%" data-min="{{ min }}"
+            data-max="{{ max }}">
+            <thead>
+                {% if date.DateEquals(TodaysDate) %}
+                    <tr class="today">
+                    {% else %}
+                    <tr>
+                    {% endif %}
+                        <td class="resdate" colspan="{{ Resources|length + 1 }}">{{ formatdate(date, null, null, 'schedule_daily') }}</td>
+                    </tr>
+                {{ resources_header }}
+            </thead>
+            <tbody>
+                <!-- tall -->
+                {% for period in datePeriods %}
+                    <tr class="slots" id="{{ period.Id() }}">
+                        <td class="reslabel">{{ period.Label(date)|escape_once }}</td>
+                        {% for resource in Resources %}
+                            {% set resourceId = resource.Id %}
+                            {% set slotRef = period.BeginDate().Format('YmdHis') ~ resourceId %}
+                            {% set slotHref = CreateReservationPage ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                            {{ slot.dispatch(DisplaySlotFactory.GetFunction(period, resource.CanAccess), period, slotHref|raw, slotRef, resourceId) }}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {{ resources_header }}
+        </table>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts_before %}
+{% endblock %}

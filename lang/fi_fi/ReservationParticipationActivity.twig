@@ -1,0 +1,49 @@
+<p>{{ ParticipantDetails|raw }} on
+    {% if (InvitationAction == constant('InvitationAction::Decline') or InvitationAction == constant('InvitationAction::CancelAll') or InvitationAction == constant('InvitationAction::CancelInstance')) %}
+        hylännyt varauskutsusi.
+    {% elseif (InvitationAction == constant('InvitationAction::Join') or InvitationAction == constant('InvitationAction::JoinAll')) %}
+        liittynyt varaukseesi.
+    {% else %}
+        hyväksynyt varauskutsusi.
+    {% endif %}
+</p>
+<p><strong>Varauksen tiedot:</strong></p>
+
+<p>
+    <strong>Alkaa:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Päättyy:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Otsikko:</strong> {{ Title|escape_once }}<br/>
+    <strong>Kuvaus:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+    <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Resurssit ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Resurssi:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+<p><strong>Varausnumero:</strong> {{ ReferenceNumber|raw }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Näytä varaus</a> |
+    <a href="{{ ScriptUrl|raw }}">Kirjaudu sovellukseen {{ AppTitle|raw }}</a>
+</p>

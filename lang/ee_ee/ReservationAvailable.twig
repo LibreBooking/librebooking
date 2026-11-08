@@ -1,0 +1,6 @@
+{{ FirstName|raw }},<br/>
+{{ ResourceName|escape_once }} on vaba alates {{ formatdate(date: StartDate, key: 'res_popup') }} kuni {{ formatdate(date: EndDate, key: 'res_popup') }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Broneeri kohe</a> |
+<a href="{{ ScriptUrl|raw }}">Logi sisse Rannahalli kalendrisse</a>

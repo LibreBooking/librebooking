@@ -1,0 +1,40 @@
+{{ include('globalheader.twig') }}
+<div id="forgotbox" class="mx-auto col-md-6 col-12 mt-4">
+    {% if Enabled is defined and Enabled %}
+
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <form class="forgot" method="post" action="{{ server.SCRIPT_NAME }}">
+                    <div class="forgot_pwdHeader mt-2">
+                        <h1 class="border-bottom mb-2">{{ translate('ForgotPassword') }}</h1>
+                    </div>
+                    <div>
+                        <p class="forgot">{{ translate('YouWillBeEmailedANewPassword') }}</p>
+                        <!-- Alert goes here for a nice width same as form -->
+                        {% if ShowResetEmailSent is defined and ShowResetEmailSent %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ translate('ForgotPasswordEmailSent') }}<br />
+                                <a class="link-success" href="{{ Path }}{{ constant('Pages::LOGIN') }}">{{ translate('LogIn') }}</a>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                        <p>
+                            <label class="forgot fw-bold">{{ translate('EmailAddress') }}<br />
+                                {{ textbox(name: 'EMAIL', type: 'email', required: true, class: 'input', attributes: {size: '20', tabindex: '10'}) }}</label>
+                        </p>
+                        <p class="resetpassword">
+                            <button type="submit" class="btn btn-primary" name="{{ constant('Actions::RESET') }}"
+                                value="{{ constant('Actions::RESET') }}">{{ translate('ChangePassword') }}</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{ setfocus(key: 'EMAIL') }}
+    {% else %}
+        <h2 class="alert alert-danger alert-dismissible fade show text-center error">Disabled</h2>
+    {% endif %}
+</div>
+{{ include('javascript-includes.twig') }}
+{{ include('globalfooter.twig') }}

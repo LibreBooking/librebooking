@@ -1,0 +1,332 @@
+{% set DataTable = true %}{{ include('globalheader.twig') }}
+<div id="page-manage-quotas" class="admin-page">
+    <h1 class="border-bottom mb-3">{{ translate('ManageQuotas') }}</h1>
+
+    <div class="accordion">
+        <form id="addQuotaForm" method="post" role="form" class="form-inline">
+
+            <div class="accordion-item shadow mb-2 panel-default" id="add-quota-panel">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed link-primary fw-bold" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#add-quota-content" aria-expanded="false"
+                        aria-controls="add-quota-content">
+                        <i class="bi bi-plus-circle-fill me-1"></i>{{ translate('AddQuota') }}
+                    </button>
+                </h2>
+                <div class="accordion-collapse collapse" id="add-quota-content">
+                    <div class="accordion-body" id="addQuota">
+                        {% set schedules %}
+                            <select class='form-select form-select-sm w-auto' {{ formname('SCHEDULE_ID') }}
+                                title='Select Schedule'>
+                                <option selected='selected' value=''>{{ translate('AllSchedules') }}</option>
+                                {% for schedule in Schedules %}
+                                    <option value='{{ schedule.GetId() }}'>{{ schedule.GetName()|replace({',': ' '})|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endset %}
+
+                        {% set resources %}
+                            <select class='form-select form-select-sm w-auto' {{ formname('RESOURCE_ID') }}
+                                title='Select Resource'>
+                                <option selected='selected' value=''>{{ translate('AllResources') }}</option>
+                                {% for resource in Resources %}
+                                    <option value='{{ resource.GetResourceId() }}'>{{ resource.GetName()|replace({',': ' '})|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endset %}
+
+                        {% set groups %}
+                            <select class='form-select form-select-sm w-auto' {{ formname('GROUP') }} title='Select Group'>
+                                <option selected='selected' value=''>{{ translate('AllGroups') }}</option>
+                                {% for group in Groups %}
+                                    <option value='{{ group.Id }}'>{{ group.Name|replace({',': ' '})|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endset %}
+
+                        {% set amount %}
+                            <input type='number' step='any' class='form-control form-control-sm mid-number' min='0'
+                                max='10000' value='0' {{ formname('LIMIT') }} title='Quota number' />
+                        {% endset %}
+
+                        {% set unit %}
+                            <select class='form-select form-select-sm w-auto' {{ formname('UNIT') }} title='Quota unit'>
+                                <option value='{{ constant('QuotaUnit::Hours') }}'>{{ translate('hours') }}</option>
+                                <option value='{{ constant('QuotaUnit::Reservations') }}'>{{ translate('reservations') }}</option>
+                            </select>
+                        {% endset %}
+
+                        {% set duration %}
+                            <select class='form-select form-select-sm w-auto' {{ formname('DURATION') }}
+                                title='Quota frequency'>
+                                <option value='{{ constant('QuotaDuration::Day') }}'>{{ translate('day') }}</option>
+                                <option value='{{ constant('QuotaDuration::Week') }}'>{{ translate('week') }}</option>
+                                <option value='{{ constant('QuotaDuration::Month') }}'>{{ translate('month') }}</option>
+                                <option value='{{ constant('QuotaDuration::Year') }}'>{{ translate('year') }}</option>
+                            </select>
+                        {% endset %}
+
+                        {% set enforceHours %}
+                            <div class='form-check form-check-inline ms-2'>
+                                <input class='form-check-input' type='checkbox' id='enforce-all-day' checked='checked'
+                                    value='1' {{ formname('ENFORCE_ALL_DAY') }} />
+                                <label class='form-check-label' for='enforce-all-day'>{{ translate('AllDay') }}</label>
+                            </div>
+                            <div id='enforce-hours-times' class='collapse collapse-horizontal'>
+                                <div class='form-group form-group-sm d-flex align-items-center'>
+                                    <span class='me-1'>{{ translate('Between') }}</span>
+                                    <label for='enforce-time-start'
+                                        class='visually-hidden'>{{ translate('StartTime') }}</label>
+                                    <label for='enforce-time-end' class='visually-hidden'>{{ translate('EndTime') }}</label>
+                                    <select {{ formname('BEGIN_TIME') }} id='enforce-time-start'
+                                        class='form-select form-select-sm w-auto timepicker' data-format='{{ TimeFormat|raw }}' {# raw: JS string context #}
+                                        data-step='30' data-default='{{ now().Format('H:00')|raw }}'>
+                                    </select>
+                                    <div class='mx-1'>-</div>
+                                    <select {{ formname('END_TIME') }} id='enforce-time-end'
+                                        class='form-select form-select-sm w-auto timepicker' data-format='{{ TimeFormat|raw }}' {# raw: JS string context #}
+                                        data-step='30' data-default='{{ now().AddHours(1).Format('H:00')|raw }}'>
+                                    </select>
+                                </div>
+                            </div>
+                        {% endset %}
+
+                        {% set enforceDays %}
+                            <div class='form-check form-check-inline ms-2'>
+                                <input class='form-check-input' type='checkbox' id='enforce-every-day' checked='checked'
+                                    value='1' {{ formname('ENFORCE_EVERY_DAY') }} />
+                                <label class='form-check-label' for='enforce-every-day'>{{ translate('Everyday') }}</label>
+                            </div>
+                            <div class='enforce-days-inner'>
+                                <div id='enforce-days' class='collapse collapse-horizontal'>
+                                    <div class='btn-group-sm' data-bs-toggle='buttons'>
+                                        <input type='checkbox' class='btn-check' id='enforce-sun' value='0'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-sun'>{{ translate('DaySundayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-mon' value='1'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-mon'>{{ translate('DayMondayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-tue' value='2'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-tue'>{{ translate('DayTuesdayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-wed' value='3'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-wed'>{{ translate('DayWednesdayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-thu' value='4'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-thu'>{{ translate('DayThursdayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-fri' value='5'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-fri'>{{ translate('DayFridayAbbr') }}</label>
+
+                                        <input type='checkbox' class='btn-check' id='enforce-sat' value='6'
+                                            {{ formname('DAY', multi: true) }} />
+                                        <label class='btn btn-outline-primary'
+                                            for='enforce-sat'>{{ translate('DaySaturdayAbbr') }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endset %}
+
+                        {% set scope %}
+                            <div class='form-group'>
+                                <label for="quoteScope"
+                                    class='visually-hidden'>{{ translate('IncludingCompletedReservations') }}</label>
+                                <select class='form-select form-select-sm' {{ formname('QUOTA_SCOPE') }} id="quoteScope">
+                                    <option value='{{ constant('QuotaScope::IncludeCompleted') }}'>
+                                        {{ translate('IncludingCompletedReservations') }}
+                                    </option>
+                                    <option value='{{ constant('QuotaScope::ExcludeCompleted') }}'>
+                                        {{ translate('NotCountingCompletedReservations') }}
+                                    </option>
+                                </select>
+                            </div>
+                        {% endset %}
+
+                        <div class="add-quota-line d-flex align-items-center flex-wrap gap-1 mb-2">
+                            {{ translate('QuotaConfiguration', [schedules, resources, groups, amount, unit, duration])|raw }}
+                            {{ scope|raw }}</div>
+                        <div class="add-quota-line d-flex align-items-center flex-wrap gap-1 mb-2">
+                            {{ translate('QuotaEnforcement', [enforceHours, enforceDays])|raw }}</div>
+
+                        <div class="fw-semibold fst-italic">{{ translate('QuotaReminder') }}</div>
+
+                        <div class="accordion-footer border-top pt-3">
+                            {{ add_button() }}
+                            {{ reset_button() }}
+                            {{ indicator() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="accordion-item shadow panel-default" id="list-quotas-panel">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#quotaList-content" aria-expanded="false" aria-controls="quotaList-content">
+                    {{ translate('AllQuotas') }}
+                </button>
+            </h2>
+            <div id="quotaList-content" class="accordion-collapse collapse">
+                <div class="accordion-body no-padding" id="quotaList">
+                    {% set tableId = 'blackoutTable' %}
+                    <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+                        <thead>
+                            <tr>
+                                <th>{{ translate('ManageQuotas') }}</th>
+                            </tr>
+                        </thead>
+                        {% for quota in Quotas %}
+                            {% set scheduleName %}
+                                <span class='fw-bold'>{% if quota.ScheduleName != '' %}
+                                        {{ quota.ScheduleName|replace({',': ' '})|escape_once }}
+                                    {% else %}
+                                        {{ translate('AllSchedules') }}
+                                    {% endif %}
+                                </span>
+                            {% endset %}
+                            {% set resourceName %}
+                                <span class='fw-bold'>{% if quota.ResourceName != '' %}
+                                        {{ quota.ResourceName|replace({',': ' '})|escape_once }}
+                                    {% else %}
+                                        {{ translate('AllResources') }}
+                                    {% endif %}
+                                </span>
+                            {% endset %}
+                            {% set groupName %}
+                                <span class='fw-bold'>
+                                    {% if quota.GroupName != '' %}
+                                        {{ quota.GroupName|replace({',': ' '})|escape_once }}
+                                    {% else %}
+                                        {{ translate('AllGroups') }}
+                                    {% endif %}
+                                </span>
+                            {% endset %}
+                            {% set amount %}
+                                <span class='fw-bold'>{{ quota.Limit }}</span>
+                            {% endset %}
+                            {% set unit %}
+                                <span class='fw-bold'>{{ translate(quota.Unit) }}</span>
+                            {% endset %}
+                            {% set duration %}
+                                <span class='fw-bold'>{{ translate(quota.Duration) }}</span>
+                            {% endset %}
+                            {% set enforceHours %}
+                                <span class='fw-bold'>
+                                    {% if quota.AllDay %}
+                                        {{ translate('AllDay') }}
+                                    {% else %}
+                                        {{ translate('Between') }} {{ formatdate(date: quota.EnforcedStartTime, key: 'period_time') }} -
+                                        {{ formatdate(date: quota.EnforcedEndTime, key: 'period_time') }}
+                                    {% endif %}
+                                </span>
+                            {% endset %}
+                            {% set enforceDays %}
+                                <span class='fw-bold'>
+                                    {% if quota.Everyday %}
+                                        {{ translate('Everyday') }}
+                                    {% else %}
+                                        {% for day in quota.EnforcedDays %}
+                                            {{ translate(DayNames[day]) }}
+                                        {% endfor %}
+                                    {% endif %}
+                                </span>
+                            {% endset %}
+                            {% set scope %}
+                                {% if quota.Scope == constant('QuotaScope::IncludeCompleted') %}
+                                    {{ translate('IncludingCompletedReservations') }}
+                                {% else %}
+                                    {{ translate('NotCountingCompletedReservations') }}
+                                {% endif %}
+                            {% endset %}
+                            <tr>
+                                <td class="quotaItem clearfix">
+                                    <div class="float-start">
+                                        {{ translate('QuotaConfiguration', [scheduleName, resourceName, groupName, amount, unit, duration])|raw }}
+                                        <span class="fw-bold">{{ scope|raw }}</span>.
+                                        {{ translate('QuotaEnforcement', [enforceHours, enforceDays])|raw }}
+                                    </div>
+                                    <a href="#" quotaId="{{ quota.Id }}" class="delete float-end"
+                                        aria-label="{{ translate('Delete') }}">
+                                        <span class="bi bi-trash3-fill text-danger icon remove"
+                                            aria-hidden="true"></span></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {{ translate('None') }}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="deleteModalLabel">{{ translate('Delete') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        {{ translate('DeleteWarning') }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteQuotaForm" method="post">
+                        {{ cancel_button() }}
+                        {{ delete_button() }}
+                        {{ indicator() }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ csrf_token() }}
+    {% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ datatable(tableId) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'admin/quota.js') }}
+    {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var actions = {
+                addQuota: '{{ constant('ManageQuotasActions::AddQuota')|raw }}', {# raw: JS string context #}
+                deleteQuota: '{{ constant('ManageQuotasActions::DeleteQuota')|raw }}' {# raw: JS string context #}
+            };
+
+            var quotaOptions = {
+                submitUrl: '{{ server.SCRIPT_NAME|raw }}', {# raw: JS string context #}
+                saveRedirect: '{{ server.SCRIPT_NAME|raw }}', {# raw: JS string context #}
+                actions: actions
+            };
+
+            document.querySelectorAll('.timepicker').forEach(el => {
+                dateHelper.initTimePicker(el);
+            });
+
+            var quotaManagement = new QuotaManagement(quotaOptions);
+            quotaManagement.init();
+
+        });
+    </script>
+</div>
+{{ include('globalfooter.twig') }}

@@ -1,0 +1,69 @@
+{{ include('globalheader.twig', {HideNavBar: true}) }}
+
+<div id="page-resource-display-shell">
+
+    <div class="col-md-6 col-12 mx-auto">
+
+        <div id="login-box" class="col-12 default-box straight-top">
+            <form role="form" name="loginForm" id="loginForm" class="form-horizontal" method="post"
+                action="{{ server.SCRIPT_NAME }}?action=login">
+
+                <div id="loginError" class="alert alert-danger col-12 no-show">
+                    {{ translate('LoginError') }}
+                </div>
+
+                <div class="col-12">
+                    <div class="input-group margin-bottom-25">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" required="" class="form-control" id="email" {{ formname('EMAIL') }}
+                            placeholder="{{ translate('UsernameOrEmail') }}" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="input-group margin-bottom-25">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-lock"></i>
+                        </span>
+                        <input type="password" required="" id="password" {{ formname('PASSWORD') }} class="form-control"
+                            value="" placeholder="{{ translate('Password') }}" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-large btn-primary btn-block" name="{{ constant('Actions::LOGIN') }}"
+                        value="submit" id="loginButton">{{ translate('LogIn') }}</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div id="resource-list-box" class="col-12 default-box straight-top no-show">
+            <form role="form" id="activateResourceDisplayForm" method="post"
+                action="{{ server.SCRIPT_NAME }}?action=activate">
+                <h2><label for="resourceList">{{ translate('ResourceDisplayPrompt') }}</label></h2>
+                <select id="resourceList" {{ formname('RESOURCE_ID') }} class="form-control">
+                    <option value="">-- {{ translate('Resource') }} --</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
+    aria-hidden="true">
+    {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+</div>
+
+{{ include('javascript-includes.twig') }}
+{{ jsfile(src: 'resourceDisplay.js') }}
+{{ jsfile(src: 'ajax-helpers.js') }}
+
+<script type="text/javascript">
+    $(function() {
+        var resourceDisplay = new ResourceDisplay();
+        resourceDisplay.init();
+    });
+</script>
+
+{{ include('globalfooter.twig') }}

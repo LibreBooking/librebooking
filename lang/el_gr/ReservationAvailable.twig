@@ -1,0 +1,7 @@
+<p>{{ FirstName|raw }},</p>
+<p>Ο πόρος {{ ResourceName|escape_once }} είναι αυτή τη στιγμή διαθέσιμος μεταξύ {{ formatdate(date: StartDate, key: 'res_popup') }} και {{ formatdate(date: EndDate, key: 'res_popup') }}</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Κάνετε κράτηση τώρα</a> |
+    <a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>
+</p>

@@ -16,6 +16,8 @@ abstract class Page implements IPage
 {
     private static ?string $displayVersion = null;
 
+    protected \LibreBooking\Common\Templating\TemplateRenderer $renderer;
+
     /**
      * @var SmartyPage
      */
@@ -39,9 +41,12 @@ abstract class Page implements IPage
 
         $this->path = str_repeat('../', $pageDepth);
         $this->server = ServiceLocator::GetServer();
+        TemplateEngineOverride::PersistRequestedEngine();
         $resources = Resources::GetInstance();
 
-        $this->smarty = new SmartyPage($resources, $this->path);
+        $smartyRenderer = new SmartyRenderer($resources, $this->path);
+        $this->renderer = $smartyRenderer;
+        $this->smarty = $smartyRenderer->smarty(); // BC: existing $this->smarty->... calls keep working
 
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $this->smarty->assign('Timezone', $userSession->Timezone);
@@ -405,7 +410,7 @@ abstract class Page implements IPage
         } else {
             $this->Set('error', json_encode(['response' => $objectToSerialize, 'errors' => $error]));
         }
-        $this->smarty->display('json_data.tpl');
+        $this->RenderTemplate('json_data.tpl');
     }
 
     /**
@@ -419,7 +424,7 @@ abstract class Page implements IPage
 
         $this->Set('data', json_encode($objectToSerialize));
 
-        $this->smarty->display('json_data.tpl');
+        $this->RenderTemplate('json_data.tpl');
     }
 
     /**
@@ -428,11 +433,67 @@ abstract class Page implements IPage
      */
     protected function Display($templateName)
     {
-        if (!$this->InMaintenanceMode()) {
-            $this->smarty->display($templateName);
-        } else {
-            $this->smarty->display('maintenance.tpl');
+        if ($this->InMaintenanceMode()) {
+            $this->RenderTemplate('maintenance.tpl');
+            return;
         }
+        $this->RenderTemplate($templateName);
+    }
+
+    /**
+     * Selects the appropriate template engine and renders the given template.
+     *
+     * Checks for a Twig counterpart first; if one exists it is rendered via
+     * TwigRenderer. Otherwise falls back to Smarty. In debug mode
+     * ?template_engine=smarty forces Smarty (see TemplateEngineOverride).
+     */
+    protected function RenderTemplate(string $templateName): void
+    {
+        // The footer of each engine names itself (debug mode only)
+        $this->renderer->assign('ShowTemplateEngine', TemplateEngineOverride::Enabled());
+
+        $twigName = TemplateEngineOverride::TwigAllowed()
+            ? \LibreBooking\Common\Templating\EngineSelector::twigNameFor($templateName, $this->getTemplateSearchDirs())
+            : null;
+
+        if ($twigName !== null) {
+            $resources = Resources::GetInstance();
+            $twig = new TwigRenderer($resources, $this->path);
+
+            // Prepend any custom search dirs so the Twig loader can find them.
+            foreach (array_reverse($this->getTemplateSearchDirs()) as $dir) {
+                $twig->addTemplateDirectory($dir);
+            }
+
+            foreach ($this->renderer->getTemplateVars() as $k => $v) {
+                $twig->assign($k, $v);
+            }
+
+            $twig->Validators = $this->renderer->validators();
+
+            $html = $twig->render($twigName);
+            TemplateEngineOverride::SendEngineHeader(TemplateEngineOverride::TWIG);
+            echo $html;
+            return;
+        }
+
+        TemplateEngineOverride::SendEngineHeader(TemplateEngineOverride::SMARTY);
+        $this->smarty->display($templateName);
+    }
+
+    /**
+     * Returns the filesystem directories in which templates are searched.
+     * Override in subclasses (e.g., in tests) to inject a custom search path.
+     *
+     * @return string[]
+     */
+    protected function getTemplateSearchDirs(): array
+    {
+        $langDir = ROOT_DIR . 'lang/' . $this->GetVar('CurrentLanguage');
+        return [
+            ROOT_DIR . 'tpl',
+            $langDir,
+        ];
     }
 
     protected function DisplayCsv($templateName, $fileName)

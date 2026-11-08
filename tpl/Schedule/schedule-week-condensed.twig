@@ -1,0 +1,85 @@
+{# schedule-week-condensed.tpl #}
+{% extends 'Schedule/schedule.twig' %}
+
+{% block legend %}{% endblock %}
+
+{% block reservations %}
+{% import 'Schedule/_slot_macros_condensed.twig' as slot %}
+
+{% set TodaysDate = now() %}
+{% set columnWidth = (1 / ((BoundDates|default([])|length) + 1)) * 100 %}
+<div id="reservations">
+    <table class="reservations condensed w-100" cellpadding="0">
+        <thead>
+            <tr>
+                <td style="width:{{ columnWidth }}%">&nbsp;</td>
+                {% for date in BoundDates %}
+                    {% set datePeriods = DailyLayout.GetPeriods(date) %}
+                    {% if datePeriods|default([])|length != 0 %}{# dont show if there are no slots #}
+                        {% set tdclass = '' %}
+                        {% if date.DateEquals(TodaysDate) %}
+                            {% set tdclass = 'today' %}
+                        {% endif %}
+                        <td class="resdate-custom resdate {{ tdclass }}" style="width:{{ columnWidth }}%">
+                            {{ formatdate(date, null, null, 'schedule_daily') }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for resource in Resources %}
+                {% set resourceId = resource.Id %}
+                {% set href = constant('Pages::RESERVATION') ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId %}
+                <tr class="slots">
+                    <td class="resourcename"
+                        {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
+                        {% if resource.CanAccess %}
+                            <a href="{{ href|raw }}" resourceId="{{ resourceId }}" class="resourceNameSelector"
+                                {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                {% endif %}>{{ resource.Name|escape_once }}</a>
+                        {% else %}
+                            <span resourceId="{{ resource.Id }}" resourceId="{{ resource.Id }}" class="resourceNameSelector"
+                                {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                {% endif %}>{{ resource.Name|escape_once }}</span>
+                        {% endif %}
+                    </td>
+                    {% for date in BoundDates %}
+                        {% set datePeriods = DailyLayout.GetPeriods(date, false) %}
+                        {% set count = datePeriods|default([])|length %}
+                        {% if count != 0 %}{# dont show if there are no slots #}
+                            {% set min = datePeriods[0].BeginDate().TimeStamp() %}
+                            {% set max = datePeriods[count - 1].EndDate().TimeStamp() %}
+                            {% set addHref = CreateReservationPage ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                            <td style="vertical-align: top;" class="" ref="{{ addHref|raw }}&rd={{ formatdate(date, null, null, 'url') }}"
+                                data-href="{{ addHref|raw }}" data-start="{{ date.Format('Y-m-d H:i:s')|url_encode }}"
+                                data-end="{{ date.Format('Y-m-d H:i:s')|url_encode }}">
+
+                                {% set addButton = TodaysDate.LessThanOrEqual(date) or TodaysDate.DateEquals(date) or AllowCreatePastReservationsButton %}
+                                {% if addButton %}
+                                    <div class="reservable clickres" ref="{{ addHref|raw }}&rd={{ formatdate(date, null, null, 'url') }}"
+                                        data-href="{{ addHref|raw }}" data-start="{{ date.Format('Y-m-d H:i:s')|url_encode }}"
+                                        data-end="{{ date.Format('Y-m-d H:i:s')|url_encode }}">
+                                        <i class="bi bi-plus-circle-fill pe-none"></i> {{ translate('CreateReservation') }}
+                                        <input type="hidden" class="href" value="{{ addHref|raw }}" />
+                                    </div>
+                                {% endif %}
+                                <div class="reservations" data-min="{{ min }}" data-max="{{ max }}" data-resourceid="{{ resourceId }}"></div>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{#
+  Note: the Smarty counterpart (schedule-week-condensed.tpl) defines a
+  {block name="scripts"} which does NOT exist in the parent schedule.tpl —
+  so Smarty silently discards it and produces no extra JS output.
+  We match that by not overriding any block here.
+  The $(document).ready click handler for .reserved cells is NOT output
+  in either engine for the condensed variant — JavaScript handles it at
+  runtime.
+#}
