@@ -8,6 +8,67 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class SmartyPageTest extends TestBase
 {
+    public function testHtmlLinkEscapesTextAndAttributes(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('label', '<b>Users</b> &amp; Groups');
+        $page->assign('url', '/users?name=" onclick="alert(1)&all=1');
+        $page->assign('title', 'Users" onmouseover="alert(1)');
+
+        $output = $page->fetch('string:{html_link key=$label href=$url title=$title data-title=$title}');
+
+        $this->assertStringContainsString('&lt;b&gt;Users&lt;/b&gt; &amp; Groups</a>', $output);
+        $this->assertStringContainsString('href="/users?name=&quot; onclick=&quot;alert(1)&amp;all=1"', $output);
+        $this->assertStringContainsString('title="Users&quot; onmouseover=&quot;alert(1)"', $output);
+        $this->assertStringContainsString('data-title="Users&quot; onmouseover=&quot;alert(1)"', $output);
+        $this->assertStringNotContainsString('&amp;amp;', $output);
+    }
+
+    public function testTextboxEscapesAdditionalAttributesAndItsOwnAttributes(): void
+    {
+        $page = new SmartyPage();
+        $page->assign('attribute', 'field" onfocus="alert(1)');
+        $page->assign('placeholder', 'Name &amp; surname <required>');
+
+        $output = $page->fetch('string:{textbox name=FIRST_NAME id=$attribute type=$attribute data-title=$attribute placeholder=$placeholder}');
+
+        $this->assertStringContainsString('id="field&quot; onfocus=&quot;alert(1)"', $output);
+        $this->assertStringContainsString('type="field&quot; onfocus=&quot;alert(1)"', $output);
+        $this->assertStringContainsString('data-title="field&quot; onfocus=&quot;alert(1)"', $output);
+        $this->assertStringContainsString('placeholder="Name &amp; surname &lt;required&gt;"', $output);
+        $this->assertSame(1, substr_count($output, ' id="'));
+    }
+
+    public function testObjectOptionsEscapeLabelsAndValuesWithoutChangingSelection(): void
+    {
+        $page = new SmartyPage();
+        $value = 'room" onclick="alert(1)';
+        $label = '</option><script>alert(1)</script> &amp; Room';
+        $page->assign('options', [(object) ['id' => $value, 'name' => $label]]);
+        $page->assign('selected', $value);
+
+        $output = $page->fetch('string:{object_html_options options=$options key=id label=name usemethod=false selected=$selected}');
+
+        $this->assertStringContainsString('value="room&quot; onclick=&quot;alert(1)" selected="selected"', $output);
+        $this->assertStringContainsString('label="&lt;/option&gt;&lt;script&gt;alert(1)&lt;/script&gt; &amp; Room"', $output);
+        $this->assertStringContainsString('>&lt;/option&gt;&lt;script&gt;alert(1)&lt;/script&gt; &amp; Room</option>', $output);
+        $this->assertStringNotContainsString('<script>', $output);
+    }
+
+    public function testJavascriptArrayPreservesValuesWithoutClosingScript(): void
+    {
+        $page = new SmartyPage();
+        $values = ['quote' => '"', 'markup' => '</script><script>alert(1)</script>', 'newline' => "line\nnext", 'slash' => 'a\\b', 'number' => 7];
+        $page->assign('values', $values);
+
+        $output = $page->fetch('string:{js_array array=$values}');
+
+        $this->assertSame(['"', '</script><script>alert(1)</script>', "line\nnext", 'a\\b', '7'], json_decode($output, true, flags: JSON_THROW_ON_ERROR));
+        $this->assertStringNotContainsString('<', $output);
+        $this->assertSame('[]', $page->CreateJavascriptArray(['array' => []], null));
+        $this->assertSame(["Jos\u{FFFD}"], json_decode($page->CreateJavascriptArray(['array' => ["Jos\xE9"]], null), true));
+    }
+
     public function testGlobalHeaderDisplaysWarningWhenScriptUrlIsEmpty(): void
     {
         $page = new SmartyPage();

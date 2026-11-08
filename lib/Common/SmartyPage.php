@@ -291,10 +291,17 @@ class SmartyPage extends Smarty
 
         $attributes = new StringBuilder();
         foreach ($extraKeys as $key) {
-            $attributes->Append("$key=\"{$params[$key]}\" ");
+            $value = $this->EscapeHtml($params[$key]);
+            $attributes->Append("$key=\"$value\" ");
         }
 
         return $attributes->ToString();
+    }
+
+    private function EscapeHtml(mixed $value): string
+    {
+        // Stored values can contain legacy HTML entities. Preserve those entities.
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
     public function PrintLink($params, $smarty)
@@ -314,6 +321,10 @@ class SmartyPage extends Smarty
 
         $knownAttributes = ['key', 'title', 'href'];
         $attributes = $this->AppendAttributes($params, $knownAttributes);
+
+        $href = $this->EscapeHtml($href);
+        $title = $this->EscapeHtml($title);
+        $string = $this->EscapeHtml($string);
 
         return "<a href=\"$href\" class=\"link-primary\" title=\"$title\" $attributes><i class=\"bi bi-people-fill me-1\"></i>$string</a>";
     }
@@ -474,7 +485,7 @@ class SmartyPage extends Smarty
             $params['placeholder'] = $this->Resources->GetString($params['placeholderkey']);
         }
 
-        $knownAttributes = ['value', 'type', 'name', 'placeholderkey', 'required'];
+        $knownAttributes = ['value', 'type', 'name', 'id', 'placeholderkey', 'required'];
         $attributes = $this->AppendAttributes($params, $knownAttributes);
 
         if ($type == 'password') {
@@ -499,13 +510,13 @@ class SmartyPage extends Smarty
         foreach ($options as $option) {
             $_key = ($usemethod) ? $option->$key() : $option->$key;
             $_label = ($usemethod) ? $option->$label() : $option->$label;
-            $isselected = ($_key == $selected) ? 'selected="selected"' : '';
+            $isselected = ($_key == $selected) ? ' selected="selected"' : '';
             $builder->Append(sprintf(
                 '<option label="%s" value="%s"%s>%s</option>',
-                $_label,
-                $_key,
+                $this->EscapeHtml($_label),
+                $this->EscapeHtml($_key),
                 $isselected,
-                $_label
+                $this->EscapeHtml($_label)
             ));
         }
 
@@ -883,11 +894,13 @@ class SmartyPage extends Smarty
 
     public function CreateJavascriptArray($params, $smarty)
     {
-        $array = $params['array'];
+        // Keep the existing string-array contract, including for keyed input arrays.
+        $values = array_map(static fn ($value): string => (string) $value, array_values($params['array']));
 
-        $string = implode('","', $array);
-
-        return "[\"$string\"]";
+        return json_encode(
+            $values,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR
+        );
     }
 
     /**
