@@ -225,6 +225,64 @@ class CalendarPresenterTest extends TestBase
         $this->presenter->ProcessDataRequest('events');
     }
 
+    public function testSelectedGroupLoadsGroupResourcesButSavesGroupFilter(): void
+    {
+        $scheduleId = 2;
+        $groupId = 7;
+        $groupResourceIds = [10, 11];
+
+        $this->page->method('GetResourceId')->willReturn(null);
+        $this->page->method('GetScheduleId')->willReturn($scheduleId);
+        $this->page->method('GetGroupId')->willReturn($groupId);
+        $this->page->method('GetUserId')->willReturn(null);
+        $this->page->method('GetParticipantId')->willReturn(null);
+
+        $resourceGroups = $this->createMock(ResourceGroupTree::class);
+        $resourceGroups
+            ->expects($this->once())
+            ->method('GetResourceIds')
+            ->with($groupId)
+            ->willReturn($groupResourceIds);
+        $this->resourceService
+            ->method('GetResourceGroups')
+            ->willReturn($resourceGroups);
+        $this->resourceService
+            ->method('GetAllResources')
+            ->willReturn([]);
+        $this->resourceService
+            ->method('GetResource')
+            ->willReturnCallback(fn (int $id) => new FakeBookableResource($id));
+        $this->scheduleRepository
+            ->method('GetLayout')
+            ->willReturn(new FakeScheduleLayout());
+
+        $this->repository
+            ->expects($this->once())
+            ->method('GetReservations')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                null,
+                null,
+                $scheduleId,
+                $groupResourceIds,
+            )
+            ->willReturn([]);
+        $this->repository
+            ->method('GetBlackoutsWithin')
+            ->willReturn([]);
+
+        $this->presenter->ProcessDataRequest('events');
+
+        $savedFilter = $this->userRepository->_UpdatedUser->GetPreference(UserPreferences::CALENDAR_FILTER);
+        $this->assertSame('|2|7', $savedFilter);
+
+        $restored = UserCalendarFilter::Deserialize($savedFilter);
+        $this->assertNull($restored->ResourceId);
+        $this->assertSame($scheduleId, $restored->ScheduleId);
+        $this->assertSame($groupId, $restored->GroupId);
+    }
+
     public function testGuestCalendarEventsUseViewReservationPage(): void
     {
         $referenceNumber = 'guest-ref-123';
