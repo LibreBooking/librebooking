@@ -108,6 +108,84 @@ class PageEngineSelectionTest extends TestBase
     }
 
     /**
+     * Renders a real template whose engines differ observably: Smarty prints
+     * ResourceName raw, Twig escapes it.
+     */
+    private function renderQrPage(): string
+    {
+        $page = $this->makePage(searchDirs: [ROOT_DIR . 'tpl']);
+        $page->callSet('ResourceName', '<b>engine-probe</b>');
+        $page->callSet('QRImageUrl', 'qr.png');
+
+        ob_start();
+        $page->callDisplay('Admin/Resources/show_resource_qr.tpl');
+        return (string) ob_get_clean();
+    }
+
+    public function testRendersTwigByDefault(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+
+        $this->assertStringContainsString('&lt;b&gt;engine-probe', $this->renderQrPage());
+    }
+
+    public function testQueryOverrideRendersSmartyInDebugMode(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+        $this->fakeServer->SetQuerystring(QueryStringKeys::TEMPLATE_ENGINE, 'smarty');
+
+        $this->assertStringContainsString('<b>engine-probe</b>', $this->renderQrPage());
+    }
+
+    public function testCookieOverrideRendersSmartyInDebugMode(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+        $this->fakeServer->SetCookie(new Cookie(CookieKeys::TEMPLATE_ENGINE, 'smarty'));
+
+        $this->assertStringContainsString('<b>engine-probe</b>', $this->renderQrPage());
+    }
+
+    public function testOverrideIsIgnoredWithoutDebugMode(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, false);
+        $this->fakeServer->SetQuerystring(QueryStringKeys::TEMPLATE_ENGINE, 'smarty');
+
+        $this->assertStringContainsString('&lt;b&gt;engine-probe', $this->renderQrPage());
+    }
+
+    public function testFooterNamesTheRenderingEngineInDebugMode(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+        $this->assertStringContainsString('Template engine: Twig', $this->renderQrPage());
+
+        $this->fakeServer->SetQuerystring(QueryStringKeys::TEMPLATE_ENGINE, 'smarty');
+        $this->assertStringContainsString('Template engine: Smarty', $this->renderQrPage());
+    }
+
+    public function testFooterHasNoEngineIndicatorWithoutDebugMode(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, false);
+
+        $this->assertStringNotContainsString('Template engine:', $this->renderQrPage());
+    }
+
+    public function testPageStoresTheRequestedEngineWithoutChangingTheRequest(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+        $this->fakeServer->SetQuerystring(QueryStringKeys::TEMPLATE_ENGINE, 'smarty');
+        $this->fakeServer->SetQuerystring(QueryStringKeys::REFERENCE_NUMBER, 'abc');
+        $getBefore = $_GET;
+        $serverQueryBefore = $this->fakeServer->Get;
+
+        $this->makePage(searchDirs: [$this->tempDir]);
+
+        $this->assertSame('smarty', $this->fakeServer->GetCookie(CookieKeys::TEMPLATE_ENGINE));
+        $this->assertSame($getBefore, $_GET);
+        $this->assertSame($serverQueryBefore, $this->fakeServer->Get);
+        $this->assertSame('abc', $this->fakeServer->GetQuerystring(QueryStringKeys::REFERENCE_NUMBER));
+    }
+
+    /**
      * Create a concrete Page subclass whose search dirs can be overridden,
      * allowing isolated filesystem tests.
      *

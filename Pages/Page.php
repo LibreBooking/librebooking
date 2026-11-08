@@ -41,6 +41,7 @@ abstract class Page implements IPage
 
         $this->path = str_repeat('../', $pageDepth);
         $this->server = ServiceLocator::GetServer();
+        TemplateEngineOverride::PersistRequestedEngine();
         $resources = Resources::GetInstance();
 
         $smartyRenderer = new SmartyRenderer($resources, $this->path);
@@ -443,14 +444,17 @@ abstract class Page implements IPage
      * Selects the appropriate template engine and renders the given template.
      *
      * Checks for a Twig counterpart first; if one exists it is rendered via
-     * TwigRenderer. Otherwise falls back to Smarty.
+     * TwigRenderer. Otherwise falls back to Smarty. In debug mode
+     * ?template_engine=smarty forces Smarty (see TemplateEngineOverride).
      */
     protected function RenderTemplate(string $templateName): void
     {
-        $twigName = \LibreBooking\Common\Templating\EngineSelector::twigNameFor(
-            $templateName,
-            $this->getTemplateSearchDirs()
-        );
+        // The footer of each engine names itself (debug mode only)
+        $this->renderer->assign('ShowTemplateEngine', TemplateEngineOverride::Enabled());
+
+        $twigName = TemplateEngineOverride::TwigAllowed()
+            ? \LibreBooking\Common\Templating\EngineSelector::twigNameFor($templateName, $this->getTemplateSearchDirs())
+            : null;
 
         if ($twigName !== null) {
             $resources = Resources::GetInstance();
@@ -467,10 +471,13 @@ abstract class Page implements IPage
 
             $twig->Validators = $this->renderer->validators();
 
-            echo $twig->render($twigName);
+            $html = $twig->render($twigName);
+            TemplateEngineOverride::SendEngineHeader(TemplateEngineOverride::TWIG);
+            echo $html;
             return;
         }
 
+        TemplateEngineOverride::SendEngineHeader(TemplateEngineOverride::SMARTY);
         $this->smarty->display($templateName);
     }
 

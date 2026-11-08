@@ -5,6 +5,7 @@ require_once(ROOT_DIR . 'lib/Common/LoginTime.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyPage.php');
 require_once(ROOT_DIR . 'lib/Common/Templating/SmartyRenderer.php');
 require_once(ROOT_DIR . 'lib/Common/Templating/LibreBookingExtension.php');
+require_once(ROOT_DIR . 'lib/Common/Templating/TemplateEngineOverride.php');
 require_once(ROOT_DIR . 'lib/Common/Templating/TwigRenderer.php');
 require_once(ROOT_DIR . 'lib/Common/Resources.php');
 require_once(ROOT_DIR . 'lib/Common/ServiceLocator.php');
