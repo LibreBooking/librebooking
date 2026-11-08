@@ -412,7 +412,7 @@ abstract class ReservationPage extends Page implements IReservationPage
             $params['timezone'] = $timezone;
         }
 
-        return $this->smarty->FormatDate($params, $this->smarty);
+        return $this->smarty->FormatDate($params, $this->smarty->createTemplate('string:'));
     }
 
     private function PdfResources(): array

@@ -1109,12 +1109,13 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindResourceImages(BookableResource $resource)
     {
         $response = ['image' => null, 'images' => []];
+        $template = $this->smarty->createTemplate('string:');
 
         if ($resource->HasImage()) {
-            $response = ['image' => $this->smarty->GetResourceImage(['image' => $resource->GetImage()], $this->smarty), 'images' => []];
+            $response = ['image' => $this->smarty->GetResourceImage(['image' => $resource->GetImage()], $template), 'images' => []];
         }
         foreach ($resource->GetImages() as $image) {
-            $response['images'][] = $this->smarty->GetResourceImage(['image' => $image], $this->smarty);
+            $response['images'][] = $this->smarty->GetResourceImage(['image' => $image], $template);
         }
         $this->SetJsonResponse($response);
     }
