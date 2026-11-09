@@ -781,10 +781,11 @@ class ManageResourcesPresenter extends ActionPresenter
                         $resource->DisableSubscription();
                     }
                 }
-                if (!empty($credits)) {
+                // A blank field (null) leaves credits unchanged; an explicit 0 applies.
+                if ($credits !== null) {
                     $resource->SetCreditsPerSlot($credits);
                 }
-                if (!empty($peakCredits)) {
+                if ($peakCredits !== null) {
                     $resource->SetPeakCreditsPerSlot($peakCredits);
                 }
 

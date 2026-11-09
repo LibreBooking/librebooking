@@ -372,21 +372,65 @@ abstract class Page implements IPage
      */
     protected function GetQuerystringInt(string $key): ?int
     {
-        $value = $this->GetQuerystring($key);
-        if (!is_string($value) || !ctype_digit($value)) {
+        return self::ParseInt(value: $this->GetQuerystring($key), allowNegative: false);
+    }
+
+    /**
+     * Reads a form value that must be an integer. Negative values are kept,
+     * because several forms use -1 to mean "unchanged" or "none".
+     *
+     * @return int|null null when the value is missing, empty, not an integer,
+     *                  outside the int range, or submitted as an array
+     */
+    protected function GetFormInt(string $key): ?int
+    {
+        return self::ParseInt(value: $this->GetForm($key), allowNegative: true);
+    }
+
+    /**
+     * Reads a form value that must be a number, such as a decimal credit amount.
+     *
+     * @return float|null null when the value is missing, empty, not numeric,
+     *                    not finite, or submitted as an array
+     */
+    protected function GetFormFloat(string $key): ?float
+    {
+        $value = $this->GetForm($key);
+        if (!is_string($value) || !is_numeric($value)) {
+            return null;
+        }
+
+        $floatValue = (float)$value;
+
+        return is_finite($floatValue) ? $floatValue : null;
+    }
+
+    /**
+     * @param mixed $value raw request value
+     */
+    private static function ParseInt(mixed $value, bool $allowNegative): ?int
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+
+        $negative = $allowNegative && str_starts_with($value, '-');
+        $unsigned = $negative ? substr($value, 1) : $value;
+        if (!ctype_digit($unsigned)) {
             return null;
         }
 
         // Leading zeros are accepted; compare without them so the round trip
-        // detects values that (int) would clamp to PHP_INT_MAX.
-        $digits = ltrim($value, '0');
+        // detects values that (int) would clamp to PHP_INT_MAX or PHP_INT_MIN.
+        $digits = ltrim($unsigned, '0');
         if ($digits === '') {
             return 0;
         }
 
-        $intValue = (int)$digits;
+        $signedDigits = $negative ? '-' . $digits : $digits;
+        $intValue = (int)$signedDigits;
 
-        return (string)$intValue === $digits ? $intValue : null;
+        return (string)$intValue === $signedDigits ? $intValue : null;
     }
 
     /**

@@ -48,4 +48,68 @@ class ManageResourcesPageTest extends TestBase
             'no images' => [null, [], ['image' => null, 'images' => []]],
         ];
     }
+
+    public function testBulkUpdateDropdownsKeepTheUnchangedSentinel(): void
+    {
+        foreach ([FormKeys::SCHEDULE_ID, FormKeys::RESOURCE_TYPE_ID, FormKeys::RESOURCE_ADMIN_GROUP_ID, FormKeys::RESOURCE_STATUS_ID, FormKeys::ENABLE_CHECK_IN, FormKeys::ALLOW_CONCURRENT_RESERVATIONS] as $key) {
+            $this->fakeServer->SetForm($key, '-1');
+        }
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertSame(-1, $page->GetScheduleId());
+        $this->assertSame(-1, $page->GetResourceTypeId());
+        $this->assertSame(-1, $page->GetAdminGroupId());
+        $this->assertSame(-1, $page->GetStatusId());
+        $this->assertSame(-1, $page->GetBulkEnableCheckin());
+        $this->assertSame(-1, $page->GetBulkAllowConcurrentReservations());
+    }
+
+    public function testCreditsKeepDecimals(): void
+    {
+        $this->fakeServer->SetForm(FormKeys::CREDITS, '1.5');
+        $this->fakeServer->SetForm(FormKeys::PEAK_CREDITS, '0.25');
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertSame(1.5, $page->GetCredits());
+        $this->assertSame(0.25, $page->GetPeakCredits());
+    }
+
+    public function testCreditsDistinguishZeroFromBlank(): void
+    {
+        $this->fakeServer->SetForm(FormKeys::CREDITS, '0.00');
+        $this->fakeServer->SetForm(FormKeys::PEAK_CREDITS, '');
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertSame(0.0, $page->GetCredits());
+        $this->assertNull($page->GetPeakCredits());
+    }
+
+    public function testEmptyAdminGroupAndPermissionTypeNone(): void
+    {
+        $this->fakeServer->SetForm(FormKeys::RESOURCE_ADMIN_GROUP_ID, '');
+        $this->fakeServer->SetForm(FormKeys::PERMISSION_TYPE, (string)ResourcePermissionType::None);
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertNull($page->GetAdminGroupId());
+        $this->assertSame(ResourcePermissionType::None, $page->GetPermissionType());
+    }
+
+    public function testResourceIdFallsBackFromQuerystringToForm(): void
+    {
+        $this->fakeServer->SetForm(FormKeys::PK, '42');
+        $this->assertSame(42, $this->CreateFormReadingPage()->GetResourceId());
+
+        $this->fakeServer->SetQuerystring(QueryStringKeys::RESOURCE_ID, '7');
+        $this->assertSame(7, $this->CreateFormReadingPage()->GetResourceId());
+    }
+
+    private function CreateFormReadingPage(): ManageResourcesPage
+    {
+        return new class () extends ManageResourcesPage {
+            public function __construct()
+            {
+                $this->server = ServiceLocator::GetServer();
+            }
+        };
+    }
 }

@@ -5,20 +5,14 @@ require_once(ROOT_DIR . 'Presenters/Admin/ManageAccessoriesPresenter.php');
 
 interface IManageAccessoriesPage extends IActionPage
 {
-    /**
-     * @return int
-     */
-    public function GetAccessoryId();
+    public function GetAccessoryId(): ?int;
 
     /**
      * @return string
      */
     public function GetAccessoryName();
 
-    /**
-     * @return int
-     */
-    public function GetQuantityAvailable();
+    public function GetQuantityAvailable(): ?int;
 
     /**
      * @param $accessories AccessoryDto[]
@@ -81,12 +75,9 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
         $this->presenter->ProcessAction();
     }
 
-    /**
-     * @return int
-     */
-    public function GetAccessoryId()
+    public function GetAccessoryId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::ACCESSORY_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::ACCESSORY_ID);
     }
 
     /**
@@ -97,12 +88,9 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
         return $this->GetForm(FormKeys::ACCESSORY_NAME);
     }
 
-    /**
-     * @return int
-     */
-    public function GetQuantityAvailable()
+    public function GetQuantityAvailable(): ?int
     {
-        return $this->GetForm(FormKeys::ACCESSORY_QUANTITY_AVAILABLE);
+        return $this->GetFormInt(key: FormKeys::ACCESSORY_QUANTITY_AVAILABLE);
     }
 
     public function ProcessDataRequest($dataRequest)

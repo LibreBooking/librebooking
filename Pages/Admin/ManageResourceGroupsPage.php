@@ -15,58 +15,37 @@ interface IManageResourceGroupsPage extends IActionPage
      */
     public function BindResources($resources);
 
-    /**
-     * @return int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetGroupId();
+    public function GetGroupId(): ?int;
 
     /**
      * @return string
      */
     public function GetGroupName();
 
-    /**
-     * @return int
-     */
-    public function GetParentId();
+    public function GetParentId(): ?int;
 
     /**
      * @param ResourceGroup $newGroup
      */
     public function BindNewGroup(ResourceGroup $newGroup);
 
-    /**
-     * @return int
-     */
-    public function GetNodeId();
+    public function GetNodeId(): ?int;
 
     /**
      * @return string
      */
     public function GetNodeType();
 
-    /**
-     * @return int
-     */
-    public function GetTargetNodeId();
+    public function GetTargetNodeId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetPreviousNodeId();
+    public function GetPreviousNodeId(): ?string;
 }
 
 class ManageResourceGroupsPage extends ActionPage implements IManageResourceGroupsPage
 {
-    /**
-     * @var ManageResourcesPresenter
-     */
-    protected $_presenter;
+    protected ManageResourceGroupsPresenter $_presenter;
 
     public function __construct()
     {
@@ -110,20 +89,14 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         $this->Set('Resources', $resources);
     }
 
-    /**
-     * @return int
-     */
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetGroupId()
+    public function GetGroupId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::GROUP_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::GROUP_ID);
     }
 
     /**
@@ -134,12 +107,9 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         return $this->GetForm(FormKeys::GROUP_NAME);
     }
 
-    /**
-     * @return int
-     */
-    public function GetParentId()
+    public function GetParentId(): ?int
     {
-        return $this->GetForm(FormKeys::PARENT_ID);
+        return $this->GetFormInt(key: FormKeys::PARENT_ID);
     }
 
     public function BindNewGroup(ResourceGroup $newGroup)
@@ -147,12 +117,9 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         $this->SetJson(json_encode($newGroup));
     }
 
-    /**
-     * @return int
-     */
-    public function GetNodeId()
+    public function GetNodeId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::NODE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::NODE_ID);
     }
 
     /**
@@ -163,24 +130,18 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         return $this->GetQuerystring(QueryStringKeys::TYPE);
     }
 
-    /**
-     * @return int
-     */
-    public function GetTargetNodeId()
+    public function GetTargetNodeId(): ?int
     {
-        $groupId = $this->GetQuerystring(QueryStringKeys::GROUP_ID);
-
-        if (empty($groupId) || strtolower($groupId) == 'null') {
-            return null;
-        }
-        return $groupId;
+        // The resource group tree sends the literal string "null" when moving a
+        // group to the top level; GetQuerystringInt() returns null for it.
+        return $this->GetQuerystringInt(key: QueryStringKeys::GROUP_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetPreviousNodeId()
+    public function GetPreviousNodeId(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::PREVIOUS_ID);
+        // A tree node ID such as "resource-3-7"; only used for logging.
+        $previousId = $this->GetQuerystring(QueryStringKeys::PREVIOUS_ID);
+
+        return is_string($previousId) ? $previousId : null;
     }
 }

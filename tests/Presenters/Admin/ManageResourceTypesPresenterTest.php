@@ -41,7 +41,7 @@ class ManageResourceTypesPresenterTest extends TestBase
     {
         $types = [new ResourceType(1, 'name', 'desc')];
 
-        $attributes = $this->createMock('IEntityAttributeList');
+        $attributes = [new FakeCustomAttribute(1)];
 
         $this->resourceRepository
                 ->expects($this->once())
