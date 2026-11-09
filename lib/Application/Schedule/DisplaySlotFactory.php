@@ -20,31 +20,11 @@ class DisplaySlotFactory
                 }
             }
         }
-
-        return "displayUnreservable$functionSuffix";
     }
 
     private function UserHasAdminRights()
     {
         return ServiceLocator::GetServer()->GetUserSession()->IsAdmin;
-    }
-
-    private function IsMyReservation(IReservationSlot $slot)
-    {
-        $mySession = ServiceLocator::GetServer()->GetUserSession();
-        return $slot->IsOwnedBy($mySession);
-    }
-
-    private function IsAdminFor(IReservationSlot $slot)
-    {
-        $mySession = ServiceLocator::GetServer()->GetUserSession();
-        return $mySession->IsAdmin || $mySession->IsAdminForGroup($slot->OwnerGroupIds());
-    }
-
-    private function AmIParticipating(IReservationSlot $slot)
-    {
-        $mySession = ServiceLocator::GetServer()->GetUserSession();
-        return $slot->IsParticipating($mySession);
     }
 
     /**
@@ -96,8 +76,6 @@ class StaticDisplaySlotFactory
                 }
             }
         }
-
-        return null;
     }
 
     private function UserHasAdminRights()

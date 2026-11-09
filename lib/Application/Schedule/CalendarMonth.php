@@ -32,7 +32,7 @@ class CalendarMonth implements ICalendarSegment
         $weeks = floor(($daysInMonth + $this->firstDay->Weekday() - 1) / 7);
 
         for ($week = 0; $week <= $weeks; $week++) {
-            $this->weeks[$week] = new CalendarWeek($timezone);
+            $this->weeks[$week] = new CalendarWeek();
         }
 
         for ($dayOffset = 0; $dayOffset < $daysInMonth; $dayOffset++) {

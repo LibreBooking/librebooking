@@ -15,7 +15,7 @@ class ReportCell
     private $chartValue;
 
     /**
-     * @var ChartType|string|null
+     * @var string|null ChartColumnType constant
      */
     private $chartColumnType;
     private $chartGroup;

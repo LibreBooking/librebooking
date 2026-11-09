@@ -172,7 +172,7 @@ class ReservationListItem
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetTitle()
     {
@@ -223,7 +223,6 @@ class ReservationListItem
         $dto->IsReservation = $this->IsReservation();
         $dto->IsBuffered = false;
         $dto->IsBuffer = false;
-        $dto->Label = $this->GetTitle();
         $dto->IsPending = $this->GetPending();
         $dto->IsNew = $this->GetIsNew();
         $dto->IsUpdated = $this->GetIsUpdated();

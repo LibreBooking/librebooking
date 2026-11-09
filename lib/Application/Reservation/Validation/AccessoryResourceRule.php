@@ -82,7 +82,7 @@ class AccessoryResourceRule implements IReservationValidationRule
                 foreach ($resourceAccessories as $accessory) {
                     $accessoryId = $accessory->GetId();
 
-                    if (isset($bookedAccessories[$accessoryId]) && $bookedAccessories[$accessoryId] !== null) {
+                    if (isset($bookedAccessories[$accessoryId])) {
                         $resource = $accessory->GetResource($resourceId);
 
                         // Validate minimum quantity

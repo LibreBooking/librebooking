@@ -48,11 +48,6 @@ class ScheduleReservationList implements IScheduleReservationList
     private $_layoutIndexByEndTime = [];
 
     /**
-     * @var Time
-     */
-    private $_midnight;
-
-    /**
      * @var LayoutIndexCache
      */
     private $layoutIndexCache;
@@ -86,7 +81,6 @@ class ScheduleReservationList implements IScheduleReservationList
         $this->_layoutDateStart = $layoutDate->ToTimezone($this->_destinationTimezone)->GetDate();
         $this->_layoutDateEnd = $this->_layoutDateStart->AddDays(1);
         $this->_layoutItems = $this->_layout->GetLayout($layoutDate, $hideBlockedPeriods);
-        $this->_midnight = new Time(0, 0, 0, $this->_destinationTimezone);
 
         $this->layoutIndexCache = new LayoutIndexCache();
 
