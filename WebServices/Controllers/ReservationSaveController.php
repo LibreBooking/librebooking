@@ -368,26 +368,6 @@ class ReservationRequestResponseFacade implements IReservationSavePage
     private $recurrenceRule;
 
     /**
-     * @var bool
-     */
-    private $_canBeRetried;
-
-    /**
-     * @var ReservationRetryParameter[]
-     */
-    private $_retryParameters = [];
-
-    /**
-     * @var string[]
-     */
-    private $_retryMessages = [];
-
-    /**
-     * @var bool
-     */
-    private $_canJoinWaitlist = false;
-
-    /**
      * @param ReservationRequest $request
      * @param WebServiceUserSession $session
      */
@@ -682,7 +662,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      */
     public function SetCanBeRetried($canBeRetried)
     {
-        $this->_canBeRetried = $canBeRetried;
+        // The API response does not report whether a request can be retried.
     }
 
     /**
@@ -690,7 +670,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      */
     public function SetRetryParameters($retryParameters)
     {
-        $this->_retryParameters = $retryParameters;
+        // The API response does not report retry parameters.
     }
 
     /**
@@ -717,7 +697,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      */
     public function SetRetryMessages($messages)
     {
-        $this->_retryMessages = $messages;
+        // The API response does not report retry messages.
     }
 
     /**
@@ -725,7 +705,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      */
     public function SetCanJoinWaitList($canJoinWaitlist)
     {
-        $this->_canJoinWaitlist = $canJoinWaitlist;
+        // The API response does not report whether the waitlist can be joined.
     }
 
     /**

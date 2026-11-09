@@ -37,7 +37,6 @@ parameters:
             # Staged "next level" rollout: remove these one-by-one as each
             # area is fixed for the current target level.
             - lib/Application/
-            - WebServices/
             - tests/Application/
             - tests/Infrastructure/
             - tests/Integration/

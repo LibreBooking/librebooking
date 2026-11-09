@@ -70,7 +70,7 @@ class ResourceRequest extends JsonRequest
      */
     public $sortOrder;
     /**
-     * @var int
+     * @var int|null
      */
     public $statusId;
     /**
