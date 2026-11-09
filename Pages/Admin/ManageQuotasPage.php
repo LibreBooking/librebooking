@@ -35,35 +35,20 @@ interface IManageQuotasPage extends IActionPage
      */
     public function GetDuration();
 
-    /**
-     * @return float
-     */
-    public function GetLimit();
+    public function GetLimit(): ?float;
 
-    /**
-     * @return int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetGroupId();
+    public function GetGroupId(): ?int;
 
     /**
      * @return string
      */
     public function GetUnit();
 
-    /**
-     * @return int
-     */
-    public function GetQuotaId();
+    public function GetQuotaId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId();
+    public function GetScheduleId(): ?int;
 
     /**
      * @return bool
@@ -188,28 +173,19 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         return $this->GetForm(FormKeys::DURATION);
     }
 
-    /**
-     * @return string
-     */
-    public function GetLimit()
+    public function GetLimit(): ?float
     {
-        return $this->GetForm(FormKeys::LIMIT);
+        return $this->GetFormFloat(key: FormKeys::LIMIT);
     }
 
-    /**
-     * @return int
-     */
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetGroupId()
+    public function GetGroupId(): ?int
     {
-        return $this->GetForm(FormKeys::GROUP);
+        return $this->GetFormInt(key: FormKeys::GROUP);
     }
 
     /**
@@ -220,20 +196,14 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         return $this->GetForm(FormKeys::UNIT);
     }
 
-    /**
-     * @return int
-     */
-    public function GetQuotaId()
+    public function GetQuotaId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::QUOTA_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::QUOTA_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId()
+    public function GetScheduleId(): ?int
     {
-        return $this->GetForm(FormKeys::SCHEDULE_ID);
+        return $this->GetFormInt(key: FormKeys::SCHEDULE_ID);
     }
 
     public function ProcessDataRequest($dataRequest)
