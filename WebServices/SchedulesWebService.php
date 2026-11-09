@@ -77,8 +77,8 @@ class SchedulesWebService
     public function GetSlots($scheduleId)
     {
         $tz = $this->server->GetSession()->Timezone;
-        $startDate = $this->GetDate(WebServiceQueryStringKeys::START_DATE_TIME)->ToTimezone($tz);
-        $endDate = $this->GetDate(WebServiceQueryStringKeys::END_DATE_TIME)->ToTimezone($tz);
+        $startDate = $this->GetDate(WebServiceQueryStringKeys::START_DATE_TIME)?->ToTimezone($tz);
+        $endDate = $this->GetDate(WebServiceQueryStringKeys::END_DATE_TIME)?->ToTimezone($tz);
 
         $resourceId = $this->server->GetQueryString(WebServiceQueryStringKeys::RESOURCE_ID);
 
