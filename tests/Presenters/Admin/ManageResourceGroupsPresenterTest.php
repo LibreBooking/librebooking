@@ -111,7 +111,7 @@ class ManageResourceGroupsPresenterTest extends TestBase
         $nodeId = 1;
         $targetId = 2;
         $nodeType = ResourceGroup::GROUP_TYPE;
-        $previousNodeId = 3;
+        $previousNodeId = 'resource-2-3';
 
         $group = new ResourceGroup($nodeId, 'name', $previousNodeId);
         $group->MoveTo($targetId);

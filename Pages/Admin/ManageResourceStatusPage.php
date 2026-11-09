@@ -16,10 +16,7 @@ interface IManageResourceStatusPage extends IActionPage
 
 class ManageResourceStatusPage extends ActionPage implements IManageResourceStatusPage
 {
-    /**
-     * @var ManageResourceTypesPresenter
-     */
-    protected $presenter;
+    protected ManageResourceStatusPresenter $presenter;
 
     public function __construct()
     {
@@ -46,12 +43,13 @@ class ManageResourceStatusPage extends ActionPage implements IManageResourceStat
     }
 
     /**
+     * This page has no data requests. ManageResourceStatusPresenter has no
+     * ProcessDataRequest(), so forwarding the request would fail.
+     *
      * @param $dataRequest string
-     * @return void
      */
-    public function ProcessDataRequest($dataRequest)
+    public function ProcessDataRequest($dataRequest): void
     {
-        $this->presenter->ProcessDataRequest($dataRequest);
     }
 
     public function BindResourceStatusReasons($statusReasonList)

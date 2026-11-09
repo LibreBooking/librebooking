@@ -9,15 +9,9 @@ require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 
 interface IUpdateResourcePage
 {
-    /**
-     * @return int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId();
+    public function GetScheduleId(): ?int;
 
     /**
      * @return string
@@ -64,30 +58,21 @@ interface IUpdateResourcePage
      */
     public function GetBufferTime();
 
-    /**
-     * @return string
-     */
-    public function GetAllowMultiday();
+    public function GetAllowMultiday(): bool;
 
     /**
      * @return string
      */
     public function GetBulkAllowMultiday();
 
-    /**
-     * @return string
-     */
-    public function GetRequiresApproval();
+    public function GetRequiresApproval(): bool;
 
     /**
      * @return string
      */
     public function GetBulkRequiresApproval();
 
-    /**
-     * @return string
-     */
-    public function GetAutoAssign();
+    public function GetAutoAssign(): bool;
 
     /**
      * @return string
@@ -129,20 +114,11 @@ interface IUpdateResourcePage
      */
     public function GetMaxParticipants();
 
-    /**
-     * @return int
-     */
-    public function GetAdminGroupId();
+    public function GetAdminGroupId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetSortOrder();
+    public function GetSortOrder(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceTypeId();
+    public function GetResourceTypeId(): ?int;
 
     /**
      * @return bool
@@ -208,15 +184,9 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function BindResourceStatusReasons($reasons);
 
-    /**
-     * @return int
-     */
-    public function GetStatusId();
+    public function GetStatusId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetStatusReasonId();
+    public function GetStatusReasonId(): ?int;
 
     /**
      * @return string
@@ -283,20 +253,11 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function GetEndNoticeNone();
 
-    /**
-     * @return int
-     */
-    public function GetPermissionUserId();
+    public function GetPermissionUserId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetPermissionGroupId();
+    public function GetPermissionGroupId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetPermissionType();
+    public function GetPermissionType(): ?int;
 
     /**
      * @return string
@@ -356,25 +317,16 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function GetEnableCheckin();
 
-    /**
-     * @return bool
-     */
-    public function GetBulkEnableCheckin();
+    public function GetBulkEnableCheckin(): ?int;
 
     /**
      * @return string
      */
     public function GetAutoReleaseMinutes();
 
-    /**
-     * @return int
-     */
-    public function GetCredits();
+    public function GetCredits(): ?float;
 
-    /**
-     * @return int
-     */
-    public function GetPeakCredits();
+    public function GetPeakCredits(): ?float;
 
     public function BindUpdatedResourceCredits(BookableResource $resource);
 
@@ -437,10 +389,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function GetAllowConcurrentReservations();
 
-    /**
-     * @return int
-     */
-    public function GetBulkAllowConcurrentReservations();
+    public function GetBulkAllowConcurrentReservations(): ?int;
 
     /**
      * @return int
@@ -452,10 +401,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function SendStatusChangeMessage();
 
-    /**
-     * @return int
-     */
-    public function StatusChangeDays();
+    public function StatusChangeDays(): ?int;
 
     /**
      * @return string
@@ -573,19 +519,19 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->presenter->ProcessAction();
     }
 
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        $id = $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        $id = $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_ID);
         if (empty($id)) {
-            $id = $this->GetForm(FormKeys::PK);
+            $id = $this->GetFormInt(key: FormKeys::PK);
         }
 
         return $id;
     }
 
-    public function GetScheduleId()
+    public function GetScheduleId(): ?int
     {
-        return $this->GetForm(FormKeys::SCHEDULE_ID);
+        return $this->GetFormInt(key: FormKeys::SCHEDULE_ID);
     }
 
     public function GetValue()
@@ -652,26 +598,17 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::BUFFER_TIME);
     }
 
-    /**
-     * @return string
-     */
-    public function GetAllowMultiday()
+    public function GetAllowMultiday(): bool
     {
         return $this->GetCheckbox(FormKeys::ALLOW_MULTIDAY);
     }
 
-    /**
-     * @return string
-     */
-    public function GetRequiresApproval()
+    public function GetRequiresApproval(): bool
     {
         return $this->GetCheckbox(FormKeys::REQUIRES_APPROVAL);
     }
 
-    /**
-     * @return string
-     */
-    public function GetAutoAssign()
+    public function GetAutoAssign(): bool
     {
         return $this->GetCheckbox(FormKeys::AUTO_ASSIGN);
     }
@@ -724,12 +661,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::MAX_PARTICIPANTS);
     }
 
-    /**
-     * @return int
-     */
-    public function GetAdminGroupId()
+    public function GetAdminGroupId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_ADMIN_GROUP_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_ADMIN_GROUP_ID);
     }
 
     /**
@@ -767,12 +701,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return AttributeFormParser::GetAttributes($this->GetForm(FormKeys::ATTRIBUTE_PREFIX));
     }
 
-    /**
-     * @return int
-     */
-    public function GetSortOrder()
+    public function GetSortOrder(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_SORT_ORDER);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_SORT_ORDER);
     }
 
     /**
@@ -796,12 +727,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('ResourceTypes', $resourceTypes);
     }
 
-    /**
-     * @return int
-     */
-    public function GetResourceTypeId()
+    public function GetResourceTypeId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_TYPE_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_TYPE_ID);
     }
 
     /**
@@ -812,14 +740,14 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('StatusReasons', $reasons);
     }
 
-    public function GetStatusId()
+    public function GetStatusId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_STATUS_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_STATUS_ID);
     }
 
-    public function GetStatusReasonId()
+    public function GetStatusReasonId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_STATUS_REASON_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_STATUS_REASON_ID);
     }
 
     /**
@@ -972,19 +900,19 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->SetJson($attributeValue);
     }
 
-    public function GetPermissionUserId()
+    public function GetPermissionUserId(): ?int
     {
-        return $this->GetForm(FormKeys::USER_ID);
+        return $this->GetFormInt(key: FormKeys::USER_ID);
     }
 
-    public function GetPermissionGroupId()
+    public function GetPermissionGroupId(): ?int
     {
-        return $this->GetForm(FormKeys::GROUP_ID);
+        return $this->GetFormInt(key: FormKeys::GROUP_ID);
     }
 
-    public function GetPermissionType()
+    public function GetPermissionType(): ?int
     {
-        return $this->GetForm(FormKeys::PERMISSION_TYPE);
+        return $this->GetFormInt(key: FormKeys::PERMISSION_TYPE);
     }
 
     /**
@@ -1017,9 +945,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetCheckbox(FormKeys::ENABLE_CHECK_IN);
     }
 
-    public function GetBulkEnableCheckin()
+    public function GetBulkEnableCheckin(): ?int
     {
-        return $this->GetForm(FormKeys::ENABLE_CHECK_IN);
+        return $this->GetFormInt(key: FormKeys::ENABLE_CHECK_IN);
     }
 
     public function GetAutoReleaseMinutes()
@@ -1027,14 +955,14 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::AUTO_RELEASE_MINUTES);
     }
 
-    public function GetCredits()
+    public function GetCredits(): ?float
     {
-        return $this->GetForm(FormKeys::CREDITS);
+        return $this->GetFormFloat(key: FormKeys::CREDITS);
     }
 
-    public function GetPeakCredits()
+    public function GetPeakCredits(): ?float
     {
-        return $this->GetForm(FormKeys::PEAK_CREDITS);
+        return $this->GetFormFloat(key: FormKeys::PEAK_CREDITS);
     }
 
     public function BindUpdatedResourceCredits(BookableResource $resource)
@@ -1154,9 +1082,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return intval($val);
     }
 
-    public function GetBulkAllowConcurrentReservations()
+    public function GetBulkAllowConcurrentReservations(): ?int
     {
-        return $this->GetForm(FormKeys::ALLOW_CONCURRENT_RESERVATIONS);
+        return $this->GetFormInt(key: FormKeys::ALLOW_CONCURRENT_RESERVATIONS);
     }
 
     public function SendStatusChangeMessage()
@@ -1164,9 +1092,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetCheckbox(FormKeys::SEND_AS_EMAIL);
     }
 
-    public function StatusChangeDays()
+    public function StatusChangeDays(): ?int
     {
-        return $this->GetForm(FormKeys::DAY);
+        return $this->GetFormInt(key: FormKeys::DAY);
     }
 
     public function GetStatusChangeMessage()

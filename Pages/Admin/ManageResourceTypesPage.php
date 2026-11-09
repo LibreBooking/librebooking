@@ -10,10 +10,7 @@ interface IManageResourceTypesPage extends IActionPage
      */
     public function BindResourceTypes($types);
 
-    /**
-     * @return int
-     */
-    public function GetId();
+    public function GetId(): ?int;
 
     /**
      * @return string
@@ -38,7 +35,7 @@ interface IManageResourceTypesPage extends IActionPage
     /**
      * @param CustomAttribute[] $attributeList
      */
-    public function BindAttributeList($attributeList);
+    public function BindAttributeList(array $attributeList): void;
 
     /**
      * @param ResourceTypeJson[] $resourceTypes
@@ -130,21 +127,18 @@ class ManageResourceTypesPage extends ActionPage implements IManageResourceTypes
     }
 
     /**
-     * @param IEntityAttributeList $attributeList
+     * @param CustomAttribute[] $attributeList
      */
-    public function BindAttributeList($attributeList)
+    public function BindAttributeList(array $attributeList): void
     {
         $this->Set('AttributeList', $attributeList);
     }
 
-    /**
-     * @return int
-     */
-    public function GetId()
+    public function GetId(): ?int
     {
-        $id = $this->GetQuerystring(QueryStringKeys::RESOURCE_TYPE_ID);
+        $id = $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_TYPE_ID);
         if (empty($id)) {
-            $id = $this->GetForm(FormKeys::PK);
+            $id = $this->GetFormInt(key: FormKeys::PK);
         }
 
         return $id;
