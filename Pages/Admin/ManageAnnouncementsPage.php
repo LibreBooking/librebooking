@@ -5,10 +5,7 @@ require_once(ROOT_DIR . 'Presenters/Admin/ManageAnnouncementsPresenter.php');
 
 interface IManageAnnouncementsPage extends IActionPage
 {
-    /**
-     * @return int
-     */
-    public function GetAnnouncementId();
+    public function GetAnnouncementId(): ?int;
 
     /**
      * @return string
@@ -66,10 +63,7 @@ interface IManageAnnouncementsPage extends IActionPage
      */
     public function BindNumberOfUsersToBeSent($number);
 
-    /**
-     * @return int
-     */
-    public function GetDisplayPage();
+    public function GetDisplayPage(): ?int;
 }
 
 class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncementsPage
@@ -113,9 +107,9 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         $this->presenter->ProcessAction();
     }
 
-    public function GetAnnouncementId()
+    public function GetAnnouncementId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::ANNOUNCEMENT_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::ANNOUNCEMENT_ID);
     }
 
     public function GetText()
@@ -186,8 +180,8 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         return isset($send);
     }
 
-    public function GetDisplayPage()
+    public function GetDisplayPage(): ?int
     {
-        return $this->GetForm(FormKeys::DISPLAY_PAGE);
+        return $this->GetFormInt(key: FormKeys::DISPLAY_PAGE);
     }
 }

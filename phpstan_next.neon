@@ -36,14 +36,8 @@ parameters:
             - vendor/
             # Staged "next level" rollout: remove these one-by-one as each
             # area is fixed for the current target level.
-            - Pages/Admin/CreditLogPage.php
-            - Pages/Admin/ManageAnnouncementsPage.php
             - Pages/Admin/ManageAttributesPage.php
-            - Pages/Admin/ManageConfigurationPage.php
-            - Pages/Admin/ManageGroupsPage.php
             - Pages/Admin/ManagePaymentsPage.php
             - Pages/Admin/ManageQuotasPage.php
-            - Pages/Admin/ManageReservationColorsPage.php
-            - Pages/Admin/ManageUsersPage.php
     bootstrapFiles:
         - vendor/autoload.php

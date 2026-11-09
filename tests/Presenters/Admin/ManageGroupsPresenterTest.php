@@ -263,7 +263,7 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
     /** @var string[]|null */
     public ?array $_AllowedResourceIds = null;
 
-    public function GetGroupId()
+    public function GetGroupId(): ?int
     {
         return $this->_GroupId;
     }
@@ -290,7 +290,7 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
     {
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
         return 0;
     }
@@ -326,7 +326,7 @@ class FakeManageGroupsPage extends FakeActionPageBase implements IManageGroupsPa
     {
     }
 
-    public function GetAdminGroupId()
+    public function GetAdminGroupId(): ?int
     {
         return 0;
     }

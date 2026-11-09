@@ -818,7 +818,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
         $this->_BoundUsers = $users;
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
         return $this->_UserId;
     }
@@ -906,7 +906,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
         return $this->_FilterStatusId;
     }
 
-    public function GetUserGroup()
+    public function GetUserGroup(): ?int
     {
         return $this->_UserGroup;
     }
@@ -967,7 +967,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
         // TODO: Implement BindStatusDescriptions() method.
     }
 
-    public function GetDeletedUserIds()
+    public function GetDeletedUserIds(): array
     {
         return $this->_DeletedUserIds;
     }

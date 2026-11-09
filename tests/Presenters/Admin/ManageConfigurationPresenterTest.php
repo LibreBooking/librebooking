@@ -434,10 +434,7 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
         // TODO: Implement SetExportPluginValues() method.
     }
 
-    /**
-     * @return int
-     */
-    public function GetHomePageId()
+    public function GetHomePageId(): ?int
     {
         return 0;
     }

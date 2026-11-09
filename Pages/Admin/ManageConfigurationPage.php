@@ -53,15 +53,7 @@ interface IManageConfigurationPage extends IActionPage
      */
     public function ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
 
-    /**
-     * @param string[] $values
-     */
-
-
-    /**
-     * @return int
-     */
-    public function GetHomePageId();
+    public function GetHomePageId(): ?int;
 }
 
 class ManageConfigurationPage extends ActionPage implements IManageConfigurationPage
@@ -194,8 +186,8 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
         $this->Set('ShowScriptUrlWarning', true);
     }
 
-    public function GetHomePageId()
+    public function GetHomePageId(): ?int
     {
-        return $this->GetForm('homepage_id');
+        return $this->GetFormInt(key: 'homepage_id');
     }
 }

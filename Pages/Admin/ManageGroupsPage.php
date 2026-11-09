@@ -7,10 +7,7 @@ require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 interface IManageGroupsPage extends IActionPage
 {
-    /**
-     * @return int
-     */
-    public function GetGroupId();
+    public function GetGroupId(): ?int;
 
     /**
      * @param $groups GroupItemView[]|array
@@ -37,10 +34,7 @@ interface IManageGroupsPage extends IActionPage
      */
     public function SetJsonResponse($response);
 
-    /**
-     * @return int
-     */
-    public function GetUserId();
+    public function GetUserId(): ?int;
 
     /**
      * @param $resources array|BookableResource[]
@@ -77,10 +71,7 @@ interface IManageGroupsPage extends IActionPage
      */
     public function BindAdminGroups($adminGroups);
 
-    /**
-     * @return int
-     */
-    public function GetAdminGroupId();
+    public function GetAdminGroupId(): ?int;
 
     /**
      * @return bool
@@ -201,13 +192,13 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->presenter->ProcessAction();
     }
 
-    public function GetGroupId()
+    public function GetGroupId(): ?int
     {
-        $groupId = $this->GetForm(FormKeys::GROUP_ID);
+        $groupId = $this->GetFormInt(key: FormKeys::GROUP_ID);
         if (!empty($groupId)) {
             return $groupId;
         }
-        return $this->GetQuerystring(QueryStringKeys::GROUP_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::GROUP_ID);
     }
 
     public function SetJsonResponse($response)
@@ -215,9 +206,9 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         parent::SetJson($response);
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
-        return $this->GetForm(FormKeys::USER_ID);
+        return $this->GetFormInt(key: FormKeys::USER_ID);
     }
 
     public function BindResources($resources)
@@ -250,9 +241,9 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('AdminGroups', $adminGroups);
     }
 
-    public function GetAdminGroupId()
+    public function GetAdminGroupId(): ?int
     {
-        return $this->GetForm(FormKeys::GROUP_ADMIN);
+        return $this->GetFormInt(key: FormKeys::GROUP_ADMIN);
     }
 
     public function ProcessDataRequest($dataRequest)
