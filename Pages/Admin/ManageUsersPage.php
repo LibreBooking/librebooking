@@ -16,10 +16,7 @@ interface IManageUsersPage extends IPageable, IActionPage
      */
     public function BindUsers($users);
 
-    /**
-     * @return int
-     */
-    public function GetUserId();
+    public function GetUserId(): ?int;
 
     /**
      * @param BookableResource[] $resources
@@ -103,10 +100,7 @@ interface IManageUsersPage extends IPageable, IActionPage
      */
     public function GetFilterStatusId();
 
-    /**
-     * @return int
-     */
-    public function GetUserGroup();
+    public function GetUserGroup(): ?int;
 
     /**
      * @param GroupItemView[] $groups
@@ -155,7 +149,7 @@ interface IManageUsersPage extends IPageable, IActionPage
     /**
      * @return int[]
      */
-    public function GetDeletedUserIds();
+    public function GetDeletedUserIds(): array;
 
     /**
      * @return bool
@@ -282,14 +276,11 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->_presenter->ProcessDataRequest($dataRequest);
     }
 
-    /**
-     * @return int
-     */
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
-        $id = $this->GetQuerystring(QueryStringKeys::USER_ID);
+        $id = $this->GetQuerystringInt(key: QueryStringKeys::USER_ID);
         if (empty($id)) {
-            $id = $this->GetForm(FormKeys::PK);
+            $id = $this->GetFormInt(key: FormKeys::PK);
         }
 
         return $id;
@@ -398,9 +389,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         return empty($statusId) ? AccountStatus::ALL : $statusId;
     }
 
-    public function GetUserGroup()
+    public function GetUserGroup(): ?int
     {
-        return $this->GetForm(FormKeys::GROUP_ID);
+        return $this->GetFormInt(key: FormKeys::GROUP_ID);
     }
 
     public function BindGroups($groups)
@@ -454,14 +445,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->DisplayCsv('Admin/Users/users_csv.tpl', 'users.csv');
     }
 
-    public function GetDeletedUserIds()
+    public function GetDeletedUserIds(): array
     {
-        $ids = $this->GetForm(FormKeys::USER_ID);
-        if (!is_array($ids)) {
-            return [$ids];
-        }
-
-        return $ids;
+        return $this->GetFormIntList(key: FormKeys::USER_ID);
     }
 
     public function SendEmailNotification()

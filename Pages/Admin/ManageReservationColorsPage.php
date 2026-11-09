@@ -27,10 +27,7 @@ interface IManageReservationColorsPage extends IActionPage
      */
     public function GetColor();
 
-    /**
-     * @return int
-     */
-    public function GetRuleId();
+    public function GetRuleId(): ?int;
 }
 
 class ManageReservationColorsPresenter extends ActionPresenter
@@ -148,8 +145,8 @@ class ManageReservationColorsPage extends ActionPage implements IManageReservati
         return $this->GetForm(FormKeys::RESERVATION_COLOR);
     }
 
-    public function GetRuleId()
+    public function GetRuleId(): ?int
     {
-        return $this->GetForm(FormKeys::RESERVATION_COLOR_RULE_ID);
+        return $this->GetFormInt(key: FormKeys::RESERVATION_COLOR_RULE_ID);
     }
 }

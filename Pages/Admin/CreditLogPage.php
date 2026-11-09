@@ -7,10 +7,7 @@ require_once(ROOT_DIR . 'Presenters/Admin/CreditLogPresenter.php');
 
 interface ICreditLogPage extends IPageable
 {
-    /**
-     * @return int
-     */
-    public function GetUserId();
+    public function GetUserId(): ?int;
 
     /**
      * @param CreditLogView[] $credits
@@ -74,9 +71,9 @@ class CreditLogPage extends ActionPage implements ICreditLogPage
         $this->Set('PageInfo', $pageInfo);
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::USER_ID);
     }
 
     public function BindCredits($credits)
