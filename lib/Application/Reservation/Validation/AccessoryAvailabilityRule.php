@@ -42,6 +42,10 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
         $accessories = [];
         foreach ($reservationAccessories as $accessory) {
             $a = $this->accessoryRepository->LoadById($accessory->AccessoryId);
+            if ($a === null) {
+                // Normally rejected earlier by AccessoryResourceRule; don't rely on rule order.
+                return new ReservationRuleResult(false, Resources::GetInstance()->GetString('AccessoryNotFoundErrorMessage'));
+            }
             if (!$a->HasUnlimitedQuantity()) {
                 $accessories[$a->GetId()] = new AccessoryToCheck($a, $accessory);
             }
