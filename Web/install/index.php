@@ -20,9 +20,9 @@ if (SmartyPermissionsAreOk($smartyTemplateCacheDir)) {
 /**
  * Determine the permission of given directory
  * @param string $smartyTemplateCacheDir location of tpl_c directory
- * @return bool|string bool when writable, and string otherwise
+ * @return bool true when the directory is writable or was made writable
  */
-function SmartyPermissionsAreOk($smartyTemplateCacheDir)
+function SmartyPermissionsAreOk($smartyTemplateCacheDir): bool
 {
     if (!is_writable($smartyTemplateCacheDir)) {
         // Attempt to change permission of directory to 0770 - 1st section 0 for all storage type.

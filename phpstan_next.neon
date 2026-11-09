@@ -38,14 +38,7 @@ parameters:
             # area is fixed for the current target level.
             - Domain/
             - lib/Application/
-            - lib/Common/
-            - lib/Config/
-            - lib/Database/
-            - lib/Email/
-            - Pages/Ajax/ReservationWaitlistPage.php
-            - Pages/SchedulePage.php
             - Presenters/
-            - Web/install/index.php
             - WebServices/
             - tests/Application/
             - tests/Infrastructure/

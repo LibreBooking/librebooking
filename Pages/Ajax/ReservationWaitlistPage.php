@@ -55,11 +55,6 @@ class ReservationWaitlistPage extends SecurePage implements IReservationWaitlist
      */
     private $_presenter;
 
-    /**
-     * @var bool
-     */
-    private $_reservationSavedSuccessfully;
-
     public function __construct()
     {
         parent::__construct();
@@ -95,7 +90,7 @@ class ReservationWaitlistPage extends SecurePage implements IReservationWaitlist
      */
     public function SetSaveSuccessfulMessage($succeeded)
     {
-        $this->_reservationSavedSuccessfully = $succeeded;
+        // no-op: the waitlist presenter never reports a save result
     }
 
     /**

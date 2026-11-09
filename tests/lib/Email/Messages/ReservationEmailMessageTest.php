@@ -88,7 +88,7 @@ class ReservationEmailMessageTest extends TestBase
         $series->WithBookedBy($bookedBy);
 
         $admin = new UserDto(10, 'Admin', 'User', 'admin@example.com', null, 'en_us');
-        $message = new ReservationCreatedEmailAdmin($admin, $this->Owner(), $series, $series->Resource(), new FakeAttributeRepository(), new FakeUserRepository());
+        $message = new ReservationCreatedEmailAdmin($admin, $this->Owner(), $series, $series->Resource(), new FakeAttributeRepository());
         $body = $message->Body();
 
         $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt; Smith &amp; Sons', $body);

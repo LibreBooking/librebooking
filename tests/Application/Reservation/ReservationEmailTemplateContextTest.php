@@ -37,7 +37,7 @@ class ReservationEmailTemplateContextTest extends TestBase
             $unrelatedResource,
         ];
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, $attributeRepository);
+        $context = new ReservationEmailTemplateContext($series, $owner, $attributeRepository);
 
         $attributes = $context->ReservationAttributes();
 
@@ -102,7 +102,6 @@ class ReservationEmailTemplateContextTest extends TestBase
         $context = new ReservationEmailTemplateContext(
             $series,
             $owner,
-            $primaryResource,
             $attributeRepository,
             $scheduleRepository,
             $groupRepository
@@ -166,7 +165,7 @@ class ReservationEmailTemplateContextTest extends TestBase
             new ReservationEmailTemplateTestAttribute(17),
         ];
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, $attributeRepository);
+        $context = new ReservationEmailTemplateContext($series, $owner, $attributeRepository);
 
         $attributes = $context->ReservationAttributes();
         $attributeIds = array_map(static fn (LBAttribute $attribute): int => $attribute->Id(), $attributes);
@@ -215,7 +214,6 @@ class ReservationEmailTemplateContextTest extends TestBase
         $context = new ReservationEmailTemplateContext(
             $series,
             $owner,
-            $primaryResource,
             $attributeRepository,
             $scheduleRepository,
             $groupRepository
@@ -249,7 +247,7 @@ class ReservationEmailTemplateContextTest extends TestBase
         $series->WithResource($primaryResource);
         $series->WithCurrentInstance(new TestReservation());
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, new FakeAttributeRepository());
+        $context = new ReservationEmailTemplateContext($series, $owner, new FakeAttributeRepository());
         $repeatVariables = $context->GetRecurrenceInstances('UTC');
 
         $this->assertEmpty($repeatVariables['RepeatDates']);
@@ -271,7 +269,7 @@ class ReservationEmailTemplateContextTest extends TestBase
         $series->WithCurrentInstance(new TestReservation('ref-1', new DateRange($start, $end), 1));
         $series->WithRepeatOptions(new RepeatDaily(1, Date::Parse('2026-03-03', 'UTC')));
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, new FakeAttributeRepository());
+        $context = new ReservationEmailTemplateContext($series, $owner, new FakeAttributeRepository());
         $repeatVariables = $context->GetRecurrenceInstances('America/Chicago');
 
         $this->assertCount(3, $repeatVariables['RepeatDates']);
@@ -290,7 +288,7 @@ class ReservationEmailTemplateContextTest extends TestBase
         $series->WithBookedBy(new FakeUserSession(false, 'UTC', $owner->Id()));
         $series->WithResource($primaryResource);
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, new FakeAttributeRepository());
+        $context = new ReservationEmailTemplateContext($series, $owner, new FakeAttributeRepository());
 
         $this->assertNull($context->CreatedBy());
     }
@@ -305,7 +303,7 @@ class ReservationEmailTemplateContextTest extends TestBase
         $series->WithBookedBy(new FakeUserSession(false, 'UTC', 99));
         $series->WithResource($primaryResource);
 
-        $context = new ReservationEmailTemplateContext($series, $owner, $primaryResource, new FakeAttributeRepository());
+        $context = new ReservationEmailTemplateContext($series, $owner, new FakeAttributeRepository());
         $createdBy = $context->CreatedBy();
 
         $this->assertNotNull($createdBy);

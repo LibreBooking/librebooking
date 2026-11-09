@@ -672,11 +672,7 @@ class Date
      */
     public static function _SetNow(Date $date)
     {
-        if (is_null($date)) {
-            self::$_Now = null;
-        } else {
-            self::$_Now = $date;
-        }
+        self::$_Now = $date;
     }
 
     /**

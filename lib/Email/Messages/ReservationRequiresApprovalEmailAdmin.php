@@ -4,15 +4,14 @@ require_once(ROOT_DIR . 'lib/Email/namespace.php');
 
 class ReservationRequiresApprovalEmailAdmin extends ReservationCreatedEmailAdmin
 {
-    public function __construct(UserDto $adminDto, User $reservationOwner, ReservationSeries $reservationSeries, BookableResource $primaryResource, IAttributeRepository $attributeRepository, IUserRepository $userRepository)
+    public function __construct(UserDto $adminDto, User $reservationOwner, ReservationSeries $reservationSeries, BookableResource $primaryResource, IAttributeRepository $attributeRepository)
     {
         parent::__construct(
             adminDto: $adminDto,
             reservationOwner: $reservationOwner,
             reservationSeries: $reservationSeries,
             primaryResource: $primaryResource,
-            attributeRepository: $attributeRepository,
-            userRepository: $userRepository
+            attributeRepository: $attributeRepository
         );
     }
 
