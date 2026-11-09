@@ -31,8 +31,7 @@ class AttributesWriteWebService
      */
     public function Create()
     {
-        /** @var CustomAttributeRequest $request */
-        $request = $this->server->GetRequest();
+        $request = new CustomAttributeRequest($this->server->GetRequest());
 
         Log::Debug('AttributesWriteWebService.Create() User=%s, Request=%s', $this->server->GetSession()->UserId, json_encode($request));
 
@@ -63,8 +62,7 @@ class AttributesWriteWebService
      */
     public function Update($attributeId)
     {
-        /** @var CustomAttributeRequest $request */
-        $request = $this->server->GetRequest();
+        $request = new CustomAttributeRequest($this->server->GetRequest());
 
         Log::Debug('AttributesWriteWebService.Update() User=%s, AttributeId=%s, Request=%s', $this->server->GetSession()->UserId, $attributeId, json_encode($request));
 
