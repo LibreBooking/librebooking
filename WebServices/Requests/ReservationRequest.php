@@ -35,7 +35,7 @@ class ReservationRequest
      */
     public $invitedGuests = [];
     /**
-     * @var RecurrenceRequestResponse
+     * @var RecurrenceRequestResponse|null
      */
     public $recurrenceRule;
     public $resourceId;
@@ -47,11 +47,11 @@ class ReservationRequest
     public $title;
     public $userId;
     /**
-     * @var ReminderRequestResponse
+     * @var ReminderRequestResponse|null
      */
     public $startReminder;
     /**
-     * @var ReminderRequestResponse
+     * @var ReminderRequestResponse|null
      */
     public $endReminder;
 
@@ -61,7 +61,7 @@ class ReservationRequest
     public $allowParticipation;
 
     /**
-     * @var ReservationRetryParameterRequestResponse[]
+     * @var ReservationRetryParameterRequestResponse[]|null
      */
     public $retryParameters;
     /**

@@ -162,17 +162,6 @@ class ReservationsWebService
     }
 
     /**
-     * @param int|null $userId
-     * @param int|null $resourceId
-     * @param int|null $scheduleId
-     * @return bool
-     */
-    private function FilterProvided($userId, $resourceId, $scheduleId)
-    {
-        return !empty($userId) || !empty($resourceId) || !empty($scheduleId);
-    }
-
-    /**
      * @return Date
      */
     private function GetStartDate()

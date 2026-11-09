@@ -184,24 +184,9 @@ class ScheduleWebServiceView implements ISchedulePage
     private $resources;
 
     /**
-     * @var Date
+     * @var Date|null
      */
     private $startDate;
-
-    /**
-     * @var DateRange
-     */
-    private $availability;
-
-    /**
-     * @var bool
-     */
-    private $available = true;
-
-    /**
-     * @var bool
-     */
-    private $allowConcurrentReservations;
 
     /**
      * @param int $scheduleId
@@ -508,8 +493,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function BindScheduleAvailability($availability, $tooEarly)
     {
-        $this->availability = $availability;
-        $this->available = false;
+        // no-op
     }
 
     public function BindViewableResourceReservations($resourceIds)
@@ -519,7 +503,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function SetAllowConcurrent($allowConcurrentReservations)
     {
-        $this->allowConcurrentReservations = $allowConcurrentReservations;
+        // no-op
     }
 
     public function GetReservationRequest()
