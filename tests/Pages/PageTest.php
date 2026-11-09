@@ -292,6 +292,31 @@ class PageTest extends TestBase
         ];
     }
 
+    #[DataProvider('formIntListProvider')]
+    public function testGetFormIntListParsesSingleAndMultipleValues(mixed $value, array $expected): void
+    {
+        $this->fakeServer->SetForm('ids', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadFormIntList(key: 'ids'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: int[]}>
+     */
+    public static function formIntListProvider(): array
+    {
+        return [
+            'missing' => [null, []],
+            'empty' => ['', []],
+            'single value' => ['5', [5]],
+            'list' => [['5', '6'], [5, 6]],
+            'negative kept' => [['-1', '2'], [-1, 2]],
+            'invalid values dropped' => [['5', 'abc', '', '1.5', '6'], [5, 6]],
+            'nested array dropped' => [['5', ['6']], [5]],
+            'out of range dropped' => [['9223372036854775808', '7'], [7]],
+        ];
+    }
+
     private function CreateFormReadingPage(): object
     {
         return new class () extends Page {
@@ -312,6 +337,14 @@ class PageTest extends TestBase
             public function ReadFormFloat(string $key): ?float
             {
                 return $this->GetFormFloat(key: $key);
+            }
+
+            /**
+             * @return int[]
+             */
+            public function ReadFormIntList(string $key): array
+            {
+                return $this->GetFormIntList(key: $key);
             }
         };
     }

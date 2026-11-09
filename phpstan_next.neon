@@ -39,14 +39,11 @@ parameters:
             - Pages/Admin/CreditLogPage.php
             - Pages/Admin/ManageAnnouncementsPage.php
             - Pages/Admin/ManageAttributesPage.php
-            - Pages/Admin/ManageBlackoutsPage.php
             - Pages/Admin/ManageConfigurationPage.php
             - Pages/Admin/ManageGroupsPage.php
             - Pages/Admin/ManagePaymentsPage.php
             - Pages/Admin/ManageQuotasPage.php
             - Pages/Admin/ManageReservationColorsPage.php
-            - Pages/Admin/ManageReservationsPage.php
-            - Pages/Admin/ManageSchedulesPage.php
             - Pages/Admin/ManageUsersPage.php
     bootstrapFiles:
         - vendor/autoload.php
