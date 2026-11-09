@@ -406,6 +406,28 @@ abstract class Page implements IPage
     }
 
     /**
+     * Reads a form field that may be submitted once or as name[] and returns
+     * its integer values. Values that are not integers are dropped.
+     *
+     * @return int[]
+     */
+    protected function GetFormIntList(string $key): array
+    {
+        $value = $this->GetForm($key);
+        $values = is_array($value) ? $value : [$value];
+
+        $ints = [];
+        foreach ($values as $item) {
+            $intValue = self::ParseInt(value: $item, allowNegative: true);
+            if ($intValue !== null) {
+                $ints[] = $intValue;
+            }
+        }
+
+        return $ints;
+    }
+
+    /**
      * @param mixed $value raw request value
      */
     private static function ParseInt(mixed $value, bool $allowNegative): ?int

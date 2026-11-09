@@ -27,25 +27,16 @@ interface IManageReservationsPage extends IPageable, IActionPage
      */
     public function GetEndDate();
 
-    /**
-     * @return int
-     */
-    public function GetUserId();
+    public function GetUserId(): ?int;
 
     /**
      * @return string
      */
     public function GetUserName();
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId();
+    public function GetScheduleId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
     /**
      * @return string
@@ -118,20 +109,11 @@ interface IManageReservationsPage extends IPageable, IActionPage
      */
     public function GetDeleteScope();
 
-    /**
-     * @return int
-     */
-    public function GetReservationStatusId();
+    public function GetReservationStatusId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceStatusFilterId();
+    public function GetResourceStatusFilterId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceStatusReasonFilterId();
+    public function GetResourceStatusReasonFilterId(): ?int;
 
     /**
      * @return string
@@ -172,15 +154,9 @@ interface IManageReservationsPage extends IPageable, IActionPage
      */
     public function BindResourceStatuses($statusReasons);
 
-    /**
-     * @return int
-     */
-    public function GetResourceStatus();
+    public function GetResourceStatus(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceStatusReason();
+    public function GetResourceStatusReason(): ?int;
 
     /**
      * @return string
@@ -192,15 +168,9 @@ interface IManageReservationsPage extends IPageable, IActionPage
      */
     public function GetUpdateScope();
 
-    /**
-     * @return int
-     */
-    public function GetUpdateResourceId();
+    public function GetUpdateResourceId(): ?int;
 
-    /**
-     * @return bool
-     */
-    public function CanUpdateResourceStatuses();
+    public function CanUpdateResourceStatuses(): bool;
 
     /**
      * @return AttributeFormElement[]
@@ -222,10 +192,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
      */
     public function SetReservationJson($reservation);
 
-    /**
-     * @return int
-     */
-    public function GetAttributeId();
+    public function GetAttributeId(): ?int;
 
     /**
      * @return string
@@ -262,7 +229,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
     /**
      * @return int[]
      */
-    public function GetDeletedReservationIds();
+    public function GetDeletedReservationIds(): array;
 
     /**
      * @return string
@@ -420,9 +387,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->Set('EndDate', $date);
     }
 
-    public function GetUserId()
+    public function GetUserId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::USER_ID);
     }
 
     public function GetUserName()
@@ -430,14 +397,14 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         return $this->GetQuerystring(QueryStringKeys::USER_NAME);
     }
 
-    public function GetScheduleId()
+    public function GetScheduleId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::SCHEDULE_ID);
     }
 
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_ID);
     }
 
     public function SetUserId($userId)
@@ -511,9 +478,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         return $this->GetForm(FormKeys::SERIES_UPDATE_SCOPE);
     }
 
-    public function GetReservationStatusId()
+    public function GetReservationStatusId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESERVATION_STATUS_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESERVATION_STATUS_ID);
     }
 
     public function SetReservationStatusId($reservationStatusId)
@@ -541,14 +508,14 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->Set('StatusReasons', $statusReasons);
     }
 
-    public function GetResourceStatus()
+    public function GetResourceStatus(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_STATUS_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_STATUS_ID);
     }
 
-    public function GetResourceStatusReason()
+    public function GetResourceStatusReason(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_STATUS_REASON_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_STATUS_REASON_ID);
     }
 
     public function GetResourceStatusReferenceNumber()
@@ -561,9 +528,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         return $this->GetForm(FormKeys::RESOURCE_STATUS_UPDATE_SCOPE);
     }
 
-    public function GetUpdateResourceId()
+    public function GetUpdateResourceId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_ID);
     }
 
     public function SetResourceStatusFilterId($statusId)
@@ -576,14 +543,14 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->Set('ResourceStatusReasonFilterId', $reasonId != '' ? intval($reasonId) : '');
     }
 
-    public function GetResourceStatusFilterId()
+    public function GetResourceStatusFilterId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESERVATION_RESOURCE_STATUS_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESERVATION_RESOURCE_STATUS_ID);
     }
 
-    public function GetResourceStatusReasonFilterId()
+    public function GetResourceStatusReasonFilterId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESERVATION_RESOURCE_REASON_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESERVATION_RESOURCE_REASON_ID);
     }
 
     public function GetResourceFilterTitle()
@@ -601,9 +568,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->Set('CanUpdateResourceStatus', $canUpdate);
     }
 
-    public function CanUpdateResourceStatuses()
+    public function CanUpdateResourceStatuses(): bool
     {
-        return $this->GetVar('CanUpdateResourceStatus');
+        return (bool)$this->GetVar('CanUpdateResourceStatus');
     }
 
     public function GetAttributeFilters()
@@ -626,9 +593,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->SetJson($reservation);
     }
 
-    public function GetAttributeId()
+    public function GetAttributeId(): ?int
     {
-        return $this->GetForm(FormKeys::ATTRIBUTE_ID);
+        return $this->GetFormInt(key: FormKeys::ATTRIBUTE_ID);
     }
 
     public function GetAttributeValue()
@@ -667,14 +634,9 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         parent::SetJson($importResult);
     }
 
-    public function GetDeletedReservationIds()
+    public function GetDeletedReservationIds(): array
     {
-        $ids = $this->GetForm(FormKeys::RESERVATION_ID);
-        if (!is_array($ids)) {
-            return [$ids];
-        }
-
-        return $ids;
+        return $this->GetFormIntList(key: FormKeys::RESERVATION_ID);
     }
 
     public function GetTermsText()

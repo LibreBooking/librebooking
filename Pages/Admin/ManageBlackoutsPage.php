@@ -23,15 +23,9 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
      */
     public function GetEndDate();
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId();
+    public function GetScheduleId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
     /**
      * @param Date $date |null
@@ -69,10 +63,7 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
      */
     public function BindResources($resources);
 
-    /**
-     * @return int
-     */
-    public function GetDeleteBlackoutId();
+    public function GetDeleteBlackoutId(): ?int;
 
     /**
      * @return string
@@ -91,20 +82,14 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
      */
     public function GetApplyBlackoutToAllResources();
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutScheduleId();
+    public function GetBlackoutScheduleId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutResourceId();
+    public function GetBlackoutResourceId(): ?int;
 
     /**
      * @return int[]
      */
-    public function GetBlackoutResourceIds();
+    public function GetBlackoutResourceIds(): array;
 
     /**
      * @return string
@@ -136,20 +121,14 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
      */
     public function GetBlackoutConflictAction();
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutId();
+    public function GetBlackoutId(): ?int;
 
     /**
      * @return string
      */
     public function GetSeriesUpdateScope();
 
-    /**
-     * @return int
-     */
-    public function GetUpdateBlackoutId();
+    public function GetUpdateBlackoutId(): ?int;
 
     /**
      * @param bool $wasAddedSuccessfully
@@ -245,7 +224,7 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
     /**
      * @return int[]
      */
-    public function GetDeletedBlackoutIds();
+    public function GetDeletedBlackoutIds(): array;
 }
 
 class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
@@ -381,20 +360,14 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('EndDate', $date);
     }
 
-    /**
-     * @return int
-     */
-    public function GetScheduleId()
+    public function GetScheduleId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::SCHEDULE_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::RESOURCE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::RESOURCE_ID);
     }
 
     /**
@@ -447,12 +420,9 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->pageablePage->BindPageInfo($pageInfo);
     }
 
-    /**
-     * @return string
-     */
-    public function GetDeleteBlackoutId()
+    public function GetDeleteBlackoutId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::BLACKOUT_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::BLACKOUT_ID);
     }
 
     /**
@@ -472,20 +442,14 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return isset($applyToSchedule);
     }
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutScheduleId()
+    public function GetBlackoutScheduleId(): ?int
     {
-        return $this->GetForm(FormKeys::SCHEDULE_ID);
+        return $this->GetFormInt(key: FormKeys::SCHEDULE_ID);
     }
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutResourceId()
+    public function GetBlackoutResourceId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_ID);
     }
 
     /**
@@ -537,12 +501,9 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
     }
 
 
-    /**
-     * @return int
-     */
-    public function GetBlackoutId()
+    public function GetBlackoutId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::BLACKOUT_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::BLACKOUT_ID);
     }
 
     public function ProcessDataRequest($dataRequest)
@@ -698,34 +659,18 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('WasBlackoutFound', $wasFound);
     }
 
-    public function GetBlackoutResourceIds()
+    public function GetBlackoutResourceIds(): array
     {
-        $resources = $this->GetForm(FormKeys::RESOURCE_ID);
-
-        if (is_null($resources)) {
-            return [];
-        }
-
-        if (!is_array($resources)) {
-            return [$resources];
-        }
-
-
-        return $resources;
+        return $this->GetFormIntList(key: FormKeys::RESOURCE_ID);
     }
 
-    public function GetUpdateBlackoutId()
+    public function GetUpdateBlackoutId(): ?int
     {
-        return $this->GetForm(FormKeys::BLACKOUT_INSTANCE_ID);
+        return $this->GetFormInt(key: FormKeys::BLACKOUT_INSTANCE_ID);
     }
 
-    public function GetDeletedBlackoutIds()
+    public function GetDeletedBlackoutIds(): array
     {
-        $ids = $this->GetForm(FormKeys::BLACKOUT_INSTANCE_ID);
-        if (!is_array($ids)) {
-            return [$ids];
-        }
-
-        return $ids;
+        return $this->GetFormIntList(key: FormKeys::BLACKOUT_INSTANCE_ID);
     }
 }
