@@ -28,8 +28,6 @@ class ReservationSavePresenterTest extends TestBase
      */
     private $presenter;
 
-    private IReservationPersistenceService&\PHPUnit\Framework\MockObject\MockObject $persistenceService;
-
     private IReservationHandler&\PHPUnit\Framework\MockObject\MockObject $handler;
 
     private IResourceRepository&\PHPUnit\Framework\MockObject\MockObject $resourceRepository;
@@ -48,14 +46,12 @@ class ReservationSavePresenterTest extends TestBase
 
         $this->page = new FakeReservationSavePage();
 
-        $this->persistenceService = $this->createMock('IReservationPersistenceService');
         $this->handler = $this->createMock('IReservationHandler');
         $this->resourceRepository = $this->createMock('IResourceRepository');
         $this->scheduleRepository = new FakeScheduleRepository();
 
         $this->presenter = new ReservationSavePresenter(
             $this->page,
-            $this->persistenceService,
             $this->handler,
             $this->resourceRepository,
             $this->scheduleRepository,

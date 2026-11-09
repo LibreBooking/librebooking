@@ -110,11 +110,6 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
      */
     private $targetTimezone;
 
-    /**
-     * @var bool
-     */
-    private $cached = false;
-
     private $cachedPeriods = [];
 
     /**
@@ -397,7 +392,6 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
      */
     private function AddCached($layout, $date)
     {
-        $this->cached = true;
         $this->cachedPeriods[$date->Format('Ymd')] = $layout;
     }
 

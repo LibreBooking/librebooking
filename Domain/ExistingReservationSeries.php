@@ -105,17 +105,10 @@ class ExistingReservationSeries extends ReservationSeries
     }
 
     /**
-     * @var IRepeatOptions
-     * @internal
-     */
-    private $_originalRepeatOptions;
-
-    /**
      * @internal
      */
     public function WithRepeatOptions(IRepeatOptions $repeatOptions)
     {
-        $this->_originalRepeatOptions = $repeatOptions;
         $this->repeatOptions = $repeatOptions;
     }
 

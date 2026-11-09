@@ -17,13 +17,10 @@ class SeriesUpdateScope
         switch ($seriesUpdateScope) {
             case SeriesUpdateScope::ThisInstance:
                 return new SeriesUpdateScope_Instance();
-                break;
             case SeriesUpdateScope::FullSeries:
                 return new SeriesUpdateScope_Full();
-                break;
             case SeriesUpdateScope::FutureInstances:
                 return new SeriesUpdateScope_Future();
-                break;
             default:
                 throw new Exception('Unknown seriesUpdateScope requested');
         }

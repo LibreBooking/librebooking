@@ -14,16 +14,10 @@ abstract class ActionPresenter
      */
     private $actions;
 
-    /**
-     * @var array
-     */
-    private $validations;
-
     protected function __construct(IActionPage $page)
     {
         $this->actionPage = $page;
         $this->actions = [];
-        $this->validations = [];
     }
 
     /**
@@ -34,11 +28,6 @@ abstract class ActionPresenter
     protected function AddAction($actionName, $actionMethod)
     {
         $this->actions[$actionName] = $actionMethod;
-    }
-
-    protected function AddValidation($actionName, $validationMethod)
-    {
-        $this->validations[$actionName] = $validationMethod;
     }
 
     protected function ActionIsKnown($action)

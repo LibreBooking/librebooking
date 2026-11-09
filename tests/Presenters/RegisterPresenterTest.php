@@ -24,11 +24,6 @@ class RegisterPresenterTest extends TestBase
      */
     private $fakeReg;
 
-    /**
-     * @var FakeAuth
-     */
-    private $fakeAuth;
-
     private ICaptchaService&\PHPUnit\Framework\MockObject\MockObject $captcha;
 
     private IAttributeService&\PHPUnit\Framework\MockObject\MockObject $attributeService;
@@ -53,7 +48,6 @@ class RegisterPresenterTest extends TestBase
 
         $this->page = new FakeRegistrationPage();
         $this->fakeReg = new FakeRegistration();
-        $this->fakeAuth = new FakeAuth();
         $this->captcha = $this->createMock('ICaptchaService');
         $this->attributeService = $this->createMock('IAttributeService');
         $this->termsOfServiceRepository = new FakeTermsOfServiceRepository();
@@ -61,7 +55,6 @@ class RegisterPresenterTest extends TestBase
         $this->presenter = new RegistrationPresenter(
             $this->page,
             $this->fakeReg,
-            $this->fakeAuth,
             $this->captcha,
             $this->attributeService,
             $this->termsOfServiceRepository
@@ -221,7 +214,6 @@ class RegisterPresenterTest extends TestBase
         $this->presenter->ProcessAction();
 
         $this->assertFalse($this->fakeReg->_RegisterCalled);
-        $this->assertFalse($this->fakeAuth->_LoginCalled);
     }
 
     public function testAuthorizesUserAfterRegister()
@@ -244,7 +236,7 @@ class RegisterPresenterTest extends TestBase
     {
         $this->fakeConfig->SetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, 'false');
 
-        $this->presenter = new RegistrationPresenter($this->page, $this->fakeReg, $this->fakeAuth);
+        $this->presenter = new RegistrationPresenter($this->page, $this->fakeReg);
         $this->presenter->PageLoad();
 
         $this->assertEquals(Pages::LOGIN, $this->page->_RedirectDestination);

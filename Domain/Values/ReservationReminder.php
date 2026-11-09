@@ -3,20 +3,17 @@
 class ReservationReminder
 {
     private $value;
-    private $interval;
     private $minutesPrior;
 
     public function __construct($value, $interval)
     {
         $this->value = is_numeric($value) ? $value : 0;
-        $this->interval = $interval;
 
         if ($interval == ReservationReminderInterval::Days) {
             $this->minutesPrior = $this->value * 60 * 24;
         } elseif ($interval == ReservationReminderInterval::Hours) {
             $this->minutesPrior = $this->value * 60;
         } else {
-            $this->interval = ReservationReminderInterval::Minutes;
             $this->minutesPrior = $this->value;
         }
     }

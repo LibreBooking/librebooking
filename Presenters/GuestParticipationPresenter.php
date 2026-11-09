@@ -65,11 +65,11 @@ class GuestParticipationPresenter
             if ($user->IsRegistered()) {
                 // if email is already registered, then add user as participant and delete guest
                 $series->AcceptGuestAsUserInvitation($email, $user);
-                $result = InvitationResult::AcceptedAsUser($series, $user);
+                $result = InvitationResult::AcceptedAsUser();
             } else {
                 // if not registered
                 $series->AcceptGuestInvitation($email);
-                $result = InvitationResult::AcceptedAsGuest($series);
+                $result = InvitationResult::AcceptedAsGuest();
             }
 
             foreach ($series->AllResources() as $resource) {
@@ -90,7 +90,7 @@ class GuestParticipationPresenter
         }
         if ($invitationAction == InvitationAction::Decline) {
             $series->DeclineGuestInvitation($email);
-            $result = InvitationResult::Declined($series);
+            $result = InvitationResult::Declined();
         }
 
         $this->reservationRepository->Update($series);
@@ -116,16 +116,6 @@ class InvitationResult
     private $declined = false;
     private $reachedMaxCapacity = false;
     private $error = false;
-
-    /**
-     * @var ExistingReservationSeries|null
-     */
-    private $series;
-
-    /**
-     * @var User|null
-     */
-    private $user;
 
     /**
      * @var string|null
@@ -156,29 +146,23 @@ class InvitationResult
     }
 
     /**
-     * @param ExistingReservationSeries $series
-     * @param User $user
      * @return InvitationResult
      */
-    public static function AcceptedAsUser(ExistingReservationSeries $series, User $user)
+    public static function AcceptedAsUser()
     {
         $result = new InvitationResult();
         $result->acceptedAsUser = true;
-        $result->series = $series;
-        $result->user = $user;
 
         return $result;
     }
 
     /**
-     * @param ExistingReservationSeries $series
      * @return InvitationResult
      */
-    public static function AcceptedAsGuest(ExistingReservationSeries $series)
+    public static function AcceptedAsGuest()
     {
         $result = new InvitationResult();
         $result->acceptedAsGuest = true;
-        $result->series = $series;
 
         return $result;
     }
@@ -199,14 +183,12 @@ class InvitationResult
     }
 
     /**
-     * @param ExistingReservationSeries $series
      * @return InvitationResult
      */
-    public static function Declined(ExistingReservationSeries $series)
+    public static function Declined()
     {
         $result = new InvitationResult();
         $result->declined = true;
-        $result->series = $series;
 
         return $result;
     }

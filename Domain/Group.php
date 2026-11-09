@@ -11,15 +11,12 @@ class Group
     private $removedUsers = [];
     private $users = [];
 
-    private $permissionsChanged = false;
     private $removedPermissions = [];
     private $addedPermissions = [];
     private $allowedResourceIds = [];
     private $viewableResourceIds = [];
     private $removedViewPermissions = [];
     private $addedViewPermissions = [];
-
-    private $rolesChanged = false;
 
     /**
      * @var array|int[]
@@ -226,7 +223,6 @@ class Group
      */
     public function WithFullPermission($allowedResourceId)
     {
-        $this->permissionsChanged = false;
         $this->allowedResourceIds[] = $allowedResourceId;
     }
 
@@ -236,7 +232,6 @@ class Group
      */
     public function WithViewablePermission($viewableResourceId)
     {
-        $this->permissionsChanged = false;
         $this->viewableResourceIds[] = $viewableResourceId;
     }
 
@@ -246,7 +241,6 @@ class Group
      */
     public function WithRole($role)
     {
-        $this->rolesChanged = false;
         $this->roleIds[] = $role;
     }
 
@@ -261,7 +255,6 @@ class Group
         $added = $diff->GetAddedToArray1();
 
         if ($diff->AreDifferent()) {
-            $this->permissionsChanged = true;
             $this->removedViewPermissions = $removed;
             $this->addedViewPermissions = $added;
 
@@ -280,7 +273,6 @@ class Group
         $added = $diff->GetAddedToArray1();
 
         if ($diff->AreDifferent()) {
-            $this->permissionsChanged = true;
             $this->removedPermissions = $removed;
             $this->addedPermissions = $added;
 
@@ -349,7 +341,6 @@ class Group
         $added = $diff->GetAddedToArray1();
 
         if ($diff->AreDifferent()) {
-            $this->rolesChanged = true;
             $this->removedRoleIds = $removed;
             $this->addedRoleIds = $added;
 

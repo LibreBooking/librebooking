@@ -66,7 +66,7 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
             $userSession
         );
 
-        return new ReservationSavePresenter($savePage, $persistenceService, $handler, $resourceRepository, $scheduleRepository, $userSession);
+        return new ReservationSavePresenter($savePage, $handler, $resourceRepository, $scheduleRepository, $userSession);
     }
 
     public function Update(IReservationUpdatePage $updatePage, UserSession $userSession)
