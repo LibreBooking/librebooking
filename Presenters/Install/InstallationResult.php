@@ -51,6 +51,6 @@ class InstallationResultSkipped extends InstallationResult
 
     public function WasSuccessful()
     {
-        true;
+        return true;
     }
 }
