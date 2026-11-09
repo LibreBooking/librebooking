@@ -44,6 +44,19 @@ class AccessoryResourceRule implements IReservationValidationRule
 
         // Step 2: Load all accessories and create associations
         $accessories = $this->accessoryRepository->LoadAll();
+
+        // Reject accessories that no longer exist (deleted, stale form or edited request).
+        // The checks below assume every booked accessory is known.
+        $knownAccessoryIds = [];
+        foreach ($accessories as $accessory) {
+            $knownAccessoryIds[$accessory->GetId()] = true;
+        }
+        foreach (array_keys($bookedAccessories) as $bookedAccessoryId) {
+            if (!isset($knownAccessoryIds[$bookedAccessoryId])) {
+                return new ReservationRuleResult(false, $this->strings->GetString('AccessoryNotFoundErrorMessage'));
+            }
+        }
+
         $association = $this->GetResourcesAndRequiredAccessories($accessories);
         $bookedResourceIds = $reservationSeries->AllResourceIds();
 

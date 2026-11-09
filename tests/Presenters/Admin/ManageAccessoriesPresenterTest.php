@@ -139,4 +139,38 @@ class ManageAccessoriesPresenterTest extends TestBase
 
         $this->presenter->DeleteAccessory();
     }
+
+    public function testEditingUnknownAccessoryChangesNothing(): void
+    {
+        $this->page->method('GetAccessoryId')->willReturn(999);
+        $this->page->method('GetAccessoryName')->willReturn('name');
+        $this->page->method('GetQuantityAvailable')->willReturn(1);
+        $this->accessoryRepository->method('LoadById')->willReturn(null);
+        $this->accessoryRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeAccessory();
+    }
+
+    public function testLoadingResourcesOfUnknownAccessoryBindsNoResources(): void
+    {
+        $this->page->method('GetAccessoryId')->willReturn(999);
+        $this->accessoryRepository->method('LoadById')->willReturn(null);
+        $this->page->expects($this->once())
+            ->method('SetAccessoryResources')
+            ->with($this->equalTo([]));
+
+        $this->presenter->ProcessDataRequest('accessoryResources');
+    }
+
+    public function testChangingResourcesOfUnknownAccessoryChangesNothing(): void
+    {
+        $this->page->method('GetAccessoryId')->willReturn(999);
+        $this->page->method('GetAccessoryResources')->willReturn([]);
+        $this->page->method('GetAccessoryResourcesMinimums')->willReturn([]);
+        $this->page->method('GetAccessoryResourcesMaximums')->willReturn([]);
+        $this->accessoryRepository->method('LoadById')->willReturn(null);
+        $this->accessoryRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeAccessoryResources();
+    }
 }

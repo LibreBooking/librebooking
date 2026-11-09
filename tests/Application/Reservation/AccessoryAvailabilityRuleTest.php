@@ -37,6 +37,23 @@ class AccessoryAvailabilityRuleTest extends TestBase
         parent::teardown();
     }
 
+    public function testRuleIsInvalidIfBookedAccessoryDoesNotExist(): void
+    {
+        $reservation = new TestReservationSeries();
+        $reservation->WithAccessory(new ReservationAccessory(999, 1));
+
+        $this->accessoryRepository->expects($this->once())
+            ->method('LoadById')
+            ->with($this->equalTo(999))
+            ->willReturn(null);
+        $this->reservationRepository->expects($this->never())->method('GetAccessoriesWithin');
+
+        $result = $this->rule->Validate($reservation, null);
+
+        $this->assertFalse($result->IsValid());
+        $this->assertSame('AccessoryNotFoundErrorMessage', $result->ErrorMessage());
+    }
+
     public function testRuleIsValidIfTotalQuantityReservedIsLessThanQuantityAvailable()
     {
         $accessory1 = new ReservationAccessory(1, 5);

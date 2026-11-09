@@ -75,6 +75,11 @@ class ManageAccessoriesPresenter extends ActionPresenter
         Log::Debug('Changing accessory with id %s to name %s and quantity %s', $id, $name, $quantity);
 
         $accessory = $this->accessoryRepository->LoadById($id);
+        if ($accessory === null) {
+            Log::Error('Cannot change accessory, accessory %s not found', $id);
+            return;
+        }
+
         $accessory->SetName($name);
         $accessory->SetQuantityAvailable($quantity);
 
@@ -93,7 +98,7 @@ class ManageAccessoriesPresenter extends ActionPresenter
     public function ProcessDataRequest($dataRequest)
     {
         $accessory = $this->accessoryRepository->LoadById($this->page->GetAccessoryId());
-        $this->page->SetAccessoryResources($accessory->Resources());
+        $this->page->SetAccessoryResources($accessory === null ? [] : $accessory->Resources());
     }
 
     public function ChangeAccessoryResources()
@@ -107,7 +112,13 @@ class ManageAccessoriesPresenter extends ActionPresenter
             $accessoryResources[] = new ResourceAccessory($resourceId, $min[$resourceId], $max[$resourceId]);
         }
 
-        $accessory = $this->accessoryRepository->LoadById($this->page->GetAccessoryId());
+        $accessoryId = $this->page->GetAccessoryId();
+        $accessory = $this->accessoryRepository->LoadById($accessoryId);
+        if ($accessory === null) {
+            Log::Error('Cannot change accessory resources, accessory %s not found', $accessoryId);
+            return;
+        }
+
         $accessory->ChangeResources($accessoryResources);
         $this->accessoryRepository->Update($accessory);
     }
