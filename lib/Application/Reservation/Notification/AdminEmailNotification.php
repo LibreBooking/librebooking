@@ -118,7 +118,7 @@ class AdminEmailCreatedNotification extends AdminEmailNotification
 {
     protected function GetMessage($admin, $owner, $reservationSeries, $resource)
     {
-        return new ReservationCreatedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository, $this->userRepo);
+        return new ReservationCreatedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository);
     }
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
@@ -150,7 +150,7 @@ class AdminEmailUpdatedNotification extends AdminEmailNotification
 {
     protected function GetMessage($admin, $owner, $reservationSeries, $resource)
     {
-        return new ReservationUpdatedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository, $this->userRepo);
+        return new ReservationUpdatedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository);
     }
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
@@ -183,7 +183,7 @@ class AdminEmailDeletedNotification extends AdminEmailNotification
 {
     protected function GetMessage($admin, $owner, $reservationSeries, $resource)
     {
-        return new ReservationDeletedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository, $this->userRepo);
+        return new ReservationDeletedEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository);
     }
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
@@ -216,7 +216,7 @@ class AdminEmailApprovalNotification extends AdminEmailNotification
 {
     protected function GetMessage($admin, $owner, $reservationSeries, $resource)
     {
-        return new ReservationRequiresApprovalEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository, $this->userRepo);
+        return new ReservationRequiresApprovalEmailAdmin($admin, $owner, $reservationSeries, $resource, $this->attributeRepository);
     }
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)

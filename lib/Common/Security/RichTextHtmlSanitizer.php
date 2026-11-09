@@ -63,12 +63,12 @@ class RichTextHtmlSanitizer
     private static function SchemeRelativeLinkBlocker(): AttributeSanitizerInterface
     {
         return new class () implements AttributeSanitizerInterface {
-            public function getSupportedElements(): ?array
+            public function getSupportedElements(): array
             {
                 return ['a'];
             }
 
-            public function getSupportedAttributes(): ?array
+            public function getSupportedAttributes(): array
             {
                 return ['href'];
             }

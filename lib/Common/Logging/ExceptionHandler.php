@@ -2,10 +2,7 @@
 
 abstract class ExceptionHandler
 {
-    /**
-     * @var ExceptionHandler $handler
-     */
-    private static $handler;
+    private static ?ExceptionHandler $handler = null;
 
     public static function SetExceptionHandler(ExceptionHandler $handler)
     {
@@ -18,7 +15,7 @@ abstract class ExceptionHandler
     {
         Log::Error('Uncaught exception: %s', $exception);
 
-        if (isset(self::$handler)) {
+        if (self::$handler !== null) {
             self::$handler->HandleException($exception);
         }
     }

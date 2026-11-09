@@ -79,6 +79,7 @@ class MigrateConfig
     public static function LoadSettings(string $configPath): array
     {
         // Legacy config files assign to $conf via side-effect instead of using return.
+        /** @var array<string, mixed> $conf */
         $conf = [];
         $loaded = require $configPath;
 

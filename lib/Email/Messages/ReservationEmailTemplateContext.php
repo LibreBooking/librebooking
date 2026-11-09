@@ -23,7 +23,6 @@ class ReservationEmailTemplateContext
     public function __construct(
         private ReservationSeries $reservationSeries,
         private User $reservationOwner,
-        private BookableResource $primaryResource,
         private IAttributeRepository $attributeRepository,
         private ?IScheduleRepository $scheduleRepository = null,
         private ?IGroupViewRepository $groupRepository = null

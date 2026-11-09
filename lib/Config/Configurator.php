@@ -186,6 +186,8 @@ class Configurator implements IConfigurationSettings
      */
     public function GetSettings($file)
     {
+        // Legacy config files fill in $conf as a side effect of the require.
+        /** @var array<string, mixed> $conf */
         $conf = [];
         $loaded = @require $file;
 
@@ -312,8 +314,8 @@ class Configurator implements IConfigurationSettings
      */
     private function GetKeyMetadata($key)
     {
-        if (class_exists('ConfigKeys') && method_exists('ConfigKeys', 'findByKey')) {
-            return call_user_func(['ConfigKeys', 'findByKey'], $key);
+        if (class_exists('ConfigKeys')) {
+            return ConfigKeys::findByKey($key);
         }
         return null;
     }
@@ -323,8 +325,7 @@ class Configurator implements IConfigurationSettings
      */
     private function HasEnvironmentVariable($meta)
     {
-        return $meta && method_exists('ConfigKeys', 'hasEnv') &&
-               call_user_func(['ConfigKeys', 'hasEnv'], $meta);
+        return $meta && ConfigKeys::hasEnv($meta);
     }
 
     /**
@@ -332,12 +333,11 @@ class Configurator implements IConfigurationSettings
      */
     private function IsPrivateWithEmptyValue($meta, $newValue)
     {
-        if (!$meta || !method_exists('ConfigKeys', 'isPrivate')) {
+        if (!$meta) {
             return false;
         }
 
-        $isPrivate = call_user_func(['ConfigKeys', 'isPrivate'], $meta);
-        return $isPrivate && (empty($newValue) || $newValue === '');
+        return ConfigKeys::isPrivate($meta) && empty($newValue);
     }
 
     /**

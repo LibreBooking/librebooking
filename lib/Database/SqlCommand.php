@@ -7,8 +7,6 @@ class SqlCommand implements ISqlCommand
 {
     public $Parameters = null;
 
-    private $_paramNames = [];
-    private $_values = [];
     private $_query = null;
 
     public function __construct($query = null)
@@ -19,16 +17,7 @@ class SqlCommand implements ISqlCommand
 
     public function SetParameters(Parameters $parameters)
     {
-        $this->_paramNames = []; // Clean out contents
-        $this->_values = [];
-
         $this->Parameters = & $parameters;
-
-        for ($i = 0; $i < $this->Parameters->Count(); $i++) {
-            $p = $this->Parameters->Items($i);
-            $this->_paramNames[] = $p->Name;
-            $this->_values[] = $p->Value;
-        }
     }
 
     public function AddParameter(Parameter $parameter)
@@ -167,7 +156,7 @@ class FilterCommand extends SqlCommand
         $baseQueryUpper = strtoupper($baseQuery);
         $numberOfWheres = substr_count($baseQueryUpper, 'WHERE');
         $numberOfSelects = substr_count($baseQueryUpper, 'SELECT');
-        $hasWhere = $numberOfWheres !== false && $numberOfWheres > 0 && $numberOfWheres == $numberOfSelects;
+        $hasWhere = $numberOfWheres > 0 && $numberOfWheres == $numberOfSelects;
 
         $hasOrderBy = (stripos($baseQuery, 'ORDER BY') !== false);
         $hasGroupBy = (stripos($baseQuery, 'GROUP BY') !== false);

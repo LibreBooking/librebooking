@@ -94,7 +94,6 @@ abstract class ReservationEmailMessage extends EmailMessage
         $context = new ReservationEmailTemplateContext(
             reservationSeries: $this->reservationSeries,
             reservationOwner: $this->reservationOwner,
-            primaryResource: $this->primaryResource,
             attributeRepository: $this->attributeRepository
         );
 

@@ -141,6 +141,7 @@ class Configuration implements IConfiguration
         }
 
         // Load Legacy-style config, mutated $conf during require
+        /** @var array<string, mixed> $conf */
         $conf = [];
         $loadedConfig = @require $configFile;
 
