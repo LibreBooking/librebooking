@@ -207,6 +207,10 @@ class ManageBlackoutsService implements IManageBlackoutsService
     public function LoadBlackout($blackoutId, $userId)
     {
         $series = $this->blackoutRepository->LoadByBlackoutId($blackoutId);
+        if ($series === null) {
+            return null;
+        }
+
         $user = $this->userRepository->LoadById($userId);
 
         foreach ($series->Resources() as $resource) {

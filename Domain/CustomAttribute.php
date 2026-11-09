@@ -86,19 +86,19 @@ class CustomAttribute
     protected $sortOrder;
 
     /**
-     * @var CustomAttributeTypes|int
+     * @var int|null CustomAttributeCategory value, null when there is no secondary entity
      */
     protected $secondaryCategory;
 
     /**
-     * @var int[]
+     * @var array<int|string>|null
      */
-    protected $secondaryEntityIds = [];
+    protected ?array $secondaryEntityIds = [];
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    protected $secondaryEntityDescriptions = [];
+    protected ?array $secondaryEntityDescriptions = [];
 
     /**
      * @var bool
@@ -250,9 +250,10 @@ class CustomAttribute
     }
 
     /**
-     * @return bool
+     * Returns 1 when the attribute is admin-only, otherwise 0. Kept as an int
+     * because the API exposes it as a number.
      */
-    public function AdminOnly()
+    public function AdminOnly(): int
     {
         return (int)$this->adminOnly;
     }

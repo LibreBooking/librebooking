@@ -13,9 +13,9 @@ class RoleLevel
     public const SCHEDULE_ADMIN = 4;
 
     /**
-     * @return RoleLevel[]
+     * @return int[] RoleLevel constants
      */
-    public static function All()
+    public static function All(): array
     {
         return [
             RoleLevel::GROUP_ADMIN,

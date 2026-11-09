@@ -64,14 +64,13 @@ interface IScheduleLayout extends ILayoutCreation
      * @param Date $date
      * @return SchedulePeriod|null period which occurs at this datetime. Includes start time, excludes end time. null if no match is found
      */
-    public function GetPeriod(Date $date);
+    public function GetPeriod(Date $date): ?SchedulePeriod;
 
     /**
      * @param Date $startDate
      * @param Date $endDate
-     * @return SlotCount
      */
-    public function GetSlotCount(Date $startDate, Date $endDate);
+    public function GetSlotCount(Date $startDate, Date $endDate): SlotCount;
 
     /**
      * @param PeakTimes $peakTimes
@@ -96,15 +95,15 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     public const Custom = 1;
     public const Standard = 0;
 
-    /**
-     * @var PeakTimes
-     */
-    protected $peakTimes;
+    protected ?PeakTimes $peakTimes = null;
 
     /**
-     * @var array|LayoutPeriod[]
+     * Single layouts store a list of periods; daily layouts store one list per
+     * day of week. AddPeriod() also stores SchedulePeriod objects.
+     *
+     * @var array<int, LayoutPeriod|SchedulePeriod|LayoutPeriod[]>
      */
-    private $_periods = [];
+    private array $_periods = [];
 
     /**
      * @var string
@@ -404,9 +403,9 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
 
     /**
      * @param Date $date
-     * @return array|SchedulePeriod[]
+     * @return SchedulePeriod[]|null
      */
-    private function GetCachedValuesForDate($date)
+    private function GetCachedValuesForDate($date): ?array
     {
         $key = $date->Format('Ymd');
         if (array_key_exists($date->Format('Ymd'), $this->cachedPeriods)) {
@@ -435,10 +434,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         return $this->targetTimezone;
     }
 
-    /**
-     * @return PeakTimes
-     */
-    public function GetPeakTimes()
+    public function GetPeakTimes(): ?PeakTimes
     {
         return $this->peakTimes;
     }
@@ -507,10 +503,12 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     }
 
     /**
+     * Returns the period which occurs at this datetime (includes start time,
+     * excludes end time), or null if no period matches.
+     *
      * @param Date $date
-     * @return SchedulePeriod period which occurs at this datetime. Includes start time, excludes end time
      */
-    public function GetPeriod(Date $date)
+    public function GetPeriod(Date $date): ?SchedulePeriod
     {
         $timezone = $this->layoutTimezone;
         $tempDate = $date->ToTimezone($timezone);
@@ -583,12 +581,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         return true;
     }
 
-    /**
-     * @param Date $startDate
-     * @param Date $endDate
-     * @return SlotCount
-     */
-    public function GetSlotCount(Date $startDate, Date $endDate)
+    public function GetSlotCount(Date $startDate, Date $endDate): SlotCount
     {
         $slots = 0;
         $peakSlots = 0;
@@ -1109,9 +1102,9 @@ class CustomScheduleLayout extends ScheduleLayout implements IScheduleLayout
     private $scheduleId;
 
     /**
-     * @var SchedulePeriod[]
+     * @var array<int, SchedulePeriod[]> keyed by date timestamp
      */
-    private $cache = [];
+    private array $cache = [];
 
     /**
      * @param string $targetTimezone
@@ -1206,7 +1199,7 @@ class CustomScheduleLayout extends ScheduleLayout implements IScheduleLayout
         return $layoutDate->GetDate()->Timestamp();
     }
 
-    public function GetPeriod(Date $date)
+    public function GetPeriod(Date $date): ?SchedulePeriod
     {
         $layout = $this->GetLayout($date);
         foreach ($layout as $period) {
@@ -1218,9 +1211,13 @@ class CustomScheduleLayout extends ScheduleLayout implements IScheduleLayout
         return null;
     }
 
-    public function GetSlotCount(Date $startDate, Date $endDate)
+    public function GetSlotCount(Date $startDate, Date $endDate): SlotCount
     {
-        return 1;
+        // Custom-layout reservations are currently not charged credits.
+        // This preserves the long-standing behavior. For the planned fix
+        // (count covered custom slots, peak-aware), see:
+        // https://github.com/LibreBooking/librebooking/issues/1871
+        return new SlotCount(0, 0);
     }
 
     public function GetType()

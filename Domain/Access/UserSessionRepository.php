@@ -12,9 +12,8 @@ interface IUserSessionRepository
 
     /**
      * @param string $sessionToken
-     * @return WebServiceUserSession
      */
-    public function LoadBySessionToken($sessionToken);
+    public function LoadBySessionToken($sessionToken): ?WebServiceUserSession;
 
     /**
      * @param WebServiceUserSession $session
@@ -53,7 +52,7 @@ class UserSessionRepository implements IUserSessionRepository
         return null;
     }
 
-    public function LoadBySessionToken($sessionToken)
+    public function LoadBySessionToken($sessionToken): ?WebServiceUserSession
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetUserSessionBySessionTokenCommand($sessionToken));
         if ($row = $reader->GetRow()) {

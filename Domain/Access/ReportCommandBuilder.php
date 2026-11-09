@@ -153,9 +153,9 @@ class ReportCommandBuilder
      */
     private $limitWithin = false;
     /**
-     * @var null|int
+     * @var int[]|null
      */
-    private $scheduleIds = null;
+    private ?array $scheduleIds = null;
     /**
      * @var null|int
      */
@@ -165,21 +165,21 @@ class ReportCommandBuilder
      */
     private $participantId = null;
     /**
-     * @var null|int
+     * @var int[]|null
      */
-    private $resourceIds = null;
+    private ?array $resourceIds = null;
     /**
-     * @var null|int
+     * @var int[]|null
      */
-    private $resourceTypeIds = null;
+    private ?array $resourceTypeIds = null;
     /**
-     * @var null|int
+     * @var int[]|null
      */
-    private $accessoryIds = null;
+    private ?array $accessoryIds = null;
     /**
-     * @var null|int
+     * @var int[]|null
      */
-    private $groupIds = null;
+    private ?array $groupIds = null;
     /**
      * @var null|Date
      */

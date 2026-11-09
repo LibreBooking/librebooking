@@ -49,9 +49,9 @@ interface IGroupViewRepository
 
     /**
      * @param int|array|int[] $groupIds
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param ISqlFilter $filter
+     * @param int|null $pageNumber
+     * @param int|null $pageSize
+     * @param ISqlFilter|null $filter
      * @param AccountStatus|int $accountStatus
      * @return PageableData|UserItemView[]
      */
@@ -114,9 +114,9 @@ class GroupRepository implements IGroupRepository, IGroupViewRepository
 
     /**
      * @param array|int|int[] $groupIds
-     * @param null $pageNumber
-     * @param null $pageSize
-     * @param null $filter
+     * @param int|null $pageNumber
+     * @param int|null $pageSize
+     * @param ISqlFilter|null $filter
      * @param AccountStatus|int $accountStatus
      * @return PageableData|UserItemView[]
      */

@@ -103,7 +103,7 @@ class FakePaymentRepository implements IPaymentRepository
         return $this->_TransactionLogs ?? new PageableData();
     }
 
-    public function GetTransactionLogView($transactionLogId)
+    public function GetTransactionLogView($transactionLogId): ?TransactionLogView
     {
         $this->_LastTransactionLogId = $transactionLogId;
         return $this->_TransactionLogView;

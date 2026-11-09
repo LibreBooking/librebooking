@@ -140,9 +140,8 @@ class Accessory
 
     /**
      * @param int $resourceId
-     * @return ResourceAccessory
      */
-    public function GetResource($resourceId)
+    public function GetResource($resourceId): ?ResourceAccessory
     {
         foreach ($this->resources as $resource) {
             if ($resource->ResourceId == $resourceId) {

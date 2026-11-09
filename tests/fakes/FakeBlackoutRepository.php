@@ -22,10 +22,7 @@ class FakeBlackoutRepository implements IBlackoutRepository
      * @var int
      */
     public $_DeletedSeriesId;
-    /**
-     * @var BlackoutSeries
-     */
-    public $_Series;
+    public ?BlackoutSeries $_Series = null;
     /**
      * @var int
      */
@@ -67,7 +64,7 @@ class FakeBlackoutRepository implements IBlackoutRepository
     /**
      * @inheritDoc
      */
-    public function LoadByBlackoutId($blackoutId)
+    public function LoadByBlackoutId($blackoutId): ?BlackoutSeries
     {
         $this->_LoadedBlackoutId = $blackoutId;
         return $this->_Series;

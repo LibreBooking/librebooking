@@ -103,10 +103,10 @@ class ResourceGroupTree
 
     /**
      * @param int $groupId
-     * @param int[] $resourceIds
-     * @return int[]
+     * @param array<int|string> $resourceIds
+     * @return array<int|string>
      */
-    public function GetResourceIds($groupId, &$resourceIds = [])
+    public function GetResourceIds($groupId, array &$resourceIds = []): array
     {
         $group = $this->references[$groupId];
 
@@ -233,6 +233,9 @@ class ResourceGroupAssignment implements IBookableResource
     public $resource_name;
     public $id;
     public $label;
+    /**
+     * @var int|string
+     */
     public $resource_id;
     public $resourceAdminGroupId;
     public $scheduleId;

@@ -38,10 +38,7 @@ interface IReservedItemView
      */
     public function GetReferenceNumber();
 
-    /**
-     * @return TimeInterval|null
-     */
-    public function GetBufferTime();
+    public function GetBufferTime(): TimeInterval;
 
     /**
      * @return bool
@@ -223,7 +220,7 @@ class ReservationItemView implements IReservedItemView
     public $RepeatType;
 
     /**
-     * @var int
+     * @var int|string|null
      */
 
     public $RepeatInterval;
@@ -244,7 +241,7 @@ class ReservationItemView implements IReservedItemView
     public $RepeatTerminationDate;
 
     /**
-     * @var int
+     * @var int|null
      */
     public $OwnerId;
 
@@ -411,7 +408,7 @@ class ReservationItemView implements IReservedItemView
     private $ownerGroupIds = [];
 
     /**
-     * @var StylingFactory
+     * @var IStylingFactory
      */
     private $StylingFactory;
 
@@ -847,10 +844,7 @@ class ReservationItemView implements IReservedItemView
         return $this->Attributes->Get($attributeId);
     }
 
-    /**
-     * @return TimeInterval
-     */
-    public function GetBufferTime()
+    public function GetBufferTime(): TimeInterval
     {
         return TimeInterval::Parse($this->bufferSeconds);
     }
@@ -1260,12 +1254,10 @@ class BlackoutItemView extends ReservationItemView
         return '';
     }
 
-    /**
-     * @return int|null
-     */
-    public function GetBufferTime()
+    public function GetBufferTime(): TimeInterval
     {
-        return null;
+        // Blackouts have no buffer; an empty interval keeps the contract non-null.
+        return TimeInterval::None();
     }
 
     /**

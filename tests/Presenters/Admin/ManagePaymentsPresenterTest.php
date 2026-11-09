@@ -133,6 +133,34 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->assertEquals(true, $this->page->_RefundIssued);
     }
 
+    public function testRefundIsNotIssuedWhenTransactionLogDoesNotExist(): void
+    {
+        $this->page->_RefundTransactionLogId = 999;
+        $this->page->_RefundAmount = 100;
+        $this->paymentRepository->_TransactionLogView = null;
+
+        $this->presenter->IssueRefund();
+
+        $gateway = $this->paymentRepository->_PayPal;
+        $this->assertInstanceOf(FakePayPalGateway::class, $gateway);
+        $this->assertFalse($this->page->_RefundIssued);
+        $this->assertNull($gateway->_LastTransactionView);
+    }
+
+    public function testPayPalRefundIsNotIssuedWhenGatewayReturnsNoObject(): void
+    {
+        $this->page->_RefundTransactionLogId = 10;
+        $this->page->_RefundAmount = 100;
+        $this->paymentRepository->_TransactionLogView = $this->GetTransactionLogView();
+        $gateway = $this->paymentRepository->_PayPal;
+        $this->assertInstanceOf(FakePayPalGateway::class, $gateway);
+        $gateway->_Refund = null;
+
+        $this->presenter->IssueRefund();
+
+        $this->assertFalse($this->page->_RefundIssued);
+    }
+
     public function testIssuesStripeRefund()
     {
         $this->page->_RefundTransactionLogId = 10;

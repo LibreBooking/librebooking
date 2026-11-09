@@ -9,6 +9,9 @@ class SeriesEventPriority
     public const Lowest = 1;
 }
 
+/**
+ * @template TSeries of ReservationSeries
+ */
 abstract class SeriesEvent
 {
     /**
@@ -17,12 +20,12 @@ abstract class SeriesEvent
     private $priority;
 
     /**
-     * @var \ReservationSeries
+     * @var TSeries
      */
-    protected $series;
+    protected ReservationSeries $series;
 
     /**
-     * @var string
+     * @var int
      */
     protected $id;
 
@@ -44,9 +47,9 @@ abstract class SeriesEvent
     }
 
     /**
-     * @return ReservationSeries
+     * @return TSeries
      */
-    public function Series()
+    public function Series(): ReservationSeries
     {
         return $this->series;
     }
@@ -60,7 +63,7 @@ abstract class SeriesEvent
     }
 
     /**
-     * @param ReservationSeries $series
+     * @param TSeries $series
      * @param int|SeriesEventPriority $priority
      */
     public function __construct(ReservationSeries $series, $priority = SeriesEventPriority::Normal)
@@ -180,6 +183,9 @@ class SeriesBranchedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class SeriesDeletedEvent extends SeriesEvent
 {
     public function __construct(ExistingReservationSeries $series)
@@ -187,10 +193,7 @@ class SeriesDeletedEvent extends SeriesEvent
         parent::__construct($series, SeriesEventPriority::Highest);
     }
 
-    /**
-     * @return ExistingReservationSeries
-     */
-    public function Series()
+    public function Series(): ExistingReservationSeries
     {
         return $this->series;
     }
@@ -201,6 +204,9 @@ class SeriesDeletedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class ResourceRemovedEvent extends SeriesEvent
 {
     /**
@@ -231,10 +237,7 @@ class ResourceRemovedEvent extends SeriesEvent
         return $this->resource->GetResourceId();
     }
 
-    /**
-     * @return ExistingReservationSeries
-     */
-    public function Series()
+    public function Series(): ExistingReservationSeries
     {
         return $this->series;
     }
@@ -245,6 +248,9 @@ class ResourceRemovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class ResourceAddedEvent extends SeriesEvent
 {
     /**
@@ -283,10 +289,7 @@ class ResourceAddedEvent extends SeriesEvent
         return $this->resource->GetResourceId();
     }
 
-    /**
-     * @return ExistingReservationSeries
-     */
-    public function Series()
+    public function Series(): ExistingReservationSeries
     {
         return $this->series;
     }
@@ -443,6 +446,9 @@ class AttributeRemovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class OwnerChangedEvent extends SeriesEvent
 {
     /**
@@ -467,10 +473,7 @@ class OwnerChangedEvent extends SeriesEvent
         $this->newOwnerId = $newOwnerId;
     }
 
-    /**
-     * @return ExistingReservationSeries
-     */
-    public function Series()
+    public function Series(): ExistingReservationSeries
     {
         return $this->series;
     }

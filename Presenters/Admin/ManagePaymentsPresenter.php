@@ -114,11 +114,20 @@ class ManagePaymentsPresenter extends ActionPresenter
         $amount = $this->page->GetRefundAmount();
         $transactionLogView = $this->paymentRepository->GetTransactionLogView($id);
 
+        if ($transactionLogView === null) {
+            Log::Error('Cannot issue refund, transaction log %s not found', $id);
+            $this->page->BindRefundIssued(false);
+            return;
+        }
+
         if ($transactionLogView->GatewayName == PaymentGateways::PAYPAL) {
             $gateway = $this->paymentRepository->GetPayPalGateway();
             $refund = $gateway->Refund($transactionLogView, $amount, $this->paymentLogger);
 
-            $this->page->BindRefundIssued($refund->state == 'completed');
+            // Refund() returns null on failure, or the raw body when PayPal does not return JSON.
+            // Checking the v1 "state" field on a v2 response is a known bug, see:
+            // https://github.com/LibreBooking/librebooking/issues/1873
+            $this->page->BindRefundIssued(is_object($refund) && ($refund->state ?? null) == 'completed');
         } else {
             $gateway = $this->paymentRepository->GetStripeGateway();
 

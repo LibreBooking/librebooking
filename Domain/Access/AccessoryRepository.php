@@ -6,9 +6,8 @@ interface IAccessoryRepository
 {
     /**
      * @param int $accessoryId
-     * @return Accessory
      */
-    public function LoadById($accessoryId);
+    public function LoadById($accessoryId): ?Accessory;
 
     /**
      * @return Accessory[]
@@ -38,9 +37,8 @@ class AccessoryRepository implements IAccessoryRepository
 {
     /**
      * @param int $accessoryId
-     * @return Accessory
      */
-    public function LoadById($accessoryId)
+    public function LoadById($accessoryId): ?Accessory
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetAccessoryByIdCommand($accessoryId));
 
