@@ -91,6 +91,18 @@ class SchedulesWebServiceTest extends TestBase
         $this->assertEquals(RestResponse::NotFound(), $this->server->_LastResponse);
     }
 
+    public function testGetSlotsWithoutDatesWritesAResponse(): void
+    {
+        // startDateTime and endDateTime are optional; omitting them used to
+        // call ToTimezone() on null. The fake database has no schedules, so
+        // the presenter reports a permission error, which proves the request
+        // got past the date handling.
+        $this->service->GetSlots(1);
+
+        $this->assertEquals(RestResponse::Unauthorized(), $this->server->_LastResponse);
+        $this->assertSame(RestResponse::UNAUTHORIZED_CODE, $this->server->_LastResponseCode);
+    }
+
     public function testScheduleResponseReturnsLayoutForEachDayOfWeek()
     {
         $schedule = new FakeSchedule();
