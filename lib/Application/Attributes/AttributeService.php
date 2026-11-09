@@ -237,8 +237,8 @@ class AttributeService implements IAttributeService
                             && $this->AvailableForResource($userSession, $secondaryCategory, $attribute, $requestedResourceIds))
                     )
             ) {
-                $viewableForPrivate = (!$attribute->IsPrivate() || ($attribute->IsPrivate() && $this->CanReserveFor($userSession, $requestedUserId)));
-                $viewableForAdmin = (!$attribute->AdminOnly() || ($attribute->AdminOnly() && $this->GetAuthorizationService()->IsAdminFor($userSession, $requestedUserId)));
+                $viewableForPrivate = !$attribute->IsPrivate() || $this->CanReserveFor($userSession, $requestedUserId);
+                $viewableForAdmin = !$attribute->AdminOnly() || $this->GetAuthorizationService()->IsAdminFor($userSession, $requestedUserId);
                 if ($viewableForPrivate && $viewableForAdmin) {
                     $attributes[] = new LBAttribute($attribute, $reservationView->GetAttributeValue($attribute->Id()));
                 }

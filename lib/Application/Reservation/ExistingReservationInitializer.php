@@ -6,11 +6,6 @@ require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
 class ExistingReservationInitializer extends ReservationInitializerBase implements IReservationComponentInitializer
 {
     /**
-     * @var IExistingReservationPage
-     */
-    private $page;
-
-    /**
      * @var ReservationView
      */
     private $reservationView;
@@ -40,7 +35,6 @@ class ExistingReservationInitializer extends ReservationInitializerBase implemen
         UserSession $userSession,
         ITermsOfServiceRepository $termsOfServiceRepository
     ) {
-        $this->page = $page;
         $this->reservationView = $reservationView;
         $this->reservationBinder = $reservationBinder;
 

@@ -71,7 +71,7 @@ interface IReservedItemView
     public function GetAdditonalCSSClasses();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetTitle();
 
@@ -159,12 +159,12 @@ class ReservationItemView implements IReservedItemView
     public $UserLevelId;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $Title;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $Description;
 
@@ -250,15 +250,15 @@ class ReservationItemView implements IReservedItemView
      */
     public $OwnerEmailAddress;
     /**
-     * @var string
+     * @var string|null
      */
     public $OwnerPhone;
     /**
-     * @var string
+     * @var string|null
      */
     public $OwnerOrganization;
     /**
-     * @var string
+     * @var string|null
      */
     public $OwnerPosition;
 

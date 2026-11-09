@@ -15,19 +15,12 @@ class CalendarWeek implements ICalendarSegment
     private $days = [];
 
     /**
-     * @var string
-     */
-    private $timezone;
-
-    /**
      * @var array|CalendarReservation[]
      */
     private $reservations;
 
-    public function __construct($timezone)
+    public function __construct()
     {
-        $this->timezone = $timezone;
-
         for ($i = 0; $i < 7; $i++) {
             $this->indexedDays[$i] = CalendarDay::Null();
         }
@@ -35,7 +28,7 @@ class CalendarWeek implements ICalendarSegment
 
     public static function FromDate($year, $month, $day, $timezone, $firstDayOfWeek = 0)
     {
-        $week = new CalendarWeek($timezone);
+        $week = new CalendarWeek();
 
         $date = Date::Create($year, $month, $day, 0, 0, 0, $timezone);
 

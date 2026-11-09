@@ -22,11 +22,6 @@ class ReservationInitializerFactory implements IReservationInitializerFactory
      */
     private $reservationAuthorization;
 
-    /**
-     * @var IUserRepository
-     */
-    private $userRepository;
-
     public function __construct(
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository,
@@ -34,7 +29,6 @@ class ReservationInitializerFactory implements IReservationInitializerFactory
         IReservationAuthorization $reservationAuthorization
     ) {
         $this->reservationAuthorization = $reservationAuthorization;
-        $this->userRepository = $userRepository;
 
         $this->userBinder = new ReservationUserBinder($userRepository, $reservationAuthorization);
         $this->dateBinder = new ReservationDateBinder($scheduleRepository);

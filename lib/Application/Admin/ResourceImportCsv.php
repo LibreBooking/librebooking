@@ -208,9 +208,7 @@ class ResourceImportCsv
 
         if (!$headers) {
             Log::Debug('No headers in resource import file.');
-            if (count($csvRows) > 0) {
-                Log::Debug('Header row: %s', var_export(str_getcsv($csvRows[0]), true));
-            }
+            Log::Debug('Header row: %s', var_export(str_getcsv($csvRows[0]), true));
             return $rows;
         }
 
