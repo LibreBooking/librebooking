@@ -381,6 +381,14 @@ class BlackoutsServiceTest extends TestBase
         $this->assertEquals($id, $this->blackoutRepository->_LoadedBlackoutId);
     }
 
+    public function testLoadBlackoutReturnsNullWhenBlackoutDoesNotExist(): void
+    {
+        $this->blackoutRepository->_Series = null;
+        $this->userRepository->expects($this->never())->method('LoadById');
+
+        $this->assertNull($this->service->LoadBlackout(blackoutId: 999, userId: 1));
+    }
+
     public function testUpdatesBlackoutForEachResourceWhenNoConflicts()
     {
         $userId = $this->fakeUser->UserId;

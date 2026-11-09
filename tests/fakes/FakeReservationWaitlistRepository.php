@@ -40,7 +40,7 @@ class FakeReservationWaitlistRepository implements IReservationWaitlistRepositor
      * @param int $waitlistId
      * @return ReservationWaitlistRequest
      */
-    public function LoadById($waitlistId)
+    public function LoadById($waitlistId): ?ReservationWaitlistRequest
     {
         throw new LogicException('LoadById() not implemented in FakeReservationWaitlistRepository');
     }

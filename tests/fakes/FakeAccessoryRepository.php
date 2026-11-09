@@ -16,7 +16,7 @@ class FakeAccessoryRepository implements IAccessoryRepository
      * @param int $accessoryId
      * @return Accessory
      */
-    public function LoadById($accessoryId)
+    public function LoadById($accessoryId): ?Accessory
     {
         throw new LogicException('LoadById() not implemented in FakeAccessoryRepository');
     }

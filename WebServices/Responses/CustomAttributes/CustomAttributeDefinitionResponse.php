@@ -46,7 +46,7 @@ class CustomAttributeDefinitionResponse extends RestResponse
     public $appliesToIds = [];
 
     /**
-     * @var bool
+     * @var int 1 when the attribute is admin-only, otherwise 0
      */
     public $adminOnly;
 
@@ -110,7 +110,7 @@ class ExampleCustomAttributeDefinitionResponse extends CustomAttributeDefinition
         $this->required = true;
         $this->sortOrder = 100;
         $this->appliesToIds = [10];
-        $this->adminOnly = true;
+        $this->adminOnly = 1;
         $this->isPrivate = true;
         $this->secondaryCategoryId = 1;
         $this->secondaryEntityIds = [1,2];

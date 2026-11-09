@@ -27,9 +27,8 @@ interface IBlackoutRepository
 
     /**
      * @param int $blackoutId
-     * @return BlackoutSeries
      */
-    public function LoadByBlackoutId($blackoutId);
+    public function LoadByBlackoutId($blackoutId): ?BlackoutSeries;
 }
 
 class BlackoutRepository implements IBlackoutRepository
@@ -83,9 +82,8 @@ class BlackoutRepository implements IBlackoutRepository
 
     /**
      * @param int $blackoutId
-     * @return BlackoutSeries
      */
-    public function LoadByBlackoutId($blackoutId)
+    public function LoadByBlackoutId($blackoutId): ?BlackoutSeries
     {
         $db = ServiceLocator::GetDatabase();
         $reader = $db->Query(new GetBlackoutSeriesByBlackoutIdCommand($blackoutId));

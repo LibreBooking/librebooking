@@ -32,9 +32,9 @@ class Group
     private $addedRoleIds = [];
 
     /**
-     * @var array|RoleDto[]
+     * @var int[]
      */
-    private $roleIds = [];
+    private array $roleIds = [];
 
     /**
      * @param $id int
@@ -332,18 +332,17 @@ class Group
     }
 
     /**
-     * @return array|int[]
+     * @return int[]
      */
-    public function RoleIds()
+    public function RoleIds(): array
     {
         return $this->roleIds;
     }
 
     /**
-     * @param $roleIds int[]|array
-     * @return void
+     * @param int[] $roleIds
      */
-    public function ChangeRoles($roleIds)
+    public function ChangeRoles(array $roleIds): void
     {
         $diff = new ArrayDiff($this->roleIds, $roleIds);
         $removed = $diff->GetRemovedFromArray1();

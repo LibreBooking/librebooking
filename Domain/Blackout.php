@@ -353,9 +353,8 @@ class BlackoutSeries
 
     /**
      * @param DateRange $date
-     * @return string
      */
-    private function ToKey(DateRange $date)
+    private function ToKey(DateRange $date): int
     {
         return $date->GetBegin()->Timestamp();
     }

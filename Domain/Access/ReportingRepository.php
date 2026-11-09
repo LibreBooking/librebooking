@@ -26,9 +26,8 @@ interface IReportingRepository
     /**
      * @param int $reportId
      * @param int $userId
-     * @return SavedReport
      */
-    public function LoadSavedReportForUser($reportId, $userId);
+    public function LoadSavedReportForUser($reportId, $userId): ?SavedReport;
 
     /**
      * @param int $reportId
@@ -88,9 +87,8 @@ class ReportingRepository implements IReportingRepository
     /**
      * @param int $reportId
      * @param int $userId
-     * @return SavedReport
      */
-    public function LoadSavedReportForUser($reportId, $userId)
+    public function LoadSavedReportForUser($reportId, $userId): ?SavedReport
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetSavedReportForUserCommand($reportId, $userId));
 

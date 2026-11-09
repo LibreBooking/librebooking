@@ -655,9 +655,8 @@ class User
 
     /**
      * @param UserAttribute|string $attributeName
-     * @return string
      */
-    public function GetAttribute($attributeName)
+    public function GetAttribute($attributeName): ?string
     {
         if (array_key_exists($attributeName, $this->attributes)) {
             return $this->attributes[$attributeName];

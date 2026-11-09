@@ -444,7 +444,7 @@ class FakeReportingRepository implements IReportingRepository
      * @param int $userId
      * @return SavedReport
      */
-    public function LoadSavedReportForUser($reportId, $userId)
+    public function LoadSavedReportForUser($reportId, $userId): ?SavedReport
     {
         return $this->_SavedReport;
     }

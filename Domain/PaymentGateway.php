@@ -311,7 +311,8 @@ class PayPalGateway implements IPaymentGateway
      * @param CreditCartSession $cart
      * @param string $returnUrl
      * @param string $cancelUrl
-     * @return object
+     * @return object|string|null decoded JSON response body, the raw body when
+     *                            it is not valid JSON, or null when the request fails
      */
     public function CreatePayment(CreditCartSession $cart, $returnUrl, $cancelUrl)
     {
@@ -357,7 +358,8 @@ class PayPalGateway implements IPaymentGateway
      * @param string $paymentId
      * @param string $payerId
      * @param IPaymentTransactionLogger $logger
-     * @return object
+     * @return object|string|null decoded JSON response body, the raw body when
+     *                            it is not valid JSON, or null when the request fails
      */
     public function ExecutePayment(CreditCartSession $cart, $paymentId, $payerId, IPaymentTransactionLogger $logger)
     {
@@ -416,7 +418,8 @@ class PayPalGateway implements IPaymentGateway
      * @param TransactionLogView $log
      * @param float $amount
      * @param IPaymentTransactionLogger $logger
-     * @return object
+     * @return object|string|null decoded JSON response body, the raw body when
+     *                            it is not valid JSON, or null when the request fails
      */
     public function Refund(TransactionLogView $log, $amount, IPaymentTransactionLogger $logger)
     {

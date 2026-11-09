@@ -206,7 +206,7 @@ class FakeReservationRepository implements IReservationRepository
      * @param $attachmentFileId int
      * @return ReservationAttachment
      */
-    public function LoadReservationAttachment($attachmentFileId)
+    public function LoadReservationAttachment($attachmentFileId): ?ReservationAttachment
     {
         throw new LogicException('LoadReservationAttachment() not implemented in FakeReservationRepository');
     }

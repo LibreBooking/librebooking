@@ -949,10 +949,7 @@ class QuotaLimitCount implements IQuotaLimit
      */
     private $aggregateCounts = [];
 
-    /**
-     * @var int
-     */
-    private $totalAllowed;
+    private float $totalAllowed;
 
     /**
      * @param float $totalAllowed

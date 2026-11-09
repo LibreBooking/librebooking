@@ -58,9 +58,8 @@ interface IPaymentRepository
 
     /**
      * @param int $transactionLogId
-     * @return TransactionLogView
      */
-    public function GetTransactionLogView($transactionLogId);
+    public function GetTransactionLogView($transactionLogId): ?TransactionLogView;
 }
 
 class PaymentRepository implements IPaymentRepository
@@ -174,9 +173,8 @@ class PaymentRepository implements IPaymentRepository
 
     /**
      * @param int $transactionLogId
-     * @return TransactionLogView
      */
-    public function GetTransactionLogView($transactionLogId)
+    public function GetTransactionLogView($transactionLogId): ?TransactionLogView
     {
         $command = new GetTransactionLogCommand($transactionLogId);
         $reader = ServiceLocator::GetDatabase()->Query($command);

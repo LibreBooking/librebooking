@@ -1049,4 +1049,15 @@ class ScheduleLayoutTest extends TestBase
         $this->assertEquals($expectedLayout2, $date2Layout);
         $this->assertSame($date1Layout, $date1AgainLayout);
     }
+
+    public function testCustomScheduleLayoutSlotCountIsCurrentlyZero(): void
+    {
+        // Documents the current behavior: custom-layout reservations are not
+        // charged credits. Update this test when the slot counting is fixed:
+        // https://github.com/LibreBooking/librebooking/issues/1871
+        $layout = new CustomScheduleLayout('UTC', 1, new FakeScheduleRepository());
+        $start = Date::Parse('2026-11-10 09:00', 'UTC');
+
+        $this->assertEquals(new SlotCount(0, 0), $layout->GetSlotCount($start, $start->AddHours(1)));
+    }
 }

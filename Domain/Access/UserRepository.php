@@ -745,9 +745,8 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param $emailAddress string
-     * @return User
      */
-    public function FindByEmail($emailAddress)
+    public function FindByEmail($emailAddress): ?User
     {
         $command = new CheckEmailCommand($emailAddress);
         $reader = ServiceLocator::GetDatabase()->Query($command);
@@ -985,9 +984,9 @@ class UserItemView
     public $CurrentCreditCount;
 
     /**
-     * @var int[]
+     * @var array<int|string> group IDs as returned by the database
      */
-    public $GroupIds = [];
+    public array $GroupIds = [];
 
     public function __construct()
     {

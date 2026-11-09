@@ -252,9 +252,8 @@ class ReservationRepository implements IReservationRepository
     /**
      * @param SeriesEvent $event
      * @param ExistingReservationSeries $series
-     * @return EventCommand
      */
-    private function GetReservationCommand($event, $series)
+    private function GetReservationCommand($event, $series): ?EventCommand
     {
         return ReservationEventMapper::Instance()->Map($event, $series);
     }
@@ -459,9 +458,8 @@ class ReservationRepository implements IReservationRepository
 
     /**
      * @param $attachmentFileId int
-     * @return ReservationAttachment
      */
-    public function LoadReservationAttachment($attachmentFileId)
+    public function LoadReservationAttachment($attachmentFileId): ?ReservationAttachment
     {
         $command = new GetReservationAttachmentCommand($attachmentFileId);
         $reader = ServiceLocator::GetDatabase()->Query($command);
@@ -600,9 +598,8 @@ class ReservationEventMapper
     /**
      * @param $event mixed
      * @param $series ExistingReservationSeries
-     * @return EventCommand
      */
-    public function Map($event, ExistingReservationSeries $series)
+    public function Map($event, ExistingReservationSeries $series): ?EventCommand
     {
         $eventType = get_class($event);
         if (!isset($this->buildMethods[$eventType])) {
@@ -695,10 +692,7 @@ class EventCommand
      */
     private $command;
 
-    /**
-     * @var ExistingReservationSeries
-     */
-    protected $series;
+    protected ReservationSeries $series;
 
     public function __construct(ISqlCommand $command, ExistingReservationSeries $series)
     {
@@ -708,9 +702,13 @@ class EventCommand
 
     public function Execute(Database $database)
     {
-        if (!$this->series->RequiresNewSeries()) {
-            $database->Execute($this->command);
+        // The base constructor requires an ExistingReservationSeries; subclasses
+        // that store a plain ReservationSeries override Execute().
+        if ($this->series instanceof ExistingReservationSeries && $this->series->RequiresNewSeries()) {
+            return;
         }
+
+        $database->Execute($this->command);
     }
 }
 
@@ -1002,9 +1000,8 @@ interface IReservationRepository
     /**
      * @abstract
      * @param $attachmentFileId int
-     * @return ReservationAttachment
      */
-    public function LoadReservationAttachment($attachmentFileId);
+    public function LoadReservationAttachment($attachmentFileId): ?ReservationAttachment;
 
     /**
      * @param $attachmentFile ReservationAttachment

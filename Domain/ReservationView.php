@@ -49,7 +49,7 @@ class ReservationView
      */
     public $RepeatType;
     /**
-     * @var int
+     * @var int|string|null
      */
     public $RepeatInterval;
     /**

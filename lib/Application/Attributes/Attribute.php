@@ -67,9 +67,9 @@ class LBAttribute
     }
 
     /**
-     * @return bool
+     * Returns 1 when the attribute is admin-only, otherwise 0.
      */
-    public function AdminOnly()
+    public function AdminOnly(): int
     {
         return $this->attributeDefinition->AdminOnly();
     }
