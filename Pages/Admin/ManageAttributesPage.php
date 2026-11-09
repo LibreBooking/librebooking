@@ -35,7 +35,7 @@ interface IManageAttributesPage extends IActionPage
     /**
      * @return int[]
      */
-    public function GetEntityIds();
+    public function GetEntityIds(): array;
 
     /**
      * return string
@@ -47,10 +47,7 @@ interface IManageAttributesPage extends IActionPage
      */
     public function GetRequestedCategory();
 
-    /**
-     * @return int
-     */
-    public function GetSortOrder();
+    public function GetSortOrder(): ?int;
 
     /**
      * return bool
@@ -67,20 +64,14 @@ interface IManageAttributesPage extends IActionPage
      */
     public function SetCategory($categoryId);
 
-    /**
-     * @return int
-     */
-    public function GetAttributeId();
+    public function GetAttributeId(): ?int;
 
     /**
-     * @return int|null
+     * @return int[]
      */
-    public function GetSecondaryEntityIds();
+    public function GetSecondaryEntityIds(): array;
 
-    /**
-     * @return CustomAttributeCategory|int|null
-     */
-    public function GetSecondaryCategory();
+    public function GetSecondaryCategory(): ?int;
 
     /**
      * @return bool
@@ -158,18 +149,9 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
         return !empty($required);
     }
 
-    public function GetEntityIds()
+    public function GetEntityIds(): array
     {
-        $ids = $this->GetForm(FormKeys::ATTRIBUTE_ENTITY);
-        if (is_null($ids)) {
-            return [];
-        }
-
-        if (!is_array($ids)) {
-            return [$ids];
-        }
-
-        return $ids;
+        return $this->GetFormIntList(key: FormKeys::ATTRIBUTE_ENTITY);
     }
 
     public function GetPossibleValues()
@@ -177,9 +159,9 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
         return $this->GetForm(FormKeys::ATTRIBUTE_POSSIBLE_VALUES);
     }
 
-    public function GetSortOrder()
+    public function GetSortOrder(): ?int
     {
-        return $this->GetForm(FormKeys::ATTRIBUTE_SORT_ORDER);
+        return $this->GetFormInt(key: FormKeys::ATTRIBUTE_SORT_ORDER);
     }
 
     public function GetRequestedCategory()
@@ -204,28 +186,19 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
         $this->Set('Category', $categoryId);
     }
 
-    public function GetAttributeId()
+    public function GetAttributeId(): ?int
     {
-        return $this->GetQuerystring(QueryStringKeys::ATTRIBUTE_ID);
+        return $this->GetQuerystringInt(key: QueryStringKeys::ATTRIBUTE_ID);
     }
 
-    public function GetSecondaryEntityIds()
+    public function GetSecondaryEntityIds(): array
     {
-        $ids = $this->GetForm(FormKeys::ATTRIBUTE_SECONDARY_ENTITY_IDS);
-        if (is_null($ids)) {
-            return [];
-        }
-
-        if (!is_array($ids)) {
-            return [$ids];
-        }
-
-        return $ids;
+        return $this->GetFormIntList(key: FormKeys::ATTRIBUTE_SECONDARY_ENTITY_IDS);
     }
 
-    public function GetSecondaryCategory()
+    public function GetSecondaryCategory(): ?int
     {
-        return $this->GetForm(FormKeys::ATTRIBUTE_SECONDARY_CATEGORY);
+        return $this->GetFormInt(key: FormKeys::ATTRIBUTE_SECONDARY_CATEGORY);
     }
 
     public function GetLimitAttributeScope()

@@ -77,15 +77,9 @@ interface IManagePaymentsPage extends IActionPage
      */
     public function SetStripeSettings($enabled, $publishableKey, $secretKey);
 
-    /**
-     * @return string
-     */
-    public function GetPageNumber();
+    public function GetPageNumber(): int;
 
-    /**
-     * @return string
-     */
-    public function GetPageSize();
+    public function GetPageSize(): int;
 
     /**
      * @param PageableData|TransactionLogView[] $transactionLog
@@ -234,12 +228,12 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         $this->Display('Admin/Payments/transaction_log.tpl');
     }
 
-    public function GetPageNumber()
+    public function GetPageNumber(): int
     {
         return $this->pageable->GetPageNumber();
     }
 
-    public function GetPageSize()
+    public function GetPageSize(): int
     {
         return $this->pageable->GetPageSize();
     }

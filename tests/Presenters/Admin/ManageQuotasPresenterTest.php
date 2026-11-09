@@ -104,7 +104,7 @@ class ManageQuotasPresenterTest extends TestBase
     public function testWhenAdding()
     {
         $duration = QuotaDuration::Day;
-        $limit = 2;
+        $limit = 2.0;
         $unit = QuotaUnit::Hours;
         $resourceId = 987;
         $groupId = 8287;

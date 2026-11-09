@@ -57,10 +57,10 @@ class ManageAttributesPresenterTest extends TestBase
         $required = true;
         $regex = '/$\d^/';
         $possibleValues = '1,2,3';
-        $sortOrder = '5';
+        $sortOrder = 5;
         $entityIds = [10];
         $adminOnly = true;
-        $secondaryEntityIds = ['1029', '2028'];
+        $secondaryEntityIds = [1029, 2028];
 
         $this->page->_label = $label;
         $this->page->_type = $type;
@@ -93,11 +93,11 @@ class ManageAttributesPresenterTest extends TestBase
         $required = true;
         $regex = '/$\d^/';
         $possibleValues = '1,2,3';
-        $sortOrder = '5';
+        $sortOrder = 5;
         $entityIds = [1,2,3];
         $isPrivate = true;
         $adminOnly = true;
-        $secondaryEntityIds = ['1029', '2028'];
+        $secondaryEntityIds = [1029, 2028];
 
         $this->page->_label = $label;
         $this->page->_required = $required;
@@ -162,11 +162,11 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
     public $_boundAttributes;
     public $_attributeId;
     public $_sortOrder;
-    public $_entityIds;
+    public $_entityIds = [];
     public $_adminOnly;
     public $_limitAttributeScope;
     public $_secondaryCategory;
-    public $_secondaryEntityIds;
+    public $_secondaryEntityIds = [];
     public $_isPrivate;
 
 
@@ -195,7 +195,7 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
         return $this->_required;
     }
 
-    public function GetEntityIds()
+    public function GetEntityIds(): array
     {
         return $this->_entityIds;
     }
@@ -210,7 +210,7 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
         return $this->_requestedCategoryId;
     }
 
-    public function GetSortOrder()
+    public function GetSortOrder(): ?int
     {
         return $this->_sortOrder;
     }
@@ -225,7 +225,7 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
         // TODO: Implement SetCategory() method.
     }
 
-    public function GetAttributeId()
+    public function GetAttributeId(): ?int
     {
         return $this->_attributeId;
     }
@@ -235,12 +235,12 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
         return $this->_adminOnly;
     }
 
-    public function GetSecondaryEntityIds()
+    public function GetSecondaryEntityIds(): array
     {
         return $this->_secondaryEntityIds;
     }
 
-    public function GetSecondaryCategory()
+    public function GetSecondaryCategory(): ?int
     {
         return $this->_secondaryCategory;
     }

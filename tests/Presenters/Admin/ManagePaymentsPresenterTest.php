@@ -289,12 +289,12 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         $this->_StripeSecretKey = $secretKey;
     }
 
-    public function GetPageNumber()
+    public function GetPageNumber(): int
     {
         return $this->_CurrentPage;
     }
 
-    public function GetPageSize()
+    public function GetPageSize(): int
     {
         return $this->_PageSize;
     }
