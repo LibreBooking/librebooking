@@ -224,15 +224,6 @@ class ICalImportPresenter extends ActionPresenter
         return $this->defaultScheduleId;
     }
 
-    private function GetTimezone($event, $dtarray)
-    {
-        if (array_key_exists('TZID', $event[$dtarray][0])) {
-            return $event[$dtarray][0]['TZID'];
-        }
-
-        return 'UTC';
-    }
-
     protected function LoadValidators($action)
     {
         $this->page->RegisterValidator(

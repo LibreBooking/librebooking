@@ -82,7 +82,6 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
             new AnnouncementRepository(),
             new GroupRepository(),
             $resourceRepository,
-            PluginManager::Instance()->LoadPermission(),
             new UserRepository()
         );
     }

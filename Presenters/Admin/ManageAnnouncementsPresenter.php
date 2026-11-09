@@ -32,10 +32,6 @@ class ManageAnnouncementsPresenter extends ActionPresenter
      */
     private $resourceRepository;
     /**
-     * @var IPermissionService
-     */
-    private $permissionService;
-    /**
      * @var IUserViewRepository
      */
     private $userViewRepository;
@@ -45,7 +41,6 @@ class ManageAnnouncementsPresenter extends ActionPresenter
      * @param IAnnouncementRepository $announcementRepository
      * @param IGroupViewRepository $groupViewRepository
      * @param IResourceRepository $resourceRepository
-     * @param IPermissionService $permissionService
      * @param IUserViewRepository $userViewRepository
      */
     public function __construct(
@@ -53,7 +48,6 @@ class ManageAnnouncementsPresenter extends ActionPresenter
         IAnnouncementRepository $announcementRepository,
         IGroupViewRepository $groupViewRepository,
         IResourceRepository $resourceRepository,
-        IPermissionService $permissionService,
         IUserViewRepository $userViewRepository
     ) {
         parent::__construct($page);
@@ -62,7 +56,6 @@ class ManageAnnouncementsPresenter extends ActionPresenter
         $this->announcementRepository = $announcementRepository;
         $this->groupViewRepository = $groupViewRepository;
         $this->resourceRepository = $resourceRepository;
-        $this->permissionService = $permissionService;
         $this->userViewRepository = $userViewRepository;
 
         $this->AddAction(ManageAnnouncementsActions::Add, 'AddAnnouncement');

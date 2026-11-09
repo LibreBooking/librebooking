@@ -266,10 +266,6 @@ class User
         return $this->creditsNote;
     }
 
-    /**
-     * @var bool
-     */
-    private $permissionsChanged = false;
     private $removedPermissions = [];
     private $addedPermissions = [];
     private $removedViewPermissions = [];
@@ -310,7 +306,6 @@ class User
      */
     public function WithAllowedPermissions($allowedResourceIds = [])
     {
-        $this->permissionsChanged = false;
         $this->allowedResourceIds = $allowedResourceIds;
     }
 
@@ -319,7 +314,6 @@ class User
      */
     public function WithViewablePermission($viewableResourceIds = [])
     {
-        $this->permissionsChanged = false;
         $this->viewableResourceIds = $viewableResourceIds;
     }
 
@@ -368,7 +362,6 @@ class User
         $added = array_diff($allowedResourceIds, $this->allowedResourceIds);
 
         if (!empty($removed) || !empty($added)) {
-            $this->permissionsChanged = true;
             $this->removedPermissions = $removed;
             $this->addedPermissions = $added;
 
@@ -386,7 +379,6 @@ class User
         $added = $diff->GetAddedToArray1();
 
         if ($diff->AreDifferent()) {
-            $this->permissionsChanged = true;
             $this->removedViewPermissions = $removed;
             $this->addedViewPermissions = $added;
 

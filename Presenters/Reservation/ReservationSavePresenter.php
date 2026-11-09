@@ -23,11 +23,6 @@ class ReservationSavePresenter implements IReservationSavePresenter
     private $page;
 
     /**
-     * @var IReservationPersistenceService
-     */
-    private $persistenceService;
-
-    /**
      * @var IReservationHandler
      */
     private $handler;
@@ -48,14 +43,12 @@ class ReservationSavePresenter implements IReservationSavePresenter
 
     public function __construct(
         IReservationSavePage $page,
-        IReservationPersistenceService $persistenceService,
         IReservationHandler $handler,
         IResourceRepository $resourceRepository,
         IScheduleRepository $scheduleRepository,
         UserSession $userSession
     ) {
         $this->page = $page;
-        $this->persistenceService = $persistenceService;
         $this->handler = $handler;
         $this->resourceRepository = $resourceRepository;
         $this->scheduleRepository = $scheduleRepository;

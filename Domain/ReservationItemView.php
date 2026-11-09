@@ -401,7 +401,7 @@ class ReservationItemView implements IReservedItemView
     public $ScheduleAdminGroupId = null;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $bufferSeconds = 0;
 

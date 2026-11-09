@@ -17,7 +17,6 @@ class ResourceAdminManageResourcesPage extends ManageResourcesPage
             new ImageFactory(),
             new GroupRepository(),
             new AttributeService(new AttributeRepository()),
-            new UserPreferenceRepository(),
             new ReservationViewRepository()
         );
     }

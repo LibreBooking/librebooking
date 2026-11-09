@@ -23,11 +23,6 @@ class RegistrationPresenter extends ActionPresenter
     private $registration;
 
     /**
-     * @var IAuthentication
-     */
-    private $auth;
-
-    /**
      * @var ICaptchaService
      */
     private $captchaService;
@@ -45,7 +40,6 @@ class RegistrationPresenter extends ActionPresenter
     /**
      * @param IRegistrationPage $page
      * @param IRegistration|null $registration
-     * @param IAuthentication|null $authentication
      * @param ICaptchaService|null $captchaService
      * @param IAttributeService|null $attributeService
      * @param ITermsOfServiceRepository|null $termsOfServiceRepository
@@ -53,7 +47,6 @@ class RegistrationPresenter extends ActionPresenter
     public function __construct(
         IRegistrationPage $page,
         $registration = null,
-        $authentication = null,
         $captchaService = null,
         $attributeService = null,
         $termsOfServiceRepository = null
@@ -62,7 +55,6 @@ class RegistrationPresenter extends ActionPresenter
 
         $this->page = $page;
         $this->SetRegistration($registration);
-        $this->SetAuthentication($authentication);
         $this->SetCaptchaService($captchaService);
         $this->SetAttributeService($attributeService);
         $this->SetTermsRepository($termsOfServiceRepository);
@@ -76,15 +68,6 @@ class RegistrationPresenter extends ActionPresenter
             $this->registration = new Registration();
         } else {
             $this->registration = $registration;
-        }
-    }
-
-    private function SetAuthentication($authorization)
-    {
-        if (is_null($authorization)) {
-            $this->auth = PluginManager::Instance()->LoadAuthentication();
-        } else {
-            $this->auth = $authorization;
         }
     }
 

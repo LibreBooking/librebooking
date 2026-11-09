@@ -80,11 +80,6 @@ class ManageResourcesPresenter extends ActionPresenter
     private $attributeService;
 
     /**
-     * @var IUserPreferenceRepository
-     */
-    private $userPreferenceRepository;
-
-    /**
      * @var IReservationViewRepository
      */
     private $reservationViewRepository;
@@ -96,7 +91,6 @@ class ManageResourcesPresenter extends ActionPresenter
         IImageFactory $imageFactory,
         IGroupViewRepository $groupRepository,
         IAttributeService $attributeService,
-        IUserPreferenceRepository $userPreferenceRepository,
         IReservationViewRepository $reservationViewRepository
     ) {
         parent::__construct($page);
@@ -107,7 +101,6 @@ class ManageResourcesPresenter extends ActionPresenter
         $this->imageFactory = $imageFactory;
         $this->groupRepository = $groupRepository;
         $this->attributeService = $attributeService;
-        $this->userPreferenceRepository = $userPreferenceRepository;
         $this->reservationViewRepository = $reservationViewRepository;
 
         $this->AddAction(ManageResourcesActions::ActionAdd, 'Add');

@@ -41,7 +41,6 @@ class ManageResourcesPresenterTest extends TestBase
             $this->createMock(IImageFactory::class),
             $groupRepository,
             $attributeService,
-            $this->createMock(IUserPreferenceRepository::class),
             $this->createMock(IReservationViewRepository::class)
         );
     }

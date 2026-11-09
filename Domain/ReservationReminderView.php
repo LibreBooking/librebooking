@@ -8,7 +8,7 @@ class ReservationReminderView
     private $value;
 
     /**
-     * @var ReservationReminderInterval|string
+     * @var string ReservationReminderInterval constant
      */
     private $interval;
 
