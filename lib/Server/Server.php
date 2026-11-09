@@ -116,9 +116,21 @@ class Server
         return null;
     }
 
-    private static function specialchars(&$val)
+    /**
+     * Escapes a submitted value in place. Nested arrays (for example from a
+     * name[a][]=1 field) are escaped recursively instead of being passed to
+     * trim(), which would throw a TypeError.
+     */
+    private static function specialchars(mixed &$val): void
     {
-        $val = htmlspecialchars(trim($val));
+        if (is_array($val)) {
+            array_walk($val, [self::class, 'specialchars']);
+            return;
+        }
+
+        if (is_string($val)) {
+            $val = htmlspecialchars(trim($val));
+        }
     }
 
     /**
