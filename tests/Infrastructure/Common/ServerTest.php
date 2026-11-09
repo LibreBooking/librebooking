@@ -45,6 +45,26 @@ class ServerTest extends TestBase
         $this->assertFalse($session->IsLoggedIn());
         $this->assertTrue($session->IsGuest());
     }
+
+    public function testGetFormEscapesSubmittedList(): void
+    {
+        $_POST['field'] = [' a ', '<b>'];
+
+        $this->assertSame(['a', '&lt;b&gt;'], (new Server())->GetForm('field'));
+    }
+
+    public function testGetFormEscapesNestedArraysInsteadOfFailing(): void
+    {
+        $_POST['field'] = ['5', ['x' => ' <i> '], [['6']]];
+
+        $this->assertSame(['5', ['x' => '&lt;i&gt;'], [['6']]], (new Server())->GetForm('field'));
+    }
+
+    public function tearDown(): void
+    {
+        unset($_POST['field']);
+        parent::tearDown();
+    }
 }
 
 class InMemorySessionServer extends Server
