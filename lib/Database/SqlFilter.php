@@ -65,7 +65,7 @@ abstract class BaseSqlFilter implements ISqlFilter
 
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param string $columnValue
+     * @param mixed $columnValue
      */
     public function __construct($columnName, $columnValue)
     {
@@ -166,17 +166,16 @@ class Criteria
 class SqlFilterEquals extends BaseSqlFilter
 {
     /**
-     * @param string|SqlFilterColumn $columnName
-     * @param string $columnValue
+     * A null $columnValue produces an `IS NULL` comparison.
      */
-    public function __construct($columnName, $columnValue)
+    public function __construct(ISqlFilterColumn|string $columnName, string|int|null $columnValue)
     {
         parent::__construct($columnName, $columnValue);
     }
 
     protected function GetSql()
     {
-        if ($this->criteria->Value == null) {
+        if ($this->criteria->Value === null) {
             return "{$this->criteria->Name} IS NULL";
         }
         return "{$this->criteria->Name} = {$this->criteria->Variable}";
@@ -185,11 +184,7 @@ class SqlFilterEquals extends BaseSqlFilter
 
 class SqlFilterNotEquals extends BaseSqlFilter
 {
-    /**
-     * @param string|SqlFilterColumn $columnName
-     * @param string $columnValue
-     */
-    public function __construct($columnName, $columnValue)
+    public function __construct(ISqlFilterColumn|string $columnName, string|int $columnValue)
     {
         parent::__construct($columnName, $columnValue);
     }
