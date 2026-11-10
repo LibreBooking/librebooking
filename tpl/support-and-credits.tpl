@@ -21,7 +21,7 @@
                 <h2>Credits</h2>
 
                 <p>see <a class="link-primary"
-                        href="https://github.com/LibreBooking/librebooking/blob/develop/CONTRIBUTORS.md">CONTRIBUTORS.md</a>
+                        href="https://github.com/LibreBooking/librebooking/blob/main/CONTRIBUTORS.md">CONTRIBUTORS.md</a>
                 </p>
 
                 <h2>License</h2>

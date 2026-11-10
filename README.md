@@ -48,7 +48,7 @@ Previous security update
 [![GitHub issues](https://img.shields.io/github/issues/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/issues)
 [![Last commit](https://img.shields.io/github/last-commit/LibreBooking/librebooking)](https://github.com/LibreBooking/librebooking/commits)
 [![GitHub release](https://img.shields.io/github/v/release/LibreBooking/librebooking?include_prereleases)](https://github.com/LibreBooking/librebooking/releases)
-[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/LibreBooking/librebooking/blob/develop/LICENSE.md)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/LibreBooking/librebooking/blob/main/LICENSE.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/network)
@@ -90,7 +90,7 @@ flexible, mobile-friendly, and extensible interface for organizations to manage
 resource reservations.
 
 The repository for LibreBooking is hosted on GitHub at
-<https://github.com/LibreBooking/librebooking>; the `develop` branch contains the latest
+<https://github.com/LibreBooking/librebooking>; the `main` branch contains the latest
 code.
 
 LibreBooking is a fork of Booked Scheduler, based on Booked Scheduler's last
@@ -147,7 +147,7 @@ To run LibreBooking from a prebuilt release, your server needs:
 - Git (optional, useful for cloning the repository or managing updates)
 
 For full setup instructions, see
-[INSTALLATION](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/INSTALLATION.rst)
+[INSTALLATION](https://github.com/LibreBooking/librebooking/blob/main/docs/source/INSTALLATION.rst)
 
 ### Docker Deployment
 
@@ -162,22 +162,22 @@ docker-compose up -d
 ## 💻 Developer Documentation
 
 - See
-  [docs/source/README.md](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/DEVELOPER-README.rst)
+  [docs/source/README.md](https://github.com/LibreBooking/librebooking/blob/main/docs/source/DEVELOPER-README.rst)
   for developer notes.
-- See [docs/source/API.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/API.rst)
+- See [docs/source/API.rst](https://github.com/LibreBooking/librebooking/blob/main/docs/source/API.rst)
   for API notes.
 - See
-  [docs/source/Oauth2-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/Oauth2-Configuration.rst)
+  [docs/source/Oauth2-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/main/docs/source/Oauth2-Configuration.rst)
   for Oauth2 configuration.
 - See
-  [docs/source/SAML-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/SAML-Configuration.rst)
+  [docs/source/SAML-Configuration.rst](https://github.com/LibreBooking/librebooking/blob/main/docs/source/SAML-Configuration.rst)
   for SAML configuration.
 - Codebase follows PSR-12 standards and GitHub Flow.
 
 ## 🎨 Configuration & Theming
 
 For configuration options, see the
-[Configuration Guide](https://github.com/LibreBooking/librebooking/blob/develop/docs/source/CONFIGURATION.rst).
+[Configuration Guide](https://github.com/LibreBooking/librebooking/blob/main/docs/source/CONFIGURATION.rst).
 
 Recent configuration highlights:
 

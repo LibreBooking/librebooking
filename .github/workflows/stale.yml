@@ -51,7 +51,7 @@ jobs:
 
             This is documented in CONTRIBUTING.md
 
-            https://github.com/LibreBooking/librebooking/blob/develop/CONTRIBUTING.md
+            https://github.com/LibreBooking/librebooking/blob/main/CONTRIBUTING.md
 
           days-before-issue-stale: 60
           days-before-issue-close: 15
@@ -81,7 +81,7 @@ jobs:
 
             This is documented in CONTRIBUTING.md
 
-            https://github.com/LibreBooking/librebooking/blob/develop/CONTRIBUTING.md
+            https://github.com/LibreBooking/librebooking/blob/main/CONTRIBUTING.md
 
           stale-pr-message: >
             This Pull Request (PR) was marked stale because it has been open 90 days

@@ -17,7 +17,7 @@ below and check the boxes that apply.
 - [ ] I understand that I will likely get a faster and better review if I
   join the [LibreBooking Discord](https://discord.gg/4TGThPtmX8) to discuss
   this pull request. Joining is not required, but it is highly recommended.
-- [ ] This PR targets the `develop` branch.
+- [ ] This PR targets the `main` branch.
 - [ ] The PR title and commit messages follow the
   [Conventional Commits](https://www.conventionalcommits.org/) format.
 - [ ] The PR contains no merge commits.

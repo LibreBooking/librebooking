@@ -9,8 +9,8 @@ version_variables = [
   "SECURITY.md:supported_version:nf",
 ]
 
-[semantic_release.branches.develop]
-match = "^develop$"
+[semantic_release.branches.main]
+match = "^main$"
 prerelease = false
 
 [semantic_release.changelog]

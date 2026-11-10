@@ -59,8 +59,8 @@ about.
 
 ## Getting Started
 
-* **Ensure you have an up-to-date `develop` branch:** Fork the repository and make
-sure your `develop` branch is synced with the upstream project before creating
+* **Ensure you have an up-to-date `main` branch:** Fork the repository and make
+sure your `main` branch is synced with the upstream project before creating
 your feature branch.
 * **Create a new branch** for your changes: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/issue-number-and-fix`.
 * **Make your changes** and **add tests** if applicable.
@@ -68,7 +68,7 @@ your feature branch.
 * **Ensure your code lints**
 * **Commit your changes** with a clear and descriptive commit message.
 * **Push your branch** to your fork: `git push origin feature/your-feature-name`.
-* **Open a Pull Request** against our `develop` branch.
+* **Open a Pull Request** against our `main` branch.
 
 ## Reporting Bugs
 
@@ -105,7 +105,7 @@ We'd love to hear your ideas for improving LibreBooking.
 LibreBooking follows [Semantic Versioning](https://semver.org/)
 (`MAJOR.MINOR.PATCH`). Version numbers are never chosen or edited by hand:
 [python-semantic-release](https://python-semantic-release.readthedocs.io/)
-derives the next version from the commit messages merged into `develop` since
+derives the next version from the commit messages merged into `main` since
 the previous release.
 
 | Commit                                    | Version bump |
@@ -118,7 +118,7 @@ the previous release.
 The largest bump among the commits wins. If no commit since the previous
 release warrants a bump, no release is made.
 
-Releases are created from the `develop` branch by the `Release` GitHub Actions
+Releases are created from the `main` branch by the `Release` GitHub Actions
 workflow, which runs monthly and can also be started manually by a maintainer.
 It updates the version in `lib/Config/Configuration.php`, `docs/source/conf.py`
 and `SECURITY.md`, updates `CHANGELOG.md`, commits the result as

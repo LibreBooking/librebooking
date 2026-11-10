@@ -10,8 +10,7 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - develop
-      - master
+      - main
 
 env:
   PY_COLORS: 1
