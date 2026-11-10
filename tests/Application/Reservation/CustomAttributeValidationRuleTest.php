@@ -83,7 +83,7 @@ class CustomAttributeValidationRuleTest extends TestBase
                 ->willReturn($validationResult);
 
         $userAttribute = new FakeCustomAttribute();
-        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, 123);
+        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, [123]);
 
         $result = $this->rule->Validate($this->reservation, null);
 
@@ -129,7 +129,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $attributeService = $this->createMock('IAttributeService');
 
         $userAttribute = new FakeCustomAttribute();
-        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, 123);
+        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, [123]);
 
         $validationResult = new AttributeServiceValidationResult(false, ['error'], [new InvalidAttribute($userAttribute, 'another message')]);
 
@@ -154,7 +154,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $attributeService = $this->createMock('IAttributeService');
 
         $userAttribute = new FakeCustomAttribute();
-        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, 2);
+        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, [2]);
 
         $validationResult = new AttributeServiceValidationResult(false, ['error'], [new InvalidAttribute($userAttribute, 'another message')]);
 
@@ -181,7 +181,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $attributeService = $this->createMock('IAttributeService');
 
         $userAttribute = new FakeCustomAttribute();
-        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, 2);
+        $userAttribute->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, [2]);
 
         $validationResult = new AttributeServiceValidationResult(false, ['error'], [new InvalidAttribute($userAttribute, 'another message')]);
 

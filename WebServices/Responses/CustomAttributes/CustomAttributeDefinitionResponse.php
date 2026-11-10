@@ -21,7 +21,7 @@ class CustomAttributeDefinitionResponse extends RestResponse
     public $categoryId;
 
     /**
-     * @var string
+     * @var string|null null when the attribute has no validation regex
      */
     public $regex;
 
@@ -56,7 +56,7 @@ class CustomAttributeDefinitionResponse extends RestResponse
     public $isPrivate;
 
     /**
-     * @var int
+     * @var int|null null when the attribute is not limited to secondary entities
      */
     public $secondaryCategoryId;
 

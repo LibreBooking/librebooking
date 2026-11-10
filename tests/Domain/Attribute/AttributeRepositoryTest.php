@@ -31,7 +31,7 @@ class AttributeRepositoryTest extends TestBase
         $regex = '/regex/';
         $required = false;
         $possibleValues = '';
-        $sortOrder = '4';
+        $sortOrder = 4;
         $entityId = 12;
         $adminOnly = true;
         $secondaryCategory = CustomAttributeCategory::USER;
@@ -46,7 +46,7 @@ class AttributeRepositoryTest extends TestBase
             $required,
             $possibleValues,
             $sortOrder,
-            $entityId,
+            [$entityId],
             $adminOnly
         );
 
@@ -103,11 +103,30 @@ class AttributeRepositoryTest extends TestBase
 
         $attribute = $this->repository->LoadById($id);
 
-        $expectedFirstAttribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, $sortOrder, $entityId, $adminOnly);
+        $expectedFirstAttribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, 4, [12], $adminOnly);
         $expectedFirstAttribute->WithSecondaryEntities(CustomAttributeCategory::USER, [1, 2, 3], '1!sep!2!sep!3');
 
         $this->assertEquals($expectedFirstAttribute, $attribute);
+        // assertEquals() compares loosely, so check the IDs are integers.
+        $this->assertSame([1, 2, 3], $attribute->SecondaryEntityIds());
         $this->assertEquals(new GetAttributeByIdCommand($id), $this->db->_LastCommand);
+    }
+
+    public function testLoadsEntityIdsAsIntegers()
+    {
+        // Entity IDs are kept only for non-reservation categories.
+        $id = 12099;
+        $row = $this->GetAttributeRow(
+            id: $id,
+            category: CustomAttributeCategory::RESOURCE,
+            entityId: '12!sep!13'
+        );
+
+        $this->db->SetRows([$row]);
+
+        $attribute = $this->repository->LoadById($id);
+
+        $this->assertSame([12, 13], $attribute->EntityIds());
     }
 
     public function testUpdatesAttribute()
@@ -119,14 +138,14 @@ class AttributeRepositoryTest extends TestBase
         $regex = '/regex/';
         $required = false;
         $possibleValues = 'val1,val2,val3';
-        $sortOrder = '4';
+        $sortOrder = 4;
         $entityId = 10;
         $adminOnly = true;
         $secondaryCategory = CustomAttributeCategory::USER;
         $secondaryEntityIds = '828,829';
         $isPrivate = true;
 
-        $attribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, $sortOrder, $entityId, $adminOnly);
+        $attribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, $sortOrder, [$entityId], $adminOnly);
         $attribute->WithSecondaryEntities($secondaryCategory, $secondaryEntityIds);
         $attribute->WithIsPrivate($isPrivate);
 
@@ -188,7 +207,7 @@ class AttributeRepositoryTest extends TestBase
 
         $attributes = $this->repository->GetByCategory(CustomAttributeCategory::RESERVATION);
 
-        $expectedFirstAttribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, $sortOrder, $entityIds);
+        $expectedFirstAttribute = new CustomAttribute($id, $label, $type, $category, $regex, $required, $possibleValues, 4, [12]);
         $expectedFirstAttribute->WithEntityDescriptions([$entityDescriptions]);
 
         $this->assertEquals(2, count($attributes));

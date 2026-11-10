@@ -8,8 +8,8 @@ class CustomAttributeTest extends TestBase
 {
     public function testChecksForRequiredValues()
     {
-        $customAttributeRequired = CustomAttribute::Create(null, 1, 1, null, true, null, null);
-        $customAttributeNotRequired = CustomAttribute::Create(null, 1, 1, null, false, null, null);
+        $customAttributeRequired = CustomAttribute::Create('', 1, 1, null, true, null, 0);
+        $customAttributeNotRequired = CustomAttribute::Create('', 1, 1, null, false, null, 0);
 
         $this->assertFalse($customAttributeRequired->SatisfiesRequired(''));
         $this->assertFalse($customAttributeRequired->SatisfiesRequired(' '));
@@ -29,8 +29,8 @@ class CustomAttributeTest extends TestBase
     {
         $regex = '/^\d+$/';
 
-        $customAttributeRequired = CustomAttribute::Create(null, 1, 1, $regex, false, null, null);
-        $customAttributeNotRequired = CustomAttribute::Create(null, 1, 1, null, false, null, null);
+        $customAttributeRequired = CustomAttribute::Create('', 1, 1, $regex, false, null, 0);
+        $customAttributeNotRequired = CustomAttribute::Create('', 1, 1, null, false, null, 0);
 
         $this->assertFalse($customAttributeRequired->SatisfiesConstraint(''));
         $this->assertFalse($customAttributeRequired->SatisfiesConstraint(' '));
@@ -47,8 +47,8 @@ class CustomAttributeTest extends TestBase
 
     public function testChecksForPossibleValues()
     {
-        $customAttributeRequired = CustomAttribute::Create(null, 1, 1, null, true, '1,abc,1abc3', null);
-        $customAttributeNotRequired = CustomAttribute::Create(null, 1, 1, null, false, 'something', null);
+        $customAttributeRequired = CustomAttribute::Create('', 1, 1, null, true, '1,abc,1abc3', 0);
+        $customAttributeNotRequired = CustomAttribute::Create('', 1, 1, null, false, 'something', 0);
 
         $this->assertFalse($customAttributeRequired->SatisfiesConstraint(''));
         $this->assertFalse($customAttributeRequired->SatisfiesConstraint(' '));
@@ -67,7 +67,7 @@ class CustomAttributeTest extends TestBase
 
     public function testTrimsOffPossibleValueWhiteSpace()
     {
-        $attribute = CustomAttribute::Create(null, 1, 1, null, false, '  1, abc    ,1abc3   ', '    1   ');
+        $attribute = CustomAttribute::Create('', 1, 1, null, false, '  1, abc    ,1abc3   ', 1);
 
         $list = $attribute->PossibleValueList();
 

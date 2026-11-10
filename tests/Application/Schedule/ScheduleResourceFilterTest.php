@@ -117,10 +117,10 @@ class ScheduleResourceFilterTest extends TestBase
         $resourceId = 4;
 
         $attributeList = new FakeAttributeList();
-        $attributeList->Add($resourceId, new LBAttribute(new CustomAttribute($attributeId1, '', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, $resourceId), $attributeValue1));
-        $attributeList->Add($resourceId, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, $resourceId), $attributeValue2));
-        $attributeList->Add(1, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, 1), $attributeValue2));
-        $attributeList->Add(3, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, 3), $attributeValue2));
+        $attributeList->Add($resourceId, new LBAttribute(new CustomAttribute($attributeId1, '', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [$resourceId]), $attributeValue1));
+        $attributeList->Add($resourceId, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [$resourceId]), $attributeValue2));
+        $attributeList->Add(1, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [1]), $attributeValue2));
+        $attributeList->Add(3, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [3]), $attributeValue2));
 
         $this->attributeService->expects($this->once())
         ->method('GetAttributes')
@@ -157,10 +157,10 @@ class ScheduleResourceFilterTest extends TestBase
         $resourceTypeId = 4;
 
         $attributeList = new FakeAttributeList();
-        $attributeList->Add($resourceTypeId, new LBAttribute(new CustomAttribute($attributeId1, '', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, $resourceTypeId), $attributeValue1));
-        $attributeList->Add($resourceTypeId, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, $resourceTypeId), $attributeValue2));
-        $attributeList->Add(1, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, 1), $attributeValue2));
-        $attributeList->Add(3, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, 3), $attributeValue2));
+        $attributeList->Add($resourceTypeId, new LBAttribute(new CustomAttribute($attributeId1, '', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [$resourceTypeId]), $attributeValue1));
+        $attributeList->Add($resourceTypeId, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [$resourceTypeId]), $attributeValue2));
+        $attributeList->Add(1, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [1]), $attributeValue2));
+        $attributeList->Add(3, new LBAttribute(new CustomAttribute($attributeId2, '', CustomAttributeTypes::MULTI_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '', false, '', 0, [3]), $attributeValue2));
 
         $this->attributeService->expects($this->once())
         ->method('GetAttributes')
