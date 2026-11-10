@@ -398,40 +398,6 @@ class SearchAvailabilityPresenterTest extends TestBase
             true
         );
     }
-
-    /**
-     * @param Date $date
-     * @param string $start
-     * @param string $end
-     * @return ReservationSlot
-     */
-    private function GetReservation(Date $date, $start, $end)
-    {
-        return new ReservationSlot(
-            new SchedulePeriod($date->SetTimeString($start), $date->SetTimeString($end, true)),
-            new SchedulePeriod($date->SetTimeString($start), $date->SetTimeString($end, true)),
-            $date,
-            6,
-            new TestReservationItemView(1, Date::Now(), Date::Now())
-        );
-    }
-
-    /**
-     * @param Date $date
-     * @param string $start
-     * @param string $end
-     * @return ReservationSlot|BlackoutSlot
-     */
-    private function GetBlackout(Date $date, $start, $end)
-    {
-        return new BlackoutSlot(
-            new SchedulePeriod($date->SetTimeString($start), $date->SetTimeString($end, true)),
-            new SchedulePeriod($date->SetTimeString($start), $date->SetTimeString($end, true)),
-            $date,
-            6,
-            new TestBlackoutItemView(1, Date::Now(), Date::Now(), 1)
-        );
-    }
 }
 
 class FakeSearchAvailabilityPage extends SearchAvailabilityPage

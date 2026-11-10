@@ -92,6 +92,6 @@ class FakeUploadedFile extends UploadedFile
 
     public function Error()
     {
-        $this->Error;
+        return $this->Error;
     }
 }

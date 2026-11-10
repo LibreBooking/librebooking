@@ -58,7 +58,8 @@ class SmokeTest extends TestCase
             ));
         }
 
-        if (!is_callable('proc_open')) {
+        $disabledFunctions = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+        if (in_array('proc_open', $disabledFunctions, true)) {
             self::fail('Cannot start integration test web server: proc_open() is not available.');
         }
 
@@ -84,8 +85,8 @@ class SmokeTest extends TestCase
         self::$serverPipes = $pipes;
 
         $status = proc_get_status($process);
-        $pid = $status['pid'] ?? null;
-        if (!is_int($pid) || $pid <= 0) {
+        $pid = $status['pid'];
+        if ($pid <= 0) {
             self::stopServerProcess();
             self::fail('Failed to start integration test web server: proc_get_status() returned an invalid PID.');
         }
@@ -94,7 +95,7 @@ class SmokeTest extends TestCase
         $ready = false;
         for ($i = 0; $i < 50; $i++) {
             $status = proc_get_status(self::$serverProcess);
-            if (!($status['running'] ?? false)) {
+            if (!$status['running']) {
                 self::stopServerProcess();
                 self::fail('PHP built-in server exited before becoming ready.');
             }
@@ -141,11 +142,11 @@ class SmokeTest extends TestCase
     {
         if (is_resource(self::$serverProcess)) {
             $status = proc_get_status(self::$serverProcess);
-            if ($status['running'] ?? false) {
+            if ($status['running']) {
                 @proc_terminate(self::$serverProcess);
                 usleep(200_000);
                 $status = proc_get_status(self::$serverProcess);
-                if ($status['running'] ?? false) {
+                if ($status['running']) {
                     @proc_terminate(self::$serverProcess, 9);
                 }
             }

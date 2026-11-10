@@ -7,9 +7,6 @@ require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 
 class ScheduleReservationListTest extends TestBase
 {
-    private $utc;
-    private $userTz;
-
     /**
      * @var Date
      */
@@ -24,11 +21,8 @@ class ScheduleReservationListTest extends TestBase
     {
         parent::setup();
 
-        $utc = 'UTC';
         $userTz = 'America/Chicago';
 
-        $this->utc = $utc;
-        $this->userTz = $userTz;
 
         $date = Date::Parse('2008-11-11', $userTz);
         $this->date = $date;
@@ -746,6 +740,6 @@ class ScheduleReservationListTest extends TestBase
 
         $this->assertTrue($slots[4]->Begin()->Equals(Time::Parse('2:00', $tz)));
         $this->assertTrue($slots[4]->End()->Equals(Time::Parse('6:00', $tz)));
-        $this->assertInstanceOf('BufferSlot', $slots[0]);
+        $this->assertInstanceOf('BufferSlot', $slots[4]);
     }
 }

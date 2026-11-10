@@ -8,13 +8,6 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ReservationEmailPresenterTest extends TestBase
 {
-    private $userId;
-
-    /**
-     * @var UserSession
-     */
-    private $user;
-
     /**
      * @var FakeReservationEmailPage
      */
@@ -49,8 +42,6 @@ class ReservationEmailPresenterTest extends TestBase
     {
         parent::setup();
 
-        $this->user = $this->fakeServer->UserSession;
-        $this->userId = $this->user->UserId;
 
         $this->reservationRepository = new FakeReservationRepository();
         $this->userRepository = new FakeUserRepository();

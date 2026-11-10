@@ -91,7 +91,7 @@ class FakePaymentRepository implements IPaymentRepository
 
     public function SavePayPalPaymentResult(PayPalPaymentResult $result)
     {
-        $this->_LastSavedPayPalResult;
+        $this->_LastSavedPayPalResult = $result;
     }
 
     public function GetList($pageNumber, $pageSize, $userId = -1, $sortField = null, $sortDirection = null, $filter = null)

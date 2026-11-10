@@ -26,7 +26,7 @@ if (!is_string($path)) {
 function dispatchScript(string $documentRoot, string $scriptPath, ?string $pathInfo = null): void
 {
     $scriptName = substr($scriptPath, strlen($documentRoot));
-    if ($scriptName === false || $scriptName === '') {
+    if ($scriptName === '') {
         $scriptName = '/index.php';
     }
     $scriptName = str_replace('\\', '/', $scriptName);
@@ -81,7 +81,7 @@ function resolvePathInDocumentRoot(string $documentRoot, string $path): ?string
 
 // Serve existing static files directly (CSS, JS, images, etc.)
 $documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
-if (!is_string($documentRoot) || $documentRoot === '') {
+if (!is_string($documentRoot)) {
     http_response_code(500);
     echo "Server Misconfiguration\n";
     return;
@@ -111,7 +111,7 @@ if (str_starts_with($path, '/Web/Services/') && $path !== '/Web/Services/index.p
     $servicesIndex = resolvePathInDocumentRoot(documentRoot: $documentRoot, path: '/Web/Services/index.php');
     if (is_string($servicesIndex) && is_file($servicesIndex) && !$requestedPathIsFile) {
         $pathInfo = substr($path, strlen('/Web/Services'));
-        if ($pathInfo === false || $pathInfo === '') {
+        if ($pathInfo === '') {
             $pathInfo = '/';
         }
         dispatchScript(documentRoot: $documentRoot, scriptPath: $servicesIndex, pathInfo: $pathInfo);

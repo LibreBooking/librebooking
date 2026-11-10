@@ -19,11 +19,6 @@ class ReservationComponentTest extends TestBase
     private $scheduleRepository;
 
     /**
-     * @var IAttributeRepository|PHPUnit\Framework\MockObject\MockObject
-     */
-    private $attributeRepository;
-
-    /**
      * @var IUserRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $userRepository;
@@ -70,7 +65,6 @@ class ReservationComponentTest extends TestBase
         $this->userId = 9999;
 
         $this->scheduleRepository = new FakeScheduleRepository();
-        $this->attributeRepository = $this->createMock('IAttributeRepository');
         $this->userRepository = $this->createMock('IUserRepository');
 
         $this->resourceService = $this->createMock('IResourceService');

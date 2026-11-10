@@ -16,8 +16,6 @@ class CalendarPresenterTest extends TestBase
 
     private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $repository;
 
-    private ICalendarFactory&\PHPUnit\Framework\MockObject\MockObject $calendarFactory;
-
     private IScheduleRepository&\PHPUnit\Framework\MockObject\MockObject $scheduleRepository;
 
     /**
@@ -42,7 +40,6 @@ class CalendarPresenterTest extends TestBase
         $this->repository = $this->createMock('IReservationViewRepository');
         $this->scheduleRepository = $this->createMock('IScheduleRepository');
         $this->userRepository = new FakeUserRepository();
-        $this->calendarFactory = $this->createMock('ICalendarFactory');
         $this->resourceService = $this->createMock('IResourceService');
         $this->subscriptionService = $this->createMock('ICalendarSubscriptionService');
         $this->privacyFilter = new FakePrivacyFilter();

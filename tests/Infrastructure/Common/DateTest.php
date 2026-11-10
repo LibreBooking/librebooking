@@ -6,7 +6,6 @@ require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 class DateTest extends TestBase
 {
-    private $tz;
     private $datestring;
 
     public function setUp(): void
@@ -14,7 +13,6 @@ class DateTest extends TestBase
         parent::setup();
 
         $this->datestring = date(DATE_W3C, time());
-        $this->tz = new DateTimeZone('UTC');
     }
 
     public function testCanGetNow()

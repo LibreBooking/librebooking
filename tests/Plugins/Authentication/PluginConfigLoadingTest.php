@@ -180,7 +180,7 @@ class PluginConfigLoadingTest extends TestBase
                 $firstKey = $allKeys[0];
                 $value = $config->GetKey($firstKey);
                 // Value can be anything, just check it doesn't throw an exception
-                $this->assertTrue(true, "Successfully retrieved config value for {$plugin['name']}");
+                $this->addToAssertionCount(1);
             }
         }
     }
@@ -330,7 +330,7 @@ class PluginConfigLoadingTest extends TestBase
                 try {
                     $value = $config->GetKey($keyDef);
                     // Value retrieved successfully (can be empty string, null, or actual value)
-                    $this->assertTrue(true, "Successfully retrieved {$plugin['name']}.{$keyName}");
+                    $this->addToAssertionCount(1);
                 } catch (Exception $e) {
                     $this->fail("Failed to retrieve {$plugin['name']}.{$keyName}: " . $e->getMessage());
                 }
@@ -486,7 +486,7 @@ class PluginConfigLoadingTest extends TestBase
             );
         } else {
             fwrite(STDERR, "\n[CONFIG VALIDATION] All plugin configs match their ConfigKeys definitions ✓\n");
-            $this->assertTrue(true, 'All config files match their ConfigKeys');
+            $this->addToAssertionCount(1);
         }
     }
 }

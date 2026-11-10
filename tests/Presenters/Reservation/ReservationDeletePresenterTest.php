@@ -8,8 +8,6 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ReservationDeletePresenterTest extends TestBase
 {
-    private $userId;
-
     /**
      * @var UserSession
      */
@@ -31,7 +29,6 @@ class ReservationDeletePresenterTest extends TestBase
         parent::setup();
 
         $this->user = $this->fakeServer->UserSession;
-        $this->userId = $this->user->UserId;
 
         $this->persistenceService = $this->createMock('IDeleteReservationPersistenceService');
         $this->handler = $this->createMock('IReservationHandler');

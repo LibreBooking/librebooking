@@ -499,7 +499,8 @@ class ManageUsersPresenterTest extends TestBase
                                  ->willReturnCallback(function ($userId) use ($matcher) {
                                      match ($matcher->numberOfInvocations()) {
                                          1 => $this->assertEquals(809, $userId),
-                                         2 => $this->assertEquals(909, $userId)
+                                         2 => $this->assertEquals(909, $userId),
+                                         default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                                      };
                                  });
 

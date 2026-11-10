@@ -6,11 +6,6 @@ require_once(ROOT_DIR . 'Presenters/Dashboard/UpcomingReservationsPresenter.php'
 
 class UpcomingReservationsPresenterTest extends TestBase
 {
-    /**
-     * @var UpcomingReservationsPresenter
-     */
-    private $presenter;
-
     private IUpcomingReservationsControl&\PHPUnit\Framework\MockObject\MockObject $control;
 
     private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $repository;

@@ -16,9 +16,7 @@ class AuthenticationTest extends TestBase
     private $fname;
     private $lname;
     private $email;
-    private $isAdmin;
     private $timezone;
-    private $lastLogin;
     private $homepageId;
     private $languageCode;
     private $publicId;
@@ -44,11 +42,6 @@ class AuthenticationTest extends TestBase
      * @var IRoleService|PHPUnit\Framework\MockObject\MockObject
      */
     private $authorization;
-
-    /**
-     * @var WebLoginContext
-     */
-    private $loginContext;
 
     /**
      * @var FakeUser
@@ -79,9 +72,7 @@ class AuthenticationTest extends TestBase
         $this->fname = 'Test';
         $this->lname = 'Name';
         $this->email = 'my@email.com';
-        $this->isAdmin = true;
         $this->timezone = 'America/Chicago';
-        $this->lastLogin = time();
         $this->homepageId = 2;
         $this->languageCode = 'en_us';
         $this->publicId = 'public_id';
@@ -112,8 +103,6 @@ class AuthenticationTest extends TestBase
         $this->auth = new Authentication($this->authorization, $this->userRepository, $this->groupRepository);
         $this->auth->SetMigration($this->fakeMigration);
         $this->auth->SetFirstRegistrationStrategy($this->fakeFirstRegistration);
-
-        $this->loginContext = new WebLoginContext(new LoginData());
     }
 
     public function testValidateChecksAgainstDB()

@@ -14,11 +14,6 @@ class ReservationSavePresenterTest extends TestBase
     private $user;
 
     /**
-     * @var int
-     */
-    private $userId;
-
-    /**
      * @var FakeReservationSavePage
      */
     private $page;
@@ -42,7 +37,6 @@ class ReservationSavePresenterTest extends TestBase
         parent::setup();
 
         $this->user = $this->fakeServer->UserSession;
-        $this->userId = $this->user->UserId;
 
         $this->page = new FakeReservationSavePage();
 

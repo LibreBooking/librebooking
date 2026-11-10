@@ -67,7 +67,8 @@ class ResourceServiceTest extends TestBase
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
                         3 => $this->assertEquals($res, $resource3),
-                        4 => $this->assertEquals($res, $resource4)
+                        4 => $this->assertEquals($res, $resource4),
+                        default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                     };
                     return $matcher->numberOfInvocations() == 4 ? false : true;
                 });
@@ -181,6 +182,7 @@ class ResourceServiceTest extends TestBase
                     match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
+                        default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                     };
                     return $matcher->numberOfInvocations() == 2;
                 });

@@ -13,17 +13,10 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/ExistingReservationInitiali
 
 class ExistingReservationInitializerTest extends TestBase
 {
-    /**
-     * @var int
-     */
-    private $userId;
-
-
     public function setUp(): void
     {
         parent::setup();
 
-        $this->userId = $this->fakeUser->UserId;
     }
 
     public function teardown(): void
