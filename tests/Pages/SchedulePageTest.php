@@ -106,7 +106,7 @@ class TestableSchedulePage extends SchedulePage
         $this->IsTablet = $isTablet;
     }
 
-    public function Set($var, $value)
+    public function Set(string $var, mixed $value): void
     {
         $this->assigned[$var] = $value;
     }

@@ -286,12 +286,7 @@ abstract class Page implements IPage
         return $this->smarty->IsValid();
     }
 
-    /**
-     * @param string $var
-     * @param string|object|array $value
-     * @return void
-     */
-    public function Set($var, $value)
+    public function Set(string $var, mixed $value): void
     {
         $this->smarty->assign($var, $value);
     }
