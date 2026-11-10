@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
+
 require_once(ROOT_DIR . 'Domain/namespace.php');
 
 class RepeatOptionsTest extends TestBase
@@ -246,7 +249,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesRepeatDailyOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('daily', 1, null, null, null, []);
+        $options = $factory->Create('daily', 1, NullDate::Instance(), null, null, []);
 
         $this->assertInstanceOf('RepeatDaily', $options);
     }
@@ -254,7 +257,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesRepeatWeeklyOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('weekly', 1, null, [], null, []);
+        $options = $factory->Create('weekly', 1, NullDate::Instance(), [], null, []);
 
         $this->assertInstanceOf('RepeatWeekly', $options);
     }
@@ -262,7 +265,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesDayOfMonthRepeatOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('monthly', 1, null, null, 'dayOfMonth', []);
+        $options = $factory->Create('monthly', 1, NullDate::Instance(), null, 'dayOfMonth', []);
 
         $this->assertInstanceOf('RepeatDayOfMonth', $options);
     }
@@ -270,7 +273,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesWeekDayOfMonthRepeatOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('monthly', 1, null, null, null, []);
+        $options = $factory->Create('monthly', 1, NullDate::Instance(), null, null, []);
 
         $this->assertInstanceOf('RepeatWeekDayOfMonth', $options);
     }
@@ -278,7 +281,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesYearlyRepeatOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('yearly', 1, null, null, null, []);
+        $options = $factory->Create('yearly', 1, NullDate::Instance(), null, null, []);
 
         $this->assertInstanceOf('RepeatYearly', $options);
     }
@@ -286,7 +289,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesNoRepeatOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('none', 1, null, null, null, []);
+        $options = $factory->Create('none', 1, NullDate::Instance(), null, null, []);
 
         $this->assertInstanceOf('RepeatNone', $options);
     }
@@ -305,7 +308,7 @@ class RepeatOptionsTest extends TestBase
         $daily = new RepeatDaily($interval, $terminationDate);
         $config = RepeatConfiguration::Create($daily->RepeatType(), $daily->ConfigurationString());
         $this->assertEquals(RepeatType::Daily, $config->Type);
-        $this->assertEquals(10, $config->Interval);
+        $this->assertSame(10, $config->Interval);
         $this->assertEquals($terminationDate, $config->TerminationDate);
 
         // weekly
@@ -334,14 +337,14 @@ class RepeatOptionsTest extends TestBase
         $yearly = new RepeatYearly($interval, $terminationDate);
         $config = RepeatConfiguration::Create($yearly->RepeatType(), $yearly->ConfigurationString());
         $this->assertEquals(RepeatType::Yearly, $config->Type);
-        $this->assertEquals(10, $config->Interval);
+        $this->assertSame(10, $config->Interval);
         $this->assertEquals($terminationDate, $config->TerminationDate);
 
         // custom
         $custom = new RepeatCustom([]);
         $config = RepeatConfiguration::Create($custom->RepeatType(), $custom->ConfigurationString());
         $this->assertEquals(RepeatType::Custom, $config->Type);
-        $this->assertEquals('', $config->Interval);
+        $this->assertNull($config->Interval);
         $this->assertEquals(new NullDate(), $config->TerminationDate);
     }
 
@@ -419,7 +422,7 @@ class RepeatOptionsTest extends TestBase
     public function testFactoryCreatesCustomRepeatOptions()
     {
         $factory = new RepeatOptionsFactory();
-        $options = $factory->Create('custom', null, null, null, null, []);
+        $options = $factory->Create('custom', null, NullDate::Instance(), null, null, []);
 
         $this->assertInstanceOf('RepeatCustom', $options);
     }
@@ -436,5 +439,80 @@ class RepeatOptionsTest extends TestBase
         $this->assertEquals(DateRange::Create('2020-02-05 2:30', '2020-02-06 4:00', $timezone), $dates[0]);
         $this->assertEquals(DateRange::Create('2020-02-22 2:30', '2020-02-23 4:00', $timezone), $dates[1]);
         $this->assertEquals(DateRange::Create('2020-05-19 2:30', '2020-05-20 4:00', $timezone), $dates[2]);
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidIntervals(): array
+    {
+        return [
+            'non-numeric' => ['abc'],
+            'zero' => ['0'],
+            'negative' => ['-1'],
+            'decimal' => ['2.5'],
+            'empty' => [''],
+            'missing' => [null],
+        ];
+    }
+
+    /**
+     * An interval below 1 never advances the dates, so GetDates() used to
+     * loop until memory was exhausted.
+     */
+    #[DataProvider('invalidIntervals')]
+    public function testCreateFromCompositeRejectsInvalidInterval(mixed $interval): void
+    {
+        $composite = $this->createStub(IRepeatOptionsComposite::class);
+        $composite->method('GetRepeatType')->willReturn(RepeatType::Daily);
+        $composite->method('GetRepeatInterval')->willReturn($interval);
+        $composite->method('GetRepeatWeekdays')->willReturn(null);
+        $composite->method('GetRepeatMonthlyType')->willReturn(null);
+        $composite->method('GetRepeatTerminationDate')->willReturn('2030-01-01');
+        $composite->method('GetRepeatCustomDates')->willReturn([]);
+
+        $this->expectException(InvalidArgumentException::class);
+
+        (new RepeatOptionsFactory())->CreateFromComposite($composite, 'UTC');
+    }
+
+    public function testCreateFromCompositeParsesValidInterval(): void
+    {
+        $composite = $this->createStub(IRepeatOptionsComposite::class);
+        $composite->method('GetRepeatType')->willReturn(RepeatType::Daily);
+        $composite->method('GetRepeatInterval')->willReturn('3');
+        $composite->method('GetRepeatWeekdays')->willReturn(null);
+        $composite->method('GetRepeatMonthlyType')->willReturn(null);
+        $composite->method('GetRepeatTerminationDate')->willReturn('2030-01-01');
+        $composite->method('GetRepeatCustomDates')->willReturn([]);
+
+        $options = (new RepeatOptionsFactory())->CreateFromComposite($composite, 'UTC');
+
+        $this->assertInstanceOf(RepeatDaily::class, $options);
+        $this->assertStringStartsWith('interval=3|', $options->ConfigurationString());
+    }
+
+    #[TestWith([0])]
+    #[TestWith([-1])]
+    public function testRepeatTypesWithIntervalRejectNonPositiveInterval(int $interval): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new RepeatDaily($interval, Date::Parse('2030-01-01', 'UTC'));
+    }
+
+    public function testRepeatTypesWithoutIntervalAcceptMissingInterval(): void
+    {
+        $factory = new RepeatOptionsFactory();
+
+        $this->assertInstanceOf(RepeatNone::class, $factory->Create(RepeatType::None, null, NullDate::Instance(), null, null, []));
+        $this->assertInstanceOf(RepeatCustom::class, $factory->Create(RepeatType::Custom, null, NullDate::Instance(), null, null, []));
+    }
+
+    public function testRepeatConfigurationTreatsInvalidIntervalAsMissing(): void
+    {
+        $config = RepeatConfiguration::Create(RepeatType::Daily, 'interval=abc|termination=');
+
+        $this->assertNull($config->Interval);
     }
 }

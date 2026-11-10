@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 require_once(ROOT_DIR . 'WebServices/Controllers/ReservationSaveController.php');
 
 class ReservationSaveControllerTest extends TestBase
@@ -272,5 +274,52 @@ class ReservationSaveControllerTest extends TestBase
 
         $this->assertIsArray($retryParams);
         $this->assertEmpty($retryParams);
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidRepeatIntervals(): array
+    {
+        return [
+            'non-numeric' => ['abc'],
+            'trailing text' => ['2abc'],
+            'decimal string' => ['2.5'],
+            'float' => [2.5],
+            'zero' => [0],
+            'negative' => [-1],
+            'missing' => [null],
+        ];
+    }
+
+    #[DataProvider('invalidRepeatIntervals')]
+    public function testCreateRejectsInvalidRepeatInterval(mixed $interval): void
+    {
+        $request = new ReservationRequest();
+        $request->resourceId = 1;
+        $request->startDateTime = '2030-04-05T01:00:00+0000';
+        $request->endDateTime = '2030-04-05T02:00:00+0000';
+        $request->recurrenceRule = new RecurrenceRequestResponse(RepeatType::Daily, $interval, null, [], '2030-05-01T00:00:00+0000');
+
+        $this->presenterFactory->expects($this->never())->method('Create');
+
+        $result = $this->controller->Create($request, new FakeWebServiceUserSession(123));
+
+        $this->assertFalse($result->WasSuccessful());
+        $this->assertContains('Missing or invalid repeatInterval', $result->Errors());
+    }
+
+    public function testFacadeDoesNotTruncateRepeatInterval(): void
+    {
+        $request = new ReservationRequest();
+        $request->recurrenceRule = new RecurrenceRequestResponse(RepeatType::Daily, '2abc', null, [], null);
+        $facade = new ReservationRequestResponseFacade($request, new FakeWebServiceUserSession(123));
+
+        $this->assertSame('2abc', $facade->GetRepeatInterval());
+
+        $request->recurrenceRule = new RecurrenceRequestResponse(RepeatType::Daily, 3, null, [], null);
+        $facade = new ReservationRequestResponseFacade($request, new FakeWebServiceUserSession(123));
+
+        $this->assertSame('3', $facade->GetRepeatInterval());
     }
 }

@@ -77,11 +77,21 @@ abstract class RepeatOptionsAbstract implements IRepeatOptions
     }
 
     /**
-     * @param int $interval
+     * @param int $interval must be at least 1
      * @param Date $terminationDate
+     * @throws InvalidArgumentException when the interval is not a positive integer
      */
     protected function __construct($interval, $terminationDate)
     {
+        // An interval below 1 never advances the repeat dates, so GetDates()
+        // would loop until memory is exhausted.
+        if (!is_int($interval) || $interval < 1) {
+            throw new InvalidArgumentException(sprintf(
+                'Repeat interval must be a positive integer, got %s',
+                var_export($interval, true)
+            ));
+        }
+
         $this->_interval = $interval;
         $this->_terminationDate = $terminationDate;
     }
@@ -89,6 +99,17 @@ abstract class RepeatOptionsAbstract implements IRepeatOptions
     public function ConfigurationString()
     {
         return sprintf('interval=%s|termination=%s', $this->_interval, $this->_terminationDate->ToDatabase());
+    }
+
+    /**
+     * Parses a stored or submitted interval. Text that is not an integer
+     * becomes null instead of 0, so the constructor rejects it for repeat
+     * types that need an interval.
+     */
+    public static function ParseInterval(mixed $interval): ?int
+    {
+        $parsed = filter_var($interval, FILTER_VALIDATE_INT);
+        return $parsed === false ? null : $parsed;
     }
 
     public function Equals(IRepeatOptions $repeatOptions)
@@ -602,10 +623,10 @@ class RepeatOptionsFactory
 {
     /**
      * @param string $repeatType must be option in RepeatType enum
-     * @param int $interval
+     * @param int|null $interval null for repeat types without an interval
      * @param Date $terminationDate
-     * @param array $weekdays
-     * @param string $monthlyType
+     * @param array|null $weekdays
+     * @param string|null $monthlyType null selects RepeatMonthlyType::DayOfWeek
      * @param Date[] $repeatDates
      * @return IRepeatOptions
      */
@@ -640,6 +661,7 @@ class RepeatOptionsFactory
     {
         $repeatType = $composite->GetRepeatType();
         $interval = $composite->GetRepeatInterval();
+        $interval = RepeatOptionsAbstract::ParseInterval($interval);
         $weekdays = $composite->GetRepeatWeekdays();
         $monthlyType = $composite->GetRepeatMonthlyType();
         $customDates = [];
@@ -660,7 +682,7 @@ class RepeatConfiguration
     public $Type;
 
     /**
-     * @var string
+     * @var int|null
      */
     public $Interval;
 
@@ -670,12 +692,12 @@ class RepeatConfiguration
     public $TerminationDate;
 
     /**
-     * @var array
+     * @var array|null
      */
     public $Weekdays;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $MonthlyType;
 
@@ -702,7 +724,7 @@ class RepeatConfiguration
         $config = new RepeatConfiguration();
         $config->Type = empty($repeatType) ? RepeatType::None : $repeatType;
 
-        $config->Interval = self::Get($configParts, 'interval');
+        $config->Interval = RepeatOptionsAbstract::ParseInterval(self::Get($configParts, 'interval'));
         $config->SetTerminationDate(self::Get($configParts, 'termination'));
         $config->SetWeekdays(self::Get($configParts, 'days'));
         $config->MonthlyType = self::Get($configParts, 'type');
