@@ -37,7 +37,7 @@ class ManageAttributesPresenterTest extends TestBase
         $categoryId = CustomAttributeCategory::RESERVATION;
         $this->page->_requestedCategoryId = $categoryId;
 
-        $attributes = [CustomAttribute::Create('abc', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, null, false, null, null, null)];
+        $attributes = [CustomAttribute::Create('abc', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0, [])];
 
         $this->attributeRepository->expects($this->once())
                 ->method('GetByCategory')

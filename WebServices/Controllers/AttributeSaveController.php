@@ -87,7 +87,7 @@ class AttributeSaveController implements IAttributeSaveController
             $request->type,
             $request->categoryId,
             $request->regex . '',
-            (int)$request->required,
+            (bool)$request->required,
             $this->GetPossibleValues($request),
             $request->sortOrder,
             $request->appliesToIds,

@@ -152,28 +152,28 @@ class AttributeServiceTest extends TestBase
 
         $this->resourceService->_AllResources = [$resource1, $resource3];
 
-        $unrestricted = new CustomAttribute(1, 'unrestricted', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
+        $unrestricted = new CustomAttribute(1, 'unrestricted', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
 
-        $forUser = new CustomAttribute(2, 'forUser', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $forUser->WithSecondaryEntities(CustomAttributeCategory::USER, $requestedUserId);
+        $forUser = new CustomAttribute(2, 'forUser', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $forUser->WithSecondaryEntities(CustomAttributeCategory::USER, [$requestedUserId]);
 
-        $notForUser = new CustomAttribute(3, 'notForUser', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $notForUser->WithSecondaryEntities(CustomAttributeCategory::USER, 100);
+        $notForUser = new CustomAttribute(3, 'notForUser', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $notForUser->WithSecondaryEntities(CustomAttributeCategory::USER, [100]);
 
-        $forResource1 = new CustomAttribute(4, 'forResource1', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $forResource1->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, $resourceId1);
+        $forResource1 = new CustomAttribute(4, 'forResource1', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $forResource1->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, [$resourceId1]);
 
-        $resource2IsNotAllowed = new CustomAttribute(5, 'forResource2', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $resource2IsNotAllowed->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, $resourceId2);
+        $resource2IsNotAllowed = new CustomAttribute(5, 'forResource2', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $resource2IsNotAllowed->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, [$resourceId2]);
 
-        $forOtherResource = new CustomAttribute(6, 'forOtherResource', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $forOtherResource->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, 300);
+        $forOtherResource = new CustomAttribute(6, 'forOtherResource', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $forOtherResource->WithSecondaryEntities(CustomAttributeCategory::RESOURCE, [300]);
 
-        $forResourceType1 = new CustomAttribute(7, 'forResourceType1', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $forResourceType1->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, $resourceTypeId1);
+        $forResourceType1 = new CustomAttribute(7, 'forResourceType1', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $forResourceType1->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, [$resourceTypeId1]);
 
-        $forOtherResourceType = new CustomAttribute(8, 'forResourceType2', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, null, null, 0);
-        $forOtherResourceType->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, $resourceTypeId2);
+        $forOtherResourceType = new CustomAttribute(8, 'forResourceType2', CustomAttributeTypes::CHECKBOX, CustomAttributeCategory::RESERVATION, null, false, null, 0);
+        $forOtherResourceType->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, [$resourceTypeId2]);
 
         $this->attributeRepository->_CustomAttributes = [$unrestricted, $forUser, $notForUser, $forResource1, $resource2IsNotAllowed, $forOtherResource, $forResourceType1, $forOtherResourceType];
 
