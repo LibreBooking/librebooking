@@ -57,8 +57,8 @@ class RetryOptionsTest extends TestBase
 
 
         $this->conflictIdentifier->_Conflicts = new ReservationConflictResult([
-            new IdentifiedConflict($conflict1, new TestReservationItemView('100', $conflict1->StartDate(), $conflict1->EndDate(), 1, '2')),
-            new IdentifiedConflict($conflict2, new TestReservationItemView('200', $conflict2->StartDate(), $conflict2->EndDate(), 1, '3'))
+            new IdentifiedConflict($conflict1, new TestReservationItemView(100, $conflict1->StartDate(), $conflict1->EndDate(), 1, '2')),
+            new IdentifiedConflict($conflict2, new TestReservationItemView(200, $conflict2->StartDate(), $conflict2->EndDate(), 1, '3'))
         ], 0, false, 1);
 
         $retryOptions = new ReservationRetryOptions($this->conflictIdentifier, $this->scheduleRepository);

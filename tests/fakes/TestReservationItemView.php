@@ -6,18 +6,16 @@ class TestReservationItemView extends ReservationItemView
 {
     public $_RequiresCheckin = false;
 
-    /**
-     * @param null|string $id
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param int $resourceId
-     * @param string|null $referenceNumber
-     */
-    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = 'referencenumber')
-    {
+    public function __construct(
+        int $id,
+        Date $startDate,
+        Date $endDate,
+        int $resourceId = 1,
+        string $referenceNumber = 'referencenumber'
+    ) {
         parent::__construct();
 
-        $this->ReservationId = (int)($id ?? 0);
+        $this->ReservationId = $id;
         $this->StartDate = $startDate;
         $this->EndDate = $endDate;
         $this->ResourceId = $resourceId;
@@ -27,7 +25,7 @@ class TestReservationItemView extends ReservationItemView
         $this->ScheduleId = 1;
     }
 
-    public function WithSeriesId($seriesId)
+    public function WithSeriesId(int $seriesId): static
     {
         $this->SeriesId = $seriesId;
         return $this;
