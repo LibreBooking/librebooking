@@ -1103,33 +1103,41 @@ class ScheduleLayoutTest extends TestBase
 
     public function testCustomScheduleLayoutClassifiesPeakSlotsInTheScheduleTimezone(): void
     {
-        $timezone = 'America/New_York';
-        $date = Date::Parse('2026-11-10', $timezone);
-        $repository = new FakeScheduleRepository();
-        $repository->_AddCustomLayout($date, [
-            new SchedulePeriod($date->SetTimeString('16:00'), $date->SetTimeString('17:00')),
-            new SchedulePeriod($date->SetTimeString('17:00'), $date->SetTimeString('18:00')),
-        ]);
-        $layout = new CustomScheduleLayout($timezone, 1, $repository);
-        $layout->ChangePeakTimes(new PeakTimes(
-            false,
-            Time::Parse('09:00', $timezone),
-            Time::Parse('17:00', $timezone),
-            true,
-            [],
-            true,
-            0,
-            0,
-            0,
-            0
-        ));
+        $serverTimezone = date_default_timezone_get();
+        // Peak times without an explicit timezone use the server default.
+        date_default_timezone_set('UTC');
 
-        $count = $layout->GetSlotCount(
-            Date::Parse('2026-11-10 16:00', $timezone),
-            Date::Parse('2026-11-10 18:00', $timezone)
-        );
+        try {
+            $timezone = 'America/New_York';
+            $date = Date::Parse('2026-11-10', $timezone);
+            $repository = new FakeScheduleRepository();
+            $repository->_AddCustomLayout($date, [
+                new SchedulePeriod($date->SetTimeString('16:00'), $date->SetTimeString('17:00')),
+                new SchedulePeriod($date->SetTimeString('17:00'), $date->SetTimeString('18:00')),
+            ]);
+            $layout = new CustomScheduleLayout($timezone, 1, $repository);
+            $layout->ChangePeakTimes(new PeakTimes(
+                false,
+                Time::Parse('09:00', $timezone),
+                Time::Parse('17:00', $timezone),
+                true,
+                [],
+                true,
+                0,
+                0,
+                0,
+                0
+            ));
 
-        $this->assertEquals(new SlotCount(1, 1), $count);
+            $count = $layout->GetSlotCount(
+                Date::Parse('2026-11-10 16:00', $timezone),
+                Date::Parse('2026-11-10 18:00', $timezone)
+            );
+
+            $this->assertEquals(new SlotCount(1, 1), $count);
+        } finally {
+            date_default_timezone_set($serverTimezone);
+        }
     }
 
     public function testCustomScheduleLayoutChargesCredits(): void
