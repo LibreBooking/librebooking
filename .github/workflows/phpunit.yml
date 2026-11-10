@@ -11,7 +11,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - develop
+      - main
 
 permissions:
   contents: read

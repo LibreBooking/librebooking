@@ -66,7 +66,7 @@ body:
     id: version
     attributes:
       label: LibreBooking version
-      description: The version or commit SHA if using the `develop` branch.
+      description: The version or commit SHA if using the `main` branch.
       placeholder: e.g. 2.8.5 or abc1234
     validations:
       required: true

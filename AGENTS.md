@@ -11,7 +11,7 @@ This file contains essential information for AI coding agents working on the Lib
 - **Architecture**: Model-View-Presenter (MVP) pattern
 - **Template Engine**: Smarty (version 5.8+)
 - **Frontend**: Bootstrap 5, jQuery
-- **Main Branch**: `develop` (not `main` or `master`)
+- **Main Branch**: `main`
 - **License**: GPL-3.0
 
 ## Repository Structure
@@ -349,9 +349,9 @@ per-PR tooling changes are needed when adding files there.
 
 ### Branch Strategy
 
-**Important**: The main development branch is `develop`, NOT `main` or `master`.
+**Important**: The main development branch is `main`.
 
-- **develop** - Active development, latest beta code
+- **main** - Active development, latest code
 - Feature branches: `feature/description-of-feature`
 - Bugfix branches: `bugfix/issue-number-description`
 
@@ -440,7 +440,7 @@ Assisted-by: Claude:claude-sonnet-4-6
 
 ### Pull Request Guidelines
 
-1. **Target branch**: PRs should target `develop` (not main/master)
+1. **Target branch**: PRs should target `main`
 2. **No merge commits**: PRs must not contain merge commits (use rebase)
 3. **Linear history**: Maintainers will use "Rebase and merge" or "Squash and merge"
 4. **PR title**: Follow commit message header format
@@ -454,7 +454,7 @@ Assisted-by: Claude:claude-sonnet-4-6
 
 The repository uses several CI workflows:
 
-1. **Linters** (`lint-and-analyse-php.yml`) - Runs on PRs to `develop`:
+1. **Linters** (`lint-and-analyse-php.yml`) - Runs on PRs to `main`:
    - Commitizen (commit message validation)
    - Config checks
    - doc8 (RST documentation)
@@ -464,7 +464,7 @@ The repository uses several CI workflows:
    - PHPStan analysis on PHP 8.5 (both base and next configs)
    - Validates no merge commits in PR
 
-2. **PHPUnit** (`phpunit.yml`) - Runs on PRs to `develop`:
+2. **PHPUnit** (`phpunit.yml`) - Runs on PRs to `main`:
    - Unit tests on PHP 8.2, 8.3, 8.4, 8.5
    - Creates config.php from config.dist.php
    - Validates test summary output
@@ -500,10 +500,10 @@ composer preflight
 
 ### Adding a New Feature
 
-1. Create feature branch from `develop`:
+1. Create feature branch from `main`:
 
    ```bash
-   git checkout develop
+   git checkout main
    git pull
    git checkout -b feature/your-feature-name
    ```
@@ -531,7 +531,7 @@ composer preflight
 
 6. Commit with conventional commit message
 
-7. Push and create PR to `develop`
+7. Push and create PR to `main`
 
 ### Adding a Plugin
 
