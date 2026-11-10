@@ -207,8 +207,8 @@ class ReservationSaveController implements IReservationSaveController
             }
 
             if (!empty($repeatType) && $repeatType != RepeatType::None) {
-                $repeatInterval = $request->GetRepeatInterval();
-                if (empty($repeatInterval)) {
+                $parsedInterval = RepeatOptionsAbstract::ParseInterval($request->GetRepeatInterval());
+                if ($parsedInterval === null || $parsedInterval < 1) {
                     $errors[] = 'Missing or invalid repeatInterval';
                 }
 
@@ -414,10 +414,16 @@ class ReservationRequestResponseFacade implements IReservationSavePage
 
     public function GetRepeatInterval()
     {
-        if (!empty($this->recurrenceRule->interval)) {
-            return (string)intval($this->recurrenceRule->interval);
+        $interval = $this->recurrenceRule->interval ?? null;
+        if ($interval === null || $interval === '') {
+            return null;
         }
-        return null;
+
+        // Pass the value on unchanged so validation rejects anything that is
+        // not an integer, such as "2abc", instead of truncating it. Any other
+        // type (a float, bool, array or object) is not a usable interval, so
+        // return null and let validation reject it.
+        return is_int($interval) || is_string($interval) ? (string)$interval : null;
     }
 
     public function GetRepeatWeekdays()
