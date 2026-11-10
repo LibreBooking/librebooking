@@ -1207,11 +1207,47 @@ class CustomScheduleLayout extends ScheduleLayout implements IScheduleLayout
 
     public function GetSlotCount(Date $startDate, Date $endDate): SlotCount
     {
-        // Custom-layout reservations are currently not charged credits.
-        // This preserves the long-standing behavior. For the planned fix
-        // (count covered custom slots, peak-aware), see:
-        // https://github.com/LibreBooking/librebooking/issues/1871
-        return new SlotCount(0, 0);
+        $slots = 0;
+        $peakSlots = 0;
+
+        // The slots are stored per day: load the whole day, not the tail of it
+        // that starts at the reservation's start time.
+        foreach ($this->GetLayout($startDate->GetDate(), true) as $period) {
+            if (!$period->IsReservable()) {
+                continue;
+            }
+
+            if (
+                $startDate->Compare($period->BeginDate()) > 0 ||
+                $endDate->Compare($period->EndDate()) < 0
+            ) {
+                continue;
+            }
+
+            if ($this->IsPeakSlot($period->BeginDate())) {
+                $peakSlots++;
+            } else {
+                $slots++;
+            }
+        }
+
+        return new SlotCount($slots, $peakSlots);
+    }
+
+    private function IsPeakSlot(Date $slotStart)
+    {
+        if (!$this->HasPeakTimesDefined()) {
+            return false;
+        }
+
+        // Custom layouts have no layout timezone of their own: the layout rows
+        // that set it are not read for them. The slots carry the schedule's
+        // timezone, while the peak times were parsed in the server default, so
+        // convert the peak times to the slot's timezone before comparing.
+        $peakTimes = clone $this->peakTimes;
+        $peakTimes->InTimezone($slotStart->Timezone());
+
+        return $peakTimes->IsWithinPeak($slotStart);
     }
 
     public function GetType()
