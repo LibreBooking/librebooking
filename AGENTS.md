@@ -134,7 +134,7 @@ Configuration: `.php-cs-fixer.dist.php`
 
 ### Static Analysis
 
-**PHPStan** (level 3):
+**PHPStan** (level 4):
 
 ```bash
 # Run base analysis
@@ -146,7 +146,7 @@ composer phpstan_next
 
 Configuration files:
 
-- `phpstan.neon` - Base configuration (level 3)
+- `phpstan.neon` - Base configuration (level 4)
 - `phpstan_next.neon` - Stricter analysis for progressive improvements
 
 Output format: `prettyJson`
