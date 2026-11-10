@@ -662,7 +662,7 @@ class ScheduleReservationListTest extends TestBase
             startDate: Date::Parse('2011-02-08 2:00', $tz)->ToUtc(),
             endDate: Date::Parse('2011-02-08 6:00', $tz)->ToUtc(),
             resourceId: 1,
-            referenceNumber: 30
+            referenceNumber: '30'
         );
         $item->WithBufferTime(60 * 60);
         $r1 = new ReservationListItem($item);
