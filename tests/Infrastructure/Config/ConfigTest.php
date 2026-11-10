@@ -526,6 +526,8 @@ PHP
                 throw new RuntimeException('Failed to write temporary config file.');
             }
 
+            /** @var array<string, mixed> $conf */
+
             $conf = [];
             $loaded = require $path;
 

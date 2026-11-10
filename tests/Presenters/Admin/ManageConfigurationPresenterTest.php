@@ -245,15 +245,6 @@ class ManageConfigurationPresenterTest extends TestBase
         }
     }
 
-    private function assertSectionSettingExists($configValues, $key, $section)
-    {
-        $expectedValue = $configValues[$section][$key];
-        $this->assertTrue(in_array(
-            new ConfigSetting($key, $section, $expectedValue),
-            $this->page->_SectionSettings[$section]
-        ));
-    }
-
     private function assertSettingMissing($key, $section = null)
     {
         foreach ($this->page->_Settings as $setting) {

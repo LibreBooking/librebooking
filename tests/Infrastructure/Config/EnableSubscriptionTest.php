@@ -240,6 +240,7 @@ PHP
 
     private function loadConfigurationFile(string $path): ConfigurationFile
     {
+        /** @var array<string, mixed> $conf */
         $conf = [];
         $loaded = require $path;
 

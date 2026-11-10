@@ -452,7 +452,8 @@ class ManageReservationsPresenterTest extends TestBase
             ->willReturnCallback(function ($res) use ($matcher, $res1, $res2) {
                 match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals($res, $res1),
-                    2 => $this->assertEquals($res, $res2)
+                    2 => $this->assertEquals($res, $res2),
+                    default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                 };
             });
 
@@ -478,7 +479,8 @@ class ManageReservationsPresenterTest extends TestBase
                 $this->assertEquals($this->fakeUser, $session);
                 match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals(1, $id),
-                    2 => $this->assertEquals(2, $id)
+                    2 => $this->assertEquals(2, $id),
+                    default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                 };
             });
 

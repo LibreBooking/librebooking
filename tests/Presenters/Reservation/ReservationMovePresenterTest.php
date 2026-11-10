@@ -8,8 +8,6 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 
 class ReservationMovePresenterTest extends TestBase
 {
-    private $userId;
-
     /**
      * @var UserSession
      */
@@ -36,7 +34,6 @@ class ReservationMovePresenterTest extends TestBase
         parent::setup();
 
         $this->user = $this->fakeServer->UserSession;
-        $this->userId = $this->user->UserId;
 
         $this->persistenceService = $this->createMock('IUpdateReservationPersistenceService');
         $this->handler = $this->createMock('IReservationHandler');

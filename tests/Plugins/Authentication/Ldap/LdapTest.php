@@ -31,11 +31,6 @@ class LdapTest extends TestBase
      */
     private $fakeRegistration;
 
-    /**
-     * @var FakePasswordEncryption
-     */
-    private $encryption;
-
     private $username = 'username';
     private $password = 'password';
 
@@ -52,7 +47,6 @@ class LdapTest extends TestBase
         $this->fakeLdapOptions = new FakeLdapOptions();
         $this->fakeLdap = new FakeLdapWrapper();
         $this->fakeRegistration = new FakeRegistration();
-        $this->encryption = new FakePasswordEncryption();
 
         $ldapEntry = new TestLdapEntry();
         $ldapEntry->Set('sn', 'user');

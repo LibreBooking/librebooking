@@ -9,8 +9,6 @@ class EditReservationPresenterTest extends TestBase
      */
     private $user;
 
-    private $userId;
-
     private IExistingReservationPage&\PHPUnit\Framework\MockObject\MockObject $page;
 
     private IReservationViewRepository&\PHPUnit\Framework\MockObject\MockObject $reservationViewRepository;
@@ -26,7 +24,6 @@ class EditReservationPresenterTest extends TestBase
         parent::setup();
 
         $this->user = $this->fakeServer->UserSession;
-        $this->userId = $this->user->UserId;
 
         $this->page = $this->createMock('IExistingReservationPage');
 

@@ -82,7 +82,6 @@ class DatabaseTest extends TestBase
         $newParam = new Parameter('n3', 'v3');
         $SqlCommand->AddParameter($newParam);
 
-        $this->assertNotNull($parameters, 'Parameters object null');
         $this->assertNotNull($SqlCommand->Parameters, 'SqlCommand::parameters is null');
         $this->assertEquals(3, $SqlCommand->Parameters->Count());
         $this->assertEquals($parameters->Items(0), $SqlCommand->Parameters->Items(0));

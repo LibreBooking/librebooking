@@ -46,7 +46,7 @@ class ServerEnvironmentTest extends TestCase
             'date.timezone' => '',
         ];
         $environment = new ServerEnvironment(
-            iniGet: static fn (string $name): string|false => $values[$name] ?? '1',
+            iniGet: static fn (string $name): string => $values[$name] ?? '1',
         );
 
         $settings = $environment->getIniSettings();
@@ -60,7 +60,7 @@ class ServerEnvironmentTest extends TestCase
     public function testBooleanIniSettingPreservesNonBooleanValue(): void
     {
         $environment = new ServerEnvironment(
-            iniGet: static fn (string $name): string|false => $name === 'display_errors' ? 'stderr' : '1',
+            iniGet: static fn (string $name): string => $name === 'display_errors' ? 'stderr' : '1',
         );
 
         $this->assertSame('stderr', $environment->getIniSettings()['display_errors']);

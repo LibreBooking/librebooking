@@ -223,6 +223,7 @@ class URIParamValidatorTest extends TestBase
             'simpleDateList' => ParamsValidatorMethods::simpleDateValidatorList($param, $uri),
             'optionalSimpleDate' => ParamsValidatorMethods::optionalSimpleDateValidator($param, $uri),
             'optionalNumeric' => ParamsValidatorMethods::optionalNumericValidator($param, $uri),
+            default => $this->fail("Unknown validator $validator"),
         };
         $this->assertFalse($result, "Array param should be rejected by $validator for URI: $uri");
     }

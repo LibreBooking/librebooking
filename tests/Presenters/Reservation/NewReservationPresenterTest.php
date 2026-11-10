@@ -13,17 +13,11 @@ class NewReservationPresenterTest extends TestBase
      */
     private $_user;
 
-    /**
-     * @var int
-     */
-    private $_userId;
-
     public function setUp(): void
     {
         parent::setup();
 
         $this->_user = $this->fakeServer->UserSession;
-        $this->_userId = $this->_user->UserId;
     }
 
     public function teardown(): void

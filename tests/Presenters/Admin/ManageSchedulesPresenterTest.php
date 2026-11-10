@@ -203,7 +203,8 @@ class ManageSchedulesPresenterTest extends TestBase
                 ->willReturnCallback(function ($resource) use ($matcher, $resource1, $resource2) {
                     match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($resource, $resource1),
-                        2 => $this->assertEquals($resource, $resource2)
+                        2 => $this->assertEquals($resource, $resource2),
+                        default => $this->fail('Unexpected invocation ' . $matcher->numberOfInvocations()),
                     };
                 });
 

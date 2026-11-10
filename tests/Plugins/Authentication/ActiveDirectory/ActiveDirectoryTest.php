@@ -31,16 +31,6 @@ class ActiveDirectoryTest extends TestBase
      */
     private $fakeRegistration;
 
-    /**
-     * @var FakeGroupViewRepository
-     */
-    private $fakeGroupRepository;
-
-    /**
-     * @var FakePasswordEncryption
-     */
-    private $encryption;
-
     private $username = 'username';
     private $password = 'password';
 
@@ -57,8 +47,6 @@ class ActiveDirectoryTest extends TestBase
         $this->fakeLdapOptions = new FakeActiveDirectoryOptions();
         $this->fakeLdap = new FakeActiveDirectoryWrapper();
         $this->fakeRegistration = new FakeRegistration();
-        $this->encryption = new FakePasswordEncryption();
-        $this->fakeGroupRepository = new FakeGroupViewRepository();
 
         $ldapEntry = new TestAdLdapEntry();
         $ldapEntry->sn = 'user';
