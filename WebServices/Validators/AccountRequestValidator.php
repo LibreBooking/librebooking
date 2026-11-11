@@ -10,13 +10,13 @@ require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountPasswordReque
 interface IAccountRequestValidator
 {
     /**
-     * @param CreateAccountRequest $request
+     * @param CreateAccountRequest|null $request null is rejected with an error
      * @return string[]
      */
     public function ValidateCreate($request);
 
     /**
-     * @param UpdateAccountRequest $request
+     * @param UpdateAccountRequest|null $request null is rejected with an error
      * @param WebServiceUserSession $session
      * @return string[]
      */

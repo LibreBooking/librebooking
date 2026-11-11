@@ -102,7 +102,10 @@ class AccountController implements IAccountController
             $request->acceptTermsOfService
         );
 
-        return new AccountControllerResult($user->Id(), null, $user->StatusId() == AccountStatus::AWAITING_ACTIVATION ? [] : null);
+        return new AccountControllerResult(
+            userId: $user->Id(),
+            messages: $user->StatusId() == AccountStatus::AWAITING_ACTIVATION ? [] : null
+        );
     }
 
     public function Update(UpdateAccountRequest $request, WebServiceUserSession $session)
@@ -163,11 +166,11 @@ class AccountController implements IAccountController
 class AccountControllerResult
 {
     /**
-     * @param int $userId
-     * @param array|string[] $errors
-     * @param array|string[] $messages
+     * @param int|null $userId null when the request failed
+     * @param string[] $errors
+     * @param string[]|null $messages
      */
-    public function __construct(private $userId, private $errors = [], private $messages = [])
+    public function __construct(private ?int $userId, private array $errors = [], private ?array $messages = [])
     {
     }
 
@@ -180,7 +183,7 @@ class AccountControllerResult
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function UserId()
     {
@@ -188,7 +191,7 @@ class AccountControllerResult
     }
 
     /**
-     * @return array|string[]
+     * @return string[]
      */
     public function Errors()
     {
@@ -196,7 +199,7 @@ class AccountControllerResult
     }
 
     /**
-     * @return array|string[]
+     * @return string[]|null
      */
     public function Messages()
     {

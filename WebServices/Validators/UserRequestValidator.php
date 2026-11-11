@@ -9,14 +9,14 @@ require_once(ROOT_DIR . 'WebServices/Requests/User/UpdateUserRequest.php');
 interface IUserRequestValidator
 {
     /**
-     * @param CreateUserRequest $createRequest
+     * @param CreateUserRequest|null $createRequest null is rejected with an error
      * @return array|string[]
      */
     public function ValidateCreateRequest($createRequest);
 
     /**
      * @param int $userId
-     * @param UpdateUserRequest $updateRequest
+     * @param UpdateUserRequest|null $updateRequest null is rejected with an error
      * @return array|string[]
      */
     public function ValidateUpdateRequest($userId, $updateRequest);

@@ -10,7 +10,7 @@ interface IRegistration
      * @param string $password unencrypted password
      * @param string $timezone name of user timezone
      * @param string $language preferred language code
-     * @param int $homepageId lookup id of the page to redirect the user to on login
+     * @param int|null $homepageId lookup id of the page to redirect the user to on login; null for the default page
      * @param array $additionalFields key value pair of additional fields to use during registration
      * @param array|AttributeValue[] $attributeValues
      * @param null|UserGroup[] $groups

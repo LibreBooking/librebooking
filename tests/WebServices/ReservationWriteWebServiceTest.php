@@ -133,7 +133,7 @@ class ReservationWriteWebServiceTest extends TestBase
         $this->server->SetRequest($reservationRequest);
 
         $errors = ['error'];
-        $controllerResult = new ReservationControllerResult($reservationRequest);
+        $controllerResult = new ReservationControllerResult();
         $controllerResult->SetErrors($errors);
 
         $this->controller->expects($this->once())

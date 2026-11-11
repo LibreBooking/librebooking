@@ -152,10 +152,10 @@ class UserSaveController implements IUserSaveController
 class UserControllerResult
 {
     /**
-     * @param int $userId
-     * @param array $errors
+     * @param int|null $userId null when the request failed
+     * @param string[] $errors
      */
-    public function __construct(private $userId, private $errors = [])
+    public function __construct(private ?int $userId, private array $errors = [])
     {
     }
 
@@ -168,7 +168,7 @@ class UserControllerResult
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function UserId()
     {

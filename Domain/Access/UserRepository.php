@@ -161,8 +161,8 @@ interface IUserViewRepository
     public function GetAll();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param null|string $sortField
      * @param null|string $sortDirection
      * @param null|ISqlFilter $filter

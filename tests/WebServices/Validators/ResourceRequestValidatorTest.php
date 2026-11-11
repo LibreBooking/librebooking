@@ -75,8 +75,9 @@ class ResourceRequestValidatorTest extends TestBase
     {
         $request = ResourceRequest::Example();
 
-        $deleteErrors = $this->validator->ValidateDeleteRequest(null);
-        $updateErrors = $this->validator->ValidateUpdateRequest('', $request);
+        // Route IDs are digits only, so 0 is the only ID that can be empty.
+        $deleteErrors = $this->validator->ValidateDeleteRequest(resourceId: 0);
+        $updateErrors = $this->validator->ValidateUpdateRequest(resourceId: 0, updateRequest: $request);
 
         $this->assertEquals(1, count($deleteErrors));
         $this->assertEquals(1, count($updateErrors));

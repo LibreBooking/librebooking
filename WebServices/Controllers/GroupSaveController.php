@@ -396,7 +396,7 @@ abstract class GroupControllerPageFacade implements IManageGroupsPage
 class CreateGroupFacade extends GroupControllerPageFacade
 {
     /**
-     * @param GroupRequest $request
+     * @param GroupRequest|null $request null when deleting, which only needs the id
      * @param int|null $id
      */
     public function __construct(private $request, private $id = null)
@@ -410,12 +410,12 @@ class CreateGroupFacade extends GroupControllerPageFacade
 
     public function GetGroupName(): ?string
     {
-        return $this->request->name;
+        return $this->request?->name;
     }
 
     public function AutomaticallyAddToGroup(): ?bool
     {
-        return $this->request->isDefault;
+        return $this->request?->isDefault;
     }
 
     /**
