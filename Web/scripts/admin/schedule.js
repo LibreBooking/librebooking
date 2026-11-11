@@ -477,7 +477,9 @@ function ScheduleManagement(opts) {
       var endTime = times.data('end-time');
 
       var everyday = days.data('everyday');
-      var days = days.data('weekdays').split(',');
+      // Read the raw attribute: .data() turns a single day such as "0"
+      // into a number, which has no split().
+      var weekdays = days.attr('data-weekdays').split(',');
 
       var allYear = months.data('all-year');
       var beginMonth = months.data('begin-month');
@@ -493,16 +495,14 @@ function ScheduleManagement(opts) {
         $('#peakEndTime').val(endTime);
       }
 
-      elements.peakEveryDay.attr('checked', everyday == 1);
+      elements.peakEveryDay.prop('checked', everyday == 1);
 
-      _.each($('#peakDayList').find(':checked'), function (e) {
-        $(e).closest('label').button('toggle');
-      });
+      // Set the checkboxes themselves: the days are btn-check inputs, and
+      // only their checked state is submitted.
+      $('#peakDayList').find('.btn-check').prop('checked', false);
 
-      _.each(days, function (day) {
-        $('#peakDay' + day)
-          .closest('label')
-          .button('toggle');
+      _.each(weekdays, function (day) {
+        $('#peakDay' + day).prop('checked', true);
       });
 
       if (allYear == 1) {
