@@ -477,7 +477,7 @@ class Quota implements IQuota
     }
 
     /**
-     * @param ExistingReservationSeries $series
+     * @param ReservationSeries $series only an ExistingReservationSeries can have deletions
      * @param int $reservationId
      * @return bool
      */
@@ -533,7 +533,7 @@ class QuotaUnit
     public const Reservations = 'reservations';
 }
 
-interface IQuotaDuration
+interface IQuotaDuration extends Stringable
 {
     /**
      * @return string QuotaDuration
@@ -922,7 +922,7 @@ class QuotaDurationYear extends QuotaDuration
     }
 }
 
-interface IQuotaLimit
+interface IQuotaLimit extends Stringable
 {
     /**
      * @param Date $start

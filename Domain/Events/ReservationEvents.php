@@ -590,7 +590,7 @@ class ReminderAddedEvent extends SeriesEvent
     }
 
     /**
-     * @return ReservationReminderType
+     * @return int ReservationReminderType constant
      */
     public function ReminderType()
     {
@@ -606,7 +606,7 @@ class ReminderRemovedEvent extends SeriesEvent
     private $reminderType;
 
     /**
-     * @return ReservationReminderType
+     * @return int ReservationReminderType constant
      */
     public function ReminderType()
     {

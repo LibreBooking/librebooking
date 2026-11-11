@@ -51,7 +51,7 @@ class Database
     /**
      * Executes an alter query against the database
      *
-     * @param SqlCommand $command
+     * @param ISqlCommand $command
      * @return void
      */
     public function Execute(ISqlCommand $command)

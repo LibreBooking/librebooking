@@ -36,7 +36,7 @@ class ExistingReservationSeries extends ReservationSeries
     private $_removedAttachmentIds = [];
 
     /**
-     * @var array|int[]
+     * @var array<int, string> file id => file extension
      */
     protected $attachmentIds = [];
 
@@ -709,7 +709,7 @@ class ExistingReservationSeries extends ReservationSeries
             $this->AddEvent(new AttributeAddedEvent($attribute, $this));
         }
 
-        /** @var ReservationAccessory $attribute */
+        /** @var AttributeValue $attribute */
         foreach ($removed as $attribute) {
             $this->AddEvent(new AttributeRemovedEvent($attribute, $this));
         }

@@ -758,7 +758,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string $value
+     * @param string|null $value null removes the image, e.g. when copying a resource
      * @return void
      */
     public function SetImage($value)

@@ -277,14 +277,14 @@ class AddPaymentTransactionLogCommand extends SqlCommand
      * @param string $userId
      * @param string $status
      * @param string $invoiceNumber
-     * @param int $transactionId
+     * @param string $transactionId
      * @param float $totalAmount
      * @param float $transactionFee
      * @param string $currency
-     * @param string $transactionHref
-     * @param string $refundHref
+     * @param string|null $transactionHref
+     * @param string|null $refundHref
      * @param Date $dateCreated
-     * @param string $gatewayDateCreated
+     * @param string|int $gatewayDateCreated
      * @param string $gatewayResponse
      */
     public function __construct(
@@ -372,15 +372,15 @@ class AddQuotaCommand extends SqlCommand
 class AddRefundTransactionLogCommand extends SqlCommand
 {
     /**
-     * @param string $paymentTransactionLogId
+     * @param int $paymentTransactionLogId
      * @param string $status
-     * @param int $transactionId
+     * @param string $transactionId
      * @param float $totalRefundAmount
      * @param float $paymentRefundAmount
      * @param float $feeRefundAmount
-     * @param string $transactionHref
+     * @param string|null $transactionHref
      * @param Date $dateCreated
-     * @param string $gatewayDateCreated
+     * @param string|int $gatewayDateCreated
      * @param string $refundResponse
      */
     public function __construct(

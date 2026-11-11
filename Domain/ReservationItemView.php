@@ -614,7 +614,12 @@ class ReservationItemView implements IReservedItemView
         }
 
         if (isset($row[ColumnNames::GROUP_LIST])) {
-            $view->WithOwnerGroupIds(explode(',', $row[ColumnNames::GROUP_LIST]));
+            $view->WithOwnerGroupIds(
+                ownerGroupIds: array_map(
+                    callback: 'intval',
+                    array: explode(',', $row[ColumnNames::GROUP_LIST])
+                )
+            );
         }
 
         if (isset($row[ColumnNames::START_REMINDER_MINUTES_PRIOR])) {

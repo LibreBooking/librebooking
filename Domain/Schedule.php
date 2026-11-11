@@ -315,7 +315,9 @@ class Schedule implements ISchedule
             $row[ColumnNames::LAYOUT_ID]
         );
 
-        $schedule->WithSubscription($row[ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION]);
+        $schedule->WithSubscription(
+            allowSubscription: (bool) intval(value: $row[ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION])
+        );
         $schedule->WithPublicId($row[ColumnNames::PUBLIC_ID]);
         $schedule->SetAdminGroupId($row[ColumnNames::SCHEDULE_ADMIN_GROUP_ID]);
         $schedule->SetAvailability(Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_START_DATE]), Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_END_DATE]));
