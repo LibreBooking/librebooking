@@ -67,14 +67,20 @@ function ResourceDisplay(opts) {
       elements.reservationForm.submit();
     });
 
-    elements.placeholder.on('click', '#reservePopup', function (e) {
-      pauseRefresh();
-    });
+    const modalContainer = elements.placeholder[0];
 
-    elements.placeholder.on('click', '#reserveCancel', function (e) {
-      resumeRefresh();
-      refreshResource();
-    });
+    if (modalContainer) {
+      modalContainer.addEventListener('show.bs.modal', function (e) {
+        if (!e.target.matches('#reservation-box')) return;
+        pauseRefresh();
+      });
+
+      modalContainer.addEventListener('hidden.bs.modal', function (e) {
+        if (!e.target.matches('#reservation-box')) return;
+        resumeRefresh();
+        refreshResource();
+      });
+    }
 
     elements.placeholder.on('submit', '#formReserve', function (e) {
       e.preventDefault();
@@ -89,8 +95,6 @@ function ResourceDisplay(opts) {
         var validationErrors = $('#validationErrors');
         if (data.success) {
           validationErrors.find('ul').empty().addClass('d-none');
-          resumeRefresh();
-          refreshResource();
           $('#reservation-box').modal('hide');
         } else {
           var errors = data.errors ? data.errors : data.Messages;
