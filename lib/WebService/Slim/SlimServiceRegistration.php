@@ -237,6 +237,11 @@ class SlimServiceMetadata
                 }
 
                 $parsedDocComment = str_replace($matches[1] . $matches[2], '', $parsedDocComment);
+            } else {
+                // Not a tag, e.g. a summary line or a blank line between
+                // tags. Skip it so that every pass shortens the comment;
+                // without this the loop never ends.
+                $parsedDocComment = substr($parsedDocComment, $newlinePos + 1);
             }
         }
         return $phpDoc;
