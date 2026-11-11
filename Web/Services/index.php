@@ -89,6 +89,14 @@ $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
     }
 });
 
+// Unknown routes, including IDs that fail the numeric route conditions set
+// by SlimWebServiceRegistry, get the same JSON body as a missing record
+// instead of Slim's HTML page.
+$app->notFound(function () use ($app) {
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(RestResponse::NotFound());
+});
+
 $app->error(function (\Exception $e) use ($app) {
     require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
     Log::Error('Slim Exception. %s', $e);

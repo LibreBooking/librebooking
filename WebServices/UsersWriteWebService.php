@@ -61,10 +61,10 @@ class UsersWriteWebService
      * @description Updates an existing user
      * @request UpdateUserRequest
      * @response UserUpdatedResponse
-     * @param $userId
+     * @param int $userId
      * @return void
      */
-    public function Update($userId)
+    public function Update(int $userId)
     {
         /** @var UpdateUserRequest $request */
         $request = new UpdateUserRequest($this->server->GetRequest());
@@ -100,7 +100,7 @@ class UsersWriteWebService
      * @param int $userId
      * @return void
      */
-    public function Delete($userId)
+    public function Delete(int $userId)
     {
         Log::Debug('UsersWriteWebService.Delete() User=%s', $this->server->GetSession()->UserId);
 
@@ -131,7 +131,7 @@ class UsersWriteWebService
      * @param int $userId
      * @return void
      */
-    public function UpdatePassword($userId)
+    public function UpdatePassword(int $userId)
     {
         Log::Debug('UsersWriteWebService.UpdatePassword() User=%s', $this->server->GetSession()->UserId);
 

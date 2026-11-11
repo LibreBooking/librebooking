@@ -89,7 +89,7 @@ class AccountWebService
      * @response AccountActionResponse
      * @return void
      */
-    public function Update($userId)
+    public function Update(int $userId)
     {
         /** @var UpdateAccountRequest $request */
         $request = new UpdateAccountRequest($this->server->GetRequest());
@@ -122,7 +122,7 @@ class AccountWebService
      * @response AccountActionResponse
      * @return void
      */
-    public function UpdatePassword($userId)
+    public function UpdatePassword(int $userId)
     {
         /** @var UpdateAccountPasswordRequest $request */
         $request = new UpdateAccountPasswordRequest($this->server->GetRequest());

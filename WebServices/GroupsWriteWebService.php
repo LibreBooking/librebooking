@@ -49,10 +49,10 @@ class GroupsWriteWebService
      * @description Updates and existing group
      * @request GroupRequest
      * @response GroupUpdatedResponse
-     * @param $groupId
+     * @param int $groupId
      * @return void
      */
-    public function Update($groupId)
+    public function Update(int $groupId)
     {
         /** @var GroupRequest $request */
         $request = $this->server->GetRequest();
@@ -79,7 +79,7 @@ class GroupsWriteWebService
      * @param int $groupId
      * @return void
      */
-    public function Delete($groupId)
+    public function Delete(int $groupId)
     {
         Log::Debug('GroupsWriteWebService.Delete() GroupId=%s, UserId=%s', $groupId, $this->server->GetSession()->UserId);
 
@@ -104,7 +104,7 @@ class GroupsWriteWebService
      * @param int $groupId
      * @return void
      */
-    public function Roles($groupId)
+    public function Roles(int $groupId)
     {
         /** @var GroupRolesRequest $request */
         $request = $this->server->GetRequest();
@@ -131,7 +131,7 @@ class GroupsWriteWebService
      * @param int $groupId
      * @return void
      */
-    public function Permissions($groupId)
+    public function Permissions(int $groupId)
     {
         /** @var GroupPermissionsRequest $request */
         $request = $this->server->GetRequest();
@@ -158,7 +158,7 @@ class GroupsWriteWebService
      * @param int $groupId
      * @return void
      */
-    public function Users($groupId)
+    public function Users(int $groupId)
     {
         /** @var GroupUsersRequest $request */
         $request = $this->server->GetRequest();

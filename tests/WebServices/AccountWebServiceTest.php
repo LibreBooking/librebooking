@@ -30,7 +30,7 @@ class AccountWebServiceTest extends TestBase
 
     public function testCanCreateNewUser()
     {
-        $userId = '1';
+        $userId = 1;
 
         $request = new CreateAccountRequest();
         $this->server->SetRequest($request);
@@ -64,7 +64,7 @@ class AccountWebServiceTest extends TestBase
 
     public function testCanUpdateUser()
     {
-        $userId = '1';
+        $userId = 1;
 
         $userRequest = new UpdateAccountRequest();
         $this->server->SetRequest($userRequest);
@@ -100,7 +100,7 @@ class AccountWebServiceTest extends TestBase
 
     public function testCanUpdatePassword()
     {
-        $userId = '1';
+        $userId = 1;
 
         $request = new UpdateAccountPasswordRequest();
         $this->server->SetRequest($request);

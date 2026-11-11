@@ -42,6 +42,21 @@ For all of the secure service calls it is required to be
    2. ``X-Booked-UserId`` set to the value of ``userId`` returned by the
       `Authenticate <#authenticate>`__ API call.
 
+IDs in Routes
+~~~~~~~~~~~~~
+
+Routes that contain a numeric ID, such as ``:userId`` in
+``/Web/Services/index.php/Users/:userId``, accept only digits (at most
+10). A route with any other value, for example ``/Users/abc`` or
+``/Users/12abc``, does not match and returns HTTP 404 with a JSON
+body::
+
+    {"links": [], "message": "The requested resource was not found"}
+
+This applies to ``:accessoryId``, ``:attributeId``, ``:categoryId``,
+``:groupId``, ``:resourceId``, ``:scheduleId`` and ``:userId``.
+``:referenceNumber`` is not affected.
+
 GET Requests / Query String Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

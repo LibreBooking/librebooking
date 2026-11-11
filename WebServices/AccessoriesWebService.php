@@ -51,7 +51,7 @@ class AccessoriesWebService
      * @response AccessoryResponse
      * @return void
      */
-    public function GetAccessory($accessoryId)
+    public function GetAccessory(int $accessoryId)
     {
         $accessory = $this->accessoryRepository->LoadById($accessoryId);
 

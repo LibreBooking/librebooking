@@ -70,7 +70,7 @@ class UsersWebService
      * @param int $userId
      * @return void
      */
-    public function GetUser($userId)
+    public function GetUser(int $userId)
     {
         $responseCode = RestResponse::OK_CODE;
 
