@@ -82,7 +82,12 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
             $scheduleName = $row['schedule_name'];
             $enforcedStartTime = $row[ColumnNames::ENFORCED_START_TIME];
             $enforcedEndTime = $row[ColumnNames::ENFORCED_END_TIME];
-            $enforcedDays = empty($row[ColumnNames::ENFORCED_DAYS]) ? [] : explode(',', $row[ColumnNames::ENFORCED_DAYS]);
+            $enforcedDays = empty($row[ColumnNames::ENFORCED_DAYS])
+                ? []
+                : array_map(
+                    callback: 'intval',
+                    array: explode(',', $row[ColumnNames::ENFORCED_DAYS])
+                );
             $scope = $row[ColumnNames::QUOTA_SCOPE];
 
             $quotas[] = new QuotaItemView(

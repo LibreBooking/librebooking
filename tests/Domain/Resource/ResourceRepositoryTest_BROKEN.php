@@ -162,8 +162,8 @@ class ResourceRepositoryTest extends TestBase
         $resourceId = 123;
 
         $resource = new FakeBookableResource($resourceId);
-        $resource->SetAutoAssign('0');
-        $resource->SetAutoAssign('1');
+        $resource->SetAutoAssign(value: false);
+        $resource->SetAutoAssign(value: true);
         $resource->SetClearAllPermissions(true);
 
         $this->repository->Update($resource);

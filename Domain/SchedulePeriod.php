@@ -143,7 +143,7 @@ class SchedulePeriod
     public function Id()
     {
         if (empty($this->_id)) {
-            $this->_id = uniqid($this->_begin->Timestamp());
+            $this->_id = uniqid(prefix: (string) $this->_begin->Timestamp());
         }
         return $this->_id;
     }

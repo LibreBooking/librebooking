@@ -786,17 +786,22 @@ class PeakTimes
 
     public static function FromRow($row)
     {
-        $allDay = intval($row[ColumnNames::PEAK_ALL_DAY]);
+        $allDay = (bool) intval($row[ColumnNames::PEAK_ALL_DAY]);
 
         $beginTime = !empty($row[ColumnNames::PEAK_START_TIME]) ? Time::Parse($row[ColumnNames::PEAK_START_TIME]) : null;
         $endTime = !empty($row[ColumnNames::PEAK_END_TIME]) ? Time::Parse($row[ColumnNames::PEAK_END_TIME]) : null;
 
-        $everyDay = intval($row[ColumnNames::PEAK_EVERY_DAY]);
+        $everyDay = (bool) intval($row[ColumnNames::PEAK_EVERY_DAY]);
 
-        $weekdays = !empty($row[ColumnNames::PEAK_DAYS]) ? explode(',', $row[ColumnNames::PEAK_DAYS]) : [];
+        $weekdays = !empty($row[ColumnNames::PEAK_DAYS])
+            ? array_map(
+                callback: 'intval',
+                array: explode(',', $row[ColumnNames::PEAK_DAYS])
+            )
+            : [];
 
 
-        $allYear = intval($row[ColumnNames::PEAK_ALL_YEAR]);
+        $allYear = (bool) intval($row[ColumnNames::PEAK_ALL_YEAR]);
 
         $beginDay = $row[ColumnNames::PEAK_BEGIN_DAY];
         $beginMonth = $row[ColumnNames::PEAK_BEGIN_MONTH];

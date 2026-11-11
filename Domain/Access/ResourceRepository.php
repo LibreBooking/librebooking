@@ -1164,6 +1164,23 @@ class NullResourceDto extends ResourceDto
 {
     public function __construct()
     {
-        parent::__construct(0, null, false, false, 0, new TimeInterval(0), null, null, null, null, false, false, false, null, null, null);
+        parent::__construct(
+            id: 0,
+            name: '',
+            canAccess: false,
+            canBook: false,
+            scheduleId: 0,
+            minLength: new TimeInterval(0),
+            resourceTypeId: null,
+            adminGroupId: null,
+            scheduleAdminGroupId: null,
+            statusId: null,
+            requiresApproval: false,
+            isCheckInEnabled: false,
+            isAutoReleased: false,
+            autoReleaseMinutes: null,
+            color: null,
+            maxConcurrentReservations: null
+        );
     }
 }

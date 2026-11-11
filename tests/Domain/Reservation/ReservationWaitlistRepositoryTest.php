@@ -23,12 +23,25 @@ class ReservationWaitlistRepositoryTest extends TestBase
         $startDate = Date::Now();
         $endDate = Date::Now();
         $userId = 1;
-        $resourceIds = [1, 2, 3];
-        $request = ReservationWaitlistRequest::Create($userId, $startDate, $endDate, $resourceIds);
+        $resourceId = 1;
+        $request = ReservationWaitlistRequest::Create(
+            userId: $userId,
+            startDate: $startDate,
+            endDate: $endDate,
+            resourceId: $resourceId
+        );
 
         $id = $this->repository->Add($request);
 
         $this->assertEquals($this->db->_ExpectedInsertId, $id);
-        $this->assertEquals(new AddReservationWaitlistCommand($userId, $startDate, $endDate, $resourceIds), $this->db->_LastCommand);
+        $this->assertEquals(
+            new AddReservationWaitlistCommand(
+                userId: $userId,
+                startDate: $startDate,
+                endDate: $endDate,
+                resourceId: $resourceId
+            ),
+            $this->db->_LastCommand
+        );
     }
 }

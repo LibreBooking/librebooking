@@ -215,7 +215,7 @@ class Date
     }
 
     /**
-     * @param string $databaseValue
+     * @param string|null $databaseValue an empty or null value gives a NullDate
      * @return Date
      */
     public static function FromDatabase($databaseValue)
@@ -846,7 +846,7 @@ class DateDiff
     private $seconds = 0;
 
     /**
-     * @param int $seconds
+     * @param int|float $seconds truncated to whole seconds
      */
     public function __construct($seconds)
     {

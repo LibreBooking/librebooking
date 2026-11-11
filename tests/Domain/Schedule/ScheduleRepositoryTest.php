@@ -295,7 +295,7 @@ class ScheduleRepositoryTest extends TestBase
             $timezone,
             $layoutId
         );
-        $expectedSchedule->WithSubscription($allowSubscription);
+        $expectedSchedule->WithSubscription(allowSubscription: true);
         $expectedSchedule->WithPublicId($publicId);
         $expectedSchedule->SetAvailability($start, $end);
 

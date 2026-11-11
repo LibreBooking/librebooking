@@ -73,14 +73,14 @@ interface IPaymentTransactionLogger
      * @param string $userId
      * @param string $status
      * @param string $invoiceNumber
-     * @param int $transactionId
+     * @param string $transactionId the gateway's transaction id
      * @param float $totalAmount
      * @param float $transactionFee
      * @param string $currency
-     * @param string $transactionHref
-     * @param string $refundHref
+     * @param string|null $transactionHref
+     * @param string|null $refundHref
      * @param Date $dateCreated
-     * @param string $gatewayDateCreated
+     * @param string|int $gatewayDateCreated as reported by the gateway; a Unix timestamp from Stripe
      * @param string $gatewayName
      * @param string $gatewayResponse
      */
@@ -101,15 +101,15 @@ interface IPaymentTransactionLogger
     );
 
     /**
-     * @param string $paymentTransactionLogId
+     * @param int $paymentTransactionLogId id of the logged payment being refunded
      * @param string $status
-     * @param int $transactionId
+     * @param string $transactionId the gateway's refund transaction id
      * @param float $totalRefundAmount
      * @param float $paymentRefundAmount
      * @param float $feeRefundAmount
-     * @param string $transactionHref
+     * @param string|null $transactionHref
      * @param Date $dateCreated
-     * @param string $gatewayDateCreated
+     * @param string|int $gatewayDateCreated as reported by the gateway; a Unix timestamp from Stripe
      * @param string $refundResponse
      */
     public function LogRefund(
