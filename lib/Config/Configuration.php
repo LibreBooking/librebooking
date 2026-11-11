@@ -26,7 +26,7 @@ interface IConfiguration extends IConfigurationFile
 interface IConfigurationFile
 {
     /**
-     * @param array $name
+     * @param ConfigKey|array $name a ConfigKeys definition
      * @param null|IConvert $converter
      * @return mixed|string
      */
@@ -195,7 +195,7 @@ class Configuration implements IConfiguration
 
     /**
      * Returns the value of a configuration key.
-     * @param array|string $configDef The key name or configuration definition.
+     * @param ConfigKey|array $configDef The configuration definition, e.g. a ConfigKeys constant.
      * @param null|IConvert $converter Optional converter for the value.
      * @return mixed|string The configuration value.
      * @throws InvalidArgumentException If the config definition is not found.
@@ -505,7 +505,7 @@ class ConfigurationFile implements IConfigurationFile
      * If the section is specified, it retrieves the value from that section.
      * If no section is specified, it retrieves the value from the global configuration.
      *
-     * @param array $configDef The configuration definition containing 'key' and optional 'section'.
+     * @param ConfigKey|array $configDef The configuration definition; an array contains 'key' and optional 'section'.
      * @param null|IConvert $converter Optional converter for the value.
      * @return mixed|string The converted configuration value.
      * @throws InvalidArgumentException If the config definition is not found.

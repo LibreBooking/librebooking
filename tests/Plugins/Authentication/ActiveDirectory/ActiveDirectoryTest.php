@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/namespace.php');
+require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/collections/adLDAPCollection.php');
+require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/collections/adLDAPUserCollection.php');
 
 class ActiveDirectoryTest extends TestBase
 {
@@ -305,8 +307,17 @@ class ActiveDirectoryTest extends TestBase
     }
 }
 
-class TestAdLdapEntry
+/**
+ * Stands in for an LDAP user entry. The real collection reads its values
+ * through __get() from a live adLDAP connection; the declared properties
+ * here take precedence over __get(), so the test sets them directly.
+ */
+class TestAdLdapEntry extends adLDAPUserCollection
 {
+    public function __construct()
+    {
+    }
+
     public $sn;
     public $givenname;
     public $fooName;

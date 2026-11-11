@@ -472,19 +472,19 @@ PHP
                     if (is_bool($sectionValue)) {
                         $this->assertEquals(
                             $sectionValue,
-                            $config->GetKey(ConfigKeys::findByKey($fullkey), new BooleanConverter()),
+                            $config->GetKey($this->findConfigKey($fullkey), new BooleanConverter()),
                             "Boolean value mismatch for key '$fullkey'"
                         );
                     } elseif (is_int($sectionValue)) {
                         $this->assertEquals(
                             $sectionValue,
-                            $config->GetKey(ConfigKeys::findByKey($fullkey), new IntConverter()),
+                            $config->GetKey($this->findConfigKey($fullkey), new IntConverter()),
                             "Integer value mismatch for key '$fullkey'"
                         );
                     } else {
                         $this->assertEquals(
                             $sectionValue,
-                            $config->GetKey(ConfigKeys::findByKey($fullkey)),
+                            $config->GetKey($this->findConfigKey($fullkey)),
                             "String value mismatch for key '$fullkey'"
                         );
                     }
@@ -494,24 +494,32 @@ PHP
                 if (is_bool($value)) {
                     $this->assertEquals(
                         $value,
-                        $config->GetKey(ConfigKeys::findByKey($key), new BooleanConverter()),
+                        $config->GetKey($this->findConfigKey($key), new BooleanConverter()),
                         "Boolean value mismatch for key '$key'"
                     );
                 } elseif (is_int($value)) {
                     $this->assertEquals(
                         $value,
-                        $config->GetKey(ConfigKeys::findByKey($key), new IntConverter()),
+                        $config->GetKey($this->findConfigKey($key), new IntConverter()),
                         "Integer value mismatch for key '$key'"
                     );
                 } else {
                     $this->assertEquals(
                         $value,
-                        $config->GetKey(ConfigKeys::findByKey($key)),
+                        $config->GetKey($this->findConfigKey($key)),
                         "String value mismatch for key '$key'"
                     );
                 }
             }
         }
+    }
+
+    private function findConfigKey(string $key): ConfigKey
+    {
+        $configKey = ConfigKeys::findByKey($key);
+        $this->assertNotNull($configKey, "No ConfigKeys definition for '$key'");
+
+        return $configKey;
     }
 
     private function createConfigurationFileFromContents(string $contents): ConfigurationFile

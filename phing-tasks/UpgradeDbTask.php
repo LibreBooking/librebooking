@@ -87,7 +87,7 @@ class UpgradeDbTask // extends Task
     {
         $dblink = mysqli_connect($this->host, $this->username, $this->mysqlPassword, $this->database);
         if (!$dblink) {
-            die('Could not connect: ' . mysqli_error($dblink));
+            die('Could not connect: ' . mysqli_connect_error());
         }
 
         mysqli_select_db($dblink, $this->database);
