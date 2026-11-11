@@ -98,16 +98,26 @@ namespace Booked {
         }
 
         /**
-         * @param float $amount
-         * @return float
+         * Converts an amount to the integer number of minor units (e.g.
+         * cents) that Stripe requires. Stripe rejects an amount that is not
+         * a whole number, and floating point arithmetic makes 19.99 * 100
+         * slightly less than 1999.
+         *
+         * Rounds to cents before multiplying: 1.005 * 100 is
+         * 100.49999999999999, which round() turns into 100 on PHP 8.4 and
+         * later but 101 on earlier versions. round(1.005, 2) is 1.01 on all
+         * of them.
+         *
+         * @param float|int|string $amount
+         * @return int
          */
-        public function ToStripe($amount)
+        public function ToStripe($amount): int
         {
             if ($this->IsZeroDecimal()) {
-                return $amount;
+                return (int) round((float) $amount);
             }
 
-            return $amount * 100;
+            return (int) round(round((float) $amount, 2) * 100);
         }
 
         /**
