@@ -681,6 +681,102 @@ class ResourcesWebServiceTest extends TestBase
         $this->service->GetAvailability();
     }
 
+    public function testGetsSingleResourceAvailabilityFromRoute()
+    {
+        $resourceId = 1;
+        $resource = new FakeBookableResource($resourceId);
+
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceIdList')
+                         ->willReturn([$resourceId]);
+
+        $this->repository->expects($this->once())
+                         ->method('LoadById')
+                         ->with($this->identicalTo($resourceId))
+                         ->willReturn($resource);
+
+        $endDate = Date::Now()->AddDays(7);
+        $this->reservationRepository->expects($this->once())
+                                    ->method('GetReservations')
+                                    ->with(
+                                        $this->equalTo(Date::Now()),
+                                        $this->equalTo($endDate),
+                                        $this->isEmpty(),
+                                        $this->isEmpty(),
+                                        $this->isEmpty(),
+                                        $this->identicalTo($resourceId)
+                                    )
+                                    ->willReturn([]);
+
+        $this->service->GetAvailability(resourceId: $resourceId);
+
+        $expected = new ResourcesAvailabilityResponse([
+            new ResourceAvailabilityResponse($this->server, $resource, null, null, null, $endDate),
+        ]);
+        $this->assertEquals($expected, $this->server->_LastResponse);
+    }
+
+    public function testRouteResourceIdTakesPrecedenceOverQueryString()
+    {
+        $routeResourceId = 1;
+        $this->server->SetQueryString(WebServiceQueryStringKeys::RESOURCE_ID, '2');
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceIdList')
+                         ->willReturn([1, 2]);
+
+        $this->repository->expects($this->once())
+                         ->method('LoadById')
+                         ->with($this->identicalTo($routeResourceId))
+                         ->willReturn(new FakeBookableResource($routeResourceId));
+
+        $this->reservationRepository->expects($this->once())
+                                    ->method('GetReservations')
+                                    ->willReturn([]);
+
+        $this->service->GetAvailability(resourceId: $routeResourceId);
+    }
+
+    public function testRouteResourceIdZeroDoesNotReturnAllResources()
+    {
+        $this->repository->expects($this->never())
+                         ->method('GetUserResourceList');
+
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceIdList')
+                         ->willReturn([1, 2]);
+
+        $this->repository->expects($this->never())
+                         ->method('LoadById');
+
+        $this->reservationRepository->method('GetReservations')
+                                    ->willReturn([]);
+
+        $this->service->GetAvailability(resourceId: 0);
+
+        $this->assertEquals(new ResourcesAvailabilityResponse([]), $this->server->_LastResponse);
+    }
+
+    public function testRouteResourceIdNotAvailableToUserReturnsNoResources()
+    {
+        $this->repository->expects($this->once())
+                         ->method('GetUserResourceIdList')
+                         ->willReturn([2]);
+
+        $this->repository->expects($this->never())
+                         ->method('LoadById');
+
+        $this->reservationRepository->method('GetReservations')
+                                    ->willReturn([]);
+
+        $this->service->GetAvailability(resourceId: 1);
+
+        $this->assertEquals(new ResourcesAvailabilityResponse([]), $this->server->_LastResponse);
+    }
+
     public function testGetsSingleResourceAvailabilityForARequestTime()
     {
         $date = Date::Parse('2014-01-01 04:30:00', 'America/Chicago');

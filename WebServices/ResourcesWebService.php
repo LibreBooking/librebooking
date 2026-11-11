@@ -165,13 +165,22 @@ class ResourcesWebService
      * @name GetAvailability
      * @description Returns resource availability for the requested resource (optional). "availableAt" and "availableUntil" will include availability through the next 7 days
      * Optional query string parameter: dateTime. If no dateTime is requested the current datetime will be used.
+     * Optional query string parameter: resourceId, used when the resource is not given in the route.
      * @response ResourcesAvailabilityResponse
+     * @param int|null $resourceId
      * @return void
      */
-    public function GetAvailability()
+    public function GetAvailability(?int $resourceId = null)
     {
         $dateQueryString = $this->server->GetQueryString(WebServiceQueryStringKeys::DATE_TIME);
-        $resourceId = $this->server->GetQueryString(WebServiceQueryStringKeys::RESOURCE_ID);
+
+        // /Resources/:resourceId/Availability passes the resource from the
+        // route. /Resources/Availability passes nothing and may name one in
+        // the query string instead; an empty value there means all resources.
+        if ($resourceId === null) {
+            $queryResourceId = $this->server->GetQueryString(WebServiceQueryStringKeys::RESOURCE_ID);
+            $resourceId = empty($queryResourceId) ? null : $queryResourceId;
+        }
 
         if (!empty($dateQueryString)) {
             $requestedTime = WebServiceDate::GetDate($dateQueryString, $this->server->GetSession());
@@ -180,7 +189,7 @@ class ResourcesWebService
         }
 
         $resources = [];
-        if (empty($resourceId)) {
+        if ($resourceId === null) {
             $resources = $this->resourceRepository->GetUserResourceList();
         } else {
             $allowedResourceIds = $this->resourceRepository->GetUserResourceIdList();

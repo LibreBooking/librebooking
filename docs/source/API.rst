@@ -2313,6 +2313,8 @@ GetAvailability
 | the next 7 days
 | Optional query string parameter: dateTime. If no dateTime is requested
 | the current datetime will be used.
+| Optional query string parameter: resourceId, to return a single
+| resource. See also `GetResourceAvailability <#getresourceavailability>`__.
 
 **Route:** ``/Web/Services/index.php/Resources/Availability``
 
