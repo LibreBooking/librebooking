@@ -256,6 +256,7 @@ Configuration: `build.xml`
 8. **Single quotes** for strings (unless interpolation is needed)
 9. **Short array syntax** - Use `[]` not `array()`
 10. **No magic numbers** - Use named constants, enums, or class constants instead of raw numeric literals. For example, use `CustomAttributeTypes::CHECKBOX` instead of `4`. Code reviews should flag any unexplained numeric literals as magic numbers
+11. **Named arguments** - When you change the arguments of a function or method call, convert that call to named arguments (e.g. `ReservationSeries::Create(userId: $userId, resource: $resource, ...)`). Put one argument per line when the call no longer fits on one line. Only convert the calls you touch; do not mass-convert unrelated calls. Do not use named arguments for calls into `lib/external/` or where the parameter name is not stable (e.g. interface implementations with differing parameter names)
 
 ### Design Patterns
 
