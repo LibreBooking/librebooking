@@ -43,9 +43,21 @@ class AccountResponse extends RestResponse
             $this->icsUrl = $url->__toString();
         }
 
-        $this->AddService($server, WebServices::GetAccount, [WebServiceParams::UserId, $this->userId]);
-        $this->AddService($server, WebServices::UpdateAccount, [WebServiceParams::UserId, $this->userId]);
-        $this->AddService($server, WebServices::UpdatePassword, [WebServiceParams::UserId, $this->userId]);
+        $this->AddService(
+            server: $server,
+            serviceName: WebServices::GetAccount,
+            params: [WebServiceParams::UserId => $this->userId]
+        );
+        $this->AddService(
+            server: $server,
+            serviceName: WebServices::UpdateAccount,
+            params: [WebServiceParams::UserId => $this->userId]
+        );
+        $this->AddService(
+            server: $server,
+            serviceName: WebServices::UpdateAccountPassword,
+            params: [WebServiceParams::UserId => $this->userId]
+        );
     }
 
     public static function Example()

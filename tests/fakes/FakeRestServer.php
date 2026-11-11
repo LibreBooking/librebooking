@@ -52,10 +52,16 @@ class FakeRestServer implements IRestServer
 
     public function GetServiceUrl($serviceName, $params = [])
     {
-        if (isset($this->_ServiceUrls[$serviceName])) {
-            return $this->_ServiceUrls[$serviceName];
+        $url = $this->_ServiceUrls[$serviceName] ?? '';
+
+        // Fill route placeholders the way Slim's Router::urlFor() does:
+        // each key of $params replaces the matching ":key", so a list such
+        // as [ResourceId, 5] leaves ":resourceId" in the URL.
+        foreach ($params as $key => $value) {
+            $url = preg_replace('#:' . preg_quote((string) $key, '#') . '\+?(?!\w)#', (string) $value, $url);
         }
-        return '';
+
+        return $url;
     }
 
     public function SetRequest($request)
