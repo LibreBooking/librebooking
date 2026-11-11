@@ -6,8 +6,16 @@ class ResourceUpdatedResponse extends RestResponse
 {
     public function __construct(IRestServer $server, public $resourceId)
     {
-        $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId, $this->resourceId]);
-        $this->AddService($server, WebServices::UpdateResource, [WebServiceParams::ResourceId, $this->resourceId]);
+        $this->AddService(
+            server: $server,
+            serviceName: WebServices::GetResource,
+            params: [WebServiceParams::ResourceId => $this->resourceId]
+        );
+        $this->AddService(
+            server: $server,
+            serviceName: WebServices::UpdateResource,
+            params: [WebServiceParams::ResourceId => $this->resourceId]
+        );
     }
 
     public static function Example()
