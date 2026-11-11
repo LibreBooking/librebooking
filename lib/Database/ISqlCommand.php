@@ -13,6 +13,11 @@ interface ISqlCommand
     public function AddParameter(Parameter $parameter);
 
     /**
+     * @return Parameters the parameters to bind into the query
+     */
+    public function GetParameters(): Parameters;
+
+    /**
      * @return string the underlying query to be executed
      */
     public function GetQuery();

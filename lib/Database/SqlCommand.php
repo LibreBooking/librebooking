@@ -25,6 +25,11 @@ class SqlCommand implements ISqlCommand
         $this->Parameters->Add($parameter);
     }
 
+    public function GetParameters(): Parameters
+    {
+        return $this->Parameters;
+    }
+
     public function GetQuery()
     {
         return $this->_query;

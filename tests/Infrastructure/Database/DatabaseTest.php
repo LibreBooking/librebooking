@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once(ROOT_DIR . 'lib/Database/namespace.php');
+require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
 
 class DatabaseTest extends TestBase
 {
@@ -90,6 +91,34 @@ class DatabaseTest extends TestBase
         $this->assertNotNull($SqlCommand->Parameters->Items(2), 'Last parameter object null');
         $this->assertEquals(3, $parameters->Count());
         $this->assertEquals($newParam, $SqlCommand->Parameters->Items(2));
+    }
+
+    public function testGetParametersReturnsTheCommandParameters(): void
+    {
+        $command = new SqlCommand('SELECT * FROM t WHERE a = @a');
+        $parameter = new Parameter('@a', 1);
+        $command->AddParameter(parameter: $parameter);
+
+        $this->assertSame($command->Parameters, $command->GetParameters());
+        $this->assertSame($parameter, $command->GetParameters()->Items(0));
+    }
+
+    public function testDecoratedCommandsReturnTheParametersTheyBind(): void
+    {
+        $base = new SqlCommand('SELECT * FROM t WHERE a = @a');
+        $base->AddParameter(parameter: new Parameter('@a', 1));
+
+        $commands = [
+            new CountCommand(baseCommand: $base),
+            new SortCommand(baseCommand: $base, sortField: 'a', sortDirection: 'asc'),
+            new FilterCommand(baseCommand: $base, filter: new SqlFilterEquals('b', 2)),
+            new MySqlLimitCommand(baseCommand: $base, limit: 10, offset: 0),
+        ];
+
+        foreach ($commands as $command) {
+            // MySqlCommandAdapter used to read ->Parameters directly.
+            $this->assertSame($command->Parameters, $command->GetParameters(), get_class($command));
+        }
     }
 
     public function testSqlCommandIsUsedInQuery()

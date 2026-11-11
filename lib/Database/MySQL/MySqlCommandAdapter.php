@@ -24,13 +24,14 @@ class MySqlCommandAdapter
         return $this->_query;
     }
 
-    private function Convert(SqlCommand &$command)
+    private function Convert(ISqlCommand &$command)
     {
         $query = $command->GetQuery();
         $replacements = [];
+        $parameters = $command->GetParameters();
 
-        for ($p = 0; $p < $command->Parameters->Count(); $p++) {
-            $curParam = $command->Parameters->Items($p);
+        for ($p = 0; $p < $parameters->Count(); $p++) {
+            $curParam = $parameters->Items($p);
 
             if (is_null($curParam->Value)) {
                 $replacements[$curParam->Name] = 'null';
