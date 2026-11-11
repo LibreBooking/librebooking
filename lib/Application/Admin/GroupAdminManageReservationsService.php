@@ -35,14 +35,14 @@ class GroupAdminManageReservationsService extends ManageReservationsService impl
      * @param null|string $sortField
      * @param null|string $sortDirection
      * @param $filter ReservationFilter
-     * @param $user UserSession
+     * @param $userSession UserSession
      * @return PageableData|ReservationItemView[]
      */
-    public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $user)
+    public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $userSession)
     {
-        $currentUser = $this->userRepository->LoadById($user->UserId);
+        $user = $this->userRepository->LoadById($userSession->UserId);
 
-        $adminGroups = $currentUser->GetAdminGroups();
+        $adminGroups = $user->GetAdminGroups();
         $groupIds = [];
         foreach ($adminGroups as $group) {
             $groupIds[] = $group->GroupId;

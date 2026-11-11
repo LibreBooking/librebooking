@@ -12,7 +12,6 @@ interface ILoginContext
 class LoginData
 {
     /**
-     * @deprecated Persistent login was removed. The value is no longer used.
      * @var bool
      */
     public $Persist;

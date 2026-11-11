@@ -110,7 +110,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-sm-6" id="default-page">
+                        <div class="col-12 col-sm-6" id="default-page" style="display:none">
                             <div class="form-group">
                                 <label class="reg fw-bold" for="homepage">{translate key="DefaultPage"}</label>
                                 <select {formname key='DEFAULT_HOMEPAGE'} id="homepage"
@@ -120,7 +120,7 @@
                             </div>
 
                         </div>
-                        <div class="col-12 col-sm-6" id="timezone">
+                        <div class="col-12 col-sm-6" id="timezone" style="display:none">
                             <label class="reg fw-bold" for="timezoneDropDown">{translate key="Timezone"}</label>
 
                             <div class="input-group">

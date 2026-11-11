@@ -824,6 +824,15 @@ class CheckUsernameCommand extends SqlCommand
     }
 }
 
+class CookieLoginCommand extends SqlCommand
+{
+    public function __construct($userId)
+    {
+        parent::__construct(Queries::COOKIE_LOGIN);
+        $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userId));
+    }
+}
+
 class DeleteAccessoryCommand extends SqlCommand
 {
     public function __construct($accessoryId)
@@ -2655,13 +2664,11 @@ class UpdateGroupCommand extends SqlCommand
 
 class UpdateLoginDataCommand extends SqlCommand
 {
-    public function __construct($userId, $lastLoginTime, $language, $publicId)
+    public function __construct($userId, $lastLoginTime, $language)
     {
         parent::__construct(Queries::UPDATE_LOGINDATA);
         $this->AddParameter(new Parameter(ParameterNames::LAST_LOGIN, $lastLoginTime));
         $this->AddParameter(new Parameter(ParameterNames::LANGUAGE, $language));
-        $this->AddParameter(new Parameter(ParameterNames::PUBLIC_ID, $publicId));
-        $this->AddParameter(new Parameter(ParameterNames::DATE_MODIFIED, Date::Now()->ToDatabase()));
         $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userId));
     }
 }

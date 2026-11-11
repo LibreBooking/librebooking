@@ -19,8 +19,6 @@ class UserSession
     public $Groups = [];
     public $AdminGroups = [];
     public $CSRFToken = '';
-    // Also prevents services from deriving administrative permissions from stored roles.
-    public bool $AllowAdminPrivileges = true;
 
     public function __construct($id)
     {
@@ -35,23 +33,6 @@ class UserSession
     public function IsGuest()
     {
         return false;
-    }
-
-    /**
-     * Keeps booking ownership and ordinary permissions without granting admin exemptions.
-     * Returns a copy so a kiosk cannot change an authenticated browser session.
-     */
-    public function WithoutAdminPrivileges(): UserSession
-    {
-        $session = clone $this;
-        $session->IsAdmin = false;
-        $session->IsGroupAdmin = false;
-        $session->IsResourceAdmin = false;
-        $session->IsScheduleAdmin = false;
-        $session->AdminGroups = [];
-        $session->AllowAdminPrivileges = false;
-
-        return $session;
     }
 
     public function IsAdminForGroup($groupIds = [])

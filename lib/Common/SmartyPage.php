@@ -10,8 +10,6 @@ require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
-use League\Uri\QueryString;
-use League\Uri\Uri;
 use Smarty\Smarty;
 
 class SmartyPage extends Smarty
@@ -770,37 +768,24 @@ class SmartyPage extends Smarty
         '
         );
     }
-
-    /**
-     * Sets $key to $value in the query string of a raw (not HTML-escaped) URL.
-     * The query is parsed and rebuilt form-style (spaces as "+"), matching
-     * Server::GetUrl(). The result is a raw URL and must be escaped before
-     * being placed in HTML.
-     */
-    public function ReplaceQueryString(string $url, string $key, string|int $value): string
+    public function ReplaceQueryString($url, $key, $value)
     {
-        $uri = Uri::new($url);
-        $pairs = [];
-        $replaced = false;
-        foreach (QueryString::parse($uri->getQuery(), '&', PHP_QUERY_RFC1738) as [$name, $pairValue]) {
-            if ($name === '' && $pairValue === null) {
-                // Skip empty segments such as a bare "?" or "&&".
-                continue;
-            }
+        $newUrl = $url;
 
-            if ($name !== $key) {
-                $pairs[] = [$name, $pairValue];
-            } elseif (!$replaced) {
-                $pairs[] = [$key, (string) $value];
-                $replaced = true;
+        if (!str_contains((string) $url, (string) $key)) { // does not have variable
+            if (!str_contains((string) $url, '?')) { // and does not have any query string
+                $newUrl = sprintf('%s?%s=%s', $url, $key, $value);
+            } else {
+                $newUrl = sprintf('%s&amp;%s=%s', $url, $key, $value); // and has existing query string
             }
+        } else {
+            $pattern = '/(\?|&)(' . $key . '=.*)/';
+            $replace = '${1}' . $key . '=' . $value;
+
+            $newUrl = preg_replace($pattern, $replace, (string) $url);
         }
 
-        if (!$replaced) {
-            $pairs[] = [$key, (string) $value];
-        }
-
-        return $uri->withQuery(QueryString::build($pairs, '&', PHP_QUERY_RFC1738))->toString();
+        return $newUrl;
     }
 
     public function CreateJavascriptArray($params, $smarty)

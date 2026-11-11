@@ -117,12 +117,14 @@ class Authentication implements IAuthentication
         if ($user->StatusId() == AccountStatus::ACTIVE) {
             $loginData = $loginContext->GetData();
             $loginTime = LoginTime::Now();
-            // Only a language chosen at login is saved. Writing back the loaded one could
-            // revert a language change made since the user was loaded.
-            $loginLanguage = empty($loginData->Language) ? null : $loginData->Language;
+            $language = $user->Language();
 
-            $user->Login($loginTime, $loginLanguage ?? $user->Language());
-            $this->userRepository->UpdateLoginData(user: $user, language: $loginLanguage);
+            if (!empty($loginData->Language)) {
+                $language = $loginData->Language;
+            }
+
+            $user->Login($loginTime, $language);
+            $this->userRepository->Update($user);
 
             $user = $this->GetFirstRegistrationStrategy()->HandleLogin($user, $this->userRepository, $this->groupRepository);
 
@@ -157,9 +159,6 @@ class Authentication implements IAuthentication
         return true;
     }
 
-    /**
-     * @deprecated Persistent login was removed. The result is no longer used.
-     */
     public function ShowPersistLoginPrompt()
     {
         return true;
