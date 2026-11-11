@@ -1,0 +1,277 @@
+/* ==========================================================
+   STUDIO PODZIEMIE - CZCIONKI (GEIST & GEIST MONO)
+   ========================================================== */
+
+/* Import czcionek z Google Fonts dla pełnej kompatybilności */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600;700&display=swap');
+
+:root {
+    --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Geist Mono', monospace;
+}
+
+/* Zastosowanie czcionek w całym LibreBooking */
+body, .page-body, #page-wrapper, input, button, select, textarea, .form-control {
+    font-family: var(--font-sans) !important;
+}
+
+code, pre, .badge, .mono {
+    font-family: var(--font-mono) !important;
+}
+
+
+/* ===== Podziemie: kolory ===== */
+:root {
+    --pz-black: #000000;
+    --pz-yellow: #fcf241;
+    --pz-white: #ffffff;
+}
+
+/* ===== Przyciski atrybutów (wybór treningu / urządzenia) ===== */
+.custom-attr-buttons {
+    gap: 0.5rem;
+}
+
+.custom-attr-buttons .btn {
+    min-height: 42px;
+    padding: 0.5rem 1.1rem;
+    border: 2px solid var(--pz-black);
+    border-radius: 0;
+    background-color: var(--pz-white);
+    color: var(--pz-black);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: none;
+    transition: background-color 0.15s, color 0.15s, transform 0.1s;
+}
+
+.custom-attr-buttons .btn:hover {
+    background-color: var(--pz-black);
+    border-color: var(--pz-black);
+    color: var(--pz-yellow);
+}
+
+.custom-attr-buttons .btn:active {
+    transform: translateY(1px);
+}
+
+.custom-attr-buttons .btn:focus-visible {
+    outline: 3px solid var(--pz-yellow);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--pz-black);
+}
+
+/* Wybrana opcja */
+.custom-attr-buttons .btn.active,
+.custom-attr-buttons .btn.btn-primary {
+    background-color: var(--pz-yellow);
+    border-color: var(--pz-black);
+    color: var(--pz-black);
+}
+
+.custom-attr-buttons .btn.active:hover,
+.custom-attr-buttons .btn.btn-primary:hover {
+    background-color: var(--pz-black);
+    border-color: var(--pz-black);
+    color: var(--pz-yellow);
+}
+
+.customAttribute .custom-attr-buttons .btn.active,
+.customAttribute .custom-attr-buttons .btn.btn-primary{
+ color: black!important;
+ background: var(--pz-yellow) !important;
+}
+
+
+/* ===== Układ przycisków atrybutów (grid) ===== */
+.customAttribute,
+.customAttribute .custom-attr-buttons {
+    width: 100%;
+    max-width: none;
+}
+
+.custom-attr-buttons,
+.custom-attr-buttons.d-flex {
+    display: grid !important;
+    gap: 0.75rem !important;
+    grid-template-columns: minmax(0, 1fr); /* najwęższy widok: 1 kolumna */
+    justify-items: stretch;
+    width: 100%;
+}
+
+/* Wygląd pojedynczego przycisku */
+.customAttribute .custom-attr-buttons .btn {
+    width: 100% !important;
+    max-width: none;
+    box-sizing: border-box;
+    min-height: 56px;
+    margin-bottom: 0;
+    padding: 14px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    color: white;
+    text-decoration: none;
+    background: var(--primary);
+    border: none;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1rem), calc(100% - 1rem) 100%, 0 100%);
+    font-family: "Manrope", "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Telefon: wygodne do kliknięcia */
+@media (max-width: 575.98px) {
+    .custom-attr-buttons .btn {
+        min-height: 48px;
+    }
+}
+
+/* Od 576px: układ zależny od liczby przycisków */
+@media (min-width: 576px) {
+    /* domyślnie 3 kolumny: 3 = 1x3, 9 = 3x3 */
+    .custom-attr-buttons,
+    .custom-attr-buttons.d-flex {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* 1 przycisk: pełna szerokość */
+    .custom-attr-buttons:has(> .btn:first-child:last-child) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* 2 i 6 przycisków: 2 kolumny (6 = 2x3) */
+    .custom-attr-buttons:has(> .btn:nth-child(2):last-child),
+    .custom-attr-buttons:has(> .btn:nth-child(6):last-child) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* 4 i 8 przycisków: 2 kolumny na tablecie */
+    .custom-attr-buttons:has(> .btn:nth-child(4):last-child),
+    .custom-attr-buttons:has(> .btn:nth-child(8):last-child) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* 5 przycisków: góra 3 przyciski, dół 2 przyciski na całą szerokość */
+    .custom-attr-buttons:has(> .btn:nth-child(5):last-child) {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .custom-attr-buttons:has(> .btn:nth-child(5):last-child) > .btn {
+        grid-column: span 2;
+    }
+
+    .custom-attr-buttons:has(> .btn:nth-child(5):last-child) > .btn:nth-child(n+4) {
+        grid-column: span 3;
+    }
+}
+
+/* Od 768px: 4 przyciski w jednym rzędzie, 8 jako 2x4 */
+@media (min-width: 768px) {
+    .custom-attr-buttons:has(> .btn:nth-child(4):last-child),
+    .custom-attr-buttons:has(> .btn:nth-child(8):last-child) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+
+/* ===== Wybór zasobu (lista zasobów) ===== */
+
+#availabilityDashboard .resourceNameSelectorMod{
+  width: 100%;
+  padding: 20px;
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  color: white;
+  text-decoration: none;
+  background: var(--primary) !important;
+  clip-path: polygon(0 0,100% 0,100% calc(100% - 2rem),calc(100% - 2rem) 100%,0 100%);
+  margin-bottom: 10px;
+  font-family: "Manrope", "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
+  text-transform: uppercase;
+}
+
+
+.bg-warning {
+  --bs-bg-opacity: 0.8;
+  background-color: var(--primary) !important;
+  color: white;
+}
+
+.reservation.row.gx-0.border-bottom.p-2.border-bottom.align-items-center > div{
+text-align:center;
+}
+
+/*Ukrycie paneli zasobów i akcesoriów w widoku rezerwacji, aby nie były widoczne dla użytkowników*/
+#reservation-resources,
+.accessoriesDiv,
+.reservationDescription {
+    display:none!important;
+}
+
+
+@media (max-width: 991.98px) {
+    #availabilityDashboard .resourceNameSelector {
+        font-size: 1.5rem;
+    }
+.reservation.row.gx-0.border-bottom.p-2.border-bottom.align-items-center > div > span.reservationTitleMod{
+    font-weight: 700;
+}
+}
+
+.float-sm-end {
+  margin-top: 10px;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.form-group .flatpickr-wrapper {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.form-group .flatpickr-wrapper input.form-control {
+    width: 100% !important;   /* nadpisuje w-auto */
+    min-width: 0;
+}
+
+.form-group .timeinput {
+    max-width: 100%;
+}
+
+@media (max-width: 380px) {
+    .form-group {
+        width: 100%;
+        margin-right: 0 !important;
+    }
+
+    .form-group .reservationDate {
+        margin-right: .5rem;
+    }
+
+    .form-group .timeinput {
+        flex: 1 1 auto;
+        width: auto !important;
+    }
+}
+
+.align-items-center {
+  align-items: center !important;
+  margin-bottom: 10px;
+}
+
+
+.float-end.buttonsEdit{
+display: flex;
+flex-direction: column;
+}
+
+.float-end.buttonsEdit>button{
+margin-bottom:10px;
+}
