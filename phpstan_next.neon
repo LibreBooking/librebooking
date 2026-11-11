@@ -42,7 +42,6 @@ parameters:
             - lib/Application/
             - lib/Common/
             - lib/Database/
-            - lib/GoogleVoice/
             - tests/Application/
             - tests/Domain/
             - tests/Presenters/
