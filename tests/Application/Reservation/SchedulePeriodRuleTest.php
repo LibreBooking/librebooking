@@ -34,7 +34,15 @@ class SchedulePeriodRuleTest extends TestBase
         $resource = new FakeBookableResource(1);
         $resource->SetScheduleId($scheduleId);
 
-        $series = ReservationSeries::Create(1, $resource, null, null, $dates, new RepeatNone(), $this->fakeUser);
+        $series = ReservationSeries::Create(
+            userId: 1,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: $dates,
+            repeatOptions: new RepeatNone(),
+            bookedBy: $this->fakeUser
+        );
 
         $this->scheduleRepository
                 ->expects($this->once())
@@ -64,7 +72,15 @@ class SchedulePeriodRuleTest extends TestBase
         $resource = new FakeBookableResource(1);
         $resource->SetScheduleId($scheduleId);
 
-        $series = ReservationSeries::Create(1, $resource, null, null, $dates, new RepeatNone(), $this->fakeUser);
+        $series = ReservationSeries::Create(
+            userId: 1,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: $dates,
+            repeatOptions: new RepeatNone(),
+            bookedBy: $this->fakeUser
+        );
 
         $this->scheduleRepository
                 ->expects($this->once())
@@ -105,7 +121,15 @@ class SchedulePeriodRuleTest extends TestBase
         $resource = new FakeBookableResource(1);
         $resource->SetScheduleId($scheduleId);
 
-        $series = ReservationSeries::Create(1, $resource, null, null, $dates, new RepeatNone(), $this->fakeUser);
+        $series = ReservationSeries::Create(
+            userId: 1,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: $dates,
+            repeatOptions: new RepeatNone(),
+            bookedBy: $this->fakeUser
+        );
 
         $this->scheduleRepository
                 ->expects($this->once())

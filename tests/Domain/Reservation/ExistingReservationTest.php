@@ -1064,7 +1064,7 @@ class ExistingReservationTest extends TestBase
         $now = Date::Parse('2017-08-10', $tz);
         for ($i = 0; $i < 5; $i++) {
             $date = new DateRange($now->AddDays($i)->SetTime(Time::Parse('13:00')), $now->AddDays($i)->SetTime(Time::Parse('14:00')));
-            $reservations[] = new TestReservation($i, $date, $i);
+            $reservations[] = new TestReservation(referenceNumber: (string) $i, reservationDate: $date, reservationId: $i);
         }
         $series = new ExistingReservationSeries();
         for ($i = 1; $i < 5; $i++) {
@@ -1095,12 +1095,12 @@ class ExistingReservationTest extends TestBase
         $builder = new ExistingReservationSeriesBuilder();
         $originalRange = DateRange::Create('2018-10-01 12:00', '2018-10-01 13:00', $tz);
         $reservation = $builder
-            ->WithCurrentInstance(new TestReservation(1, $originalRange))
+            ->WithCurrentInstance(new TestReservation(referenceNumber: '1', reservationDate: $originalRange))
             ->WithRepeatOptions(new RepeatWeekly(1, Date::Parse('2018-10-29', $tz), [DayOfWeek::MONDAY]))
-            ->WithInstance(new TestReservation(2, $originalRange->AddDays(7)))
-            ->WithInstance(new TestReservation(3, $originalRange->AddDays(14)))
-            ->WithInstance(new TestReservation(4, $originalRange->AddDays(21)))
-            ->WithInstance(new TestReservation(5, $originalRange->AddDays(28)))
+            ->WithInstance(new TestReservation(referenceNumber: '2', reservationDate: $originalRange->AddDays(7)))
+            ->WithInstance(new TestReservation(referenceNumber: '3', reservationDate: $originalRange->AddDays(14)))
+            ->WithInstance(new TestReservation(referenceNumber: '4', reservationDate: $originalRange->AddDays(21)))
+            ->WithInstance(new TestReservation(referenceNumber: '5', reservationDate: $originalRange->AddDays(28)))
             ->WithPrimaryResource(new FakeBookableResource(1))
             ->Build();
 
@@ -1139,11 +1139,11 @@ class ExistingReservationTest extends TestBase
         $date3 = $originalRange->AddDays(15);
         $repeatOptions = new RepeatCustom([$date1->GetBegin(), $date2->GetBegin(), $date3->GetBegin()]);
         $reservation = $builder
-            ->WithCurrentInstance(new TestReservation(1, $originalRange))
+            ->WithCurrentInstance(new TestReservation(referenceNumber: '1', reservationDate: $originalRange))
             ->WithRepeatOptions($repeatOptions)
-            ->WithInstance(new TestReservation(2, $date1))
-            ->WithInstance(new TestReservation(3, $date2))
-            ->WithInstance(new TestReservation(4, $date3))
+            ->WithInstance(new TestReservation(referenceNumber: '2', reservationDate: $date1))
+            ->WithInstance(new TestReservation(referenceNumber: '3', reservationDate: $date2))
+            ->WithInstance(new TestReservation(referenceNumber: '4', reservationDate: $date3))
             ->WithPrimaryResource(new FakeBookableResource(1))
             ->Build();
 
@@ -1200,11 +1200,11 @@ class ExistingReservationTest extends TestBase
         $date3 = $originalRange->AddDays(15);
         $newDate = $originalRange->AddDays(10);
         $reservation = $builder
-            ->WithCurrentInstance(new TestReservation(1, $originalRange))
+            ->WithCurrentInstance(new TestReservation(referenceNumber: '1', reservationDate: $originalRange))
             ->WithRepeatOptions(new RepeatCustom([$date1->GetBegin(), $date2->GetBegin(), $date3->GetBegin()]))
-            ->WithInstance(new TestReservation(2, $date1))
-            ->WithInstance(new TestReservation(3, $date2))
-            ->WithInstance(new TestReservation(4, $date3))
+            ->WithInstance(new TestReservation(referenceNumber: '2', reservationDate: $date1))
+            ->WithInstance(new TestReservation(referenceNumber: '3', reservationDate: $date2))
+            ->WithInstance(new TestReservation(referenceNumber: '4', reservationDate: $date3))
             ->WithPrimaryResource(new FakeBookableResource(1))
             ->Build();
 
@@ -1249,11 +1249,11 @@ class ExistingReservationTest extends TestBase
         $date2 = $originalRange->AddDays(5);
         $date3 = $originalRange->AddDays(15);
         $reservation = $builder
-            ->WithCurrentInstance(new TestReservation(1, $originalRange))
+            ->WithCurrentInstance(new TestReservation(referenceNumber: '1', reservationDate: $originalRange))
             ->WithRepeatOptions(new RepeatCustom([$date1->GetBegin(), $date2->GetBegin(), $date3->GetBegin()]))
-            ->WithInstance(new TestReservation(2, $date1))
-            ->WithInstance(new TestReservation(3, $date2))
-            ->WithInstance(new TestReservation(4, $date3))
+            ->WithInstance(new TestReservation(referenceNumber: '2', reservationDate: $date1))
+            ->WithInstance(new TestReservation(referenceNumber: '3', reservationDate: $date2))
+            ->WithInstance(new TestReservation(referenceNumber: '4', reservationDate: $date3))
             ->WithPrimaryResource(new FakeBookableResource(1))
             ->Build();
 
