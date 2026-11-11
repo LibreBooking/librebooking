@@ -41,7 +41,6 @@ parameters:
             - Presenters/
             - lib/Application/
             - lib/Common/
-            - lib/Database/
             - tests/Application/
             - tests/Domain/
             - tests/Presenters/
