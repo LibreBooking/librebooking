@@ -75,7 +75,8 @@ class DatabaseTest extends TestBase
         $parameters = new Parameters();
         $p1 = new Parameter('n1', 'v1');
         $parameters->Add($p1);
-        $parameters->Add(new Parameter('n2', 'v2'));
+        $p2 = new Parameter('n2', 'v2');
+        $parameters->Add(parameter: $p2);
 
         $SqlCommand->SetParameters($parameters);
 

@@ -65,8 +65,8 @@ interface IResourceRepository
     public function GetUserResourceIdList();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string|null $sortField
      * @param string|null $sortDirection
      * @param ISqlFilter $filter

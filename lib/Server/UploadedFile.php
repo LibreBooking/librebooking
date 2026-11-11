@@ -81,7 +81,7 @@ class UploadedFile
 
     /**
      * @static
-     * @param UploadedFile[]|null $files
+     * @param array<UploadedFile|null>|null $files null entries are skipped
      * @return string[] a message for each rejected upload, which is also logged
      */
     public static function GetRejectedMessages($files)
