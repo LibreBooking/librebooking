@@ -40,7 +40,6 @@ parameters:
             - Jobs/
             - Pages/
             - Presenters/
-            - WebServices/
             - lib/Application/
             - lib/Common/
             - lib/Database/
@@ -53,7 +52,6 @@ parameters:
             - tests/Pages/
             - tests/Plugins/
             - tests/Presenters/
-            - tests/WebServices/
             - tests/fakes/
             - tests/lib/
             - tests/load_test.php

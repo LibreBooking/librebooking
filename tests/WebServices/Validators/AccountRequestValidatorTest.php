@@ -183,6 +183,6 @@ class AccountRequestValidatorTest extends TestBase
 
     private function expectsAttributeValidator()
     {
-        $this->attributeService->_ValidationResult = new AttributeServiceValidationResult(true, null);
+        $this->attributeService->_ValidationResult = new AttributeServiceValidationResult(isValid: true, errors: []);
     }
 }

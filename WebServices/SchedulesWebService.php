@@ -190,7 +190,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     /**
      * @param int $scheduleId
-     * @param int $resourceId
+     * @param string|null $resourceId the optional resourceId query string value
      */
     public function __construct(private $scheduleId, $startDate, private $resourceId)
     {
@@ -315,7 +315,10 @@ class ScheduleWebServiceView implements ISchedulePage
             return [];
         }
 
-        return [$this->resourceId];
+        // Same conversion as GetResourceId(). SchedulePageBuilder replaces
+        // this list with GetResourceId() whenever that is non-zero, and a
+        // value that converts to 0 matches no resource either way.
+        return [$this->GetResourceId()];
     }
 
     public function SetResourceGroupTree(ResourceGroupTree $resourceGroupTree)

@@ -174,6 +174,6 @@ class UserRequestValidatorTest extends TestBase
         $this->attributeService->expects($this->any())
                 ->method('Validate')
                 ->with($this->anything(), $this->anything())
-                ->willReturn(new AttributeServiceValidationResult(true, null));
+                ->willReturn(new AttributeServiceValidationResult(isValid: true, errors: []));
     }
 }
