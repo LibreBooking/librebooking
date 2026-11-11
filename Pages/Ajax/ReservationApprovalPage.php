@@ -20,11 +20,11 @@ class ReservationApprovalPage extends SecurePage implements IReservationApproval
             $this->EnforceCSRFCheck();
             $reservationAction = ReservationAction::Approve;
             $factory = new ReservationPersistenceFactory();
-            $persistenceService = $factory->Create($reservationAction);
+            $persistenceService = $factory->CreateUpdateService();
             $handler = ReservationHandler::Create(
-                $reservationAction,
-                $persistenceService,
-                ServiceLocator::GetServer()->GetUserSession()
+                reservationAction: $reservationAction,
+                persistenceService: $persistenceService,
+                session: ServiceLocator::GetServer()->GetUserSession()
             );
             $auth = new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization());
 

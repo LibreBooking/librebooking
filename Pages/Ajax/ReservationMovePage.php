@@ -44,13 +44,20 @@ class ReservationMovePage extends Page implements IReservationMovePage
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $persistenceFactory = new ReservationPersistenceFactory();
         $reservationAction = ReservationAction::Update;
+        $persistenceService = $persistenceFactory->CreateUpdateService();
         $handler = ReservationHandler::Create(
-            $reservationAction,
-            $persistenceFactory->Create($reservationAction),
-            $userSession
+            reservationAction: $reservationAction,
+            persistenceService: $persistenceService,
+            session: $userSession
         );
 
-        $this->presenter = new ReservationMovePresenter($this, $persistenceFactory->Create(ReservationAction::Update), $handler, new ResourceRepository(), $userSession);
+        $this->presenter = new ReservationMovePresenter(
+            page: $this,
+            persistenceService: $persistenceService,
+            handler: $handler,
+            resourceRepository: new ResourceRepository(),
+            userSession: $userSession
+        );
     }
 
     public function PageLoad()

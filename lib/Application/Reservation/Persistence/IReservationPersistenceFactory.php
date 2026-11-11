@@ -2,8 +2,12 @@
 
 interface IReservationPersistenceFactory
 {
+    public function CreateAddService(): IReservationPersistenceService;
+
     /**
-     * @param string $reservationAction one of the ReservationAction constants
+     * The service for updating, approving, checking in or moving a reservation.
      */
-    public function Create(string $reservationAction): IReservationPersistenceService;
+    public function CreateUpdateService(): IUpdateReservationPersistenceService;
+
+    public function CreateDeleteService(): IDeleteReservationPersistenceService;
 }

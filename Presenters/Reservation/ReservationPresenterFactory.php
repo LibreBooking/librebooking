@@ -59,11 +59,11 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
         $resourceRepository = new ResourceRepository();
         $scheduleRepository = new ScheduleRepository();
         $reservationAction = ReservationAction::Create;
-        $persistenceService = $persistenceFactory->Create($reservationAction);
+        $persistenceService = $persistenceFactory->CreateAddService();
         $handler = ReservationHandler::Create(
-            $reservationAction,
-            $persistenceService,
-            $userSession
+            reservationAction: $reservationAction,
+            persistenceService: $persistenceService,
+            session: $userSession
         );
 
         return new ReservationSavePresenter($savePage, $handler, $resourceRepository, $scheduleRepository, $userSession);
@@ -75,11 +75,11 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
         $resourceRepository = new ResourceRepository();
         $scheduleRepository = new ScheduleRepository();
         $reservationAction = ReservationAction::Update;
-        $persistenceService = $persistenceFactory->Create($reservationAction);
+        $persistenceService = $persistenceFactory->CreateUpdateService();
         $handler = ReservationHandler::Create(
-            $reservationAction,
-            $persistenceService,
-            $userSession
+            reservationAction: $reservationAction,
+            persistenceService: $persistenceService,
+            session: $userSession
         );
 
         return new ReservationUpdatePresenter($updatePage, $persistenceService, $handler, $resourceRepository, $scheduleRepository, $userSession);
@@ -91,8 +91,12 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
 
         $deleteAction = ReservationAction::Delete;
 
-        $persistenceService = $persistenceFactory->Create($deleteAction);
-        $handler = ReservationHandler::Create($deleteAction, $persistenceService, $userSession);
+        $persistenceService = $persistenceFactory->CreateDeleteService();
+        $handler = ReservationHandler::Create(
+            reservationAction: $deleteAction,
+            persistenceService: $persistenceService,
+            session: $userSession
+        );
         return new ReservationDeletePresenter(
             $deletePage,
             $persistenceService,
@@ -107,11 +111,11 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
 
         $approveAction = ReservationAction::Approve;
 
-        $persistenceService = $persistenceFactory->Create($approveAction);
+        $persistenceService = $persistenceFactory->CreateUpdateService();
         $handler = ReservationHandler::Create(
-            $approveAction,
-            $persistenceService,
-            $userSession
+            reservationAction: $approveAction,
+            persistenceService: $persistenceService,
+            session: $userSession
         );
 
         $auth = new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization());
@@ -134,8 +138,12 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
             $action = ReservationAction::Checkin;
         }
 
-        $persistenceService = $persistenceFactory->Create(ReservationAction::Update);
-        $handler = ReservationHandler::Create($action, $persistenceService, $userSession);
+        $persistenceService = $persistenceFactory->CreateUpdateService();
+        $handler = ReservationHandler::Create(
+            reservationAction: $action,
+            persistenceService: $persistenceService,
+            session: $userSession
+        );
 
         return new ReservationCheckinPresenter(
             $page,
