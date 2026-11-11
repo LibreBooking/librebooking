@@ -60,10 +60,10 @@ class ResourcesWriteWebService
      * @description Updates an existing resource
      * @request ResourceRequest
      * @response ResourceUpdatedResponse
-     * @param $resourceId
+     * @param int $resourceId
      * @return void
      */
-    public function Update($resourceId)
+    public function Update(int $resourceId)
     {
         /** @var ResourceRequest $request */
         $request = new ResourceRequest($this->server->GetRequest());
@@ -103,7 +103,7 @@ class ResourcesWriteWebService
      * @param int $resourceId
      * @return void
      */
-    public function Delete($resourceId)
+    public function Delete(int $resourceId)
     {
         Log::Debug('ResourcesWriteWebService.Delete() Resource=%s', $this->server->GetSession()->UserId);
 

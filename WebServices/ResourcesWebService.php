@@ -107,7 +107,7 @@ class ResourcesWebService
      * @response ResourceResponse
      * @return void
      */
-    public function GetResource($resourceId)
+    public function GetResource(int $resourceId)
     {
         $allowedResourceIds = $this->resourceRepository->GetUserResourceIdList();
         if (!in_array($resourceId, $allowedResourceIds)) {

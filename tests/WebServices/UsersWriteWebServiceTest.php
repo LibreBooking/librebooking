@@ -35,7 +35,7 @@ class UsersWriteWebServiceTest extends TestBase
 
     public function testCanCreateNewUser()
     {
-        $userId = '1';
+        $userId = 1;
 
         $userRequest = new CreateUserRequest();
         $this->server->SetRequest($userRequest);
@@ -73,7 +73,7 @@ class UsersWriteWebServiceTest extends TestBase
 
     public function testCanUpdateUser()
     {
-        $userId = '1';
+        $userId = 1;
 
         $userRequest = new UpdateUserRequest();
         $this->server->SetRequest($userRequest);
@@ -120,7 +120,7 @@ class UsersWriteWebServiceTest extends TestBase
 
     public function testCanDeleteUser()
     {
-        $userId = '1';
+        $userId = 1;
 
         $controllerResult = new UserControllerResult($userId);
 
@@ -154,7 +154,7 @@ class UsersWriteWebServiceTest extends TestBase
 
     public function testCanUpdatePassword()
     {
-        $userId = '1';
+        $userId = 1;
         $password = 'new password';
 
         $this->server->_Request = new UpdateUserPasswordRequest();

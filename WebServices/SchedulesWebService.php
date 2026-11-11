@@ -49,10 +49,10 @@ class SchedulesWebService
      * @name GetSchedule
      * @description Loads a specific schedule by id
      * @response ScheduleResponse
-     * @param $scheduleId
+     * @param int $scheduleId
      * @return void
      */
-    public function GetSchedule($scheduleId)
+    public function GetSchedule(int $scheduleId)
     {
         $schedule = $this->scheduleRepository->LoadById($scheduleId);
 
@@ -71,10 +71,10 @@ class SchedulesWebService
      * If no dates are provided the default schedule dates will be returned.
      * If dates do not include the timezone offset, the timezone of the authenticated user will be assumed.
      * @response ScheduleSlotsResponse
-     * @param $scheduleId
+     * @param int $scheduleId
      * @return void
      */
-    public function GetSlots($scheduleId)
+    public function GetSlots(int $scheduleId)
     {
         $tz = $this->server->GetSession()->Timezone;
         $startDate = $this->GetDate(WebServiceQueryStringKeys::START_DATE_TIME)?->ToTimezone($tz);

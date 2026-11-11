@@ -58,10 +58,10 @@ class AttributesWriteWebService
      * secondaryCategoryId and secondaryEntityIds only applies to category 1 and must match the id of the corresponding entities
      * @request CustomAttributeRequest
      * @response CustomAttributeUpdatedResponse
-     * @param $attributeId
+     * @param int $attributeId
      * @return void
      */
-    public function Update($attributeId)
+    public function Update(int $attributeId)
     {
         /** @var CustomAttributeRequest $request */
         $request = $this->server->GetRequest();
@@ -88,7 +88,7 @@ class AttributesWriteWebService
      * @param int $attributeId
      * @return void
      */
-    public function Delete($attributeId)
+    public function Delete(int $attributeId)
     {
         Log::Debug('AttributesWriteWebService.Delete() AttributeId=%s, UserId=%s', $attributeId, $this->server->GetSession()->UserId);
 

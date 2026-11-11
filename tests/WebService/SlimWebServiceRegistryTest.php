@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
 require_once(ROOT_DIR . 'lib/external/Slim/Route.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
@@ -233,6 +235,69 @@ class SlimWebServiceRegistryTest extends TestBase
         $this->assertTrue($registry->IsLimitedToAdmin($c1p1name));
         $this->assertTrue($registry->IsLimitedToAdmin($c1p2name));
         $this->assertTrue($registry->IsLimitedToAdmin($c1p3name));
+    }
+
+    public static function numericIdRouteProvider(): array
+    {
+        $routes = [];
+        foreach (SlimWebServiceRegistry::NUMERIC_ID_PARAMS as $param) {
+            $routes[$param] = [$param];
+        }
+        return $routes;
+    }
+
+    #[DataProvider('numericIdRouteProvider')]
+    public function testNumericIdRouteParamsOnlyMatchDigits(string $param): void
+    {
+        $slim = new TestSlim();
+        $registry = new SlimWebServiceRegistry($slim);
+        $category = new SlimWebServiceRegistryCategory('Things');
+        $category->AddGet('/:' . $param, [$this, 'routeCallback'], 'get');
+        $category->AddPost('/:' . $param . '/Sub', [$this, 'routeCallback'], 'post');
+        $category->AddDelete('/:' . $param, [$this, 'routeCallback'], 'delete');
+        $registry->AddCategory($category);
+
+        $routes = [
+            ['/Things/%s', $slim->gets[0]->response],
+            ['/Things/%s/Sub', $slim->posts[0]->response],
+            ['/Things/%s', $slim->deletes[0]->response],
+        ];
+
+        foreach ($routes as [$uriFormat, $route]) {
+            $this->assertTrue($route->matches(sprintf($uriFormat, '5')));
+            $this->assertSame(['5'], array_values($route->getParams()));
+            $this->assertTrue($route->matches(sprintf($uriFormat, '1234567890')));
+
+            $this->assertFalse($route->matches(sprintf($uriFormat, 'abc')), 'non-numeric id');
+            $this->assertFalse($route->matches(sprintf($uriFormat, '12abc')), 'id with trailing text');
+            $this->assertFalse($route->matches(sprintf($uriFormat, '-1')), 'negative id');
+            $this->assertFalse($route->matches(sprintf($uriFormat, '1.5')), 'decimal id');
+            $this->assertFalse($route->matches(sprintf($uriFormat, '12345678901')), 'id longer than 10 digits');
+        }
+    }
+
+    public function testReferenceNumberRouteParamIsNotRestricted(): void
+    {
+        $slim = new TestSlim();
+        $registry = new SlimWebServiceRegistry($slim);
+        $category = new SlimWebServiceRegistryCategory('Reservations');
+        $category->AddGet('/:' . WebServiceParams::ReferenceNumber, [$this, 'routeCallback'], 'get');
+        $registry->AddCategory($category);
+
+        $route = $slim->gets[0]->response;
+
+        $this->assertTrue($route->matches('/Reservations/5f1a2b3c4d5e6'));
+        $this->assertSame(['5f1a2b3c4d5e6'], array_values($route->getParams()));
+    }
+
+    // Tagged like a real handler so SlimServiceRegistration can parse its
+    // PHPDoc. Only @ tags may appear: a prose line makes that parser loop.
+    /**
+     * @name RouteCallback
+     * @response RestResponse
+     */
+    public function routeCallback(): void
+    {
     }
 
     private function cb()

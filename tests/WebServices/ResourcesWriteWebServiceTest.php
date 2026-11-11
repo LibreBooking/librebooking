@@ -33,7 +33,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
     public function testCanCreateNewResource()
     {
-        $resourceId = '1';
+        $resourceId = 1;
 
         $request = new ResourceRequest();
         $this->server->SetRequest($request);
@@ -71,7 +71,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
     public function testCanUpdateResource()
     {
-        $resourceId = '1';
+        $resourceId = 1;
 
         $request = new ResourceRequest();
         $this->server->SetRequest($request);
@@ -118,7 +118,7 @@ class ResourcesWriteWebServiceTest extends TestBase
 
     public function testCanDeleteResource()
     {
-        $resourceId = '1';
+        $resourceId = 1;
 
         $controllerResult = new ResourceControllerResult($resourceId);
 

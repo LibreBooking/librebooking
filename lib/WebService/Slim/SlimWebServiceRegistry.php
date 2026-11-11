@@ -2,6 +2,7 @@
 
 require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once(ROOT_DIR . 'lib/WebService/WebServiceParams.php');
 
 class ApiPermissions
 {
@@ -42,6 +43,27 @@ class ApiPermissions
 class SlimWebServiceRegistry
 {
     /**
+     * Route parameters that carry a numeric database ID.
+     */
+    public const NUMERIC_ID_PARAMS = [
+        WebServiceParams::AccessoryId,
+        WebServiceParams::AttributeCategoryId,
+        WebServiceParams::AttributeId,
+        WebServiceParams::GroupId,
+        WebServiceParams::ResourceId,
+        WebServiceParams::ScheduleId,
+        WebServiceParams::UserId,
+    ];
+
+    /**
+     * Digits only, at most 10 of them (enough for any INT UNSIGNED ID). A
+     * value that does not match makes the route not match, so Slim answers
+     * 404 instead of handing a non-numeric string to a handler that expects
+     * an int. The length cap keeps the value within PHP's int range.
+     */
+    public const NUMERIC_ID_PATTERN = '[0-9]{1,10}';
+
+    /**
      * @var Slim\Slim
      */
     private $slim;
@@ -76,8 +98,12 @@ class SlimWebServiceRegistry
      */
     public function AddCategory(SlimWebServiceRegistryCategory $category)
     {
+        $conditions = array_fill_keys(self::NUMERIC_ID_PARAMS, self::NUMERIC_ID_PATTERN);
+
         foreach ($category->Gets() as $registration) {
-            $this->slim->get($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->slim->get($registration->Route(), $registration->Callback())
+                ->name($registration->RouteName())
+                ->conditions($conditions);
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: false, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -85,7 +111,9 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Posts() as $registration) {
-            $this->slim->post($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->slim->post($registration->Route(), $registration->Callback())
+                ->name($registration->RouteName())
+                ->conditions($conditions);
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -93,7 +121,9 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Deletes() as $registration) {
-            $this->slim->delete($registration->Route(), $registration->Callback())->name($registration->RouteName());
+            $this->slim->delete($registration->Route(), $registration->Callback())
+                ->name($registration->RouteName())
+                ->conditions($conditions);
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())

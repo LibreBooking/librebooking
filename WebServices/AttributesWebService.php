@@ -30,7 +30,7 @@ class AttributesWebService
      * @return void
      * @param int $categoryId
      */
-    public function GetAttributes($categoryId)
+    public function GetAttributes(int $categoryId)
     {
         $attributes = $this->attributeService->GetByCategory($categoryId);
 
@@ -44,7 +44,7 @@ class AttributesWebService
      * @return void
      * @param int $attributeId
      */
-    public function GetAttribute($attributeId)
+    public function GetAttribute(int $attributeId)
     {
         $attribute = $this->attributeService->GetById($attributeId);
 

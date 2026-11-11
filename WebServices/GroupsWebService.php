@@ -52,7 +52,7 @@ class GroupsWebService
      * @param int $groupId
      * @return void
      */
-    public function GetGroup($groupId)
+    public function GetGroup(int $groupId)
     {
         $group = $this->groupRepository->LoadById($groupId);
 
