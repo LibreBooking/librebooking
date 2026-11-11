@@ -52,7 +52,7 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
             $scheduleId = $row[ColumnNames::SCHEDULE_ID];
             $enforcedStartTime = $row[ColumnNames::ENFORCED_START_TIME];
             $enforcedEndTime = $row[ColumnNames::ENFORCED_END_TIME];
-            $enforcedDays = empty($row[ColumnNames::ENFORCED_DAYS]) ? [] : explode(',', $row[ColumnNames::ENFORCED_DAYS]);
+            $enforcedDays = self::ParseEnforcedDays(days: $row[ColumnNames::ENFORCED_DAYS] ?? null);
             $scope = Quota::CreateScope($row[ColumnNames::QUOTA_SCOPE]);
 
             $quotas[] = new Quota($quotaId, $duration, $limit, $resourceId, $groupId, $scheduleId, $enforcedStartTime, $enforcedEndTime, $enforcedDays, $scope);
@@ -82,12 +82,7 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
             $scheduleName = $row['schedule_name'];
             $enforcedStartTime = $row[ColumnNames::ENFORCED_START_TIME];
             $enforcedEndTime = $row[ColumnNames::ENFORCED_END_TIME];
-            $enforcedDays = empty($row[ColumnNames::ENFORCED_DAYS])
-                ? []
-                : array_map(
-                    callback: 'intval',
-                    array: explode(',', $row[ColumnNames::ENFORCED_DAYS])
-                );
+            $enforcedDays = self::ParseEnforcedDays(days: $row[ColumnNames::ENFORCED_DAYS] ?? null);
             $scope = $row[ColumnNames::QUOTA_SCOPE];
 
             $quotas[] = new QuotaItemView(
@@ -107,6 +102,25 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
 
         $reader->Free();
         return $quotas;
+    }
+
+    /**
+     * Parses the comma-separated enforced weekdays. No days means every
+     * day. Do not use empty() here: Sunday alone is stored as '0', which
+     * empty() would treat as no days.
+     *
+     * @return int[]
+     */
+    private static function ParseEnforcedDays(?string $days): array
+    {
+        if ($days === null || $days === '') {
+            return [];
+        }
+
+        return array_map(
+            callback: 'intval',
+            array: explode(separator: ',', string: $days)
+        );
     }
 
     /**

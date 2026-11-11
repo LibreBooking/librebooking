@@ -793,10 +793,13 @@ class PeakTimes
 
         $everyDay = (bool) intval($row[ColumnNames::PEAK_EVERY_DAY]);
 
-        $weekdays = !empty($row[ColumnNames::PEAK_DAYS])
+        // Do not use empty() here: Sunday alone is stored as '0', which
+        // empty() would treat as no days, meaning every day.
+        $peakDays = $row[ColumnNames::PEAK_DAYS] ?? null;
+        $weekdays = $peakDays !== null && $peakDays !== ''
             ? array_map(
                 callback: 'intval',
-                array: explode(',', $row[ColumnNames::PEAK_DAYS])
+                array: explode(separator: ',', string: $peakDays)
             )
             : [];
 

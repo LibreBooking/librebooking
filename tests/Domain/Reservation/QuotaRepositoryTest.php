@@ -108,6 +108,25 @@ class QuotaRepositoryTest extends TestBase
         $this->assertFalse($quota3->AppliesToSchedule(18));
     }
 
+    public function testLoadsSundayOnlyQuotaAsSundayNotEveryDay()
+    {
+        $this->db->SetRows([$this->GetSundayOnlyRow()]);
+
+        $quotas = $this->repository->LoadAll();
+
+        $this->assertSame([DayOfWeek::SUNDAY], $quotas[0]->EnforcedDays());
+    }
+
+    public function testGetsSundayOnlyQuotaViewAsSundayNotEveryDay()
+    {
+        $this->db->SetRows([$this->GetSundayOnlyRow()]);
+
+        $quotas = $this->repository->GetAll();
+
+        $this->assertSame([DayOfWeek::SUNDAY], $quotas[0]->EnforcedDays);
+        $this->assertFalse($quotas[0]->Everyday);
+    }
+
     public function testAddsNewQuota()
     {
         $duration = QuotaDuration::Month;
@@ -150,6 +169,28 @@ class QuotaRepositoryTest extends TestBase
         $this->repository->DeleteById($id);
 
         $this->assertEquals($command, $this->db->_LastCommand);
+    }
+
+    private function GetSundayOnlyRow(): array
+    {
+        $row = $this->GetRow(
+            quotaId: 1,
+            limit: 12,
+            unit: QuotaUnit::Reservations,
+            duration: QuotaDuration::Month,
+            resourceId: null,
+            groupId: null,
+            scheduleId: null,
+            enforcedStartTime: null,
+            enforcedEndTime: null,
+            enforcedDays: (string) DayOfWeek::SUNDAY,
+            scope: QuotaScope::IncludeCompleted
+        );
+        $row['group_name'] = null;
+        $row['resource_name'] = null;
+        $row['schedule_name'] = null;
+
+        return $row;
     }
 
     private function GetRow($quotaId, $limit, $unit, $duration, $resourceId, $groupId, $scheduleId, $enforcedStartTime, $enforcedEndTime, $enforcedDays, $scope)
