@@ -64,6 +64,62 @@ class SchedulePageTest extends TestBase
     }
 
     /**
+     * @param string|string[] $submitted
+     * @param int[] $expected
+     */
+    #[DataProvider('submittedResourceIds')]
+    public function testConvertsSubmittedResourceIds(string|array $submitted, array $expected): void
+    {
+        $this->fakeServer->SetQuerystring(name: FormKeys::RESOURCE_ID, value: $submitted);
+        $page = new TestableSchedulePage(isMobile: false, isTablet: false);
+
+        $this->assertSame($expected, $page->GetResourceIds());
+    }
+
+    #[DataProvider('submittedWholeNumbers')]
+    public function testReadsSingleFilterValuesAsWholeNumbers(string $submitted, int $expected): void
+    {
+        $this->fakeServer->SetQuerystring(name: QueryStringKeys::RESOURCE_ID, value: $submitted);
+        $this->fakeServer->SetQuerystring(name: FormKeys::RESOURCE_TYPE_ID, value: $submitted);
+        $this->fakeServer->SetQuerystring(name: FormKeys::MAX_PARTICIPANTS, value: $submitted);
+        $page = new TestableSchedulePage(isMobile: false, isTablet: false);
+
+        $this->assertSame($expected, $page->GetResourceId());
+        $this->assertSame($expected, $page->GetResourceTypeId());
+        $this->assertSame($expected, $page->GetMaxParticipants());
+    }
+
+    /**
+     * @return array<string, array{0:string, 1:int}>
+     */
+    public static function submittedWholeNumbers(): array
+    {
+        return [
+            'whole number' => ['5', 5],
+            'malformed number' => ['5x', 0],
+            'decimal' => ['1.5', 0],
+            'negative number' => ['-4', 0],
+            'nothing submitted' => ['', 0],
+        ];
+    }
+
+    /**
+     * @return array<string, array{0:string|string[], 1:int[]}>
+     */
+    public static function submittedResourceIds(): array
+    {
+        return [
+            'single id' => ['5', [5]],
+            'single malformed id' => ['5x', []],
+            'single decimal' => ['1.5', []],
+            'single negative id' => ['-4', []],
+            'list of ids' => [['3', '10'], [3, 10]],
+            'list with malformed ids' => [['3', '5x', '0', '10'], [3, 10]],
+            'nothing submitted' => ['', []],
+        ];
+    }
+
+    /**
      * @return array<string, array{0:ScheduleStyle, 1:ScheduleStyle}>
      */
     public static function phoneStyles(): array
@@ -104,6 +160,7 @@ class TestableSchedulePage extends SchedulePage
     {
         $this->IsMobile = $isMobile;
         $this->IsTablet = $isTablet;
+        $this->server = ServiceLocator::GetServer();
     }
 
     public function Set(string $var, mixed $value): void

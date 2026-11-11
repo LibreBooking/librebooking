@@ -26,8 +26,8 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
 
     /**
      * @param int|null $scheduleId
-     * @param int|null $resourceTypeId
-     * @param int|null $minCapacity
+     * @param int|string|null $resourceTypeId
+     * @param int|string|null $minCapacity
      * @param AttributeValue[]|null $resourceAttributes
      * @param AttributeValue[]|null $resourceTypeAttributes
      * @param int[]|null $resourceIds
@@ -41,11 +41,50 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
         $resourceIds = null
     ) {
         $this->ScheduleId = $scheduleId;
-        $this->ResourceTypeId = $resourceTypeId;
-        $this->MinCapacity = empty($minCapacity) ? null : $minCapacity;
+        $this->ResourceTypeId = self::ToPositiveInt(value: $resourceTypeId);
+        $this->MinCapacity = self::ToPositiveInt(value: $minCapacity);
         $this->ResourceAttributes = empty($resourceAttributes) ? [] : $resourceAttributes;
         $this->ResourceTypeAttributes = empty($resourceTypeAttributes) ? [] : $resourceTypeAttributes;
-        $this->ResourceIds = empty($resourceIds) ? [] : $resourceIds;
+        $this->ResourceIds = self::ToResourceIds(values: $resourceIds);
+    }
+
+    /**
+     * Converts submitted or cookie-stored resource ids to positive ints,
+     * dropping anything else.
+     *
+     * @param mixed $values
+     * @return int[]
+     */
+    public static function ToResourceIds($values): array
+    {
+        if (!is_array($values)) {
+            return [];
+        }
+
+        $ids = [];
+        foreach ($values as $value) {
+            $id = self::ToPositiveInt(value: $value);
+            if ($id !== null) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param mixed $value
+     * @return int|null the value as an int if it is a positive whole number
+     */
+    private static function ToPositiveInt($value): ?int
+    {
+        if (!is_int($value) && !(is_string($value) && ctype_digit($value))) {
+            return null;
+        }
+
+        $int = intval($value);
+
+        return $int > 0 ? $int : null;
     }
 
     public static function FromCookie($val)

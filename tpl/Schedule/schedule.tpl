@@ -466,7 +466,7 @@ opacity-75">
         cookieName: "{$CookieName}",
         scheduleId: "{$ScheduleId|escape:'javascript'}",
         scriptUrl: '{$ScriptUrl}',
-        selectedResources: [{$ResourceIds|join:','}],
+        selectedResources: {$ResourceIds|json_encode},
         specificDates: [{foreach from=$SpecificDates item=d}'{$d->Format('Y-m-d')}',{/foreach}],
         updateReservationUrl: "{$Path}ajax/reservation_move.php",
         lockTableHead: "{if isset($LockTableHead)}{$LockTableHead}{/if}",

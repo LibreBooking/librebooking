@@ -57,6 +57,68 @@ class ScheduleResourceFilterTest extends TestBase
         $this->assertEquals($resourceId, $resourceIds[0]);
     }
 
+    public function testConvertsResourceIdsToInts()
+    {
+        $filter = new ScheduleResourceFilter(resourceIds: ['3', '10', 7]);
+
+        $this->assertSame([3, 10, 7], $filter->ResourceIds);
+    }
+
+    public function testDropsResourceIdsThatAreNotPositiveWholeNumbers()
+    {
+        $filter = new ScheduleResourceFilter(
+            resourceIds: ['1,2', 'abc', '', '0', '-4', '5x', ' 6', '1.5', ['9'], null, '8']
+        );
+
+        $this->assertSame([8], $filter->ResourceIds);
+    }
+
+    public function testConvertsResourceIdsLoadedFromCookie()
+    {
+        $cookie = json_decode(
+            json: '{"ScheduleId":1,"ResourceTypeId":null,"MinCapacity":null,'
+                . '"ResourceAttributes":[],"ResourceTypeAttributes":[],'
+                . '"ResourceIds":["4","2,3",5]}'
+        );
+
+        $filter = ScheduleResourceFilter::FromCookie($cookie);
+
+        $this->assertSame([4, 5], $filter->ResourceIds);
+    }
+
+    public function testConvertsResourceTypeAndCapacityLoadedFromCookie()
+    {
+        $cookie = json_decode(
+            json: '{"ScheduleId":1,"ResourceTypeId":"3","MinCapacity":"12",'
+                . '"ResourceAttributes":[],"ResourceTypeAttributes":[],"ResourceIds":[]}'
+        );
+
+        $filter = ScheduleResourceFilter::FromCookie($cookie);
+
+        $this->assertSame(3, $filter->ResourceTypeId);
+        $this->assertSame(12, $filter->MinCapacity);
+    }
+
+    public function testDropsResourceTypeAndCapacityThatAreNotPositiveWholeNumbers()
+    {
+        $cookie = json_decode(
+            json: '{"ScheduleId":1,"ResourceTypeId":"3x","MinCapacity":"-1",'
+                . '"ResourceAttributes":[],"ResourceTypeAttributes":[],"ResourceIds":[]}'
+        );
+
+        $filter = ScheduleResourceFilter::FromCookie($cookie);
+
+        $this->assertNull($filter->ResourceTypeId);
+        $this->assertNull($filter->MinCapacity);
+        $this->assertFalse($filter->HasFilter());
+    }
+
+    public function testResourceIdsMustBeAnArray()
+    {
+        $this->assertSame([], ScheduleResourceFilter::ToResourceIds(values: '4'));
+        $this->assertSame([], ScheduleResourceFilter::ToResourceIds(values: null));
+    }
+
     public function testFiltersByMinCapacity()
     {
         $minCapacity = 10;

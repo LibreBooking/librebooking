@@ -489,7 +489,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
      */
     public function GetResourceId()
     {
-        return intval($this->GetQuerystring(QueryStringKeys::RESOURCE_ID));
+        return $this->GetQuerystringInt(QueryStringKeys::RESOURCE_ID) ?? 0;
     }
 
     /**
@@ -503,10 +503,10 @@ class SchedulePage extends ActionPage implements ISchedulePage
         }
 
         if (!is_array($resourceIds)) {
-            return [intval($resourceIds)];
+            return ScheduleResourceFilter::ToResourceIds(values: [$resourceIds]);
         }
 
-        return array_filter($resourceIds, 'intval');
+        return ScheduleResourceFilter::ToResourceIds(values: $resourceIds);
     }
 
     public function SetResourceGroupTree(ResourceGroupTree $resourceGroupTree)
@@ -538,13 +538,12 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function GetResourceTypeId()
     {
-        return intval($this->GetQuerystring(FormKeys::RESOURCE_TYPE_ID));
+        return $this->GetQuerystringInt(FormKeys::RESOURCE_TYPE_ID) ?? 0;
     }
 
     public function GetMaxParticipants()
     {
-        $max = $this->GetQuerystring(FormKeys::MAX_PARTICIPANTS);
-        return intval($max);
+        return $this->GetQuerystringInt(FormKeys::MAX_PARTICIPANTS) ?? 0;
     }
 
     public function GetResourceAttributes()
