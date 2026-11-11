@@ -76,8 +76,20 @@ class AccessoryAvailabilityRuleTest extends TestBase
         $reservation->WithDuration($dr1);
         $reservation->WithInstanceOn($dr2);
 
-        $accessoryReservation = new AccessoryReservation(2, $startDate, $endDate, $accessory1->AccessoryId, 3);
-        $accessoryReservationForOtherResource = new AccessoryReservation(2, $startDate, $endDate, $accessory1->AccessoryId, 3);
+        $accessoryReservation = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 3
+        );
+        $accessoryReservationForOtherResource = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 3
+        );
 
         $this->accessoryRepository->expects($this->exactly(2))
             ->method('LoadById')
@@ -111,9 +123,27 @@ class AccessoryAvailabilityRuleTest extends TestBase
         $dr1 = new DateRange($startDate, $endDate);
         $reservation->WithDuration($dr1);
 
-        $lowerQuantity1 = new AccessoryReservation(2, $startDate, $endDate, $accessory1->AccessoryId, 2);
-        $lowerQuantity2 = new AccessoryReservation(3, $startDate, $endDate, $accessory1->AccessoryId, 2);
-        $notOnReservation = new AccessoryReservation(4, $startDate, $endDate, 100, 1);
+        $lowerQuantity1 = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 2
+        );
+        $lowerQuantity2 = new AccessoryReservation(
+            referenceNumber: '3',
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 2
+        );
+        $notOnReservation = new AccessoryReservation(
+            referenceNumber: '4',
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: 100,
+            quantityReserved: 1
+        );
 
         $this->accessoryRepository->expects($this->once())
             ->method('LoadById')
@@ -183,7 +213,7 @@ class AccessoryAvailabilityRuleTest extends TestBase
     public function testExistingLongRunningReservation()
     {
         $accessory1 = new ReservationAccessory(1, 5);
-        $currentReferenceNumber = 1;
+        $currentReferenceNumber = '1';
 
         $quantityAvailable = 6;
         $startDate = Date::Parse('2010-04-04 00:00', 'UTC');
@@ -193,11 +223,29 @@ class AccessoryAvailabilityRuleTest extends TestBase
         $reservation->WithAccessory($accessory1);
 
         $dr1 = new DateRange($startDate, $endDate);
-        $reservation->WithCurrentInstance(new TestReservation($currentReferenceNumber, $dr1));
+        $reservation->WithCurrentInstance(new TestReservation(referenceNumber: $currentReferenceNumber, reservationDate: $dr1));
 
-        $accessoryReservation = new AccessoryReservation($currentReferenceNumber, $startDate, $endDate, $accessory1->AccessoryId, 5);
-        $a1 = new AccessoryReservation(2, Date::Parse('2010-04-04 10:00', 'UTC'), Date::Parse('2010-04-04 12:00', 'UTC'), $accessory1->AccessoryId, 1);
-        $a2 = new AccessoryReservation(3, Date::Parse('2010-04-04 13:00', 'UTC'), Date::Parse('2010-04-04 15:00', 'UTC'), $accessory1->AccessoryId, 1);
+        $accessoryReservation = new AccessoryReservation(
+            referenceNumber: $currentReferenceNumber,
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 5
+        );
+        $a1 = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: Date::Parse('2010-04-04 10:00', 'UTC'),
+            endDate: Date::Parse('2010-04-04 12:00', 'UTC'),
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 1
+        );
+        $a2 = new AccessoryReservation(
+            referenceNumber: '3',
+            startDate: Date::Parse('2010-04-04 13:00', 'UTC'),
+            endDate: Date::Parse('2010-04-04 15:00', 'UTC'),
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 1
+        );
 
         $this->accessoryRepository->expects($this->once())
             ->method('LoadById')
@@ -226,10 +274,34 @@ class AccessoryAvailabilityRuleTest extends TestBase
         $dr1 = new DateRange($startDate, $endDate);
         $reservation->WithDuration($dr1);
 
-        $ar1 = new AccessoryReservation(2, Date::Parse('2010-04-02', 'UTC'), Date::Parse('2010-04-05', 'UTC'), $accessory->AccessoryId, 1);
-        $ar2 = new AccessoryReservation(3, Date::Parse('2010-04-05', 'UTC'), Date::Parse('2010-04-06', 'UTC'), $accessory->AccessoryId, 1);
-        $ar3 = new AccessoryReservation(4, Date::Parse('2010-04-06', 'UTC'), Date::Parse('2010-04-07', 'UTC'), $accessory->AccessoryId, 1);
-        $ar4 = new AccessoryReservation(5, Date::Parse('2010-04-08', 'UTC'), Date::Parse('2010-04-11', 'UTC'), $accessory->AccessoryId, 1);
+        $ar1 = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: Date::Parse('2010-04-02', 'UTC'),
+            endDate: Date::Parse('2010-04-05', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 1
+        );
+        $ar2 = new AccessoryReservation(
+            referenceNumber: '3',
+            startDate: Date::Parse('2010-04-05', 'UTC'),
+            endDate: Date::Parse('2010-04-06', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 1
+        );
+        $ar3 = new AccessoryReservation(
+            referenceNumber: '4',
+            startDate: Date::Parse('2010-04-06', 'UTC'),
+            endDate: Date::Parse('2010-04-07', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 1
+        );
+        $ar4 = new AccessoryReservation(
+            referenceNumber: '5',
+            startDate: Date::Parse('2010-04-08', 'UTC'),
+            endDate: Date::Parse('2010-04-11', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 1
+        );
 
         $this->accessoryRepository->expects($this->any())
             ->method('LoadById')

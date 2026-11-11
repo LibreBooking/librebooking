@@ -76,13 +76,13 @@ while ($i < $numberOfReservations) {
                 $resource = $resources[$resourceNum];
                 $date = new DateRange($period->BeginDate(), $period->EndDate(), 'America/Chicago');
                 $reservation = ReservationSeries::Create(
-                    $userId,
-                    $resource,
-                    "load$i",
-                    null,
-                    $date,
-                    new RepeatNone(),
-                    $bookedBy
+                    userId: $userId,
+                    resource: $resource,
+                    title: "load$i",
+                    description: '',
+                    reservationDate: $date,
+                    repeatOptions: new RepeatNone(),
+                    bookedBy: $bookedBy
                 );
                 $reservationRepo->Add($reservation);
                 $i++;

@@ -318,7 +318,11 @@ class BlackoutsServiceTest extends TestBase
         $filter = new BlackoutFilter();
 
         $groupIds = [1, 2, 3];
-        $groups = [new UserGroup(1, null), new UserGroup(2, null), new UserGroup(3, null)];
+        $groups = [
+            new UserGroup(groupId: 1, groupName: 'group1'),
+            new UserGroup(groupId: 2, groupName: 'group2'),
+            new UserGroup(groupId: 3, groupName: 'group3'),
+        ];
 
         $expectedFilter = $filter->GetFilter();
         $adminFilter = new SqlFilterIn(new SqlFilterColumn('r', ColumnNames::RESOURCE_ADMIN_GROUP_ID), $groupIds);

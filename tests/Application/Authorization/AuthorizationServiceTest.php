@@ -138,8 +138,8 @@ class AuthorizationServiceTest extends TestBase
         $expectedIsAdmin = true;
 
         $groups = [
-            new UserGroup(1, null, null, RoleLevel::APPLICATION_ADMIN),
-            new UserGroup(3, null, null, RoleLevel::APPLICATION_ADMIN),
+            new UserGroup(groupId: 1, groupName: 'group1', adminGroupId: null, roleLevel: RoleLevel::APPLICATION_ADMIN),
+            new UserGroup(groupId: 3, groupName: 'group3', adminGroupId: null, roleLevel: RoleLevel::APPLICATION_ADMIN),
         ];
 
         $user = new User();
@@ -169,8 +169,8 @@ class AuthorizationServiceTest extends TestBase
         $expectedIsAdmin = true;
 
         $groups = [
-            new UserGroup(1, null, null, RoleLevel::APPLICATION_ADMIN),
-            new UserGroup(3, null, null, RoleLevel::RESOURCE_ADMIN),
+            new UserGroup(groupId: 1, groupName: 'group1', adminGroupId: null, roleLevel: RoleLevel::APPLICATION_ADMIN),
+            new UserGroup(groupId: 3, groupName: 'group3', adminGroupId: null, roleLevel: RoleLevel::RESOURCE_ADMIN),
         ];
 
         $user = new User();
@@ -187,8 +187,8 @@ class AuthorizationServiceTest extends TestBase
         $expectedIsAdmin = true;
 
         $groups = [
-            new UserGroup(1, null, null, RoleLevel::APPLICATION_ADMIN),
-            new UserGroup(3, null, null, RoleLevel::GROUP_ADMIN),
+            new UserGroup(groupId: 1, groupName: 'group1', adminGroupId: null, roleLevel: RoleLevel::APPLICATION_ADMIN),
+            new UserGroup(groupId: 3, groupName: 'group3', adminGroupId: null, roleLevel: RoleLevel::GROUP_ADMIN),
         ];
 
         $user = new User();

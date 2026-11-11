@@ -779,8 +779,8 @@ class QuotaTest extends TestBase
 
     public function testDoesNotCheckWhenNoGroupsApply()
     {
-        $g1 = new UserGroup(1, null);
-        $g2 = new UserGroup(2, null);
+        $g1 = new UserGroup(groupId: 1, groupName: 'group1');
+        $g2 = new UserGroup(groupId: 2, groupName: 'group2');
         $this->user->SetGroups([$g1, $g2]);
 
         $groupId = 4;
@@ -798,9 +798,9 @@ class QuotaTest extends TestBase
 
     public function testChecksWhenAtLeastOneGroupApplies()
     {
-        $g1 = new UserGroup(1, null);
-        $g2 = new UserGroup(2, null);
-        $g4 = new UserGroup(4, null);
+        $g1 = new UserGroup(groupId: 1, groupName: 'group1');
+        $g2 = new UserGroup(groupId: 2, groupName: 'group2');
+        $g4 = new UserGroup(groupId: 4, groupName: 'group4');
         $this->user->SetGroups([$g1, $g2, $g4]);
 
         $groupId = 4;
@@ -994,13 +994,13 @@ class QuotaTest extends TestBase
         $resource = new FakeBookableResource($resource1);
         $resource->SetScheduleId($schedule);
         $series = ReservationSeries::Create(
-            $userId,
-            $resource,
-            null,
-            null,
-            $hourLongReservation,
-            new RepeatNone(),
-            new FakeUserSession()
+            userId: $userId,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: $hourLongReservation,
+            repeatOptions: new RepeatNone(),
+            bookedBy: new FakeUserSession()
         );
         $series->AddResource(new FakeBookableResource($resource2));
 

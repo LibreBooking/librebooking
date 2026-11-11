@@ -3,7 +3,7 @@
 class Accessory
 {
     /**
-     * @var int
+     * @var int|null null until the accessory is saved
      */
     private $id;
 
@@ -14,7 +14,7 @@ class Accessory
     private $name;
 
     /**
-     * @var int
+     * @var int|null null means unlimited
      */
     private $quantityAvailable;
 
@@ -24,9 +24,9 @@ class Accessory
     private $resources = [];
 
     /**
-     * @param int $id
+     * @param int|null $id null until the accessory is saved
      * @param string $name
-     * @param int $quantityAvailable
+     * @param int|string|null $quantityAvailable empty means unlimited
      */
     public function __construct($id, $name, $quantityAvailable)
     {
@@ -36,7 +36,7 @@ class Accessory
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function GetId()
     {
@@ -61,7 +61,7 @@ class Accessory
     }
 
     /**
-     * @param int $quantity
+     * @param int|string|null $quantity empty means unlimited
      */
     public function SetQuantityAvailable($quantity)
     {
@@ -70,7 +70,7 @@ class Accessory
     }
 
     /**
-     * @return int
+     * @return int|null null means unlimited
      */
     public function GetQuantityAvailable()
     {
@@ -101,7 +101,7 @@ class Accessory
     /**
      * @static
      * @param string $name
-     * @param int $quantity
+     * @param int|string|null $quantity empty means unlimited
      * @return Accessory
      */
     public static function Create($name, $quantity)

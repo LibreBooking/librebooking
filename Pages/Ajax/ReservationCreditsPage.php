@@ -46,7 +46,7 @@ interface IReservationCreditsPage extends IRepeatOptionsComposite
 
     /**
      * @param int $creditsRequired
-     * @param string $cost
+     * @param string|null $cost null when credits are disabled
      */
     public function SetCreditRequired($creditsRequired, $cost);
 }

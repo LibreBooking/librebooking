@@ -9,9 +9,9 @@ class GroupAdminGroupsRepositoryTest extends TestBase
     public function testGetsListOfGroupsThatThisUserCanAdminister()
     {
         $user = new User();
-        $adminGroup1 = new UserGroup(1, null, null, RoleLevel::GROUP_ADMIN);
-        $adminGroup2 = new UserGroup(2, null, 1, RoleLevel::GROUP_ADMIN);
-        $adminGroup3 = new UserGroup(3, null, 1, RoleLevel::GROUP_ADMIN);
+        $adminGroup1 = new UserGroup(groupId: 1, groupName: 'group1', adminGroupId: null, roleLevel: RoleLevel::GROUP_ADMIN);
+        $adminGroup2 = new UserGroup(groupId: 2, groupName: 'group2', adminGroupId: 1, roleLevel: RoleLevel::GROUP_ADMIN);
+        $adminGroup3 = new UserGroup(groupId: 3, groupName: 'group3', adminGroupId: 1, roleLevel: RoleLevel::GROUP_ADMIN);
         $user->WithOwnedGroups([$adminGroup1, $adminGroup2, $adminGroup3]);
 
         $userRepo = $this->createMock('IUserRepository');

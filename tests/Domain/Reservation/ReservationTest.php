@@ -79,7 +79,15 @@ class ReservationTest extends TestBase
 
         $repeatOptions = $this->createMock('IRepeatOptions');
 
-        $series = ReservationSeries::Create(1, new FakeBookableResource(1), null, null, $dateRange, $repeatOptions, new FakeUserSession());
+        $series = ReservationSeries::Create(
+            userId: 1,
+            resource: new FakeBookableResource(1),
+            title: '',
+            description: '',
+            reservationDate: $dateRange,
+            repeatOptions: $repeatOptions,
+            bookedBy: new FakeUserSession()
+        );
 
         $instance = $series->CurrentInstance();
 

@@ -76,7 +76,15 @@ class ReservationCreditsPresenter
             $repeatOptions = $roFactory->CreateFromComposite($this->page, $userSession->Timezone);
             $duration = $this->GetReservationDuration($userSession);
 
-            $reservationSeries = ReservationSeries::Create($userId, $resource, null, null, $duration, $repeatOptions, $userSession);
+            $reservationSeries = ReservationSeries::Create(
+                userId: $userId,
+                resource: $resource,
+                title: '',
+                description: '',
+                reservationDate: $duration,
+                repeatOptions: $repeatOptions,
+                bookedBy: $userSession
+            );
 
             $additionalResourceIds = $this->GetAdditionalResourceIds();
             foreach ($additionalResourceIds as $resourceId) {
@@ -100,11 +108,11 @@ class ReservationCreditsPresenter
 
             $resource = $this->resourceRepository->LoadById($resourceId);
             $existingSeries->Update(
-                $this->page->GetUserId(),
-                $resource,
-                null,
-                null,
-                $userSession
+                userId: $this->page->GetUserId(),
+                resource: $resource,
+                title: $existingSeries->Title(),
+                description: $existingSeries->Description(),
+                updatedBy: $userSession
             );
 
             $existingSeries->UpdateDuration($this->GetReservationDuration($userSession));

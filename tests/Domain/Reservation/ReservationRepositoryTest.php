@@ -189,13 +189,13 @@ class ReservationRepositoryTest extends TestBase
         $userSession = new FakeUserSession();
 
         $reservation = ReservationSeries::Create(
-            1,
-            new FakeBookableResource(1),
-            null,
-            null,
-            $duration,
-            $repeats,
-            $userSession
+            userId: 1,
+            resource: new FakeBookableResource(1),
+            title: '',
+            description: '',
+            reservationDate: $duration,
+            repeatOptions: $repeats,
+            bookedBy: $userSession
         );
 
         $this->db->_ExpectedInsertIds[0] = $reservationSeriesId;

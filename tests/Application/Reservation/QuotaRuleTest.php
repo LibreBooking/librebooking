@@ -64,13 +64,13 @@ class QuotaRuleTest extends TestBase
         $resource = new FakeBookableResource(20);
         $resource->SetScheduleId($scheduleId);
         $series = ReservationSeries::Create(
-            $userId,
-            $resource,
-            null,
-            null,
-            new TestDateRange(),
-            new RepeatNone(),
-            new FakeUserSession()
+            userId: $userId,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: new TestDateRange(),
+            repeatOptions: new RepeatNone(),
+            bookedBy: new FakeUserSession()
         );
         $series->AddResource(new FakeBookableResource(22));
 
@@ -126,13 +126,13 @@ class QuotaRuleTest extends TestBase
         $resource = new FakeBookableResource(20);
         $resource->SetScheduleId($scheduleId);
         $series = ReservationSeries::Create(
-            $userId,
-            $resource,
-            null,
-            null,
-            new TestDateRange(),
-            new RepeatNone(),
-            new FakeUserSession()
+            userId: $userId,
+            resource: $resource,
+            title: '',
+            description: '',
+            reservationDate: new TestDateRange(),
+            repeatOptions: new RepeatNone(),
+            bookedBy: new FakeUserSession()
         );
         $series->AddResource(new FakeBookableResource(22));
 
