@@ -824,7 +824,6 @@ function Schedule(opts, resourceGroups) {
     }
 
     $('#schedules').on('change', function (e) {
-      // e.preventDefault();
       var scheduleId = $(this).val();
 
       RedirectToSelf('sid', /sid=\d+/i, 'sid=' + scheduleId, function (url) {

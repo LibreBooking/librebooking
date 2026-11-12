@@ -892,7 +892,6 @@ function ResourceManagement(opts) {
     var statusOptions = statusForm.find(elements.statusOptions);
     var statusReasons = statusForm.find(elements.statusReasons);
     var addStatusReason = statusForm.find(elements.addStatusReason);
-    // var saveButton = statusForm.find('.save');
 
     statusOptions.val(resource.statusId);
     statusReasons.val(resource.reasonId);
@@ -919,15 +918,6 @@ function ResourceManagement(opts) {
         statusForm.find(elements.statusReasons).focus();
       }
     });
-
-    // saveButton.unbind();
-    //
-    //
-    //
-    // saveButton.click(function () {
-    // 	statusForm.submit();
-    // });
-    //
 
     elements.toggleStatusChangeMessage.prop('checked', false);
     elements.sendStatusChangeMessageContent.addClass('d-none');

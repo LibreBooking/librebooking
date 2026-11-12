@@ -4,13 +4,6 @@ function Registration() {
   };
 
   Registration.prototype.init = function () {
-    // $("#btnUpdate").click(function (e)
-    // {
-    // 	e.preventDefault();
-    // 	e.stopPropagation();
-    // 	elements.form.submit();
-    // });
-
     elements.form.bind('onValidationFailed', onValidationFailed);
 
     ConfigureAsyncForm(elements.form, defaultSubmitCallback, successHandler, null, { onBeforeSubmit: onBeforeSubmit });

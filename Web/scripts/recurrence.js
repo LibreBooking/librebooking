@@ -73,11 +73,11 @@ function Recurrence(recurOptions, recurElements, prefix) {
   };
 
   var show = function (element) {
-    element.removeClass('d-none'); //.addClass('d-inline')
+    element.removeClass('d-none');
   };
 
   var hide = function (element) {
-    element.addClass('d-none'); //.removeClass('d-inline')
+    element.addClass('d-none');
   };
 
   var RequiresTerminationDate = function (repeatType) {

@@ -132,11 +132,6 @@ function ReservationManagement(opts, approval) {
     }
 
     elements.reservationTable.on('click', '.edit', function (e) {
-      //This conditional prevents the edit button from working on mobile devices
-      /*if ($(e.target).hasClass('action') || $(e.target).closest('td').hasClass('action')) {
-                e.stopPropagation();
-                return;
-            }*/
       viewReservation($(this).closest('tr').attr('data-refnum'));
     });
 
