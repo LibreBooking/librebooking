@@ -148,7 +148,11 @@ class GroupRepository implements IGroupRepository, IGroupViewRepository
 
         $reader = $db->Query(new GetGroupByIdCommand($groupId));
         if ($row = $reader->GetRow()) {
-            $group = new Group($row[ColumnNames::GROUP_ID], $row[ColumnNames::GROUP_NAME], $row[ColumnNames::GROUP_ISDEFAULT]);
+            $group = new Group(
+                id: $row[ColumnNames::GROUP_ID],
+                name: $row[ColumnNames::GROUP_NAME],
+                isDefault: (bool) intval($row[ColumnNames::GROUP_ISDEFAULT])
+            );
             $group->WithGroupAdmin($row[ColumnNames::GROUP_ADMIN_GROUP_ID]);
         }
         $reader->Free();

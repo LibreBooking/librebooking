@@ -36,7 +36,7 @@ class GroupResponse extends RestResponse
             $this->roles[] = $roleId;
         }
 
-        $this->isDefault = (bool)$group->IsDefault();
+        $this->isDefault = $group->IsDefault();
     }
 
     public static function Example()
