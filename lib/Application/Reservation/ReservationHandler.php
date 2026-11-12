@@ -56,7 +56,7 @@ class ReservationHandler implements IReservationHandler
 
     /**
      * @static
-     * @param $reservationAction string|ReservationAction
+     * @param string $reservationAction one of the ReservationAction constants
      * @param UserSession $session
      * @return IReservationHandler
      */

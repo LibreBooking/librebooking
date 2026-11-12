@@ -37,10 +37,7 @@ parameters:
             # Staged "next level" rollout: remove these one-by-one as each
             # area is fixed for the current target level.
             - Presenters/
-            - lib/Application/
-            - tests/Application/
             - tests/Presenters/
-            - tests/fakes/
     bootstrapFiles:
         - vendor/autoload.php
     # Corrected PHPDoc for third-party code that cannot be edited.

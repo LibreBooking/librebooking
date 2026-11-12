@@ -69,7 +69,7 @@ interface IBookableResource extends IResource
     public function GetAutoReleaseMinutes();
 
     /**
-     * @return int
+     * @return int|null null when the resource has no type
      */
     public function GetResourceTypeId();
 
@@ -395,7 +395,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMinLength($value)
     {
@@ -492,7 +492,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMaxLength($value)
     {
@@ -618,7 +618,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMinNoticeAdd($value)
     {
@@ -642,7 +642,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMinNoticeUpdate($value)
     {
@@ -666,7 +666,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMinNoticeDelete($value)
     {
@@ -690,7 +690,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param string|int|TimeInterval $value
+     * @param string|int|TimeInterval|null $value null for no limit
      */
     public function SetMaxNotice($value)
     {
@@ -1097,7 +1097,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param int $resourceTypeId
+     * @param int|null $resourceTypeId null for no resource type
      */
     public function SetResourceTypeId($resourceTypeId)
     {
@@ -1105,7 +1105,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @return int
+     * @return int|null null when the resource has no type
      */
     public function GetResourceTypeId()
     {

@@ -11,9 +11,9 @@ class ReservationRuleResult
 
     /**
      * @param bool $isValid
-     * @param string $errorMessage
+     * @param string|null $errorMessage
      * @param bool $canBeRetried
-     * @param null $retryMessage
+     * @param string|null $retryMessage
      * @param array|ReservationRetryParameter[] $retryParams
      * @param bool $canJoinWaitlist
      */
@@ -36,7 +36,7 @@ class ReservationRuleResult
     }
 
     /**
-     * @return string
+     * @return string|null null for a valid result
      */
     public function ErrorMessage()
     {
@@ -52,7 +52,7 @@ class ReservationRuleResult
     }
 
     /**
-     * @return string
+     * @return string|null null when the reservation cannot be retried
      */
     public function RetryMessage()
     {

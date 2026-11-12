@@ -3,16 +3,20 @@
 class ReservationListItem
 {
     /**
-     * @var IReservedItemView
+     * ReservationSlot and BufferSlot read ReservationItemView members that
+     * IReservedItemView does not declare, such as ReferenceNumber and
+     * IsUserParticipating().
+     *
+     * @var ReservationItemView
      */
     protected $item;
 
-    public function __construct(IReservedItemView $reservedItem)
+    public function __construct(ReservationItemView $reservedItem)
     {
         $this->item = $reservedItem;
     }
 
-    public function ReservedItem(): IReservedItemView
+    public function ReservedItem(): ReservationItemView
     {
         return $this->item;
     }
@@ -69,7 +73,13 @@ class ReservationListItem
      */
     public function BuildSlot(SchedulePeriod $start, SchedulePeriod $end, Date $displayDate, $span)
     {
-        return new ReservationSlot($start, $end, $displayDate, $span, $this->item);
+        return new ReservationSlot(
+            begin: $start,
+            end: $end,
+            displayDate: $displayDate,
+            periodSpan: $span,
+            reservation: $this->item
+        );
     }
 
     /**
@@ -344,7 +354,13 @@ class BufferItem extends ReservationListItem
 
     public function BuildSlot(SchedulePeriod $start, SchedulePeriod $end, Date $displayDate, $span)
     {
-        return new BufferSlot($start, $end, $displayDate, $span, $this->reservationItem->ReservedItem());
+        return new BufferSlot(
+            begin: $start,
+            end: $end,
+            displayDate: $displayDate,
+            periodSpan: $span,
+            reservation: $this->item
+        );
     }
 
     /**

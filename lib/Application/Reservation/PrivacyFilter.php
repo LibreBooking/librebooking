@@ -6,7 +6,8 @@ interface IPrivacyFilter
 {
     /**
      * @param UserSession $currentUser
-     * @param ReservationView|null $reservationView
+     * @param ReservationView|ReservationItemView|null $reservationView only a
+     *        ReservationView is checked against reservation permissions
      * @param int|null $ownerId
      * @return bool
      */
@@ -14,7 +15,8 @@ interface IPrivacyFilter
 
     /**
      * @param UserSession $currentUser
-     * @param ReservationView|null $reservationView
+     * @param ReservationView|ReservationItemView|null $reservationView only a
+     *        ReservationView is checked against reservation permissions
      * @param int|null $ownerId
      * @return bool
      */

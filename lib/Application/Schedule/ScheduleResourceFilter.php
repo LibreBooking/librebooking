@@ -30,7 +30,9 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
      * @param int|string|null $minCapacity
      * @param AttributeValue[]|null $resourceAttributes
      * @param AttributeValue[]|null $resourceTypeAttributes
-     * @param int[]|null $resourceIds
+     * @param array<mixed>|null $resourceIds unchecked ids from a request or
+     *        the saved cookie; anything that is not a positive whole number
+     *        is dropped
      */
     public function __construct(
         $scheduleId = null,

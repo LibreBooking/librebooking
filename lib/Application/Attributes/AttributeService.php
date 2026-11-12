@@ -256,7 +256,7 @@ class AttributeService implements IAttributeService
     /**
      * @param UserSession $userSession
      * @param int $requestedUserId
-     * @param string $secondaryCategory
+     * @param CustomAttributeCategory|int $secondaryCategory
      * @param CustomAttribute $attribute
      * @return bool
      */
@@ -269,7 +269,7 @@ class AttributeService implements IAttributeService
 
     /**
      * @param UserSession $userSession
-     * @param string $secondaryCategory
+     * @param CustomAttributeCategory|int $secondaryCategory
      * @param CustomAttribute $attribute
      * @param int[] $requestedResourceIds
      * @return bool

@@ -21,9 +21,9 @@ class FakeReminder extends Reminder
 
     public function __construct()
     {
-        $day = date('d');
-        $mon = date('m');
-        $year = date('Y');
+        $day = intval(value: date('d'));
+        $mon = intval(value: date('m'));
+        $year = intval(value: date('Y'));
 
         $this->id = 'reminderid';
         $this->resid = 'resid';

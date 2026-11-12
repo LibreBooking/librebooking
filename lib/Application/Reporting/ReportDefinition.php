@@ -156,7 +156,7 @@ class ReportDefinition implements IReportDefinition
     }
 
     /**
-     * @param CustomAttributeCategory|string $category
+     * @param CustomAttributeCategory|int $category
      * @param CustomAttributes|null $attributes
      * @param array $formattedRow
      * @param string $key

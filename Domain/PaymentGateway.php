@@ -18,13 +18,13 @@ class PaymentGatewaySetting
      */
     private $name;
     /**
-     * @var string
+     * @var string|null null for a disabled gateway, whose settings are not saved
      */
     private $value;
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|null $value null for a disabled gateway
      */
     public function __construct($name, $value)
     {
@@ -41,7 +41,7 @@ class PaymentGatewaySetting
     }
 
     /**
-     * @return string
+     * @return string|null null for a disabled gateway
      */
     public function Value()
     {
@@ -201,23 +201,23 @@ class PayPalGateway implements IPaymentGateway
      */
     private $enabled;
     /**
-     * @var string
+     * @var string|null null when the gateway is disabled
      */
     private $clientId;
     /**
-     * @var string
+     * @var string|null null when the gateway is disabled
      */
     private $secret;
     /**
-     * @var string
+     * @var string|null null when the gateway is disabled
      */
     private $environment;
 
     /**
      * @param bool $enabled
-     * @param string $clientId
-     * @param string $secret
-     * @param string $environment
+     * @param string|null $clientId ignored when the gateway is disabled
+     * @param string|null $secret ignored when the gateway is disabled
+     * @param string|null $environment ignored when the gateway is disabled
      */
     public function __construct($enabled, $clientId, $secret, $environment)
     {
@@ -261,7 +261,7 @@ class PayPalGateway implements IPaymentGateway
     }
 
     /**
-     * @return string
+     * @return string|null null when the gateway is disabled
      */
     public function ClientId()
     {
@@ -269,7 +269,7 @@ class PayPalGateway implements IPaymentGateway
     }
 
     /**
-     * @return string
+     * @return string|null null when the gateway is disabled
      */
     public function Secret()
     {
@@ -277,7 +277,7 @@ class PayPalGateway implements IPaymentGateway
     }
 
     /**
-     * @return string
+     * @return string|null null when the gateway is disabled
      */
     public function Environment()
     {
@@ -481,11 +481,11 @@ class StripeGateway implements IPaymentGateway
      */
     private $enabled;
     /**
-     * @var string
+     * @var string|null null when the gateway is disabled
      */
     private $publishableKey;
     /**
-     * @var string
+     * @var string|null null when the gateway is disabled
      */
     private $secretKey;
     /**
@@ -503,8 +503,8 @@ class StripeGateway implements IPaymentGateway
 
     /**
      * @param bool $enabled
-     * @param string $publishableKey
-     * @param string $secretKey
+     * @param string|null $publishableKey ignored when the gateway is disabled
+     * @param string|null $secretKey ignored when the gateway is disabled
      */
     public function __construct($enabled, $publishableKey, $secretKey)
     {
@@ -545,7 +545,7 @@ class StripeGateway implements IPaymentGateway
     }
 
     /**
-     * @return string
+     * @return string|null null when the gateway is disabled
      */
     public function PublishableKey()
     {
@@ -553,7 +553,7 @@ class StripeGateway implements IPaymentGateway
     }
 
     /**
-     * @return string
+     * @return string|null null when the gateway is disabled
      */
     public function SecretKey()
     {

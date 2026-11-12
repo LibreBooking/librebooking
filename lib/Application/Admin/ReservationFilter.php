@@ -48,7 +48,7 @@ class ReservationFilter
     private $resourceStatusReasonId = null;
 
     /**
-     * @var Attribute[]|null
+     * @var LBAttribute[]|null
      */
     private $attributes = null;
 
@@ -83,7 +83,7 @@ class ReservationFilter
      * @param int $statusId
      * @param int $resourceStatusId
      * @param int $resourceStatusReasonId
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      * @param string $title
      * @param string $description
      * @param bool $missedCheckin

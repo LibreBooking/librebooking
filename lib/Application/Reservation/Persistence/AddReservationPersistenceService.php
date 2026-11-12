@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @implements IReservationPersistenceService<ReservationSeries>
+ */
 class AddReservationPersistenceService implements IReservationPersistenceService
 {
     /**

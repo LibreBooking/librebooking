@@ -119,7 +119,7 @@ class SlotLabelFactory
         $matches = $matches[0];
         if (count($matches) > 0) {
             for ($m = 0; $m < count($matches); $m++) {
-                $id = filter_var($matches[$m], FILTER_SANITIZE_NUMBER_INT);
+                $id = intval(value: filter_var($matches[$m], FILTER_SANITIZE_NUMBER_INT));
                 $value = $reservation->GetAttributeValue($id) ?? '';
 
                 $label = str_replace($matches[$m], $value, $label);
