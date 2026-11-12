@@ -51,7 +51,7 @@ class BookedStringHelper
             $string = random_bytes(intval($length / 2));
             $string = bin2hex($string);
         } catch (Exception $e) {
-            $string = uniqid(rand(), true);
+            $string = uniqid(prefix: (string) rand(), more_entropy: true);
             Log::Error('Could not generate web service session token. %s', $e);
         }
         return $string;

@@ -15,7 +15,7 @@ interface IReservationAttributesPrintPage
     public function GetRequestedReferenceNumber();
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetAttributes($attributes);
 
@@ -56,7 +56,7 @@ class ReservationAttributesPrintPage extends Page implements IReservationAttribu
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetAttributes($attributes)
     {

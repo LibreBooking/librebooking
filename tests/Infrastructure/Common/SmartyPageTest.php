@@ -304,6 +304,37 @@ class SmartyPageTest extends TestBase
         );
     }
 
+    #[DataProvider('ignorePrivacyValues')]
+    public function testDisplayFullNameIgnoresPrivacyWhenAsked(mixed $ignorePrivacy, string $expected): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_HIDE_USER_DETAILS, true);
+        $this->fakeUser->IsAdmin = false;
+        $page = new SmartyPage();
+
+        $this->assertSame(
+            $expected,
+            $page->DisplayFullName(
+                params: ['first' => 'Mary', 'last' => 'Smith', 'ignorePrivacy' => $ignorePrivacy],
+                template: $page->createTemplate('string:')
+            )
+        );
+    }
+
+    /**
+     * Templates pass ignorePrivacy as a bool or as the string "true".
+     *
+     * @return array<string, array{0:mixed, 1:string}>
+     */
+    public static function ignorePrivacyValues(): array
+    {
+        return [
+            'bool true' => [true, 'Mary Smith'],
+            'string true' => ['true', 'Mary Smith'],
+            'bool false' => [false, 'Private'],
+            'string false' => ['false', 'Private'],
+        ];
+    }
+
     #[DataProvider('replaceQueryStringValues')]
     public function testReplaceQueryString(string $url, string $key, string|int $value, string $expected): void
     {

@@ -87,7 +87,7 @@ class FakeUserDetailsPopupPage implements IUserDetailsPopupPage
 
     public function GetUserId()
     {
-        return '1';
+        return 1;
     }
 
     /**

@@ -1,0 +1,22 @@
+<?php
+
+namespace FeedWriter;
+
+/**
+ * Corrects mibe/feedwriter's PHPDoc: setChannelElement() also accepts an
+ * array, which it renders as child elements, for example
+ * ['name' => 'x'] as <name>x</name>.
+ */
+abstract class Feed
+{
+    /**
+     * @param string $elementName
+     * @param string|array<string, string|string[]> $content
+     * @param array<string, string>|null $attributes
+     * @param bool $multiple
+     * @return self
+     */
+    public function setChannelElement($elementName, $content, ?array $attributes = null, $multiple = false)
+    {
+    }
+}

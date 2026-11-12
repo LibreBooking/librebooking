@@ -69,7 +69,7 @@ interface IReservationPopupPage
     public function SetHideUser($hideUserInfo);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function BindAttributes($attributes);
 

@@ -1041,7 +1041,7 @@ class DateDiff
     }
 
     /**
-     * @param false $short
+     * @param bool $short
      * @return string
      */
     public function ToString($short = false)

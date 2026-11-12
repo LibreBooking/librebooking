@@ -235,11 +235,10 @@ class FakeReservationAttributesPage implements IReservationAttributesPage
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetAttributes($attributes)
     {
-        /** @var LBAttribute[] $attributes */
         $this->_Attributes = $attributes;
     }
 

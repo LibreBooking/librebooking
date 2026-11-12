@@ -36,3 +36,6 @@ parameters:
             - vendor/
     bootstrapFiles:
         - vendor/autoload.php
+    # Corrected PHPDoc for third-party code that cannot be edited.
+    stubFiles:
+        - tests/phpstan-stubs/FeedWriter.stub

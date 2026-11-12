@@ -138,12 +138,12 @@ interface ISchedulePage extends IActionPage
     public function SetResourceTypes($resourceTypes);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceCustomAttributes($attributes);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceTypeCustomAttributes($attributes);
 

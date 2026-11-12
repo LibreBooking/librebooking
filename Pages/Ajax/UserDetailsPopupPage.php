@@ -8,7 +8,8 @@ require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 interface IUserDetailsPopupPage
 {
     /**
-     * @return string
+     * @return int the requested user id, or 0 when it is missing or not a
+     *             whole number
      */
     public function GetUserId();
 
@@ -51,12 +52,9 @@ class UserDetailsPopupPage extends Page implements IUserDetailsPopupPage
         $this->Set('CanViewUser', $canView);
     }
 
-    /**
-     * @return string
-     */
     public function GetUserId()
     {
-        return $this->GetQuerystring(QueryStringKeys::USER_ID);
+        return $this->GetQuerystringInt(QueryStringKeys::USER_ID) ?? 0;
     }
 
     /**

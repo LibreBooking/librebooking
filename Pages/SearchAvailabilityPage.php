@@ -74,12 +74,12 @@ interface ISearchAvailabilityPage extends IActionPage, IRepeatOptionsComposite
     public function GetResourceTypeAttributeValues();
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceAttributes($attributes);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceTypeAttributes($attributes);
 
