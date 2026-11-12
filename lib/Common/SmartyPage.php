@@ -910,10 +910,7 @@ class SmartyPage extends Smarty
     public function DisplayFullName(array $params, Template $template): string
     {
         $config = Configuration::Instance();
-        $ignorePrivacy = false;
-        if (isset($params['ignorePrivacy']) && strtolower($params['ignorePrivacy'] == 'true')) {
-            $ignorePrivacy = true;
-        }
+        $ignorePrivacy = filter_var($params['ignorePrivacy'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $csv = filter_var($params['csv'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         if (
@@ -1201,6 +1198,9 @@ class SmartyPage extends Smarty
         return array_key_exists($key ?? '', $array);
     }
 
+    /**
+     * @param COUNT_NORMAL|COUNT_RECURSIVE $mode
+     */
     public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int
     {
         return count($value, $mode);

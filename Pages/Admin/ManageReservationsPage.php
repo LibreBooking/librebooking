@@ -178,7 +178,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
     public function GetAttributeFilters();
 
     /**
-     * @param Attribute[] $filters
+     * @param LBAttribute[] $filters
      */
     public function SetAttributeFilters($filters);
 

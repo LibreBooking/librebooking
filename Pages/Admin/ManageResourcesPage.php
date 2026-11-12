@@ -194,7 +194,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetNewStatusReason();
 
     /**
-     * @param Attribute[] $attributeFilters
+     * @param LBAttribute[] $attributeFilters
      */
     public function BindAttributeFilters($attributeFilters);
 

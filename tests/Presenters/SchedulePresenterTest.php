@@ -1134,14 +1134,14 @@ class FakeSchedulePage implements ISchedulePage
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceCustomAttributes($attributes)
     {
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetResourceTypeCustomAttributes($attributes)
     {

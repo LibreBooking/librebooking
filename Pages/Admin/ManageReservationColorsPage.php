@@ -8,7 +8,7 @@ require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 interface IManageReservationColorsPage extends IActionPage
 {
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function SetAttributes($attributes);
 

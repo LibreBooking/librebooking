@@ -18,12 +18,13 @@ class TimeInterval
 
     /**
      * @static
-     * @param string|int $interval string interval in format: #d#h#m ie: 22d4h12m or total seconds
+     * @param TimeInterval|string|int|null $interval an interval, a string in
+     *        the format #d#h#m (for example 22d4h12m), or total seconds
      * @return TimeInterval
      */
     public static function Parse($interval)
     {
-        if (is_a($interval, 'TimeInterval')) {
+        if ($interval instanceof TimeInterval) {
             return $interval;
         }
 

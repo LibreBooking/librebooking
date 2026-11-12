@@ -54,7 +54,7 @@ class AdjustedColor
         $out = '';
         for ($i = 1; $i <= 3; $i++) {
             $parts[$i] = hexdec($parts[$i]);
-            $parts[$i] = round($parts[$i] * $this->steps / 100);
+            $parts[$i] = intval(value: round($parts[$i] * $this->steps / 100));
             $out .= str_pad(dechex($parts[$i]), 2, '0', STR_PAD_LEFT);
         }
         return '#' . $out;

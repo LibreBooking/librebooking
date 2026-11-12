@@ -461,11 +461,12 @@ abstract class Page implements IPage
 
     /**
      * @param mixed $objectToSerialize
-     * @param string|null $error
+     * @param string[]|string|null $error the error messages; the reservation
+     *        approval page passes a single string
      * @param int|null $httpResponseCode
      * @return void
      */
-    protected function SetJson($objectToSerialize, $error = null, $httpResponseCode = 200)
+    protected function SetJson($objectToSerialize, array|string|null $error = null, $httpResponseCode = 200)
     {
         header('Content-type: application/json');
         http_response_code(empty($httpResponseCode) ? 200 : $httpResponseCode);

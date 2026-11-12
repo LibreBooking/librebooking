@@ -109,7 +109,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
     public function BindSchedule(Schedule $schedule);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function BindAttributes($attributes);
 

@@ -66,7 +66,7 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
 
     /**
      * @param ResourceType $resourceType
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function BindResourceType(ResourceType $resourceType, $attributes)
     {
@@ -83,13 +83,13 @@ interface IResourceDetailsPage
     public function BindResource(BookableResource $resource);
 
     /**
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function BindAttributes($attributes);
 
     /**
      * @param ResourceType $resourceType
-     * @param Attribute[] $attributes
+     * @param LBAttribute[] $attributes
      */
     public function BindResourceType(ResourceType $resourceType, $attributes);
 
