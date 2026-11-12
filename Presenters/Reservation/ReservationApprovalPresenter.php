@@ -59,7 +59,7 @@ class ReservationApprovalPresenter implements IReservationApprovalPresenter
             $series->Approve($this->userSession);
             $this->handler->Handle($series, $this->page);
         } else {
-            $this->page->SetErrors('error');
+            $this->page->SetErrors(errors: [Resources::GetInstance()->GetString('NoReservationAccess')]);
         }
     }
 }
