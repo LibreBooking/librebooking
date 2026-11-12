@@ -43,7 +43,7 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
             ScheduleStyle::CondensedWeek->value => $resources->GetString('Week'),
         ]);
 
-        $this->Display(ROOT_DIR.'tpl/Admin/Schedules/view_schedules.tpl');
+        $this->Display('Admin/Schedules/view_schedules.tpl');
     }
 
     public function BindSchedules($schedules, $layouts, $sourceSchedules)
