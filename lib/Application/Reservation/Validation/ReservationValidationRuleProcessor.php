@@ -20,7 +20,20 @@ class ReservationValidationRuleProcessor implements IReservationValidationServic
             Log::Debug('Validating rule %s. Passed?: %s', get_class($rule), $result->IsValid() . '');
 
             if (!$result->IsValid()) {
-                return new ReservationValidationResult(false, [$result->ErrorMessage()], [], $result->CanBeRetried(), $result->RetryParameters(), [$result->RetryMessage()], $result->CanJoinWaitlist());
+                // Every failure needs a message: some pages only respond when
+                // there are errors to report
+                $errorMessage = $result->ErrorMessage() ?? Resources::GetInstance()->GetString('ReservationFailed');
+                $retryMessage = $result->RetryMessage();
+
+                return new ReservationValidationResult(
+                    canBeSaved: false,
+                    errors: [$errorMessage],
+                    warnings: [],
+                    canBeRetried: $result->CanBeRetried(),
+                    retryParams: $result->RetryParameters(),
+                    retryMessages: $retryMessage === null ? [] : [$retryMessage],
+                    canJoinWaitList: $result->CanJoinWaitlist()
+                );
             }
         }
 

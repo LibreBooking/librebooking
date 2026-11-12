@@ -80,8 +80,10 @@ class AnonymousResourceExcludedRuleTest extends TestBase
         $this->baseRule->expects($this->never())->method('Validate');
 
         $rule = new AnonymousResourceExcludedRule($this->baseRule, new NullUserSession());
+        $result = $rule->Validate($this->reservationSeries, null);
 
-        $this->assertFalse($rule->Validate($this->reservationSeries, null)->IsValid());
+        $this->assertFalse($result->IsValid());
+        $this->assertSame(Resources::GetInstance()->GetString('NoResourcePermission'), $result->ErrorMessage());
     }
 
     private function CheckinReadySeriesOwnedBy(int $ownerId): ExistingReservationSeries

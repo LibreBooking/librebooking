@@ -86,4 +86,25 @@ class ReservationValidationRuleProcessorTest extends TestBase
         $this->assertEquals([$retryMessage], $result->GetRetryMessages());
         $this->assertEquals($retryParams, $result->GetRetryParameters());
     }
+
+    public function testFailedRuleWithoutMessagesReportsAGenericError()
+    {
+        $reservation = new ExistingReservationSeries();
+
+        $rule = $this->createMock('IUpdateReservationValidationRule');
+        $rule->expects($this->once())
+            ->method('Validate')
+            ->willReturn(new ReservationRuleResult(isValid: false));
+
+        $vs = new ReservationValidationRuleProcessor(validationRules: [$rule]);
+
+        $result = $vs->Validate($reservation);
+
+        $this->assertFalse($result->CanBeSaved());
+        $this->assertSame(
+            [Resources::GetInstance()->GetString('ReservationFailed')],
+            $result->GetErrors()
+        );
+        $this->assertSame([], $result->GetRetryMessages());
+    }
 }
