@@ -178,14 +178,13 @@ function AttributeManagement(opts) {
   function handleEntitiesSelected(element) {
     element.empty();
     var entities = selectedEntityChoices.find(':checked');
-    // element.append(entities);
+
     if (entities.length > 0) {
       var text = _.map(entities, function (e) {
         return $(e).attr('data-text');
       }).join(', ');
 
       element.text(text);
-      // elements.secondaryPrompt.text(text);
 
       updateEntityCallback(
         _.map(entities, function (e) {
@@ -348,14 +347,12 @@ function AttributeManagement(opts) {
       $('.attributeIsPrivate').show();
     } else {
       $('.attributeUnique').show();
-      //$('.attributeAdminOnly').hide();
       $('.secondaryEntities, .attributeSecondary').addClass('d-none');
       $('.attributeIsPrivate').hide();
     }
   };
 
   var showEntities = function (element, categoryId, selectedIds, formName) {
-    //var selectedIds = [];
     elements.appliesToId.find('input:checkbox').removeAttr('checked');
 
     selectedEntityChoices.empty();

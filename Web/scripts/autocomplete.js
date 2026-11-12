@@ -32,7 +32,6 @@ $.fn.userAutoComplete = function (url, selectionCallback) {
     select: function (event, ui) {
       if (selectionCallback != undefined) {
         selectionCallback(ui, textbox);
-        //textbox.val('');
       } else {
         textbox.val(ui.item.label);
       }

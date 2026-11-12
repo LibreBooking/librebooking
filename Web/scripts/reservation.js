@@ -206,7 +206,6 @@ function Reservation(opts) {
     $('#creatingNotification').find('h3').addClass('d-none');
     $('#createUpdateMessage').removeClass('d-none');
     $('#result').addClass('d-none');
-    //$('#creatingNotification').show();
 
     return true;
   };
@@ -700,7 +699,6 @@ function Reservation(opts) {
         var retryParams = $('#retryParams');
         $('#retrySubmitParams').empty().append(retryParams.find('input'));
         retryParams.empty();
-        //CloseSaveDialog();
         elements.reservationForm.submit();
       });
 
@@ -714,7 +712,6 @@ function Reservation(opts) {
 
   var JoinWaitList = function () {
     $('#result').addClass('d-none');
-    //$('#creatingNotification').show();
     $('#joiningWaitingList').removeClass('d-none');
 
     ajaxPost(elements.reservationForm, opts.waitlistUrl, null, function (data) {
