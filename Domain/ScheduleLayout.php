@@ -748,8 +748,8 @@ class PeakTimes
 
     /**
      * @param bool $allDay
-     * @param string|Time $beginTime
-     * @param string|Time $endTime
+     * @param string|Time|null $beginTime null or ignored when $allDay
+     * @param string|Time|null $endTime null or ignored when $allDay
      * @param bool $everyDay
      * @param int[] $weekdays
      * @param bool $allYear

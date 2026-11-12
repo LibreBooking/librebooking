@@ -104,7 +104,7 @@ interface IExistingReservationPage extends IReservationPage
     public function SetCheckOutRequired($isCheckOutRequired);
 
     /**
-     * @param int $autoReleaseMinutes
+     * @param int|null $autoReleaseMinutes null when the reservation is not auto-released
      */
     public function SetAutoReleaseMinutes($autoReleaseMinutes);
 

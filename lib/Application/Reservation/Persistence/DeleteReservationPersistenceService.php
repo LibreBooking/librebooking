@@ -2,6 +2,9 @@
 
 require_once(ROOT_DIR . 'lib/Application/Reservation/Persistence/IReservationPersistenceService.php');
 
+/**
+ * @extends IReservationPersistenceService<ExistingReservationSeries>
+ */
 interface IDeleteReservationPersistenceService extends IReservationPersistenceService
 {
     /**

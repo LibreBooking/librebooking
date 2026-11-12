@@ -46,7 +46,22 @@ class TestBlackoutItemView extends BlackoutItemView
         $resourceId,
         $seriesId = 1
     ) {
-        parent::__construct($instanceId, $startDate, $endDate, $resourceId, null, null, null, null, null, null, null, $seriesId, null, null);
+        parent::__construct(
+            instanceId: $instanceId,
+            startDate: $startDate,
+            endDate: $endDate,
+            resourceId: $resourceId,
+            ownerId: null,
+            scheduleId: 0,
+            title: '',
+            description: '',
+            firstName: null,
+            lastName: null,
+            resourceName: '',
+            seriesId: $seriesId,
+            repeatOptions: '',
+            repeatType: RepeatType::None
+        );
     }
 
     public function WithScheduleId($scheduleId)

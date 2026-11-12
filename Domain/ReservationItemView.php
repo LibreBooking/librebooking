@@ -1139,12 +1139,12 @@ class BlackoutItemView extends ReservationItemView
      * @param Date $startDate
      * @param Date $endDate
      * @param int $resourceId
-     * @param int $ownerId
+     * @param int|null $ownerId
      * @param int $scheduleId
      * @param string $title
      * @param string $description
-     * @param string $firstName
-     * @param string $lastName
+     * @param string|null $firstName
+     * @param string|null $lastName
      * @param string $resourceName
      * @param int $seriesId
      * @param string $repeatOptions

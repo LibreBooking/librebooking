@@ -28,7 +28,7 @@ class FakeCustomAttribute extends CustomAttribute
      * @param int $id
      * @param bool $isRequiredOk
      * @param bool $isRegexOk
-     * @param int[] $entityIds
+     * @param int|int[]|null $entityIds a single id is wrapped in a list
      * @param bool $adminOnly
      */
     public function __construct($id = 1, $isRequiredOk = true, $isRegexOk = true, $entityIds = [], $adminOnly = false)
@@ -63,6 +63,11 @@ class FakeCustomAttribute extends CustomAttribute
 
 class TestCustomAttribute extends CustomAttribute
 {
+    /**
+     * @param int $id
+     * @param string $label
+     * @param int|int[] $entityIds a single id is wrapped in a list
+     */
     public function __construct($id, $label, $entityIds = [])
     {
         $this->id = $id;

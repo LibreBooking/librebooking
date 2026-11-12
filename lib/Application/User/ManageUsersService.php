@@ -63,8 +63,8 @@ interface IManageUsersService
     public function DeleteUser($userId);
 
     /**
-     * @param User $user
-     * @param int[] $groupIds
+     * @param User|null $user nothing changes when null
+     * @param int[]|null $groupIds nothing changes when null
      */
     public function ChangeGroups($user, $groupIds);
 

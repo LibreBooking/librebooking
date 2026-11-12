@@ -17,7 +17,7 @@ class FakeResourceService implements IResourceService
     public $_ScheduleResources = [];
 
     /**
-     * @var ScheduleResourceFilter|null
+     * @var IScheduleResourceFilter|null
      */
     public $_LastFilter;
 
@@ -26,7 +26,7 @@ class FakeResourceService implements IResourceService
      * @param int $scheduleId
      * @param bool $includeInaccessibleResources
      * @param UserSession $user
-     * @param ScheduleResourceFilter|null $filter
+     * @param IScheduleResourceFilter|null $filter
      * @return array|ResourceDto[]
      */
     public function GetScheduleResources($scheduleId, $includeInaccessibleResources, UserSession $user, $filter = null)

@@ -8,7 +8,8 @@ class ReservationRetryParameter
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|bool $value a string from a submitted form, or a bool
+     *        from a validation rule or an API request
      */
     public function __construct($name, $value)
     {
@@ -39,8 +40,9 @@ class ReservationRetryParameter
     /**
      * @param string $parameterName
      * @param ReservationRetryParameter[] $retryParameters
-     * @param null|IConvert $converter
-     * @return null|string
+     * @param null|IConvert $converter defaults to LowerCaseConverter
+     * @return mixed the converter's result, for example a bool from
+     *         BooleanConverter; null when the parameter is not present
      */
     public static function GetValue($parameterName, $retryParameters, $converter = null)
     {
@@ -71,7 +73,7 @@ class ReservationRetryParameter
     }
 
     /**
-     * @return string
+     * @return string|bool
      */
     public function Value()
     {

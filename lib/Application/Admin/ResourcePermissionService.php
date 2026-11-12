@@ -16,7 +16,8 @@ interface IResourcePermissionService
      * full-access and view-only resource ID arrays, filtering to only resources
      * the admin can manage.
      *
-     * @param string[]|null $submittedPermissions raw form data
+     * @param array<mixed>|null $submittedPermissions raw form data; entries
+     *        that are not well-formed strings are skipped
      * @param int[] $managedResourceIds resources the admin can manage
      * @return array{full: int[], view: int[]}
      */

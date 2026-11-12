@@ -10,7 +10,7 @@ interface IResourceService
      * @param int $scheduleId
      * @param bool $includeInaccessibleResources
      * @param UserSession $user
-     * @param ScheduleResourceFilter|null $filter
+     * @param IScheduleResourceFilter|null $filter
      * @return array|ResourceDto[]
      */
     public function GetScheduleResources($scheduleId, $includeInaccessibleResources, UserSession $user, $filter = null);
@@ -19,7 +19,7 @@ interface IResourceService
      * Gets resource list
      * @param bool $includeInaccessibleResources
      * @param UserSession $user
-     * @param ScheduleResourceFilter|null $filter
+     * @param IScheduleResourceFilter|null $filter
      * @param null $pageNumber
      * @param null $pageSize
      * @return array|ResourceDto[]

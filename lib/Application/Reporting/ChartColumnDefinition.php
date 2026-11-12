@@ -24,7 +24,7 @@ class ChartGroup
 class ChartColumnDefinition
 {
     /**
-     * @var ChartColumnType|string
+     * @var ChartColumnType|string|null null for a column that is not charted
      */
     private $chartColumnType;
     /**
@@ -37,7 +37,7 @@ class ChartColumnDefinition
     private $chartGroup;
 
     /**
-     * @param string|ChartColumnType $chartColumnType
+     * @param string|ChartColumnType|null $chartColumnType
      * @param string|null $dataColumnName
      * @param string|null|ChartGroup $chartGroup
      */
@@ -87,7 +87,7 @@ class ChartColumnDefinition
     }
 
     /**
-     * @return ChartColumnType|string
+     * @return ChartColumnType|string|null
      */
     public function ChartColumnType()
     {

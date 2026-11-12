@@ -3,7 +3,7 @@
 interface IReservationNotificationFactory
 {
     /**
-     * @param ReservationAction $reservationAction
+     * @param string $reservationAction one of the ReservationAction constants
      * @param UserSession $userSession
      * @return IReservationNotificationService
      */

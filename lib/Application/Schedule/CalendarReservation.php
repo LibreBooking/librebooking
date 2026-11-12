@@ -176,7 +176,7 @@ class CalendarReservation
      * @param array|ReservationItemView[] $reservations
      * @param array|BlackoutItemView[] $blackouts
      * @param array|ReservableCalendarSlot[] $availablePeriods
-     * @param array|ResourceDto[] $resources
+     * @param IResource[] $resources
      * @param UserSession $userSession
      * @param bool $groupSeriesByResource
      * @param SlotLabelFactory|null $factory
@@ -199,7 +199,6 @@ class CalendarReservation
         $knownSeries = [];
 
         $resourceMap = [];
-        /** @var ResourceDto $resource */
         foreach ($resources as $resource) {
             $resourceMap[$resource->GetResourceId()] = $resource->GetName();
         }

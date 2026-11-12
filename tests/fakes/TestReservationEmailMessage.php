@@ -24,7 +24,7 @@ class TestReservationEmailMessage extends ReservationEmailMessage
 
     /**
      * @param Reservation $currentInstance
-     * @param Attribute[] $attributeValues
+     * @param LBAttribute[] $attributeValues
      */
     public function PopulateIcsAttachmentForTest($currentInstance, $attributeValues = [])
     {

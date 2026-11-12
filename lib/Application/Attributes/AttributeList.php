@@ -28,7 +28,7 @@ class AttributeList implements IEntityAttributeList
     private $labels = [];
 
     /**
-     * @var array|string[]
+     * @var array<int, array<int, LBAttribute>> entity id => attribute id => value
      */
     private $values = [];
 
