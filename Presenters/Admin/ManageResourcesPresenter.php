@@ -499,7 +499,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function ChangeSchedule()
     {
-        $scheduleId = $this->page->GetValue();
+        $scheduleId = $this->page->GetIntValue();
         if (!empty($scheduleId)) {
             $resourceId = $this->page->GetResourceId();
             Log::Debug('Changing schedule for resource %s', $resourceId);
@@ -516,7 +516,7 @@ class ManageResourcesPresenter extends ActionPresenter
         Log::Debug('Changing resource admin for resource %s', $resourceId);
 
         $resource = $this->resourceRepository->LoadById($resourceId);
-        $adminGroupId = $this->page->GetValue();
+        $adminGroupId = $this->page->GetIntValue();
         $resource->SetAdminGroupId($adminGroupId);
         $this->resourceRepository->Update($resource);
     }
@@ -573,7 +573,7 @@ class ManageResourcesPresenter extends ActionPresenter
     public function ChangeSortOrder()
     {
         $resourceId = $this->page->GetResourceId();
-        $sortOrder = $this->page->GetValue();
+        $sortOrder = $this->page->GetIntValue();
         Log::Debug('Changing sort order for resource %s', $resourceId);
 
         $resource = $this->resourceRepository->LoadById($resourceId);
@@ -583,7 +583,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
     public function ChangeResourceType()
     {
-        $resourceTypeId = $this->page->GetValue();
+        $resourceTypeId = $this->page->GetIntValue();
         $resourceId = $this->page->GetResourceId();
         Log::Debug('Changing resource type for resource %s', $resourceId);
         $resource = $this->resourceRepository->LoadById($resourceId);
@@ -756,16 +756,19 @@ class ManageResourcesPresenter extends ActionPresenter
                     $resource->SetMaxNotice(null);
                 }
                 if ($this->ChangingDropDown($allowMultiDay)) {
-                    $resource->SetAllowMultiday($allowMultiDay);
+                    $resource->SetAllowMultiday(value: $allowMultiDay === 1);
                 }
                 if ($this->ChangingDropDown($requiresApproval)) {
-                    $resource->SetRequiresApproval($requiresApproval);
+                    $resource->SetRequiresApproval(value: $requiresApproval === 1);
                 }
                 if ($this->ChangingDropDown($autoAssign)) {
-                    $resource->SetAutoAssign($autoAssign);
+                    $resource->SetAutoAssign(value: $autoAssign === 1);
                 }
                 if ($this->ChangingDropDown($enableCheckin)) {
-                    $resource->SetCheckin($enableCheckin, $this->page->GetAutoReleaseMinutes());
+                    $resource->SetCheckin(
+                        enabled: $enableCheckin === 1,
+                        autoReleaseMinutes: $this->page->GetAutoReleaseMinutes()
+                    );
                 }
                 if ($this->ChangingDropDown($allowSubscription)) {
                     if ($allowSubscription) {
@@ -785,7 +788,7 @@ class ManageResourcesPresenter extends ActionPresenter
                 if ($unlimitedCapacity) {
                     $resource->SetMaxParticipants(null);
                 }
-                if (!$unlimitedCapacity && $maxCapacity != '') {
+                if (!$unlimitedCapacity && $maxCapacity !== null) {
                     $resource->SetMaxParticipants($maxCapacity);
                 }
 

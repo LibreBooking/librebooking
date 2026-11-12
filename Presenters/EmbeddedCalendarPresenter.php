@@ -63,7 +63,7 @@ class EmbeddedCalendarPresenter
     }
 
     /**
-     * @param int $schedulePublicId
+     * @param string|null $schedulePublicId
      * @return Schedule|null
      */
     private function GetSchedule($schedulePublicId)
@@ -78,7 +78,7 @@ class EmbeddedCalendarPresenter
     }
 
     /**
-     * @param int $resourcePublicId
+     * @param string|null $resourcePublicId
      * @return BookableResource|null
      */
     private function GetResource($resourcePublicId)

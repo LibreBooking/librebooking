@@ -495,9 +495,9 @@ class ManageReservationsPresenterTest extends TestBase
      * @param int $resourceId
      * @param int $userId
      * @param int $statusId
-     * @param null $resourceStatusId
-     * @param null $resourceStatusReasonId
-     * @param Attribute[] $attributes
+     * @param int|null $resourceStatusId
+     * @param int|null $resourceStatusReasonId
+     * @param LBAttribute[]|null $attributes
      * @return ReservationFilter
      */
     private function GetExpectedFilter(

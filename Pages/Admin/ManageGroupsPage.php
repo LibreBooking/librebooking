@@ -100,9 +100,9 @@ interface IManageGroupsPage extends IActionPage
 
     /**
      * @param GroupItemView[] $groups
-     * @param UserItemView[] $users
-     * @param GroupResourcePermission[] $permissionsWrite
-     * @param GroupResourcePermission[] $permissionsRead
+     * @param array<int, UserItemView[]> $users members, indexed by group id
+     * @param array<int, GroupResourcePermission[]> $permissionsWrite full permissions, indexed by group id
+     * @param array<int, GroupResourcePermission[]> $permissionsRead read-only permissions, indexed by group id
      */
     public function Export($groups, $users, $permissionsWrite, $permissionsRead);
 

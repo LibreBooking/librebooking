@@ -945,7 +945,7 @@ class ResourceDto implements IBookableResource
     public $CanBook;
 
     /**
-     * @var null|int
+     * @var int
      */
     public $ScheduleId;
 
@@ -1032,7 +1032,7 @@ class ResourceDto implements IBookableResource
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function GetScheduleId()
     {

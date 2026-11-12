@@ -8,7 +8,7 @@ require_once(ROOT_DIR . 'Pages/Admin/ManageSchedulesPage.php');
 class ManageSchedulesPresenterTest extends TestBase
 {
     /**
-     * @var IUpdateSchedulePage|PHPUnit\Framework\MockObject\MockObject
+     * @var IManageSchedulesPage|PHPUnit\Framework\MockObject\MockObject
      */
     private $page;
 
@@ -132,8 +132,8 @@ class ManageSchedulesPresenterTest extends TestBase
     {
         $sourceScheduleId = 198;
         $name = 'new name';
-        $startDay = '3';
-        $daysVisible = '7';
+        $startDay = 3;
+        $daysVisible = 7;
 
         $expectedSchedule = new Schedule(null, $name, false, $startDay, $daysVisible);
 

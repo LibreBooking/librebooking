@@ -30,7 +30,7 @@ class ManagePaymentsPresenterTest extends TestBase
 
     public function testPageLoadSetsCurrentCreditValues()
     {
-        $creditCost = new CreditCost(44.4, 'USD');
+        $creditCost = new CreditCost(count: 1, cost: 44.4, currency: 'USD');
         $this->paymentRepository->_CreditCost = [$creditCost];
 
         $this->presenter->PageLoad();

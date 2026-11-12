@@ -46,8 +46,8 @@ interface IPaymentRepository
     public function GetStripeGateway();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param int $userId
      * @param string $sortField
      * @param string $sortDirection
@@ -151,8 +151,8 @@ class PaymentRepository implements IPaymentRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param int $userId
      * @param string $sortField
      * @param string $sortDirection

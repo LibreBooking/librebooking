@@ -6,8 +6,8 @@ require_once(ROOT_DIR . 'Domain/Access/PageableDataStore.php');
 interface ICreditRepository
 {
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param int $userId
      * @param string $sortField
      * @param string $sortDirection

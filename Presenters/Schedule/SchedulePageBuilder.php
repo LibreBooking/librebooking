@@ -4,14 +4,14 @@ interface ISchedulePageBuilder
 {
     /**
      * @param ISchedulePage $page
-     * @param ISchedule[] $schedules
+     * @param Schedule[] $schedules
      * @param ISchedule $currentSchedule
      */
     public function BindSchedules(ISchedulePage $page, $schedules, $currentSchedule);
 
     /**
      * @param ISchedulePage $page
-     * @param ISchedule[] $schedules
+     * @param Schedule[] $schedules
      * @param UserSession $user
      * @return Schedule
      */
@@ -70,8 +70,8 @@ interface ISchedulePageBuilder
     /**
      * @param ISchedulePage $page
      * @param ScheduleResourceFilter $filter
-     * @param Attribute[] $resourceCustomAttributes
-     * @param Attribute[] $resourceTypeCustomAttributes
+     * @param LBAttribute[] $resourceCustomAttributes
+     * @param LBAttribute[] $resourceTypeCustomAttributes
      */
     public function BindResourceFilter(
         ISchedulePage $page,
@@ -85,7 +85,7 @@ class SchedulePageBuilder implements ISchedulePageBuilder
 {
     /**
      * @param ISchedulePage $page
-     * @param ISchedule[] $schedules
+     * @param Schedule[] $schedules
      * @param ISchedule $currentSchedule
      */
     public function BindSchedules(ISchedulePage $page, $schedules, $currentSchedule)
@@ -107,7 +107,7 @@ class SchedulePageBuilder implements ISchedulePageBuilder
 
     /**
      * @param ISchedulePage $page
-     * @param ISchedule[] $schedules
+     * @param Schedule[] $schedules
      * @param UserSession $user
      * @return Schedule
      */

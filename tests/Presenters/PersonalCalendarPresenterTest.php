@@ -60,8 +60,8 @@ class PersonalCalendarPresenterTest extends TestBase
         $resourceName = 'rn';
         $defaultScheduleId = 12;
 
-        $r1 = new FakeBookableResource(1, 'dude1');
-        $r2 = new FakeBookableResource($resourceId, $resourceName);
+        $r1 = new TestResourceDto(id: 1, name: 'dude1');
+        $r2 = new TestResourceDto(id: $resourceId, name: $resourceName);
         $resources = [$r1, $r2];
 
         $resourceGroupTree = new ResourceGroupTree();

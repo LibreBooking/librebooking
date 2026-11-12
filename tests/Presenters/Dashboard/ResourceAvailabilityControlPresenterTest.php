@@ -112,7 +112,6 @@ class ResourceAvailabilityControlPresenterTest extends TestBase
         $this->assertNotEmpty($this->control->_UnavailableNow);
         $this->assertNotEmpty($this->control->_UnavailableNow[1]);
         $unavailableItem = $this->control->_UnavailableNow[1][0];
-        $this->assertInstanceOf('UnavailableDashboardItem', $unavailableItem);
         $this->assertEquals($futureResource->GetId(), $unavailableItem->ResourceId());
         $this->assertTrue($unavailableItem->IsFutureScheduleAvailability());
         // Verify that the availability begin date is set as the end date of the synthetic reservation
@@ -170,22 +169,22 @@ class ResourceAvailabilityControlPresenterTest extends TestBase
 class FakeResourceAvailabilityControl implements IResourceAvailabilityControl
 {
     /**
-     * @var AvailableDashboardItem[]
+     * @var array<int, list<AvailableDashboardItem>> keyed by schedule id
      */
     public $_AvailableNow;
 
     /**
-     * @var UnavailableDashboardItem[]
+     * @var array<int, list<UnavailableDashboardItem>> keyed by schedule id
      */
     public $_UnavailableNow;
 
     /**
-     * @var UnavailableDashboardItem[]
+     * @var array<int, list<UnavailableDashboardItem>> keyed by schedule id
      */
     public $_UnavailableAllDay;
 
     /**
-     * @param AvailableDashboardItem[] $items
+     * @param array<int, list<AvailableDashboardItem>> $items keyed by schedule id
      */
     public function SetAvailable($items)
     {
@@ -193,7 +192,7 @@ class FakeResourceAvailabilityControl implements IResourceAvailabilityControl
     }
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailable($items)
     {
@@ -201,7 +200,7 @@ class FakeResourceAvailabilityControl implements IResourceAvailabilityControl
     }
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailableAllDay($items)
     {

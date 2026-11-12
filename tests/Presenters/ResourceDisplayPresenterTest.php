@@ -133,7 +133,11 @@ class ResourceDisplayPresenterTest extends TestBase
 
         $this->presenter->reservationCreateHandler = $this->reservationCreateHandler;
         $this->presenter->DisplayResource($publicId, null);
-        $expectedDate = DateRange::Create($now->ToTimezone($timezone)->GetDate()->ToUtc(), $now->ToTimezone($timezone)->GetDate()->AddDays(1)->ToUtc(), 'UTC');
+        $expectedDate = new DateRange(
+            begin: $now->ToTimezone($timezone)->GetDate()->ToUtc(),
+            end: $now->ToTimezone($timezone)->GetDate()->AddDays(1)->ToUtc(),
+            timezone: 'UTC'
+        );
 
         $this->assertEquals(new DailyLayout(
             $this->reservationService->_ReservationListing,
@@ -766,9 +770,9 @@ class TestResourceDisplayPage extends FakePageBase implements IResourceDisplayPa
         // TODO: Implement GetDataRequest() method.
     }
 
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return '';
+        return $this->_ResourceId;
     }
 
     public function DisplayLogin()

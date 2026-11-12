@@ -71,7 +71,7 @@ interface IManagePaymentsPage extends IActionPage
     public function SetPayPalSettings($enabled, $clientId, $secret, $environment);
 
     /**
-     * @param string $enabled
+     * @param bool $enabled
      * @param string $publishableKey
      * @param string $secretKey
      */
@@ -107,7 +107,7 @@ interface IManagePaymentsPage extends IActionPage
     public function BindTransactionLogView(TransactionLogView $transactionLogView);
 
     /**
-     * @param int $wasIssued
+     * @param bool $wasIssued
      */
     public function BindRefundIssued($wasIssued);
 }

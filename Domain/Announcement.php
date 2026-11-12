@@ -44,7 +44,7 @@ class Announcement
     }
 
     /**
-     * @return int
+     * @return int|null null when the announcement has no priority
      */
     public function Priority()
     {
@@ -111,13 +111,13 @@ class Announcement
      * @param string $text
      * @param Date $start
      * @param Date $end
-     * @param int $priority
+     * @param int|null $priority null for no priority
      * @param int[] $groupIds
      * @param int[] $resourceIds
      * @param int $displayPage
      * @return Announcement
      */
-    public static function Create($text, Date $start, Date $end, $priority, $groupIds, $resourceIds, $displayPage)
+    public static function Create($text, Date $start, Date $end, ?int $priority, $groupIds, $resourceIds, $displayPage)
     {
         if (empty($priority)) {
             $priority = null;
@@ -144,9 +144,9 @@ class Announcement
     }
 
     /**
-     * @param int $priority
+     * @param int|null $priority null for no priority
      */
-    public function SetPriority($priority)
+    public function SetPriority(?int $priority)
     {
         $this->Priority = $priority;
     }

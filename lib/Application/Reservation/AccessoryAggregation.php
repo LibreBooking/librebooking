@@ -17,7 +17,7 @@ class AccessoryAggregation
     private $accessoryQuantity = [];
 
     /**
-     * @param array|AccessoryToCheck[] $accessories
+     * @param AccessoryToCheck[]|Accessory[] $accessories only their ids are used
      * @param DateRange $duration
      */
     public function __construct($accessories, $duration)

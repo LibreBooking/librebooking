@@ -13,7 +13,7 @@ interface IResource extends IPermissibleResource
     public function GetName();
 
     /**
-     * @return int
+     * @return int|null null when the resource has no admin group
      */
     public function GetAdminGroupId();
 
@@ -583,7 +583,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @return int
+     * @return int|null null when there is no participant limit
      */
     public function GetMaxParticipants()
     {
@@ -591,7 +591,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param int $value
+     * @param int|null $value null or 0 for no participant limit
      */
     public function SetMaxParticipants($value)
     {
@@ -723,7 +723,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @return int
+     * @return int|null null when the resource has no admin group
      */
     public function GetAdminGroupId()
     {
@@ -731,7 +731,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param int $adminGroupId
+     * @param int|null $adminGroupId null or 0 for no admin group
      */
     public function SetAdminGroupId($adminGroupId)
     {

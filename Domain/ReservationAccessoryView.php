@@ -13,7 +13,7 @@ class ReservationAccessoryView
     public $QuantityReserved;
 
     /**
-     * @var int
+     * @var int|null null when the quantity is unlimited or not known
      */
     public $QuantityAvailable;
 
@@ -26,7 +26,7 @@ class ReservationAccessoryView
      * @param int $accessoryId
      * @param int $quantityReserved
      * @param string $accessoryName
-     * @param int $quantityAvailable
+     * @param int|null $quantityAvailable null when the quantity is unlimited or not known
      */
     public function __construct($accessoryId, $quantityReserved, $accessoryName, $quantityAvailable)
     {

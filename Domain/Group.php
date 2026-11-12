@@ -86,12 +86,9 @@ class Group
         $this->name = $groupName;
     }
 
-    /**
-     * @param int $isDefault
-     */
-    public function ChangeDefault($isDefault)
+    public function ChangeDefault(bool $isDefault)
     {
-        $this->isDefault = $isDefault;
+        $this->isDefault = intval($isDefault);
     }
 
     /**

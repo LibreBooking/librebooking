@@ -197,7 +197,7 @@ class ManageScheduleService
 
     /**
      * @param int $scheduleId
-     * @param int $adminGroupId
+     * @param int|null $adminGroupId null for no admin group
      */
     public function ChangeAdminGroup($scheduleId, $adminGroupId)
     {
@@ -207,8 +207,8 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @return PageableData|BookableResource[]
      */
     public function GetList($pageNumber, $pageSize)
@@ -508,7 +508,11 @@ class ManageSchedulesPresenter extends ActionPresenter
      */
     public function ChangeStartDay()
     {
-        $this->manageSchedulesService->ChangeSettings($this->page->GetScheduleId(), $this->page->GetValue(), null);
+        $this->manageSchedulesService->ChangeSettings(
+            scheduleId: $this->page->GetScheduleId(),
+            startDay: $this->page->GetIntValue(),
+            daysVisible: null
+        );
     }
 
     /**
@@ -516,7 +520,11 @@ class ManageSchedulesPresenter extends ActionPresenter
      */
     public function ChangeDaysVisible()
     {
-        $this->manageSchedulesService->ChangeSettings($this->page->GetScheduleId(), null, $this->page->GetValue());
+        $this->manageSchedulesService->ChangeSettings(
+            scheduleId: $this->page->GetScheduleId(),
+            startDay: null,
+            daysVisible: $this->page->GetIntValue()
+        );
     }
 
     /**
@@ -550,7 +558,10 @@ class ManageSchedulesPresenter extends ActionPresenter
      */
     public function ChangeAdminGroup()
     {
-        $this->manageSchedulesService->ChangeAdminGroup($this->page->GetScheduleId(), $this->page->GetValue());
+        $this->manageSchedulesService->ChangeAdminGroup(
+            scheduleId: $this->page->GetScheduleId(),
+            adminGroupId: $this->page->GetIntValue()
+        );
     }
 
     /**

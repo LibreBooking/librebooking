@@ -84,9 +84,9 @@ interface IReservationService
 {
     /**
      * @param DateRange $dateRangeUtc range of dates to search against in UTC
-     * @param int $scheduleId
+     * @param int|int[]|null $scheduleId
      * @param string $targetTimezone timezone to convert the results to
-     * @param null|int[] $resourceIds
+     * @param int|int[]|null $resourceIds
      * @return IReservationListing
      */
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null);
