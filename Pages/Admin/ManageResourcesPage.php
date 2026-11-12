@@ -61,23 +61,23 @@ interface IUpdateResourcePage
     public function GetAllowMultiday(): bool;
 
     /**
-     * @return string
+     * @return int|null 1 for yes, 0 for no, -1 to leave unchanged
      */
-    public function GetBulkAllowMultiday();
+    public function GetBulkAllowMultiday(): ?int;
 
     public function GetRequiresApproval(): bool;
 
     /**
-     * @return string
+     * @return int|null 1 for yes, 0 for no, -1 to leave unchanged
      */
-    public function GetBulkRequiresApproval();
+    public function GetBulkRequiresApproval(): ?int;
 
     public function GetAutoAssign(): bool;
 
     /**
-     * @return string
+     * @return int|null 1 for yes, 0 for no, -1 to leave unchanged
      */
-    public function GetBulkAutoAssign();
+    public function GetBulkAutoAssign(): ?int;
 
     /**
      * @return string
@@ -109,10 +109,7 @@ interface IUpdateResourcePage
      */
     public function GetEndNoticeMinutes();
 
-    /**
-     * @return string
-     */
-    public function GetMaxParticipants();
+    public function GetMaxParticipants(): ?int;
 
     public function GetAdminGroupId(): ?int;
 
@@ -265,6 +262,11 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetValue();
 
     /**
+     * @return int|null the submitted value as an integer, or null when it is not one
+     */
+    public function GetIntValue(): ?int;
+
+    /**
      * @return string
      */
     public function GetName();
@@ -319,10 +321,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
 
     public function GetBulkEnableCheckin(): ?int;
 
-    /**
-     * @return string
-     */
-    public function GetAutoReleaseMinutes();
+    public function GetAutoReleaseMinutes(): ?int;
 
     public function GetCredits(): ?float;
 
@@ -538,6 +537,11 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::VALUE);
     }
 
+    public function GetIntValue(): ?int
+    {
+        return $this->GetFormInt(key: FormKeys::VALUE);
+    }
+
     public function GetName()
     {
         return $this->GetForm(FormKeys::NAME);
@@ -652,12 +656,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::MAX_NOTICE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetMaxParticipants()
+    public function GetMaxParticipants(): ?int
     {
-        return $this->GetForm(FormKeys::MAX_PARTICIPANTS);
+        return $this->GetFormInt(key: FormKeys::MAX_PARTICIPANTS);
     }
 
     public function GetAdminGroupId(): ?int
@@ -949,9 +950,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetFormInt(key: FormKeys::ENABLE_CHECK_IN);
     }
 
-    public function GetAutoReleaseMinutes()
+    public function GetAutoReleaseMinutes(): ?int
     {
-        return $this->GetForm(FormKeys::AUTO_RELEASE_MINUTES);
+        return $this->GetFormInt(key: FormKeys::AUTO_RELEASE_MINUTES);
     }
 
     public function GetCredits(): ?float
@@ -978,28 +979,19 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Display('Admin/Resources/show_resource_qr.tpl');
     }
 
-    /**
-     * @return string
-     */
-    public function GetBulkAllowMultiday()
+    public function GetBulkAllowMultiday(): ?int
     {
-        return $this->GetForm(FormKeys::ALLOW_MULTIDAY);
+        return $this->GetFormInt(key: FormKeys::ALLOW_MULTIDAY);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBulkRequiresApproval()
+    public function GetBulkRequiresApproval(): ?int
     {
-        return $this->GetForm(FormKeys::REQUIRES_APPROVAL);
+        return $this->GetFormInt(key: FormKeys::REQUIRES_APPROVAL);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBulkAutoAssign()
+    public function GetBulkAutoAssign(): ?int
     {
-        return $this->GetForm(FormKeys::AUTO_ASSIGN);
+        return $this->GetFormInt(key: FormKeys::AUTO_ASSIGN);
     }
 
     public function GetImportFile()

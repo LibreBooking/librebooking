@@ -20,6 +20,7 @@ class CreditCost
     private $currency;
 
     /**
+     * @param int $count number of credits for the given cost
      * @param float $cost
      * @param string $currency
      */

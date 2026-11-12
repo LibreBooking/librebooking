@@ -49,7 +49,7 @@ class UserCreditsPresenterTest extends TestBase
         $currentCredits = 10.5;
         $this->userRepository->_User = new FakeUser();
         $this->userRepository->_User->WithCredits($currentCredits);
-        $this->paymentRepository->_CreditCost = [new CreditCost(1, '10.11')];
+        $this->paymentRepository->_CreditCost = [new CreditCost(count: 1, cost: 10.11)];
 
         $this->presenter->PageLoad($this->fakeUser);
 

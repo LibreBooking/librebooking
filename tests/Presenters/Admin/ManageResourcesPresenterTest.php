@@ -134,18 +134,52 @@ class ManageResourcesPresenterTest extends TestBase
         return $resource;
     }
 
-    private function ConfigureBulkUpdate(BookableResource $resource, int $dropdownValue): void
+    public function testBulkUpdateTurnsYesNoFieldsOn(): void
+    {
+        $resource = $this->CreateResourceForBulkUpdate();
+        $this->ConfigureBulkUpdate(resource: $resource, dropdownValue: -1, yesNoValue: 1);
+
+        $this->presenter->BulkUpdate();
+
+        $this->assertTrue($resource->GetAllowMultiday());
+        $this->assertSame(1, $resource->GetRequiresApproval());
+        $this->assertSame(1, $resource->GetAutoAssign());
+        $this->assertTrue($resource->IsCheckInEnabled());
+    }
+
+    public function testBulkUpdateTurnsYesNoFieldsOff(): void
+    {
+        $resource = $this->CreateResourceForBulkUpdate();
+        $resource->SetAllowMultiday(value: true);
+        $resource->SetRequiresApproval(value: true);
+        $resource->SetAutoAssign(value: true);
+        $resource->SetCheckin(enabled: true, autoReleaseMinutes: null);
+        $this->ConfigureBulkUpdate(resource: $resource, dropdownValue: -1, yesNoValue: 0);
+
+        $this->presenter->BulkUpdate();
+
+        $this->assertFalse($resource->GetAllowMultiday());
+        $this->assertSame(0, $resource->GetRequiresApproval());
+        $this->assertSame(0, $resource->GetAutoAssign());
+        $this->assertFalse($resource->IsCheckInEnabled());
+    }
+
+    /**
+     * @param int $dropdownValue value for the schedule, resource type, admin group and status dropdowns
+     * @param int $yesNoValue value for the multi-day, approval, auto-assign and check-in dropdowns
+     */
+    private function ConfigureBulkUpdate(BookableResource $resource, int $dropdownValue, int $yesNoValue = -1): void
     {
         $this->page->method('GetBulkUpdateResourceIds')->willReturn([1]);
         $this->page->method('GetAttributes')->willReturn([]);
         foreach (['GetScheduleId', 'GetResourceTypeId', 'GetAdminGroupId', 'GetStatusId'] as $method) {
             $this->page->method($method)->willReturn($dropdownValue);
         }
-        foreach (['GetBulkAllowMultiday', 'GetBulkRequiresApproval', 'GetBulkAutoAssign', 'GetAllowSubscriptions'] as $method) {
-            $this->page->method($method)->willReturn('-1');
+        foreach (['GetBulkAllowMultiday', 'GetBulkRequiresApproval', 'GetBulkAutoAssign', 'GetBulkEnableCheckin'] as $method) {
+            $this->page->method($method)->willReturn($yesNoValue);
         }
-        $this->page->method('GetBulkEnableCheckin')->willReturn(-1);
         $this->page->method('GetBulkAllowConcurrentReservations')->willReturn(-1);
+        $this->page->method('GetAllowSubscriptions')->willReturn('-1');
         $this->resourceRepository->method('LoadById')->willReturn($resource);
         $this->resourceRepository->expects($this->once())->method('Update')->with($this->identicalTo($resource));
     }

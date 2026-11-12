@@ -8,10 +8,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
 {
     public function DisplayLogin();
 
-    /**
-     * @return string
-     */
-    public function GetResourceId();
+    public function GetResourceId(): ?int;
 
     /**
      * @return string
@@ -198,9 +195,9 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $this->presenter->PageLoad();
     }
 
-    public function GetResourceId()
+    public function GetResourceId(): ?int
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return $this->GetFormInt(key: FormKeys::RESOURCE_ID);
     }
 
     public function DisplayLogin()

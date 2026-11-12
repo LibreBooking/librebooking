@@ -38,7 +38,7 @@ class Url
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|int $value
      * @return Url
      */
     public function AddQueryString($name, $value)

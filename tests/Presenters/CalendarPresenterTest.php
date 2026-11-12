@@ -79,8 +79,8 @@ class CalendarPresenterTest extends TestBase
         //$res = new ScheduleReservation(1, $startDate, $endDate, null, $summary, $resourceId, $userId, $fname, $lname, $referenceNumber, ReservationStatus::Created);
         $res = new ReservationItemView($referenceNumber, $startDate, $endDate, 'resource name', $resourceId, 1, null, null, $summary, null, $fname, $lname, $userId);
 
-        $r1 = new FakeBookableResource(1, 'dude1');
-        $r2 = new FakeBookableResource($resourceId, $resourceName);
+        $r1 = new TestResourceDto(id: 1, name: 'dude1');
+        $r2 = new TestResourceDto(id: $resourceId, name: $resourceName);
 
         $resources = [$r1, $r2];
         /** @var Schedule[] $schedules */

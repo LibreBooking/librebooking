@@ -49,7 +49,7 @@ class FakeResourceService implements IResourceService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int|null $scheduleId null for all schedules
      * @param UserSession $user
      * @return ResourceGroupTree
      */

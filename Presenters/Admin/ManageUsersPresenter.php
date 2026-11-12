@@ -116,7 +116,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     }
 
     /**
-     * @param UserRepository $userRepository
+     * @param IUserRepository $userRepository
      */
     public function SetUserRepository($userRepository)
     {
@@ -125,7 +125,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     /**
      * @param IManageUsersPage $page
-     * @param UserRepository $userRepository
+     * @param IUserRepository $userRepository
      * @param IResourceRepository $resourceRepository
      * @param PasswordEncryption $passwordEncryption
      * @param IManageUsersService $manageUsersService

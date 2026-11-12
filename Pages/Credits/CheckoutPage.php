@@ -24,7 +24,7 @@ interface ICheckoutPage extends IActionPage
     public function SetPayPalSettings($enabled, $clientId, $environment);
 
     /**
-     * @param string $enabled
+     * @param bool $enabled
      * @param string $publishableKey
      */
     public function SetStripeSettings($enabled, $publishableKey);

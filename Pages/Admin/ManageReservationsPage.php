@@ -257,7 +257,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
     public function GetTermsSource();
 
     /**
-     * @param object $terms
+     * @param array{text: string, url: string, filename: string, applicability: string}|null $terms null when no terms of service are set
      */
     public function BindTerms($terms);
 

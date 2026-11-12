@@ -9,17 +9,17 @@ require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 interface IResourceAvailabilityControl
 {
     /**
-     * @param AvailableDashboardItem[] $items
+     * @param array<int, list<AvailableDashboardItem>> $items keyed by schedule id
      */
     public function SetAvailable($items);
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailable($items);
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailableAllDay($items);
 
@@ -221,7 +221,7 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
     }
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailable($items)
     {
@@ -229,7 +229,7 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
     }
 
     /**
-     * @param UnavailableDashboardItem[] $items
+     * @param array<int, list<UnavailableDashboardItem>> $items keyed by schedule id
      */
     public function SetUnavailableAllDay($items)
     {

@@ -525,7 +525,7 @@ class BlackoutResource implements IResource
     }
 
     /**
-     * @return int
+     * @return int|null null when the resource has no admin group
      */
     public function GetAdminGroupId()
     {

@@ -18,8 +18,8 @@ class CalendarFilters
     /**
      * @param array|Schedule[] $schedules
      * @param array|ResourceDto[] $resources
-     * @param int $selectedScheduleId
-     * @param int $selectedResourceId
+     * @param int|null $selectedScheduleId null when no schedule is selected
+     * @param int|null $selectedResourceId null when no resource is selected
      * @param ResourceGroupTree $resourceGroupTree
      */
     public function __construct($schedules, $resources, $selectedScheduleId, $selectedResourceId, ResourceGroupTree $resourceGroupTree)

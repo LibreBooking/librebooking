@@ -70,8 +70,8 @@ interface IScheduleRepository
     public function GetCustomLayoutPeriodsInRange(Date $start, Date $end, $scheduleId);
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string|null $sortField
      * @param string|null $sortDirection
      * @param ISqlFilter $filter
@@ -81,9 +81,9 @@ interface IScheduleRepository
 
     /**
      * @param int $scheduleId
-     * @param ScheduleLayout $layout
+     * @param IScheduleLayout $layout
      */
-    public function UpdatePeakTimes($scheduleId, ScheduleLayout $layout);
+    public function UpdatePeakTimes($scheduleId, IScheduleLayout $layout);
 
     /**
      * @param int $scheduleId
@@ -393,8 +393,8 @@ class ScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string|null $sortField
      * @param string|null $sortDirection
      * @param ISqlFilter $filter
@@ -412,7 +412,7 @@ class ScheduleRepository implements IScheduleRepository
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
-    public function UpdatePeakTimes($scheduleId, ScheduleLayout $layout)
+    public function UpdatePeakTimes($scheduleId, IScheduleLayout $layout)
     {
         ServiceLocator::GetDatabase()->Execute(new DeletePeakTimesCommand($scheduleId));
 

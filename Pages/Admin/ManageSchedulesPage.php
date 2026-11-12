@@ -14,15 +14,9 @@ interface IUpdateSchedulePage
      */
     public function GetScheduleName();
 
-    /**
-     * @return string
-     */
-    public function GetStartDay();
+    public function GetStartDay(): ?int;
 
-    /**
-     * @return string
-     */
-    public function GetDaysVisible();
+    public function GetDaysVisible(): ?int;
 
     /**
      * @return string
@@ -62,6 +56,11 @@ interface IUpdateSchedulePage
      * @return string
      */
     public function GetValue();
+
+    /**
+     * @return int|null the submitted value as an integer, or null when it is not one
+     */
+    public function GetIntValue(): ?int;
 
     /**
      * @return int
@@ -308,14 +307,14 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $this->server->GetForm(FormKeys::SCHEDULE_NAME);
     }
 
-    public function GetStartDay()
+    public function GetStartDay(): ?int
     {
-        return $this->server->GetForm(FormKeys::SCHEDULE_WEEKDAY_START);
+        return $this->GetFormInt(key: FormKeys::SCHEDULE_WEEKDAY_START);
     }
 
-    public function GetDaysVisible()
+    public function GetDaysVisible(): ?int
     {
-        return $this->server->GetForm(FormKeys::SCHEDULE_DAYS_VISIBLE);
+        return $this->GetFormInt(key: FormKeys::SCHEDULE_DAYS_VISIBLE);
     }
 
     public function GetReservableSlots()
@@ -424,6 +423,11 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     public function GetValue()
     {
         return $this->GetForm(FormKeys::VALUE);
+    }
+
+    public function GetIntValue(): ?int
+    {
+        return $this->GetFormInt(key: FormKeys::VALUE);
     }
 
     public function GetPeakWeekdays()

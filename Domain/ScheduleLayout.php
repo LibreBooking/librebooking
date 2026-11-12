@@ -79,6 +79,10 @@ interface IScheduleLayout extends ILayoutCreation
 
     public function RemovePeakTimes();
 
+    public function HasPeakTimesDefined(): bool;
+
+    public function GetPeakTimes(): ?PeakTimes;
+
     /**
      * @return bool
      */
@@ -609,7 +613,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         return new SlotCount($slots, $peakSlots);
     }
 
-    public function HasPeakTimesDefined()
+    public function HasPeakTimesDefined(): bool
     {
         return $this->peakTimes != null;
     }

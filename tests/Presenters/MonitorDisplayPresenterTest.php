@@ -114,7 +114,7 @@ class TestMonitorDisplayPage extends MonitorDisplayPage
     public $_ScheduleId;
 
     /**
-     * @var ResourceDto[]
+     * @var list<array{id: int, name: string}>
      */
     public $_ReBoundResources;
 

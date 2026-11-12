@@ -76,8 +76,8 @@ interface IResourceRepository
 
     /**
      * @param array $resourceIds
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string|null $sortField
      * @param string|null $sortDirection
      * @param ISqlFilter $filter

@@ -22,10 +22,7 @@ interface IManageAnnouncementsPage extends IActionPage
      */
     public function GetEnd();
 
-    /**
-     * @return string
-     */
-    public function GetPriority();
+    public function GetPriority(): ?int;
 
     /**
      * @return int[]
@@ -126,9 +123,9 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         return $this->GetForm(FormKeys::ANNOUNCEMENT_END);
     }
 
-    public function GetPriority()
+    public function GetPriority(): ?int
     {
-        return $this->GetForm(FormKeys::ANNOUNCEMENT_PRIORITY);
+        return $this->GetFormInt(key: FormKeys::ANNOUNCEMENT_PRIORITY);
     }
 
     public function ProcessDataRequest($dataRequest)

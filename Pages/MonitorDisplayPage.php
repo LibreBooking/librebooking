@@ -35,7 +35,7 @@ interface IMonitorDisplayPage extends IPage, IActionPage
     public function GetFormat();
 
     /**
-     * @param ResourceDto[] $resources
+     * @param list<array{id: int, name: string}> $resources
      */
     public function RebindResources($resources);
 
@@ -43,7 +43,7 @@ interface IMonitorDisplayPage extends IPage, IActionPage
      * @param DateRange $range
      * @param IDailyLayout $layout
      * @param ResourceDto[] $resources
-     * @param int $format
+     * @param string|null $format the format query string value
      */
     public function RebindSchedule(DateRange $range, IDailyLayout $layout, $resources, $format);
 }

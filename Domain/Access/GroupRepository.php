@@ -32,8 +32,8 @@ interface IGroupRepository
 interface IGroupViewRepository
 {
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string $sortField
      * @param string $sortDirection
      * @param ISqlFilter $filter
@@ -88,8 +88,8 @@ class GroupRepository implements IGroupRepository, IGroupViewRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int|null $pageNumber null for no paging
+     * @param int|null $pageSize null for no paging
      * @param string $sortField
      * @param string $sortDirection
      * @param ISqlFilter $filter

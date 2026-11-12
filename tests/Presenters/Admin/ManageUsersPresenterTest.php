@@ -83,7 +83,7 @@ class ManageUsersPresenterTest extends TestBase
 
         $resourceList = [new FakeBookableResource(1)];
 
-        $attributeList = [new FakeCustomAttribute(1, '1')];
+        $attributeList = [new FakeCustomAttribute(id: 1, isRequiredOk: true)];
 
         $user = new FakeUser();
 
