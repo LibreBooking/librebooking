@@ -29,6 +29,9 @@ class AnonymousResourceExcludedRule implements IReservationValidationRule
             }
         }
 
-        return new ReservationRuleResult(false);
+        return new ReservationRuleResult(
+            isValid: false,
+            errorMessage: Resources::GetInstance()->GetString('NoResourcePermission')
+        );
     }
 }
