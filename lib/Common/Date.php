@@ -914,6 +914,12 @@ class DateDiff
 
         if ($hasTime) {
             $parts = explode(':', $timeString);
+            foreach ($parts as $part) {
+                if (!ctype_digit($part)) {
+                    throw new Exception('Time must be a valid time HH:mm or DD:HH:mm');
+                }
+            }
+            $parts = array_map(callback: 'intval', array: $parts);
 
             if (count($parts) == 3) {
                 $day = $parts[0];

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class DateTest extends TestBase
 {
     private $datestring;
@@ -480,6 +482,37 @@ class DateTest extends TestBase
         $this->assertEquals(0, DateDiff::FromTimeString('dhm')->TotalSeconds());
         $this->assertEquals(0, DateDiff::FromTimeString('hm')->TotalSeconds());
         $this->assertEquals(0, DateDiff::FromTimeString('dm')->TotalSeconds());
+    }
+
+    public function testCanGetDifferenceFromColonSeparatedTime()
+    {
+        $this->assertSame((1 * 60 * 60) + (30 * 60), DateDiff::FromTimeString('1:30')->TotalSeconds());
+        $this->assertSame(
+            (2 * 24 * 60 * 60) + (1 * 60 * 60) + (30 * 60),
+            DateDiff::FromTimeString('2:01:30')->TotalSeconds()
+        );
+    }
+
+    #[DataProvider('colonSeparatedTimesWithNonNumericParts')]
+    public function testRejectsColonSeparatedTimeWithNonNumericParts(string $timeString)
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Time must be a valid time HH:mm or DD:HH:mm');
+
+        DateDiff::FromTimeString($timeString);
+    }
+
+    /**
+     * @return array<string, array{0:string}>
+     */
+    public static function colonSeparatedTimesWithNonNumericParts(): array
+    {
+        return [
+            'letters' => ['1:xx'],
+            'empty part' => [':30'],
+            'trailing letters' => ['1:30x'],
+            'negative part' => ['1:-30'],
+        ];
     }
 
     public function testDateRangeOverlapsIfStartsWithinOrEndsWithin()
