@@ -184,8 +184,10 @@ function GroupManagement(opt) {
       elements.permissionsForm.find('.injected-permission').remove();
     };
 
-    var hidePermissionsDialog = function () {
-      elements.permissionsDialog.modal('hide');
+    var hideDialog = function (dialog) {
+      return function () {
+        dialog.modal('hide');
+      };
     };
 
     elements.permissionsDialog.on('hidden.bs.modal', cleanupPermissionsForm);
@@ -242,7 +244,7 @@ function GroupManagement(opt) {
     ConfigureAsyncForm(
       elements.permissionsForm,
       getSubmitCallback(options.actions.permissions),
-      hidePermissionsDialog,
+      hideDialog(elements.permissionsDialog),
       error,
       { onBeforeSerialize: permissionsBeforeSerialize }
     );
@@ -254,25 +256,19 @@ function GroupManagement(opt) {
     ConfigureAsyncForm(
       elements.changeAdminGroupsForm,
       getSubmitCallback(options.actions.adminGroups),
-      function () {
-        elements.groupAdminAllDialog.modal('hide');
-      },
+      hideDialog(elements.groupAdminAllDialog),
       error
     );
     ConfigureAsyncForm(
       elements.changeAdminResourcesForm,
       getSubmitCallback(options.actions.resourceGroups),
-      function () {
-        elements.resourceAdminDialog.modal('hide');
-      },
+      hideDialog(elements.resourceAdminDialog),
       error
     );
     ConfigureAsyncForm(
       elements.changeAdminSchedulesForm,
       getSubmitCallback(options.actions.scheduleGroups),
-      function () {
-        elements.scheduleAdminDialog.modal('hide');
-      },
+      hideDialog(elements.scheduleAdminDialog),
       error
     );
     ConfigureAsyncForm(elements.importGroupsForm, getSubmitCallback(options.actions.importGroups), importHandler);
