@@ -74,4 +74,22 @@ class ReservationApprovalPresenterTest extends TestBase
 
         $this->assertTrue(in_array(new SeriesApprovedEvent($reservation), $reservation->GetEvents()));
     }
+
+    public function testReportsAnErrorWhenTheUserCannotApprove()
+    {
+        $builder = new ExistingReservationSeriesBuilder();
+        $reservation = $builder->Build();
+
+        $this->persistence->method('LoadByReferenceNumber')->willReturn($reservation);
+        $this->auth->method('CanApprove')->willReturn(false);
+
+        $this->handler->expects($this->never())->method('Handle');
+        $this->page->expects($this->once())
+            ->method('SetErrors')
+            ->with($this->identicalTo([Resources::GetInstance()->GetString('NoReservationAccess')]));
+
+        $this->presenter->PageLoad();
+
+        $this->assertFalse(in_array(new SeriesApprovedEvent($reservation), $reservation->GetEvents()));
+    }
 }
