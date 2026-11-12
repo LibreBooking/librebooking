@@ -77,7 +77,7 @@ class GroupRepositoryTest extends TestBase
         $groupId = 98282;
         $groupName = 'gn';
         $groupAdminId = 1111;
-        $isDefault = 1;
+        $isDefault = '1';
 
         $rows = [];
         $rows[] = [ColumnNames::GROUP_ID => $groupId,
@@ -118,6 +118,7 @@ class GroupRepositoryTest extends TestBase
         $this->assertEquals($groupId, $group->Id());
         $this->assertEquals($groupName, $group->Name());
         $this->assertEquals($groupAdminId, $group->AdminGroupId());
+        $this->assertTrue($group->IsDefault());
         $this->assertTrue($group->HasMember(1));
         $this->assertFalse($group->HasMember(3));
         $this->assertTrue(in_array(1, $group->AllowedResourceIds()));
@@ -203,9 +204,9 @@ class GroupRepositoryTest extends TestBase
         $id = 2828;
         $newName = 'new name';
         $groupAdminId = 123;
-        $isDefault = 1;
+        $isDefault = true;
 
-        $group = new Group($id, 'old name', $isDefault);
+        $group = new Group(id: $id, name: 'old name', isDefault: $isDefault);
         $group->Rename($newName);
         $group->ChangeAdmin($groupAdminId);
 
@@ -229,8 +230,8 @@ class GroupRepositoryTest extends TestBase
     {
         $newId = 40298;
         $name = 'gn';
-        $isDefault = 1;
-        $group = new Group(0, $name, $isDefault);
+        $isDefault = true;
+        $group = new Group(id: 0, name: $name, isDefault: $isDefault);
 
         $this->db->_ExpectedInsertId = $newId;
 

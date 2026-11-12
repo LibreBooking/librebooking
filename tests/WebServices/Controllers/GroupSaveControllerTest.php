@@ -50,7 +50,7 @@ class GroupSaveControllerTest extends TestBase
 
         $this->assertTrue($result->WasSuccessful());
         $this->assertSame('new name', $group->Name());
-        $this->assertFalse((bool) $group->IsDefault());
+        $this->assertFalse($group->IsDefault());
     }
 
     public function testFacadeTreatsMissingOrNullIsDefaultAsFalse(): void

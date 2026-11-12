@@ -5,7 +5,7 @@ class Group
     private $id;
     private $name;
     private $adminGroupId;
-    private $isDefault = 0;
+    private bool $isDefault = false;
 
     private $addedUsers = [];
     private $removedUsers = [];
@@ -34,15 +34,15 @@ class Group
     private array $roleIds = [];
 
     /**
-     * @param $id int
-     * @param $name string
-     * @param $isDefault int
+     * @param int $id
+     * @param string|null $name null only for NullGroup
+     * @param bool $isDefault whether new users are automatically added to this group
      */
-    public function __construct($id, $name, $isDefault = 0)
+    public function __construct($id, $name, bool $isDefault = false)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->isDefault = intval($isDefault);
+        $this->isDefault = $isDefault;
     }
 
     /**
@@ -54,7 +54,7 @@ class Group
     }
 
     /**
-     * @return string
+     * @return string|null null only for NullGroup
      */
     public function Name()
     {
@@ -69,12 +69,9 @@ class Group
         return $this->adminGroupId;
     }
 
-    /**
-     * @return int
-     */
-    public function IsDefault()
+    public function IsDefault(): bool
     {
-        return intval($this->isDefault);
+        return $this->isDefault;
     }
 
     /**
@@ -88,7 +85,7 @@ class Group
 
     public function ChangeDefault(bool $isDefault)
     {
-        $this->isDefault = intval($isDefault);
+        $this->isDefault = $isDefault;
     }
 
     /**
