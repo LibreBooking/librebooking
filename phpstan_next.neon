@@ -2,7 +2,7 @@ includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
-    level: 5
+    level: 6
     errorFormat: prettyJson
     tmpDir: var/cache/phpstan/next
     treatPhpDocTypesAsCertain: false
@@ -34,6 +34,40 @@ parameters:
             - plugins/
             - tpl_c/ (?)
             - vendor/
+            # Staged "next level" rollout: remove these one-by-one as each
+            # area is fixed for the current target level.
+            - Controls/
+            - Domain/
+            - Jobs/
+            - Pages/
+            - Presenters/
+            - Web/
+            - WebServices/
+            - config/timezones.php
+            - lang/
+            - lib/Application/
+            - lib/Common/
+            - lib/Config/
+            - lib/Database/
+            - lib/Email/
+            - lib/FileSystem/
+            - lib/Graphics/
+            - lib/Server/
+            - lib/WebService/
+            - phing-tasks/
+            - tests/Application/
+            - tests/Common/
+            - tests/Domain/
+            - tests/Infrastructure/
+            - tests/Pages/
+            - tests/Plugins/
+            - tests/Presenters/
+            - tests/TestBase.php
+            - tests/WebService/
+            - tests/WebServices/
+            - tests/data/
+            - tests/fakes/
+            - tests/lib/
     bootstrapFiles:
         - vendor/autoload.php
     # Corrected PHPDoc for third-party code that cannot be edited.
