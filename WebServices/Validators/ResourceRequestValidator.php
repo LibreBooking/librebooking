@@ -5,6 +5,7 @@ require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 require_once(ROOT_DIR . 'WebServices/Validators/RequestRequiredValueValidator.php');
 require_once(ROOT_DIR . 'WebServices/Validators/TimeIntervalValidator.php');
 require_once(ROOT_DIR . 'WebServices/Requests/Resource/ResourceRequest.php');
+require_once(ROOT_DIR . 'Domain/Access/GroupRepository.php');
 
 interface IResourceRequestValidator
 {
@@ -35,7 +36,7 @@ class ResourceRequestValidator implements IResourceRequestValidator
      */
     private $attributeService;
 
-    public function __construct(IAttributeService $attributeService)
+    public function __construct(IAttributeService $attributeService, private readonly IGroupRepository $groupRepository)
     {
         $this->attributeService = $attributeService;
     }
@@ -55,6 +56,19 @@ class ResourceRequestValidator implements IResourceRequestValidator
             return ['Request was not properly formatted'];
         }
         $errors = [];
+
+        if (isset($request->adminGroupId)) {
+            if (!is_int($request->adminGroupId) || $request->adminGroupId <= 0) {
+                $errors[] = 'adminGroupId must be a positive integer or null';
+            } else {
+                $group = $this->groupRepository->LoadById(groupId: $request->adminGroupId);
+                if ($group === null || $group instanceof NullGroup) {
+                    $errors[] = 'adminGroupId must identify an existing group';
+                } elseif (!in_array(RoleLevel::RESOURCE_ADMIN, $group->RoleIds())) {
+                    $errors[] = 'adminGroupId must identify a group with the Resource Administrator role';
+                }
+            }
+        }
 
         /** @var IValidator[] $validators */
         $validators = [];

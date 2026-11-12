@@ -174,7 +174,16 @@ function RegisterResources(SlimServer $server, SlimWebServiceRegistry $registry)
         reservationRepository: new ReservationViewRepository(),
         scheduleRepository: new ScheduleRepository()
     );
-    $writeWebService = new ResourcesWriteWebService($server, new ResourceSaveController($resourceRepository, new ResourceRequestValidator($attributeService)));
+    $writeWebService = new ResourcesWriteWebService(
+        server: $server,
+        controller: new ResourceSaveController(
+            repository: $resourceRepository,
+            validator: new ResourceRequestValidator(
+                attributeService: $attributeService,
+                groupRepository: new GroupRepository()
+            )
+        )
+    );
 
     $roGroupId = GetConfigGroup(ConfigKeys::API_RESOURCES_RO_GROUP);
     $category = new SlimWebServiceRegistryCategory('Resources', roGroupId: $roGroupId);

@@ -30,6 +30,57 @@ class ResourceSaveControllerTest extends TestBase
         parent::setup();
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('adminGroupAssignments')]
+    public function testCreatesResourceWithAdminGroup(bool $provided, ?int $adminGroupId): void
+    {
+        $resourceId = 122;
+        $request = ResourceRequest::Example();
+        unset($request->adminGroupId);
+        if ($provided) {
+            $request->adminGroupId = $adminGroupId;
+        }
+        $this->validator->method('ValidateCreateRequest')->willReturn([]);
+        $this->repository->expects($this->once())->method('Add')->willReturn($resourceId);
+        $this->repository->expects($this->once())->method('Update')
+            ->with($this->callback(fn (BookableResource $resource) => $resource->GetAdminGroupId() === $adminGroupId));
+
+        $result = $this->controller->Create(request: $request, session: $this->session);
+
+        $this->assertTrue($result->WasSuccessful());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('adminGroupAssignments')]
+    public function testUpdatesResourceAdminGroup(bool $provided, ?int $adminGroupId): void
+    {
+        $resourceId = 122;
+        $oldAdminGroupId = 99;
+        $oldResource = new FakeBookableResource($resourceId);
+        $oldResource->SetAdminGroupId($oldAdminGroupId);
+        $request = ResourceRequest::Example();
+        unset($request->adminGroupId);
+        if ($provided) {
+            $request->adminGroupId = $adminGroupId;
+        }
+        $expectedAdminGroupId = $provided ? $adminGroupId : $oldAdminGroupId;
+        $this->validator->method('ValidateUpdateRequest')->willReturn([]);
+        $this->repository->expects($this->once())->method('LoadById')->with($resourceId)->willReturn($oldResource);
+        $this->repository->expects($this->once())->method('Update')
+            ->with($this->callback(fn (BookableResource $resource) => $resource->GetAdminGroupId() === $expectedAdminGroupId));
+
+        $result = $this->controller->Update(resourceId: $resourceId, request: $request, session: $this->session);
+
+        $this->assertTrue($result->WasSuccessful());
+    }
+
+    public static function adminGroupAssignments(): array
+    {
+        return [
+            'omitted' => [false, null],
+            'explicit null' => [true, null],
+            'assigned group' => [true, 42],
+        ];
+    }
+
     public function testAddsNewResource()
     {
         $resourceId = 122;
@@ -65,6 +116,7 @@ class ResourceSaveControllerTest extends TestBase
         );
 
         $expectedUpdateResource->SetSortOrder($request->sortOrder);
+        $expectedUpdateResource->SetAdminGroupId($request->adminGroupId);
         $expectedUpdateResource->ChangeStatus($request->statusId, $request->statusReasonId);
         $attributes = [new AttributeValue($request->customAttributes[0]->attributeId, $request->customAttributes[0]->attributeValue)];
         $expectedUpdateResource->ChangeAttributes($attributes);
@@ -97,6 +149,8 @@ class ResourceSaveControllerTest extends TestBase
     public function testWhenAddValidationFails()
     {
         $errors = ['something failed'];
+        $this->repository->expects($this->never())->method('Add');
+        $this->repository->expects($this->never())->method('Update');
 
         $request = ResourceRequest::Example();
         $this->validator->expects($this->once())
@@ -139,6 +193,7 @@ class ResourceSaveControllerTest extends TestBase
         );
 
         $expectedUpdateResource->SetSortOrder($request->sortOrder);
+        $expectedUpdateResource->SetAdminGroupId($request->adminGroupId);
         $expectedUpdateResource->ChangeStatus($request->statusId, $request->statusReasonId);
         $attributes = [new AttributeValue($request->customAttributes[0]->attributeId, $request->customAttributes[0]->attributeValue)];
         $expectedUpdateResource->ChangeAttributes($attributes);
@@ -175,6 +230,8 @@ class ResourceSaveControllerTest extends TestBase
     {
         $resourceId = 123;
         $errors = ['something failed'];
+        $this->repository->expects($this->never())->method('Add');
+        $this->repository->expects($this->never())->method('Update');
 
         $request = ResourceRequest::Example();
         $this->validator->expects($this->once())
