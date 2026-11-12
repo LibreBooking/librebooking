@@ -72,15 +72,45 @@ class ResourcePermissionServiceTest extends TestBase
 
         $result = $this->service->ParseSubmittedPermissions($submitted, $adminManagedIds);
 
-        // "1" splits to ["1"], $split[1] is undefined, defaults to 'none', skipped
+        // "1" has no permission type, so it is skipped
         $this->assertEquals([], $result['full']);
         $this->assertEquals([], $result['view']);
     }
 
-    public function testParseSubmittedPermissionsRejectsNonNumericPermissionType()
+    public function testParseSubmittedPermissionsRejectsMalformedResourceIds()
     {
-        // "abc" would cast to 0 via (int), falsely matching Full Access
-        $submitted = ['1_abc', '2_0'];
+        // "1abc" would cast to 1 via (int), granting access to resource 1
+        $submitted = ['1abc_0', '-2_0', ' 1_1', '_0', '2_0'];
+        $adminManagedIds = [1, 2];
+
+        $result = $this->service->ParseSubmittedPermissions(
+            submittedPermissions: $submitted,
+            managedResourceIds: $adminManagedIds
+        );
+
+        $this->assertEquals([2], $result['full']);
+        $this->assertEquals([], $result['view']);
+    }
+
+    public function testParseSubmittedPermissionsRejectsExtraSegments()
+    {
+        $submitted = ['1_0_extra', '1_1_0', '2_1'];
+        $adminManagedIds = [1, 2];
+
+        $result = $this->service->ParseSubmittedPermissions(
+            submittedPermissions: $submitted,
+            managedResourceIds: $adminManagedIds
+        );
+
+        $this->assertEquals([], $result['full']);
+        $this->assertEquals([2], $result['view']);
+    }
+
+    public function testParseSubmittedPermissionsRejectsInvalidPermissionType()
+    {
+        // "abc" would cast to 0 via (int), falsely matching Full Access;
+        // only 0 (full) and 1 (view) are permission types
+        $submitted = ['1_abc', '1_blah', '1_7', '1_', '2_0'];
         $adminManagedIds = [1, 2];
 
         $result = $this->service->ParseSubmittedPermissions($submitted, $adminManagedIds);
