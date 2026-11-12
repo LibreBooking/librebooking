@@ -71,6 +71,9 @@ class ResourceSaveController implements IResourceSaveController
         $oldResource = $this->repository->LoadById($resourceId);
         $resource = $this->BuildResource($request, $resourceId);
         $resource->SetImages($oldResource->GetImages());
+        if (!$request->HasAdminGroupId()) {
+            $resource->SetAdminGroupId($oldResource->GetAdminGroupId());
+        }
         $this->repository->Update($resource);
 
         return new ResourceControllerResult($resourceId);
@@ -123,6 +126,9 @@ class ResourceSaveController implements IResourceSaveController
             resourceTypeId: $request->typeId,
         );
         $resource->SetSortOrder($request->sortOrder);
+        if ($request->HasAdminGroupId()) {
+            $resource->SetAdminGroupId($request->adminGroupId);
+        }
 
         $attributes = [];
         foreach ($request->GetCustomAttributes() as $attribute) {

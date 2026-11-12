@@ -1953,6 +1953,10 @@ DeleteReservation
 Resources
 ---------
 
+``adminGroupId`` optionally assigns a group with the Resource Administrator
+role. On update, omit it to preserve the current assignment or pass ``null``
+to clear it.
+
 .. _post-endpoints-resources:
 
 POST Endpoints
@@ -1994,6 +1998,7 @@ Creates a new resource
        "maxNotice": "0d12h30m",
        "description": "description",
        "scheduleId": 10,
+       "adminGroupId": 42,
        "autoAssignPermissions": true,
        "customAttributes": [
            {
@@ -2079,6 +2084,7 @@ Updates an existing resource
        "maxNotice": "0d12h30m",
        "description": "description",
        "scheduleId": 10,
+       "adminGroupId": null,
        "autoAssignPermissions": true,
        "customAttributes": [
            {
@@ -2237,6 +2243,7 @@ zero, a ``400 Bad Request`` is returned. If any group ID does not exist, a
                ],
                "typeId": 2,
                "groupIds": null,
+               "adminGroupId": null,
                "bufferTime": "1 hours 30 minutes",
                "autoReleaseMinutes": 15,
                "requiresCheckIn": true,
@@ -2558,6 +2565,7 @@ Loads a specific resource by id
        ],
        "typeId": 2,
        "groupIds": null,
+       "adminGroupId": 42,
        "bufferTime": "1 hours 30 minutes",
        "autoReleaseMinutes": 15,
        "requiresCheckIn": true,

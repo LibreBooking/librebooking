@@ -43,11 +43,13 @@ class ResourcesWebServiceTest extends TestBase
         );
     }
 
-    public function testGetsResourceById()
+    #[\PHPUnit\Framework\Attributes\DataProvider('adminGroupIds')]
+    public function testGetsResourceById(int|string|null $adminGroupId, ?int $expectedAdminGroupId)
     {
         $resourceId = 8282;
         $resource = new FakeBookableResource($resourceId);
         $resource->SetBufferTime(3600);
+        $resource->SetAdminGroupId($adminGroupId);
 
         $attributes = new AttributeList();
 
@@ -71,6 +73,18 @@ class ResourcesWebServiceTest extends TestBase
         $this->service->GetResource($resourceId);
 
         $this->assertEquals(new ResourceResponse($this->server, $resource, $attributes), $this->server->_LastResponse);
+        $response = json_decode(json_encode($this->server->_LastResponse), true);
+        $this->assertArrayHasKey('adminGroupId', $response);
+        $this->assertSame($expectedAdminGroupId, $response['adminGroupId']);
+    }
+
+    public static function adminGroupIds(): array
+    {
+        return [
+            'assigned group' => [42, 42],
+            'database string ID' => ['42', 42],
+            'unassigned' => [null, null],
+        ];
     }
 
     public function testWhenNotFound()
@@ -93,7 +107,10 @@ class ResourcesWebServiceTest extends TestBase
     public function testGetsResourceList()
     {
         $resourceId = 123;
-        $resources[] = new FakeBookableResource($resourceId);
+        $assignedResource = new FakeBookableResource($resourceId);
+        $assignedResource->SetAdminGroupId(42);
+        $unassignedResourceId = 456;
+        $resources = [$assignedResource, new FakeBookableResource($unassignedResourceId)];
         $attributes = new AttributeList();
 
         $this->repository->expects($this->once())
@@ -104,11 +121,16 @@ class ResourcesWebServiceTest extends TestBase
                                ->method('GetAttributes')
                                ->with(
                                    $this->equalTo(CustomAttributeCategory::RESOURCE),
-                                   $this->equalTo([$resourceId])
+                                   $this->equalTo([$resourceId, $unassignedResourceId])
                                )
                                ->willReturn($attributes);
 
         $this->service->GetAll();
+
+        $response = $this->server->_LastResponse;
+        $this->assertInstanceOf(ResourcesResponse::class, $response);
+        $this->assertSame(42, $response->resources[0]->adminGroupId);
+        $this->assertNull($response->resources[1]->adminGroupId);
 
         $this->assertEquals(
             new ResourcesResponse($this->server, $resources, $attributes),

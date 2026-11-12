@@ -6,6 +6,17 @@ require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueReq
 class ResourceRequest extends JsonRequest
 {
     /**
+     * Optional administrator group ID. Uninitialized means omitted; null clears it.
+     * Kept mixed so invalid JSON types produce validation errors instead of TypeErrors.
+     */
+    public mixed $adminGroupId;
+
+    public function HasAdminGroupId(): bool
+    {
+        return array_key_exists('adminGroupId', get_object_vars($this));
+    }
+
+    /**
      * @var string
      */
     public $name;
@@ -149,6 +160,7 @@ class ExampleResourceRequest extends ResourceRequest
         $this->maxNotice = '0d12h30m';
         $this->description = 'description';
         $this->scheduleId = 10;
+        $this->adminGroupId = 42;
         $this->autoAssignPermissions = true;
         $this->customAttributes = [AttributeValueRequest::Example()];
         $this->sortOrder = 1;

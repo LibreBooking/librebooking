@@ -20,6 +20,7 @@ class ResourceResponse extends RestResponse
     public $maxNotice;
     public $description;
     public $scheduleId;
+    public ?int $adminGroupId;
     public $icsUrl;
     public $statusId;
     public $statusReasonId;
@@ -58,6 +59,8 @@ class ResourceResponse extends RestResponse
         $this->maxParticipants = $resource->GetMaxParticipants();
         $this->description = $resource->GetDescription();
         $this->scheduleId = $resource->GetScheduleId();
+        $adminGroupId = $resource->GetAdminGroupId();
+        $this->adminGroupId = $adminGroupId === null ? null : (int) $adminGroupId;
         $this->statusId = $resource->GetStatusId();
         $this->statusReasonId = $resource->GetStatusReasonId();
         $this->bufferTime = $resource->GetBufferTime()->ToShortString();
@@ -114,6 +117,7 @@ class ExampleResourceResponse extends ResourceResponse
         $this->maxParticipants = 10;
         $this->description = 'resource description';
         $this->scheduleId = 123;
+        $this->adminGroupId = null;
         $this->statusId = ResourceStatus::AVAILABLE;
         $this->statusReasonId = 3;
         $this->typeId = 2;
