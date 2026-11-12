@@ -358,9 +358,9 @@ abstract class GroupControllerPageFacade implements IManageGroupsPage
         return null;
     }
 
-    public function AutomaticallyAddToGroup(): ?bool
+    public function AutomaticallyAddToGroup(): bool
     {
-        return null;
+        return false;
     }
 
     public function GetUserIds(): array
@@ -413,9 +413,10 @@ class CreateGroupFacade extends GroupControllerPageFacade
         return $this->request?->name;
     }
 
-    public function AutomaticallyAddToGroup(): ?bool
+    public function AutomaticallyAddToGroup(): bool
     {
-        return $this->request?->isDefault;
+        // The request is the decoded JSON body, so isDefault may be missing or null
+        return $this->request->isDefault ?? false;
     }
 
     /**
