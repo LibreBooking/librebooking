@@ -113,51 +113,75 @@ function ResourceGroupManagement(opts) {
     });
   }
 
+  function attachContextMenu(scope, selector, getItems) {
+    const menu = document.createElement('ul');
+    menu.className = 'dropdown-menu';
+    menu.style.position = 'fixed';
+    document.body.appendChild(menu);
+
+    const close = () => menu.classList.remove('show');
+
+    scope.addEventListener('contextmenu', (e) => {
+      const target = e.target.closest(selector);
+      if (!target || !scope.contains(target)) return;
+      e.preventDefault();
+
+      menu.replaceChildren();
+      getItems(target).forEach((item) => {
+        const li = document.createElement('li');
+        if (item === 'hr') {
+          li.innerHTML = '<hr class="dropdown-divider">';
+        } else {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'dropdown-item' + (item.disabled ? ' disabled' : '');
+          if (item.icon) {
+            const icon = document.createElement('i');
+            icon.className = 'bi ' + item.icon + ' me-2';
+            btn.appendChild(icon);
+          }
+          btn.append(item.label);
+          btn.addEventListener('click', () => {
+            close();
+            item.onClick?.(target);
+          });
+          li.appendChild(btn);
+        }
+        menu.appendChild(li);
+      });
+
+      menu.classList.add('show');
+      menu.style.left = Math.min(e.clientX, window.innerWidth - menu.offsetWidth) + 'px';
+      menu.style.top = Math.min(e.clientY, window.innerHeight - menu.offsetHeight) + 'px';
+    });
+
+    document.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+    window.addEventListener('resize', close);
+    window.addEventListener('scroll', close, true);
+  }
+
   function wireUpContextMenu() {
-    function getNode(options) {
-      var id = options.$trigger.parent().attr('node-id');
+    function getNode(trigger) {
+      var id = trigger.parentElement.getAttribute('node-id');
       return elements.groupDiv.tree('getNodeById', id);
     }
 
-    elements.groupDiv.contextMenu({
-      selector: '.ui-droppable',
-      callback: function (key, options) {},
-      items: {
-        rename: {
-          name: options.renameText,
-          icon: 'edit',
-          callback: function (key, options) {
-            var node = getNode(options);
-            showRename(node);
-          },
-        },
-        delete: {
-          name: options.deleteText,
-          icon: 'delete',
-          callback: function (key, options) {
-            var node = getNode(options);
-            showDelete(node);
-          },
-        },
-        addChild: {
-          name: options.addChildText,
-          icon: 'add',
-          callback: function (key, options) {
-            var node = getNode(options);
-            showAddChild(node);
-          },
-        },
-        sep1: '---------',
-        quit: { name: options.exitText, icon: 'quit' },
-      },
+    attachContextMenu(elements.groupDiv[0], '.ui-droppable', function () {
+      return [
+        { label: options.renameText, icon: 'bi-pencil', onClick: (el) => showRename(getNode(el)) },
+        { label: options.deleteText, icon: 'bi-trash', onClick: (el) => showDelete(getNode(el)) },
+        { label: options.addChildText, icon: 'bi-plus-lg', onClick: (el) => showAddChild(getNode(el)) },
+        'hr',
+        { label: options.exitText, icon: 'bi-x-lg' },
+      ];
     });
   }
 
   function showRename(node) {
     elements.activeId.val(node.id);
-    elements.renameDialog.modal('show');
-
     elements.newName.val(node.name);
+    elements.renameDialog.modal('show');
   }
 
   function showDelete(node) {
@@ -169,7 +193,9 @@ function ResourceGroupManagement(opts) {
     elements.activeId.val(node.id);
     $('#groupParentId').val(node.id);
     $('#childName').val('');
-    $('#childName').focus();
+    elements.addChildDialog.one('shown.bs.modal', function () {
+      $('#childName').trigger('focus');
+    });
     elements.addChildDialog.modal('show');
   }
 
@@ -231,8 +257,9 @@ function ResourceGroupManagement(opts) {
     var parentNode = null;
 
     data = decodeNames([JSON.parse(data)])[0];
-    if (data.parent_id && data.parent_id != null && data.parent_id != '') {
-      parentNode = elements.groupDiv.tree('getNodeById', data.parent_id);
+    data.id = String(data.id);
+    if (data.parent_id) {
+      parentNode = elements.groupDiv.tree('getNodeById', String(data.parent_id));
     }
     elements.groupDiv.tree('appendNode', data, parentNode);
   }

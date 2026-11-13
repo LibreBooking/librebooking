@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' cssFiles='assets/vendor/jquery-contextmenu/2.9.2/css/jquery.contextMenu.css,assets/vendor/jqtree/1.8.11/css/jqtree.css'}
+{include file='globalheader.tpl' cssFiles='assets/vendor/jqtree/1.8.11/css/jqtree.css'}
 
 <div id="page-manage-resource-groups" class="admin-page">
 
@@ -142,7 +142,6 @@
 {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
 {vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
-{vendor_js src="jquery-contextmenu/2.9.2/js/jquery.contextMenu.js"}
 
 <script type="text/javascript">
 	$(document).ready(function() {
