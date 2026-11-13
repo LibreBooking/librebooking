@@ -48,6 +48,7 @@ class PreflightRunner
         'ldap',
         'mbstring',
         'mysqli',
+        'mysqlnd',
         'openssl',
         'pdo',
         'pdo_mysql',

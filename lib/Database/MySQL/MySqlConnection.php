@@ -66,23 +66,22 @@ class MySqlConnection implements IDbConnection
 
     public function Query(ISqlCommand $sqlCommand)
     {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
-
-        if (Log::DebugEnabled()) {
-            Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
+        if ($sqlCommand->IsMultiQuery()) {
+            throw new InvalidArgumentException(
+                sprintf('MySqlConnection::Query does not support multi-query commands, got %s', get_debug_type($sqlCommand))
+            );
         }
+
+        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql Query: ');
 
         if ($sqlCommand->ContainsGroupConcat()) {
             mysqli_query($this->_db, 'SET SESSION group_concat_max_len = 1000000;');
         }
 
-        mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
+        $statement = $mysqlCommand->GetStatements()[0];
+        $result = $this->executeStatement(query: $statement['query'], values: $statement['values']);
 
-        $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
-
-        $this->_handleError($result);
-
-        return new MySqlReader($result);
+        return new MySqlReader($result === true ? null : $result);
     }
 
     public function LimitQuery(ISqlCommand $command, $limit, $offset = 0)
@@ -100,17 +99,27 @@ class MySqlConnection implements IDbConnection
     {
         $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql Execute: ');
 
-        if ($sqlCommand->IsMultiQuery()) {
-            $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
-            do {
-                if ($r = mysqli_store_result($this->_db)) {
-                    mysqli_free_result($r);
-                }
-            } while (mysqli_next_result($this->_db));
-        } else {
-            $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
+        $statements = $mysqlCommand->GetStatements();
+        if (count($statements) === 1) {
+            $this->executeAndFree($statements[0]);
+            return;
         }
-        $this->_handleError($result);
+
+        // A multi-query command is one unit of work: all statements apply or none do.
+        if (!mysqli_begin_transaction($this->_db)) {
+            $this->fail(mysqli_error($this->_db));
+        }
+        try {
+            foreach ($statements as $statement) {
+                $this->executeAndFree($statement);
+            }
+            if (!mysqli_commit($this->_db)) {
+                $this->fail(mysqli_error($this->_db));
+            }
+        } catch (Throwable $e) {
+            mysqli_rollback($this->_db);
+            throw $e;
+        }
     }
 
     public function ExecuteAffectedRows(ISqlCommand $sqlCommand): int
@@ -123,19 +132,15 @@ class MySqlConnection implements IDbConnection
 
         $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql ExecuteAffectedRows: ');
 
-        $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
-        $this->_handleError($result);
-
-        // Read immediately after the statement, before any other query or Disconnect() resets it.
-        return (int)mysqli_affected_rows($this->_db);
+        return $this->executeAndFree($mysqlCommand->GetStatements()[0]);
     }
 
     private function _prepareExecute(ISqlCommand $sqlCommand, string $logPrefix): MySqlCommandAdapter
     {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
+        $mysqlCommand = new MySqlCommandAdapter($sqlCommand);
 
         if (Log::DebugEnabled()) {
-            Log::Sql($logPrefix . str_replace('%', '%%', $mysqlCommand->GetQuery()));
+            Log::Sql(str_replace('%', '%%', $logPrefix . $mysqlCommand->GetQuery() . ' -- ' . json_encode($mysqlCommand->GetValues())));
         }
 
         mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
@@ -143,19 +148,64 @@ class MySqlConnection implements IDbConnection
         return $mysqlCommand;
     }
 
+    /**
+     * Runs one statement, discards any result set and returns the affected row count.
+     *
+     * @param array{query: string, values: list<string|null>} $statement
+     */
+    private function executeAndFree(array $statement): int
+    {
+        $affectedRows = 0;
+        $result = $this->executeStatement(query: $statement['query'], values: $statement['values'], affectedRows: $affectedRows);
+        if ($result instanceof mysqli_result) {
+            mysqli_free_result($result);
+        }
+
+        return $affectedRows;
+    }
+
+    /**
+     * Prepares and executes one statement with its values bound server-side.
+     *
+     * @param list<string|null> $values
+     * @param int $affectedRows receives the statement's affected row count
+     * @return mysqli_result|true a buffered result set, or true when the statement returns none
+     */
+    private function executeStatement(string $query, array $values, int &$affectedRows = 0): mysqli_result|true
+    {
+        $statement = mysqli_prepare($this->_db, $query);
+        if ($statement === false) {
+            $this->fail(mysqli_error($this->_db));
+        }
+
+        try {
+            if (!mysqli_stmt_execute($statement, $values === [] ? null : $values)) {
+                $this->fail(mysqli_stmt_error($statement));
+            }
+
+            $affectedRows = (int) mysqli_stmt_affected_rows($statement);
+
+            $result = mysqli_stmt_get_result($statement);
+            if ($result === false && mysqli_stmt_errno($statement) !== 0) {
+                $this->fail(mysqli_stmt_error($statement));
+            }
+
+            return $result === false ? true : $result;
+        } finally {
+            mysqli_stmt_close($statement);
+        }
+    }
+
     public function GetLastInsertId()
     {
         return mysqli_insert_id($this->_db);
     }
 
-    private function _handleError($result)
+    private function fail(string $error): never
     {
-        if (!$result) {
-            Log::Error('Error executing MySQL query %s', mysqli_error($this->_db));
+        Log::Error('Error executing MySQL query %s', $error);
 
-            throw new Exception('There was an error executing your query\n' .  mysqli_error($this->_db));
-        }
-        return false;
+        throw new Exception('There was an error executing your query\n' . $error);
     }
 }
 
