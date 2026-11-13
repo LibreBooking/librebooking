@@ -927,16 +927,6 @@ class Queries
 
     public const GET_USER_PREFERENCES = 'SELECT `name`, `value` FROM `user_preferences` WHERE `user_id` = @userid';
 
-    public const GET_USER_ROLES =
-        'SELECT
-			`user_id`, `user_level`
-		FROM
-			`roles` `r`
-		INNER JOIN
-			`user_roles` `ur` on `r`.`role_id` = `ur`.`role_id`
-		WHERE
-			`ur`.`user_id` = @userid';
-
     public const GET_USER_SESSION_BY_SESSION_TOKEN = 'SELECT * FROM `user_session` WHERE `session_token` = @session_token';
 
     public const GET_USER_SESSION_BY_USERID = 'SELECT * FROM `user_session` WHERE `user_id` = @userid';

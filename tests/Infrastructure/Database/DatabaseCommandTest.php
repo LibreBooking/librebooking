@@ -96,16 +96,6 @@ class DatabaseCommandTest extends TestBase
         $this->assertEquals(new Parameter(ParameterNames::USERNAME, $username), $command->Parameters->Items(0));
     }
 
-    public function testGetUserRoleCommand()
-    {
-        $userid = 123;
-
-        $command = new GetUserRoleCommand($userid);
-        $this->assertEquals(Queries::GET_USER_ROLES, $command->GetQuery());
-        $this->assertEquals(1, $command->Parameters->Count());
-        $this->assertEquals(new Parameter(ParameterNames::USER_ID, $userid), $command->Parameters->Items(0));
-    }
-
     public function testUpdateUserFromLdapCommand()
     {
         $username = 'testlogin';
