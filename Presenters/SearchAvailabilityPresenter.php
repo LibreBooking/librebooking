@@ -429,7 +429,9 @@ class PotentialSlot
     public function AddReservedItem(ReservationListItem $item)
     {
         if (!$item->IsReservation()) {
-            $this->isBlackout = true;
+            if ($item->CollidesWithRange(new DateRange($this->slot->BeginDate(), $this->slot->EndDate()))) {
+                $this->isBlackout = true;
+            }
             return;
         }
 
