@@ -18,9 +18,10 @@ interface IAttributeService
      * @param $entityIds int[]
      * @param bool $ignoreEmpty
      * @param bool $isAdmin
+     * @param int|null $resourceTypeId attributes limited to other resource types are not required
      * @return AttributeServiceValidationResult
      */
-    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false);
+    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false, $resourceTypeId = null);
 
     /**
      * @param $category int|CustomAttributeCategory
@@ -148,7 +149,7 @@ class AttributeService implements IAttributeService
         return $attributeList;
     }
 
-    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false)
+    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false, $resourceTypeId = null)
     {
         $isValid = true;
         $errors = [];
@@ -165,9 +166,7 @@ class AttributeService implements IAttributeService
 
         $attributes = $this->attributeRepository->GetByCategory($category);
         foreach ($attributes as $attribute) {
-            if (!empty($entityIds) &&
-                (($attribute->UniquePerEntity() && count(array_intersect($entityIds, $attribute->EntityIds())) == 0) ||
-                ($attribute->HasSecondaryEntities() && count(array_intersect($entityIds, $attribute->SecondaryEntityIds())) == 0))) {
+            if (!empty($entityIds) && $attribute->UniquePerEntity() && count(array_intersect($entityIds, $attribute->EntityIds())) == 0) {
                 continue;
             }
 
@@ -175,12 +174,13 @@ class AttributeService implements IAttributeService
                 continue;
             }
 
-            if (!$attribute->Required() && !array_key_exists($attribute->Id(), $values)) {
-                continue;
-            }
-
             $value = trim($values[$attribute->Id()] ?? '');
             $label = $attribute->Label();
+
+            $isRequired = $attribute->Required() && $attribute->AppliesToResourceType($resourceTypeId);
+            if (!$isRequired && $value === '') {
+                continue;
+            }
 
             if (empty($value) && ($ignoreEmpty || $isAdmin)) {
                 continue;

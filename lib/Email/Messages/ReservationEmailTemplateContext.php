@@ -177,7 +177,7 @@ class ReservationEmailTemplateContext
                 continue;
             }
 
-            if ($attribute->AppliesToEntity($resource->GetId())) {
+            if ($attribute->AppliesToEntity($resource->GetId()) && $attribute->AppliesToResourceType($resource->GetResourceTypeId())) {
                 $resourceAttributeValues[] = new LBAttribute(
                     attributeDefinition: $attribute,
                     value: $resource->GetAttributeValue($attribute->Id())

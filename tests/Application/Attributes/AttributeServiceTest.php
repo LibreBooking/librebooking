@@ -102,6 +102,21 @@ class AttributeServiceTest extends TestBase
         $this->assertEquals(3, count($result->Errors()));
     }
 
+    public function testRequiredResourceAttributeIsOnlyRequiredForItsResourceTypes()
+    {
+        $scoped = new CustomAttribute(1, 'scoped', CustomAttributeTypes::SINGLE_LINE_TEXTBOX, CustomAttributeCategory::RESOURCE, '/^\\d+$/', true, null, 0);
+        $scoped->WithSecondaryEntities(CustomAttributeCategory::RESOURCE_TYPE, '3');
+        $this->attributeRepository->_CustomAttributes = [$scoped];
+
+        $otherType = $this->attributeService->Validate(CustomAttributeCategory::RESOURCE, [], null, false, false, 5);
+        $scopedType = $this->attributeService->Validate(CustomAttributeCategory::RESOURCE, [], null, false, false, 3);
+        $invalidValue = $this->attributeService->Validate(CustomAttributeCategory::RESOURCE, [new AttributeValue(1, 'abc')], null, false, false, 5);
+
+        $this->assertTrue($otherType->IsValid());
+        $this->assertContains(Resources::GetInstance()->GetString('CustomAttributeRequired', 'scoped'), $scopedType->Errors());
+        $this->assertEquals([Resources::GetInstance()->GetString('CustomAttributeInvalid', 'scoped')], $invalidValue->Errors());
+    }
+
     public function testWhenUserIsNotAdminButAttributeIsAdminOnly_ThenDoNotValidate()
     {
         $category = CustomAttributeCategory::RESERVATION;
