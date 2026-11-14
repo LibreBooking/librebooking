@@ -342,6 +342,7 @@ Basic Privacy Settings
    'privacy' => [
        'view.schedules' => true,
        'view.reservations' => false,
+       'view.public.reservation.details' => false,
        'allow.guest.reservations' => false,
    ],
 
@@ -350,6 +351,10 @@ Basic Privacy Settings
 
 **privacy.view.reservations**
   Allow users to view reservations.
+
+**privacy.view.public.reservation.details**
+  Allow public (not logged-in) users to open reservation details from the
+  public schedule and calendar. Requires ``privacy.view.reservations``.
 
 **privacy.allow.guest.reservations**
   Allow guests to make reservations.
