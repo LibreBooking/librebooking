@@ -5,6 +5,15 @@ RewriteEngine On
 #RewriteCond %{HTTPS} off
 #RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Defense in depth: only /Web is meant to be reachable. These rules cover what
+# the per-directory .htaccess files cannot: untracked directories, dot-files
+# and root-level project files.
+# Deny dot-files and dot-directories such as .git and .env. /.well-known/ stays
+# reachable because ACME (Let's Encrypt) certificate validation uses it.
+RewriteRule (^|/)\.(?!well-known/) - [F]
+RewriteRule ^(vendor|node_modules|tpl_c|var)(/|$) - [F]
+RewriteRule ^(composer\.(json|lock)|package(-lock)?\.json)$ - [F]
+
 # Redirect requests that are not already under /Web to /Web.
 RewriteCond %{REQUEST_URI} !^/Web(/|$)
 RewriteRule ^(.*)$ /Web/$1 [R=301,L]
