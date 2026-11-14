@@ -503,6 +503,9 @@ class ja_jp extends en_gb
         $strings['AddReservationColorRule'] = '予約の背景色を変更';
         $strings['LimitAttributeScope'] = '特定の場合のみ取得';
         $strings['CollectFor'] = '次の予約時：';
+        $strings['AdminOnlyHelp'] = '管理者のみがこの属性値を表示および編集できます';
+        $strings['PrivateHelp'] = 'この属性値は、予約の所有者と管理者のみに表示されます';
+        $strings['LimitAttributeScopeHelp'] = '選択したユーザー、リソース、またはリソースタイプに対してのみこの属性を収集します';
         $strings['SignIn'] = 'サインイン';
         $strings['AllParticipants'] = '全ての参加者';
         $strings['RegisterANewAccount'] = '新しいアカウントを登録する';
