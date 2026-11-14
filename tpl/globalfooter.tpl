@@ -36,6 +36,19 @@
 	<script type="text/javascript">
 		init();
 
+		{if !empty($IsImpersonating)}
+			$('#switch-back-link').on('click', function(e) {
+				e.preventDefault();
+				$.post('{$Path|escape:'javascript'}switch_back.php', {
+					'{FormKeys::CSRF_TOKEN}': '{$CSRFToken|escape:'javascript'}'
+				}, 'json').done(function() {
+					window.location.href = '{$Path|escape:'javascript'}admin/manage_users.php';
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					console.error('Switch back request failed', textStatus, errorThrown);
+				});
+			});
+		{/if}
+
 		{if isset($LoggedIn) && $LoggedIn && count($AvailableLanguages) > 1}
 			$('#languageDropdownMenu').on('click', 'a[data-lang-code]', function(e) {
 				e.preventDefault();

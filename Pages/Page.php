@@ -76,6 +76,14 @@ abstract class Page implements IPage
         $this->smarty->assign('CanViewResourceAdmin', $userSession->IsResourceAdmin);
         $this->smarty->assign('CanViewScheduleAdmin', $userSession->IsScheduleAdmin);
         $this->smarty->assign('CanViewResponsibilities', !$userSession->IsAdmin && ($userSession->IsGroupAdmin || $userSession->IsResourceAdmin || $userSession->IsScheduleAdmin));
+        $impersonator = $this->server->GetSession(SessionKeys::IMPERSONATOR_SESSION);
+        $this->smarty->assign('IsImpersonating', $impersonator instanceof UserSession);
+        if ($impersonator instanceof UserSession) {
+            // Not {translate args=}: it splits args on commas and doesn't HTML-escape.
+            $name = htmlspecialchars((string) $userSession->FullName());
+            $bannerText = sprintf($resources->GetString('ImpersonationBannerText'), $name);
+            $this->smarty->assign('ImpersonationBannerText', $bannerText);
+        }
         $allowAllUsersToReports = Configuration::Instance()->GetKey(ConfigKeys::REPORTS_ALLOW_ALL_USERS, new BooleanConverter());
         $this->smarty->assign('CanViewReports', ($allowAllUsersToReports || $userSession->IsAdmin || $userSession->IsGroupAdmin || $userSession->IsResourceAdmin || $userSession->IsScheduleAdmin));
 

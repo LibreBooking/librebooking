@@ -55,6 +55,16 @@ class WebAuthenticationTest extends TestBase
         $this->assertEquals($user, $this->fakeServer->GetUserSession());
     }
 
+    public function testLoginClearsStashedImpersonatorSession()
+    {
+        $this->fakeAuth->_Session = new FakeUserSession();
+        $this->fakeServer->SetSession(SessionKeys::IMPERSONATOR_SESSION, new FakeUserSession());
+
+        $this->webAuth->Login($this->username, $this->loginContext);
+
+        $this->assertNull($this->fakeServer->GetSession(SessionKeys::IMPERSONATOR_SESSION));
+    }
+
     public function testLoginDoesNotSetAPersistentLoginCookie()
     {
         $this->fakeAuth->_Session = new FakeUserSession();

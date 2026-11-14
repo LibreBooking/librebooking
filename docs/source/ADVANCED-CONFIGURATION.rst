@@ -176,6 +176,17 @@ Application Advanced Settings
 
      'admin.email.name' => 'LB Administrator',
 
+**admin.impersonation.enabled**
+  Allow application administrators to temporarily view the application as
+  another user. Adds a "View as" action to the Manage Users page for active,
+  non-administrator users. While impersonating, the administrator can do
+  anything the user can, including making reservations in their name. Start
+  and stop are written to the application log, prefixed with ``AUDIT:``.
+
+  .. code-block:: php
+
+     'admin.impersonation.enabled' => false,
+
 Frontend Advanced Settings
 --------------------------
 

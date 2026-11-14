@@ -28,6 +28,10 @@ return [
         # Display name used for outgoing admin emails
         'admin.email.name' => 'LB Administrator',
 
+        # Allow application administrators to temporarily view the application as
+        # another user (true/false)
+        'admin.impersonation.enabled' => false,
+
         # Company name to show in the page header
         'company.name' => '',
 
