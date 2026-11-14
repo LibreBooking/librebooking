@@ -223,7 +223,7 @@
 								data-refnum="{$reservation->ReferenceNumber}">
 								<td class="id d-none">{$reservationId}</td>
 								<td class="user">
-									{fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=true}
+									{fullname first=$reservation->FirstName|default:''|unescape:'html' last=$reservation->LastName|default:''|unescape:'html' ignorePrivacy=true}
 								</td>
 								<td class="resource">{$reservation->ResourceName}
 									{if $reservation->ResourceStatusId == ResourceStatus::AVAILABLE}

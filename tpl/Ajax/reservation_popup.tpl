@@ -83,7 +83,7 @@
                     {translate key="Participants"} ({$participants|@count}):
                     {foreach from=$participants item=user name=participant_loop}
                         {if !$user->IsOwner()}
-                            {fullname first=$user->FirstName|unescape:'html' last=$user->LastName|unescape:'html'}
+                            {fullname first=$user->FirstName|default:''|unescape:'html' last=$user->LastName|default:''|unescape:'html'}
                         {/if}
                         {if !$smarty.foreach.participant_loop.last}, {/if}
                     {/foreach}

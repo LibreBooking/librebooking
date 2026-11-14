@@ -8,7 +8,7 @@
     <div class="col-sm-3 col-12"><span class="reservationTitle" data-bs-custom-class="respopup-tooltip"
             data-bs-html="true">{$reservation->Title|escape:'html'|default:$DefaultTitle}</span></div>
     <div class="col-sm-3 col-12">
-        {fullname first=$reservation->FirstName|unescape:'html' last=$reservation->LastName|unescape:'html' ignorePrivacy=$reservation->IsUserOwner($UserId)}
+        {fullname first=$reservation->FirstName|default:''|unescape:'html' last=$reservation->LastName|default:''|unescape:'html' ignorePrivacy=$reservation->IsUserOwner($UserId)}
         {if !$reservation->IsUserOwner($UserId)}<i class="bi bi-people-fill"></i> {/if}</div>
     <div class="col-sm-3 col-6">{formatdate date=$reservation->StartDate->ToTimezone($Timezone) key=dashboard} -
         {formatdate date=$reservation->EndDate->ToTimezone($Timezone) key=dashboard}</div>

@@ -1,7 +1,7 @@
 {if $CanViewUser}
 	<div id="userDetailsPopup">
 		<div class="card-header fw-bold">
-			{fullname first=$User->FirstName()|unescape:'html' last=$User->LastName()|unescape:'html' ignorePrivacy=true}
+			{fullname first=$User->FirstName()|default:''|unescape:'html' last=$User->LastName()|default:''|unescape:'html' ignorePrivacy=true}
 		</div>
 		<div id="userDetailsName" class="card-body">
 			{if $User->EmailAddress()}
