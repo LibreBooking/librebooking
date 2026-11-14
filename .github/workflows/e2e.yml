@@ -28,10 +28,16 @@ jobs:
         with:
           node-version: '24'
 
+      # Building and pulling the images is kept apart from the test steps so
+      # their logs show little more than the Playwright results.
+      - name: Prepare Docker E2E images
+        timeout-minutes: 20
+        run: npm run test:e2e:docker:prepare
+
       # The Playwright container installs its own dependencies and browsers.
       - name: Run Docker E2E tests
-        timeout-minutes: 25
-        run: npm run test:e2e:docker
+        timeout-minutes: 10
+        run: npm run test:e2e:docker:test
 
       - name: Upload Playwright report and failure artifacts
         if: ${{ !cancelled() }}
