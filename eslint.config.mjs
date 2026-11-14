@@ -14,7 +14,6 @@ export default [
         jQuery: 'readonly',
         $: 'readonly',
         _: 'readonly',
-        moment: 'readonly',
         FullCalendar: 'readonly',
         flatpickr: 'readonly',
         DOMPurify: 'readonly',
