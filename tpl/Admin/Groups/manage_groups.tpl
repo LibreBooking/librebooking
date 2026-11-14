@@ -559,8 +559,6 @@
     {jsfile src="ajax-helpers.js"}
     {jsfile src="autocomplete.js"}
     {jsfile src="admin/group.js"}
-    {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
-
 
     <script type="text/javascript">
         $(document).ready(function() {

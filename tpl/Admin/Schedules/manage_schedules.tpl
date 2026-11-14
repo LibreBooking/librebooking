@@ -858,7 +858,6 @@
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="date-helper.js"}
 	{jsfile src="admin/schedule.js"}
-	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 
 	<script type="text/javascript">
 		function setUpEditables() {

@@ -153,7 +153,6 @@
 	{include file="javascript-includes.tpl" InlineEdit=true DataTable=true}
 	{jsfile src="ajax-helpers.js"}
 	{jsfile src="admin/resource-types.js"}
-	{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 	{datatable tableId=$tableId}
 	<script type="text/javascript">
 		function hidePopoversWhenClickAway() {
