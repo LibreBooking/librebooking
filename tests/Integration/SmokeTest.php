@@ -324,6 +324,55 @@ class SmokeTest extends TestCase
         $this->assertPhpErrorFree(body: $body);
     }
 
+    /**
+     * A request the URI validators reject must be redirected exactly once to
+     * the clean page in the same directory.
+     *
+     * See https://github.com/LibreBooking/librebooking/issues/1590
+     */
+    #[\PHPUnit\Framework\Attributes\Depends('testLoginAndVisitDashboard')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('rejectedRequestsProvider')]
+    public function testRejectedRequestRedirectsToCleanPage(string $path, string $cleanPath, string $pageMarker): void
+    {
+        if (!self::$loggedIn) {
+            $this->markTestSkipped('Login did not succeed — skipping authenticated page tests');
+        }
+
+        $response = self::$client->get($path);
+
+        $this->assertSame(
+            [self::$baseUrl . $cleanPath],
+            $response->getHeader('X-Guzzle-Redirect-History'),
+            "Request $path was not redirected exactly once to $cleanPath"
+        );
+        $this->assertSame(200, $response->getStatusCode(), "Redirect target for $path did not return HTTP 200");
+
+        $body = (string) $response->getBody();
+        $this->assertPhpErrorFree(body: $body);
+        $this->assertStringContainsString($pageMarker, $body, "Redirect target for $path is not the expected page");
+    }
+
+    /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function rejectedRequestsProvider(): array
+    {
+        $schedule = '/Web/schedule.php';
+        $scheduleMarker = 'id="page-schedule"';
+        $calendar = '/Web/calendar.php';
+        $calendarMarker = 'id="page-calendar"';
+
+        return [
+            'schedule with non-numeric schedule id' => [$schedule . '?sid=abc', $schedule, $scheduleMarker],
+            'calendar with non-numeric schedule id' => [$calendar . '?sid=abc', $calendar, $calendarMarker],
+            'schedule with script tag in query' => [$schedule . '?sid=%3Cscript%3Ealert(1)%3C/script%3E', $schedule, $scheduleMarker],
+            'schedule with appended path' => [$schedule . '/extra', $schedule, $scheduleMarker],
+            'schedule with appended PHP file' => [$schedule . '/extra.php', $schedule, $scheduleMarker],
+            'schedule with appended Web directory and PHP file' => [$schedule . '/Web/extra.php', $schedule, $scheduleMarker],
+            'calendar with appended PHP file' => [$calendar . '/extra.php', $calendar, $calendarMarker],
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('unauthenticatedSecurePagesProvider')]
     public function testUnauthenticatedSecurePageRedirectsToLogin(string $path, string $label): void
     {
