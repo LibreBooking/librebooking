@@ -119,7 +119,6 @@
 {include file="javascript-includes.tpl" DataTable=true}
 {datatable tableId=$tableId}
 {jsfile src="ajax-helpers.js"}
-{vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
 {jsfile src="ajax-form-submit.js"}
 {jsfile src="admin/reservation-colors.js"}
 

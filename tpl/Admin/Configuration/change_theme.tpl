@@ -105,7 +105,6 @@
     {include file="javascript-includes.tpl"}
 
     {jsfile src="ajax-helpers.js"}
-    {vendor_js src="jquery-form/3.09/jquery.form-3.09.min.js"}
     {vendor_js src="ajaxfileupload/1.0.0/js/ajaxfileupload.js"}
     {jsfile src="ajax-form-submit.js"}
 
