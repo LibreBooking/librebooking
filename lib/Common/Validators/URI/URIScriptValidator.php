@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Common\ScriptDirectoryUrl;
+
 class URIScriptValidator implements IURIScriptValidator
 {
     /**
@@ -11,8 +13,12 @@ class URIScriptValidator implements IURIScriptValidator
     public static function validateOrRedirect(string $requestURI, string $redirectURL): void
     {
         if (!self::validate($requestURI)) {
-            Log::Debug(message: 'Invalid URI detected. Redirecting to: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
-            header('Location: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            $location = ScriptDirectoryUrl::forPage(
+                scriptName: $_SERVER['SCRIPT_NAME'] ?? '',
+                page: $redirectURL,
+            );
+            Log::Debug(message: 'Invalid URI detected. Redirecting to: ' . $location);
+            header('Location: ' . $location);
             exit;
         }
     }
@@ -47,8 +53,19 @@ class URIScriptValidator implements IURIScriptValidator
 
     private static function isSafePath(string $path): bool
     {
-        // Enforce the path must include /Web/ and end with a PHP file
-        if (!preg_match('#/Web/[^/]+\.php$#', $path)) {
+        // The path must end with a PHP file. The directory is deliberately not
+        // checked: pages are served from /Web/ when the project root is the
+        // document root and from / when Web is.
+        // See https://github.com/LibreBooking/librebooking/issues/1590
+        if (!preg_match('#/[^/]+\.php$#', $path)) {
+            return false;
+        }
+
+        // Only the last segment may be a PHP file. A web server that accepts
+        // path info runs /schedule.php for /schedule.php/anything, so a ".php"
+        // segment followed by more path means caller-controlled content was
+        // appended after the real script name, even if it also ends in ".php".
+        if (preg_match('#\.php/#i', rawurldecode($path))) {
             return false;
         }
 

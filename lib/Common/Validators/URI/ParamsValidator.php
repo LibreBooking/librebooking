@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Common\ScriptDirectoryUrl;
+
 class ParamsValidator
 {
     /**
@@ -51,8 +53,12 @@ class ParamsValidator
     public static function validateOrRedirect(array $params, string $requestURI, string $redirectURL, bool $optional): void
     {
         if (!self::validate($params, $requestURI, $optional)) {
-            Log::Debug(message: 'Validation failed. Redirecting to: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
-            header('Location: ' . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            $location = ScriptDirectoryUrl::forPage(
+                scriptName: $_SERVER['SCRIPT_NAME'] ?? '',
+                page: $redirectURL,
+            );
+            Log::Debug(message: 'Validation failed. Redirecting to: ' . $location);
+            header('Location: ' . $location);
             exit;
         }
     }

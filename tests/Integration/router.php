@@ -135,6 +135,16 @@ if (is_string($scriptPath) && is_file($scriptPath)) {
     return;
 }
 
+// Replicate the web server's path info handling: /page.php/extra runs page.php
+// with PATH_INFO=/extra, as Apache does by default for PHP scripts.
+if (preg_match('#^(.+?\.php)(/.*)$#', $path, $matches) === 1) {
+    $pathInfoScript = resolvePathInDocumentRoot(documentRoot: $documentRoot, path: $matches[1]);
+    if (is_string($pathInfoScript) && is_file($pathInfoScript)) {
+        dispatchScript(documentRoot: $documentRoot, scriptPath: $pathInfoScript, pathInfo: $matches[2]);
+        return;
+    }
+}
+
 // 404 fallback
 http_response_code(404);
 echo "Not Found: $path\n";
