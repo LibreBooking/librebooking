@@ -763,15 +763,15 @@
             {foreach from=$users item=user}
                 var user = {
                     id: {$user->Id},
-                    first: '{$user->First|unescape:'html'|escape:'javascript'}',
-                    last: '{$user->Last|unescape:'html'|escape:'javascript'}',
+                    first: '{$user->First|default:''|unescape:'html'|escape:'javascript'}',
+                    last: '{$user->Last|default:''|unescape:'html'|escape:'javascript'}',
                     isActive: '{$user->IsActive()}',
-                    username: '{$user->Username|unescape:'html'|escape:'javascript'}',
+                    username: '{$user->Username|default:''|unescape:'html'|escape:'javascript'}',
                     email: '{$user->Email|unescape:'html'|escape:'javascript'}',
                     timezone: '{$user->Timezone}',
-                    phone: '{$user->Phone|unescape:'html'|escape:'javascript'}',
-                    organization: '{$user->Organization|unescape:'html'|escape:'javascript'}',
-                    position: '{$user->Position|unescape:'html'|escape:'javascript'}',
+                    phone: '{$user->Phone|default:''|unescape:'html'|escape:'javascript'}',
+                    organization: '{$user->Organization|default:''|unescape:'html'|escape:'javascript'}',
+                    position: '{$user->Position|default:''|unescape:'html'|escape:'javascript'}',
                     reservationColor: '{$user->ReservationColor|escape:"javascript"}'
                 };
                 userManagement.addUser(user);
