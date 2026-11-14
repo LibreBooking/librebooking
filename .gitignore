@@ -16,6 +16,7 @@
 !/lib/external/phpqrcode/cache/index.html
 
 /plugins/*
+!/plugins/.htaccess
 !/plugins/Authentication
 !/plugins/**/index.html
 !/plugins/**/*Example/*
