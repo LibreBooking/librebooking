@@ -113,4 +113,13 @@ class LBAttribute
     {
         return $this->attributeDefinition->SecondaryEntityIds();
     }
+
+    /**
+     * @param int|null $resourceTypeId
+     * @return bool
+     */
+    public function AppliesToResourceType($resourceTypeId)
+    {
+        return $this->attributeDefinition->AppliesToResourceType($resourceTypeId);
+    }
 }

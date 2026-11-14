@@ -135,7 +135,10 @@ class ResourceDetailsPresenter
         $this->page->BindResource($resource);
 
         $attributeList = $this->attributeService->GetAttributes(CustomAttributeCategory::RESOURCE, $resourceId);
-        $this->page->BindAttributes($attributeList->GetAttributes($resourceId));
+        $this->page->BindAttributes(array_values(array_filter(
+            $attributeList->GetAttributes($resourceId),
+            fn (LBAttribute $attribute) => $attribute->AppliesToResourceType($resource->GetResourceTypeId())
+        )));
 
         if ($resource->HasResourceType()) {
             $resourceType = $this->resourceRepository->LoadResourceType($resource->GetResourceTypeId());

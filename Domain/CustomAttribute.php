@@ -279,6 +279,20 @@ class CustomAttribute
     }
 
     /**
+     * @param int|null $resourceTypeId
+     * @return bool
+     */
+    public function AppliesToResourceType($resourceTypeId)
+    {
+        if ($this->category != CustomAttributeCategory::RESOURCE ||
+            $this->secondaryCategory != CustomAttributeCategory::RESOURCE_TYPE ||
+            !$this->HasSecondaryEntities()) {
+            return true;
+        }
+        return in_array($resourceTypeId, $this->SecondaryEntityIds());
+    }
+
+    /**
      * @param int|null $id
      * @param string $label
      * @param CustomAttributeTypes|int $type
@@ -504,7 +518,11 @@ class CustomAttribute
      */
     public function WithSecondaryEntities($category, $entityIds, $entityDescriptions = null)
     {
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        // Resource attributes can only be limited to resource types, specific resources use the entity ids
+        $isResourceTypeScope = $this->category == CustomAttributeCategory::RESOURCE &&
+            (empty($category) || $category == CustomAttributeCategory::RESOURCE_TYPE);
+
+        if ($this->category != CustomAttributeCategory::RESERVATION && !$isResourceTypeScope) {
             return;
         }
 

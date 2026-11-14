@@ -37,7 +37,7 @@ class FakeAttributeService implements IAttributeService
      * @param bool $isAdmin
      * @return AttributeServiceValidationResult
      */
-    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false)
+    public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false, $resourceTypeId = null)
     {
         return $this->_ValidationResult;
     }
