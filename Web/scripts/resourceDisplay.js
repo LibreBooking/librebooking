@@ -24,12 +24,12 @@ function ResourceDisplay(opts) {
   }
 
   function activateResourceDisplay(resourceId) {
-    $('#waitModal').modal('show');
+    setDialogVisible('#wait-modal', true);
     ajaxPost(elements.activateResourceDisplayForm, null, null, function (data) {
       if (data.location) {
         window.location = data.location;
       } else {
-        $('#waitModal').modal('hide');
+        setDialogVisible('#wait-modal', false);
       }
     });
   }
@@ -95,7 +95,7 @@ function ResourceDisplay(opts) {
         var validationErrors = $('#validationErrors');
         if (data.success) {
           validationErrors.find('ul').empty().addClass('d-none');
-          $('#reservation-box').modal('hide');
+          setDialogVisible('#reservation-box', false);
         } else {
           var errors = data.errors ? data.errors : data.Messages;
           validationErrors
@@ -225,11 +225,11 @@ function ResourceDisplay(opts) {
   };
 
   function showWait() {
-    $('#wait-modal').modal('show');
+    setDialogVisible('#wait-modal', true);
   }
 
   function hideWait() {
-    $('#wait-modal').modal('hide');
+    setDialogVisible('#wait-modal', false);
   }
 
   elements.loginButton.click(function (e) {

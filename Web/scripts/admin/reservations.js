@@ -20,7 +20,7 @@ function ReservationManagement(opts, approval) {
     missedCheckout: $('#missedCheckout'),
 
     deleteInstanceDialog: $('#deleteInstanceDialog'),
-    deleteSeriesDialog: $('#deleteSeriesDialog'),
+    deleteSeriesDialog: document.getElementById('deleteSeriesDialog'),
 
     deleteInstanceForm: $('#deleteInstanceForm'),
     deleteSeriesForm: $('#deleteSeriesForm'),
@@ -43,10 +43,10 @@ function ReservationManagement(opts, approval) {
     inlineUpdateErrorDialog: $('#inlineUpdateErrorDialog'),
 
     importReservationsForm: $('#importReservationsForm'),
-    importReservationsDialog: $('#importReservationsDialog'),
+    importReservationsDialog: document.getElementById('importReservationsDialog'),
 
     deleteMultiplePrompt: $('#delete-selected'),
-    deleteMultipleDialog: $('#deleteMultipleDialog'),
+    deleteMultipleDialog: document.getElementById('deleteMultipleDialog'),
     deleteMultipleForm: $('#deleteMultipleForm'),
     deleteMultipleSelectAll: $('#delete-all'),
     deleteMultipleCount: $('#deleteMultipleCount'),
@@ -180,7 +180,7 @@ function ReservationManagement(opts, approval) {
       e.preventDefault();
       $('#importErrors').empty().addClass('d-none');
       $('#importResults').addClass('d-none');
-      elements.importReservationsDialog.modal('show');
+      setDialogVisible(elements.importReservationsDialog, true);
     });
 
     elements.deleteMultiplePrompt.click(function (e) {
@@ -189,7 +189,7 @@ function ReservationManagement(opts, approval) {
       elements.deleteMultipleCount.text(checked.length);
       elements.deleteMultiplePlaceHolder.empty();
       elements.deleteMultiplePlaceHolder.append(checked.clone());
-      elements.deleteMultipleDialog.modal('show');
+      setDialogVisible(elements.deleteMultipleDialog, true);
     });
 
     elements.deleteMultipleSelectAll.click(function (e) {
@@ -211,7 +211,7 @@ function ReservationManagement(opts, approval) {
     elements.addTermsOfService.click(function (e) {
       e.preventDefault();
       loadExistingTermsOfService();
-      elements.termsOfServiceDialog.modal('show');
+      setDialogVisible(elements.termsOfServiceDialog, true);
     });
 
     elements.termsOfServiceDialog.find('.toggle').click(function (e) {
@@ -253,7 +253,7 @@ function ReservationManagement(opts, approval) {
       dataType: 'json',
     });
     ConfigureAsyncForm(elements.statusForm, getUpdateStatusUrl, function () {
-      elements.statusDialog.modal('hide');
+      setDialogVisible(elements.statusDialog, false);
       // todo inline update
       window.location.reload();
     });
@@ -268,7 +268,7 @@ function ReservationManagement(opts, approval) {
       var control = $('#tos-upload');
       control.val('').replaceWith((control = control.clone(true))); // 'reset' file upload
       control.trigger('change');
-      elements.termsOfServiceDialog.modal('hide');
+      setDialogVisible(elements.termsOfServiceDialog, false);
     });
   };
 
@@ -327,9 +327,9 @@ function ReservationManagement(opts, approval) {
 
   function showDeleteReservation(referenceNumber) {
     if (reservations[referenceNumber].isRecurring == '1') {
-      elements.deleteSeriesDialog.modal('show');
+      setDialogVisible(elements.deleteSeriesDialog, true);
     } else {
-      elements.deleteInstanceDialog.modal('show');
+      setDialogVisible(elements.deleteInstanceDialog, true);
     }
   }
 
@@ -407,7 +407,7 @@ function ReservationManagement(opts, approval) {
   }
 
   function approveReservation(referenceNumber) {
-    $('#approveDiv').modal('show');
+    setDialogVisible('#approveDiv', true);
     approval.Approve(referenceNumber);
   }
 

@@ -4,7 +4,7 @@ function QuotaManagement(opts) {
   var elements = {
     addForm: $('#addQuotaForm'),
     deleteForm: $('#deleteQuotaForm'),
-    deleteDialog: $('#deleteDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
     enforceAllDayToggle: document.getElementById('enforce-all-day'),
     enforceHoursTimes: document.getElementById('enforce-hours-times'),
     enforceEveryDayToggle: document.getElementById('enforce-every-day'),
@@ -19,7 +19,7 @@ function QuotaManagement(opts) {
     $('#quotaList-content').on('click', '.delete', function (e) {
       e.preventDefault();
       setActiveQuotaId($(this).attr('quotaId'));
-      elements.deleteDialog.modal('show');
+      setDialogVisible(elements.deleteDialog, true);
     });
 
     $('.save').click(function () {

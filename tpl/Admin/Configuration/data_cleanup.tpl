@@ -242,28 +242,28 @@
             $('#formDeleteReservationDate').val($('#reservationDeleteDate').val());
             ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getReservationCount&date=' + $('#reservationDeleteDate').val(), null, function (data) {
             $('#deleteReservationCount').text(data.count);
-            $('#deleteReservationsDialog').modal('show');
+            setDialogVisible('#deleteReservationsDialog', true);
         })
     });
 
     document.getElementById('purgeReservations').addEventListener('click', function(e) {
-        $('#purgeReservationsDialog').modal('show');
+        setDialogVisible('#purgeReservationsDialog', true);
     });
 
     document.getElementById('deleteBlackouts').addEventListener('click', function(e) {
-    $('#formDeleteBlackoutDate').val($('#blackoutDeleteDate').val());
-    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getBlackoutCount&date=' + $('#blackoutDeleteDate').val(), null, function (data) {
-    $('#deleteBlackoutCount').text(data.count);
-    $('#deleteBlackoutDialog').modal('show');
-    })
+        $('#formDeleteBlackoutDate').val($('#blackoutDeleteDate').val());
+        ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getBlackoutCount&date=' + $('#blackoutDeleteDate').val(), null, function (data) {
+            $('#deleteBlackoutCount').text(data.count);
+            setDialogVisible('#deleteBlackoutDialog', true);
+        })
     });
 
     document.getElementById('deleteUsers').addEventListener('click', function(e) {
-    $('#formDeleteUserDate').val($('#userDeleteDate').val());
-    ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getUserCount&date=' + $('#userDeleteDate').val(), null, function (data) {
-    $('#deleteUserCount').text(data.count);
-    $('#deleteUsersDialog').modal('show');
-    })
+        $('#formDeleteUserDate').val($('#userDeleteDate').val());
+        ajaxGet('{$smarty.server.SCRIPT_NAME}?dr=getUserCount&date=' + $('#userDeleteDate').val(), null, function (data) {
+            $('#deleteUserCount').text(data.count);
+            setDialogVisible('#deleteUsersDialog', true);
+        })
     });
 
     ConfigureAsyncForm($('#deleteReservationsForm'));

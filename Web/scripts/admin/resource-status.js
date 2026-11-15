@@ -2,9 +2,9 @@ function ResourceStatusManagement(opts) {
   var options = opts;
 
   var elements = {
-    addDialog: $('#addDialog'),
-    editDialog: $('#editDialog'),
-    deleteDialog: $('#deleteDialog'),
+    addDialog: document.getElementById('addDialog'),
+    editDialog: document.getElementById('editDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
 
     activeId: $('#activeId'),
 
@@ -27,11 +27,11 @@ function ResourceStatusManagement(opts) {
 
     statusList.on('click', 'a.edit', function (e) {
       $('#edit-reason-description').val($(this).closest('.reason-item').find('.reason-description').text());
-      showEditPrompt(e);
+      setDialogVisible(elements.editDialog, true);
     });
 
     statusList.on('click', 'a.delete', function (e) {
-      showDeletePrompt(e);
+      setDialogVisible(elements.deleteDialog, true);
     });
 
     $('.save').click(function () {
@@ -41,7 +41,7 @@ function ResourceStatusManagement(opts) {
     $('.add-link').click(function (e) {
       e.preventDefault();
       $('#add-reason-status').val($(this).attr('add-to'));
-      showAddPrompt(e);
+      setDialogVisible(elements.addDialog, true);
     });
 
     var errorHandler = function (result) {
@@ -63,17 +63,5 @@ function ResourceStatusManagement(opts) {
 
   var getActiveId = function () {
     return elements.activeId.val();
-  };
-
-  var showAddPrompt = function (e) {
-    elements.addDialog.modal('show');
-  };
-
-  var showEditPrompt = function (e) {
-    elements.editDialog.modal('show');
-  };
-
-  var showDeletePrompt = function (e) {
-    elements.deleteDialog.modal('show');
   };
 }

@@ -6,8 +6,8 @@ function ResourceTypeManagement(opts) {
 
     resourceTypes: $('#resourceTypes'),
 
-    editDialog: $('#editDialog'),
-    deleteDialog: $('#deleteDialog'),
+    editDialog: document.getElementById('editDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
 
     editForm: $('#editForm'),
     addForm: $('#addForm'),
@@ -104,10 +104,10 @@ function ResourceTypeManagement(opts) {
     $('#editName').val(type.name);
     $('#editDescription').val(type.description);
 
-    elements.editDialog.modal('show');
+    setDialogVisible(elements.editDialog, true);
   };
 
   var showDeletePrompt = function (e) {
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 }
