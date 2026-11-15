@@ -83,7 +83,12 @@ class ResourceRequestValidator implements IResourceRequestValidator
         foreach ($request->GetCustomAttributes() as $attribute) {
             $attributes[] = new AttributeValue($attribute->attributeId, $attribute->attributeValue);
         }
-        $validators[] = new AttributeValidator($this->attributeService, CustomAttributeCategory::RESOURCE, $attributes);
+        $validators[] = new AttributeValidator(
+            service: $this->attributeService,
+            category: CustomAttributeCategory::RESOURCE,
+            attributes: $attributes,
+            resourceTypeId: $request->typeId
+        );
 
 
         foreach ($validators as $validator) {

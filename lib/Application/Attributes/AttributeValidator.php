@@ -46,8 +46,9 @@ class AttributeValidator extends ValidatorBase
      * @param $entityId int
      * @param bool $ignoreEmpty
      * @param bool $isAdmin
+     * @param int|null $resourceTypeId
      */
-    public function __construct(IAttributeService $service, $category, $attributes, $entityId = null, $ignoreEmpty = false, $isAdmin = false)
+    public function __construct(IAttributeService $service, $category, $attributes, $entityId = null, $ignoreEmpty = false, $isAdmin = false, private $resourceTypeId = null)
     {
         $this->service = $service;
         $this->category = $category;
@@ -67,7 +68,14 @@ class AttributeValidator extends ValidatorBase
             return;
         }
 
-        $result = $this->service->Validate($this->category, $this->attributes, $this->entityId, $this->ignoreEmpty, $this->isAdmin);
+        $result = $this->service->Validate(
+            category: $this->category,
+            attributeValues: $this->attributes,
+            entityIds: $this->entityId,
+            ignoreEmpty: $this->ignoreEmpty,
+            isAdmin: $this->isAdmin,
+            resourceTypeId: $this->resourceTypeId
+        );
         $this->isValid = $result->IsValid();
         $this->messages = $result->Errors();
     }

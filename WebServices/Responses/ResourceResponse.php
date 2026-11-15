@@ -75,10 +75,11 @@ class ResourceResponse extends RestResponse
 
         $attributeValues = $attributes->GetAttributes($resourceId);
 
-        $i = 0;
         foreach ($attributeValues as $av) {
+            if (!$av->AppliesToResourceType($this->typeId)) {
+                continue;
+            }
             $this->customAttributes[] = new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
-            $i++;
         }
 
         if ($resource->GetIsCalendarSubscriptionAllowed()) {

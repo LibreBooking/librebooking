@@ -279,6 +279,20 @@ class CustomAttribute
     }
 
     /**
+     * @param int|null $resourceTypeId
+     * @return bool
+     */
+    public function AppliesToResourceType($resourceTypeId)
+    {
+        if ($this->category != CustomAttributeCategory::RESOURCE ||
+            $this->secondaryCategory != CustomAttributeCategory::RESOURCE_TYPE ||
+            !$this->HasSecondaryEntities()) {
+            return true;
+        }
+        return in_array((int)$resourceTypeId, $this->SecondaryEntityIds(), true);
+    }
+
+    /**
      * @param int|null $id
      * @param string $label
      * @param CustomAttributeTypes|int $type
@@ -504,18 +518,21 @@ class CustomAttribute
      */
     public function WithSecondaryEntities($category, $entityIds, $entityDescriptions = null)
     {
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if ($this->category != CustomAttributeCategory::RESERVATION && $this->category != CustomAttributeCategory::RESOURCE) {
             return;
+        }
+
+        // Resource attributes can only be limited to resource types, specific resources use the entity ids.
+        // Any other scope clears the existing one.
+        if ($this->category == CustomAttributeCategory::RESOURCE && $category != CustomAttributeCategory::RESOURCE_TYPE) {
+            $category = null;
         }
 
         if (!empty($category) && !empty($entityIds)) {
             $this->secondaryCategory = $category;
 
-            if (is_array($entityIds)) {
-                $this->secondaryEntityIds = $entityIds;
-            } else {
-                $this->secondaryEntityIds = array_map(intval(...), explode(',', $entityIds));
-            }
+            $entityIds = is_array($entityIds) ? $entityIds : explode(',', $entityIds);
+            $this->secondaryEntityIds = array_map(intval(...), $entityIds);
 
             $descriptions = [];
             if (!empty($entityDescriptions)) {

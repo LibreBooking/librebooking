@@ -10,7 +10,6 @@ function AttributeManagement(opts) {
     attributeType: $('#attributeType'),
     appliesTo: $('#appliesTo'),
     editAppliesTo: $('#editAppliesTo'),
-    appliesToId: $('.appliesToId'),
     entityChoices: $('#entityChoices'),
     editEntityChoices: $('#editEntityChoices'),
 
@@ -90,7 +89,7 @@ function AttributeManagement(opts) {
       showRelevantCategoryOptions();
       elements.appliesTo.text(options.allText);
       elements.secondaryPrompt.text(options.allText);
-      elements.appliesToId.val('');
+      renderEntityInputs(elements.addForm);
       elements.addDialog.modal('show');
     });
 
@@ -116,7 +115,7 @@ function AttributeManagement(opts) {
       e.preventDefault();
       activeAppliesTo = $(this);
 
-      showEntities($(this), elements.attributeCategory.val(), currentAttributeEntities.entityIds, 'ATTRIBUTE_ENTITY');
+      showEntities($(this), elements.attributeCategory.val(), currentAttributeEntities.entityIds);
 
       updateEntityCallback = function (selectedIds) {
         currentAttributeEntities.entityIds = selectedIds;
@@ -130,8 +129,7 @@ function AttributeManagement(opts) {
       showEntities(
         $(this),
         $(this).closest('.textBoxOptions').find('.secondaryAttributeCategory').val(),
-        currentAttributeEntities.secondaryEntityIds,
-        'ATTRIBUTE_SECONDARY_ENTITY_IDS'
+        currentAttributeEntities.secondaryEntityIds
       );
 
       updateEntityCallback = function (selectedIds) {
@@ -158,16 +156,13 @@ function AttributeManagement(opts) {
     });
 
     elements.limitScope.change(function () {
-      elements.attributeSecondary.addClass('d-none');
-      if (elements.limitScope.is(':checked')) {
-        elements.attributeSecondary.removeClass('d-none');
-      }
+      elements.attributeSecondary.toggleClass('d-none', !$(this).is(':checked'));
     });
 
-    elements.secondaryAttributeCategory.change(function (e) {
-      currentAttributeEntities.entityIds = [];
+    elements.secondaryAttributeCategory.change(function () {
       currentAttributeEntities.secondaryEntityIds = [];
       elements.secondaryPrompt.text(opts.allText);
+      renderEntityInputs($(this).closest('form'));
     });
 
     ConfigureAsyncForm(elements.addForm, defaultSubmitCallback, addAttributeHandler);
@@ -176,32 +171,40 @@ function AttributeManagement(opts) {
   };
 
   function handleEntitiesSelected(element) {
-    element.empty();
     var entities = selectedEntityChoices.find(':checked');
+    var text = _.map(entities, function (e) {
+      return $(e).attr('data-text');
+    }).join(', ');
 
-    if (entities.length > 0) {
-      var text = _.map(entities, function (e) {
-        return $(e).attr('data-text');
-      }).join(', ');
+    element.text(text || opts.allText);
+    updateEntityCallback(
+      _.map(entities, function (e) {
+        return $(e).val();
+      })
+    );
+    renderEntityInputs(selectedEntityChoices.closest('form'));
+  }
 
-      element.text(text);
+  // The picker checkboxes are display only. Both pickers share one container, so the
+  // selected ids are submitted from hidden inputs built from currentAttributeEntities.
+  function renderEntityInputs(form) {
+    form.find('.selectedEntityIds').remove();
 
-      updateEntityCallback(
-        _.map(entities, function (e) {
-          return $(e).val();
-        })
-      );
-    } else {
-      element.text(opts.allText);
-    }
+    var inputs = $('<div class="selectedEntityIds d-none"></div>');
+    $.each(currentAttributeEntities.entityIds, function (i, id) {
+      inputs.append($('<input type="hidden" name="ATTRIBUTE_ENTITY[]"/>').val(id));
+    });
+    $.each(currentAttributeEntities.secondaryEntityIds, function (i, id) {
+      inputs.append($('<input type="hidden" name="ATTRIBUTE_SECONDARY_ENTITY_IDS[]"/>').val(id));
+    });
+    form.append(inputs);
   }
 
   var onEntityChoiceClick = function (e) {
     e.preventDefault();
     selectedEntityChoices.hide();
-    elements.appliesToId.empty();
-    selectedEntityChoices.find('input:checkbox').removeAttr('checked');
-    elements.appliesTo.text(opts.allText);
+    selectedEntityChoices.find('input:checkbox').prop('checked', false);
+    handleEntitiesSelected(activeAppliesTo);
   };
 
   var showRelevantAttributeOptions = function (selectedType, optionsDiv) {
@@ -254,64 +257,26 @@ function AttributeManagement(opts) {
     $('#editAttributeRegex').val(selectedAttribute.regex);
     $('#editAttributePossibleValues').val(selectedAttribute.possibleValues);
     $('#editAttributeSortOrder').val(selectedAttribute.sortOrder);
-    $('#editAttributeEntityId').val(selectedAttribute.entityId);
 
     selectedEntityChoices.empty();
-    if (selectedAttribute.entityDescriptions.length == 0) {
-      elements.appliesTo.text(options.allText);
-      elements.appliesToId.val('');
-    } else {
-      if (elements.attributeCategory.val() == options.categories.reservation) {
-        $.each(selectedAttribute.secondaryEntityIds, function (i, id) {
-          if (selectedAttribute.secondaryEntityDescriptions[i] != undefined) {
-            var name = selectedAttribute.secondaryEntityDescriptions[i].replace(/"/g, '&quot;');
-            selectedEntityChoices.append(
-              $(
-                '<input type="checkbox" name="ATTRIBUTE_SECONDARY_ENTITY_IDS[]" value="' +
-                  id +
-                  '" checked="checked" data-text="' +
-                  name +
-                  '"/>'
-              )
-            );
-          }
-        });
-      } else {
-        $.each(selectedAttribute.entityIds, function (i, id) {
-          if (selectedAttribute.secondaryEntityDescriptions[i] != undefined) {
-            var name = selectedAttribute.entityDescriptions[i].replace(/"/g, '&quot;');
-            selectedEntityChoices.append(
-              $(
-                '<input type="checkbox" name="ATTRIBUTE_ENTITY[]" value="' +
-                  id +
-                  '" checked="checked" data-text="' +
-                  name +
-                  '"/>'
-              )
-            );
-          }
-        });
-      }
-      handleEntitiesSelected(elements.editAppliesTo);
-      elements.appliesToId.hide();
-    }
+    var appliesToText = selectedAttribute.entityDescriptions.filter(Boolean).join(', ');
+    elements.editAppliesTo.text(appliesToText || options.allText);
 
     var limitScope = $('#editAttributeLimitScope');
-    limitScope.prop('checked', false);
+    limitScope.prop('checked', false).trigger('change');
 
-    $('#editAttributeSecondaryEntityId').val('');
     elements.secondaryPrompt.text(options.allText);
     if (selectedAttribute.secondaryEntityIds.length > 0) {
       limitScope.prop('checked', true);
       limitScope.trigger('change');
       $('#editAttributeSecondaryCategory').val(selectedAttribute.secondaryCategory);
-      $('#editAttributeSecondaryEntityId').val(selectedAttribute.secondaryEntityIds.join());
       elements.secondaryPrompt.text(selectedAttribute.secondaryEntityDescriptions.join(', '));
     }
 
     $('#editAttributePrivate').prop('checked', selectedAttribute.isPrivate);
 
     setActiveId(selectedAttribute.id);
+    renderEntityInputs(elements.form);
 
     elements.editDialog.modal('show');
   };
@@ -339,22 +304,26 @@ function AttributeManagement(opts) {
   }
 
   var showRelevantCategoryOptions = function () {
-    if (elements.attributeCategory.val() == options.categories.reservation) {
-      $('.attributeUnique').hide();
-      $('.attributeAdminOnly').show();
-      $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-      $('.secondaryEntities').removeClass('d-none');
-      $('.attributeIsPrivate').show();
-    } else {
-      $('.attributeUnique').show();
-      $('.secondaryEntities, .attributeSecondary').addClass('d-none');
-      $('.attributeIsPrivate').hide();
+    var category = elements.attributeCategory.val();
+    var isReservation = category == options.categories.reservation;
+    var isResource = category == options.categories.resource;
+
+    $('.attributeUnique').toggle(!isReservation);
+    $('.attributeIsPrivate').toggle(isReservation);
+    $('.secondaryEntities, .attributeSecondary').addClass('d-none');
+    $('.secondaryEntities').toggleClass('d-none', !isReservation && !isResource);
+
+    // Resource attributes can only be limited to resource types, specific resources use "Applies To"
+    $('.secondaryAttributeCategory option').each(function () {
+      var hidden = isResource && $(this).val() != options.categories.resource_type;
+      $(this).prop({ hidden: hidden, disabled: hidden });
+    });
+    if (isResource) {
+      elements.secondaryAttributeCategory.val(options.categories.resource_type);
     }
   };
 
-  var showEntities = function (element, categoryId, selectedIds, formName) {
-    elements.appliesToId.find('input:checkbox').removeAttr('checked');
-
+  var showEntities = function (element, categoryId, selectedIds) {
     selectedEntityChoices.empty();
     selectedEntityChoices.css({ left: element.position().left, top: element.position().top + element.height() });
     selectedEntityChoices.show();
@@ -382,15 +351,13 @@ function AttributeManagement(opts) {
     ];
     $.each(data, function (index, item) {
       var checked = '';
-      if (selectedIds.indexOf(item.Id) !== -1) {
+      if (selectedIds.map(String).indexOf(String(item.Id)) !== -1) {
         checked = ' checked="checked" ';
       }
       items.push(
         '<div class="form-check"><input type="checkbox" class="form-check-input" id="' +
           item.Id +
-          '" name="' +
-          formName +
-          '[]" value="' +
+          '" value="' +
           item.Id +
           '"' +
           checked +

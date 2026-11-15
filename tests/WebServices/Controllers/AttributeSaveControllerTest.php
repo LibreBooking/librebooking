@@ -68,6 +68,39 @@ class AttributeSaveControllerTest extends TestBase
         $this->assertEquals(false, $result->WasSuccessful());
     }
 
+    public function testAddsResourceAttributeLimitedToResourceTypes()
+    {
+        $request = $this->ResourceAttributeRequest(CustomAttributeCategory::RESOURCE_TYPE);
+
+        $result = $this->controller->Create($request, $this->session);
+
+        $this->assertTrue($result->WasSuccessful());
+        $this->assertEquals([3], $this->attributeRepository->_Added->SecondaryEntityIds());
+    }
+
+    public function testRejectsResourceAttributeLimitedToOtherCategories()
+    {
+        $request = $this->ResourceAttributeRequest(CustomAttributeCategory::USER);
+
+        $createResult = $this->controller->Create($request, $this->session);
+        $updateResult = $this->controller->Update(1, $request, $this->session);
+
+        $this->assertFalse($createResult->WasSuccessful());
+        $this->assertFalse($updateResult->WasSuccessful());
+    }
+
+    private function ResourceAttributeRequest(int $secondaryCategoryId): CustomAttributeRequest
+    {
+        $request = new CustomAttributeRequest();
+        $request->label = 'attributename';
+        $request->type = CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+        $request->categoryId = CustomAttributeCategory::RESOURCE;
+        $request->secondaryCategoryId = $secondaryCategoryId;
+        $request->secondaryEntityIds = [3];
+
+        return $request;
+    }
+
     public function testUpdatesAttribute()
     {
         $attributeId = 123;

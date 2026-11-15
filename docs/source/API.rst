@@ -475,8 +475,10 @@ CreateCustomAttribute
   (resource), 5 (resource type)
 | appliesToIds only allowed for category 2, 4, 5 and must match the id
   of corresponding entities
-| secondaryCategoryId and secondaryEntityIds only applies to category 1
-  and must match the id of the corresponding entities
+| secondaryCategoryId and secondaryEntityIds only apply to category 1
+  and 4 and must match the id of the corresponding entities
+| For category 4 the only allowed secondaryCategoryId is 5 (resource
+  type)
 
 **Route:** ``/Web/Services/index.php/Attributes/``
 
@@ -564,8 +566,10 @@ UpdateCustomAttribute
   (resource), 5 (resource type)
 | appliesToIds only allowed for category 2, 4, 5 and must match the id
   of corresponding entities
-| secondaryCategoryId and secondaryEntityIds only applies to category 1
-  and must match the id of the corresponding entities
+| secondaryCategoryId and secondaryEntityIds only apply to category 1
+  and 4 and must match the id of the corresponding entities
+| For category 4 the only allowed secondaryCategoryId is 5 (resource
+  type)
 
 **Route:** ``/Web/Services/index.php/Attributes/:attributeId``
 

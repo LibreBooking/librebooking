@@ -22,6 +22,10 @@ insert into `resources` (`resource_id`, `name`, `location`, `contact_info`, `des
   (1, 'Conference Room 1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, NULL, NULL, NULL, 'resource1.jpg', NULL, 1),
   (2, 'Conference Room 2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, NULL, NULL, NULL, 'resource2.jpg', NULL, 1);
 
+insert into `resource_types` (`resource_type_id`, `resource_type_name`, `resource_type_description`) values
+  (1, 'Meeting Room', NULL),
+  (2, 'Equipment', NULL);
+
 insert into `accessories` (`accessory_id`, `accessory_name`, `accessory_quantity`) values
   (1, 'accessory limited to 10', 10),
   (2, 'accessory limited to 2', 2),

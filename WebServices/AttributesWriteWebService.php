@@ -24,7 +24,8 @@ class AttributesWriteWebService
      * Allowed values for type: 1 (single line),  2 (multi line), 3 (select list), 4 (checkbox), 5 (datetime)
      * Allowed values for categoryId: 1 (reservation), 2 (user), 4 (resource), 5 (resource type)
      * appliesToIds only allowed for category 2, 4, 5 and must match the id of corresponding entities
-     * secondaryCategoryId and secondaryEntityIds only applies to category 1 and must match the id of the corresponding entities
+     * secondaryCategoryId and secondaryEntityIds only apply to category 1 and 4 and must match the id of the corresponding entities
+     * For category 4 the only allowed secondaryCategoryId is 5 (resource type)
      * @request CustomAttributeRequest
      * @response CustomAttributeCreatedResponse
      * @return void
@@ -55,7 +56,8 @@ class AttributesWriteWebService
      * Allowed values for type: 1 (single line),  2 (multi line), 3 (select list), 4 (checkbox), 5 (datetime)
      * Allowed values for categoryId: 1 (reservation), 2 (user), 4 (resource), 5 (resource type)
      * appliesToIds only allowed for category 2, 4, 5 and must match the id of corresponding entities
-     * secondaryCategoryId and secondaryEntityIds only applies to category 1 and must match the id of the corresponding entities
+     * secondaryCategoryId and secondaryEntityIds only apply to category 1 and 4 and must match the id of the corresponding entities
+     * For category 4 the only allowed secondaryCategoryId is 5 (resource type)
      * @request CustomAttributeRequest
      * @response CustomAttributeUpdatedResponse
      * @param int $attributeId

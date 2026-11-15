@@ -209,6 +209,16 @@ class AttributeSaveController implements IAttributeSaveController
             $errors[] = 'appliesToId is not valid when the type is reservation';
         }
 
+        if ($request->categoryId == CustomAttributeCategory::RESOURCE &&
+                !empty($request->secondaryCategoryId) &&
+                $request->secondaryCategoryId != CustomAttributeCategory::RESOURCE_TYPE
+        ) {
+            $errors[] = sprintf(
+                'secondaryCategoryId is invalid for resource attributes. Allowed value: %s (resource type)',
+                CustomAttributeCategory::RESOURCE_TYPE
+            );
+        }
+
         return $errors;
     }
 

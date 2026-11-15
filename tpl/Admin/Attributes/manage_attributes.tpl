@@ -73,9 +73,8 @@
 							</div>
 
 							<div class="attributeUnique form-group">
-								<label for="addAttributeEntityId">{translate key=AppliesTo}</label>
+								<label>{translate key=AppliesTo}</label>
 								<a href="#" id="appliesTo" class="link-primary">{translate key=All}</a>
-								<div class="appliesToId" id="addAttributeEntityId" style="display:none;"></div>
 							</div>
 
 							<div class="attributeRequired form-group">
@@ -194,9 +193,8 @@
 							</div>
 
 							<div class="form-group attributeUnique">
-								<label for="editAttributeEntityId">{translate key=AppliesTo}</label>
+								<label>{translate key=AppliesTo}</label>
 								<a href="#" id="editAppliesTo" class="link-primary">{translate key=All}</a>
-								<div class="appliesToId" id='editAttributeEntityId' style="display:none;"></div>
 							</div>
 
 							<div class="form-group attributeRequired">
