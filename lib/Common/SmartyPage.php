@@ -48,7 +48,9 @@ class SmartyPage extends Smarty
 
         $base = __DIR__ . '/../../';
 
-        $this->debugging = isset($_GET['debug']);
+        // The debug console lists every template variable, so only offer it in debug mode
+        $this->debugging = isset($_GET['debug']) &&
+            Configuration::Instance()->GetKey(ConfigKeys::APP_DEBUG, new BooleanConverter());
         $this->AddTemplateDirectory($base . 'tpl');
         $this->setCompileDir($base . 'tpl_c');
         $this->setConfigDir($base . 'configs');
