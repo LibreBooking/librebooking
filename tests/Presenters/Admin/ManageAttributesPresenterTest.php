@@ -86,6 +86,27 @@ class ManageAttributesPresenterTest extends TestBase
         $this->presenter->AddAttribute();
     }
 
+    public function testAddsResourceAttributeLimitedToResourceTypes()
+    {
+        $this->page->_label = 'resource label';
+        $this->page->_type = CustomAttributeTypes::SINGLE_LINE_TEXTBOX;
+        $this->page->_category = CustomAttributeCategory::RESOURCE;
+        $this->page->_entityIds = [];
+        $this->page->_limitAttributeScope = true;
+        $this->page->_secondaryCategory = CustomAttributeCategory::RESOURCE_TYPE;
+        $this->page->_secondaryEntityIds = ['3', '4'];
+
+        $this->attributeRepository->expects($this->once())
+                ->method('Add')
+                ->with($this->callback(function (CustomAttribute $attribute) {
+                    return $attribute->SecondaryCategory() == CustomAttributeCategory::RESOURCE_TYPE
+                        && $attribute->SecondaryEntityIds() == ['3', '4'];
+                }))
+                ->willReturn(1);
+
+        $this->presenter->AddAttribute();
+    }
+
     public function testUpdatesAttribute()
     {
         $attributeId = 1091;

@@ -578,7 +578,7 @@
 													{if $AttributeList|default:array()|count > 0}
 														{assign var="hasResults" value=false}
 														{foreach from=$AttributeList item=attribute name=attrLoop}
-															{if $attribute->AppliesToEntity($id)}
+															{if $attribute->AppliesToEntity($id) && $attribute->AppliesToResourceType($resource->GetResourceTypeId())}
 																{if !$hasResults}
 																	{assign var="hasResults" value=true}
 																	{* Content at the start of the iteration *}
@@ -2221,6 +2221,10 @@
 	$('.resourceTypeName').editable({
 		url: updateUrl + '{ManageResourcesActions::ActionChangeResourceType}',
 		emptytext: "{translate key=NoResourceTypeLabel|escape:'javascript'}",
+		success: function () {
+			// Which attributes apply depends on the resource type
+			window.location.reload();
+		},
 		source: [{
 				value: '0', text: '' //'-- {translate key=None} --'
 			},

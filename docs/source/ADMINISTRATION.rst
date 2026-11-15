@@ -530,7 +530,9 @@ be shown.
 User attributes are collected when registering and updating a user's profile.
 
 Resources attributes are collected when managing resources and will be
-displayed when viewing resource details.
+displayed when viewing resource details. To collect a resource attribute only
+for resources of specific resource types, check the Collect In Specific Cases
+option and pick the resource types.
 
 Resource Type attributes are collected when managing resource types and will
 be displayed when viewing resource details.
