@@ -303,4 +303,70 @@ class TwigRendererTest extends TestBase
             'fetchLocalized must select the .twig file and produce output matching the .tpl'
         );
     }
+
+
+    public function testRenderControlTemplateSeesPageVariables(): void
+    {
+        $renderer = new TwigRenderer();
+        $renderer->environment()->setLoader(new \Twig\Loader\ArrayLoader(['Control.twig' => '{{ Path }}|{{ own }}']));
+        $renderer->assign('Path', '/web/');
+
+        $this->assertSame('/web/|x', $renderer->renderControlTemplate('Control.tpl', ['own' => 'x']));
+    }
+
+    public function testDashboardItemRendersControlWithThePageRenderer(): void
+    {
+        $renderer = new TwigRenderer();
+        $renderer->environment()->setLoader(new \Twig\Loader\ArrayLoader([
+            'page' => '{{ dashboard_item(item) }}',
+            'Dashboard/widget.twig' => 'twig:{{ Path }}',
+        ]));
+        $renderer->assign('Path', '/web/');
+
+        // Dashboard controls are created with a Smarty renderer before the page picks its engine
+        $item = new class (new SmartyRenderer()) extends Control {
+            public function PageLoad(): void
+            {
+                $this->Display('Dashboard/widget.tpl');
+            }
+        };
+
+        $this->assertSame('twig:/web/', $renderer->render('page', ['item' => $item]));
+    }
+
+    public function testFetchLocalizedWithoutLanguageFallsBackToEnUs(): void
+    {
+        $resources = Resources::GetInstance();
+        $previous = $resources->CurrentLanguage;
+        $resources->SetLanguage('de_de');
+        try {
+            $renderer = new TwigRenderer($resources);
+            $renderer->assign('AppTitle', 'LibreBooking');
+
+            $this->assertSame(
+                $renderer->fetchLocalized('ReportEmail.tpl', false, 'en_us'),
+                $renderer->fetchLocalized('ReportEmail.tpl', false)
+            );
+        } finally {
+            $resources->SetLanguage($previous);
+        }
+    }
+
+    public function testDebugQueryParameterOnlyCountsInDebugMode(): void
+    {
+        $config = new FakeConfig();
+        $config->SetKey(ConfigKeys::CACHE_TEMPLATES, true);
+        Configuration::SetInstance($config);
+        $_GET['debug'] = '1';
+        try {
+            $config->SetKey(ConfigKeys::APP_DEBUG, false);
+            $this->assertFalse((new TwigRenderer())->environment()->isDebug());
+
+            $config->SetKey(ConfigKeys::APP_DEBUG, true);
+            $this->assertTrue((new TwigRenderer())->environment()->isDebug());
+        } finally {
+            unset($_GET['debug']);
+            Configuration::SetInstance(null);
+        }
+    }
 }
