@@ -12,9 +12,6 @@
 /config/version-suffix.txt
 **/*.config.php
 
-/lib/external/phpqrcode/cache/*
-!/lib/external/phpqrcode/cache/index.html
-
 /plugins/*
 !/plugins/.htaccess
 !/plugins/Authentication

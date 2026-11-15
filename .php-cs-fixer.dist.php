@@ -12,7 +12,6 @@ try {
 $finder = new PhpCsFixer\Finder();
 
 $finder->exclude(['.git', '.phpdoc', 'build', 'node_modules', 'tools', 'tpl_c', 'var', 'vendor'])
-    ->notPath(['lib/external'])
     ->in(__DIR__);
 
 $config = new PhpCsFixer\Config();

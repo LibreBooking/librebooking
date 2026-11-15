@@ -8,6 +8,7 @@ class RestResponse
     public const UNAUTHORIZED_CODE = 401;
     public const FORBIDDEN_CODE = 403;
     public const NOT_FOUND_CODE = 404;
+    public const METHOD_NOT_ALLOWED_CODE = 405;
     public const SERVER_ERROR = 500;
     public const SERVICE_UNAVAILABLE = 503;
 

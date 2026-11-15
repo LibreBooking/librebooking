@@ -1,9 +1,15 @@
 <?php
 
+use LibreBooking\WebService\ApiRequestPath;
+use Slim\Factory\AppFactory;
+use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\ResponseEmitter;
+
 define('ROOT_DIR', '../../');
 
 require_once(ROOT_DIR . 'lib/ComposerDependenciesGuard.php');
 EnsureComposerDependenciesInstalledForRequest();
+require_once(ROOT_DIR . 'vendor/autoload.php');
 
 require_once(ROOT_DIR . 'lib/WebService/namespace.php');
 require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
@@ -38,15 +44,16 @@ set_exception_handler(function ($e) {
     exit;
 });
 
-\Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+$requestPath = ApiRequestPath::fromServer(server: $_SERVER);
 
-$server = new SlimServer($app);
+$app = AppFactory::create();
+
+$server = new SlimServer(basePath: $requestPath->basePath);
 ServiceLocator::SetApiServer(apiServer: $server);
-$registry = new SlimWebServiceRegistry($app);
+$registry = new SlimWebServiceRegistry(slim: $app, server: $server);
 
 
-RegisterHelp($registry, $app);
+RegisterHelp(registry: $registry, server: $server);
 RegisterAuthentication($server, $registry);
 RegisterReservations($server, $registry);
 RegisterResources($server, $registry);
@@ -57,67 +64,51 @@ RegisterGroups($server, $registry);
 RegisterAccessories($server, $registry);
 RegisterAccounts($server, $registry);
 
-$app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
-    if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
-        $app->halt(RestResponse::SERVICE_UNAVAILABLE, 'LibreBooking API is disabled. Set ["api"]["enabled"] = true');
-    }
+// Slim runs the middleware that was added last first: errors are handled
+// around everything, then the route is looked up, and only a request that
+// matched a route has its access checked.
+$app->add(new ApiAccessMiddleware(
+    registry: $registry,
+    server: $server,
+    security: new WebServiceSecurity(new UserSessionRepository()),
+    responseFactory: $app->getResponseFactory(),
+));
+$app->addRoutingMiddleware();
+// Slim does not log: ApiErrorHandlers writes the log entry.
+$errorMiddleware = $app->addErrorMiddleware(displayErrorDetails: false, logErrors: false, logErrorDetails: false);
+$errorHandlers = new ApiErrorHandlers(responseFactory: $app->getResponseFactory());
+$errorHandlers->Register(errorMiddleware: $errorMiddleware);
 
-    $routeName = $app->router()->getCurrentRoute()->getName();
-    if ($registry->IsSecure($routeName)) {
-        $security = new WebServiceSecurity(new UserSessionRepository());
-        $wasHandled = $security->HandleSecureRequest($server, $registry->IsLimitedToAdmin($routeName));
-        if (!$wasHandled) {
-            $app->halt(
-                RestResponse::UNAUTHORIZED_CODE,
-                'You must be authenticated in order to access this service.<br/>' . $server->GetFullServiceUrl(WebServices::Login)
-            );
-        }
+// Routes are matched against the path of the service only, wherever the API
+// is located inside the web root.
+$request = ServerRequestCreatorFactory::create()->createServerRequestFromGlobals();
+$request = $request->withUri($request->getUri()->withPath($requestPath->pathInfo));
 
-        $userSession = ServiceLocator::GetUserSession();
-        // Admin users can always use the API
-        if ($userSession->IsAdmin) {
-            return;
-        }
+// A PHP warning raised while the request is handled fails the request.
+//
+// $app->run() is not used, so that the response stays available in
+// $response: ApiEntryPointTest reads its status and headers from there,
+// because a command-line subprocess cannot observe what was sent.
+set_error_handler($errorHandlers->ThrowPhpError(...));
+try {
+    $response = $app->handle($request);
+} finally {
+    // Also when handle() throws, so that the exception handler set above
+    // does not run with warnings still being turned into exceptions.
+    restore_error_handler();
+}
 
-        // Check if the user is allowed API access to the route
-        if (!$registry->IsUserAllowedApiAccess(routeName: $routeName, userId: $userSession->UserId)) {
-            $app->halt(
-                RestResponse::FORBIDDEN_CODE,
-                'You are not authorized to access this service.<br/>'
-            );
-        }
-    }
-});
+(new ResponseEmitter())->emit($response);
 
-// Unknown routes, including IDs that fail the numeric route conditions set
-// by SlimWebServiceRegistry, get the same JSON body as a missing record
-// instead of Slim's HTML page.
-$app->notFound(function () use ($app) {
-    $app->response()->header('Content-Type', 'application/json');
-    echo json_encode(RestResponse::NotFound());
-});
-
-$app->error(function (\Exception $e) use ($app) {
-    require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
-    Log::Error('Slim Exception. %s', $e);
-    $app->response()->header('Content-Type', 'application/json');
-    $app->response()->status(RestResponse::SERVER_ERROR);
-    $app->response()->write('Exception was logged.');
-});
-
-$app->run();
-
-function RegisterHelp(SlimWebServiceRegistry $registry, \Slim\Slim $app)
+function RegisterHelp(SlimWebServiceRegistry $registry, SlimServer $server)
 {
-    $app->get('/', function () use ($registry, $app) {
+    $renderHelp = function () use ($registry, $server) {
         // Print API documentation
-        ApiHelpPage::Render($registry, $app);
-    })->name('Default');
+        ApiHelpPage::Render(registry: $registry, server: $server);
+    };
 
-    $app->get('/Help', function () use ($registry, $app) {
-        // Print API documentation
-        ApiHelpPage::Render($registry, $app);
-    })->name('Help');
+    $registry->AddUnlistedGet(route: '/', callback: $renderHelp, routeName: 'Default');
+    $registry->AddUnlistedGet(route: '/Help', callback: $renderHelp, routeName: 'Help');
 }
 
 function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry)

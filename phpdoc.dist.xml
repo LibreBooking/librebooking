@@ -30,7 +30,6 @@
                 <path>WebServices/*</path>
             </source>
             <ignore hidden="true" symlinks="true">
-                <path>lib/external/**/*</path>
                 <path>vendor/**/*</path>
             </ignore>
         </api>
