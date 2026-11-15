@@ -37,6 +37,7 @@ export default [
         decodeNames: 'readonly',
         getCollapseInstance: 'readonly',
         syncCollapse: 'readonly',
+        setDialogVisible: 'readonly',
 
         // AJAX helpers (ajax-helpers.js)
         ajaxPost: 'readonly',
