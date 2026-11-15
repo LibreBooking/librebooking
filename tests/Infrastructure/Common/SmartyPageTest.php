@@ -488,4 +488,18 @@ class SmartyPageTest extends TestBase
 
         return $queries;
     }
+
+    public function testDebugConsoleIsOffOutsideDebugMode(): void
+    {
+        $_GET['debug'] = '1';
+        try {
+            $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, false);
+            $this->assertFalse((new SmartyPage())->debugging);
+
+            $this->fakeConfig->SetKey(ConfigKeys::APP_DEBUG, true);
+            $this->assertTrue((new SmartyPage())->debugging);
+        } finally {
+            unset($_GET['debug']);
+        }
+    }
 }
