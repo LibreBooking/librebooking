@@ -42,13 +42,13 @@ function Registration() {
 
     $('#profileUpdatedMessage').hide();
 
-    $('#waitModal').modal('show');
+    setDialogVisible('#waitModal', true);
 
     return true;
   }
 
   function hideModal() {
-    $('#waitModal').modal('hide');
+    setDialogVisible('#waitModal', false);
 
     var top = $('#registrationbox').scrollTop();
     $('html, body').animate({ scrollTop: top }, 'slow');

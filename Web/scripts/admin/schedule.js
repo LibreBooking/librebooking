@@ -6,15 +6,15 @@ function ScheduleManagement(opts) {
     scheduleList: $('#schedulesTable_wrapper'),
 
     layoutDialog: $('#changeLayoutDialog'),
-    deleteDialog: $('#deleteDialog'),
-    addDialog: $('#addDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
+    addDialog: document.getElementById('addDialog'),
 
     changeLayoutForm: $('#changeLayoutForm'),
     placeholderForm: $('#placeholderForm'),
     deleteForm: $('#deleteForm'),
 
     addForm: $('#addScheduleForm'),
-    addName: $('#addName'),
+    addName: document.getElementById('addName'),
 
     reservableEdit: $('#reservableEdit'),
     blockedEdit: $('#blockedEdit'),
@@ -31,7 +31,7 @@ function ScheduleManagement(opts) {
 
     addScheduleButton: $('#add-schedule'),
 
-    peakTimesDialog: $('#peakTimesDialog'),
+    peakTimesDialog: document.getElementById('peakTimesDialog'),
     peakTimesForm: $('#peakTimesForm'),
     peakEveryDay: $('#peakEveryDay'),
     peakDayList: $('#peakDayList'),
@@ -52,15 +52,15 @@ function ScheduleManagement(opts) {
 
     switchLayoutButton: $('.switchLayout'),
     switchLayoutForm: $('#switchLayoutForm'),
-    switchLayoutDialog: $('#switchLayoutDialog'),
+    switchLayoutDialog: document.getElementById('switchLayoutDialog'),
 
     concurrentMaximumForm: $('#concurrentMaximumForm'),
-    concurrentMaximumDialog: $('#concurrentMaximumDialog'),
+    concurrentMaximumDialog: document.getElementById('concurrentMaximumDialog'),
     maximumConcurrentUnlimited: $('#maximumConcurrentUnlimited'),
     maximumConcurrent: $('#maximumConcurrent'),
 
     resourcesPerReservationForm: $('#resourcesPerReservationForm'),
-    resourcesPerReservationDialog: $('#resourcesPerReservationDialog'),
+    resourcesPerReservationDialog: document.getElementById('resourcesPerReservationDialog'),
     resourcesPerReservationUnlimited: $('#resourcesPerReservationUnlimited'),
     resourcesPerReservationResources: $('#resourcesPerReservationResources'),
 
@@ -172,7 +172,7 @@ function ScheduleManagement(opts) {
     elements.scheduleList.on('click', '.switchLayout', function (e) {
       e.preventDefault();
       $('#switchLayoutTypeId').val($(e.target).data('switch-to'));
-      elements.switchLayoutDialog.modal('show');
+      setDialogVisible(elements.switchLayoutDialog, true);
     });
 
     elements.scheduleList.on('click', '.changeScheduleConcurrentMaximum', function (e) {
@@ -181,7 +181,7 @@ function ScheduleManagement(opts) {
       elements.maximumConcurrentUnlimited.attr('checked', concurrent == '0');
       elements.maximumConcurrent.val(concurrent);
       elements.maximumConcurrent.attr('disabled', concurrent == '0');
-      elements.concurrentMaximumDialog.modal('show');
+      setDialogVisible(elements.concurrentMaximumDialog, true);
     });
 
     elements.scheduleList.on('click', '.changeResourcesPerReservation', function (e) {
@@ -190,7 +190,7 @@ function ScheduleManagement(opts) {
       elements.resourcesPerReservationUnlimited.attr('checked', maximum == '0');
       elements.resourcesPerReservationResources.val(maximum);
       elements.resourcesPerReservationResources.attr('disabled', maximum == '0');
-      elements.resourcesPerReservationDialog.modal('show');
+      setDialogVisible(elements.resourcesPerReservationDialog, true);
     });
 
     elements.deletePeakTimesButton.click(function (e) {
@@ -248,11 +248,11 @@ function ScheduleManagement(opts) {
 
     elements.addScheduleButton.click(function (e) {
       e.preventDefault();
-      elements.addDialog.modal('show');
+      setDialogVisible(elements.addDialog, true);
     });
 
-    elements.addDialog.on('shown.bs.modal', function () {
-      elements.addName.focus();
+    elements.addDialog.addEventListener('shown.bs.modal', function () {
+      elements.addName?.focus();
     });
 
     elements.cancelDeleteSlot.click(function (e) {
@@ -435,7 +435,7 @@ function ScheduleManagement(opts) {
     }
     elements.usesSingleLayout.trigger('change');
 
-    elements.layoutDialog.modal('show');
+    setDialogVisible(elements.layoutDialog, true);
   };
 
   var toggleLayoutChange = function (useSingleLayout) {
@@ -454,7 +454,7 @@ function ScheduleManagement(opts) {
     elements.deleteDestinationScheduleId.children('option[value="' + scheduleId + '"]').attr('disabled', 'disabled');
     elements.deleteDestinationScheduleId.val('');
 
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   var reformatTimeSlots = function (div) {
@@ -523,7 +523,7 @@ function ScheduleManagement(opts) {
     wireUpTimePickers(startTime, endTime);
 
     elements.deletePeakTimes.val('');
-    elements.peakTimesDialog.modal('show');
+    setDialogVisible(elements.peakTimesDialog, true);
   };
 
   var peakOnEveryDayChanged = function () {
@@ -554,7 +554,7 @@ function ScheduleManagement(opts) {
     $('[data-schedule-id=' + getActiveScheduleId() + ']')
       .find('.peakPlaceHolder')
       .html(resultHtml);
-    elements.peakTimesDialog.modal('hide');
+    setDialogVisible(elements.peakTimesDialog, false);
   };
 
   var wireUpPeakTimeToggles = function () {
@@ -733,7 +733,7 @@ function ScheduleManagement(opts) {
       _fullCalendar.render();
     });
 
-    $('#customLayoutDialog').modal('show');
+    setDialogVisible('#customLayoutDialog', true);
   };
 
   function afterDeleteSlot() {

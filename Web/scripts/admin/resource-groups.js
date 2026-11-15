@@ -11,14 +11,14 @@ function ResourceGroupManagement(opts) {
     activeId: $('#activeId'),
 
     renameForm: $('#renameForm'),
-    renameDialog: $('#renameDialog'),
+    renameDialog: document.getElementById('renameDialog'),
     newName: $('#editName'),
 
     deleteForm: $('#deleteForm'),
-    deleteDialog: $('#deleteDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
 
     addChildForm: $('#addChildForm'),
-    addChildDialog: $('#addChildDialog'),
+    addChildDialog: document.getElementById('addChildDialog'),
   };
 
   ResourceGroupManagement.prototype.init = function (groups) {
@@ -155,14 +155,14 @@ function ResourceGroupManagement(opts) {
 
   function showRename(node) {
     elements.activeId.val(node.id);
-    elements.renameDialog.modal('show');
+    setDialogVisible(elements.renameDialog, true);
 
     elements.newName.val(node.name);
   }
 
   function showDelete(node) {
     elements.activeId.val(node.id);
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   }
 
   function showAddChild(node) {
@@ -170,7 +170,7 @@ function ResourceGroupManagement(opts) {
     $('#groupParentId').val(node.id);
     $('#childName').val('');
     $('#childName').focus();
-    elements.addChildDialog.modal('show');
+    setDialogVisible(elements.addChildDialog, true);
   }
 
   function onBeforeRename(arr, $form, options) {
@@ -240,7 +240,7 @@ function ResourceGroupManagement(opts) {
   function onChildGroupAdded(data) {
     onGroupAdded(data);
 
-    hideDialogs(data);
+    hideDialogs();
   }
 
   function onBeforeAddGroup(arr, $form, options) {
@@ -255,12 +255,8 @@ function ResourceGroupManagement(opts) {
     return false;
   }
 
-  function hideDialogs(data) {
-    $.each($('div.modal'), function (index, element) {
-      if ($(element).is(':visible')) {
-        $(element).modal('hide');
-      }
-    });
+  function hideDialogs() {
+    document.querySelectorAll('div.modal.show').forEach((el) => setDialogVisible(el, false));
   }
 
   function getMoveNodeUrl(targetNodeId, movedNodeId, previousId, type, action) {

@@ -58,7 +58,7 @@ function GenerateReports(reportOptions) {
       e.preventDefault();
       e.stopPropagation();
       elements.saveDialog.find(':text').val('');
-      elements.saveDialog.modal('show');
+      setDialogVisible(elements.saveDialog, true);
     });
 
     $('.save').on('click', function () {
@@ -128,7 +128,7 @@ function GenerateReports(reportOptions) {
     var before = function () {};
 
     var after = function (data) {
-      elements.saveDialog.modal('hide');
+      setDialogVisible(elements.saveDialog, false);
       $('#saveMessage').show().delay(3000).fadeOut(1000);
     };
 
