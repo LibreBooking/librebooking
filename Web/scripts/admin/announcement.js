@@ -6,8 +6,8 @@ function AnnouncementManagement(opts) {
     announcementList: $('#announcementList'),
 
     editDialog: document.getElementById('editDialog'),
-    deleteDialog: $('#deleteDialog'),
-    emailDialog: $('#emailDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
+    emailDialog: document.getElementById('emailDialog'),
 
     addForm: $('#addForm'),
     form: $('#editForm'),
@@ -72,7 +72,7 @@ function AnnouncementManagement(opts) {
       return options.submitUrl + '?aid=' + getActiveId() + '&action=' + options.actions.edit;
     });
     ConfigureAsyncForm(elements.emailForm, getSubmitCallback(options.actions.email), function () {
-      elements.emailDialog.modal('hide');
+      setDialogVisible(elements.emailDialog, false);
     });
   };
 
@@ -111,7 +111,7 @@ function AnnouncementManagement(opts) {
       elements.editResourceGroups.trigger('change');
     }
 
-    new bootstrap.Modal(elements.editDialog).show();
+    setDialogVisible(elements.editDialog, true);
 
     elements.editDialog.addEventListener(
       'shown.bs.modal',
@@ -136,13 +136,13 @@ function AnnouncementManagement(opts) {
       function () {},
       function (data) {
         elements.emailCount.text(data.users);
-        elements.emailDialog.modal('show');
+        setDialogVisible(elements.emailDialog, true);
       }
     );
   };
 
   var deleteAnnouncement = function () {
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   var getActiveAnnouncement = function () {

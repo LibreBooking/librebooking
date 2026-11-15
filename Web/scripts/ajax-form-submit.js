@@ -21,13 +21,13 @@ jQuery.fn.bindAjaxSubmit = function (updateButton, successElement, modalDiv) {
   function onBeforeAddSubmit(formData, jqForm, opts) {
     successElement.addClass('d-none');
 
-    $('#waitModal').modal('show');
+    setDialogVisible('#waitModal', true);
 
     return true;
   }
 
   function hideModal() {
-    $('#waitModal').modal('hide');
+    setDialogVisible('#waitModal', false);
 
     var top = self.scrollTop();
     $('html, body').animate({ scrollTop: top }, 'slow');

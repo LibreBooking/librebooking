@@ -79,7 +79,7 @@ function GroupManagement(opt) {
 
     $('#add-group').click((e) => {
       e.preventDefault();
-      addDialog.modal('show');
+      setDialogVisible(addDialog, true);
       addDialog.find(':text').first().focus();
     });
 
@@ -186,11 +186,11 @@ function GroupManagement(opt) {
 
     var hideDialog = function (dialog) {
       return function () {
-        dialog.modal('hide');
+        setDialogVisible(dialog, false);
       };
     };
 
-    elements.permissionsDialog.on('hidden.bs.modal', cleanupPermissionsForm);
+    elements.permissionsDialog[0].addEventListener('hidden.bs.modal', cleanupPermissionsForm);
 
     elements.permissionsForm.on('change', 'select.resourceId', function () {
       var rid = $(this).attr('id').replace('permission_', '');
@@ -287,11 +287,11 @@ function GroupManagement(opt) {
     const activeRow = elements.groupList.find(`[data-group-id="${activeId}"]`);
     elements.editGroupName.val(activeRow.find('.dataGroupName').text());
     elements.editGroupIsDefault.prop('checked', activeRow.data('group-default') === '1');
-    elements.editDialog.modal('show');
+    setDialogVisible(elements.editDialog, true);
   };
 
   var deleteGroup = function () {
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   const buildUserItem = (actionLinkHtml, item) =>
@@ -324,7 +324,7 @@ function GroupManagement(opt) {
 
       $('<div/>').append(items).appendTo(elements.groupUserList);
     });
-    elements.membersDialog.modal('show');
+    setDialogVisible(elements.membersDialog, true);
   };
 
   var addUserToGroup = function (userId) {
@@ -338,7 +338,7 @@ function GroupManagement(opt) {
   };
 
   var showAllUsersToAdd = function () {
-    elements.membersDialog.modal('hide');
+    setDialogVisible(elements.membersDialog, false);
     elements.allUsersList.empty();
 
     if (!allUserList) {
@@ -368,7 +368,7 @@ function GroupManagement(opt) {
     }
 
     $('<div/>').append(items).appendTo(elements.allUsersList);
-    elements.browseUserDialog.modal('show');
+    setDialogVisible(elements.browseUserDialog, true);
   };
 
   // Update visible <select> dropdowns on the current DataTable page to match permissionState.
@@ -411,7 +411,7 @@ function GroupManagement(opt) {
       });
 
       syncSelectsFromState();
-      elements.permissionsDialog.modal('show');
+      setDialogVisible(elements.permissionsDialog, true);
     });
   };
 
@@ -428,7 +428,7 @@ function GroupManagement(opt) {
       .val();
 
     elements.groupAdminForm.find('select').val(currentGroupAdminVal || '');
-    elements.groupAdminDialog.modal('show');
+    setDialogVisible(elements.groupAdminDialog, true);
   };
 
   //change group role
@@ -441,7 +441,7 @@ function GroupManagement(opt) {
         elements.rolesForm.find(`:checkbox[value="${value}"]`).prop('checked', true);
       });
 
-      elements.rolesDialog.modal('show');
+      setDialogVisible(elements.rolesDialog, true);
     });
   };
 
@@ -479,7 +479,7 @@ function GroupManagement(opt) {
       });
 
       dialog.find('.count').text(groupIds.length);
-      dialog.modal('show');
+      setDialogVisible(dialog, true);
     });
   };
 }

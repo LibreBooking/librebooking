@@ -11,7 +11,7 @@ function Calendar(opts) {
     moveReferenceNumber: $('#moveReferenceNumber'),
     moveStartDate: $('#moveStartDate'),
     moveErrorOk: $('#moveErrorOk'),
-    moveErrorDialog: $('#moveErrorDialog'),
+    moveErrorDialog: document.getElementById('moveErrorDialog'),
     moveErrorsList: $('#moveErrorsList'),
   };
 
@@ -190,7 +190,7 @@ function Calendar(opts) {
             var messages = result.errors.join('</li><li>');
             messages = '<li>' + messages + '</li>';
             elements.moveErrorsList.empty().append(messages);
-            elements.moveErrorDialog.modal('show');
+            setDialogVisible(elements.moveErrorDialog, true);
           }
         };
 
@@ -308,7 +308,7 @@ function Calendar(opts) {
 
     elements.moveErrorOk.click(function (e) {
       e.preventDefault();
-      elements.moveErrorDialog.modal('hide');
+      setDialogVisible(elements.moveErrorDialog, false);
     });
 
     function selectOwner(ui, textbox) {

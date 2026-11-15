@@ -7,7 +7,7 @@ function Dashboard(opts) {
   };
 
   var CloseSaveDialog = function () {
-    $('#wait-box').modal('hide');
+    setDialogVisible('#wait-box', false);
   };
   Dashboard.prototype.init = function () {
     $('.resourceNameSelector').each(function () {
@@ -62,7 +62,7 @@ function Dashboard(opts) {
       var form = $('#form-checkin');
       var refNum = $(this).attr('data-referencenumber');
       $('#referenceNumber').val(refNum);
-      $('#wait-box').modal('show');
+      setDialogVisible($('#wait-box'), true);
       ajaxPost(form, $(this).data('url'), null, function (data) {
         $('button[data-referencenumber="' + refNum + '"]').addClass('d-none');
         $('#result').html(data);

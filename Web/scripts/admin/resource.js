@@ -6,11 +6,11 @@ function ResourceManagement(opts) {
     resourcesList: $('#resourceList'),
 
     imageDialog: $('#imageDialog'),
-    deleteDialog: $('#deletePrompt'),
-    statusDialog: $('#statusDialog'),
-    durationDialog: $('#durationDialog'),
-    capacityDialog: $('#capacityDialog'),
-    accessDialog: $('#accessDialog'),
+    deleteDialog: document.getElementById('deletePrompt'),
+    statusDialog: document.getElementById('statusDialog'),
+    durationDialog: document.getElementById('durationDialog'),
+    capacityDialog: document.getElementById('capacityDialog'),
+    accessDialog: document.getElementById('accessDialog'),
 
     imageForm: $('#imageForm'),
     removeImageForm: $('#removeImageForm'),
@@ -47,21 +47,21 @@ function ResourceManagement(opts) {
     addResourceDialog: $('#add-resource-dialog'),
 
     userSearch: $('#userSearch'),
-    userDialog: $('#userDialog'),
+    userDialog: document.getElementById('userDialog'),
     changeUserForm: $('#changeUserForm'),
-    browseUserDialog: $('#allUsers'),
+    browseUserDialog: document.getElementById('allUsers'),
     browseUsersButton: $('#browseUsers'),
     resourceUserList: $('#resourceUserList'),
     allUsersList: $('#allUsersList'),
 
     groupSearch: $('#groupSearch'),
-    groupDialog: $('#groupDialog'),
-    browseGroupDialog: $('#allGroups'),
+    groupDialog: document.getElementById('groupDialog'),
+    browseGroupDialog: document.getElementById('allGroups'),
     browseGroupsButton: $('#browseGroups'),
     resourceGroupList: $('#resourceGroupList'),
     allGroupsList: $('#allGroupsList'),
 
-    resourceGroupDialog: $('#resourceGroupDialog'),
+    resourceGroupDialog: document.getElementById('resourceGroupDialog'),
     resourceGroupForm: $('#resourceGroupForm'),
     changeGroupForm: $('#changeGroupForm'),
     groupDiv: $('#resourceGroups'),
@@ -75,7 +75,7 @@ function ResourceManagement(opts) {
     colorForm: $('#colorForm'),
     reservationColor: $('#reservationColor'),
 
-    creditsDialog: $('#creditsDialog'),
+    creditsDialog: document.getElementById('creditsDialog'),
     creditsForm: $('#creditsForm'),
     creditsPerSlot: $('#creditsPerSlot'),
     peakCreditsPerSlot: $('#peakCreditsPerSlot'),
@@ -83,11 +83,11 @@ function ResourceManagement(opts) {
     checkAllResources: $('#checkAllResources'),
     checkNoResources: $('#checkNoResources'),
 
-    copyDialog: $('#copyDialog'),
+    copyDialog: document.getElementById('copyDialog'),
     copyName: $('#copyResourceName'),
     copyForm: $('#copyForm'),
 
-    importDialog: $('#importDialog'),
+    importDialog: document.getElementById('importDialog'),
     importForm: $('#importForm'),
     importTrigger: $('#import-resources'),
     removeImageName: $('#removeImageName'),
@@ -127,7 +127,7 @@ function ResourceManagement(opts) {
     elements.resourcesList.on('click', '.copyButton', function (e) {
       e.stopPropagation();
       elements.copyName.val(getActiveResource().name + ' ' + options.copyText);
-      elements.copyDialog.modal('show');
+      setDialogVisible(elements.copyDialog, true);
       elements.copyName.select().focus();
     });
 
@@ -150,7 +150,7 @@ function ResourceManagement(opts) {
       elements.removeImageForm.submit();
     });
 
-    elements.imageDialog.on('hidden.bs.modal', function () {
+    elements.imageDialog[0].addEventListener('hidden.bs.modal', function () {
       window.location.reload();
     });
 
@@ -197,24 +197,24 @@ function ResourceManagement(opts) {
 
     elements.resourcesList.on('click', '.changeUserPermission', function (e) {
       changeUserPermissions();
-      elements.userDialog.modal('show');
+      setDialogVisible(elements.userDialog, true);
     });
 
     elements.resourcesList.on('click', '.changeGroupPermissions', function (e) {
       changeGroupPermissions();
-      elements.groupDialog.modal('show');
+      setDialogVisible(elements.groupDialog, true);
     });
 
     elements.resourcesList.on('click', '.changeResourceGroups', function (e) {
       changeResourceGroups();
-      elements.resourceGroupDialog.modal('show');
+      setDialogVisible(elements.resourceGroupDialog, true);
     });
 
     elements.resourcesList.on('click', '.changeCredits', function (e) {
       var resource = getActiveResource();
       elements.creditsPerSlot.val(resource.credits);
       elements.peakCreditsPerSlot.val(resource.peakCredits);
-      elements.creditsDialog.modal('show');
+      setDialogVisible(elements.creditsDialog, true);
     });
 
     elements.resourcesList.on('click', '.enableSubscription, .disableSubscription', function (e) {
@@ -255,7 +255,7 @@ function ResourceManagement(opts) {
 
     elements.addResourceButtons.click(function (e) {
       e.preventDefault();
-      elements.addResourceDialog.modal('show');
+      setDialogVisible(elements.addResourceDialog, true);
       $('#resourceName').focus();
     });
 
@@ -320,7 +320,7 @@ function ResourceManagement(opts) {
       });
       $('<div/>', { html: items.join('') }).appendTo(elements.bulkUpdateList);
 
-      $('#bulkUpdateDialog').modal('show');
+      setDialogVisible(elements.bulkUpdateDialog, true);
     });
 
     elements.bulkDeletePromptButton.click(function (e) {
@@ -347,7 +347,7 @@ function ResourceManagement(opts) {
       });
       $('<div/>', { html: items.join('') }).appendTo(elements.bulkDeleteList);
 
-      $('#bulkDeleteDialog').modal('show');
+      setDialogVisible(elements.bulkDeleteDialog, true);
     });
 
     elements.userSearch.userAutoComplete(options.userAutocompleteUrl, function (ui) {
@@ -423,7 +423,7 @@ function ResourceManagement(opts) {
       e.preventDefault();
       $('#importErrors').empty().addClass('d-none');
       $('#importResults').addClass('d-none');
-      elements.importDialog.modal('show');
+      setDialogVisible(elements.importDialog, true);
     });
 
     elements.toggleStatusChangeMessage.on('change', function (e) {
@@ -554,7 +554,7 @@ function ResourceManagement(opts) {
         .find('[data-resourceid="' + id + '"]')
         .closest('tr')
         .remove();
-      elements.deleteDialog.modal('hide');
+      setDialogVisible(elements.deleteDialog, false);
     });
     ConfigureAsyncForm(elements.durationForm, defaultSubmitCallback(elements.durationForm), onDurationSaved, null, {
       onBeforeSerialize: combineIntervals,
@@ -708,7 +708,7 @@ function ResourceManagement(opts) {
     e.preventDefault();
     var resource = getActiveResource();
     refreshResourceImages(resource);
-    elements.imageDialog.modal('show');
+    setDialogVisible(elements.imageDialog, true);
   };
 
   var onImagesUpdated = function (resource) {
@@ -719,12 +719,12 @@ function ResourceManagement(opts) {
 
   var showResourceAdmin = function (e) {
     $('#adminGroupId').val(getActiveResource().adminGroupId);
-    elements.groupAdminDialog.modal('show');
+    setDialogVisible(elements.groupAdminDialog, true);
   };
 
   var showDeletePrompt = function (e) {
     e.preventDefault();
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   var showDurationPrompt = function (e) {
@@ -735,14 +735,14 @@ function ResourceManagement(opts) {
     setDaysHoursMinutes('#bufferTime', resource.bufferTime, $('#noBufferTime'));
     $('#allowMultiDay').prop('checked', resource.allowMultiday && resource.allowMultiday == '1');
 
-    elements.durationDialog.modal('show');
+    setDialogVisible(elements.durationDialog, true);
   };
 
   var showCapacityPrompt = function (e) {
     var resource = getActiveResource();
 
     showHideConfiguration(resource.maxParticipants, $('#maxCapacity'), $('#unlimitedCapacity'));
-    elements.capacityDialog.modal('show');
+    setDialogVisible(elements.capacityDialog, true);
   };
 
   var showAccessPrompt = function (e) {
@@ -767,7 +767,7 @@ function ResourceManagement(opts) {
     elements.maxConcurrent.val(Math.max(2, Number.parseInt(resource.maxConcurrent)));
     showHideConcurrent();
 
-    elements.accessDialog.modal('show');
+    setDialogVisible(elements.accessDialog, true);
   };
 
   var showHideAutoRelease = function () {
@@ -807,7 +807,7 @@ function ResourceManagement(opts) {
     setDuration(bufferTime, resource.bufferTime);
     resource.allowMultiday = allowMultiDay.attr('data-value');
 
-    elements.durationDialog.modal('hide');
+    setDialogVisible(elements.durationDialog, false);
   };
 
   var onCapacitySaved = function (resultHtml) {
@@ -819,7 +819,7 @@ function ResourceManagement(opts) {
     var maxParticipants = result.find('.maxParticipants');
     resource.maxParticipants = maxParticipants.attr('data-value');
 
-    elements.capacityDialog.modal('hide');
+    setDialogVisible(elements.capacityDialog, false);
   };
 
   var onAccessSaved = function (resultHtml) {
@@ -851,7 +851,7 @@ function ResourceManagement(opts) {
     resource.maxConcurrent = maxConcurrent.data('max-concurrent');
     resource.allowConcurrent = maxConcurrent.data('allow-concurrent');
 
-    elements.accessDialog.modal('hide');
+    setDialogVisible(elements.accessDialog, false);
   };
 
   var onResourceGroupsSaved = function (resultHtml) {
@@ -868,7 +868,7 @@ function ResourceManagement(opts) {
     });
     resource.resourceGroupIds = groupIds;
 
-    elements.resourceGroupDialog.modal('hide');
+    setDialogVisible(elements.resourceGroupDialog, false);
   };
 
   var onCreditsSaved = function (resultHtml) {
@@ -882,7 +882,7 @@ function ResourceManagement(opts) {
     resource.credits = credits.attr('data-value');
     resource.peakCredits = peak.attr('data-value');
 
-    elements.creditsDialog.modal('hide');
+    setDialogVisible(elements.creditsDialog, false);
   };
 
   var showStatusPrompt = function (e) {
@@ -923,7 +923,7 @@ function ResourceManagement(opts) {
     elements.sendStatusChangeMessageContent.addClass('d-none');
     elements.statusMessageContent.val('');
 
-    elements.statusDialog.modal('show');
+    setDialogVisible(elements.statusDialog, true);
     statusOptions.focus();
   };
 
@@ -1009,7 +1009,7 @@ function ResourceManagement(opts) {
   };
 
   var showAllUsersToAdd = function () {
-    elements.userDialog.modal('hide');
+    setDialogVisible(elements.userDialog, false);
     elements.allUsersList.empty();
 
     var resourceId = getActiveResourceId();
@@ -1017,7 +1017,7 @@ function ResourceManagement(opts) {
       elements.allUsersList.html(data);
     });
 
-    elements.browseUserDialog.modal('show');
+    setDialogVisible(elements.browseUserDialog, true);
   };
 
   var changeGroupPermissions = function () {
@@ -1036,7 +1036,7 @@ function ResourceManagement(opts) {
   };
 
   var showAllGroupsToAdd = function () {
-    elements.groupDialog.modal('hide');
+    setDialogVisible(elements.groupDialog, false);
     elements.allGroupsList.empty();
 
     var resourceId = getActiveResourceId();
@@ -1044,7 +1044,7 @@ function ResourceManagement(opts) {
       elements.allGroupsList.html(data);
     });
 
-    elements.browseGroupDialog.modal('show');
+    setDialogVisible(elements.browseGroupDialog, true);
   };
 
   function changeResourceGroups() {

@@ -22,7 +22,7 @@ function SavedReports(reportOptions) {
       },
       function (data) {
         $('#emailSent').show().delay(3000).fadeOut(1000);
-        $('#emailDiv').modal('hide');
+        setDialogVisible('#emailDiv', false);
       }
     );
 
@@ -68,11 +68,11 @@ function SavedReports(reportOptions) {
     });
 
     $('.emailNow').on('click', function (e) {
-      $('#emailDiv').modal('show');
+      setDialogVisible('#emailDiv', true);
     });
 
     $('.delete').on('click', function (e) {
-      $('#deleteDiv').modal('show');
+      setDialogVisible('#deleteDiv', true);
     });
   };
 

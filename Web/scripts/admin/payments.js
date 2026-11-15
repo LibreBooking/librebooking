@@ -5,7 +5,7 @@ function Payments(opts) {
     updateGatewayForm: $('#updateGatewayForm'),
     transactionLog: $('#transaction-log-content'),
     transactionLogIndicator: $('#transactionLogIndicator'),
-    refundDialog: $('#refundDialog'),
+    refundDialog: document.getElementById('refundDialog'),
     issueRefundForm: $('#issueRefundForm'),
     refundId: $('#refundId'),
     refundAmount: $('#refundAmount'),
@@ -35,7 +35,7 @@ function Payments(opts) {
         elements.refundAmount.prop('max', amount);
         elements.refundAmount.val(amount);
         elements.refundId.val(id);
-        elements.refundDialog.modal('show');
+        setDialogVisible(elements.refundDialog, true);
       });
     });
 
@@ -86,7 +86,7 @@ function Payments(opts) {
       defaultSubmitCallback,
       function () {
         showMessage('refundIssuedMessage');
-        elements.refundDialog.modal('hide');
+        setDialogVisible(elements.refundDialog, false);
         loadTransactionLog(0, 0);
       },
       function () {}
