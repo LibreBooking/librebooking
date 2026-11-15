@@ -36,6 +36,11 @@ updates:
       prefix: "chore(deps)"
     cooldown:
       default-days: 7
+    groups:
+      stylelint:
+        patterns:
+          - "stylelint"
+          - "stylelint-config-*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
