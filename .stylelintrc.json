@@ -20,7 +20,6 @@
     "declaration-empty-line-before": null,
     "declaration-block-no-redundant-longhand-properties": null,
     "declaration-block-no-shorthand-property-overrides": null,
-    "declaration-block-single-line-max-declarations": null,
     "rule-empty-line-before": null,
     "media-feature-range-notation": null
   }
