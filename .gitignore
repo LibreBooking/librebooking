@@ -64,9 +64,6 @@ lang/*/*-custom.tpl
 
 .DS_Store
 
-# php8 phpcompatibility report
-php8-report.log
-
 # phpunit cache
 .phpunit.cache/
 .env

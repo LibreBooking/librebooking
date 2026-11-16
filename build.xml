@@ -111,8 +111,6 @@
                 <exclude name="composer*" />
                 <exclude name=".phive/**" />
                 <exclude name="vendor/bin/**" />
-                <exclude name="vendor/phpcompatibility/**" />
-                <exclude name="vendor/squizlabs/**" />
                 <!-- testing -->
                 <exclude name="*phpunit*" />
                 <exclude name="**/tests/**" />
