@@ -243,7 +243,7 @@ How should I approach a shared-hosting or cPanel deployment?
 Shared hosting can work, but it is less forgiving than Docker or a managed
 Linux host. At minimum, verify the following:
 
-- PHP 8.2 or newer is available.
+- PHP 8.4 or newer is available.
 - Required PHP extensions are enabled.
 - ``composer install`` has been run.
 - ``config/config.php`` points at the correct database host, database name,

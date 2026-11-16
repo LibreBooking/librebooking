@@ -83,7 +83,7 @@ class ResourceRequestValidatorTest extends TestBase
 
     public function testAcceptsNullOrOmittedAdminGroupWithoutLookup(): void
     {
-        $request = ResourceRequest::Example();
+        $request = new ResourceRequest(jsonObject: ResourceRequest::Example());
         $request->adminGroupId = null;
         $request->customAttributes = [];
         $this->groupRepository->expects($this->never())->method('LoadById');

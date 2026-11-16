@@ -30,7 +30,7 @@ readonly class CheckResult
 
 class PreflightRunner
 {
-    private const REQUIRED_PHP_VERSION = '8.2.0';
+    private const REQUIRED_PHP_VERSION = '8.4.0';
     private const DB_CONNECT_TIMEOUT_SECONDS = 3;
     // https://dev.mysql.com/doc/mysql-errors/5.7/en/client-error-reference.html
     private const MYSQL_ERR_CANT_CONNECT_LOCAL = 2002;
@@ -148,14 +148,14 @@ class PreflightRunner
         if (version_compare(version1: $current, version2: $required, operator: '>=')) {
             return new CheckResult(
                 status: CheckStatus::Pass,
-                label: "PHP version: {$current} (required: >= 8.2)",
+                label: "PHP version: {$current} (required: >= 8.4)",
             );
         }
 
         return new CheckResult(
             status: CheckStatus::Fail,
-            label: "PHP version: {$current} (required: >= 8.2)",
-            message: 'Upgrade PHP to version 8.2 or later.',
+            label: "PHP version: {$current} (required: >= 8.4)",
+            message: 'Upgrade PHP to version 8.4 or later.',
         );
     }
 

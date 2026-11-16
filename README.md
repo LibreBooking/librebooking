@@ -53,7 +53,7 @@ Previous security update
 [![GitHub stars](https://img.shields.io/github/stars/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/LibreBooking/librebooking?style=flat)](https://github.com/LibreBooking/librebooking/network)
 
-[![PHP](https://img.shields.io/badge/PHP-8.2%2B-brightgreen.svg?logo=php)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-8.4%2B-brightgreen.svg?logo=php)](https://www.php.net/)
 [![Database](https://img.shields.io/badge/Database-MySQL%20%3E%3D8.0%20%7C%20MariaDB%20%3E%3D10.6-blue.svg?logo=mysql)](https://www.mysql.com/)
 ![Platform](https://img.shields.io/badge/Platform-Web-lightgrey)
 ![Status](https://img.shields.io/badge/Status-Active-green)
@@ -137,7 +137,7 @@ Note: This instance is public and **resets every 20 minutes** to ensure a clean 
 
 To run LibreBooking from a prebuilt release, your server needs:
 
-- PHP >= 8.2 with the extensions: ctype, curl, fileinfo, intl, json, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
+- PHP >= 8.4 with the extensions: ctype, curl, fileinfo, intl, json, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
 - Optional PHP extensions: bcmath (needed for Active Directory authentication), gd (image processing), ldap (LDAP authentication)
 - Apache >= 2.4. Other web servers, including Nginx, may work when configured
   with equivalent routing and access-control rules, but are not currently
@@ -145,6 +145,10 @@ To run LibreBooking from a prebuilt release, your server needs:
 - MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021)
 - Composer (for managing PHP dependencies)
 - Git (optional, useful for cloning the repository or managing updates)
+
+LibreBooking only aims to support the current PHP release and the release
+before it (PHP 8.5 and 8.4 as of 2026-11-16). See
+[Supported PHP Versions](https://github.com/LibreBooking/librebooking/blob/main/CONTRIBUTING.md#supported-php-versions).
 
 For full setup instructions, see
 [INSTALLATION](https://github.com/LibreBooking/librebooking/blob/main/docs/source/INSTALLATION.rst)

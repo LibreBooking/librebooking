@@ -34,7 +34,7 @@ class ResourceSaveControllerTest extends TestBase
     public function testCreatesResourceWithAdminGroup(bool $provided, ?int $adminGroupId): void
     {
         $resourceId = 122;
-        $request = ResourceRequest::Example();
+        $request = new ResourceRequest(jsonObject: ResourceRequest::Example());
         unset($request->adminGroupId);
         if ($provided) {
             $request->adminGroupId = $adminGroupId;
@@ -56,7 +56,7 @@ class ResourceSaveControllerTest extends TestBase
         $oldAdminGroupId = 99;
         $oldResource = new FakeBookableResource($resourceId);
         $oldResource->SetAdminGroupId($oldAdminGroupId);
-        $request = ResourceRequest::Example();
+        $request = new ResourceRequest(jsonObject: ResourceRequest::Example());
         unset($request->adminGroupId);
         if ($provided) {
             $request->adminGroupId = $adminGroupId;

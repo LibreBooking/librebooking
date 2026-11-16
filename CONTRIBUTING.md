@@ -133,6 +133,28 @@ commit message. The release tool also parses embedded commit messages and
 For example, a `fix:` header with an embedded `feat:` commit produces a minor
 release, while a `BREAKING CHANGE:` footer produces a major release.
 
+## Supported PHP Versions
+
+LibreBooking only aims to support the current PHP release and the release
+before it (PHP 8.5 and 8.4 as of 2026-11-16). "Release" here means a PHP
+minor version line such as 8.4, not a patch release such as 8.4.1. Older PHP
+versions are not tested and may stop working at any time.
+
+After a new PHP version is released, the project adds it to the CI test
+matrices and raises the minimum version to the previous release. There is no
+fixed schedule for this; it happens once the new version works with
+LibreBooking and its dependencies.
+
+Raising the minimum PHP version is a breaking change. The commit must be
+marked as one (see [Footer](#footer)), so it is only shipped in a major
+release. The commit updates all of these together:
+
+* `require.php` and `config.platform.php` in `composer.json`, and
+  `composer.lock`
+* `REQUIRED_PHP_VERSION` in `lib/preflight.php`
+* the PHP version matrices in `.github/workflows/`
+* the PHP versions stated in `README.md`, `AGENTS.md` and `docs/source/`
+
 ## Commit Message Guidelines
 
 We have precise rules over how our git commit messages should be formatted.

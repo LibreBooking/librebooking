@@ -12,6 +12,12 @@ Fresh Installation
 Server Configuration
 ~~~~~~~~~~~~~~~~~~~~
 
+LibreBooking requires PHP 8.4 or newer. The project only aims to support the
+current PHP release and the release before it (PHP 8.5 and 8.4 as of
+2026-11-16), so the minimum PHP version rises as new PHP versions are
+released. Each increase is announced as a breaking change in the release
+notes of a major release.
+
 In an **Apache** or similar server environment, some required modules
 for LibreBooking may not be enabled by default. The following modules
 (or their equivalents) are often not enabled as part of a standard
@@ -812,7 +818,7 @@ client applications.
 Prerequisites
 ^^^^^^^^^^^^^
 
--  PHP 8.2 or greater
+-  PHP 8.4 or greater
 -  To use ‘friendly’ URLs, mod_rewrite or URL rewriting must be enabled
 -  Your web server must accept all verbs: GET, POST, PUT, DELETE
 

@@ -80,7 +80,8 @@ class GroupSaveControllerTest extends TestBase
      */
     private function RequestWithoutIsDefault(string $name): GroupRequest
     {
-        $request = $this->Request(name: $name, isDefault: false);
+        $request = new GroupRequest();
+        $request->name = $name;
         unset($request->isDefault);
 
         return $request;
