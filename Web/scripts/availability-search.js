@@ -22,7 +22,15 @@ function AvailabilitySearch(options) {
       },
       showSearchResults,
       null,
-      { onBeforeSubmit: validateTimes }
+      {
+        onBeforeSubmit: function (formData, jqForm, opts) {
+          if (!validateTimes()) {
+            return false;
+          }
+
+          return BeforeFormSubmit(formData, jqForm, opts);
+        },
+      }
     );
 
     elements.availabilityResults.on('click', '.opening', function (e) {
