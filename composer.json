@@ -14,8 +14,6 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
-        "squizlabs/php_codesniffer": "^3.13.6",
-        "phpcompatibility/php-compatibility": "^9.3.5",
         "phpunit/phpunit": "^11.3",
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-phpunit": "^2.1",
@@ -59,7 +57,6 @@
             "@phpunit",
             "@phpcsfixer:lint"
         ],
-        "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0",
         "preflight": "php lib/preflight.php",
         "test:integration": "./vendor/bin/phpunit --testsuite integration --testdox",
         "test:integration:db": "./vendor/bin/phpunit tests/Integration/Database --testdox",
