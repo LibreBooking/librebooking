@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4", "8.5"]
+        php-version: ["8.4", "8.5"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
@@ -133,14 +133,14 @@ jobs:
         run: composer validate --strict
 
       - name: Validate optimized Composer autoloading
-        if: matrix.php-version == '8.2'
+        if: matrix.php-version == '8.4'
         run: composer dump-autoload --optimize --strict-psr
 
       - name: Lint PHP files
         run: ./ci/ci-phplint
 
       - name: Check config.dist.php is up-to-date
-        if: matrix.php-version == '8.2'
+        if: matrix.php-version == '8.4'
         run: |
           if ! composer config-dist:check; then
             echo ""
@@ -156,7 +156,7 @@ jobs:
           fi
 
       - name: Check .env.example is up-to-date
-        if: matrix.php-version == '8.2'
+        if: matrix.php-version == '8.4'
         run: |
           if ! composer env-example:check; then
             echo ""
@@ -172,7 +172,7 @@ jobs:
           fi
 
       - name: Cache php-cs-fixer
-        if: matrix.php-version == '8.2'
+        if: matrix.php-version == '8.4'
         uses: actions/cache@v6.1.0
         with:
           path: var/cache/.php-cs-fixer.cache
@@ -181,7 +181,7 @@ jobs:
             php-cs-fixer-${{ runner.os }}-${{ matrix.php-version }}-
 
       - name: Check coding-standard (php-cs-fixer)
-        if: matrix.php-version == '8.2'
+        if: matrix.php-version == '8.4'
         run: |
           if ! composer phpcsfixer:lint; then
             echo ""

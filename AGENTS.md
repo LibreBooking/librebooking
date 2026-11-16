@@ -6,7 +6,9 @@ This file contains essential information for AI coding agents working on the Lib
 
 **LibreBooking** is an open-source resource scheduling and booking system written in PHP. It's a fork of Booked Scheduler that has evolved significantly since 2020.
 
-- **Primary Language**: PHP (>=8.2)
+- **Primary Language**: PHP (>=8.4). The project only aims to support the
+  current PHP release and the release before it (PHP 8.5 and 8.4 as of
+  2026-11-16); see "Supported PHP Versions" in `CONTRIBUTING.md`
 - **Database**: MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021)
 - **Architecture**: Model-View-Presenter (MVP) pattern
 - **Template Engine**: Smarty (version 5.8+)
@@ -49,7 +51,7 @@ This file contains essential information for AI coding agents working on the Lib
 
 ### Prerequisites
 
-- PHP >= 8.2 with extensions: ctype, curl, fileinfo, intl, json, ldap, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
+- PHP >= 8.4 with extensions: ctype, curl, fileinfo, intl, json, ldap, mbstring, mysqli, openssl, pdo, pdo_mysql, tokenizer, xml
 - Optional PHP extensions: bcmath, gd
 - Composer for dependency management
 - MySQL >= 8.0 (2018) or MariaDB >= 10.6 (2021) for database
@@ -247,7 +249,7 @@ Configuration: `build.xml`
 ### PHP Code Style
 
 1. **Follow PSR-12** - The codebase strictly follows PSR-12 standards
-2. **Use PHP 8.2+ features** where appropriate (enums, readonly properties, constructor property promotion, etc.)
+2. **Use PHP 8.4+ features** where appropriate (enums, readonly properties, constructor property promotion, etc.)
 3. **Type hints** - Use strict typing where possible
 4. **Documentation** - Add PHPDoc blocks for classes and complex methods
 5. **No trailing whitespace** - EditorConfig enforces this
@@ -460,13 +462,13 @@ The repository uses several CI workflows:
    - Config checks
    - doc8 (RST documentation)
    - Markdown linting
-   - PHP lint (syntax check) on PHP 8.2, 8.3, 8.4, 8.5
-   - php-cs-fixer (code style) on PHP 8.2
+   - PHP lint (syntax check) on PHP 8.4, 8.5
+   - php-cs-fixer (code style) on PHP 8.4
    - PHPStan analysis on PHP 8.5 (both base and next configs)
    - Validates no merge commits in PR
 
 2. **PHPUnit** (`phpunit.yml`) - Runs on PRs to `main`:
-   - Unit tests on PHP 8.2, 8.3, 8.4, 8.5
+   - Unit tests on PHP 8.4, 8.5
    - Creates config.php from config.dist.php
    - Validates test summary output
 
@@ -892,5 +894,5 @@ composer build -- upgrade.db        # Apply upgrades
 ---
 
 **Version**: 1.0
-**Last Updated**: 2026-02-16
+**Last Updated**: 2026-11-16
 **Maintainers**: LibreBooking Community

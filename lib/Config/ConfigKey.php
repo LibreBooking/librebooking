@@ -8,7 +8,7 @@
  * instances at runtime via ConfigKey::fromArray() at the read boundary
  * (AbstractConfigKeys::all()/findByKey() and Configuration::GetKey()) rather than
  * being declared as `new ConfigKey(...)` constants directly, because `new` in a
- * class constant is only supported from PHP 8.5 and the project floor is PHP 8.2.
+ * class constant is only supported from PHP 8.5 and the project floor is PHP 8.4.
  * Consumers receive a typed ConfigKey; the constructor and fromArray() validate the
  * definition.
  */

@@ -22,7 +22,7 @@
         "guzzlehttp/guzzle": "^7.0"
     },
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "smarty/smarty": "^5.8",
         "stripe/stripe-php": "^22.1",
         "monolog/monolog": "^3.12",
@@ -74,7 +74,7 @@
             "tbachert/spi": true
         },
         "platform": {
-            "php": "8.2.0"
+            "php": "8.4.0"
         }
     }
 }
