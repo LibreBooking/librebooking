@@ -29,6 +29,14 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_Stripe;
     /**
+     * @var NanoGateway
+     */
+    public $_Nano;
+    /**
+     * @var NanoGateway
+     */
+    public $_LastNano;
+    /**
      * @var PayPalPaymentResult
      */
     public $_LastSavedPayPalResult;
@@ -47,6 +55,7 @@ class FakePaymentRepository implements IPaymentRepository
     {
         $this->_PayPal = new FakePayPalGateway();
         $this->_Stripe = new FakeStripeGateway();
+        $this->_Nano = NanoGateway::Create(null, null, null);
         $this->_CreditCost = [new CreditCost()];
     }
 
@@ -77,6 +86,16 @@ class FakePaymentRepository implements IPaymentRepository
     public function UpdateStripeGateway(StripeGateway $gateway)
     {
         $this->_LastStripe = $gateway;
+    }
+
+    public function UpdateNanoGateway(NanoGateway $gateway)
+    {
+        $this->_LastNano = $gateway;
+    }
+
+    public function GetNanoGateway()
+    {
+        return $this->_Nano;
     }
 
     public function GetPayPalGateway()

@@ -50,6 +50,31 @@
 										</button>
 									</div>
 								{/if}
+
+								{if $NanoEnabled}
+									<div class="col-12" id="nano-payment">
+										<h5>{translate key=PayWithNano}</h5>
+										<dl class="row small mb-2">
+											<dt class="col-sm-4">{translate key=NanoSendExactly}</dt>
+											<dd class="col-sm-8"><code>{$NanoAmountXno}</code> XNO (<code>{$NanoAmountRaw}</code> raw)</dd>
+											<dt class="col-sm-4">{translate key=NanoToAccount}</dt>
+											<dd class="col-sm-8 text-break"><code>{$NanoAccount}</code></dd>
+											<dt class="col-sm-4">{translate key=NanoRepresentative}</dt>
+											<dd class="col-sm-8 text-break"><code>{$NanoRepresentative}</code>
+												<div class="form-text">{translate key=NanoRepresentativeHelp}</div>
+											</dd>
+										</dl>
+										<div class="input-group">
+											<input type="text" id="nano-block-hash" class="form-control font-monospace"
+												maxlength="64" autocomplete="off" aria-label="{translate key=NanoBlockHash}"
+												placeholder="{translate key=NanoBlockHash}" />
+											<button id="nano-button" class="btn btn-outline-secondary" type="button">
+												{translate key=NanoConfirmPayment}
+											</button>
+										</div>
+										<div id="nano-error" class="text-danger small mt-1"></div>
+									</div>
+								{/if}
 							</div>
 						</div>
 					</div>
@@ -151,6 +176,30 @@
 								// }
 
 							}).render('#paypal-button');
+
+						{/if}
+
+						{if $NanoEnabled}
+
+							var executeNanoPaymentUrl = '{$smarty.server.SCRIPT_NAME}?action=executeNanoPayment';
+							$('#nano-button').on('click', function(e) {
+								e.preventDefault();
+								$('#nano-error').text('');
+								$.post(executeNanoPaymentUrl, {
+									CSRF_TOKEN: $('#csrf_token').val(),
+									NANO_BLOCK_HASH: $('#nano-block-hash').val()
+								}, function(d) {
+									if (d.result == true) {
+										$('#cart').addClass('d-none');
+										$('#success').removeClass('d-none');
+									} else if (d.error) {
+										$('#nano-error').text(d.error);
+									} else {
+										$('#cart').addClass('d-none');
+										$('#error').removeClass('d-none');
+									}
+								});
+							});
 
 						{/if}
 

@@ -58,6 +58,23 @@ interface ICheckoutPage extends IActionPage
      * @param bool $result
      */
     public function SetStripeResult($result);
+
+    /**
+     * @param bool $enabled
+     * @param \LibreBooking\Payment\Nano\Quote|null $quote what this cart asks the payer to send
+     */
+    public function SetNanoSettings($enabled, $quote);
+
+    /**
+     * @return string|null the send block hash the payer entered
+     */
+    public function GetNanoBlockHash();
+
+    /**
+     * @param bool $result
+     * @param string|null $error why the block was refused
+     */
+    public function SetNanoResult($result, $error);
 }
 
 class CheckoutPage extends ActionPage implements ICheckoutPage
@@ -155,5 +172,26 @@ class CheckoutPage extends ActionPage implements ICheckoutPage
     public function SetStripeResult($result)
     {
         $this->SetJson(['result' => $result]);
+    }
+
+    public function SetNanoSettings($enabled, $quote)
+    {
+        $this->Set('NanoEnabled', $enabled);
+        if ($quote !== null) {
+            $this->Set('NanoAccount', $quote->payTo);
+            $this->Set('NanoAmountXno', $quote->amountXno);
+            $this->Set('NanoAmountRaw', $quote->amountRaw);
+            $this->Set('NanoRepresentative', $quote->representative);
+        }
+    }
+
+    public function GetNanoBlockHash()
+    {
+        return $this->GetForm(FormKeys::NANO_BLOCK_HASH);
+    }
+
+    public function SetNanoResult($result, $error)
+    {
+        $this->SetJson(['result' => $result, 'error' => $error]);
     }
 }

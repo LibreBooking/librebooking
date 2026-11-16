@@ -26,6 +26,10 @@ class CheckoutPresenterTest extends TestBase
      * @var FakePaymentTransactionLogger
      */
     private $paymentLogger;
+    /**
+     * @var FakeNanoClaimStore
+     */
+    private $nanoClaims;
 
     public function setUp(): void
     {
@@ -35,7 +39,8 @@ class CheckoutPresenterTest extends TestBase
         $this->paymentRepository = new FakePaymentRepository();
         $this->userRepository = new FakeUserRepository();
         $this->paymentLogger = new FakePaymentTransactionLogger();
-        $this->presenter = new CheckoutPresenter($this->page, $this->paymentRepository, $this->userRepository, $this->paymentLogger);
+        $this->nanoClaims = new FakeNanoClaimStore();
+        $this->presenter = new CheckoutPresenter($this->page, $this->paymentRepository, $this->userRepository, $this->paymentLogger, $this->nanoClaims);
     }
 
     public function testPageLoadCreatesCartAndPresentsPaymentOptions()
@@ -61,6 +66,26 @@ class CheckoutPresenterTest extends TestBase
         $this->assertEquals('live', $this->page->_PayPalEnvironment);
         $this->assertEquals(true, $this->page->_StripeEnabled);
         $this->assertEquals('publish', $this->page->_StripePublishableKey);
+        $this->assertFalse($this->page->_NanoEnabled);
+        $this->assertNull($this->page->_NanoQuote);
+    }
+
+    public function testPageLoadQuotesNanoForTheCartWhenEnabled()
+    {
+        $this->page->_CreditQuantity = 10;
+        $this->page->_CreditCount = 1;
+        $this->paymentRepository->_CreditCost = [new CreditCost(1, 5)];
+        $this->paymentRepository->_Nano = new FakeNanoGateway();
+
+        $this->presenter->PageLoad($this->fakeUser);
+
+        $cart = $this->fakeServer->GetSession(SessionKeys::CREDIT_CART);
+        $this->assertTrue($this->page->_NanoEnabled);
+        // 50 USD at 0.05 XNO per USD is 2.5 XNO, derived in raw.
+        $this->assertEquals('2.5', $this->page->_NanoQuote->amountXno);
+        $this->assertEquals('25' . str_repeat('0', 29), $this->page->_NanoQuote->amountRaw);
+        $this->assertEquals($cart->Id(), $this->page->_NanoQuote->orderId);
+        $this->assertEquals(FakeNanoGateway::ACCOUNT_BURN, $this->page->_NanoQuote->payTo);
     }
 
     public function testCreatesPayPalPayment()
@@ -126,6 +151,97 @@ class CheckoutPresenterTest extends TestBase
         $this->assertNull($this->fakeServer->GetSession(SessionKeys::CREDIT_CART));
         $this->assertEquals(15, $this->userRepository->_UpdatedUser->GetCurrentCredits());
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function nanoSendFor(CreditCartSession $cart, FakeNanoGateway $gateway): array
+    {
+        $quote = $gateway->Quote($cart);
+        return [
+            'block_account' => 'nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3',
+            'amount' => $quote->amountRaw,
+            'confirmed' => 'true',
+            'subtype' => 'send',
+            'local_timestamp' => (string) time(),
+            'contents' => ['link_as_account' => $quote->payTo, 'representative' => $quote->representative],
+        ];
+    }
+
+    public function testExecutesNanoPaymentOnce()
+    {
+        $cart = new CreditCartSession(5, 10, 'USD', $this->fakeUser->UserId);
+        $this->fakeServer->SetSession(SessionKeys::CREDIT_CART, $cart);
+        $this->userRepository->_User->WithCredits(10);
+
+        $hash = str_repeat('AB', 32);
+        $gateway = new FakeNanoGateway();
+        $gateway->_Blocks = [$hash => $this->nanoSendFor($cart, $gateway)];
+        $this->paymentRepository->_Nano = $gateway;
+        $this->page->_NanoBlockHash = strtolower($hash);
+
+        $this->presenter->ExecuteNanoPayment();
+
+        $this->assertTrue($this->page->_NanoResult);
+        $this->assertNull($this->page->_NanoError);
+        $this->assertNull($this->fakeServer->GetSession(SessionKeys::CREDIT_CART));
+        $this->assertEquals(15, $this->userRepository->_UpdatedUser->GetCurrentCredits());
+        $this->assertEquals([$hash => $cart->Id()], $this->nanoClaims->_Claims);
+        $this->assertTrue($this->paymentLogger->_PaymentLogged);
+    }
+
+    public function testRefusesANanoBlockAlreadyUsedForAnotherCart()
+    {
+        $cart = new CreditCartSession(5, 10, 'USD', $this->fakeUser->UserId);
+        $this->fakeServer->SetSession(SessionKeys::CREDIT_CART, $cart);
+
+        $hash = str_repeat('AB', 32);
+        $gateway = new FakeNanoGateway();
+        $gateway->_Blocks = [$hash => $this->nanoSendFor($cart, $gateway)];
+        $this->paymentRepository->_Nano = $gateway;
+        $this->page->_NanoBlockHash = $hash;
+        // The same block was credited to an earlier cart, before a restart.
+        $this->nanoClaims->_Claims = [$hash => 'an-earlier-cart'];
+
+        $this->presenter->ExecuteNanoPayment();
+
+        $this->assertFalse($this->page->_NanoResult);
+        $this->assertNotNull($this->page->_NanoError);
+        $this->assertNull($this->userRepository->_UpdatedUser);
+        $this->assertEquals($cart, $this->fakeServer->GetSession(SessionKeys::CREDIT_CART));
+    }
+
+    public function testRefusesANanoSendOfAnotherAmount()
+    {
+        $cart = new CreditCartSession(5, 10, 'USD', $this->fakeUser->UserId);
+        $this->fakeServer->SetSession(SessionKeys::CREDIT_CART, $cart);
+
+        $hash = str_repeat('CD', 32);
+        $gateway = new FakeNanoGateway();
+        $short = $this->nanoSendFor($cart, $gateway);
+        $short['amount'] = '1';
+        $gateway->_Blocks = [$hash => $short];
+        $this->paymentRepository->_Nano = $gateway;
+        $this->page->_NanoBlockHash = $hash;
+
+        $this->presenter->ExecuteNanoPayment();
+
+        $this->assertFalse($this->page->_NanoResult);
+        $this->assertEquals([], $this->nanoClaims->_Claims);
+        $this->assertNull($this->userRepository->_UpdatedUser);
+    }
+
+    public function testNanoPaymentIsRefusedWhenNotEnabled()
+    {
+        $cart = new CreditCartSession(5, 10, 'USD', $this->fakeUser->UserId);
+        $this->fakeServer->SetSession(SessionKeys::CREDIT_CART, $cart);
+        $this->page->_NanoBlockHash = str_repeat('AB', 32);
+
+        $this->presenter->ExecuteNanoPayment();
+
+        $this->assertFalse($this->page->_NanoResult);
+        $this->assertEquals([], $this->nanoClaims->_Claims);
+    }
 }
 
 class FakeCheckoutPage extends CheckoutPage
@@ -145,6 +261,11 @@ class FakeCheckoutPage extends CheckoutPage
     public $_PayerId;
     public $_StripeToken;
     public $_StripePaymentResult;
+    public $_NanoEnabled;
+    public $_NanoQuote;
+    public $_NanoBlockHash;
+    public $_NanoResult;
+    public $_NanoError;
 
     public function GetCreditCount()
     {
@@ -199,5 +320,22 @@ class FakeCheckoutPage extends CheckoutPage
     public function SetStripeResult($result)
     {
         $this->_StripePaymentResult = $result;
+    }
+
+    public function SetNanoSettings($enabled, $quote)
+    {
+        $this->_NanoEnabled = $enabled;
+        $this->_NanoQuote = $quote;
+    }
+
+    public function GetNanoBlockHash()
+    {
+        return $this->_NanoBlockHash;
+    }
+
+    public function SetNanoResult($result, $error)
+    {
+        $this->_NanoResult = $result;
+        $this->_NanoError = $error;
     }
 }

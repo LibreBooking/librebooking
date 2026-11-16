@@ -2,6 +2,7 @@
 
 require_once(ROOT_DIR . 'Domain/CreditCost.php');
 require_once(ROOT_DIR . 'Domain/PaymentGateway.php');
+require_once(ROOT_DIR . 'Domain/Access/NanoPaymentClaimRepository.php');
 require_once(ROOT_DIR . 'Domain/Values/PayPalPaymentResult.php');
 require_once(ROOT_DIR . 'Domain/Values/TransactionLogView.php');
 require_once(ROOT_DIR . 'Domain/Access/PageableDataStore.php');
@@ -44,6 +45,16 @@ interface IPaymentRepository
      * @return StripeGateway
      */
     public function GetStripeGateway();
+
+    /**
+     * @param NanoGateway $gateway
+     */
+    public function UpdateNanoGateway(NanoGateway $gateway);
+
+    /**
+     * @return NanoGateway
+     */
+    public function GetNanoGateway();
 
     /**
      * @param int|null $pageNumber null for no paging
@@ -101,6 +112,11 @@ class PaymentRepository implements IPaymentRepository
         $this->UpdateGateway($gateway);
     }
 
+    public function UpdateNanoGateway(NanoGateway $gateway)
+    {
+        $this->UpdateGateway($gateway);
+    }
+
     private function UpdateGateway(IPaymentGateway $gateway)
     {
         ServiceLocator::GetDatabase()->Execute(new DeletePaymentGatewaySettingsCommand($gateway->GetGatewayType()));
@@ -148,6 +164,27 @@ class PaymentRepository implements IPaymentRepository
 
         $reader->Free();
         return StripeGateway::Create($publishableKey, $secretKey);
+    }
+
+    public function GetNanoGateway()
+    {
+        $account = null;
+        $nodeUrl = null;
+        $xnoPrice = null;
+
+        $reader = ServiceLocator::GetDatabase()->Query(new GetPaymentGatewaySettingsCommand(PaymentGateways::NANO));
+        while ($row = $reader->GetRow()) {
+            if ($row[ColumnNames::GATEWAY_SETTING_NAME] == NanoGateway::ACCOUNT) {
+                $account = $row[ColumnNames::GATEWAY_SETTING_VALUE];
+            } elseif ($row[ColumnNames::GATEWAY_SETTING_NAME] == NanoGateway::NODE_URL) {
+                $nodeUrl = $row[ColumnNames::GATEWAY_SETTING_VALUE];
+            } elseif ($row[ColumnNames::GATEWAY_SETTING_NAME] == NanoGateway::XNO_PRICE) {
+                $xnoPrice = $row[ColumnNames::GATEWAY_SETTING_VALUE];
+            }
+        }
+
+        $reader->Free();
+        return NanoGateway::Create($account, $nodeUrl, $xnoPrice);
     }
 
     /**

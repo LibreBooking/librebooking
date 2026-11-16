@@ -601,8 +601,8 @@ From the Payments section of Application Management administrators are able
 to set the cost per credit, configure payment gateways, and view purchase
 transaction history.
 
-LibreBooking supports two payment gateways: Stripe and PayPal. At least one
-must be enabled in order to allow purchasing credits.
+LibreBooking supports three payment gateways: Stripe, PayPal and Nano (XNO).
+At least one must be enabled in order to allow purchasing credits.
 
 Configuring Stripe
 ^^^^^^^^^^^^^^^^^^
@@ -627,6 +627,30 @@ both Sandbox and Live API credentials. Copy your PayPal app credentials into
 the LibreBooking PayPal gateway settings and save the payment configuration.
 Use the Sandbox credentials if you want to simulate purchasing credits. Use
 the Live credentials to charge users and collect payments.
+
+Configuring Nano (XNO)
+^^^^^^^^^^^^^^^^^^^^^^
+
+Within the Payments management screen, click the Payment Gateways tab and
+enable Nano. A buyer pays with a Nano send block straight to an account you
+own; LibreBooking holds no key or seed and only reads the block from a node.
+Enter three settings and save the payment gateway configuration:
+
+* **Receiving account**: your ``nano_`` address. Its checksum is verified;
+  a mistyped address leaves the gateway off.
+* **Node URL**: a Nano node RPC URL that LibreBooking reads ``block_info``
+  from. It must be ``https``, or ``http`` on the same machine.
+* **XNO per one unit of the credit currency**: for example ``0.5`` charges
+  5 XNO for a purchase that costs 10.00 in the credit currency.
+
+At checkout the buyer sees the exact amount (in XNO and in raw, where
+1 XNO = 10^30 raw), your account, and a representative derived from the
+purchase. The buyer sends that amount with that representative and enters the
+send block hash. Credits are added only for a confirmed send of exactly that
+amount to your account carrying that representative, less than a day old. Each
+block is recorded in the ``nano_payment_claims`` table, so a block adds credits
+once, also after a restart. Refunds are sends from your own wallet; the Issue
+Refund button does not refund Nano payments.
 
 Reservation Tablet View
 -----------------------

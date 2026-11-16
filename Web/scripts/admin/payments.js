@@ -93,12 +93,15 @@ function Payments(opts) {
     );
   };
 
-  Payments.prototype.initGateways = function (paypalEnabled, stripeEnabled) {
+  Payments.prototype.initGateways = function (paypalEnabled, stripeEnabled, nanoEnabled) {
     if (paypalEnabled) {
       $('#paypalEnabled').click();
     }
     if (stripeEnabled) {
       $('#stripeEnabled').click();
+    }
+    if (nanoEnabled) {
+      $('#nanoEnabled').click();
     }
   };
 

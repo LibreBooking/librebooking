@@ -262,6 +262,11 @@ class FormKeys
     public const STRIPE_PUBLISHABLE_KEY = 'STRIPE_PUBLISHABLE_KEY';
     public const STRIPE_SECRET_KEY = 'STRIPE_SECRET_KEY';
     public const STRIPE_TOKEN = 'STRIPE_TOKEN';
+    public const NANO_BLOCK_HASH = 'NANO_BLOCK_HASH';
+    public const NANO_ENABLED = 'ENABLE_NANO';
+    public const NANO_ACCOUNT = 'NANO_ACCOUNT';
+    public const NANO_NODE_URL = 'NANO_NODE_URL';
+    public const NANO_XNO_PRICE = 'NANO_XNO_PRICE';
     public const SUBMIT = 'SUBMIT';
     public const SUMMARY = 'summary';
     public const SCHEDULE_ADMIN_GROUP_ID = 'adminGroupId';

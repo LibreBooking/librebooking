@@ -249,6 +249,22 @@ class AddCustomLayoutPeriodCommand extends SqlCommand
     }
 }
 
+class AddNanoPaymentClaimCommand extends SqlCommand
+{
+    /**
+     * @param string $blockHash 64 upper-case hex characters
+     * @param string $orderId
+     * @param Date $dateCreated
+     */
+    public function __construct($blockHash, $orderId, Date $dateCreated)
+    {
+        parent::__construct(Queries::ADD_NANO_PAYMENT_CLAIM);
+        $this->AddParameter(new Parameter(ParameterNames::BLOCK_HASH, $blockHash));
+        $this->AddParameter(new Parameter(ParameterNames::NANO_ORDER_ID, $orderId));
+        $this->AddParameter(new Parameter(ParameterNames::DATE_CREATED, $dateCreated->ToDatabase()));
+    }
+}
+
 class AddPaymentConfigurationCommand extends SqlCommand
 {
     public function __construct($creditCount, $creditCost, $creditCurrency)
@@ -1691,6 +1707,18 @@ class GetPaymentGatewaySettingsCommand extends SqlCommand
     {
         parent::__construct(Queries::GET_PAYMENT_GATEWAY_SETTINGS);
         $this->AddParameter(new Parameter(ParameterNames::GATEWAY_TYPE, $gatewayType));
+    }
+}
+
+class GetNanoPaymentClaimCommand extends SqlCommand
+{
+    /**
+     * @param string $blockHash 64 upper-case hex characters
+     */
+    public function __construct($blockHash)
+    {
+        parent::__construct(Queries::GET_NANO_PAYMENT_CLAIM);
+        $this->AddParameter(new Parameter(ParameterNames::BLOCK_HASH, $blockHash));
     }
 }
 

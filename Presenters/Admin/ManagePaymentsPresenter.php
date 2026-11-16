@@ -47,9 +47,11 @@ class ManagePaymentsPresenter extends ActionPresenter
 
         $paypal = $this->paymentRepository->GetPayPalGateway();
         $stripe = $this->paymentRepository->GetStripeGateway();
+        $nano = $this->paymentRepository->GetNanoGateway();
 
         $this->page->SetPayPalSettings($paypal->IsEnabled(), $paypal->ClientId(), $paypal->Secret(), $paypal->Environment());
         $this->page->SetStripeSettings($stripe->IsEnabled(), $stripe->PublishableKey(), $stripe->SecretKey());
+        $this->page->SetNanoSettings($nano->IsEnabled(), $nano->Account(), $nano->NodeUrl(), $nano->XnoPrice());
     }
 
     public function UpdateCreditCost()
@@ -74,11 +76,16 @@ class ManagePaymentsPresenter extends ActionPresenter
     {
         $paypalGateway = new PayPalGateway($this->page->GetPayPalIsEnabled(), $this->page->GetPayPalClientId(), $this->page->GetPayPalSecret(), $this->page->GetPayPalEnvironment());
         $stripeGateway = new StripeGateway($this->page->GetStripeIsEnabled(), $this->page->GetStripePublishableKey(), $this->page->GetStripeSecretKey());
+        $nanoGateway = new NanoGateway($this->page->GetNanoIsEnabled(), $this->page->GetNanoAccount(), $this->page->GetNanoNodeUrl(), $this->page->GetNanoXnoPrice());
 
         Log::Debug('Updating payment gateways');
 
         $this->paymentRepository->UpdatePayPalGateway($paypalGateway);
         $this->paymentRepository->UpdateStripeGateway($stripeGateway);
+        if ($this->page->GetNanoIsEnabled() && !$nanoGateway->IsEnabled()) {
+            Log::Error('Nano gateway not enabled: the account checksum, the node URL (https) or the price is not valid');
+        }
+        $this->paymentRepository->UpdateNanoGateway($nanoGateway);
     }
 
     public function ProcessDataRequest($dataRequest, $userSession)
@@ -128,6 +135,10 @@ class ManagePaymentsPresenter extends ActionPresenter
             // Checking the v1 "state" field on a v2 response is a known bug, see:
             // https://github.com/LibreBooking/librebooking/issues/1873
             $this->page->BindRefundIssued(is_object($refund) && ($refund->state ?? null) == 'completed');
+        } elseif ($transactionLogView->GatewayName == PaymentGateways::NANO) {
+            // LibreBooking holds no Nano key: a refund is a send the operator makes from their own wallet.
+            Log::Error('Cannot issue a Nano refund from LibreBooking, transaction log %s', $id);
+            $this->page->BindRefundIssued(false);
         } else {
             $gateway = $this->paymentRepository->GetStripeGateway();
 

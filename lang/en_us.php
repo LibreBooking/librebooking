@@ -692,6 +692,16 @@ class en_us extends Language
         $strings['FullyRefunded'] = 'Fully Refunded';
         $strings['YourCredits'] = 'Your Credits';
         $strings['PayWithCard'] = 'Pay with Card';
+        $strings['PayWithNano'] = 'Pay with Nano (XNO)';
+        $strings['NanoSendExactly'] = 'Send exactly';
+        $strings['NanoToAccount'] = 'To account';
+        $strings['NanoRepresentative'] = 'Representative on the send block';
+        $strings['NanoRepresentativeHelp'] = 'The representative ties the payment to this purchase. A send without it, or of another amount, is not credited.';
+        $strings['NanoBlockHash'] = 'Send block hash';
+        $strings['NanoConfirmPayment'] = 'Confirm payment';
+        $strings['NanoAccount'] = 'Receiving account';
+        $strings['NanoNodeUrl'] = 'Node URL (read only, https)';
+        $strings['NanoXnoPrice'] = 'XNO per one unit of the credit currency';
         $strings['or'] = 'or';
         $strings['CreditsRequired'] = 'Credits Required';
         $strings['AddToGoogleCalendar'] = 'Add to Google';

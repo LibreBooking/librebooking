@@ -85,6 +85,27 @@ class ManagePaymentsPresenterTest extends TestBase
         $stripeGateway = new StripeGateway($this->page->_StripeEnabled, $this->page->_StripePublishableKey, $this->page->_StripeSecretKey);
         $this->assertEquals($paypalGateway, $this->paymentRepository->_LastPayPal);
         $this->assertEquals($stripeGateway, $this->paymentRepository->_LastStripe);
+        $this->assertFalse($this->paymentRepository->_LastNano->IsEnabled());
+    }
+
+    public function testUpdatesNanoGatewayOnlyWithAValidAccount()
+    {
+        $this->page->_NanoEnabled = true;
+        $this->page->_NanoAccount = FakeNanoGateway::ACCOUNT_BURN;
+        $this->page->_NanoNodeUrl = 'https://node.invalid';
+        $this->page->_NanoXnoPrice = '0.05';
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertTrue($this->paymentRepository->_LastNano->IsEnabled());
+        $this->assertEquals(FakeNanoGateway::ACCOUNT_BURN, $this->paymentRepository->_LastNano->Account());
+
+        // One character changed: the checksum fails and the gateway stays off.
+        $this->page->_NanoAccount = substr(FakeNanoGateway::ACCOUNT_BURN, 0, -1) . 'q';
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertFalse($this->paymentRepository->_LastNano->IsEnabled());
     }
 
     public function testGetTransactionLog()
@@ -210,6 +231,10 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public $_StripeEnabled;
     public $_StripePublishableKey;
     public $_StripeSecretKey;
+    public $_NanoEnabled;
+    public $_NanoAccount;
+    public $_NanoNodeUrl;
+    public $_NanoXnoPrice;
     public $_CurrentPage;
     public $_PageSize;
     public $_TransactionLog;
@@ -327,5 +352,33 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public function BindRefundIssued($wasIssued)
     {
         $this->_RefundIssued = $wasIssued;
+    }
+
+    public function GetNanoIsEnabled()
+    {
+        return $this->_NanoEnabled;
+    }
+
+    public function GetNanoAccount()
+    {
+        return $this->_NanoAccount;
+    }
+
+    public function GetNanoNodeUrl()
+    {
+        return $this->_NanoNodeUrl;
+    }
+
+    public function GetNanoXnoPrice()
+    {
+        return $this->_NanoXnoPrice;
+    }
+
+    public function SetNanoSettings($enabled, $account, $nodeUrl, $xnoPrice)
+    {
+        $this->_NanoEnabled = $enabled;
+        $this->_NanoAccount = $account;
+        $this->_NanoNodeUrl = $nodeUrl;
+        $this->_NanoXnoPrice = $xnoPrice;
     }
 }

@@ -158,6 +158,32 @@
 
                         </div>
                     </div>
+
+                    <div class="form-group col-12 col-sm-6">
+                        <div class="payment-gateway-title">Nano (XNO)</div>
+                        <div class="form-group">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input id="nanoEnabled" type="checkbox" value="1" {formname key=NANO_ENABLED}
+                                    class="toggleDisabled form-check-input" role="switch" data-target="nano-toggle">
+                                <label class="switch visually-hidden">Nano</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nanoAccount">{translate key=NanoAccount}</label>
+                            <input type="text" id="nanoAccount" class="form-control nano-toggle required" required
+                                disabled="disabled" {formname key=NANO_ACCOUNT} value="{$NanoAccount}" placeholder="nano_" />
+                        </div>
+                        <div class="form-group">
+                            <label for="nanoNodeUrl">{translate key=NanoNodeUrl}</label>
+                            <input type="url" id="nanoNodeUrl" class="form-control nano-toggle required" required
+                                disabled="disabled" {formname key=NANO_NODE_URL} value="{$NanoNodeUrl}" placeholder="https://" />
+                        </div>
+                        <div class="form-group">
+                            <label for="nanoXnoPrice">{translate key=NanoXnoPrice}</label>
+                            <input type="text" id="nanoXnoPrice" class="form-control nano-toggle required" required
+                                disabled="disabled" {formname key=NANO_XNO_PRICE} value="{$NanoXnoPrice}" inputmode="decimal" />
+                        </div>
+                    </div>
                     <div class="d-grid">
                         {update_button submit=true}
                         {indicator}
@@ -212,7 +238,7 @@
 
             var payments = new Payments(opts);
             payments.init();
-            payments.initGateways({$PayPalEnabled}, {$StripeEnabled});
+            payments.initGateways({$PayPalEnabled}, {$StripeEnabled}, {$NanoEnabled});
 
             var url = document.location.toString();
             if (url.match('#')) {

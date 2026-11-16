@@ -9,6 +9,7 @@ class PaymentGateways
 {
     public const PAYPAL = 'PayPal';
     public const STRIPE = 'Stripe';
+    public const NANO = 'Nano';
 }
 
 class PaymentGatewaySetting
@@ -701,5 +702,219 @@ class StripeGateway implements IPaymentGateway
         }
 
         return false;
+    }
+}
+
+/**
+ * Nano (XNO) on nano:mainnet, scheme "exact": credits are paid by a send block
+ * straight to an account the operator owns. Off until an account, a node URL
+ * and a price are saved; there is no key and no seed anywhere, the node is only
+ * read. The amount owed is derived from the cart total and the operator's price
+ * (XNO per one unit of the credit currency) in integer raw, and the send block
+ * must carry a representative derived from the cart, so a block pays one cart.
+ */
+class NanoGateway implements IPaymentGateway
+{
+    public const ACCOUNT = 'account';
+    public const NODE_URL = 'node_url';
+    public const XNO_PRICE = 'xno_price';
+
+    /**
+     * @var bool
+     */
+    private $enabled;
+    /**
+     * @var string|null null when the gateway is disabled
+     */
+    private $account;
+    /**
+     * @var string|null null when the gateway is disabled
+     */
+    private $nodeUrl;
+    /**
+     * @var string|null null when the gateway is disabled
+     */
+    private $xnoPrice;
+
+    /**
+     * @param bool $enabled
+     * @param string|null $account ignored when the gateway is disabled
+     * @param string|null $nodeUrl ignored when the gateway is disabled
+     * @param string|null $xnoPrice ignored when the gateway is disabled
+     */
+    public function __construct($enabled, $account, $nodeUrl, $xnoPrice)
+    {
+        $this->enabled = $enabled && self::IsValid((string) $account, (string) $nodeUrl, (string) $xnoPrice);
+        if ($this->enabled) {
+            $this->account = trim((string) $account);
+            $this->nodeUrl = trim((string) $nodeUrl);
+            $this->xnoPrice = trim((string) $xnoPrice);
+        }
+    }
+
+    /**
+     * @param string|null $account
+     * @param string|null $nodeUrl
+     * @param string|null $xnoPrice
+     * @return NanoGateway
+     */
+    public static function Create($account, $nodeUrl, $xnoPrice)
+    {
+        $enabled = (!empty($account) && !empty($nodeUrl) && !empty($xnoPrice));
+        return new NanoGateway($enabled, $account, $nodeUrl, $xnoPrice);
+    }
+
+    /**
+     * True when the account has a valid checksum, the node URL is https (or
+     * http on this machine) and the price is a positive decimal.
+     */
+    public static function IsValid(string $account, string $nodeUrl, string $xnoPrice): bool
+    {
+        return \LibreBooking\Payment\Nano\Address::isValid(trim($account))
+            && \LibreBooking\Payment\Nano\NodeClient::isUrlAllowed(trim($nodeUrl))
+            && \LibreBooking\Payment\Nano\Checkout::isValidPrice(trim($xnoPrice));
+    }
+
+    public function GetGatewayType()
+    {
+        return PaymentGateways::NANO;
+    }
+
+    public function IsEnabled()
+    {
+        return $this->enabled;
+    }
+
+    public function Settings()
+    {
+        return [
+            new PaymentGatewaySetting(self::ACCOUNT, $this->Account()),
+            new PaymentGatewaySetting(self::NODE_URL, $this->NodeUrl()),
+            new PaymentGatewaySetting(self::XNO_PRICE, $this->XnoPrice()),
+        ];
+    }
+
+    /**
+     * @return string|null null when the gateway is disabled
+     */
+    public function Account()
+    {
+        return $this->account;
+    }
+
+    /**
+     * @return string|null null when the gateway is disabled
+     */
+    public function NodeUrl()
+    {
+        return $this->nodeUrl;
+    }
+
+    /**
+     * @return string|null null when the gateway is disabled
+     */
+    public function XnoPrice()
+    {
+        return $this->xnoPrice;
+    }
+
+    /**
+     * What this cart asks the payer to send.
+     */
+    public function Quote(CreditCartSession $cart): \LibreBooking\Payment\Nano\Quote
+    {
+        return $this->Checkout(new NanoPaymentClaimsUnavailable())->quote($cart->Id(), self::CartTotal($cart));
+    }
+
+    /**
+     * Credit the cart with the send block the payer names.
+     *
+     * @param CreditCartSession $cart
+     * @param string $blockHash
+     * @param \LibreBooking\Payment\Nano\ClaimStore $claims
+     * @param IPaymentTransactionLogger $logger
+     * @param callable(string): array<string, mixed>|null $fetchBlock the node read (injected in tests)
+     * @return bool true when the cart is paid now; false when this block already paid this cart
+     * @throws \LibreBooking\Payment\Nano\NanoException when the block does not pay this cart
+     */
+    public function Settle(
+        CreditCartSession $cart,
+        $blockHash,
+        \LibreBooking\Payment\Nano\ClaimStore $claims,
+        IPaymentTransactionLogger $logger,
+        ?callable $fetchBlock = null
+    ) {
+        $checkout = $this->Checkout($claims, $fetchBlock);
+        $quote = $checkout->quote($cart->Id(), self::CartTotal($cart));
+        $credited = $checkout->settle($quote, $blockHash);
+
+        if ($credited) {
+            $hash = strtoupper(trim($blockHash));
+            $logger->LogPayment(
+                $cart->UserId,
+                'COMPLETED',
+                $cart->Id(),
+                substr($hash, 0, 50),
+                self::CartTotal($cart),
+                0,
+                $cart->Currency,
+                null,
+                null,
+                Date::Now(),
+                (string) time(),
+                $this->GetGatewayType(),
+                json_encode([
+                    'network' => \LibreBooking\Payment\Nano\Checkout::NETWORK,
+                    'scheme' => \LibreBooking\Payment\Nano\Checkout::SCHEME,
+                    'block_hash' => $hash,
+                    'amount_raw' => $quote->amountRaw,
+                    'pay_to' => $quote->payTo,
+                    'representative' => $quote->representative,
+                ])
+            );
+        }
+
+        return $credited;
+    }
+
+    private function Checkout(\LibreBooking\Payment\Nano\ClaimStore $claims, ?callable $fetchBlock = null): \LibreBooking\Payment\Nano\Checkout
+    {
+        if (!$this->enabled) {
+            throw new \LibreBooking\Payment\Nano\NanoException('Nano payments are not enabled.');
+        }
+
+        if ($fetchBlock === null) {
+            $node = new \LibreBooking\Payment\Nano\NodeClient((string) $this->nodeUrl);
+            $fetchBlock = static fn (string $hash): array => $node->blockInfo($hash);
+        }
+
+        return new \LibreBooking\Payment\Nano\Checkout(
+            payTo: (string) $this->account,
+            xnoPrice: (string) $this->xnoPrice,
+            claims: $claims,
+            fetchBlock: $fetchBlock,
+        );
+    }
+
+    /**
+     * The cart total as a decimal string in the currency's minor unit, the
+     * same rounding the card gateways charge.
+     */
+    private static function CartTotal(CreditCartSession $cart): string
+    {
+        $currency = new \Booked\Currency($cart->Currency);
+        return number_format((float) $cart->Total(), $currency->IsZeroDecimal() ? 0 : 2, '.', '');
+    }
+}
+
+/**
+ * A quote needs no claim store; this one refuses use so a quote can never
+ * credit anything.
+ */
+class NanoPaymentClaimsUnavailable implements \LibreBooking\Payment\Nano\ClaimStore
+{
+    public function claim(string $blockHash, string $orderId): bool
+    {
+        throw new \LibreBooking\Payment\Nano\NanoException('A quote cannot credit a payment.');
     }
 }

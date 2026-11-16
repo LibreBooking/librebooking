@@ -63,6 +63,7 @@ class ParameterNames
     public const CREDIT_CURRENCY = '@credit_currency';
     public const CREDIT_NOTE = '@credit_note';
 
+    public const BLOCK_HASH = '@block_hash';
     public const DATE_CREATED = '@dateCreated';
     public const DATE_MODIFIED = '@dateModified';
     public const DESCRIPTION = '@description';
@@ -115,6 +116,7 @@ class ParameterNames
     public const PAYMENT_CURRENCY = '@currency';
     public const PAYMENT_TRANSACTION_HREF = '@transaction_href';
     public const PAYMENT_REFUND_HREF = '@refund_href';
+    public const NANO_ORDER_ID = '@order_id';
     public const PAYMENT_DATE_CREATED = '@date_created';
     public const PAYMENT_GATEWAY_DATE_CREATED = '@gateway_date_created';
     public const PAYMENT_GATEWAY_NAME = '@gateway_name';

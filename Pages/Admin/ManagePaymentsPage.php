@@ -77,6 +77,34 @@ interface IManagePaymentsPage extends IActionPage
      */
     public function SetStripeSettings($enabled, $publishableKey, $secretKey);
 
+    /**
+     * @return bool
+     */
+    public function GetNanoIsEnabled();
+
+    /**
+     * @return string
+     */
+    public function GetNanoAccount();
+
+    /**
+     * @return string
+     */
+    public function GetNanoNodeUrl();
+
+    /**
+     * @return string
+     */
+    public function GetNanoXnoPrice();
+
+    /**
+     * @param bool $enabled
+     * @param string|null $account
+     * @param string|null $nodeUrl
+     * @param string|null $xnoPrice
+     */
+    public function SetNanoSettings($enabled, $account, $nodeUrl, $xnoPrice);
+
     public function GetPageNumber(): int;
 
     public function GetPageSize(): int;
@@ -219,6 +247,34 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         $this->Set('StripeEnabled', (int)$enabled);
         $this->Set('StripePublishableKey', $publishableKey);
         $this->Set('StripeSecretKey', $secretKey);
+    }
+
+    public function GetNanoIsEnabled()
+    {
+        return $this->GetCheckbox(FormKeys::NANO_ENABLED);
+    }
+
+    public function GetNanoAccount()
+    {
+        return $this->GetForm(FormKeys::NANO_ACCOUNT);
+    }
+
+    public function GetNanoNodeUrl()
+    {
+        return $this->GetForm(FormKeys::NANO_NODE_URL);
+    }
+
+    public function GetNanoXnoPrice()
+    {
+        return $this->GetForm(FormKeys::NANO_XNO_PRICE);
+    }
+
+    public function SetNanoSettings($enabled, $account, $nodeUrl, $xnoPrice)
+    {
+        $this->Set('NanoEnabled', (int)$enabled);
+        $this->Set('NanoAccount', $account);
+        $this->Set('NanoNodeUrl', $nodeUrl);
+        $this->Set('NanoXnoPrice', $xnoPrice);
     }
 
     public function BindTransactionLog($transactionLog)

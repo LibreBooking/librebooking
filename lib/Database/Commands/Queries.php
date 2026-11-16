@@ -79,6 +79,9 @@ class Queries
         'INSERT INTO `quotas` (`quota_limit`, `unit`, `duration`, `resource_id`, `group_id`, `schedule_id`, `enforced_time_start`, `enforced_time_end`, `enforced_days`, `scope`)
 			VALUES (@limit, @unit, @duration, @resourceid, @groupid, @scheduleid, @startTime, @endTime, @enforcedDays, @scope)';
 
+    public const ADD_NANO_PAYMENT_CLAIM = 'INSERT IGNORE INTO `nano_payment_claims` (`block_hash`, `order_id`, `date_created`)
+                                      VALUES (@block_hash, @order_id, @dateCreated)';
+
     public const ADD_PAYMENT_CONFIGURATION = 'INSERT INTO `payment_configuration` (`credit_cost`, `credit_currency`, `credit_count`) VALUES (@credit_cost, @credit_currency, @credit_count)';
 
     public const ADD_PAYMENT_GATEWAY_SETTING = 'INSERT INTO `payment_gateway_settings` (`gateway_type`, `setting_name`, `setting_value`)
@@ -838,6 +841,8 @@ class Queries
 		ORDER BY `tb`.`start_time`';
 
     public const GET_PEAK_TIMES = 'SELECT * FROM `peak_times` WHERE `schedule_id` = @scheduleid';
+
+    public const GET_NANO_PAYMENT_CLAIM = 'SELECT * FROM `nano_payment_claims` WHERE `block_hash` = @block_hash';
 
     public const GET_PAYMENT_CONFIGURATION = 'SELECT * FROM `payment_configuration`';
 

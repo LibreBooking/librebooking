@@ -290,6 +290,10 @@ class ColumnNames
     public const GATEWAY_SETTING_NAME = 'setting_name';
     public const GATEWAY_SETTING_VALUE = 'setting_value';
 
+    // NANO PAYMENT CLAIMS //
+    public const NANO_BLOCK_HASH = 'block_hash';
+    public const NANO_ORDER_ID = 'order_id';
+
     // PAYMENT TRANSACTION LOG //
     public const TRANSACTION_LOG_ID = 'payment_transaction_log_id';
     public const TRANSACTION_LOG_STATUS = 'status';
