@@ -2213,16 +2213,6 @@ class GetUserGroupsCommand extends SqlCommand
     }
 }
 
-class GetUserRoleCommand extends SqlCommand
-{
-    public function __construct($userId)
-    {
-        parent::__construct(Queries::GET_USER_ROLES);
-        $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userId));
-    }
-}
-
-
 class GetUserSessionBySessionTokenCommand extends SqlCommand
 {
     public function __construct($sessionToken)

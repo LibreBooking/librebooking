@@ -59,9 +59,11 @@ class Queries
     public const ADD_GROUP_ROLE =
         'INSERT IGNORE INTO `group_roles` (`group_id`, `role_id`) VALUES (@groupid, @roleid)';
 
+    // Both statements run in one transaction. FOR UPDATE takes the exclusive lock on the user row
+    // up front, so a concurrent adjustment for the same user waits instead of deadlocking on the UPDATE.
     public const ADJUST_USER_CREDITS =
         'INSERT INTO `credit_log` (`user_id`, `original_credit_count`, `credit_count`, `credit_note`, `date_created`)
-            SELECT `user_id`, `credit_count`, COALESCE(`credit_count`,0) - @credit_count, @credit_note, @dateCreated FROM `users` WHERE `user_id` = @userid;
+            SELECT `user_id`, `credit_count`, COALESCE(`credit_count`,0) - @credit_count, @credit_note, @dateCreated FROM `users` WHERE `user_id` = @userid FOR UPDATE;
           UPDATE `users` SET `credit_count` = COALESCE(`credit_count`,0) - @credit_count WHERE `user_id` = @userid';
 
     public const ADD_LAYOUT =
@@ -924,16 +926,6 @@ class Queries
     public const GET_USER_PREFERENCE = 'SELECT `value` FROM `user_preferences` WHERE `user_id` = @userid AND `name` = @name';
 
     public const GET_USER_PREFERENCES = 'SELECT `name`, `value` FROM `user_preferences` WHERE `user_id` = @userid';
-
-    public const GET_USER_ROLES =
-        'SELECT
-			`user_id`, `user_level`
-		FROM
-			`roles` `r`
-		INNER JOIN
-			`user_roles` `ur` on `r`.`role_id` = `ur`.`role_id`
-		WHERE
-			`ur`.`user_id` = @userid';
 
     public const GET_USER_SESSION_BY_SESSION_TOKEN = 'SELECT * FROM `user_session` WHERE `session_token` = @session_token';
 

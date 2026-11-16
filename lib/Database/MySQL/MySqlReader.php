@@ -11,7 +11,19 @@ class MySqlReader implements IReader
 
     public function GetRow()
     {
-        return mysqli_fetch_assoc($this->_result);
+        $row = mysqli_fetch_assoc($this->_result);
+
+        // Prepared statements return native PHP types for numeric columns.
+        // Callers expect every non-null column as a string, as mysqli_query() returned them.
+        if (is_array($row)) {
+            foreach ($row as $column => $value) {
+                if ($value !== null && !is_string($value)) {
+                    $row[$column] = (string) $value;
+                }
+            }
+        }
+
+        return $row;
     }
 
     public function NumRows()
