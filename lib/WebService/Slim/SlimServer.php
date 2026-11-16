@@ -1,46 +1,132 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 require_once(ROOT_DIR . 'lib/WebService/IRestServer.php');
 
 class SlimServer implements IRestServer
 {
-    /**
-     * @var Slim\Slim
-     */
-    private $slim;
+    public const CONTENT_TYPE_HEADER = 'Content-Type';
+    public const CONTENT_TYPE_JSON = 'application/json';
+    public const CONTENT_TYPE_HTML = 'text/html';
+    private const SERVER_PARAM_HOST = 'HTTP_HOST';
+
+    private ?ServerRequestInterface $request = null;
 
     /**
      * @var WebServiceUserSession
      */
     private $session;
 
-    public function __construct(Slim\Slim $slim)
+    /**
+     * Route patterns by route name, written with ":name" placeholders.
+     *
+     * @var array<string, string>
+     */
+    private array $routes = [];
+
+    private ?int $statusCode = null;
+
+    private string $body = '';
+
+    /**
+     * @param string $basePath Path of the API inside the web root, without a
+     *     trailing slash. Service URLs start with it.
+     */
+    public function __construct(private readonly string $basePath = '')
     {
-        $this->slim = $slim;
+    }
+
+    /**
+     * Sets the request that the other methods read from.
+     */
+    public function SetCurrentRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Makes a route known so that URLs can be generated for it.
+     *
+     * @param string $pattern Route pattern with ":name" placeholders
+     */
+    public function AddNamedRoute(string $routeName, string $pattern): void
+    {
+        $this->routes[$routeName] = $pattern;
+    }
+
+    /**
+     * Moves what a service produced into the response: the status and JSON
+     * body passed to WriteResponse(), followed by anything the service wrote
+     * to the output. A service that only wrote to the output gets an HTML
+     * response.
+     *
+     * @param string $output Output the service wrote while it ran
+     */
+    public function ApplyResponse(ResponseInterface $response, string $output = ''): ResponseInterface
+    {
+        if ($this->statusCode === null) {
+            $response = $response->withHeader(self::CONTENT_TYPE_HEADER, self::CONTENT_TYPE_HTML);
+        } else {
+            $response = $response
+                ->withHeader(self::CONTENT_TYPE_HEADER, self::CONTENT_TYPE_JSON)
+                ->withStatus($this->statusCode);
+        }
+        $response->getBody()->write($this->body . $output);
+
+        $this->statusCode = null;
+        $this->body = '';
+
+        return $response;
     }
 
     public function GetRequest()
     {
-        return json_decode($this->slim->request()->getBody());
+        return json_decode((string) $this->CurrentRequest()->getBody());
     }
 
     public function WriteResponse(RestResponse $restResponse, $statusCode = 200)
     {
-        $this->slim->response()->header('Content-Type', 'application/json');
-        $this->slim->response()->status($statusCode);
-        $this->slim->response()->write(json_encode($restResponse));
-        unset($restResponse);
+        $this->statusCode = (int) $statusCode;
+        $this->body .= json_encode($restResponse);
     }
 
+    /**
+     * Each key of $params replaces the ":key" placeholder of the route. A
+     * placeholder without a matching key is left in the URL.
+     */
     public function GetServiceUrl($serviceName, $params = [])
     {
-        return $this->slim->urlFor($serviceName, $params);
+        if (!array_key_exists($serviceName, $this->routes)) {
+            throw new RuntimeException('Named route not found for name: ' . $serviceName);
+        }
+
+        $url = $this->routes[$serviceName];
+        foreach ($params as $key => $value) {
+            $url = preg_replace_callback(
+                '#:' . preg_quote((string) $key, '#') . '\+?(?!\w)#',
+                fn (array $matches): string => (string) $value,
+                $url
+            );
+        }
+
+        return $this->basePath . $url;
     }
 
+    /**
+     * The host is the one the client sent, including a port if it sent one.
+     * The Host header of the request object is not used when the web server
+     * provided the original value: the request object drops the port from
+     * the header, and its URI may carry the port of a backend server behind a
+     * reverse proxy.
+     */
     public function GetUrl()
     {
-        return $this->slim->environment()->offsetGet('slim.url_scheme') . '://' . $this->slim->environment()->offsetGet('HOST');
+        $request = $this->CurrentRequest();
+        $host = $request->getServerParams()[self::SERVER_PARAM_HOST] ?? $request->getHeaderLine('Host');
+
+        return $request->getUri()->getScheme() . '://' . trim((string) $host);
     }
 
     public function GetFullServiceUrl($serviceName, $params = [])
@@ -50,7 +136,11 @@ class SlimServer implements IRestServer
 
     public function GetHeader($headerName)
     {
-        return $this->slim->request()->headers($headerName);
+        $request = $this->CurrentRequest();
+        if (!$request->hasHeader($headerName)) {
+            return null;
+        }
+        return trim($request->getHeaderLine($headerName));
     }
 
     public function SetSession(WebServiceUserSession $session)
@@ -69,6 +159,14 @@ class SlimServer implements IRestServer
      */
     public function GetQueryString($queryStringKey)
     {
-        return $this->slim->request()->get($queryStringKey);
+        return $this->CurrentRequest()->getQueryParams()[$queryStringKey] ?? null;
+    }
+
+    private function CurrentRequest(): ServerRequestInterface
+    {
+        if ($this->request === null) {
+            throw new LogicException('The API server has not been given a request.');
+        }
+        return $this->request;
     }
 }

@@ -53,8 +53,5 @@
       <directory suffix=".php">Web</directory>
       <directory suffix=".php">WebServices</directory>
     </include>
-    <exclude>
-      <directory suffix=".php">lib/external</directory>
-    </exclude>
   </source>
 </phpunit>

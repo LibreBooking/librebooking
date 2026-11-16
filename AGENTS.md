@@ -31,7 +31,6 @@ This file contains essential information for AI coding agents working on the Lib
   /Common                  Shared utilities (dates, localization, etc.)
   /Database                Database access and abstractions
   /Email                   Email services
-  /external                Third-party libraries (DO NOT MODIFY)
 /Pages                   Page binding and workflow logic
 /Presenters              Application logic and page population
 /plugins                 Plugin architecture (various types)
@@ -256,7 +255,7 @@ Configuration: `build.xml`
 8. **Single quotes** for strings (unless interpolation is needed)
 9. **Short array syntax** - Use `[]` not `array()`
 10. **No magic numbers** - Use named constants, enums, or class constants instead of raw numeric literals. For example, use `CustomAttributeTypes::CHECKBOX` instead of `4`. Code reviews should flag any unexplained numeric literals as magic numbers
-11. **Named arguments** - When you change the arguments of a function or method call, convert that call to named arguments (e.g. `ReservationSeries::Create(userId: $userId, resource: $resource, ...)`). Put one argument per line when the call no longer fits on one line. Only convert the calls you touch; do not mass-convert unrelated calls. Do not use named arguments for calls into `lib/external/` or where the parameter name is not stable (e.g. interface implementations with differing parameter names)
+11. **Named arguments** - When you change the arguments of a function or method call, convert that call to named arguments (e.g. `ReservationSeries::Create(userId: $userId, resource: $resource, ...)`). Put one argument per line when the call no longer fits on one line. Only convert the calls you touch; do not mass-convert unrelated calls. Do not use named arguments where the parameter name is not stable (e.g. interface implementations with differing parameter names)
 
 ### Design Patterns
 
@@ -688,7 +687,9 @@ chmod 755 tpl_c tpl uploads
 
 ### 6. Third-Party Code
 
-**Important**: Never modify code in `/lib/external/` - these are third-party libraries maintained separately.
+**Important**: Third-party libraries are installed with Composer into
+`/vendor/`. Never modify or commit code there, and do not copy third-party
+code into the repository; add it as a Composer dependency instead.
 
 ## Testing Strategy
 

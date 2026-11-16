@@ -1,7 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Interfaces\RouteCollectorProxyInterface;
+
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once(ROOT_DIR . 'lib/WebService/Slim/SlimServer.php');
 require_once(ROOT_DIR . 'lib/WebService/WebServiceParams.php');
 
 class ApiPermissions
@@ -63,10 +67,9 @@ class SlimWebServiceRegistry
      */
     public const NUMERIC_ID_PATTERN = '[0-9]{1,10}';
 
-    /**
-     * @var Slim\Slim
-     */
-    private $slim;
+    private const METHOD_GET = 'GET';
+    private const METHOD_POST = 'POST';
+    private const METHOD_DELETE = 'DELETE';
 
     /**
      * @var array|SlimWebServiceRegistryCategory[]
@@ -88,9 +91,14 @@ class SlimWebServiceRegistry
      */
     private $apiPermissionRoutes = [];
 
-    public function __construct(Slim\Slim $slim)
-    {
-        $this->slim = $slim;
+    /**
+     * @param RouteCollectorProxyInterface<\Psr\Container\ContainerInterface|null> $slim
+     *     The Slim application the routes are added to
+     */
+    public function __construct(
+        private readonly RouteCollectorProxyInterface $slim,
+        private readonly SlimServer $server,
+    ) {
     }
 
     /**
@@ -98,12 +106,13 @@ class SlimWebServiceRegistry
      */
     public function AddCategory(SlimWebServiceRegistryCategory $category)
     {
-        $conditions = array_fill_keys(self::NUMERIC_ID_PARAMS, self::NUMERIC_ID_PATTERN);
-
         foreach ($category->Gets() as $registration) {
-            $this->slim->get($registration->Route(), $registration->Callback())
-                ->name($registration->RouteName())
-                ->conditions($conditions);
+            $this->AddRoute(
+                method: self::METHOD_GET,
+                route: $registration->Route(),
+                callback: $registration->Callback(),
+                routeName: $registration->RouteName(),
+            );
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: false, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -111,9 +120,12 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Posts() as $registration) {
-            $this->slim->post($registration->Route(), $registration->Callback())
-                ->name($registration->RouteName())
-                ->conditions($conditions);
+            $this->AddRoute(
+                method: self::METHOD_POST,
+                route: $registration->Route(),
+                callback: $registration->Callback(),
+                routeName: $registration->RouteName(),
+            );
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -121,9 +133,12 @@ class SlimWebServiceRegistry
         }
 
         foreach ($category->Deletes() as $registration) {
-            $this->slim->delete($registration->Route(), $registration->Callback())
-                ->name($registration->RouteName())
-                ->conditions($conditions);
+            $this->AddRoute(
+                method: self::METHOD_DELETE,
+                route: $registration->Route(),
+                callback: $registration->Callback(),
+                routeName: $registration->RouteName(),
+            );
             $this->SecureRegistration(
                 $registration,
                 apiPermissions: new ApiPermissions(isWrite: true, roGroupId: $category->GetRoGroupId(), rwGroupId: $category->GetRwGroupId())
@@ -131,6 +146,77 @@ class SlimWebServiceRegistry
         }
 
         $this->categories[] = $category;
+    }
+
+    /**
+     * Adds a GET route that belongs to no category: it is not secured and is
+     * not listed by Categories().
+     *
+     * @param string $route Route pattern with ":name" placeholders
+     */
+    public function AddUnlistedGet(string $route, callable $callback, string $routeName): void
+    {
+        $this->AddRoute(method: self::METHOD_GET, route: $route, callback: $callback, routeName: $routeName);
+    }
+
+    /**
+     * Converts a route pattern with ":name" placeholders into the pattern
+     * syntax of Slim's router.
+     *
+     * A placeholder matches one path segment; the ones in NUMERIC_ID_PARAMS
+     * only match a numeric ID. A pattern that ends in a slash matches with
+     * and without that slash; a pattern that does not end in one does not
+     * match a URL that does.
+     */
+    public static function ToRouterPattern(string $route): string
+    {
+        $pattern = preg_replace_callback(
+            '#:(\w+)\+?#',
+            function (array $matches): string {
+                if (in_array($matches[1], self::NUMERIC_ID_PARAMS, true)) {
+                    return '{' . $matches[1] . ':' . self::NUMERIC_ID_PATTERN . '}';
+                }
+                return '{' . $matches[1] . '}';
+            },
+            $route
+        );
+
+        if ($pattern !== '/' && str_ends_with($pattern, '/')) {
+            $pattern = substr($pattern, 0, -1) . '[/]';
+        }
+
+        return $pattern;
+    }
+
+    private function AddRoute(string $method, string $route, callable $callback, string $routeName): void
+    {
+        $server = $this->server;
+        $server->AddNamedRoute(routeName: $routeName, pattern: $route);
+
+        // The route parameters are passed to the service by position, in the
+        // order they appear in the route. array_values() is needed because
+        // unpacking an array with string keys would pass named arguments.
+        $handler = static function (
+            ServerRequestInterface $request,
+            ResponseInterface $response,
+            array $args
+        ) use (
+            $server,
+            $callback
+        ): ResponseInterface {
+            $server->SetCurrentRequest($request);
+            ob_start();
+            try {
+                $callback(...array_values($args));
+            } finally {
+                $output = (string) ob_get_clean();
+            }
+            return $server->ApplyResponse(response: $response, output: $output);
+        };
+
+        $this->slim
+            ->map([$method], self::ToRouterPattern($route), $handler)
+            ->setName($routeName);
     }
 
     /**

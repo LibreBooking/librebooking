@@ -10,8 +10,7 @@
             "**/vendor": true,
             "**/build": true,
             "**/tpl_c": true,
-            "**/*.code-search": true,
-            "**/lib/external": true
+            "**/*.code-search": true
         }
     }
 }

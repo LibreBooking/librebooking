@@ -132,11 +132,9 @@
                 <exclude name=".phpdoc/**" />
                 <!-- version control -->
                 <exclude name=".git*/**" />
-                <include name="**/qrconfig.php" />
                 <include name="**/.htaccess" />
             </fileset>
         </copy>
-        <copy tofile="${stagingdir}/lib/external/phpqrcode/qrconfig.php" file="./lib/external/phpqrcode/qrconfig.php" />
 
         <phingcall target="combine.db.files"></phingcall>
 
