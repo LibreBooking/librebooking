@@ -504,6 +504,44 @@ class ReservationComponentTest extends TestBase
         $binder->Bind($this->initializer);
     }
 
+    public function testDailyLayoutOnlyOffersPeriodsThatStartOrEndOnTheDate(): void
+    {
+        $timezone = 'UTC';
+        $scheduleId = 1;
+        $requestedDate = Date::Now()->AddDays(1)->ToTimezone($timezone)->SetTimeString('02:55:22');
+        $day = $requestedDate->GetDate();
+
+        $this->initializer->method('CurrentUser')->willReturn($this->fakeUser);
+        $this->initializer->method('GetTimezone')->willReturn($timezone);
+        $this->initializer->method('GetReservationDate')->willReturn($requestedDate);
+        $this->initializer->method('GetStartDate')->willReturn($requestedDate);
+        $this->initializer->method('GetEndDate')->willReturn($requestedDate);
+        $this->initializer->method('GetScheduleId')->willReturn($scheduleId);
+
+        $beganPreviousDay = new SchedulePeriod($day->AddDays(-1)->SetTimeString('22:00'), $day->SetTimeString('06:00'));
+        $withinDay = new SchedulePeriod($day->SetTimeString('08:00'), $day->SetTimeString('22:00'));
+        $endsNextDay = new SchedulePeriod($day->SetTimeString('22:00'), $day->AddDays(1)->SetTimeString('06:00'));
+
+        $layout = $this->createMock('IScheduleLayout');
+        $layout->method('UsesDailyLayouts')->willReturn(true);
+        $layout->method('GetLayout')->willReturn([$beganPreviousDay, $withinDay, $endsNextDay]);
+
+        $this->scheduleRepository->_Layout = $layout;
+        $this->scheduleRepository->_Schedule = new FakeSchedule();
+
+        $this->initializer->expects($this->once())
+                          ->method('SetDates')
+                          ->with(
+                              $this->equalTo($requestedDate),
+                              $this->equalTo($requestedDate),
+                              $this->equalTo([$withinDay, $endsNextDay]),
+                              $this->equalTo([$beganPreviousDay, $withinDay])
+                          );
+
+        $binder = new ReservationDateBinder($this->scheduleRepository);
+        $binder->Bind($this->initializer);
+    }
+
     public function testBindsReservationDetails()
     {
         $timezone = 'UTC';

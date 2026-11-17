@@ -1029,6 +1029,138 @@ class ScheduleLayoutTest extends TestBase
         return $layout;
     }
 
+    public function testSingleLayoutPeriodCanRunPastMidnight(): void
+    {
+        $layout = ScheduleLayout::Parse('UTC', '22:00-06:00', '06:00-22:00');
+        $monday = Date::Parse('2026-11-16', 'UTC');
+
+        $periods = $layout->GetLayout($monday);
+
+        $this->assertCount(3, $periods);
+        $this->assertEquals(new SchedulePeriod($monday->AddDays(-1)->SetTimeString('22:00'), $monday->SetTimeString('06:00')), $periods[0]);
+        $this->assertEquals(new NonSchedulePeriod($monday->SetTimeString('06:00'), $monday->SetTimeString('22:00')), $periods[1]);
+        $this->assertEquals(new SchedulePeriod($monday->SetTimeString('22:00'), $monday->AddDays(1)->SetTimeString('06:00')), $periods[2]);
+    }
+
+    public function testDailyLayoutPeriodCanRunIntoTheNextDay(): void
+    {
+        $layout = $this->GetDailyLayoutWithMondayNight('UTC');
+        $monday = Date::Parse('2026-11-16', 'UTC');
+        $tuesday = $monday->AddDays(1);
+        $wednesday = $monday->AddDays(2);
+        $mondayNight = new SchedulePeriod($monday->SetTimeString('22:00'), $tuesday->SetTimeString('06:00'));
+
+        $mondayPeriods = $layout->GetLayout($monday);
+        $tuesdayPeriods = $layout->GetLayout($tuesday);
+        $wednesdayPeriods = $layout->GetLayout($wednesday);
+
+        $this->assertCount(3, $mondayPeriods);
+        $this->assertTrue($mondayPeriods[0]->BeginDate()->Equals($monday));
+        $this->assertEquals($mondayNight, $mondayPeriods[2]);
+
+        $this->assertCount(4, $tuesdayPeriods);
+        $this->assertEquals($mondayNight, $tuesdayPeriods[0]);
+        $this->assertEquals(new NonSchedulePeriod($tuesday->SetTimeString('06:00'), $tuesday->SetTimeString('08:00')), $tuesdayPeriods[1]);
+        $this->assertTrue($tuesdayPeriods[3]->EndDate()->Equals($wednesday));
+
+        $this->assertCount(3, $wednesdayPeriods);
+        $this->assertTrue($wednesdayPeriods[0]->BeginDate()->Equals($wednesday));
+    }
+
+    public function testDailyLayoutPeriodRunningIntoTheNextDayIsConvertedToRequestedTimezone(): void
+    {
+        $layout = $this->GetDailyLayoutWithMondayNight('America/Chicago', 'America/New_York');
+        $monday = Date::Parse('2026-11-16', 'America/New_York');
+        $tuesday = $monday->AddDays(1);
+        // 22:00 - 06:00 in Chicago is 23:00 - 07:00 in New York
+        $mondayNight = new SchedulePeriod($monday->SetTimeString('23:00'), $tuesday->SetTimeString('07:00'));
+
+        $mondayPeriods = $layout->GetLayout($monday);
+        $tuesdayPeriods = $layout->GetLayout($tuesday);
+
+        $this->assertEquals($mondayNight, $mondayPeriods[count($mondayPeriods) - 1]);
+        $this->assertEquals($mondayNight, $tuesdayPeriods[0]);
+        for ($i = 0; $i < count($tuesdayPeriods) - 1; $i++) {
+            $this->assertTrue($tuesdayPeriods[$i]->EndDate()->Equals($tuesdayPeriods[$i + 1]->BeginDate()), "gap or overlap after period $i");
+        }
+    }
+
+    public function testGetsPeriodThatRunsPastMidnight(): void
+    {
+        $monday = Date::Parse('2026-11-16', 'UTC');
+        $tuesday = $monday->AddDays(1);
+        $mondayNight = new SchedulePeriod($monday->SetTimeString('22:00'), $tuesday->SetTimeString('06:00'));
+
+        $layouts = [
+            'single' => ScheduleLayout::Parse('UTC', '22:00-06:00', '06:00-22:00'),
+            'daily' => $this->GetDailyLayoutWithMondayNight('UTC'),
+        ];
+
+        foreach ($layouts as $type => $layout) {
+            $this->assertEquals($mondayNight, $layout->GetPeriod($monday->SetTimeString('22:00')), $type);
+            $this->assertEquals($mondayNight, $layout->GetPeriod($monday->SetTimeString('23:30')), $type);
+            $this->assertEquals($mondayNight, $layout->GetPeriod($tuesday), $type);
+            $this->assertEquals($mondayNight, $layout->GetPeriod($tuesday->SetTimeString('03:00')), $type);
+
+            $afterNight = $layout->GetPeriod($tuesday->SetTimeString('06:00'));
+            $this->assertTrue($afterNight->BeginDate()->Equals($tuesday->SetTimeString('06:00')), $type);
+            $this->assertFalse($afterNight->IsReservable(), $type);
+        }
+    }
+
+    public function testPeriodThatRunsPastMidnightIsCountedOnceOnTheDayItStarts(): void
+    {
+        $layout = ScheduleLayout::Parse('UTC', "22:00-06:00\n06:00-14:00\n14:00-22:00", '');
+        $monday = Date::Parse('2026-11-16', 'UTC');
+        $tuesday = $monday->AddDays(1);
+
+        $night = $layout->GetSlotCount($monday->SetTimeString('22:00'), $tuesday->SetTimeString('06:00'));
+        $restOfNight = $layout->GetSlotCount($tuesday, $tuesday->SetTimeString('06:00'));
+        $daytime = $layout->GetSlotCount($monday->SetTimeString('06:00'), $monday->SetTimeString('22:00'));
+        $endsDuringNight = $layout->GetSlotCount($monday->SetTimeString('14:00'), $monday->SetTimeString('23:00'));
+        $multipleDays = $layout->GetSlotCount($monday->SetTimeString('06:00'), $tuesday->SetTimeString('14:00'));
+
+        $this->assertEquals(1, $night->OffPeak);
+        $this->assertEquals(0, $restOfNight->OffPeak);
+        $this->assertEquals(2, $daytime->OffPeak);
+        $this->assertEquals(1, $endsDuringNight->OffPeak);
+        $this->assertEquals(3, $multipleDays->OffPeak);
+    }
+
+    public function testPeakHoursCanRunPastMidnight(): void
+    {
+        $peakTimes = new PeakTimes(false, '22:00', '06:00', true, [], true, 0, 0, 0, 0);
+        $date = Date::Parse('2026-11-16', 'UTC');
+
+        $this->assertTrue($peakTimes->IsWithinPeak($date->SetTimeString('22:00')));
+        $this->assertTrue($peakTimes->IsWithinPeak($date->SetTimeString('03:00')));
+        $this->assertFalse($peakTimes->IsWithinPeak($date->SetTimeString('06:00')));
+        $this->assertFalse($peakTimes->IsWithinPeak($date->SetTimeString('12:00')));
+    }
+
+    /**
+     * Every day is reservable 08:00 - 22:00, and Monday also has a period
+     * from 22:00 until 06:00 on Tuesday.
+     */
+    private function GetDailyLayoutWithMondayNight(string $layoutTimezone, ?string $targetTimezone = null): ScheduleLayout
+    {
+        $layout = new ScheduleLayout($targetTimezone ?? $layoutTimezone);
+        $time = fn (string $time) => Time::Parse($time, $layoutTimezone);
+
+        foreach (DayOfWeek::Days() as $day) {
+            $dayStart = $day == DayOfWeek::TUESDAY ? '06:00' : '00:00';
+            $layout->AppendBlockedPeriod($time($dayStart), $time('08:00'), null, $day);
+            $layout->AppendPeriod($time('08:00'), $time('22:00'), null, $day);
+            if ($day == DayOfWeek::MONDAY) {
+                $layout->AppendPeriod($time('22:00'), $time('06:00'), null, $day);
+            } else {
+                $layout->AppendBlockedPeriod($time('22:00'), $time('00:00'), null, $day);
+            }
+        }
+
+        return $layout;
+    }
+
     public function testCustomScheduleLayoutLoadsPeriodsFromDatabase()
     {
         $repository = new FakeScheduleRepository();

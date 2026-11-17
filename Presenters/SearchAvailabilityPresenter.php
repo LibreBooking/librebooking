@@ -118,7 +118,7 @@ class SearchAvailabilityPresenter extends ActionPresenter
                             $opening = $this->GetSlot($i, $i, $potentialSlots, $requestedLength, $resource);
 
                             if ($opening != null) {
-                                $openings[] = $opening;
+                                $this->AddOpening($openings, $opening, $dateRange);
                             }
                         }
                     }
@@ -141,7 +141,7 @@ class SearchAvailabilityPresenter extends ActionPresenter
 
                             if ($opening != null) {
                                 if ($this->AllDaysAreOpen($opening, $repeatDates, $resource, $requestedLength)) {
-                                    $openings[] = $opening;
+                                    $this->AddOpening($openings, $opening, $dateRange);
                                 }
                             }
                         }
@@ -152,7 +152,24 @@ class SearchAvailabilityPresenter extends ActionPresenter
 
         Log::Debug('Searching for available openings found %s times', count($openings));
 
-        $this->page->ShowOpenings($openings);
+        $this->page->ShowOpenings(array_values($openings));
+    }
+
+    /**
+     * A slot which runs past midnight is part of the layout of both the day
+     * it starts on and the day it ends on, so the same opening can be found
+     * twice, or found starting before the range which is being searched.
+     *
+     * @param AvailableOpeningView[] $openings
+     */
+    private function AddOpening(array &$openings, AvailableOpeningView $opening, DateRange $searchRange): void
+    {
+        if ($opening->Start()->LessThan($searchRange->GetBegin())) {
+            return;
+        }
+
+        $key = sprintf('%s|%s|%s', $opening->Resource()->GetId(), $opening->Start()->Timestamp(), $opening->End()->Timestamp());
+        $openings[$key] = $opening;
     }
 
     /**

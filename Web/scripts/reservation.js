@@ -633,6 +633,32 @@ function Reservation(opts) {
     elements.endDate[0]._flatpickr.setDate(currentEndDate, true);
   };
 
+  // Moving the begin time moves the end time by the same amount. When that
+  // carries the end time past midnight (for example into a slot that ends the
+  // next morning) the end date has to follow.
+  var ShiftEndDateWhenEndTimeCrossesMidnight = function (diff) {
+    var beginDate = dateHelper.parseYMDDate(elements.beginDate.val());
+    var endDate = dateHelper.parseYMDDate(elements.endDate.val());
+    var picker = elements.endDate[0] ? elements.endDate[0]._flatpickr : null;
+
+    if (!beginDate || !endDate || !picker) {
+      return;
+    }
+
+    var endTimeOfDay = dateHelper.GetTimeDifference('00:00:00', elements.endTime.val());
+    var dayShift = Math.floor((endTimeOfDay + diff) / oneDay);
+    if (dayShift === 0) {
+      return;
+    }
+
+    endDate.setDate(endDate.getDate() + dayShift);
+    if (endDate.getTime() < beginDate.getTime()) {
+      return;
+    }
+
+    picker.setDate(endDate, true);
+  };
+
   var SelectRepeatWeekday = function () {
     if (elements.referenceNumber.val() != '') {
       return;
@@ -826,6 +852,8 @@ function Reservation(opts) {
 
       var newTime = dateHelper.AddTimeDiff(diff, elements.endTime.val());
 
+      ShiftEndDateWhenEndTimeCrossesMidnight(diff);
+
       elements.endTime.val(newTime);
       elements.beginTime.data('previousVal', elements.beginTime.val());
 
@@ -917,9 +945,13 @@ function Reservation(opts) {
       periodElement.empty();
       $.map(layoutItems, function (item) {
         if (item.isReservable) {
+          // A period which runs past midnight is listed on both days: it can
+          // only be started on the day it begins and ended on the day it ends.
           if (type === 'begin') {
-            items.push('<option value="' + item.begin + '">' + item.label + '</option>');
-          } else {
+            if (item.beginsOnDate !== false) {
+              items.push('<option value="' + item.begin + '">' + item.label + '</option>');
+            }
+          } else if (item.endsOnDate !== false) {
             items.push('<option value="' + item.end + '">' + item.labelEnd + '</option>');
           }
         } else {

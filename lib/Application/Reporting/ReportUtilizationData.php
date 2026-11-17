@@ -134,28 +134,42 @@ class ReportUtilizationData
             return;
         }
         $seconds = 0;
-        $first = null;
-        $last = null;
+        $earliest = null;
+        $latest = null;
         $periods = $layout->GetLayout($date->GetDate());
 
-        foreach ($periods as $period) {
+        foreach ($periods as $index => $period) {
             if ($period->IsReservable()) {
-                if ($first == null) {
-                    $first = $period;
+                $begin = $period->BeginDate();
+                $end = $period->EndDate();
+
+                // a period which runs past midnight is in the layout of both days, and only counts for the part within this day
+                $runsPastMidnight = !$begin->DateEquals($end) && !$end->IsMidnight();
+                if ($runsPastMidnight) {
+                    $beganPreviousDay = $index == 0 && count($periods) > 1;
+                    if ($beganPreviousDay) {
+                        $begin = $end->GetDate();
+                    } else {
+                        $end = $begin->GetDate()->AddDays(1);
+                    }
                 }
-                $last = $period;
-                $seconds += DateDiff::BetweenDates($period->BeginDate(), $period->EndDate())->TotalSeconds();
+
+                if ($earliest == null) {
+                    $earliest = $begin->GetTime();
+                }
+                $latest = $end->GetTime();
+                $seconds += DateDiff::BetweenDates($begin, $end)->TotalSeconds();
             }
         }
 
-        if ($first == null) {
-            $first = $periods[0];
+        if ($earliest == null) {
+            $earliest = $periods[0]->Begin();
         }
-        if ($last == null) {
-            $last = $periods[count($periods) - 1];
+        if ($latest == null) {
+            $latest = $periods[count($periods) - 1]->End();
         }
 
-        $this->weekdayAvailability[$key] = new ReportDailyAvailability($seconds, $first->Begin(), $last->End());
+        $this->weekdayAvailability[$key] = new ReportDailyAvailability($seconds, $earliest, $latest);
     }
 
     /**

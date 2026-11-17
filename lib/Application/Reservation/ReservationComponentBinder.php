@@ -67,7 +67,10 @@ class ReservationDateBinder implements IReservationComponentBinder
     {
         $startPeriods = $layout->GetLayout($startDate, true);
 
-        return $this->GetPeriods($startPeriods, $layout, $startDate);
+        // a period which began the day before cannot be started on this date
+        $beginsOnDate = fn (SchedulePeriod $period, Date $date) => $period->BeginDate()->DateEquals($date);
+
+        return $this->GetPeriods($startPeriods, $layout, $startDate, $beginsOnDate);
     }
 
     /**
@@ -83,26 +86,36 @@ class ReservationDateBinder implements IReservationComponentBinder
             // no periods on the next day, return midnight to let the reservation end at the top of the hour
             return [new SchedulePeriod($endDate->SetTimeString('00:00'), $endDate->SetTimeString('00:00', true))];
         }
-        return $this->GetPeriods($endPeriods, $layout, $endDate);
+
+        // a period which runs past midnight into the following day cannot be ended on this date
+        $endsOnDate = fn (SchedulePeriod $period, Date $date) => $period->EndDate()->DateEquals($date)
+            || $period->EndDate()->Equals($date->GetDate()->AddDays(1));
+
+        return $this->GetPeriods($endPeriods, $layout, $endDate, $endsOnDate);
     }
 
     /**
      * @param SchedulePeriod[] $startPeriods
      * @param IScheduleLayout $layout
      * @param Date $startDate
+     * @param callable(SchedulePeriod, Date): bool $occursOnDate used when each day of the week has its own periods
      * @param int $iteration
      * @return array|SchedulePeriod[]
      */
-    private function GetPeriods($startPeriods, $layout, &$startDate, $iteration = 0)
+    private function GetPeriods($startPeriods, $layout, &$startDate, callable $occursOnDate, $iteration = 0)
     {
-        if (count($startPeriods) > 1 && $startPeriods[0]->Begin()->Compare($startPeriods[1]->Begin()) > 0) {
+        if ($layout->UsesDailyLayouts()) {
+            // the layout also returns the neighbouring days' periods which run into this date
+            $date = $startDate;
+            $startPeriods = array_values(array_filter($startPeriods, fn (SchedulePeriod $period) => $occursOnDate($period, $date)));
+        } elseif (count($startPeriods) > 1 && $startPeriods[0]->Begin()->Compare($startPeriods[1]->Begin()) > 0) {
             $period = array_shift($startPeriods);
             $startPeriods[] = $period;
         }
 
-        if (count($startPeriods) == 0 && $iteration < 7) {
+        if (count($startPeriods) == 0 && $iteration < DayOfWeek::NumberOfDays) {
             $startDate = $startDate->AddDays(1);
-            return $this->GetPeriods($layout->GetLayout($startDate, true), $layout, $startDate, ++$iteration);
+            return $this->GetPeriods($layout->GetLayout($startDate, true), $layout, $startDate, $occursOnDate, ++$iteration);
         }
         return $startPeriods;
     }

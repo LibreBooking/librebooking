@@ -357,6 +357,40 @@ class ReportingServiceTest extends TestBase
         $this->assertEquals(100, $data[2][ColumnNames::UTILIZATION], '4/4');
     }
 
+    public function testUtilizationReportCountsAPeriodThatRunsPastMidnightOnBothDays(): void
+    {
+        $r1 = 1;
+        $s1 = 100;
+        $tz = 'America/New_York';
+
+        $thursday = Date::Parse('2018-12-20', $tz);
+        $friday = Date::Parse('2018-12-21', $tz);
+
+        // reservable 22:00 - 06:00, so each day is reservable for 6 hours in the morning and 2 hours at night
+        $layout = new FakeScheduleLayout();
+        $layout->_Timezone = $tz;
+        $layout->_UsesDailyLayouts = false;
+        $layout->_Layout = [
+            new SchedulePeriod($thursday->AddDays(-1)->SetTimeString('22:00'), $thursday->SetTimeString('06:00')),
+            new NonSchedulePeriod($thursday->SetTimeString('06:00'), $thursday->SetTimeString('22:00')),
+            new SchedulePeriod($thursday->SetTimeString('22:00'), $friday->SetTimeString('06:00')),
+        ];
+        $this->scheduleRepository->_Layout = $layout;
+
+        $this->reportingRepository->_CustomReportData = [
+            $this->GetUtilizationRow($r1, $s1, $thursday->SetTimeString('22:00'), $friday->SetTimeString('06:00'), 1, 'r1'),
+        ];
+
+        $report = $this->rs->GenerateCustomReport(new Report_Usage(Report_Usage::RESOURCES), new Report_ResultSelection(Report_ResultSelection::UTILIZATION), new Report_GroupBy(Report_GroupBy::NONE), Report_Range::AllTime(), new Report_Filter(null, null, null, null, null, null, false, null), $this->fakeUser->Timezone);
+
+        $data = $report->GetData()->Rows();
+
+        $this->assertEquals($thursday, $data[0][ColumnNames::DATE]);
+        $this->assertEquals(25, $data[0][ColumnNames::UTILIZATION], '2 of 8 hours');
+        $this->assertEquals($friday, $data[1][ColumnNames::DATE]);
+        $this->assertEquals(75, $data[1][ColumnNames::UTILIZATION], '6 of 8 hours');
+    }
+
     /**
      * @param int $resourceId
      * @param int $scheduleId
