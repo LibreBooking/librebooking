@@ -9,7 +9,6 @@
  * Input variables (Set/Get):
  *
  * @property string $ControlId       ID of the input that will be converted into a datepicker.
- * @property string|null $AltId      ID of an alternate input (optional), used for hidden or inline dates.
  * @property bool $HasTimepicker     Indicates if the picker includes time (true) or only date (false). Default: false.
  * @property bool $Inline            Whether the picker should be displayed inline instead of as a popup. Default: false.
  * @property string|null $OnSelect   JS callback triggered when a date is selected (optional).
@@ -82,21 +81,6 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('OnClose', null);
         $this->SetDefault('FirstDay', 0);
 
-        /****************************** Remove upon completion of Flatpickr deployment */
-        $controlId = $this->Get('ControlId');
-        $altId = $this->Get('AltId');
-
-        $elementsToTrigger = '#' . $controlId;
-        if (!empty($altId)) {
-            $altId = str_replace(']', '\\\\]', str_replace('[', '\\\\[', $altId));
-            $elementsToTrigger .= ",#$altId";
-        }
-
-        $this->Set('ControlId', $controlId);
-        $this->Set('AltId', $altId);
-
-        /****************************** */
-
         $hasTimepicker = $this->Get('HasTimepicker');
         $this->Set('HasTimepicker', $hasTimepicker);
 
@@ -167,11 +151,7 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 
-        if (!$altId) {
-            $this->Display('Controls/DatePickerSetup.tpl');
-        } else {
-            $this->Display('Controls/DateSetup.tpl');
-        }
+        $this->Display('Controls/DatePickerSetup.tpl');
     }
 
     /**
