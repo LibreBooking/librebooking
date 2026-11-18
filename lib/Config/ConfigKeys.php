@@ -216,6 +216,20 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => "Name of the CSS theme to use\nOptions: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange",
     ];
 
+    public const CSS_COLOR_MODE = [
+        'key' => 'css.color.mode',
+        'type' => 'string',
+        'default' => 'auto',
+        'choices' => [
+            'auto' => 'Auto (follow browser/OS setting)',
+            'light' => 'Light',
+            'dark' => 'Dark',
+        ],
+        'label' => 'CSS Color Mode',
+        'description' => 'Light or dark color mode. "auto" follows the browser/operating system preference and switches automatically. Options: auto, light, dark',
+        'config_file_comment' => "Light or dark color mode\nOptions: auto (follow browser/OS setting), light, dark",
+    ];
+
     public const NAME_FORMAT = [
         'key' => 'name.format',
         'type' => 'string',

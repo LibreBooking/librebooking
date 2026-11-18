@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="{$HtmlLang}" dir="{$HtmlTextDirection}">
+<html lang="{$HtmlLang}" dir="{$HtmlTextDirection}" data-bs-theme="{if $cssColorMode eq 'dark'}dark{else}light{/if}"
+    data-lb-color-mode="{$cssColorMode}">
 
 <head>
     <title>{if isset($TitleKey) && $TitleKey neq ''}{translate key=$TitleKey args=$TitleArgs}{else}{$Title}{/if}</title>
     <meta http-equiv="Content-Type" content="text/html; charset={$Charset}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="{if $cssColorMode eq 'auto'}light dark{else}{$cssColorMode}{/if}" />
+    {* Applied before any CSS loads so pages don't flash light before switching to dark. *}
+    <script>
+        (function () {
+            var root = document.documentElement;
+            if (root.getAttribute('data-lb-color-mode') !== 'auto' || !window.matchMedia) {
+                return;
+            }
+            var query = window.matchMedia('(prefers-color-scheme: dark)');
+            var apply = function () {
+                root.setAttribute('data-bs-theme', query.matches ? 'dark' : 'light');
+            };
+            apply();
+            if (query.addEventListener) {
+                query.addEventListener('change', apply);
+            } else if (query.addListener) {
+                query.addListener(apply);
+            }
+        })();
+    </script>
     {if isset($ShouldLogout) && $ShouldLogout}
         <meta http-equiv="REFRESH"
             content="{$SessionTimeoutSeconds};URL={$Path}logout.php?{QueryStringKeys::REDIRECT}={$smarty.server.REQUEST_URI|urlencode}" />
@@ -108,7 +129,7 @@
     <!-- End CSS -->
 </head>
 
-<body data-bs-theme='{$cssTheme}'>
+<body data-lb-theme='{$cssTheme}'>
 
     <noscript>
         <div class="alert alert-warning text-center m-2" role="alert">
@@ -139,7 +160,7 @@
                 <h5 class="mb-0"><a class="link-primary" href="{$HomeUrl}">{$AppTitle}</a></h5>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm py-2 sticky-top">
             <div class="container-fluid">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation" aria-controls="librebooking-navigation" aria-expanded="false"

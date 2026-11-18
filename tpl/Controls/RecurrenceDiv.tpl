@@ -112,7 +112,7 @@
 							class="bi bi-plus-square-fill"></i></button>
 				</div>
 			</div>
-			<div class="repeat-date-list rounded border bg-white my-2 p-2">
+			<div class="repeat-date-list rounded border bg-body my-2 p-2">
 
 			</div>
 		</div>

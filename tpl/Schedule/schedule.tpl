@@ -430,7 +430,7 @@
     {csrf_token}
 </form>
 
-<div id="loading-schedule" class="d-none d-flex align-items-center gap-2 p-3 border rounded-2 bg-white
+<div id="loading-schedule" class="d-none d-flex align-items-center gap-2 p-3 border rounded-2 bg-body
 opacity-75">
     <div class="spinner-border" role="status">
         <span class="visually-hidden">{translate key='Working'}</span>

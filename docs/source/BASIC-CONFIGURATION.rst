@@ -293,6 +293,7 @@ Frontend Settings
 
    'script.url' => 'https://example.com/librebooking/Web',
    'css.theme' => 'default',
+   'css.color.mode' => 'auto',
    'cache.templates' => true,
    'default.homepage' => 1,
 
@@ -317,6 +318,20 @@ Frontend Settings
 **css.theme**
   Theme to use for the application. Options: default, dimgray, dark_red,
   dark_green, french_blue, cake_blue, orange.
+
+  The theme name is exposed as the ``data-lb-theme`` attribute on ``<body>``.
+  Custom CSS (see ``css.extension.file``) that targets a theme should use
+  ``[data-lb-theme='<name>']``.
+
+**css.color.mode**
+  Light or dark color mode. Options: ``auto``, ``light``, ``dark``. The
+  default ``auto`` follows the browser/operating system preference and
+  switches automatically when that preference changes, without a page
+  reload. The equivalent environment variable is ``LB_CSS_COLOR_MODE``.
+
+  The active mode is exposed as Bootstrap's ``data-bs-theme`` attribute
+  (``light`` or ``dark``) on ``<html>``, so custom CSS can target dark mode
+  with ``[data-bs-theme='dark']``.
 
 **cache.templates**
   Enable or disable template caching.

@@ -184,7 +184,7 @@
                                                                 {else}
                                                                     <div class="text-center">
                                                                         <div
-                                                                            class="noImage w-100 bg-light border rounded-3 mx-auto">
+                                                                            class="noImage w-100 bg-body-tertiary border rounded-3 mx-auto">
                                                                             <span class="bi bi-image fs-1"></span>
                                                                         </div>
                                                                     </div>
