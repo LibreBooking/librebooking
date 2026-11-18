@@ -73,3 +73,4 @@ parameters:
     # Corrected PHPDoc for third-party code that cannot be edited.
     stubFiles:
         - tests/phpstan-stubs/FeedWriter.stub
+        - tests/phpstan-stubs/Smarty.stub

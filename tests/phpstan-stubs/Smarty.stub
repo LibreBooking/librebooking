@@ -1,0 +1,34 @@
+<?php
+
+namespace Smarty;
+
+class Data
+{
+}
+
+abstract class TemplateBase extends Data
+{
+}
+
+class Template extends TemplateBase
+{
+}
+
+/**
+ * Corrects smarty/smarty's PHPDoc: createTemplate() documents $parent as
+ * null, but passes it to the Template constructor, which takes a Data
+ * object.
+ */
+class Smarty extends TemplateBase
+{
+    /**
+     * @param string $template_name
+     * @param mixed $cache_id
+     * @param mixed $compile_id
+     * @param Data|null $parent
+     * @return Template
+     */
+    public function createTemplate($template_name, $cache_id = null, $compile_id = null, $parent = null): Template
+    {
+    }
+}
