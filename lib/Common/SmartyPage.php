@@ -86,7 +86,8 @@ class SmartyPage extends Smarty
      * Fetches template in a specific language. A custom template file might override the default template.
      * In case the template is not available in the target language it will fall back to en_us.
      * @param string $templateName
-     * @param string $languageCode Will be set to template var CurrentLanguage if null
+     * @param string $languageCode Will be set to template var CurrentLanguage if null, and to the
+     * language this page was created for if that variable is not assigned either
      * @param bool $enforceCustomTemplate if true uses custom language from default language
      * if custom template of the target language is not available.
      * @return string
@@ -95,6 +96,10 @@ class SmartyPage extends Smarty
     {
         if ($languageCode == null) {
             $languageCode = $this->getTemplateVars('CurrentLanguage');
+        }
+        if ($languageCode == null) {
+            // e.g. an email that was created without a language
+            $languageCode = $this->Resources->CurrentLanguage;
         }
         $langPath = ROOT_DIR . 'lang/';
         $localizedPath = $langPath . $languageCode;
@@ -124,6 +129,14 @@ class SmartyPage extends Smarty
             $templateName = $customTemplateName;
         }
 
+        // Fetch from the selected directory by its full path. Looking the name up in the template
+        // directories would return the file of whichever language directory was added first.
+        $localizedTemplate = rtrim($path, '/') . '/' . $templateName;
+        if (is_file($localizedTemplate)) {
+            return $this->fetch('file:' . $localizedTemplate);
+        }
+
+        // Not a localized template (e.g. Reports/custom-csv.tpl): look it up in the template directories
         return $this->fetch($templateName);
     }
 
