@@ -6,6 +6,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
+      - refactor/twig # temporary: drop before merging refactor/twig into main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
