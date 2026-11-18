@@ -254,7 +254,7 @@ class SmartyPage extends Smarty
         /**
          * PageValidators
          */
-        $this->Validators = new PageValidators($this);
+        $this->Validators = new PageValidators();
     }
 
     public function IsValid()
@@ -272,20 +272,6 @@ class SmartyPage extends Smarty
     public function Validate()
     {
         $this->Validators->Validate();
-    }
-
-    /**
-     * @var array|IValidator[]
-     */
-    public $failedValidators = [];
-
-    /**
-     * @param $id int
-     * @param $validator IValidator
-     */
-    public function AddFailedValidation($id, $validator)
-    {
-        $this->failedValidators[$id] = $validator;
     }
 
     private function AppendAttributes(array $params, array $knownAttributes): string

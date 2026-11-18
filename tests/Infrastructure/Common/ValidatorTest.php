@@ -10,13 +10,55 @@ class ValidatorTest extends TestBase
     {
         $validator = new FakeValidator();
         $validator->_IsValid = true;
-        $validators = new PageValidators(new SmartyPage());
+        $validators = new PageValidators();
 
         $validators->Register('someid', $validator);
         $validators->Validate();
 
         $this->assertTrue($validator->_WasValidated, 'should have been validated when registered');
         $this->assertTrue($validators->AreAllValid());
+    }
+
+    public function testFailedValidatorsAreKeptByTheirId(): void
+    {
+        $passing = new FakeValidator();
+        $passing->_IsValid = true;
+        $failing = new FakeValidator();
+        $failing->_IsValid = false;
+        $alsoFailing = new FakeValidator();
+        $alsoFailing->_IsValid = false;
+
+        $validators = new PageValidators();
+        $validators->Register('passing', $passing);
+        $validators->Register('failing', $failing);
+        $validators->Register('alsoFailing', $alsoFailing);
+        $validators->Validate();
+
+        $this->assertFalse($validators->AreAllValid());
+        $this->assertSame(['failing' => $failing, 'alsoFailing' => $alsoFailing], $validators->GetFailed());
+    }
+
+    public function testNoValidatorHasFailedBeforeValidation(): void
+    {
+        $failing = new FakeValidator();
+        $failing->_IsValid = false;
+
+        $validators = new PageValidators();
+        $validators->Register('failing', $failing);
+
+        $this->assertSame([], $validators->GetFailed());
+    }
+
+    public function testNoValidatorHasFailedWhenAllPass(): void
+    {
+        $passing = new FakeValidator();
+        $passing->_IsValid = true;
+
+        $validators = new PageValidators();
+        $validators->Register('passing', $passing);
+        $validators->Validate();
+
+        $this->assertSame([], $validators->GetFailed());
     }
 
     public function testPasswordComplexity()

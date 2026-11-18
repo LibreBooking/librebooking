@@ -84,7 +84,7 @@ abstract class ActionPage extends Page implements IActionPage
         $errors = new ActionErrors();
         $inlineErrors = [];
 
-        foreach ($this->smarty->failedValidators as $id => $validator) {
+        foreach ($this->smarty->Validators->GetFailed() as $id => $validator) {
             Log::Debug('Failed validator %s', $id);
             $errors->Add($id, $validator->Messages());
 
