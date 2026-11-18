@@ -167,6 +167,7 @@ class ConfigKeysMeta
             'script.url',
             'install.password',
             'cache.templates',
+            'template.engine',
             'use.local.js.libs',
             'inactivity.timeout',
             'home.url',

@@ -115,6 +115,19 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => 'Enable template caching. Recommended for production.',
     ];
 
+    public const TEMPLATE_ENGINE = [
+        'key' => 'template.engine',
+        'type' => 'string',
+        'default' => 'smarty',
+        'choices' => [
+            'smarty' => 'Smarty',
+            'twig' => 'Twig (experimental)',
+        ],
+        'label' => 'Template Engine',
+        'description' => 'Engine used to render pages and emails. Twig is experimental and only used for templates that have been migrated; all other templates are rendered with Smarty. Options: smarty, twig',
+        'config_file_comment' => "Template engine used to render pages and emails.\nTwig is experimental and only used for templates that have been migrated;\nall other templates are rendered with Smarty.\nOptions: smarty, twig",
+    ];
+
     # previously USE_LOCAL_JS
     public const USE_LOCAL_JS_LIBS = [
         'key' => 'use.local.js.libs',
