@@ -13,14 +13,9 @@ class PageValidators
     private $isValidated = false;
 
     /**
-     * @var SmartyPage
+     * @var array<int|string, IValidator>
      */
-    private $page;
-
-    public function __construct(SmartyPage $page)
-    {
-        $this->page = $page;
-    }
+    private array $failed = [];
 
     public function Register($id, $validator)
     {
@@ -33,11 +28,22 @@ class PageValidators
             $validator->Validate();
 
             if (!$validator->IsValid()) {
-                $this->page->AddFailedValidation($id, $validator);
+                $this->failed[$id] = $validator;
             }
         }
 
         $this->isValidated = true;
+    }
+
+    /**
+     * The validators that did not pass when Validate() ran, keyed by the id
+     * they were registered with.
+     *
+     * @return array<int|string, IValidator>
+     */
+    public function GetFailed(): array
+    {
+        return $this->failed;
     }
 
     public function AreAllValid()
