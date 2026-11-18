@@ -3,7 +3,7 @@ LibreBooking Installation
 
 .. note::
    For users without web hosting service or existing environment, packages like
-   `XAMMP <http://www.apachefriends.org/en/index.html>`__ or `WampServer
+   `XAMMP <https://www.apachefriends.org/>`__ or `WampServer
    <http://www.wampserver.com/en/>`__ can help you get set up quickly.
 
 Fresh Installation
