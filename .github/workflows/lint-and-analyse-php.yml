@@ -12,6 +12,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
+      - refactor/twig # temporary: drop before merging refactor/twig into main
 
 permissions:
   contents: read

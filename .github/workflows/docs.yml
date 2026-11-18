@@ -11,6 +11,7 @@ on:
   pull_request:
     branches:
       - main
+      - refactor/twig # temporary: drop before merging refactor/twig into main
 
 env:
   PY_COLORS: 1
