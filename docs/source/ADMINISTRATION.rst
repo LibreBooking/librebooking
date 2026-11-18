@@ -144,6 +144,10 @@ read-only schedule. By default, only available and unavailable times are
 shown. Setting this to ``true`` will show full reservation details to
 unauthenticated users.
 
+``view.public.reservation.details`` additionally lets unauthenticated users
+open the reservation popup from the read-only schedule. It has no effect
+unless ``view.reservations`` is ``true``.
+
 Resources
 ---------
 

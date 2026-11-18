@@ -1235,6 +1235,15 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => "When true, public (unauthenticated) views show reservation details.\nWhen false (default), public views show only that a slot is occupied with no content.",
         'section' => 'privacy'
     ];
+    public const PRIVACY_VIEW_PUBLIC_RESERVATION_DETAILS = [
+        'key' => 'privacy.view.public.reservation.details',
+        'type' => 'boolean',
+        'default' => false,
+        'label' => 'View Public Reservation Details',
+        'description' => 'When true, public (not logged-in) users can open the reservation popup from the public schedule and calendar to see reservation details. Requires privacy.view.reservations to be true.',
+        'config_file_comment' => "When true, public (unauthenticated) users can open reservation details from public views.\nRequires privacy.view.reservations.",
+        'section' => 'privacy'
+    ];
     public const PRIVACY_HIDE_USER_DETAILS = [
         'key' => 'privacy.hide.user.details',
         'type' => 'boolean',
