@@ -71,6 +71,12 @@ return [
         # Enable template caching. Recommended for production. (true/false)
         'cache.templates' => true,
 
+        # Template engine used to render pages and emails.
+        # Twig is experimental and only used for templates that have been migrated;
+        # all other templates are rendered with Smarty.
+        # Options: smarty, twig
+        'template.engine' => 'smarty',
+
         # Enable use of bundled/self-hosted frontend assets (JavaScript, CSS, fonts) (true/false)
         'use.local.js.libs' => true,
 
