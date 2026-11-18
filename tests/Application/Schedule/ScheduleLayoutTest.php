@@ -1073,14 +1073,118 @@ class ScheduleLayoutTest extends TestBase
         $this->assertSame($date1Layout, $date1AgainLayout);
     }
 
-    public function testCustomScheduleLayoutSlotCountIsCurrentlyZero(): void
+    public function testCustomScheduleLayoutCountsCoveredSlots(): void
     {
-        // Documents the current behavior: custom-layout reservations are not
-        // charged credits. Update this test when the slot counting is fixed:
-        // https://github.com/LibreBooking/librebooking/issues/1871
-        $layout = new CustomScheduleLayout('UTC', 1, new FakeScheduleRepository());
-        $start = Date::Parse('2026-11-10 09:00', 'UTC');
+        $date = Date::Parse('2026-11-10', 'UTC');
+        $repository = new FakeScheduleRepository();
+        $repository->_AddCustomLayout($date, [
+            new SchedulePeriod($date->SetTimeString('08:00'), $date->SetTimeString('09:00')),
+            new SchedulePeriod($date->SetTimeString('09:00'), $date->SetTimeString('10:00')),
+        ]);
+        $layout = new CustomScheduleLayout('UTC', 1, $repository);
 
-        $this->assertEquals(new SlotCount(0, 0), $layout->GetSlotCount($start, $start->AddHours(1)));
+        $count = $layout->GetSlotCount(
+            Date::Parse('2026-11-10 08:00', 'UTC'),
+            Date::Parse('2026-11-10 10:00', 'UTC')
+        );
+
+        $this->assertEquals(new SlotCount(2, 0), $count);
+    }
+
+    public function testCustomScheduleLayoutIgnoresPartiallyCoveredSlot(): void
+    {
+        $date = Date::Parse('2026-11-10', 'UTC');
+        $repository = new FakeScheduleRepository();
+        $repository->_AddCustomLayout($date, [
+            new SchedulePeriod($date->SetTimeString('08:00'), $date->SetTimeString('09:00')),
+            new SchedulePeriod($date->SetTimeString('09:00'), $date->SetTimeString('10:00')),
+        ]);
+        $layout = new CustomScheduleLayout('UTC', 1, $repository);
+
+        $count = $layout->GetSlotCount(
+            Date::Parse('2026-11-10 08:30', 'UTC'),
+            Date::Parse('2026-11-10 10:00', 'UTC')
+        );
+
+        $this->assertEquals(new SlotCount(1, 0), $count);
+    }
+
+    public function testCustomScheduleLayoutWithoutSlotsCountsNothing(): void
+    {
+        $date = Date::Parse('2026-11-10', 'UTC');
+        $repository = new FakeScheduleRepository();
+        $repository->_AddCustomLayout($date, []);
+        $layout = new CustomScheduleLayout('UTC', 1, $repository);
+
+        $count = $layout->GetSlotCount(
+            Date::Parse('2026-11-10 08:00', 'UTC'),
+            Date::Parse('2026-11-10 10:00', 'UTC')
+        );
+
+        $this->assertEquals(new SlotCount(0, 0), $count);
+    }
+
+    public function testCustomScheduleLayoutClassifiesPeakSlotsInTheScheduleTimezone(): void
+    {
+        $serverTimezone = date_default_timezone_get();
+        // Peak times without an explicit timezone use the server default.
+        date_default_timezone_set('UTC');
+
+        try {
+            $timezone = 'America/New_York';
+            $date = Date::Parse('2026-11-10', $timezone);
+            $repository = new FakeScheduleRepository();
+            $repository->_AddCustomLayout($date, [
+                new SchedulePeriod($date->SetTimeString('16:00'), $date->SetTimeString('17:00')),
+                new SchedulePeriod($date->SetTimeString('17:00'), $date->SetTimeString('18:00')),
+            ]);
+            $layout = new CustomScheduleLayout($timezone, 1, $repository);
+            $layout->ChangePeakTimes(new PeakTimes(
+                false,
+                Time::Parse('09:00', $timezone),
+                Time::Parse('17:00', $timezone),
+                true,
+                [],
+                true,
+                0,
+                0,
+                0,
+                0
+            ));
+
+            $count = $layout->GetSlotCount(
+                Date::Parse('2026-11-10 16:00', $timezone),
+                Date::Parse('2026-11-10 18:00', $timezone)
+            );
+
+            $this->assertEquals(new SlotCount(1, 1), $count);
+        } finally {
+            date_default_timezone_set($serverTimezone);
+        }
+    }
+
+    public function testCustomScheduleLayoutChargesCredits(): void
+    {
+        // Credits count only for reservations that end in the future.
+        $date = Date::Now()->ToTimezone('UTC')->AddDays(7)->GetDate();
+        $repository = new FakeScheduleRepository();
+        $repository->_AddCustomLayout($date, [
+            new SchedulePeriod($date->SetTimeString('09:00'), $date->SetTimeString('10:00')),
+        ]);
+        $layout = new CustomScheduleLayout('UTC', 1, $repository);
+
+        $resource = new FakeBookableResource(1);
+        $resource->SetCreditsPerSlot(5);
+        $series = new TestReservationSeries();
+        $series->WithResource($resource);
+        $series->WithCurrentInstance(new TestReservation('reference', new DateRange(
+            $date->SetTimeString('09:00'),
+            $date->SetTimeString('10:00')
+        )));
+
+        $series->CalculateCredits($layout);
+
+        $instance = current($series->Instances());
+        $this->assertEquals(5, $instance->GetCreditsRequired());
     }
 }
