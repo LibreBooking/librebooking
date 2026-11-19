@@ -41,7 +41,6 @@ parameters:
             - plugins/Authentication/Moodle/
             - plugins/Authentication/MoodleAdv/
             - plugins/Authentication/Saml/
-            - plugins/Authentication/Shibboleth/
             - plugins/Authentication/WordPress/
     bootstrapFiles:
         - vendor/autoload.php
