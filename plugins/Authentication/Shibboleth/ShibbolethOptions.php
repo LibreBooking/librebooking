@@ -16,7 +16,7 @@ class ShibbolethOptions
 {
     /**
      * Options map.
-     * @var array
+     * @var array|null
      */
     protected $_options;
 

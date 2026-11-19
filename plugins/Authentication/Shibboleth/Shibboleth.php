@@ -22,17 +22,17 @@ class Shibboleth extends Authentication
 
     protected $authToDecorate;
     /**
-     * @var Registration
+     * @var Registration|null
      */
     protected $_registration;
 
     /**
-     * @var ShibbolethUser
+     * @var ShibbolethUser|null
      */
     protected $_user;
 
     /**
-     * @var ShibbolethOptions
+     * @var ShibbolethOptions|null
      */
     protected $_config;
 
