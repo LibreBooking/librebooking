@@ -18,8 +18,6 @@ class SamlOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/Saml.config.php');
-
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Saml.config.php',
             dirname(__FILE__) . '/.env',
