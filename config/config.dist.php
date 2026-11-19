@@ -725,7 +725,7 @@ return [
 
         'plugins' => [
             # Plugin class name to use for authentication
-            # Options: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, Moodle, MoodleAdv, Saml, Shibboleth, WordPress
+            # Options: ActiveDirectory, Apache, CAS, Drupal, Krb5, Ldap, Mellon, MoodleAdv, Saml, Shibboleth, WordPress
             'authentication' => '',
 
             # Plugin class name to use for authorization

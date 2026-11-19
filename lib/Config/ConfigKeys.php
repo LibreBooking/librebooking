@@ -1719,7 +1719,6 @@ class ConfigKeys extends AbstractConfigKeys
             'Krb5' => 'Krb5',
             'Ldap' => 'Ldap',
             'Mellon' => 'Mellon',
-            'Moodle' => 'Moodle',
             'MoodleAdv' => 'MoodleAdv',
             'Saml' => 'Saml',
             'Shibboleth' => 'Shibboleth',
