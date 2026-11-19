@@ -71,6 +71,10 @@ parameters:
             - tests/lib/
     bootstrapFiles:
         - vendor/autoload.php
+    # Declarations of symbols from applications that plugins integrate with
+    # but that are not dependencies of this project.
+    scanFiles:
+        - tests/phpstan-stubs/WordPress.symbols
     # Corrected PHPDoc for third-party code that cannot be edited.
     stubFiles:
         - tests/phpstan-stubs/FeedWriter.stub
