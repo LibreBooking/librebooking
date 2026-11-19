@@ -196,6 +196,22 @@ jobs:
             exit 1
           fi
 
+      - name: Check Twig coding-standard (twig-cs-fixer)
+        if: matrix.php-version == '8.4'
+        run: |
+          if ! composer twigcsfixer:lint; then
+            echo ""
+            echo "=========================================="
+            echo "  twig-cs-fixer found template style issues."
+            echo "  To fix them locally, run:"
+            echo ""
+            echo "    composer twigcsfixer:fix"
+            echo ""
+            echo "  Then commit the changes."
+            echo "=========================================="
+            exit 1
+          fi
+
   analyse-php:
     runs-on: ubuntu-latest
     strategy:
