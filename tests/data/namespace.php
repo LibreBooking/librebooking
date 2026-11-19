@@ -2,4 +2,4 @@
 
 declare(strict_types=1);
 
-require_once(ROOT_DIR . '\tests\data\AuthorizationCommandResults.php');
+require_once(__DIR__ . '/AuthorizationCommandResults.php');
