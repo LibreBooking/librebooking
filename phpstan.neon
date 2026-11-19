@@ -39,7 +39,6 @@ parameters:
             - plugins/Authentication/ActiveDirectory/
             - plugins/Authentication/Ldap/
             - plugins/Authentication/Moodle/
-            - plugins/Authentication/MoodleAdv/
             - plugins/Authentication/Saml/
             - plugins/Authentication/WordPress/
     bootstrapFiles:
