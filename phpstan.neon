@@ -27,12 +27,29 @@ parameters:
         analyse:
             - build/ (?)
             - lib/external/
-            # Do not report diagnostics inside `plugins`: The
-            # legacy/third-party code is noisy. This keeps analysis focused on
-            # core app code while still allowing symbol discovery.
-            - plugins/
+            # Third-party libraries bundled with plugins (adLDAP, phpCAS).
+            - plugins/Authentication/ActiveDirectory/adLDAP.php
+            - plugins/Authentication/ActiveDirectory/classes/
+            - plugins/Authentication/ActiveDirectory/collections/
+            - plugins/Authentication/CAS/CAS-1.3.8/
             - tpl_c/ (?)
             - vendor/
+            # Staged plugin rollout: remove these one-by-one as each plugin
+            # is fixed. They stay in `paths` for symbol discovery.
+            - plugins/Authentication/ActiveDirectory/
+            - plugins/Authentication/Apache/
+            - plugins/Authentication/CAS/
+            - plugins/Authentication/Drupal/
+            - plugins/Authentication/Krb5/
+            - plugins/Authentication/Ldap/
+            - plugins/Authentication/Mellon/
+            - plugins/Authentication/Moodle/
+            - plugins/Authentication/MoodleAdv/
+            - plugins/Authentication/Saml/
+            - plugins/Authentication/Shibboleth/
+            - plugins/Authentication/WordPress/
+            - plugins/Export/ExportExample/
+            - plugins/PostReservation/PostReservationExample/
     bootstrapFiles:
         - vendor/autoload.php
     # Corrected PHPDoc for third-party code that cannot be edited.
