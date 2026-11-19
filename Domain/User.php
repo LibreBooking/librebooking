@@ -1129,7 +1129,7 @@ class UserGroup
      * @param int $groupId
      * @param string $groupName
      * @param int|null $adminGroupId
-     * @param int|RoleLevel $roleLevel defaults to none
+     * @param int|null $roleLevel A RoleLevel constant
      */
     public function __construct($groupId, $groupName, $adminGroupId = null, $roleLevel = RoleLevel::NONE)
     {
