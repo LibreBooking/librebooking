@@ -123,6 +123,7 @@
                 <exclude name="build.xml" />
                 <exclude name="**/phing-tasks/**" />
                 <exclude name=".php-cs-fixer*" />
+                <exclude name=".twig-cs-fixer*" />
                 <!-- documentation -->
                 <exclude name="**/doc/**" />
                 <exclude name="**/docs/**" />
