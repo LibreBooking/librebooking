@@ -258,7 +258,7 @@ Configuration: `build.xml`
 8. **Single quotes** for strings (unless interpolation is needed)
 9. **Short array syntax** - Use `[]` not `array()`
 10. **No magic numbers** - Use named constants, enums, or class constants instead of raw numeric literals. For example, use `CustomAttributeTypes::CHECKBOX` instead of `4`. Code reviews should flag any unexplained numeric literals as magic numbers
-11. **Named arguments** - When you change the arguments of a function or method call, convert that call to named arguments (e.g. `ReservationSeries::Create(userId: $userId, resource: $resource, ...)`). Put one argument per line when the call no longer fits on one line. Only convert the calls you touch; do not mass-convert unrelated calls. Do not use named arguments for calls into `lib/external/` or where the parameter name is not stable (e.g. interface implementations with differing parameter names)
+11. **Named arguments** - Use named arguments for every function or method call you write or modify (e.g. `ReservationSeries::Create(userId: $userId, resource: $resource, ...)`). This covers new calls in new or existing code, and existing calls whose arguments you change. Put one argument per line when the call no longer fits on one line. Leave existing calls you do not otherwise touch as they are; do not mass-convert unrelated calls. Keep a call positional when the callee requires it, as with the variadic arguments of `array_merge()` and `sprintf()`. Do not use named arguments where the parameter name is not stable (e.g. interface implementations with differing parameter names)
 
 ### Design Patterns
 
@@ -894,5 +894,5 @@ composer build -- upgrade.db        # Apply upgrades
 ---
 
 **Version**: 1.0
-**Last Updated**: 2026-11-16
+**Last Updated**: 2026-11-18
 **Maintainers**: LibreBooking Community
