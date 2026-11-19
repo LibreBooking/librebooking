@@ -1187,7 +1187,7 @@ class SmartyPage extends Smarty
     }
 
     /**
-     * @param COUNT_NORMAL|COUNT_RECURSIVE $mode
+     * @param 0|1 $mode COUNT_NORMAL or COUNT_RECURSIVE
      */
     public function Count(Countable|array $value, int $mode = COUNT_NORMAL): int
     {
