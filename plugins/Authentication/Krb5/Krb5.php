@@ -5,16 +5,6 @@ require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 class Krb5 extends Authentication implements IAuthentication
 {
     private $authToDecorate;
-    private $_registration;
-
-    private function GetRegistration()
-    {
-        if ($this->_registration == null) {
-            $this->_registration = new Registration();
-        }
-
-        return $this->_registration;
-    }
 
     public function __construct(Authentication $authentication)
     {

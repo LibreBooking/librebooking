@@ -37,17 +37,12 @@ parameters:
             # Staged plugin rollout: remove these one-by-one as each plugin
             # is fixed. They stay in `paths` for symbol discovery.
             - plugins/Authentication/ActiveDirectory/
-            - plugins/Authentication/Apache/
-            - plugins/Authentication/Drupal/
-            - plugins/Authentication/Krb5/
             - plugins/Authentication/Ldap/
             - plugins/Authentication/Moodle/
             - plugins/Authentication/MoodleAdv/
             - plugins/Authentication/Saml/
             - plugins/Authentication/Shibboleth/
             - plugins/Authentication/WordPress/
-            - plugins/Export/ExportExample/
-            - plugins/PostReservation/PostReservationExample/
     bootstrapFiles:
         - vendor/autoload.php
     # Corrected PHPDoc for third-party code that cannot be edited.
