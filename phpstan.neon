@@ -38,11 +38,9 @@ parameters:
             # is fixed. They stay in `paths` for symbol discovery.
             - plugins/Authentication/ActiveDirectory/
             - plugins/Authentication/Apache/
-            - plugins/Authentication/CAS/
             - plugins/Authentication/Drupal/
             - plugins/Authentication/Krb5/
             - plugins/Authentication/Ldap/
-            - plugins/Authentication/Mellon/
             - plugins/Authentication/Moodle/
             - plugins/Authentication/MoodleAdv/
             - plugins/Authentication/Saml/
