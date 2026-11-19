@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once(ROOT_DIR . '/lib/Reminder.class.php');
+require_once(ROOT_DIR . 'Domain/Reminder.php');
 
 class FakeReminder extends Reminder
 {
