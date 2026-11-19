@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * Declarations of the SimpleSAMLphp symbols used by the Saml authentication
+ * plugin. SimpleSAMLphp is not a dependency of this project, so PHPStan would
+ * otherwise not know them. Only what the plugin uses is declared here.
+ */
+
+namespace SimpleSAML\Auth {
+    class Simple
+    {
+        /**
+         * @param string $authSource
+         */
+        public function __construct($authSource)
+        {
+        }
+
+        /**
+         * @param array<string, mixed> $params
+         * @return void
+         */
+        public function requireAuth(array $params = [])
+        {
+        }
+
+        /**
+         * @return bool
+         */
+        public function isAuthenticated()
+        {
+        }
+
+        /**
+         * @return array<string, mixed>
+         */
+        public function getAttributes()
+        {
+        }
+
+        /**
+         * @param string|array<string, mixed>|null $params
+         * @return void
+         */
+        public function logout($params = null)
+        {
+        }
+    }
+}
+
+namespace SimpleSAML {
+    class Session
+    {
+        /**
+         * @return Session
+         */
+        public static function getSessionFromRequest()
+        {
+        }
+
+        /**
+         * @return void
+         */
+        public function cleanup()
+        {
+        }
+    }
+}

@@ -25,7 +25,7 @@ class Saml extends Authentication implements IAuthentication
     private $authToDecorate;
 
     /**
-     * @var AdSamlWrapper
+     * @var ISaml
      */
     private $saml;
 
@@ -40,11 +40,6 @@ class Saml extends Authentication implements IAuthentication
     private $_registration;
 
     /**
-     * @var PasswordEncryption
-     */
-    private $_encryption;
-
-    /**
      * @var SamlUser
      */
     private $user;
@@ -54,11 +49,6 @@ class Saml extends Authentication implements IAuthentication
      *
      */
     private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
 
     public function SetRegistration($registration)
     {
@@ -72,20 +62,6 @@ class Saml extends Authentication implements IAuthentication
         }
 
         return $this->_registration;
-    }
-
-    public function SetEncryption($passwordEncryption)
-    {
-        $this->_encryption = $passwordEncryption;
-    }
-
-    private function GetEncryption()
-    {
-        if ($this->_encryption == null) {
-            $this->_encryption = new PasswordEncryption();
-        }
-
-        return $this->_encryption;
     }
 
 
@@ -145,7 +121,7 @@ class Saml extends Authentication implements IAuthentication
 
     public function Logout(UserSession $user)
     {
-        $this->saml->Logout($user);
+        $this->saml->Logout();
     }
 
     public function postLogout(UserSession $user)
@@ -171,17 +147,17 @@ class Saml extends Authentication implements IAuthentication
 
         $registration->Synchronize(
             new AuthenticatedUser(
-                $username,
-                $this->user->GetEmail(),
-                $this->user->GetFirstName(),
-                $this->user->GetLastName(),
-                $this->password,
-                Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
-                Configuration::Instance()->GetDefaultTimezone(),
-                $this->user->GetPhone(),
-                $this->user->GetInstitution(),
-                $this->user->GetTitle(),
-                $this->user->GetGroups()
+                username: $username,
+                email: $this->user->GetEmail(),
+                fname: $this->user->GetFirstName(),
+                lname: $this->user->GetLastName(),
+                password: null,
+                languageCode: Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE),
+                timezoneName: Configuration::Instance()->GetDefaultTimezone(),
+                phone: $this->user->GetPhone(),
+                organization: $this->user->GetInstitution(),
+                title: $this->user->GetTitle(),
+                groups: $this->user->GetGroups()
             )
         );
     }

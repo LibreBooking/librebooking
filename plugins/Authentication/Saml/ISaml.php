@@ -27,4 +27,16 @@ interface ISaml
      * @return SamlUser The details for the user
      */
     public function GetSamlUser();
+
+    /**
+     * Logs the user out of the identity provider
+     * @return void
+     */
+    public function Logout();
+
+    /**
+     * Reverts from the SimpleSAMLphp session to the application session
+     * @return void
+     */
+    public function Cleanup();
 }

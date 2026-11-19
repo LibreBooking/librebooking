@@ -12,10 +12,10 @@ class SamlUser
     private $groups = [];
 
     /**
-     * @param array of SAML user attributes
+     * @param array $saml_attributes SAML user attributes
      * @param SamlOptions $samlOptions
      */
-    public function __construct($saml_attributes = [], $samlOptions)
+    public function __construct($saml_attributes, $samlOptions)
     {
         Log::Debug('Inside construct SamlUser');
         $options = $samlOptions->AdSamlOptions();
