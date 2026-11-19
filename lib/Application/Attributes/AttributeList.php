@@ -8,7 +8,7 @@ interface IEntityAttributeList
     public function GetLabels();
 
     /**
-     * @param null $entityId
+     * @param int|null $entityId
      * @return array|CustomAttribute[]
      */
     public function GetDefinitions($entityId = null);
@@ -78,7 +78,7 @@ class AttributeList implements IEntityAttributeList
     }
 
     /**
-     * @param null $entityId
+     * @param int|null $entityId
      * @return array|CustomAttribute[]
      */
     public function GetDefinitions($entityId = null)
