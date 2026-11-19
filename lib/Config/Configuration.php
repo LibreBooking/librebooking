@@ -26,11 +26,11 @@ interface IConfiguration extends IConfigurationFile
 interface IConfigurationFile
 {
     /**
-     * @param ConfigKey|array $name a ConfigKeys definition
+     * @param ConfigKey|array $configDef a ConfigKeys definition
      * @param null|IConvert $converter
      * @return mixed|string
      */
-    public function GetKey($name, $converter = null);
+    public function GetKey($configDef, $converter = null);
 
     /**
      * @return string the full url to the root of this LibreBooking instance WITHOUT the trailing /
