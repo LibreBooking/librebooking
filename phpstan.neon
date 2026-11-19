@@ -37,7 +37,6 @@ parameters:
             # Staged plugin rollout: remove these one-by-one as each plugin
             # is fixed. They stay in `paths` for symbol discovery.
             - plugins/Authentication/ActiveDirectory/
-            - plugins/Authentication/Ldap/
             - plugins/Authentication/Moodle/
             - plugins/Authentication/Saml/
             - plugins/Authentication/WordPress/
