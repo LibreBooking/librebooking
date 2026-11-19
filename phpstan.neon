@@ -34,14 +34,12 @@ parameters:
             - plugins/Authentication/CAS/CAS-1.3.8/
             - tpl_c/ (?)
             - vendor/
-            # Staged plugin rollout: remove these one-by-one as each plugin
-            # is fixed. They stay in `paths` for symbol discovery.
-            - plugins/Authentication/Saml/
     bootstrapFiles:
         - vendor/autoload.php
     # Declarations of symbols from applications that plugins integrate with
     # but that are not dependencies of this project.
     scanFiles:
+        - tests/phpstan-stubs/SimpleSAML.symbols
         - tests/phpstan-stubs/WordPress.symbols
     # Corrected PHPDoc for third-party code that cannot be edited.
     stubFiles:

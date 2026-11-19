@@ -37,14 +37,6 @@ class adSAML
     private $samlLib;
 
     /**
-     * Full directory path name that holds simpleSAMLphp config.php file
-     * on  your server
-     *
-     * @var string
-     */
-    private $samlConfig;
-
-    /**
      * Instance of the helper class for Simple Saml Applications
      *
      * @var SimpleSAML\Auth\Simple object
@@ -55,7 +47,7 @@ class adSAML
      * Holds a list of user attributes obtained from SimpleSAMLphp
      * Identity Provider (IDP)
      *
-     * @var associative array where attribute names are keys
+     * @var array<string, mixed> associative array where attribute names are keys
      */
     private $userAttributes;
 
@@ -73,7 +65,6 @@ class adSAML
         // Auto load  libraries and
         // obtain simple SAML SP configuration data
         $this->samlLib = $options['ssphp_lib'];
-        $this->samlConfig = $options['ssphp_config'];
         require_once($this->samlLib . '/lib/_autoload.php');
 
         // You can specifically overide any of the default configuration options setup above
@@ -118,7 +109,7 @@ class adSAML
      * After we know user is authetnicated,
      * then we can call getAttributes() method
      * on $this->authSimple instance
-     * @return associative array of attributes
+     * @return array<string, mixed> associative array of attributes
      */
     public function getAttributes()
     {
