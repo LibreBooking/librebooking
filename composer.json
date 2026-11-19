@@ -42,7 +42,8 @@
         "ext-intl": "*",
         "ext-ldap": "*",
         "symfony/html-sanitizer": "^7.4",
-        "league/uri": "^7.10"
+        "league/uri": "^7.10",
+        "twig/twig": "^3.30"
     },
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
