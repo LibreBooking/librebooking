@@ -98,7 +98,7 @@
                 <exclude name="**.bak" />
                 <exclude name="**/*.zip" />
                 <!-- temporary files -->
-                <exclude name="tpl_c/*.*" />
+                <exclude name="tpl_c/**" />
                 <exclude name="var/**" />
                 <!-- project / IDE files -->
                 <exclude name=".project" />
@@ -135,6 +135,8 @@
                 <include name="**/.htaccess" />
             </fileset>
         </copy>
+        <!-- the installer expects the template cache directory to exist -->
+        <mkdir dir="${stagingdir}/tpl_c" />
         <copy tofile="${stagingdir}/lib/external/phpqrcode/qrconfig.php" file="./lib/external/phpqrcode/qrconfig.php" />
 
         <phingcall target="combine.db.files"></phingcall>
