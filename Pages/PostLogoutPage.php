@@ -4,7 +4,7 @@ require_once(ROOT_DIR . 'Pages/LoginPage.php');
 require_once(ROOT_DIR . 'Presenters/LoginPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
-class LogoutPage extends LoginPage
+class PostLogoutPage extends LoginPage
 {
     public function __construct()
     {
