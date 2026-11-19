@@ -51,8 +51,6 @@ class Ldap2Wrapper
             throw new Exception($message);
         }
 
-        $this->ldap->setOption(LDAP_OPT_REFERRALS, 0);
-        $this->ldap->setOption(LDAP_OPT_PROTOCOL_VERSION, 3);
         return true;
     }
 
@@ -64,7 +62,6 @@ class Ldap2Wrapper
      */
     public function Authenticate($username, $password, $filter)
     {
-        $this->user = null;
         $populated = $this->PopulateUser($username, $filter, $password);
 
         if ($this->user == null) {
@@ -176,7 +173,6 @@ class Ldap2Wrapper
                     return false;
                 }
             } else {
-                /** @var Net_LDAP2_Entry $entry */
                 $this->user = new LdapUser($currentResult, $this->options->AttributeMapping(), $userGroups);
                 return !empty($this->user->GetEmail());
             }
