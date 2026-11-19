@@ -6,8 +6,6 @@ class WordPressOptions
 {
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/WordPress.config.php');
-
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/WordPress.config.php',
             dirname(__FILE__) . '/.env',

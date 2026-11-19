@@ -25,7 +25,6 @@ class ShibbolethOptions
      */
     public function __construct()
     {
-        require_once dirname(__FILE__) . '/Shibboleth.config.php';
         // load the plugin configuration from file.
         Configuration::Instance()->Register(
             dirname(__FILE__) . '/Shibboleth.config.php',

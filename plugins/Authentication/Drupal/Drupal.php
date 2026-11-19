@@ -1,7 +1,6 @@
 <?php
 
 require_once(ROOT_DIR . 'plugins/Authentication/Drupal/DrupalConfigKeys.php');
-require_once(ROOT_DIR . 'plugins/Authentication/Drupal/Drupal.config.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
 
@@ -46,7 +45,6 @@ class Drupal extends Authentication implements IAuthentication
     public function __construct(IAuthentication $authentication)
     {
         $drupal_config_path = dirname(__FILE__) . '/Drupal.config.php';
-        require_once($drupal_config_path);
 
         $config = Configuration::Instance();
         $config->Register(
