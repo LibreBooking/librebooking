@@ -18,7 +18,7 @@ class ActiveDirectory extends Authentication implements IAuthentication
     private $authToDecorate;
 
     /**
-     * @var AdLdapWrapper
+     * @var IActiveDirectory
      */
     private $ldap;
 
