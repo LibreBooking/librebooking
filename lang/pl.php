@@ -498,6 +498,10 @@ class pl extends en_gb
         $strings['MinimumQuantity'] = 'Minimalna liczba';
         $strings['MaximumQuantity'] = 'Maksymalna liczba';
         $strings['ChangeLanguage'] = 'Zmień język';
+        $strings['ColorMode'] = 'Tryb kolorów';
+        $strings['ColorModeLight'] = 'Jasny';
+        $strings['ColorModeDark'] = 'Ciemny';
+        $strings['ColorModeAuto'] = 'Automatyczny';
         $strings['AddRule'] = 'Dodaj regułę';
         $strings['Attribute'] = 'Atrybut';
         $strings['RequiredValue'] = 'Wymagana wartość';

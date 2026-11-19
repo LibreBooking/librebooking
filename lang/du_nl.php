@@ -466,6 +466,10 @@ class du_nl extends en_gb
         $strings['MinimumQuantity'] = 'Minimale hoeveelheid';
         $strings['MaximumQuantity'] = 'Maximale hoeveelheid';
         $strings['ChangeLanguage'] = 'Wijzig taal';
+        $strings['ColorMode'] = 'Kleurmodus';
+        $strings['ColorModeLight'] = 'Licht';
+        $strings['ColorModeDark'] = 'Donker';
+        $strings['ColorModeAuto'] = 'Automatisch';
         $strings['AddRule'] = 'Voeg regel toe';
         $strings['Attribute'] = 'Attribuut';
         $strings['RequiredValue'] = 'Vereiste waarde';

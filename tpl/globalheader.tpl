@@ -8,25 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex" />
     <meta name="color-scheme" content="{if $cssColorMode eq 'auto'}light dark{else}{$cssColorMode}{/if}" />
-    {* Applied before any CSS loads so pages don't flash light before switching to dark. *}
-    <script>
-        (function () {
-            var root = document.documentElement;
-            if (root.getAttribute('data-lb-color-mode') !== 'auto' || !window.matchMedia) {
-                return;
-            }
-            var query = window.matchMedia('(prefers-color-scheme: dark)');
-            var apply = function () {
-                root.setAttribute('data-bs-theme', query.matches ? 'dark' : 'light');
-            };
-            apply();
-            if (query.addEventListener) {
-                query.addEventListener('change', apply);
-            } else if (query.addListener) {
-                query.addListener(apply);
-            }
-        })();
-    </script>
+    {* Loaded before any CSS so pages don't flash light before switching to dark. *}
+    {jsfile src="color-mode.js"}
     {if isset($ShouldLogout) && $ShouldLogout}
         <meta http-equiv="REFRESH"
             content="{$SessionTimeoutSeconds};URL={$Path}logout.php?{QueryStringKeys::REDIRECT}={$smarty.server.REQUEST_URI|urlencode}" />
@@ -435,6 +418,34 @@
                                 </ul>
                             </li>
                         {/if}
+                        <li class="nav-item dropdown" id="navColorModeDropdown">
+                            <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                data-bs-toggle="dropdown" aria-label="{translate key=ColorMode}"
+                                title="{translate key=ColorMode}">
+                                <span class="visually-hidden">{translate key=ColorMode}</span>
+                                <i class="bi bi-circle-half" id="colorModeIcon" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" id="colorModeDropdownMenu">
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="light"
+                                        aria-pressed="false">
+                                        <i class="bi bi-sun-fill me-2" aria-hidden="true"></i>{translate key=ColorModeLight}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="dark"
+                                        aria-pressed="false">
+                                        <i class="bi bi-moon-stars-fill me-2" aria-hidden="true"></i>{translate key=ColorModeDark}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="auto"
+                                        aria-pressed="false">
+                                        <i class="bi bi-circle-half me-2" aria-hidden="true"></i>{translate key=ColorModeAuto}
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item dropdown" id="navHelpDropdown">
                             <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown">{translate key="Help"}</a>

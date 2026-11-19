@@ -477,6 +477,10 @@ class ru_ru extends en_gb
         $strings['MinimumQuantity'] = 'Минимальное количество';
         $strings['MaximumQuantity'] = 'Максимальное количество';
         $strings['ChangeLanguage'] = 'Изменить язык';
+        $strings['ColorMode'] = 'Цветовой режим';
+        $strings['ColorModeLight'] = 'Светлый';
+        $strings['ColorModeDark'] = 'Тёмный';
+        $strings['ColorModeAuto'] = 'Авто';
         $strings['AddRule'] = 'Добавить правило';
         $strings['Attribute'] = 'Атрибут';
         $strings['RequiredValue'] = 'Требуемое значение';

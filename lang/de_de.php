@@ -500,6 +500,10 @@ class de_de extends en_gb
         $strings['MinimumQuantity'] = 'Mindestmenge';
         $strings['MaximumQuantity'] = 'Maximalmenge';
         $strings['ChangeLanguage'] = 'Sprache ändern';
+        $strings['ColorMode'] = 'Farbmodus';
+        $strings['ColorModeLight'] = 'Hell';
+        $strings['ColorModeDark'] = 'Dunkel';
+        $strings['ColorModeAuto'] = 'Automatisch';
         $strings['AddRule'] = 'Regel hinzufügen';
         $strings['Attribute'] = 'Attribut';
         $strings['RequiredValue'] = 'Erforderlicher Wert';

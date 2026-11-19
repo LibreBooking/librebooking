@@ -104,7 +104,7 @@ return [
         # Options: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange
         'css.theme' => 'default',
 
-        # Light or dark color mode
+        # Default light or dark color mode. Users can override it per browser
         # Options: auto (follow browser/OS setting), light, dark
         'css.color.mode' => 'auto',
 

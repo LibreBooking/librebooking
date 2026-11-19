@@ -488,6 +488,10 @@ class da_da extends en_gb
         $strings['MinimumQuantity'] = 'Minimumsantal';
         $strings['MaximumQuantity'] = 'Maksimumantal';
         $strings['ChangeLanguage'] = 'Vælg sprog';
+        $strings['ColorMode'] = 'Farvetilstand';
+        $strings['ColorModeLight'] = 'Lys';
+        $strings['ColorModeDark'] = 'Mørk';
+        $strings['ColorModeAuto'] = 'Automatisk';
         $strings['AddRule'] = 'Tilføj regel';
         $strings['Attribute'] = 'Oplysningsfelt';
         $strings['RequiredValue'] = 'Påkrævet værdi';

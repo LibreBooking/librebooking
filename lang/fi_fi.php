@@ -471,6 +471,10 @@ class fi_fi extends en_gb
         $strings['MinimumQuantity'] = 'Minimimäärä';
         $strings['MaximumQuantity'] = 'Maksimimäärä';
         $strings['ChangeLanguage'] = 'Vaihda Kieli';
+        $strings['ColorMode'] = 'Väriteema';
+        $strings['ColorModeLight'] = 'Vaalea';
+        $strings['ColorModeDark'] = 'Tumma';
+        $strings['ColorModeAuto'] = 'Automaattinen';
         $strings['AddRule'] = 'Lisää Sääntö';
         $strings['Attribute'] = 'Kenttä';
         $strings['RequiredValue'] = 'Pakollinen Arvo';

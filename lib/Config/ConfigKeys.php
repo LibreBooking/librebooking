@@ -226,8 +226,8 @@ class ConfigKeys extends AbstractConfigKeys
             'dark' => 'Dark',
         ],
         'label' => 'CSS Color Mode',
-        'description' => 'Light or dark color mode. "auto" follows the browser/operating system preference and switches automatically. Options: auto, light, dark',
-        'config_file_comment' => "Light or dark color mode\nOptions: auto (follow browser/OS setting), light, dark",
+        'description' => 'Default light or dark color mode. "auto" follows the browser/operating system preference and switches automatically. Users can override it per browser with the color mode menu. Options: auto, light, dark',
+        'config_file_comment' => "Default light or dark color mode. Users can override it per browser\nOptions: auto (follow browser/OS setting), light, dark",
     ];
 
     public const NAME_FORMAT = [

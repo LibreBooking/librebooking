@@ -324,10 +324,15 @@ Frontend Settings
   ``[data-lb-theme='<name>']``.
 
 **css.color.mode**
-  Light or dark color mode. Options: ``auto``, ``light``, ``dark``. The
-  default ``auto`` follows the browser/operating system preference and
+  Default light or dark color mode. Options: ``auto``, ``light``, ``dark``.
+  The default ``auto`` follows the browser/operating system preference and
   switches automatically when that preference changes, without a page
   reload. The equivalent environment variable is ``LB_CSS_COLOR_MODE``.
+
+  Users can override this default with the color mode menu in the
+  navigation bar (Light, Dark or Auto). Their choice is stored in the
+  browser's local storage, so it applies per browser and is not tied to the
+  user account.
 
   The active mode is exposed as Bootstrap's ``data-bs-theme`` attribute
   (``light`` or ``dark``) on ``<html>``, so custom CSS can target dark mode
