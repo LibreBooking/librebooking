@@ -24,7 +24,6 @@ class TwigRenderer implements TemplateRenderer
     {
         $resources ??= Resources::GetInstance();
         $config = Configuration::Instance();
-        $base = __DIR__ . '/../../../';
 
         // ?debug only counts in debug mode, otherwise any visitor could switch off the template cache
         $debugRequested = isset($_GET['debug']) &&
@@ -33,10 +32,10 @@ class TwigRenderer implements TemplateRenderer
 
         $this->twig = TwigEnvironmentFactory::create(
             templateDirs: [
-                $base . 'tpl',
-                $base . 'lang/' . $resources->CurrentLanguage,
+                ROOT_DIR . 'tpl',
+                ROOT_DIR . 'lang/' . $resources->CurrentLanguage,
             ],
-            cacheDir: $base . 'tpl_c/twig',
+            cacheDir: ROOT_DIR . 'tpl_c/twig',
             debug: $debugRequested || !$cacheTemplates
         );
 
