@@ -143,14 +143,15 @@ class MoodleAdv extends Authentication implements IAuthentication
                         $delimiter = ', ';
                     }
                     $query .= ')';
+                } else {
+                    Log::Error(message: 'MOODLEADV: Authentication method is roles but no roles are configured');
+                    return false;
                 }
                 $command = new AdHocCommand($query);
                 $command->AddParameter(new Parameter('@user', $username));
-                if ($m_roles) {
-                    $rid = 0;
-                    foreach ($this->moodleRoles as $role) {
-                        $command->AddParameter(new Parameter('@role' . $rid++, $role));
-                    }
+                $rid = 0;
+                foreach ($this->moodleRoles as $role) {
+                    $command->AddParameter(new Parameter('@role' . $rid++, $role));
                 }
                 break;
             case 'field':
@@ -168,6 +169,9 @@ class MoodleAdv extends Authentication implements IAuthentication
                 $command = new AdHocCommand($query);
                 $command->AddParameter(new Parameter('@user', $username));
                 break;
+            default:
+                Log::Error(message: 'MOODLEADV: Unknown authentication method configured');
+                return false;
         }
 
         $reader = $moodleDb->Query($command);
