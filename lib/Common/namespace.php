@@ -1,5 +1,11 @@
 <?php
 
+// The classes loaded below depend on Composer packages and on the PSR-4
+// classes in src/, so the autoloader has to be registered first.
+if (file_exists(filename: ROOT_DIR . 'vendor/autoload.php')) {
+    require_once ROOT_DIR . 'vendor/autoload.php';
+}
+
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/LoginTime.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyPage.php');
