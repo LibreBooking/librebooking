@@ -15,5 +15,5 @@ require_once(ROOT_DIR . 'lib/Config/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/ConfigDistGenerator.php');
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === realpath(__FILE__)) {
-    exit(ConfigDistGenerator::main($argv));
+    exit(ConfigDistGenerator::main(argv: $_SERVER['argv']));
 }
