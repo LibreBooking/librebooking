@@ -89,6 +89,9 @@ abstract class SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class InstanceAddedEvent extends SeriesEvent
 {
     /**
@@ -116,6 +119,9 @@ class InstanceAddedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class InstanceRemovedEvent extends SeriesEvent
 {
     /**
@@ -143,6 +149,9 @@ class InstanceRemovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class InstanceUpdatedEvent extends SeriesEvent
 {
     /**
@@ -170,6 +179,9 @@ class InstanceUpdatedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ReservationSeries>
+ */
 class SeriesBranchedEvent extends SeriesEvent
 {
     public function __construct(ReservationSeries $series)
@@ -305,6 +317,9 @@ class ResourceAddedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class SeriesApprovedEvent extends SeriesEvent
 {
     public function __construct(ExistingReservationSeries $series)
@@ -318,6 +333,9 @@ class SeriesApprovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class AccessoryAddedEvent extends SeriesEvent
 {
     /**
@@ -354,6 +372,9 @@ class AccessoryAddedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class AccessoryRemovedEvent extends SeriesEvent
 {
     /**
@@ -382,6 +403,9 @@ class AccessoryRemovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class AttributeAddedEvent extends SeriesEvent
 {
     /**
@@ -418,6 +442,9 @@ class AttributeAddedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class AttributeRemovedEvent extends SeriesEvent
 {
     /**
@@ -506,6 +533,9 @@ class OwnerChangedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class AttachmentRemovedEvent extends SeriesEvent
 {
     /**
@@ -553,6 +583,9 @@ class AttachmentRemovedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class ReminderAddedEvent extends SeriesEvent
 {
     private $minutesPrior;
@@ -598,6 +631,9 @@ class ReminderAddedEvent extends SeriesEvent
     }
 }
 
+/**
+ * @extends SeriesEvent<ExistingReservationSeries>
+ */
 class ReminderRemovedEvent extends SeriesEvent
 {
     /**
