@@ -16,5 +16,5 @@ require_once(ROOT_DIR . 'lib/Config/ConfigDistGenerator.php');
 require_once(ROOT_DIR . 'lib/Config/EnvExampleGenerator.php');
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === realpath(__FILE__)) {
-    exit(EnvExampleGenerator::main($argv));
+    exit(EnvExampleGenerator::main(argv: $_SERVER['argv']));
 }

@@ -15,5 +15,5 @@ require_once(ROOT_DIR . 'lib/Config/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/MigrateConfig.php');
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === realpath(__FILE__)) {
-    exit(MigrateConfig::Main($argv));
+    exit(MigrateConfig::Main(args: $_SERVER['argv']));
 }
