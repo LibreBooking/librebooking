@@ -58,6 +58,9 @@ class Drupal extends Authentication implements IAuthentication
         );
 
         $drupalDir = $config->File('DRUPAL')->GetKey(DrupalConfigKeys::DRUPAL_ROOT_DIR);
+        // Drupal's settings.php fills in $databases
+        /** @var array<string, array<string, array<string, mixed>>> $databases */
+        $databases = [];
         require_once($drupalDir . '/sites/default/settings.php');
 
         $this->db = $databases['default']['default'];

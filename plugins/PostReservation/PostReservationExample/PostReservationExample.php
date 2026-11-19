@@ -29,8 +29,8 @@ class PostReservationExample implements IPostReservationFactory
      */
     public function CreatePostUpdateService(UserSession $userSession)
     {
-        $base = $this->factoryToDecorate->CreatePostUpdateService($userSession);
-        return new PostReservationUpdateExample($base);
+        // showing how to completely replace the base behavior: the base service is not used
+        return new PostReservationUpdateExample();
     }
 
     /**
@@ -100,16 +100,6 @@ class PostReservationCreatedExample implements IReservationNotificationService
 class PostReservationUpdateExample implements IReservationNotificationService
 {
     /**
-     * @var IReservationNotificationService
-     */
-    private $base;
-
-    public function __construct(IReservationNotificationService $base)
-    {
-        $this->base = $base;
-    }
-
-    /**
      * @param $reservationSeries ReservationSeries|ExistingReservationSeries
      * @return void
      */
@@ -117,6 +107,6 @@ class PostReservationUpdateExample implements IReservationNotificationService
     {
         // implement any custom post reservation updated logic here
 
-        // do not call the base Notify method if you want to completely override the base behavior
+        // the base Notify method is not called, which completely overrides the base behavior
     }
 }
