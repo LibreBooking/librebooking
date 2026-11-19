@@ -47,7 +47,7 @@ class adSAML
      * Holds a list of user attributes obtained from SimpleSAMLphp
      * Identity Provider (IDP)
      *
-     * @var array<string, mixed> associative array where attribute names are keys
+     * @var array<string, mixed>|null associative array where attribute names are keys
      */
     private $userAttributes;
 
@@ -109,7 +109,7 @@ class adSAML
      * After we know user is authetnicated,
      * then we can call getAttributes() method
      * on $this->authSimple instance
-     * @return array<string, mixed> associative array of attributes
+     * @return array<string, mixed>|null associative array of attributes
      */
     public function getAttributes()
     {
