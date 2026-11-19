@@ -10,7 +10,7 @@ class AdLdapWrapper implements IActiveDirectory
     private $options;
 
     /**
-     * @var adLdap|null
+     * @var adLDAP|null
      */
     private $ldap;
 
@@ -35,18 +35,10 @@ class AdLdapWrapper implements IActiveDirectory
                 Log::Debug('ActiveDirectory - Trying to connect to host %s', $host);
                 $options['domain_controllers'] = [$host];
                 $attempts++;
-                $this->ldap = new adLdap($options);
+                $this->ldap = new adLDAP($options);
                 $connected = true;
 
-                if ($connected) {
-                    Log::Debug('ActiveDirectory - Connection succeeded to host %s', $host);
-                } else {
-                    Log::Debug(
-                        'ActiveDirectory - Connection failed to host %s. Reason %s',
-                        $host,
-                        $this->ldap->getLastError()
-                    );
-                }
+                Log::Debug('ActiveDirectory - Connection succeeded to host %s', $host);
             } catch (Exception $ex) {
                 Log::Error($ex);
                 throw($ex);

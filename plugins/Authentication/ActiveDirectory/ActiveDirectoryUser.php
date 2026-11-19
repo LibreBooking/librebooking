@@ -14,7 +14,7 @@ class ActiveDirectoryUser
     /**
      * @param adLDAPUserCollection $entry
      * @param string[]|array $mapping
-     * @param string $groups
+     * @param string[]|string|false|null $groups
      */
     public function __construct($entry, $mapping, $groups = null)
     {

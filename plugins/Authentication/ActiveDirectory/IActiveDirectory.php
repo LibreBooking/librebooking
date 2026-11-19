@@ -13,7 +13,7 @@ interface IActiveDirectory
     public function Authenticate($username, $password);
 
     /**
-     * @return ActiveDirectoryUser The details for the user
+     * @return ActiveDirectoryUser|null The details for the user, or null if they could not be loaded
      */
     public function GetLdapUser($username);
 }
