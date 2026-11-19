@@ -36,7 +36,6 @@ parameters:
             - vendor/
             # Staged plugin rollout: remove these one-by-one as each plugin
             # is fixed. They stay in `paths` for symbol discovery.
-            - plugins/Authentication/Moodle/
             - plugins/Authentication/Saml/
     bootstrapFiles:
         - vendor/autoload.php
