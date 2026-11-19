@@ -813,6 +813,22 @@ a.fc-event:hover {
   color: color-mix(in oklab, var(--primary-text) 75%, white) !important;
 }
 
+/*
+ * Bootstrap 5.3 inverts tooltips in dark mode (white on dark), which clashes
+ * with the browser's native title tooltips (dark) and the rest of the UI.
+ * Use a raised dark surface for all Bootstrap tooltips, including the
+ * reservation popups on the dashboard, schedule and calendars.
+ */
+[data-bs-theme='dark'] .tooltip {
+  --bs-tooltip-bg: var(--surface-raised);
+  --bs-tooltip-color: var(--bs-body-color);
+  --bs-tooltip-opacity: 1;
+}
+
+[data-bs-theme='dark'] .tooltip-inner {
+  border: 1px solid var(--bs-border-color);
+}
+
 [data-bs-theme='dark'] .wait-box {
   border-color: var(--bs-border-color);
 }
