@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * Declarations of the WordPress symbols used by the WordPress authentication
+ * plugin. WordPress is not a dependency of this project, so PHPStan would
+ * otherwise not know them. Only what the plugin uses is declared here.
+ */
+class WP_Error
+{
+    /**
+     * @param string|int $code
+     * @return string
+     */
+    public function get_error_message($code = '')
+    {
+    }
+}
+
+class WP_User
+{
+    /** @var string */
+    public $user_login;
+
+    /** @var string */
+    public $user_email;
+
+    /** @var string */
+    public $user_firstname;
+
+    /** @var string */
+    public $user_lastname;
+
+    /**
+     * @return bool
+     */
+    public function exists()
+    {
+    }
+}
+
+/**
+ * @param string $username
+ * @param string $password
+ * @return WP_User|WP_Error
+ */
+function wp_authenticate($username, $password)
+{
+}
+
+/**
+ * @param mixed $thing
+ * @return bool
+ * @phpstan-assert-if-true WP_Error $thing
+ */
+function is_wp_error($thing)
+{
+}

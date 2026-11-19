@@ -38,9 +38,12 @@ parameters:
             # is fixed. They stay in `paths` for symbol discovery.
             - plugins/Authentication/Moodle/
             - plugins/Authentication/Saml/
-            - plugins/Authentication/WordPress/
     bootstrapFiles:
         - vendor/autoload.php
+    # Declarations of symbols from applications that plugins integrate with
+    # but that are not dependencies of this project.
+    scanFiles:
+        - tests/phpstan-stubs/WordPress.symbols
     # Corrected PHPDoc for third-party code that cannot be edited.
     stubFiles:
         - tests/phpstan-stubs/FeedWriter.stub
