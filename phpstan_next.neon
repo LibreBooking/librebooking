@@ -25,15 +25,12 @@ parameters:
         - tests
     excludePaths:
         analyse:
-            - build/ (?)
             - lib/external/
             # Third-party libraries bundled with plugins (adLDAP, phpCAS).
             - plugins/Authentication/ActiveDirectory/adLDAP.php
             - plugins/Authentication/ActiveDirectory/classes/
             - plugins/Authentication/ActiveDirectory/collections/
             - plugins/Authentication/CAS/CAS-1.3.8/
-            - tpl_c/ (?)
-            - vendor/
             # Staged "next level" rollout: remove these one-by-one as each
             # area is fixed for the current target level.
             - Controls/
