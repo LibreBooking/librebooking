@@ -23,7 +23,7 @@ class AuthenticatedUser
     private $lname;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $password;
 
@@ -38,17 +38,17 @@ class AuthenticatedUser
     private $timezoneName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $phone;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $organization;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $title;
 
@@ -62,12 +62,12 @@ class AuthenticatedUser
      * @param string $email
      * @param string $fname
      * @param string $lname
-     * @param string $password
+     * @param string|null $password
      * @param string $languageCode
      * @param string $timezoneName
-     * @param string $phone
-     * @param string $organization
-     * @param string $title
+     * @param string|null $phone
+     * @param string|null $organization
+     * @param string|null $title
      * @param string[]|null $groups
      */
     public function __construct($username, $email, $fname, $lname, $password, $languageCode, $timezoneName, $phone, $organization, $title, $groups = null)
@@ -86,58 +86,40 @@ class AuthenticatedUser
         ;
     }
 
-    /**
-     * @return string
-     */
-    public function Email()
+    public function Email(): ?string
     {
         return $this->EnsureNull($this->email);
     }
 
-    /**
-     * @return string
-     */
-    public function FirstName()
+    public function FirstName(): ?string
     {
         return $this->EnsureNull($this->fname);
     }
 
-    /**
-     * @return string
-     */
-    public function LanguageCode()
+    public function LanguageCode(): ?string
     {
         return $this->EnsureNull($this->languageCode);
     }
 
-    /**
-     * @return string
-     */
-    public function LastName()
+    public function LastName(): ?string
     {
         return $this->EnsureNull($this->lname);
     }
 
-    /**
-     * @return string
-     */
-    public function Organization()
+    public function Organization(): ?string
     {
         return $this->EnsureNull($this->organization);
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function Password()
     {
         return $this->password;
     }
 
-    /**
-     * @return string
-     */
-    public function Phone()
+    public function Phone(): ?string
     {
         return $this->EnsureNull($this->phone);
     }
@@ -150,10 +132,7 @@ class AuthenticatedUser
         return $this->timezoneName;
     }
 
-    /**
-     * @return string
-     */
-    public function Title()
+    public function Title(): ?string
     {
         return $this->EnsureNull($this->title);
     }
@@ -166,7 +145,7 @@ class AuthenticatedUser
         return $this->username;
     }
 
-    private function EnsureNull($value)
+    private function EnsureNull(mixed $value): ?string
     {
         if ($value === null) {
             return null;
