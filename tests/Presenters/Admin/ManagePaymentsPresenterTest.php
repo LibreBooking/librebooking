@@ -61,12 +61,15 @@ class ManagePaymentsPresenterTest extends TestBase
 
     public function testSettingCreditCost()
     {
-        $this->page->_CreditCost = 30.5;
+        $this->page->_CreditCost = '30.5';
         $this->page->_CreditCurrency = 'USD';
 
         $this->presenter->UpdateCreditCost();
 
-        $this->assertEquals(new CreditCost(1, $this->page->_CreditCost, $this->page->_CreditCurrency), $this->paymentRepository->_LastCost);
+        $this->assertEquals(
+            new CreditCost(count: 1, cost: 30.5, currency: 'USD'),
+            $this->paymentRepository->_LastCost,
+        );
     }
 
     public function testUpdatesPaymentGateways()
@@ -224,12 +227,12 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         parent::__construct();
     }
 
-    public function GetCreditCost()
+    public function GetCreditCost(): ?string
     {
         return $this->_CreditCost;
     }
 
-    public function GetCreditCurrency()
+    public function GetCreditCurrency(): ?string
     {
         return $this->_CreditCurrency;
     }
@@ -244,17 +247,17 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         return $this->_PayPalEnabled;
     }
 
-    public function GetPayPalClientId()
+    public function GetPayPalClientId(): ?string
     {
         return $this->_PayPalClientId;
     }
 
-    public function GetPayPalSecret()
+    public function GetPayPalSecret(): ?string
     {
         return $this->_PayPalSecret;
     }
 
-    public function GetPayPalEnvironment()
+    public function GetPayPalEnvironment(): ?string
     {
         return $this->_PayPalEnvironment;
     }
@@ -264,12 +267,12 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         return $this->_StripeEnabled;
     }
 
-    public function GetStripePublishableKey()
+    public function GetStripePublishableKey(): ?string
     {
         return $this->_StripePublishableKey;
     }
 
-    public function GetStripeSecretKey()
+    public function GetStripeSecretKey(): ?string
     {
         return $this->_StripeSecretKey;
     }

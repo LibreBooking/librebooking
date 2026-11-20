@@ -57,7 +57,7 @@ interface IManageGroupsPage extends IActionPage
     public function GetAllowedResourceIds();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetGroupName();
 
@@ -221,9 +221,9 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         return $this->GetForm(FormKeys::RESOURCE_ID);
     }
 
-    public function GetGroupName()
+    public function GetGroupName(): ?string
     {
-        return $this->GetForm(FormKeys::GROUP_NAME);
+        return $this->GetFormString(key: FormKeys::GROUP_NAME);
     }
 
     public function BindRoles($roles)
