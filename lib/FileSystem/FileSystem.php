@@ -95,9 +95,9 @@ namespace Booked {
             return Paths::ReservationAttachments();
         }
 
-        public function GetFiles($path, $filter = '*')
+        public function GetFiles($fullPath, $filter = '*')
         {
-            return glob($path . $filter);
+            return glob(pattern: $fullPath . $filter);
         }
 
         public function Exists($fullPath)

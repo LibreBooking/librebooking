@@ -220,12 +220,12 @@ class ReportDateColumn extends ReportColumn
         return $date->ToTimezone($this->timezone)->Format($this->format);
     }
 
-    public function GetChartData($row, $key)
+    public function GetChartData($row, $columnKey)
     {
-        if (is_a($row[$key], 'Date')) {
-            $date = $row[$key];
+        if (is_a(object_or_class: $row[$columnKey], class: 'Date')) {
+            $date = $row[$columnKey];
         } else {
-            $date = Date::FromDatabase($row[$key]);
+            $date = Date::FromDatabase(databaseValue: $row[$columnKey]);
         }
         //		$format = Resources::GetInstance()->GetDateFormat(ResourceKeys::DATE_GENERAL);
         return $date->ToTimezone($this->timezone)->GetDate()->ToIso();
@@ -261,8 +261,8 @@ class ReportUtilizationColumn extends ReportColumn
         return "$data%";
     }
 
-    public function GetChartData($row, $key)
+    public function GetChartData($row, $columnKey)
     {
-        return $row[$key];
+        return $row[$columnKey];
     }
 }

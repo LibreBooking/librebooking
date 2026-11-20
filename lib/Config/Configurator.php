@@ -343,13 +343,13 @@ class Configurator implements IConfigurationSettings
     /**
      * Checks if a config file is writable.
      *
-     * @param string $configFile Path to the file.
+     * @param string $configFilePath Path to the file.
      * @return bool True if writable or permission changed successfully.
      */
-    public function CanOverwriteFile($configFile)
+    public function CanOverwriteFile($configFilePath)
     {
-        if (!is_writable($configFile)) {
-            return chmod($configFile, 0770);
+        if (!is_writable(filename: $configFilePath)) {
+            return chmod(filename: $configFilePath, permissions: 0770);
         }
         return true;
     }

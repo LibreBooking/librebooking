@@ -157,7 +157,7 @@ class ManageUsersService implements IManageUsersService
         return $user;
     }
 
-    public function ChangeAttribute($userId, $attributeValue)
+    public function ChangeAttribute($userId, $attribute)
     {
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
@@ -167,7 +167,7 @@ class ManageUsersService implements IManageUsersService
         }
 
         $user = $this->userRepository->LoadById($userId);
-        $user->ChangeCustomAttribute($attributeValue);
+        $user->ChangeCustomAttribute(attribute: $attribute);
         $this->userRepository->Update($user);
     }
 
