@@ -317,6 +317,114 @@ class PageTest extends TestBase
         ];
     }
 
+    #[DataProvider('querystringIntListProvider')]
+    public function testGetQuerystringIntListParsesSingleAndMultipleValues(mixed $value, array $expected): void
+    {
+        $this->fakeServer->SetQuerystring('ids', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadQuerystringIntList(key: 'ids'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: int[]}>
+     */
+    public static function querystringIntListProvider(): array
+    {
+        return [
+            'missing' => [null, []],
+            'empty' => ['', []],
+            'single value' => ['5', [5]],
+            'list' => [['5', '6'], [5, 6]],
+            'keys discarded' => [[3 => '5', 9 => '6'], [5, 6]],
+            'negative dropped' => [['-1', '2'], [2]],
+            'invalid values dropped' => [['5', 'abc', '', '1.5', '6'], [5, 6]],
+            'nested array dropped' => [['5', ['6']], [5]],
+            'out of range dropped' => [['9223372036854775808', '7'], [7]],
+        ];
+    }
+
+    #[DataProvider('stringProvider')]
+    public function testGetFormStringReturnsOnlySingleStrings(mixed $value, ?string $expected): void
+    {
+        $this->fakeServer->SetForm('name', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadFormString(key: 'name'));
+    }
+
+    #[DataProvider('stringProvider')]
+    public function testGetQuerystringStringReturnsOnlySingleStrings(mixed $value, ?string $expected): void
+    {
+        $this->fakeServer->SetQuerystring('name', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadQuerystringString(key: 'name'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: string|null}>
+     */
+    public static function stringProvider(): array
+    {
+        return [
+            'text' => ['Room 1', 'Room 1'],
+            'empty kept' => ['', ''],
+            'zero kept' => ['0', '0'],
+            'missing' => [null, null],
+            'array' => [['Room 1'], null],
+            'empty array' => [[], null],
+            'nested array' => [[['Room 1']], null],
+        ];
+    }
+
+    #[DataProvider('formFirstStringProvider')]
+    public function testGetFormFirstStringUsesFirstItemOfList(mixed $value, ?string $expected): void
+    {
+        $this->fakeServer->SetForm('value', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadFormFirstString(key: 'value'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: string|null}>
+     */
+    public static function formFirstStringProvider(): array
+    {
+        return [
+            'text' => ['yes', 'yes'],
+            'empty kept' => ['', ''],
+            'missing' => [null, null],
+            'single item list' => [['1'], '1'],
+            'first of several' => [['a', 'b'], 'a'],
+            'first by position, not key' => [[5 => 'a', 2 => 'b'], 'a'],
+            'empty list' => [[], null],
+            'nested list' => [[['a']], null],
+        ];
+    }
+
+    #[DataProvider('formStringListProvider')]
+    public function testGetFormStringListKeepsStringsAndKeys(mixed $value, array $expected): void
+    {
+        $this->fakeServer->SetForm('names', $value);
+
+        $this->assertSame($expected, $this->CreateFormReadingPage()->ReadFormStringList(key: 'names'));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: array<array-key, string>}>
+     */
+    public static function formStringListProvider(): array
+    {
+        return [
+            'missing' => [null, []],
+            'empty' => ['', []],
+            'single value' => ['a', ['a']],
+            'zero kept' => ['0', ['0']],
+            'list' => [['a', 'b'], ['a', 'b']],
+            'empty items kept' => [['a', '', 'b'], ['a', '', 'b']],
+            'keys kept' => [[7 => 'a', 'x' => 'b'], [7 => 'a', 'x' => 'b']],
+            'nested array dropped' => [['a', ['b'], 'c'], [0 => 'a', 2 => 'c']],
+        ];
+    }
+
     private function CreateFormReadingPage(): object
     {
         return new class () extends Page {
@@ -345,6 +453,37 @@ class PageTest extends TestBase
             public function ReadFormIntList(string $key): array
             {
                 return $this->GetFormIntList(key: $key);
+            }
+
+            /**
+             * @return int[]
+             */
+            public function ReadQuerystringIntList(string $key): array
+            {
+                return $this->GetQuerystringIntList(key: $key);
+            }
+
+            public function ReadFormString(string $key): ?string
+            {
+                return $this->GetFormString(key: $key);
+            }
+
+            public function ReadFormFirstString(string $key): ?string
+            {
+                return $this->GetFormFirstString(key: $key);
+            }
+
+            public function ReadQuerystringString(string $key): ?string
+            {
+                return $this->GetQuerystringString(key: $key);
+            }
+
+            /**
+             * @return array<array-key, string>
+             */
+            public function ReadFormStringList(string $key): array
+            {
+                return $this->GetFormStringList(key: $key);
             }
         };
     }

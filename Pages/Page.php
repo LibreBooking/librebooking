@@ -423,6 +423,95 @@ abstract class Page implements IPage
     }
 
     /**
+     * Reads a query string field that may be submitted once or as name[] and
+     * returns its non-negative integer IDs. Other values are dropped.
+     *
+     * @return int[]
+     */
+    protected function GetQuerystringIntList(string $key): array
+    {
+        $value = $this->GetQuerystring(key: $key);
+        $values = is_array($value) ? $value : [$value];
+
+        $ints = [];
+        foreach ($values as $item) {
+            $intValue = self::ParseInt(value: $item, allowNegative: false);
+            if ($intValue !== null) {
+                $ints[] = $intValue;
+            }
+        }
+
+        return $ints;
+    }
+
+    /**
+     * Reads a form value that must be a single string.
+     *
+     * @return string|null null when the value is missing or submitted as an
+     *                     array
+     */
+    protected function GetFormString(string $key): ?string
+    {
+        $value = $this->GetForm(var: $key);
+
+        return is_string($value) ? $value : null;
+    }
+
+    /**
+     * Reads a form value that is normally a single string but that some
+     * inline editors (such as a checkbox attribute) submit as name[]. For a
+     * list, the first item is used.
+     *
+     * @return string|null null when the value is missing, an empty list, or
+     *                     its first item is not a string
+     */
+    protected function GetFormFirstString(string $key): ?string
+    {
+        $value = $this->GetForm(var: $key);
+        if (is_array($value)) {
+            $value = reset($value);
+        }
+
+        return is_string($value) ? $value : null;
+    }
+
+    /**
+     * Reads a query string value that must be a single string.
+     *
+     * @return string|null null when the value is missing or submitted as an
+     *                     array
+     */
+    protected function GetQuerystringString(string $key): ?string
+    {
+        $value = $this->GetQuerystring(key: $key);
+
+        return is_string($value) ? $value : null;
+    }
+
+    /**
+     * Reads a form field that may be submitted once or as name[] and returns
+     * its string values. Array keys are kept, because some forms submit
+     * name[id]. Values that are not strings, such as nested arrays, are
+     * dropped.
+     *
+     * @return array<array-key, string> empty when the value is missing or an
+     *                                  empty string
+     */
+    protected function GetFormStringList(string $key): array
+    {
+        $value = $this->GetForm(var: $key);
+        if (is_string($value)) {
+            return $value === '' ? [] : [$value];
+        }
+
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_filter(array: $value, callback: is_string(...));
+    }
+
+    /**
      * @param mixed $value raw request value
      */
     private static function ParseInt(mixed $value, bool $allowNegative): ?int
