@@ -81,6 +81,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         $submittedCost = $this->page->GetCreditCost();
         if (!is_numeric($submittedCost) || !is_finite(floatval($submittedCost))) {
             Log::Error('Rejected credit cost update with missing or malformed cost. Count=%s', $count);
+            $this->page->BindCreditCostRejected();
 
             return;
         }
@@ -95,6 +96,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         $isAboveMaximum = round(num: $cost, precision: self::CREDIT_COST_DECIMAL_PLACES) > self::MAX_CREDIT_COST;
         if ($cost < self::MIN_CREDIT_COST || $isAboveMaximum) {
             Log::Error('Rejected credit cost update with cost outside the allowed range. Count=%s, Cost=%s', $count, $cost);
+            $this->page->BindCreditCostRejected();
 
             return;
         }
@@ -117,6 +119,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         );
         if ($count === false) {
             Log::Error('Rejected credit cost delete with missing, malformed or base count');
+            $this->page->BindCreditCostRejected();
 
             return;
         }

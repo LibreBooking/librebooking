@@ -80,6 +80,7 @@ class ManagePaymentsPresenterTest extends TestBase
             new CreditCost(count: 1, cost: 0.0, currency: 'USD'),
             $this->paymentRepository->_LastCost,
         );
+        $this->assertFalse($this->page->_CreditCostRejected);
     }
 
     public function testSettingCreditCostToTheColumnMaximum()
@@ -126,6 +127,7 @@ class ManagePaymentsPresenterTest extends TestBase
 
         $this->assertNull($this->paymentRepository->_LastCost);
         $this->assertNull($this->paymentRepository->_LastDeletedCreditCount);
+        $this->assertTrue($this->page->_CreditCostRejected, 'the client must not report success');
     }
 
     public function testDeleteActionDeletesCreditCost()
@@ -138,6 +140,7 @@ class ManagePaymentsPresenterTest extends TestBase
 
         $this->assertSame(5, $this->paymentRepository->_LastDeletedCreditCount);
         $this->assertNull($this->paymentRepository->_LastCost, 'the cost must not be rewritten');
+        $this->assertFalse($this->page->_CreditCostRejected);
     }
 
     /**
@@ -172,6 +175,7 @@ class ManagePaymentsPresenterTest extends TestBase
 
         $this->assertNull($this->paymentRepository->_LastDeletedCreditCount);
         $this->assertNull($this->paymentRepository->_LastCost);
+        $this->assertTrue($this->page->_CreditCostRejected, 'the client must not report success');
     }
 
     public function testUpdatesPaymentGateways()
@@ -308,6 +312,7 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
 {
     public $_CreditCost;
     public $_CreditCurrency;
+    public $_CreditCostRejected = false;
     public $_PayPalEnabled;
     public $_PayPalClientId;
     public $_PayPalSecret;
@@ -332,6 +337,11 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public function EnforceCSRFCheck()
     {
         // The real check reads the request method, which tests do not set.
+    }
+
+    public function BindCreditCostRejected(): void
+    {
+        $this->_CreditCostRejected = true;
     }
 
     public function GetCreditCost()

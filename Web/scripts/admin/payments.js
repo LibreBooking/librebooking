@@ -54,7 +54,7 @@ function Payments(opts) {
           }
         ); // TODO: cleaner table reload
       },
-      function () {}
+      showCreditCostRejected
     );
     elements.deleteCreditsForms.each(function () {
       ConfigureAsyncForm(
@@ -70,7 +70,7 @@ function Payments(opts) {
             }
           ); // TODO: cleaner table reload
         },
-        function () {}
+        showCreditCostRejected
       );
     });
     ConfigureAsyncForm(
@@ -117,6 +117,11 @@ function Payments(opts) {
 
   var defaultSubmitCallback = function (form) {
     return form.attr('action') + '?action=' + form.attr('ajaxAction');
+  };
+
+  // The server sends a response body only when it rejected the request.
+  var showCreditCostRejected = function () {
+    showMessage('creditCostRejectedMessage');
   };
 
   var showMessage = function (id) {
