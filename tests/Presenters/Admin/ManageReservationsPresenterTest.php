@@ -355,6 +355,49 @@ class ManageReservationsPresenterTest extends TestBase
         $this->assertEquals($resourceStatusReasonId, $resource1->GetStatusReasonId());
     }
 
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidReferenceNumberProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            // ReservationFilter treats '0' as empty and drops the condition.
+            'zero' => ['0'],
+            // The page getter is untyped, so reference_number[]=x arrives
+            // as an array.
+            'array' => [['abc123']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidReferenceNumberProvider')]
+    public function testDoesNotUpdateReservationResourceStatusesWithoutReferenceNumber(mixed $referenceNumber)
+    {
+        $this->page->expects($this->once())
+            ->method('CanUpdateResourceStatuses')
+            ->willReturn(true);
+
+        $this->page->expects($this->once())
+            ->method('GetUpdateScope')
+            ->willReturn('all');
+
+        $this->page->expects($this->once())
+            ->method('GetResourceStatusReferenceNumber')
+            ->willReturn($referenceNumber);
+
+        $this->reservationsService->expects($this->never())
+            ->method('LoadFiltered');
+
+        $this->resourceRepository->expects($this->never())
+            ->method('LoadById');
+
+        $this->resourceRepository->expects($this->never())
+            ->method('Update');
+
+        $this->presenter->UpdateResourceStatus();
+    }
+
     public function testLoadsReservation()
     {
         $referenceNumber = 'rn';

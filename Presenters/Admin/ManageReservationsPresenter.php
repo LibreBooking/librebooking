@@ -281,10 +281,12 @@ class ManageReservationsPresenter extends ActionPresenter
         $resourceId = $this->page->GetUpdateResourceId();
         $updateScope = $this->page->GetUpdateScope();
 
+        // The reference number is an array for a malformed request, which
+        // cannot be formatted with %s.
         Log::Debug(
             'Updating resource status. ResourceId=%s, ReferenceNumber=%s, StatusId=%s, ReasonId=%s, UserId=%s',
             $resourceId,
-            $referenceNumber,
+            json_encode($referenceNumber),
             $statusId,
             $reasonId,
             $session->UserId
@@ -295,6 +297,15 @@ class ManageReservationsPresenter extends ActionPresenter
         if (empty($updateScope)) {
             $resourceIds[] = $resourceId;
         } else {
+            // ReservationFilter skips a reference number that is empty(),
+            // which includes '0'. That would match every reservation and
+            // update all of their resources, so use the same test here.
+            if (!is_string($referenceNumber) || empty($referenceNumber)) {
+                Log::Error('Rejected resource status update with missing or malformed reference number');
+
+                return;
+            }
+
             $reservations = $this->manageReservationsService->LoadFiltered(
                 null,
                 null,
