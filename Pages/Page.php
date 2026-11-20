@@ -19,6 +19,19 @@ abstract class Page implements IPage
     private const DEFAULT_LOGO = 'img/librebooking.svg';
 
     /**
+     * Stylesheet for each css.font choice, relative to Web/. 'none' loads no
+     * bundled font. Keys must match ConfigKeys::CSS_FONT['choices'].
+     */
+    public const FONT_STYLESHEETS = [
+        'inter' => 'assets/fonts/inter/v20/inter.css',
+        'montserrat' => 'assets/fonts/montserrat/v31/montserrat.css',
+        'nunito' => 'assets/fonts/nunito/v32/nunito.css',
+        'merriweather' => 'assets/fonts/merriweather/v33/merriweather.css',
+        'atkinson-hyperlegible' => 'assets/fonts/atkinson-hyperlegible/v12/atkinson-hyperlegible.css',
+        'none' => '',
+    ];
+
+    /**
      * @var SmartyPage
      */
     protected $smarty = null;
@@ -88,6 +101,17 @@ abstract class Page implements IPage
         $this->smarty->assign('ShouldLogout', $this->GetShouldAutoLogout());
         $this->smarty->assign('CssExtensionFile', Configuration::Instance()->GetKey(ConfigKeys::CSS_EXTENSION_FILE));
         $this->smarty->assign('UseLocalJquery', Configuration::Instance()->GetKey(ConfigKeys::USE_LOCAL_JS_LIBS, new BooleanConverter()));
+        $font = Configuration::Instance()->GetKey(configDef: ConfigKeys::CSS_FONT);
+        if ($font === null || $font === '') {
+            $font = ConfigKeys::CSS_FONT['default'];
+        }
+        // LB_CSS_FONT bypasses the config file's choice validation.
+        if (!isset(self::FONT_STYLESHEETS[$font])) {
+            error_log(message: '[CONFIG] Invalid css.font or LB_CSS_FONT value; using the default font.');
+            $font = ConfigKeys::CSS_FONT['default'];
+        }
+        $this->smarty->assign(tpl_var: 'CssFont', value: $font);
+        $this->smarty->assign(tpl_var: 'CssFontStylesheet', value: self::FONT_STYLESHEETS[$font]);
         $this->smarty->assign('EnableConfigurationPage', Configuration::Instance()->GetKey(ConfigKeys::PAGES_CONFIGURATION_ENABLED, new BooleanConverter()));
         $this->smarty->assign('ShowParticipation', !Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_PREVENT_PARTICIPATION, new BooleanConverter()));
         $this->smarty->assign('CreditsEnabled', Configuration::Instance()->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
