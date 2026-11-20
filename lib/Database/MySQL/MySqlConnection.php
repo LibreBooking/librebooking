@@ -64,15 +64,15 @@ class MySqlConnection implements IDbConnection
         $this->_connected = false;
     }
 
-    public function Query(ISqlCommand $sqlCommand)
+    public function Query(ISqlCommand $command)
     {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
+        $mysqlCommand = new MySqlCommandAdapter(command: $command, db: $this->_db);
 
         if (Log::DebugEnabled()) {
             Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
         }
 
-        if ($sqlCommand->ContainsGroupConcat()) {
+        if ($command->ContainsGroupConcat()) {
             mysqli_query($this->_db, 'SET SESSION group_concat_max_len = 1000000;');
         }
 
@@ -96,11 +96,11 @@ class MySqlConnection implements IDbConnection
         return $this->Query(new MySqlLimitCommand($command, $limit, $offset));
     }
 
-    public function Execute(ISqlCommand $sqlCommand)
+    public function Execute(ISqlCommand $command)
     {
-        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql Execute: ');
+        $mysqlCommand = $this->_prepareExecute(sqlCommand: $command, logPrefix: 'MySql Execute: ');
 
-        if ($sqlCommand->IsMultiQuery()) {
+        if ($command->IsMultiQuery()) {
             $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
             do {
                 if ($r = mysqli_store_result($this->_db)) {
@@ -113,15 +113,21 @@ class MySqlConnection implements IDbConnection
         $this->_handleError($result);
     }
 
-    public function ExecuteAffectedRows(ISqlCommand $sqlCommand): int
+    public function ExecuteAffectedRows(ISqlCommand $command): int
     {
-        if ($sqlCommand->IsMultiQuery()) {
+        if ($command->IsMultiQuery()) {
             throw new InvalidArgumentException(
-                sprintf('MySqlConnection::ExecuteAffectedRows does not support multi-query commands, got %s', get_debug_type($sqlCommand))
+                message: sprintf(
+                    'MySqlConnection::ExecuteAffectedRows does not support multi-query commands, got %s',
+                    get_debug_type(value: $command)
+                )
             );
         }
 
-        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql ExecuteAffectedRows: ');
+        $mysqlCommand = $this->_prepareExecute(
+            sqlCommand: $command,
+            logPrefix: 'MySql ExecuteAffectedRows: '
+        );
 
         $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
         $this->_handleError($result);
