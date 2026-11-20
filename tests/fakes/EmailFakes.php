@@ -31,8 +31,8 @@ class FakeMailer extends PHPMailer
         return true;
     }
 
-    public function IsHTML($bool = true)
+    public function IsHTML($isHtml = true)
     {
-        $this->isHtml = $bool;
+        $this->isHtml = $isHtml;
     }
 }

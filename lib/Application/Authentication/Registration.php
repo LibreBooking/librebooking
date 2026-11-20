@@ -66,7 +66,7 @@ class Registration implements IRegistration
     }
 
     public function Register(
-        $username,
+        $login,
         $email,
         $firstName,
         $lastName,
@@ -86,9 +86,29 @@ class Registration implements IRegistration
         $attributes = new UserAttribute($additionalFields);
 
         if ($this->CreatePending()) {
-            $user = User::CreatePending($firstName, $lastName, $email, $username, $language, $timezone, $encryptedPassword->EncryptedPassword(), $encryptedPassword->Salt(), $homepageId);
+            $user = User::CreatePending(
+                firstName: $firstName,
+                lastName: $lastName,
+                emailAddress: $email,
+                userName: $login,
+                language: $language,
+                timezone: $timezone,
+                password: $encryptedPassword->EncryptedPassword(),
+                passwordSalt: $encryptedPassword->Salt(),
+                homepageId: $homepageId,
+            );
         } else {
-            $user = User::Create($firstName, $lastName, $email, $username, $language, $timezone, $encryptedPassword->EncryptedPassword(), $encryptedPassword->Salt(), $homepageId);
+            $user = User::Create(
+                firstName: $firstName,
+                lastName: $lastName,
+                emailAddress: $email,
+                userName: $login,
+                language: $language,
+                timezone: $timezone,
+                password: $encryptedPassword->EncryptedPassword(),
+                passwordSalt: $encryptedPassword->Salt(),
+                homepageId: $homepageId,
+            );
         }
 
         $user->ChangeAttributes($attributes->Get(UserAttribute::Phone), $attributes->Get(UserAttribute::Organization), $attributes->Get(UserAttribute::Position));
