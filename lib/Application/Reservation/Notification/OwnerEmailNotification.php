@@ -30,17 +30,26 @@ abstract class OwnerEmailNotification implements IReservationNotification
     }
 
     /**
-     * @param ReservationSeries $reservation
+     * @param ReservationSeries $reservationSeries
      * @return void
      */
-    public function Notify($reservation)
+    public function Notify($reservationSeries)
     {
-        $owner = $this->_userRepo->LoadById($reservation->UserId());
+        $owner = $this->_userRepo->LoadById(userId: $reservationSeries->UserId());
         if ($this->ShouldSend($owner)) {
-            $message = $this->GetMessage($owner, $reservation, $this->_attributeRepo, $this->_userRepo);
+            $message = $this->GetMessage(
+                owner: $owner,
+                reservation: $reservationSeries,
+                attributeRepository: $this->_attributeRepo,
+                userRepository: $this->_userRepo
+            );
             ServiceLocator::GetEmailService()->Send($message);
         } else {
-            Log::Debug('Owner does not want these types of email notifications. Email=%s, ReferenceNumber=%s', $owner->EmailAddress(), $reservation->CurrentInstance()->ReferenceNumber());
+            Log::Debug(
+                'Owner does not want these types of email notifications. Email=%s, ReferenceNumber=%s',
+                $owner->EmailAddress(),
+                $reservationSeries->CurrentInstance()->ReferenceNumber()
+            );
         }
     }
 
@@ -54,11 +63,11 @@ abstract class OwnerEmailNotification implements IReservationNotification
     /**
      * @param User $owner
      * @param ReservationSeries|ExistingReservationSeries $reservation
-     * @param IAttributeRepository $attributeRepo
+     * @param IAttributeRepository $attributeRepository
      * @param IUserRepository $userRepository
      * @return EmailMessage
      */
-    abstract protected function GetMessage(User $owner, $reservation, IAttributeRepository $attributeRepo, IUserRepository $userRepository);
+    abstract protected function GetMessage(User $owner, $reservation, IAttributeRepository $attributeRepository, IUserRepository $userRepository);
 }
 
 class OwnerEmailCreatedNotification extends OwnerEmailNotification
