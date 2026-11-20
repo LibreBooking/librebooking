@@ -133,7 +133,7 @@ abstract class Page implements IPage
                 baseName: 'custom-favicon',
                 extensions: ['png', 'gif', 'jpg', 'ico'],
                 locations: $faviconLocations,
-            ) ?? 'favicon.ico'
+            ) ?? 'favicon.png'
         );
 
         $logoUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);
