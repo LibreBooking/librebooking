@@ -291,7 +291,7 @@ class ScheduleWebServiceView implements ISchedulePage
         return ScheduleStyle::Standard;
     }
 
-    public function SetScheduleStyle(ScheduleStyle $direction): void
+    public function SetScheduleStyle(ScheduleStyle $style): void
     {
         // no op
     }

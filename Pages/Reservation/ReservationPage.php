@@ -469,9 +469,9 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('AvailableResources', $resources);
     }
 
-    public function ShowAdditionalResources($shouldShow)
+    public function ShowAdditionalResources($canShowAdditionalResources)
     {
-        $this->Set('ShowAdditionalResources', $shouldShow);
+        $this->Set(var: 'ShowAdditionalResources', value: $canShowAdditionalResources);
     }
 
     public function BindAvailableAccessories($accessories)
@@ -530,9 +530,9 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('Invitees', $invitees);
     }
 
-    public function SetAllowParticipantsToJoin($allowParticipantsToJoin)
+    public function SetAllowParticipantsToJoin($allowParticipation)
     {
-        $this->Set('AllowParticipantsToJoin', $allowParticipantsToJoin);
+        $this->Set(var: 'AllowParticipantsToJoin', value: $allowParticipation);
     }
 
     public function SetAccessories($accessories)

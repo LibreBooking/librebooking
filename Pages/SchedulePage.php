@@ -91,9 +91,9 @@ interface ISchedulePage extends IActionPage
     public function GetScheduleStyle(int $scheduleId): ?ScheduleStyle;
 
     /**
-     * @param ScheduleStyle $direction
+     * @param ScheduleStyle $style
      */
-    public function SetScheduleStyle(ScheduleStyle $direction): void;
+    public function SetScheduleStyle(ScheduleStyle $style): void;
 
     /**
      * @return int
@@ -379,10 +379,10 @@ class SchedulePage extends ActionPage implements ISchedulePage
         $this->Set('DailyLayout', $dailyLayout);
     }
 
-    public function SetDisplayDates($dateRange)
+    public function SetDisplayDates($dates)
     {
-        $this->Set('DisplayDates', $dateRange);
-        $this->Set('BoundDates', $dateRange->Dates());
+        $this->Set(var: 'DisplayDates', value: $dates);
+        $this->Set(var: 'BoundDates', value: $dates->Dates());
     }
 
     public function SetSpecificDates($specificDates)

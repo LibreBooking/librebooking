@@ -210,13 +210,13 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
     }
 
     /**
-     * @param CalendarSubscriptionDetails $details
+     * @param CalendarSubscriptionDetails $subscriptionDetails
      */
-    public function BindSubscription(CalendarSubscriptionDetails $details)
+    public function BindSubscription(CalendarSubscriptionDetails $subscriptionDetails)
     {
-        $this->Set('IsSubscriptionAllowed', $details->IsAllowed());
-        $this->Set('IsSubscriptionEnabled', $details->IsEnabled());
-        $this->Set('SubscriptionUrl', $details->Url());
+        $this->Set(var: 'IsSubscriptionAllowed', value: $subscriptionDetails->IsAllowed());
+        $this->Set(var: 'IsSubscriptionEnabled', value: $subscriptionDetails->IsEnabled());
+        $this->Set(var: 'SubscriptionUrl', value: $subscriptionDetails->Url());
     }
 
     /**
