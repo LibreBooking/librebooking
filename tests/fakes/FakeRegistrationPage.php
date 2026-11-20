@@ -104,7 +104,7 @@ class FakeRegistrationPage extends FakePageBase implements IRegistrationPage
     {
     }
 
-    public function SetPosition($positon)
+    public function SetPosition($position)
     {
     }
 

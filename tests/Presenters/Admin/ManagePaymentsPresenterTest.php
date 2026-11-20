@@ -234,9 +234,9 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         return $this->_CreditCurrency;
     }
 
-    public function SetCreditCosts($cost)
+    public function SetCreditCosts($creditCosts)
     {
-        $this->_CreditCost = $cost;
+        $this->_CreditCost = $creditCosts;
     }
 
     public function GetPayPalIsEnabled()
