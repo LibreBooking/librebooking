@@ -242,6 +242,10 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         }
         if ($endDate->LessThanOrEqual($startDate)) {
             $endDate = $endDate->SetTime($startPeriod->End());
+            if ($endDate->LessThan($startDate)) {
+                // the period runs past midnight and ends on the following day
+                $endDate = $endDate->AddDays(1);
+            }
         }
         $endPeriod = $this->GetEndSlotClosestTo($endPeriods, $endDate);
 

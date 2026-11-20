@@ -398,6 +398,36 @@ class SearchAvailabilityPresenterTest extends TestBase
             true
         );
     }
+
+    public function testSlotThatRunsPastMidnightIsFoundOncePerNight(): void
+    {
+        $tz = $this->fakeUser->Timezone;
+        $resource = new TestResourceDto(1);
+        $this->resourceService->_AllResources = [$resource];
+
+        Date::_SetNow(Date::Parse('2016-07-03 12:00', $tz));
+        $this->page->_Resources = [];
+        $this->page->_Hours = 1;
+        $this->page->_Minutes = 0;
+        $this->page->_Range = 'thisweek';
+
+        $scheduleLayout = new ScheduleLayout($tz);
+        $scheduleLayout->AppendPeriod(Time::Parse('22:00', $tz), Time::Parse('06:00', $tz));
+        $scheduleLayout->AppendBlockedPeriod(Time::Parse('06:00', $tz), Time::Parse('22:00', $tz));
+        $this->scheduleService->_Layout = $scheduleLayout;
+
+        $this->presenter->SearchAvailability();
+
+        $starts = array_map(fn (AvailableOpeningView $opening) => $opening->Start()->Timestamp(), $this->page->_Openings);
+        $firstNight = Date::Parse('2016-07-03 22:00', $tz);
+
+        $this->assertGreaterThan(1, count($starts));
+        $this->assertEquals(array_values(array_unique($starts)), $starts, 'each night is only found once');
+        $this->assertEquals(
+            new AvailableOpeningView($resource, $firstNight, $firstNight->AddDays(1)->SetTimeString('06:00')),
+            $this->page->_Openings[0]
+        );
+    }
 }
 
 class FakeSearchAvailabilityPage extends SearchAvailabilityPage

@@ -36,6 +36,21 @@ A slot without a label should be formatted like this: 10:25-16:50
 A slot with a label should be formatted like this: 10:25-16:50 Schedule
 Period 4
 
+A slot can run past midnight. A slot whose end time is earlier than its start
+time ends on the following day, so 22:00-06:00 starts at 22:00 and ends at
+06:00 the next morning. The remaining slots then have to cover the rest of the
+day, for example a blocked slot of 06:00-22:00.
+
+When each day of the week has its own layout, a slot which runs past midnight
+belongs to the day it starts on, and it has to be the last slot of that day.
+The following day must then start when that slot ends instead of at 00:00. For
+example, if Monday ends with 22:00-06:00 then the first slot on Tuesday has to
+start at 06:00.
+
+A reservation for a slot which runs past midnight is allowed on resources
+which do not allow reservations across days, as long as the reservation ends
+when that slot ends.
+
 Below the slot configuration windows is a slot creation wizard. This will set
 up available slots at the given interval between the start and end times
 without having to manually enter all of the times.

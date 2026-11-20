@@ -312,6 +312,33 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertEquals($end, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->EndDate());
     }
 
+    public function testBookingASlotThatRunsPastMidnightEndsOnTheFollowingDay(): void
+    {
+        Date::_SetNow(Date::Parse('2016-03-11 13:46'));
+        $this->page->_Email = 'some@user.com';
+        $this->page->_BeginTime = '22:00';
+        $this->page->_EndTime = '06:00';
+        $this->page->_BeginDate = '2016-03-11';
+        $this->page->_Timezone = 'America/New_York';
+
+        $this->guestUserService->_UserSession = new FakeUserSession(123);
+        $this->reservationCreateHandler->_Success = true;
+
+        $this->displayEnabledResource(122, 'pub-122');
+        $this->page->_ReservationResourcePublicId = 'pub-122';
+
+        $begin = Date::Parse('2016-03-11 22:00', $this->page->_Timezone);
+        $end = Date::Parse('2016-03-12 06:00', $this->page->_Timezone);
+
+        $this->presenter->reservationCreateHandler = $this->reservationCreateHandler;
+
+        $this->presenter->Reserve();
+
+        $this->assertEquals(true, $this->page->_ReservationCreatedSuccessfully);
+        $this->assertEquals($begin, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->StartDate());
+        $this->assertEquals($end, $this->reservationCreateHandler->_LastSeries->CurrentInstance()->EndDate());
+    }
+
     public function testWhenReservationFails()
     {
         Date::_SetNow(Date::Parse('2016-03-11 13:46'));

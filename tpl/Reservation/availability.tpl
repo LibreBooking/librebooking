@@ -62,8 +62,9 @@
                     <td class="resdate">{formatdate date=$date key="schedule_daily"}</td>
                     {foreach from=$periods.$ts item=period}
                         <td class="reslabel" colspan="{$period->Span()}"
-                            data-start="{$period->Begin()->Hour()*60+$period->Begin()->Minute()}"
-                            data-end="{$period->End()->Hour()*60+$period->End()->Minute()}">{$period->Label($date)}</td>
+                            {* a period which runs past midnight only covers part of this day: 0 is midnight *}
+                            data-start="{if $period->BeginsBefore($date)}0{else}{$period->Begin()->Hour()*60+$period->Begin()->Minute()}{/if}"
+                            data-end="{if $period->EndDate()->GreaterThan($date->GetDate()->AddDays(1))}0{else}{$period->End()->Hour()*60+$period->End()->Minute()}{/if}">{$period->Label($date)}</td>
                     {/foreach}
                 </tr>
             </thead>
