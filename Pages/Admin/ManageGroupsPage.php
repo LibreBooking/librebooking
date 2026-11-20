@@ -52,7 +52,8 @@ interface IManageGroupsPage extends IActionPage
     public function BindRoles($roles);
 
     /**
-     * @return int[]|string[]|array
+     * @return string[]|null "{resourceId}_{permissionType}" entries, null
+     *                       when the field was not submitted
      */
     public function GetAllowedResourceIds();
 
@@ -62,7 +63,7 @@ interface IManageGroupsPage extends IActionPage
     public function GetGroupName();
 
     /**
-     * @return int[]|array
+     * @return int[]
      */
     public function GetRoleIds();
 
@@ -216,9 +217,17 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('resources', $resources);
     }
 
-    public function GetAllowedResourceIds()
+    /**
+     * @return string[]|null "{resourceId}_{permissionType}" entries, null
+     *                       when the field was not submitted
+     */
+    public function GetAllowedResourceIds(): ?array
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        if ($this->GetForm(var: FormKeys::RESOURCE_ID) === null) {
+            return null;
+        }
+
+        return $this->GetFormStringList(key: FormKeys::RESOURCE_ID);
     }
 
     public function GetGroupName(): ?string
@@ -231,9 +240,12 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('Roles', $roles);
     }
 
-    public function GetRoleIds()
+    /**
+     * @return int[]
+     */
+    public function GetRoleIds(): array
     {
-        return $this->GetForm(FormKeys::ROLE_ID);
+        return $this->GetFormIntList(key: FormKeys::ROLE_ID);
     }
 
     public function BindAdminGroups($adminGroups)
@@ -266,19 +278,28 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('Schedules', $schedules);
     }
 
-    public function GetGroupAdminIds()
+    /**
+     * @return int[]
+     */
+    public function GetGroupAdminIds(): array
     {
-        return $this->GetForm(FormKeys::GROUP_ID);
+        return $this->GetFormIntList(key: FormKeys::GROUP_ID);
     }
 
-    public function GetResourceAdminIds()
+    /**
+     * @return int[]
+     */
+    public function GetResourceAdminIds(): array
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        return $this->GetFormIntList(key: FormKeys::RESOURCE_ID);
     }
 
-    public function GetScheduleAdminIds()
+    /**
+     * @return int[]
+     */
+    public function GetScheduleAdminIds(): array
     {
-        return $this->GetForm(FormKeys::SCHEDULE_ID);
+        return $this->GetFormIntList(key: FormKeys::SCHEDULE_ID);
     }
 
     public function Export($groups, $users, $permissionsWrite, $permissionsRead)

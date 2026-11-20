@@ -298,9 +298,13 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     /**
      * @return string[]|null resource ids with permission type (e.g. "1_0" for full, "2_1" for view)
      */
-    public function GetAllowedResourceIds()
+    public function GetAllowedResourceIds(): ?array
     {
-        return $this->GetForm(FormKeys::RESOURCE_ID);
+        if ($this->GetForm(var: FormKeys::RESOURCE_ID) === null) {
+            return null;
+        }
+
+        return $this->GetFormStringList(key: FormKeys::RESOURCE_ID);
     }
 
     /**

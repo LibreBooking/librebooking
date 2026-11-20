@@ -114,39 +114,24 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
     /**
      * @return string[]
      */
-    public function GetAccessoryResources()
+    public function GetAccessoryResources(): array
     {
-        $r = $this->GetForm(FormKeys::ACCESSORY_RESOURCE);
-        if (empty($r)) {
-            return [];
-        }
-
-        return $r;
+        return $this->GetFormStringList(key: FormKeys::ACCESSORY_RESOURCE);
     }
 
     /**
      * @return string[]
      */
-    public function GetAccessoryResourcesMinimums()
+    public function GetAccessoryResourcesMinimums(): array
     {
-        $r = $this->GetForm(FormKeys::ACCESSORY_MIN_QUANTITY);
-        if (empty($r)) {
-            return [];
-        }
-
-        return $r;
+        return $this->GetFormStringList(key: FormKeys::ACCESSORY_MIN_QUANTITY);
     }
 
     /**
      * @return string[]
      */
-    public function GetAccessoryResourcesMaximums()
+    public function GetAccessoryResourcesMaximums(): array
     {
-        $r = $this->GetForm(FormKeys::ACCESSORY_MAX_QUANTITY);
-        if (empty($r)) {
-            return [];
-        }
-
-        return $r;
+        return $this->GetFormStringList(key: FormKeys::ACCESSORY_MAX_QUANTITY);
     }
 }
