@@ -10,11 +10,39 @@ class ConfigTest extends TestBase
 {
     private const CONFIG_ID = 'test';
 
+    /** @var array{getenv: string|false, env: ?string, server: ?string} */
+    private array $originalCssFontEnv = ['getenv' => false, 'env' => null, 'server' => null];
+
     public function setup(): void
     {
         parent::setup();
 
+        $this->originalCssFontEnv = [
+            'getenv' => getenv(name: 'LB_CSS_FONT'),
+            'env' => $_ENV['LB_CSS_FONT'] ?? null,
+            'server' => $_SERVER['LB_CSS_FONT'] ?? null,
+        ];
+
+        $this->clearCssFontEnv();
+
         Configuration::SetInstance(null);
+    }
+
+    public function tearDown(): void
+    {
+        $this->clearCssFontEnv();
+
+        if ($this->originalCssFontEnv['getenv'] !== false) {
+            putenv(assignment: 'LB_CSS_FONT=' . $this->originalCssFontEnv['getenv']);
+        }
+        if ($this->originalCssFontEnv['env'] !== null) {
+            $_ENV['LB_CSS_FONT'] = $this->originalCssFontEnv['env'];
+        }
+        if ($this->originalCssFontEnv['server'] !== null) {
+            $_SERVER['LB_CSS_FONT'] = $this->originalCssFontEnv['server'];
+        }
+
+        parent::tearDown();
     }
 
     public function testConfigLoadsAllValues()
@@ -26,6 +54,71 @@ class ConfigTest extends TestBase
         $this->assertEquals(true, $config->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter()));
         $this->assertEquals('mysql', $config->GetKey(ConfigKeys::DATABASE_TYPE));
         $this->assertEquals('ActiveDirectory', $config->GetKey(ConfigKeys::PLUGIN_AUTHENTICATION));
+    }
+
+    public function testFontConfigurationDefaultsAndAcceptsASelection(): void
+    {
+        $defaultConfig = $this->createConfigurationFileFromContents(
+            contents: <<<'PHP'
+<?php
+return ['settings' => []];
+PHP
+        );
+        $selectedConfig = $this->createConfigurationFileFromContents(
+            contents: <<<'PHP'
+<?php
+return ['settings' => ['css.font' => 'nunito']];
+PHP
+        );
+
+        $this->assertSame('inter', $defaultConfig->GetKey(ConfigKeys::CSS_FONT));
+        $this->assertSame('nunito', $selectedConfig->GetKey(ConfigKeys::CSS_FONT));
+    }
+
+    public function testInvalidFontConfigurationIsLoggedAndUsesDefault(): void
+    {
+        $errorLogs = $this->captureErrorLog(testFunction: function () {
+            $config = $this->createConfigurationFileFromContents(
+                contents: <<<'PHP'
+<?php
+return ['settings' => ['css.font' => 'invalid-font']];
+PHP
+            );
+
+            $this->assertSame('inter', $config->GetKey(ConfigKeys::CSS_FONT));
+        });
+
+        $this->assertLogMessage(
+            logs: $errorLogs,
+            expectedPattern: "Invalid value 'invalid-font' for 'css.font'",
+            description: 'invalid font configuration'
+        );
+    }
+
+    public function testFontConfigurationAcceptsBootstrapDefault(): void
+    {
+        $config = $this->createConfigurationFileFromContents(
+            contents: <<<'PHP'
+<?php
+return ['settings' => ['css.font' => 'none']];
+PHP
+        );
+
+        $this->assertSame('none', $config->GetKey(ConfigKeys::CSS_FONT));
+    }
+
+    public function testFontEnvironmentOverrideTakesPrecedenceOverConfigFile(): void
+    {
+        $this->setCssFontEnv(value: 'montserrat');
+
+        $config = $this->createConfigurationFileFromContents(
+            contents: <<<'PHP'
+<?php
+return ['settings' => ['css.font' => 'nunito']];
+PHP
+        );
+
+        $this->assertSame('montserrat', $config->GetKey(ConfigKeys::CSS_FONT));
     }
 
     public function testLegacyConfigLoadsAllValues()
@@ -112,7 +205,7 @@ class ConfigTest extends TestBase
     public function testLegacySectionRenamesDoNotProduceFlattenedMergedKeys(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['delete.old.data']['years.old.data'] = 7;
 $conf['settings']['delete.old.data']['delete.old.announcements'] = true;
@@ -137,7 +230,7 @@ PHP
     public function testLegacyImageUploadKeysRewriteToUploadsSection(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['image.upload']['directory'] = '/custom/path';
 $conf['settings']['image.upload']['url'] = '/custom/url';
@@ -156,7 +249,7 @@ PHP
     public function testTopLevelLegacyKeyCanRewriteIntoCanonicalSection(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['enable.email'] = true;
 PHP
@@ -171,7 +264,7 @@ PHP
     public function testLaterKeyWinsWhenLegacyAndCanonicalFormsAreBothPresent(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['delete.old.data']['years.old.data'] = 7;
 $conf['settings']['cleanup']['years.old.data'] = 3;
@@ -184,7 +277,7 @@ PHP
     public function testNestedLegacyKeysDoNotCreateEmptyTopLevelBucket(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
 $conf['settings']['slack']['token'] = 'xoxb-test-token';
@@ -201,7 +294,7 @@ PHP
     public function testGetKeyRetrievesUnsectionedKeysWithEmptySection(): void
     {
         $config = $this->createConfigurationFileFromContents(
-            <<<'PHP'
+            contents: <<<'PHP'
 <?php
 $conf['settings']['google.analytics']['tracking.id'] = 'G-TEST123';
 $conf['settings']['slack']['token'] = 'xoxb-test-token';
@@ -249,7 +342,6 @@ PHP
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_plugin_config.php', '', TestPluginConfigKeys::CONFIG_ID, false, TestPluginConfigKeys::class);
         $config = Configuration::Instance()->File(self::CONFIG_ID);
-        ;
         $pluginConfig = Configuration::Instance()->File(TestPluginConfigKeys::CONFIG_ID);
 
         $this->assertEquals('America/Chicago', $config->GetDefaultTimezone());
@@ -555,5 +647,18 @@ PHP
                 unlink($path);
             }
         }
+    }
+
+    private function clearCssFontEnv(): void
+    {
+        putenv(assignment: 'LB_CSS_FONT');
+        unset($_ENV['LB_CSS_FONT'], $_SERVER['LB_CSS_FONT']);
+    }
+
+    private function setCssFontEnv(string $value): void
+    {
+        putenv(assignment: 'LB_CSS_FONT=' . $value);
+        $_ENV['LB_CSS_FONT'] = $value;
+        $_SERVER['LB_CSS_FONT'] = $value;
     }
 }

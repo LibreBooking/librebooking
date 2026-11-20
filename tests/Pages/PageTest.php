@@ -425,6 +425,140 @@ class PageTest extends TestBase
         ];
     }
 
+    #[DataProvider('fontProvider')]
+    public function testConfiguredFontRendersLocalStylesheet(string $font, string $stylesheet, bool $useLocalAssets): void
+    {
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::CSS_FONT, value: $font);
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::USE_LOCAL_JS_LIBS, value: $useLocalAssets);
+
+        $output = $this->renderHeader();
+
+        $this->assertStringContainsString("data-font='{$font}'", $output);
+        $this->assertStringContainsString("../../{$stylesheet}?v=", $output);
+        $this->assertSame(1, substr_count(haystack: $output, needle: 'assets/fonts/'));
+        $this->assertStringNotContainsString('fonts.googleapis.com', $output);
+        $this->assertStringNotContainsString('fonts.gstatic.com', $output);
+        $this->assertFileExists(ROOT_DIR . 'Web/' . $stylesheet);
+
+        $css = file_get_contents(filename: ROOT_DIR . 'Web/' . $stylesheet);
+        $this->assertNotFalse($css);
+        $this->assertGreaterThan(0, preg_match_all(
+            pattern: '/url\([\'"]?\.\/([^\'")]+\.woff2)[\'"]?\)/',
+            subject: $css,
+            matches: $matches
+        ));
+        foreach (array_unique(array: $matches[1]) as $fontFile) {
+            $this->assertFileExists(dirname(path: ROOT_DIR . 'Web/' . $stylesheet) . '/' . $fontFile);
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: bool}>
+     */
+    public static function fontProvider(): array
+    {
+        $cases = [];
+        foreach (self::fontStylesheetProvider() as [$font, $stylesheet]) {
+            $cases[$font . ' local'] = [$font, $stylesheet, true];
+            $cases[$font . ' CDN'] = [$font, $stylesheet, false];
+        }
+        return $cases;
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function fontStylesheetProvider(): array
+    {
+        $cases = [];
+        foreach (array_filter(array: Page::FONT_STYLESHEETS) as $font => $stylesheet) {
+            $cases[$font] = [$font, $stylesheet];
+        }
+        return $cases;
+    }
+
+    public function testMissingFontUsesDefault(): void
+    {
+        $output = $this->renderHeader();
+
+        $this->assertStringContainsString("data-font='inter'", $output);
+        $this->assertStringContainsString('../../assets/fonts/inter/v20/inter.css?v=', $output);
+    }
+
+    #[DataProvider('localAssetsProvider')]
+    public function testBootstrapFontDoesNotLoadBundledFonts(bool $useLocalAssets): void
+    {
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::CSS_FONT, value: 'none');
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::USE_LOCAL_JS_LIBS, value: $useLocalAssets);
+
+        $output = $this->renderHeader();
+
+        $this->assertStringContainsString("data-font='none'", $output);
+        $this->assertStringNotContainsString('assets/fonts/', $output);
+        $this->assertStringNotContainsString('fonts.googleapis.com', $output);
+        $this->assertStringNotContainsString('fonts.gstatic.com', $output);
+    }
+
+    /**
+     * @return array<string, array{0: bool}>
+     */
+    public static function localAssetsProvider(): array
+    {
+        return [
+            'local' => [true],
+            'CDN' => [false],
+        ];
+    }
+
+    public function testFontStylesheetsMatchConfigChoices(): void
+    {
+        $this->assertSame(
+            array_keys(array: ConfigKeys::CSS_FONT['choices']),
+            array_keys(array: Page::FONT_STYLESHEETS)
+        );
+    }
+
+    #[DataProvider('fontStylesheetProvider')]
+    public function testApplicationCssUsesTheFontFamilyOfEachStylesheet(string $font, string $stylesheet): void
+    {
+        $fontCss = file_get_contents(filename: ROOT_DIR . 'Web/' . $stylesheet);
+        $appCss = file_get_contents(filename: ROOT_DIR . 'Web/css/librebooking.css');
+        $this->assertNotFalse($fontCss);
+        $this->assertNotFalse($appCss);
+        $this->assertSame(1, preg_match(
+            pattern: "/font-family:\\s*'([^']+)'/",
+            subject: $fontCss,
+            matches: $family
+        ));
+
+        $familyPattern = preg_quote(str: $family[1], delimiter: '/');
+        if ($font === ConfigKeys::CSS_FONT['default']) {
+            $rule = "/var\\(--app-font,\\s*'{$familyPattern}'\\)/";
+        } else {
+            $fontPattern = preg_quote(str: $font, delimiter: '/');
+            $rule = "/body\\[data-font='{$fontPattern}'\\]\\s*\\{\\s*--app-font:\\s*'{$familyPattern}';/";
+        }
+        $this->assertSame(1, preg_match(pattern: $rule, subject: $appCss), "librebooking.css does not apply '{$family[1]}' for {$font}");
+    }
+
+    public function testInvalidFontUsesDefaultAndIsLogged(): void
+    {
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::CSS_FONT, value: '../../invalid');
+
+        $logs = $this->captureErrorLog(testFunction: function () {
+            $output = $this->renderHeader();
+            $this->assertStringContainsString("data-font='inter'", $output);
+            $this->assertStringContainsString('../../assets/fonts/inter/v20/inter.css?v=', $output);
+            $this->assertStringNotContainsString('../../invalid', $output);
+        });
+
+        $this->assertLogMessage(
+            logs: $logs,
+            expectedPattern: 'Invalid css.font or LB_CSS_FONT value',
+            description: 'invalid font configuration'
+        );
+    }
+
     private function CreateFormReadingPage(): object
     {
         return new class () extends Page {
@@ -486,5 +620,26 @@ class PageTest extends TestBase
                 return $this->GetFormStringList(key: $key);
             }
         };
+    }
+
+    private function renderHeader(): string
+    {
+        $page = new class () extends Page {
+            public function __construct()
+            {
+                parent::__construct(pageDepth: 2);
+            }
+
+            public function PageLoad()
+            {
+            }
+
+            public function renderHeader(): string
+            {
+                return $this->smarty->fetch(template: 'globalheader.tpl');
+            }
+        };
+
+        return $page->renderHeader();
     }
 }
