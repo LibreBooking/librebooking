@@ -772,14 +772,12 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('AttributeFilters', $attributeFilters);
     }
 
-    public function GetBulkUpdateResourceIds()
+    /**
+     * @return int[]
+     */
+    public function GetBulkUpdateResourceIds(): array
     {
-        $resourceIds = $this->GetForm(FormKeys::RESOURCE_ID);
-        if (empty($resourceIds)) {
-            return [];
-        }
-
-        return $resourceIds;
+        return $this->GetFormIntList(key: FormKeys::RESOURCE_ID);
     }
 
     public function GetAllowSubscriptions(): ?string
@@ -895,14 +893,12 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('ResourceGroupList', $groupList);
     }
 
-    public function GetResourceGroupIds()
+    /**
+     * @return int[]
+     */
+    public function GetResourceGroupIds(): array
     {
-        $groupIds = $this->GetForm(FormKeys::GROUP_ID);
-        if (empty($groupIds)) {
-            return [];
-        }
-
-        return $groupIds;
+        return $this->GetFormIntList(key: FormKeys::GROUP_ID);
     }
 
     public function GetColor(): ?string

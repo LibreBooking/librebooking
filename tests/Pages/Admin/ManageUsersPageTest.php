@@ -104,6 +104,47 @@ class ManageUsersPageTest extends TestBase
         $this->assertSame([], $this->createPageWithoutConstructor()->GetDeletedUserIds());
     }
 
+    public function testAllowedResourceIdsIsNullWhenNotSubmitted(): void
+    {
+        unset($_POST[FormKeys::RESOURCE_ID]);
+
+        $this->assertNull($this->createPageWithoutConstructor()->GetAllowedResourceIds());
+    }
+
+    /**
+     * @return array<string, array{mixed, string[]}>
+     */
+    public static function allowedResourceIdsProvider(): array
+    {
+        return [
+            'list' => [['1_0', '2_1'], ['1_0', '2_1']],
+            'single value' => ['1_0', ['1_0']],
+            'blank' => ['', []],
+            'nested list is dropped' => [['1_0', ['2_1']], ['1_0']],
+        ];
+    }
+
+    #[DataProvider('allowedResourceIdsProvider')]
+    public function testAllowedResourceIdsAreStrings(mixed $submitted, array $expected): void
+    {
+        $_POST[FormKeys::RESOURCE_ID] = $submitted;
+
+        $this->assertSame($expected, $this->createPageWithoutConstructor()->GetAllowedResourceIds());
+    }
+
+    public function testInlineAttributeEditWithNestedValueIsRejected(): void
+    {
+        // The page must hand the submitted shape to the parser. Reading a
+        // nested list (value[][]=x) as null would clear the attribute.
+        $_POST[FormKeys::NAME] = FormKeys::ATTRIBUTE_PREFIX . '5';
+        $_POST[FormKeys::VALUE] = [['nested']];
+        $page = $this->createPageWithoutConstructor();
+
+        $this->assertNull(
+            AttributeFormParser::GetInlineAttributeValue(name: $page->GetName(), value: $page->GetValue())
+        );
+    }
+
     /**
      * @return array<string, array{0:string}>
      */

@@ -103,6 +103,46 @@ class ManageResourcesPageTest extends TestBase
         $this->assertSame(7, $this->CreateFormReadingPage()->GetResourceId());
     }
 
+    /**
+     * @return array<string, array{mixed, int[]}>
+     */
+    public static function idListProvider(): array
+    {
+        return [
+            'not submitted' => [null, []],
+            'list' => [['3', '5'], [3, 5]],
+            'single value' => ['3', [3]],
+            'blank' => ['', []],
+            'values that are not integers are dropped' => [['3', 'abc', ['5'], '7'], [3, 7]],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('idListProvider')]
+    public function testBulkUpdateAndResourceGroupIdsAreParsedAsIntegers(mixed $submitted, array $expected): void
+    {
+        if ($submitted !== null) {
+            $this->fakeServer->SetForm(FormKeys::RESOURCE_ID, $submitted);
+            $this->fakeServer->SetForm(FormKeys::GROUP_ID, $submitted);
+        }
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertSame($expected, $page->GetBulkUpdateResourceIds());
+        $this->assertSame($expected, $page->GetResourceGroupIds());
+    }
+
+    public function testInlineAttributeEditWithNestedValueIsRejected(): void
+    {
+        // The page must hand the submitted shape to the parser. Reading a
+        // nested list (value[][]=x) as null would clear the attribute.
+        $this->fakeServer->SetForm(FormKeys::NAME, FormKeys::ATTRIBUTE_PREFIX . '5');
+        $this->fakeServer->SetForm(FormKeys::VALUE, [['nested']]);
+        $page = $this->CreateFormReadingPage();
+
+        $this->assertNull(
+            AttributeFormParser::GetInlineAttributeValue(name: $page->GetName(), value: $page->GetValue())
+        );
+    }
+
     private function CreateFormReadingPage(): ManageResourcesPage
     {
         return new class () extends ManageResourcesPage {
