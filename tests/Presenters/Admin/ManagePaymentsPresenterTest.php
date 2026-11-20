@@ -69,6 +69,111 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->assertEquals(new CreditCost(1, $this->page->_CreditCost, $this->page->_CreditCurrency), $this->paymentRepository->_LastCost);
     }
 
+    public function testSettingCreditCostToZero()
+    {
+        $this->page->_CreditCost = '0';
+        $this->page->_CreditCurrency = 'USD';
+
+        $this->presenter->UpdateCreditCost();
+
+        $this->assertEquals(
+            new CreditCost(count: 1, cost: 0.0, currency: 'USD'),
+            $this->paymentRepository->_LastCost,
+        );
+    }
+
+    public function testSettingCreditCostToTheColumnMaximum()
+    {
+        $this->page->_CreditCost = '99999.99';
+        $this->page->_CreditCurrency = 'USD';
+
+        $this->presenter->UpdateCreditCost();
+
+        $this->assertEquals(
+            new CreditCost(count: 1, cost: 99999.99, currency: 'USD'),
+            $this->paymentRepository->_LastCost,
+        );
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidCreditCostProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'not a number' => ['abc'],
+            // Numeric, but overflows a float to INF.
+            'overflow' => ['1e400'],
+            // Must not be clamped to a zero price.
+            'negative' => ['-1'],
+            // credit_cost is DECIMAL(7, 2), so the maximum is 99999.99.
+            'above the column maximum' => ['100000'],
+            'rounds above the column maximum' => ['99999.995'],
+            // credit_cost[]=5 arrives as an array.
+            'array' => [['5']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCreditCostProvider')]
+    public function testDoesNotUpdateCreditCostWithInvalidCost(mixed $cost)
+    {
+        $this->page->_CreditCost = $cost;
+        $this->page->_CreditCurrency = 'USD';
+
+        $this->presenter->UpdateCreditCost();
+
+        $this->assertNull($this->paymentRepository->_LastCost);
+        $this->assertNull($this->paymentRepository->_LastDeletedCreditCount);
+    }
+
+    public function testDeleteActionDeletesCreditCost()
+    {
+        // The delete form posts only the credit count.
+        $this->fakeServer->SetQuerystring(QueryStringKeys::ACTION, ManagePaymentsActions::DELETE_CREDIT_COST);
+        $this->fakeServer->SetForm(FormKeys::CREDIT_COUNT, '5');
+
+        $this->presenter->ProcessAction();
+
+        $this->assertSame(5, $this->paymentRepository->_LastDeletedCreditCount);
+        $this->assertNull($this->paymentRepository->_LastCost, 'the cost must not be rewritten');
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidCreditCountProvider(): array
+    {
+        return [
+            // intval() would make this the one-credit price.
+            'missing' => [null],
+            'empty' => [''],
+            'not a number' => ['abc'],
+            // intval() would make this the five-credit price.
+            'trailing text' => ['5x'],
+            'zero' => ['0'],
+            // The base price, which the page offers no delete button for.
+            'base price' => ['1'],
+            'negative' => ['-5'],
+            'array' => [['5']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCreditCountProvider')]
+    public function testDeleteActionDeletesNothingWithInvalidCount(mixed $count)
+    {
+        $this->fakeServer->SetQuerystring(QueryStringKeys::ACTION, ManagePaymentsActions::DELETE_CREDIT_COST);
+        if ($count !== null) {
+            $this->fakeServer->SetForm(FormKeys::CREDIT_COUNT, $count);
+        }
+
+        $this->presenter->ProcessAction();
+
+        $this->assertNull($this->paymentRepository->_LastDeletedCreditCount);
+        $this->assertNull($this->paymentRepository->_LastCost);
+    }
+
     public function testUpdatesPaymentGateways()
     {
         $this->page->_PayPalEnabled = true;
@@ -222,6 +327,11 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function EnforceCSRFCheck()
+    {
+        // The real check reads the request method, which tests do not set.
     }
 
     public function GetCreditCost()

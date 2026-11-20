@@ -51,7 +51,8 @@
                             <input type="number" min="0" max="1000000000" id="creditCount" step="1"
                                 class="form-control form-control-sm w-auto" {formname key=CREDIT_COUNT} value="1" />
                             <label for="creditCost" class="fw-bold">{translate key=CreditsEachCost2}</label>
-                            <input type="number" min="0" max="1000000000" id="creditCost" step="any"
+                            {* max is the largest value the DECIMAL(7, 2) credit_cost column can hold *}
+                            <input type="number" min="0" max="99999.99" id="creditCost" step="any"
                                 class="form-control form-control-sm w-auto" {formname key=CREDIT_COST} value="30.00" />
                             <label for="creditCurrency" class="visually-hidden">{translate key=Currency}</label>
                             <select id="creditCurrency" {formname key=CREDIT_CURRENCY}

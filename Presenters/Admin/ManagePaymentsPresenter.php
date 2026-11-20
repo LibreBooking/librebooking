@@ -15,6 +15,21 @@ class ManagePaymentsActions
 class ManagePaymentsPresenter extends ActionPresenter
 {
     /**
+     * The one-credit price is the base price. The page offers no delete
+     * button for it, and without it the repository falls back to a zero price.
+     */
+    private const BASE_CREDIT_COUNT = 1;
+
+    /**
+     * The largest cost the payment_configuration.credit_cost column can hold.
+     * The column is DECIMAL(7, 2) UNSIGNED: seven digits in total, two of
+     * them after the decimal point, which leaves five before it.
+     */
+    private const MAX_CREDIT_COST = 99999.99;
+    private const MIN_CREDIT_COST = 0;
+    private const CREDIT_COST_DECIMAL_PLACES = 2;
+
+    /**
      * @var IManagePaymentsPage
      */
     private $page;
@@ -35,7 +50,10 @@ class ManagePaymentsPresenter extends ActionPresenter
         $this->paymentLogger = $logger;
 
         $this->AddAction(ManagePaymentsActions::UPDATE_CREDIT_COST, 'UpdateCreditCost');
-        $this->AddAction(ManagePaymentsActions::DELETE_CREDIT_COST, 'UpdateCreditCost');
+        $this->AddAction(
+            actionName: ManagePaymentsActions::DELETE_CREDIT_COST,
+            actionMethod: 'DeleteCreditCost',
+        );
         $this->AddAction(ManagePaymentsActions::UPDATE_PAYMENT_GATEWAYS, 'UpdatePaymentGateways');
         $this->AddAction(ManagePaymentsActions::ISSUE_REFUND, 'IssueRefund');
     }
@@ -55,7 +73,32 @@ class ManagePaymentsPresenter extends ActionPresenter
     public function UpdateCreditCost()
     {
         $count = max(1, intval($this->page->GetCreditCount()));
-        $cost = max(0, floatval($this->page->GetCreditCost()));
+
+        // floatval() turns a missing or malformed cost into 0, which would
+        // overwrite the configured price. '0' is numeric, so a zero price can
+        // still be set on purpose. A numeric string such as '1e400' overflows
+        // to INF, which cannot be stored.
+        $submittedCost = $this->page->GetCreditCost();
+        if (!is_numeric($submittedCost) || !is_finite(floatval($submittedCost))) {
+            Log::Error('Rejected credit cost update with missing or malformed cost. Count=%s', $count);
+
+            return;
+        }
+
+        $cost = floatval($submittedCost);
+
+        // Clamping a negative cost to 0 would overwrite the price, as a
+        // malformed cost used to. The repository deletes the existing price
+        // before inserting the new one, so a cost the column cannot hold would
+        // lose the price. Compare the rounded value, as the column rounds
+        // 99999.995 up out of range.
+        $isAboveMaximum = round(num: $cost, precision: self::CREDIT_COST_DECIMAL_PLACES) > self::MAX_CREDIT_COST;
+        if ($cost < self::MIN_CREDIT_COST || $isAboveMaximum) {
+            Log::Error('Rejected credit cost update with cost outside the allowed range. Count=%s, Cost=%s', $count, $cost);
+
+            return;
+        }
+
         $currency = $this->page->GetCreditCurrency();
 
         Log::Debug('Updating credit cost. %s, %s, %s', $count, $cost, $currency);
@@ -64,7 +107,19 @@ class ManagePaymentsPresenter extends ActionPresenter
 
     public function DeleteCreditCost()
     {
-        $count = max(1, intval($this->page->GetCreditCount()));
+        // intval() would turn a missing count into the one-credit price and
+        // '5x' into the five-credit price, so only accept an exact count
+        // above the base price, which cannot be deleted.
+        $count = filter_var(
+            $this->page->GetCreditCount(),
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => self::BASE_CREDIT_COUNT + 1]],
+        );
+        if ($count === false) {
+            Log::Error('Rejected credit cost delete with missing, malformed or base count');
+
+            return;
+        }
 
         Log::Debug('Deleting credit cost. %s', $count);
         $this->paymentRepository->DeleteCreditCost($count);
