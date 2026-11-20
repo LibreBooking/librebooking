@@ -7,10 +7,10 @@ interface IRepeatOptions
     /**
      * Gets array of DateRange objects
      *
-     * @param DateRange $startingDates
+     * @param DateRange $startingRange
      * @return array|DateRange[]
      */
-    public function GetDates(DateRange $startingDates);
+    public function GetDates(DateRange $startingRange);
 
     public function ConfigurationString();
 
@@ -176,7 +176,7 @@ class RepeatMonthlyType
 
 class RepeatNone implements IRepeatOptions
 {
-    public function GetDates(DateRange $startingDate)
+    public function GetDates(DateRange $startingRange)
     {
         return [];
     }
@@ -565,12 +565,12 @@ class RepeatCustom implements IRepeatOptions
         $this->repeatDates = $repeatDates;
     }
 
-    public function GetDates(DateRange $startingDates)
+    public function GetDates(DateRange $startingRange)
     {
-        $duration = $startingDates->Duration();
+        $duration = $startingRange->Duration();
         $ranges = [];
         foreach ($this->repeatDates as $date) {
-            $repeatStart = $date->SetTime($startingDates->GetBegin()->GetTime());
+            $repeatStart = $date->SetTime($startingRange->GetBegin()->GetTime());
             $repeatEnd = $repeatStart->ApplyDifference($duration);
             $ranges[] = new DateRange($repeatStart, $repeatEnd);
         }
