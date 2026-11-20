@@ -28,6 +28,12 @@ interface IManagePaymentsPage extends IActionPage
     public function SetCreditCosts($creditCosts);
 
     /**
+     * Tells the client that a credit cost update or delete was rejected, so
+     * it does not report success.
+     */
+    public function BindCreditCostRejected(): void;
+
+    /**
      * @return bool
      */
     public function GetPayPalIsEnabled();
@@ -256,6 +262,14 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
     public function BindTransactionLogView(TransactionLogView $transactionLogView)
     {
         $this->SetJson($transactionLogView);
+    }
+
+    public function BindCreditCostRejected(): void
+    {
+        // The credit forms treat a response as success unless it is non-empty
+        // text or, as jQuery parses this JSON, an object with ErrorIds. Only
+        // then do they call their error handler, which shows its own message.
+        $this->SetJson(objectToSerialize: ['ErrorIds' => [], 'Messages' => []]);
     }
 
     public function BindRefundIssued($wasIssued)
