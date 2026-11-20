@@ -59,9 +59,9 @@ class FakePaymentRepository implements IPaymentRepository
         return $this->_CreditCost;
     }
 
-    public function UpdateCreditCost($cost)
+    public function UpdateCreditCost($credit)
     {
-        $this->_LastCost = $cost;
+        $this->_LastCost = $credit;
     }
 
     public function GetCreditCost()

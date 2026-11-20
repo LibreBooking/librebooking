@@ -55,11 +55,11 @@ interface IScheduleRepository
     public function AddScheduleLayout($scheduleId, ILayoutCreation $layout);
 
     /**
-     * @param Date $periodDate
+     * @param Date $date
      * @param int $scheduleId
      * @return SchedulePeriod[]
      */
-    public function GetCustomLayoutPeriods(Date $periodDate, $scheduleId);
+    public function GetCustomLayoutPeriods(Date $date, $scheduleId);
 
     /**
      * @param Date $start

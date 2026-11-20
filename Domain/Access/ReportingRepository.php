@@ -13,9 +13,9 @@ interface IReportingRepository
     public function GetCustomReport(ReportCommandBuilder $commandBuilder);
 
     /**
-     * @param SavedReport $savedReport
+     * @param SavedReport $report
      */
-    public function SaveCustomReport(SavedReport $savedReport);
+    public function SaveCustomReport(SavedReport $report);
 
     /**
      * @param int $userId

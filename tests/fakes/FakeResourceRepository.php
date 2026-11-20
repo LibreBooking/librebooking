@@ -93,9 +93,9 @@ class FakeResourceRepository implements IResourceRepository
         return $this->_Resource;
     }
 
-    public function LoadByName($name)
+    public function LoadByName($resourceName)
     {
-        return $this->_NamedResources[$name];
+        return $this->_NamedResources[$resourceName];
     }
 
     public function Add(BookableResource $resource)
