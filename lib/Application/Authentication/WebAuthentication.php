@@ -19,16 +19,16 @@ interface IWebAuthentication extends IAuthenticationPromptOptions
     public function Login($username, $loginContext);
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @return void
      */
-    public function Logout(UserSession $user);
+    public function Logout(UserSession $userSession);
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @return void
      */
-    public function postLogout(UserSession $user);
+    public function postLogout(UserSession $userSession);
 
     /**
      * @param ILoginPage $loginPage

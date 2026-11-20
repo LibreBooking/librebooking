@@ -84,21 +84,21 @@ class FakeAuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @param IResource $resource
      * @return bool
      */
-    public function CanEditForResource(UserSession $user, IResource $resource)
+    public function CanEditForResource(UserSession $userSession, IResource $resource)
     {
         return $this->_CanEditForResource;
     }
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @param IResource $resource
      * @return bool
      */
-    public function CanApproveForResource(UserSession $user, IResource $resource)
+    public function CanApproveForResource(UserSession $userSession, IResource $resource)
     {
         return $this->_CanApproveForResource;
     }

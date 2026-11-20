@@ -168,7 +168,7 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_IsLoggedIn = false;
     public $_AreCredentialsKnown = false;
 
-    public function postLogout(UserSession $user)
+    public function postLogout(UserSession $userSession)
     {
     }
 
@@ -191,7 +191,7 @@ class FakeWebAuthentication implements IWebAuthentication
         $this->_LastLoginContext = $context;
     }
 
-    public function Logout(UserSession $user)
+    public function Logout(UserSession $userSession)
     {
         $this->_LogoutCalled = true;
     }
