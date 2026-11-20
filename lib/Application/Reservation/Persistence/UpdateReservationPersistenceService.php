@@ -37,9 +37,9 @@ class UpdateReservationPersistenceService implements IUpdateReservationPersisten
         return $this->_repository->LoadById($reservationInstanceId);
     }
 
-    public function Persist($existingReservationSeries)
+    public function Persist($reservation)
     {
-        $this->_repository->Update($existingReservationSeries);
+        $this->_repository->Update($reservation);
     }
 
     public function LoadByReferenceNumber($referenceNumber)

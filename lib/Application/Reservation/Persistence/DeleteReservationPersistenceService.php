@@ -31,8 +31,8 @@ class DeleteReservationPersistenceService implements IDeleteReservationPersisten
         return $this->_repository->LoadByReferenceNumber($referenceNumber);
     }
 
-    public function Persist($existingReservationSeries)
+    public function Persist($reservation)
     {
-        $this->_repository->Delete($existingReservationSeries);
+        $this->_repository->Delete($reservation);
     }
 }
