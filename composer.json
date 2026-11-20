@@ -18,7 +18,8 @@
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-phpunit": "^2.1",
         "guzzlehttp/guzzle": "^7.0",
-        "vincentlanglet/twig-cs-fixer": "^4.1"
+        "vincentlanglet/twig-cs-fixer": "^4.1",
+        "psalm/phar": "^7.11"
     },
     "require": {
         "php": ">=8.4",
@@ -54,6 +55,10 @@
         "twigcsfixer:fix": "./vendor/bin/twig-cs-fixer fix tpl lang",
         "twigcsfixer:lint": "./vendor/bin/twig-cs-fixer lint tpl lang",
         "phpunit": "./vendor/bin/phpunit",
+        "psalm": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/psalm.phar --config=psalm.xml --long-progress"
+        ],
         "phpstan": "./vendor/bin/phpstan analyse",
         "phpstan_next": "./vendor/bin/phpstan analyse -c phpstan_next.neon",
         "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",

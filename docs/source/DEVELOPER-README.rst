@@ -75,6 +75,19 @@ Phive-managed tools into the ``/tools`` directory.
 Run ``composer install`` to install Composer-managed tools into
 ``/vendor/bin`` (for example ``php-cs-fixer``).
 
+Psalm
+~~~~~
+
+Run ``composer psalm`` for the level 8 check of first-party PHP. Psalm
+fully analyzes the shared locale classes and reads concrete locale
+definitions for symbol discovery. CI syntax-lints the locale files, and
+locale tests check behavior such as formatting and substitution tokens.
+
+The level 8 check analyzes each file independently to resolve legacy
+includes. It omits effects such as variables assigned by an included file
+in the caller's scope. Taint analysis, dead-code detection, purity
+suggestions, and bundled library plugins and stubs are disabled.
+
 `Phing <https://www.phing.info/#docs>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

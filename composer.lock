@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8eef6309e7eee1da60c79a85542dacd5",
+    "content-hash": "843fbeb8ffd21d7d543614c9e4099183",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6350,6 +6350,42 @@
                 }
             ],
             "time": "2026-02-18T12:37:06+00:00"
+        },
+        {
+            "name": "psalm/phar",
+            "version": "7.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/psalm/phar.git",
+                "reference": "4a0da44dced2bea67e8a86be17f17a3eefa59bee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/4a0da44dced2bea67e8a86be17f17a3eefa59bee",
+                "reference": "4a0da44dced2bea67e8a86be17f17a3eefa59bee",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "conflict": {
+                "vimeo/psalm": "*"
+            },
+            "bin": [
+                "psalm.phar"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer-based Psalm Phar",
+            "support": {
+                "issues": "https://github.com/psalm/phar/issues",
+                "source": "https://github.com/psalm/phar/tree/7.11.0"
+            },
+            "time": "2026-11-19T00:48:37+00:00",
+            "published-time": "2026-11-19T00:48:48+00:00"
         },
         {
             "name": "psr/container",
