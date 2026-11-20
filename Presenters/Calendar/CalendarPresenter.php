@@ -102,13 +102,13 @@ class CalendarPresenter extends CommonCalendarPresenter
         ));
     }
 
-    protected function BindSubscriptionDetails($userSession, $selectedResourceId, $selectedScheduleId)
+    protected function BindSubscriptionDetails($userSession, $resourceId, $scheduleId)
     {
-        if (!empty($selectedResourceId)) {
-            $subscriptionDetails = $this->subscriptionService->ForResource($selectedResourceId);
+        if (!empty($resourceId)) {
+            $subscriptionDetails = $this->subscriptionService->ForResource(resourceId: $resourceId);
         } else {
-            if (!empty($selectedScheduleId)) {
-                $subscriptionDetails = $this->subscriptionService->ForSchedule($selectedScheduleId);
+            if (!empty($scheduleId)) {
+                $subscriptionDetails = $this->subscriptionService->ForSchedule(scheduleId: $scheduleId);
             } else {
                 $subscriptionDetails = new CalendarSubscriptionDetails(false);
             }
