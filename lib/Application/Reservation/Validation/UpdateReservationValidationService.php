@@ -15,8 +15,8 @@ class UpdateReservationValidationService implements IReservationValidationServic
         $this->ruleProcessor = $ruleProcessor;
     }
 
-    public function Validate($reservationSeries, $retryParameters = null)
+    public function Validate($series, $retryParameters = null)
     {
-        return $this->ruleProcessor->Validate($reservationSeries, $retryParameters);
+        return $this->ruleProcessor->Validate($series, $retryParameters);
     }
 }

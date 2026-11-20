@@ -21,23 +21,23 @@ class ReservationValidationRuleProcessorTest extends TestBase
         $reservation = new ExistingReservationSeries();
         $validResult = new ReservationRuleResult(true);
 
-        $rule1 = $this->createMock('IUpdateReservationValidationRule');
-        $rule2 = $this->createMock('IUpdateReservationValidationRule');
-        $rule3 = $this->createMock('IUpdateReservationValidationRule');
+        $rule1 = $this->createMock(IReservationValidationRule::class);
+        $rule2 = $this->createMock(IReservationValidationRule::class);
+        $rule3 = $this->createMock(IReservationValidationRule::class);
 
         $rule1->expects($this->once())
             ->method('Validate')
-            ->with($this->equalTo($reservation))
+            ->with($this->equalTo($reservation), null)
             ->willReturn($validResult);
 
         $rule2->expects($this->once())
             ->method('Validate')
-            ->with($this->equalTo($reservation))
+            ->with($this->equalTo($reservation), null)
             ->willReturn($validResult);
 
         $rule3->expects($this->once())
             ->method('Validate')
-            ->with($this->equalTo($reservation))
+            ->with($this->equalTo($reservation), null)
             ->willReturn($validResult);
 
         $rules = [$rule1, $rule2, $rule3];
@@ -54,15 +54,15 @@ class ReservationValidationRuleProcessorTest extends TestBase
     {
         $reservation = new ExistingReservationSeries();
 
-        $rule1 = $this->createMock('IUpdateReservationValidationRule');
-        $rule2 = $this->createMock('IUpdateReservationValidationRule');
-        $rule3 = $this->createMock('IUpdateReservationValidationRule');
+        $rule1 = $this->createMock(IReservationValidationRule::class);
+        $rule2 = $this->createMock(IReservationValidationRule::class);
+        $rule3 = $this->createMock(IReservationValidationRule::class);
 
         $rules = [$rule1, $rule2, $rule3];
 
         $rule1->expects($this->once())
             ->method('Validate')
-            ->with($this->equalTo($reservation))
+            ->with($this->equalTo($reservation), null)
             ->willReturn(new ReservationRuleResult());
 
         $error = 'something went wrong';
@@ -71,7 +71,7 @@ class ReservationValidationRuleProcessorTest extends TestBase
 
         $rule2->expects($this->once())
             ->method('Validate')
-            ->with($this->equalTo($reservation))
+            ->with($this->equalTo($reservation), null)
             ->willReturn(new ReservationRuleResult(false, $error, true, $retryMessage, $retryParams));
 
         $vs = new ReservationValidationRuleProcessor($rules);
@@ -91,7 +91,7 @@ class ReservationValidationRuleProcessorTest extends TestBase
     {
         $reservation = new ExistingReservationSeries();
 
-        $rule = $this->createMock('IUpdateReservationValidationRule');
+        $rule = $this->createMock(IReservationValidationRule::class);
         $rule->expects($this->once())
             ->method('Validate')
             ->willReturn(new ReservationRuleResult(isValid: false));
