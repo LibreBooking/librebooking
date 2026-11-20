@@ -64,18 +64,18 @@ interface IAuthorizationService extends IRoleService
     public function CanApproveFor(UserSession $approver, $approveForId);
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @param IResource $resource
      * @return bool
      */
-    public function CanEditForResource(UserSession $user, IResource $resource);
+    public function CanEditForResource(UserSession $userSession, IResource $resource);
 
     /**
-     * @param UserSession $user
+     * @param UserSession $userSession
      * @param IResource $resource
      * @return bool
      */
-    public function CanApproveForResource(UserSession $user, IResource $resource);
+    public function CanApproveForResource(UserSession $userSession, IResource $resource);
 }
 
 class AuthorizationService implements IAuthorizationService
@@ -274,12 +274,12 @@ class GuestAuthorizationService implements IAuthorizationService
         return false;
     }
 
-    public function CanEditForResource(UserSession $user, IResource $resource)
+    public function CanEditForResource(UserSession $userSession, IResource $resource)
     {
         return false;
     }
 
-    public function CanApproveForResource(UserSession $user, IResource $resource)
+    public function CanApproveForResource(UserSession $userSession, IResource $resource)
     {
         return false;
     }

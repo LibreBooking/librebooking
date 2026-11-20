@@ -357,10 +357,10 @@ Important methods:
   Determines whether the current user can approve reservations for a specific
   user.
 
-``CanEditForResource(UserSession $user, IResource $resource)``
+``CanEditForResource(UserSession $userSession, IResource $resource)``
   Determines whether the current user can edit reservations for a resource.
 
-``CanApproveForResource(UserSession $user, IResource $resource)``
+``CanApproveForResource(UserSession $userSession, IResource $resource)``
   Determines whether the current user can approve reservations for a resource.
 
 ``IsApplicationAdministrator(User $user)``
@@ -410,14 +410,14 @@ Minimal example:
            return $this->base->CanApproveFor($approver, $approveForId);
        }
 
-       public function CanEditForResource(UserSession $user, IResource $resource)
+       public function CanEditForResource(UserSession $userSession, IResource $resource)
        {
-           return $this->base->CanEditForResource($user, $resource);
+           return $this->base->CanEditForResource($userSession, $resource);
        }
 
-       public function CanApproveForResource(UserSession $user, IResource $resource)
+       public function CanApproveForResource(UserSession $userSession, IResource $resource)
        {
-           return $this->base->CanApproveForResource($user, $resource);
+           return $this->base->CanApproveForResource($userSession, $resource);
        }
 
        public function IsApplicationAdministrator(User $user)
