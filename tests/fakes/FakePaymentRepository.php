@@ -9,6 +9,10 @@ class FakePaymentRepository implements IPaymentRepository
      */
     public $_LastCost;
     /**
+     * @var int|null
+     */
+    public $_LastDeletedCreditCount;
+    /**
      * @var CreditCost[]
      */
     public $_CreditCost;
@@ -52,6 +56,7 @@ class FakePaymentRepository implements IPaymentRepository
 
     public function DeleteCreditCost($creditCount)
     {
+        $this->_LastDeletedCreditCount = $creditCount;
     }
 
     public function GetCreditCosts()
