@@ -85,6 +85,72 @@ class ManageEmailTemplatesPresenterTest extends TestBase
         $this->assertEquals('template-custom.tpl', $this->fileSystem->_AddedFileName);
     }
 
+    /**
+     * @return array<string, array{?string}>
+     */
+    public static function invalidLanguageProvider(): array
+    {
+        return [
+            // The page returns null when the field is missing or an array.
+            'missing' => [null],
+            'empty' => [''],
+            'unknown' => ['not_a_language'],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidLanguageProvider')]
+    public function testRejectsUpdateWithInvalidLanguage(?string $language)
+    {
+        $this->page->_UpdatedTemplateName = 'template.tpl';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = $language;
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertNull($this->fileSystem->_AddedFileContents);
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testSavesToLowercaseLanguageDirectory()
+    {
+        $this->page->_UpdatedTemplateName = 'template.tpl';
+        $this->page->_TemplateContents = 'contents';
+        $this->page->_UpdatedLanguage = 'CZ';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertStringEndsWith('lang/cz/', $this->fileSystem->_AddedFilePath);
+        $this->assertSame('template-custom.tpl', $this->fileSystem->_AddedFileName);
+        $this->assertTrue($this->page->_SaveResult);
+    }
+
+    public function testRejectsUpdateWithMissingContents()
+    {
+        // The page returns null when the contents field is missing or an array.
+        $this->page->_UpdatedTemplateName = 'template.tpl';
+        $this->page->_TemplateContents = null;
+        $this->page->_UpdatedLanguage = 'cz';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertNull($this->fileSystem->_AddedFileName, 'no file should be written');
+        $this->assertFalse($this->page->_SaveResult);
+    }
+
+    public function testSavesIntentionallyEmptyTemplate()
+    {
+        $this->page->_UpdatedTemplateName = 'template.tpl';
+        $this->page->_TemplateContents = '';
+        $this->page->_UpdatedLanguage = 'cz';
+
+        $this->presenter->UpdateEmailTemplate();
+
+        $this->assertSame('', $this->fileSystem->_AddedFileContents);
+        $this->assertSame('template-custom.tpl', $this->fileSystem->_AddedFileName);
+        $this->assertTrue($this->page->_SaveResult);
+    }
+
     public function testRejectsUpdateWithPathTraversalTemplateName()
     {
         // PoC vector: the file name traverses out of the lang directory.
@@ -198,27 +264,27 @@ class FakeManageEmailTemplatesPage extends ManageEmailTemplatesPage
         $this->_BoundTemplateContents = $templateContents;
     }
 
-    public function GetTemplateName()
+    public function GetTemplateName(): ?string
     {
         return $this->_TemplateName;
     }
 
-    public function GetUpdatedTemplateName()
+    public function GetUpdatedTemplateName(): ?string
     {
         return $this->_UpdatedTemplateName;
     }
 
-    public function GetTemplateContents()
+    public function GetTemplateContents(): ?string
     {
         return $this->_TemplateContents;
     }
 
-    public function GetLanguage()
+    public function GetLanguage(): ?string
     {
         return $this->_Language;
     }
 
-    public function GetUpdatedLanguage(): string
+    public function GetUpdatedLanguage(): ?string
     {
         return $this->_UpdatedLanguage;
     }
