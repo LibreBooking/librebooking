@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<psalm xmlns="https://getpsalm.org/schema/config"
+       phpVersion="8.4"
+       errorLevel="8"
+       reportInfo="false"
+       runTaintAnalysis="false"
+       findUnusedCode="false"
+       ensureOverrideAttribute="false"
+       suggestPurityAnnotations="false"
+       loadLibraryPlugins="false"
+       loadLibraryStubs="false"
+       hideExternalErrors="true"
+       respectIncludeOnce="true"
+       ignoreIncludeSideEffects="true"
+       threads="6"
+       cacheDirectory="var/cache/psalm-starter"
+       autoloader="tests/psalm/bootstrap.php">
+    <projectFiles>
+        <directory name="Controls"/>
+        <directory name="Domain"/>
+        <directory name="Jobs"/>
+        <directory name="Pages"/>
+        <directory name="Presenters"/>
+        <directory name="Web"/>
+        <directory name="WebServices"/>
+        <file name="lang/Language.php"/>
+        <file name="lang/AvailableLanguage.php"/>
+        <file name="lang/AvailableLanguages.php"/>
+        <directory name="lib"/>
+        <directory name="plugins"/>
+        <directory name="src"/>
+        <directory name="phing-tasks"/>
+        <directory name="scripts"/>
+        <directory name="tests"/>
+        <file name=".php-cs-fixer.dist.php"/>
+        <file name="config/config.dist.php"/>
+        <file name="config/lang-overrides.example.php"/>
+        <file name="config/timezones.php"/>
+        <ignoreFiles>
+            <directory name="Web/uploads"/>
+            <directory name="Web/assets/vendor"/>
+            <directory name="lib/external"/>
+            <directory name="plugins/Authentication/CAS/CAS-1.3.8"/>
+            <directory name="plugins/Authentication/ActiveDirectory/classes"/>
+            <directory name="plugins/Authentication/ActiveDirectory/collections"/>
+            <file name="plugins/Authentication/ActiveDirectory/adLDAP.php"/>
+        </ignoreFiles>
+    </projectFiles>
+    <globals>
+        <!-- PHP uses arrays for each field when a form submits multiple files. -->
+        <var name="_FILES" type="array&lt;array-key, array{name: string|array, full_path?: string|array, tmp_name: string|array, type: string|array, error: int|array, size: int|array}&gt;"/>
+    </globals>
+    <extraFiles>
+        <!-- Analyze the shared locale classes and discover the concrete locale types. -->
+        <directory name="lang"/>
+        <directory name="lib/external/Slim"/>
+    </extraFiles>
+    <stubs>
+        <file name="tests/phpstan-stubs/SimpleSAML.symbols"/>
+        <file name="tests/phpstan-stubs/WordPress.symbols"/>
+    </stubs>
+</psalm>

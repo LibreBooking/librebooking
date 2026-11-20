@@ -260,10 +260,23 @@ jobs:
           fi
 
 
-#      - name: Analyse files with Psalm
-#        # Allow the previous check to fail but not abort
-#        if: always()
-#        run: composer psalm -- --shepherd
+  psalm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v4
+
+      - name: Analyse files with Psalm
+        run: composer psalm -- --no-diff --threads=2 --scan-threads=2 --output-format=github
 
   lint-frontend:
     runs-on: ubuntu-latest
