@@ -20,15 +20,15 @@ class ResourceTypeFilter implements IResourceFilter
     }
 
     /**
-     * @param IResource $assignment
+     * @param IResource $resource
      * @return bool
      */
-    public function ShouldInclude($assignment)
+    public function ShouldInclude($resource)
     {
-        if (!$assignment instanceof IBookableResource) {
+        if (!$resource instanceof IBookableResource) {
             return false;
         }
 
-        return in_array($assignment->GetResourceTypeId(), $this->resourcetypeids);
+        return in_array(needle: $resource->GetResourceTypeId(), haystack: $this->resourcetypeids);
     }
 }
