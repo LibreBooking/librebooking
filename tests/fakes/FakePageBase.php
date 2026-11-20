@@ -15,10 +15,10 @@ class FakePageBase implements IPage
     public $_LastPage = '';
     public $_InlineEditValidators = [];
 
-    public function Redirect($destination)
+    public function Redirect($url)
     {
         $this->_RedirectCalled = true;
-        $this->_RedirectDestination = $destination;
+        $this->_RedirectDestination = $url;
     }
 
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
