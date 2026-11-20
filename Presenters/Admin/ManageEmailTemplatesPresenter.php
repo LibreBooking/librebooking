@@ -125,11 +125,40 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
             return;
         }
 
+        // Paths::EmailTemplates() falls back to en_us, so a missing or unknown
+        // language would overwrite the English template.
+        $language = $this->page->GetUpdatedLanguage();
+        if ($language === null || !AvailableLanguages::Contains(language: $language)) {
+            Log::Error(
+                'Rejected email template update with missing or unknown language. Template=%s, Language=%s',
+                $templateName,
+                json_encode($language),
+            );
+            $this->page->SetSaveResult(false);
+            return;
+        }
+
+        // AvailableLanguages::Contains() ignores case, but the lang directories
+        // are lowercase.
+        $language = strtolower($language);
+
+        // Null means the contents were missing or malformed. An empty string
+        // is a valid, intentionally empty template.
+        $contents = $this->page->GetTemplateContents();
+        if ($contents === null) {
+            Log::Error('Rejected email template update with missing contents. Template=%s', $templateName);
+            $this->page->SetSaveResult(false);
+            return;
+        }
+
         try {
             Log::Debug('Updating email template. Template=%s', $templateName);
 
-            $templatePath = Paths::EmailTemplates($this->page->GetUpdatedLanguage());
-            $saveResult = $this->filesystem->Save($templatePath, str_replace('.tpl', '-custom.tpl', $templateName), $this->page->GetTemplateContents());
+            $saveResult = $this->filesystem->Save(
+                path: Paths::EmailTemplates(language: $language),
+                fileName: str_replace('.tpl', '-custom.tpl', $templateName),
+                fileContents: $contents,
+            );
 
             $this->filesystem->FlushSmartyCache();
 

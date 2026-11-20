@@ -31,7 +31,7 @@ interface IManageEmailTemplatesPage extends IActionPage
     public function BindTemplate($templateContents);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetTemplateContents();
 
@@ -45,7 +45,7 @@ interface IManageEmailTemplatesPage extends IActionPage
      */
     public function GetUpdatedTemplateName();
 
-    public function GetUpdatedLanguage(): string;
+    public function GetUpdatedLanguage(): ?string;
 }
 
 class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplatesPage
@@ -77,9 +77,9 @@ class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplat
         $this->Display('Admin/Configuration/manage_email_templates.tpl');
     }
 
-    public function GetUpdatedLanguage(): string
+    public function GetUpdatedLanguage(): ?string
     {
-        return $this->GetForm(FormKeys::EMAIL_TEMPLATE_LANGUAGE);
+        return $this->GetFormString(key: FormKeys::EMAIL_TEMPLATE_LANGUAGE);
     }
 
     public function GetLanguage()
@@ -112,9 +112,11 @@ class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplat
         $this->SetJson($templateContents);
     }
 
-    public function GetTemplateContents()
+    public function GetTemplateContents(): ?string
     {
-        return $this->server->GetRawForm(FormKeys::EMAIL_CONTENTS);
+        $contents = $this->GetRawForm(var: FormKeys::EMAIL_CONTENTS);
+
+        return is_string($contents) ? $contents : null;
     }
 
     public function SetSaveResult($saveResult)
