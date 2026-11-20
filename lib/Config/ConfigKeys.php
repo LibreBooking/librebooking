@@ -216,6 +216,23 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => "Name of the CSS theme to use\nOptions: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange",
     ];
 
+    public const CSS_FONT = [
+        'key' => 'css.font',
+        'type' => 'string',
+        'default' => 'inter',
+        'choices' => [
+            'inter' => 'Inter',
+            'montserrat' => 'Montserrat',
+            'nunito' => 'Nunito',
+            'merriweather' => 'Merriweather',
+            'atkinson-hyperlegible' => 'Atkinson Hyperlegible',
+            'none' => 'Bootstrap default',
+        ],
+        'label' => 'CSS Font',
+        'description' => 'Font used for the application interface; none uses the Bootstrap default.',
+        'config_file_comment' => "Font used for the application interface (none uses the Bootstrap default)\nOptions: inter, montserrat, nunito, merriweather, atkinson-hyperlegible, none",
+    ];
+
     public const NAME_FORMAT = [
         'key' => 'name.format',
         'type' => 'string',

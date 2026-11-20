@@ -104,6 +104,10 @@ return [
         # Options: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange
         'css.theme' => 'default',
 
+        # Font used for the application interface (none uses the Bootstrap default)
+        # Options: inter, montserrat, nunito, merriweather, atkinson-hyperlegible, none
+        'css.font' => 'inter',
+
         # Display format when showing user names
         'name.format' => '{first} {last}',
 
