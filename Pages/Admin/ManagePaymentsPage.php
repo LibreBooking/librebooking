@@ -34,6 +34,12 @@ interface IManagePaymentsPage extends IActionPage
     public function BindCreditCostRejected(): void;
 
     /**
+     * Tells the client that a payment gateway update was rejected, so it does
+     * not report success.
+     */
+    public function BindPaymentGatewaysRejected(): void;
+
+    /**
      * @return bool
      */
     public function GetPayPalIsEnabled();
@@ -184,17 +190,17 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
 
     public function GetPayPalClientId()
     {
-        return $this->GetForm(FormKeys::PAYPAL_CLIENT_ID);
+        return $this->GetGatewaySetting(key: FormKeys::PAYPAL_CLIENT_ID);
     }
 
     public function GetPayPalSecret()
     {
-        return $this->GetForm(FormKeys::PAYPAL_SECRET);
+        return $this->GetGatewaySetting(key: FormKeys::PAYPAL_SECRET);
     }
 
     public function GetPayPalEnvironment()
     {
-        return $this->GetForm(FormKeys::PAYPAL_ENVIRONMENT);
+        return $this->GetGatewaySetting(key: FormKeys::PAYPAL_ENVIRONMENT);
     }
 
     public function GetStripeIsEnabled()
@@ -204,12 +210,30 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
 
     public function GetStripePublishableKey()
     {
-        return $this->GetForm(FormKeys::STRIPE_PUBLISHABLE_KEY);
+        return $this->GetGatewaySetting(key: FormKeys::STRIPE_PUBLISHABLE_KEY);
     }
 
     public function GetStripeSecretKey()
     {
-        return $this->GetForm(FormKeys::STRIPE_SECRET_KEY);
+        return $this->GetGatewaySetting(key: FormKeys::STRIPE_SECRET_KEY);
+    }
+
+    /**
+     * Reads a gateway setting, escaped as GetForm() escapes every form value.
+     *
+     * That escaping replaces a byte that is not valid UTF-8 with U+FFFD,
+     * which would store a different credential from the one submitted. Check
+     * the submitted bytes first and return null for such a value, so the
+     * presenter rejects it like a missing one.
+     */
+    private function GetGatewaySetting(string $key): string|array|null
+    {
+        $submitted = $this->GetRawForm(var: $key);
+        if (is_string($submitted) && !mb_check_encoding(value: $submitted, encoding: 'UTF-8')) {
+            return null;
+        }
+
+        return $this->GetForm(var: $key);
     }
 
     public function SetPayPalSettings($enabled, $clientId, $secret, $environment)
@@ -266,7 +290,17 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
 
     public function BindCreditCostRejected(): void
     {
-        // The credit forms treat a response as success unless it is non-empty
+        $this->SetRejectedResponse();
+    }
+
+    public function BindPaymentGatewaysRejected(): void
+    {
+        $this->SetRejectedResponse();
+    }
+
+    private function SetRejectedResponse(): void
+    {
+        // The payment forms treat a response as success unless it is non-empty
         // text or, as jQuery parses this JSON, an object with ErrorIds. Only
         // then do they call their error handler, which shows its own message.
         $this->SetJson(objectToSerialize: ['ErrorIds' => [], 'Messages' => []]);

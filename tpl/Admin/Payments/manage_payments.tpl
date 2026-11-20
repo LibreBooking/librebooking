@@ -13,6 +13,9 @@
     <div id="updatedGatewayMessage" class="alert alert-success" style="display:none;">
         {translate key=GatewaysUpdated}
     </div>
+    <div id="gatewaysRejectedMessage" class="alert alert-danger" style="display:none;">
+        {translate key=GatewaysNotUpdated}
+    </div>
     <div id="refundIssuedMessage" class="alert alert-success" style="display:none;">
         {translate key=RefundIssued}
     </div>

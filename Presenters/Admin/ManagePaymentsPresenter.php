@@ -30,6 +30,20 @@ class ManagePaymentsPresenter extends ActionPresenter
     private const CREDIT_COST_DECIMAL_PLACES = 2;
 
     /**
+     * The payment_gateway_settings.setting_value column is VARCHAR(1000).
+     */
+    private const MAX_GATEWAY_SETTING_LENGTH = 1000;
+
+    /**
+     * Matches a character outside the Basic Multilingual Plane, such as an
+     * emoji, which takes four bytes in UTF-8. The 2.7 upgrade created
+     * setting_value as utf8, MySQL's three-byte encoding. The 2.9 upgrade
+     * only changed the table's default character set, so on an upgraded
+     * database the column still rejects these characters in strict mode.
+     */
+    private const FOUR_BYTE_CHARACTER_PATTERN = '/[\x{10000}-\x{10FFFF}]/u';
+
+    /**
      * @var IManagePaymentsPage
      */
     private $page;
@@ -101,7 +115,17 @@ class ManagePaymentsPresenter extends ActionPresenter
             return;
         }
 
+        // credit_currency is NOT NULL and holds ten characters, so a missing
+        // or overlong currency would fail the insert after the old price is
+        // gone. Accept only the supported currency codes, which also keeps
+        // out a short code the application does not know.
         $currency = $this->page->GetCreditCurrency();
+        if (!$this->IsKnownCurrency(currency: $currency)) {
+            Log::Error('Rejected credit cost update with missing or unknown currency. Count=%s', $count);
+            $this->page->BindCreditCostRejected();
+
+            return;
+        }
 
         Log::Debug('Updating credit cost. %s, %s, %s', $count, $cost, $currency);
         $this->paymentRepository->UpdateCreditCost(new CreditCost($count, $cost, $currency));
@@ -133,10 +157,82 @@ class ManagePaymentsPresenter extends ActionPresenter
         $paypalGateway = new PayPalGateway($this->page->GetPayPalIsEnabled(), $this->page->GetPayPalClientId(), $this->page->GetPayPalSecret(), $this->page->GetPayPalEnvironment());
         $stripeGateway = new StripeGateway($this->page->GetStripeIsEnabled(), $this->page->GetStripePublishableKey(), $this->page->GetStripeSecretKey());
 
+        // The repository deletes a gateway's settings and then inserts the new
+        // ones one at a time, so a value it cannot store would leave an
+        // enabled gateway partly configured. Check both before writing either.
+        $canStorePayPal = $this->HasStorableSettings(gateway: $paypalGateway);
+        $canStoreStripe = $this->HasStorableSettings(gateway: $stripeGateway);
+        if (!$canStorePayPal || !$canStoreStripe) {
+            Log::Error(
+                'Rejected payment gateway update with missing or malformed settings. PayPalValid=%s, StripeValid=%s',
+                json_encode($canStorePayPal),
+                json_encode($canStoreStripe),
+            );
+            $this->page->BindPaymentGatewaysRejected();
+
+            return;
+        }
+
         Log::Debug('Updating payment gateways');
 
         $this->paymentRepository->UpdatePayPalGateway($paypalGateway);
         $this->paymentRepository->UpdateStripeGateway($stripeGateway);
+    }
+
+    private function IsKnownCurrency(mixed $currency): bool
+    {
+        if (!is_string($currency)) {
+            return false;
+        }
+
+        foreach (\Booked\Currency::Currencies() as $definition) {
+            if ($definition->IsoCode() === $currency) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * A disabled gateway stores no settings. An enabled one needs every
+     * setting to be a non-empty string that the setting_value column can
+     * hold.
+     */
+    private function HasStorableSettings(IPaymentGateway $gateway): bool
+    {
+        if (!$gateway->IsEnabled()) {
+            return true;
+        }
+
+        foreach ($gateway->Settings() as $setting) {
+            if (!$this->IsStorableSettingValue(value: $setting->Value())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function IsStorableSettingValue(mixed $value): bool
+    {
+        if (!is_string($value) || $value === '') {
+            return false;
+        }
+
+        // Invalid UTF-8 would also make the pattern match below fail. The page
+        // already returns null for it, as its escaping would otherwise hide it.
+        if (!mb_check_encoding(value: $value, encoding: 'UTF-8')) {
+            return false;
+        }
+
+        if (preg_match(self::FOUR_BYTE_CHARACTER_PATTERN, $value) === 1) {
+            return false;
+        }
+
+        // Name the encoding: the default is PHP's internal encoding, which
+        // need not be the UTF-8 the database stores.
+        return mb_strlen(string: $value, encoding: 'UTF-8') <= self::MAX_GATEWAY_SETTING_LENGTH;
     }
 
     public function ProcessDataRequest($dataRequest, $userSession)
