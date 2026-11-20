@@ -130,6 +130,35 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->assertTrue($this->page->_CreditCostRejected, 'the client must not report success');
     }
 
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidCreditCurrencyProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'unknown' => ['XXX'],
+            // The column holds ten characters.
+            'too long for the column' => ['USDOLLARSXXX'],
+            // credit_currency[]=USD arrives as an array.
+            'array' => [['USD']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCreditCurrencyProvider')]
+    public function testDoesNotUpdateCreditCostWithInvalidCurrency(mixed $currency)
+    {
+        $this->page->_CreditCost = '30.5';
+        $this->page->_CreditCurrency = $currency;
+
+        $this->presenter->UpdateCreditCost();
+
+        $this->assertNull($this->paymentRepository->_LastCost);
+        $this->assertNull($this->paymentRepository->_LastDeletedCreditCount, 'the old price must be untouched');
+        $this->assertTrue($this->page->_CreditCostRejected, 'the client must not report success');
+    }
+
     public function testDeleteActionDeletesCreditCost()
     {
         // The delete form posts only the credit count.
@@ -194,6 +223,135 @@ class ManagePaymentsPresenterTest extends TestBase
         $stripeGateway = new StripeGateway($this->page->_StripeEnabled, $this->page->_StripePublishableKey, $this->page->_StripeSecretKey);
         $this->assertEquals($paypalGateway, $this->paymentRepository->_LastPayPal);
         $this->assertEquals($stripeGateway, $this->paymentRepository->_LastStripe);
+        $this->assertFalse($this->page->_PaymentGatewaysRejected);
+    }
+
+    public function testDisablesPaymentGatewaysWithoutCredentials()
+    {
+        // The form does not submit the fields of a disabled gateway.
+        $this->page->_PayPalEnabled = false;
+        $this->page->_StripeEnabled = false;
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertEquals(
+            new PayPalGateway(enabled: false, clientId: null, secret: null, environment: null),
+            $this->paymentRepository->_LastPayPal,
+        );
+        $this->assertEquals(
+            new StripeGateway(enabled: false, publishableKey: null, secretKey: null),
+            $this->paymentRepository->_LastStripe,
+        );
+        $this->assertFalse($this->page->_PaymentGatewaysRejected);
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidGatewaySettingProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            // setting_value is VARCHAR(1000).
+            'too long for the column' => [str_repeat('a', 1001)],
+            // A utf8 (three-byte) column rejects a four-byte character.
+            'four-byte character' => ["secret\u{1F600}"],
+            'invalid UTF-8' => ["secret\xFF"],
+            // The field submitted as name[] arrives as an array.
+            'array' => [['secret']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidGatewaySettingProvider')]
+    public function testDoesNotUpdateEitherGatewayWithInvalidPayPalSetting(mixed $secret)
+    {
+        $this->page->_PayPalEnabled = true;
+        $this->page->_PayPalClientId = 'clientid';
+        $this->page->_PayPalSecret = $secret;
+        $this->page->_PayPalEnvironment = 'sandbox';
+        $this->page->_StripeEnabled = true;
+        $this->page->_StripePublishableKey = 'publishable';
+        $this->page->_StripeSecretKey = 'secret';
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertNull($this->paymentRepository->_LastPayPal);
+        $this->assertNull($this->paymentRepository->_LastStripe);
+        $this->assertTrue($this->page->_PaymentGatewaysRejected, 'the client must not report success');
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidGatewaySettingProvider')]
+    public function testDoesNotUpdateEitherGatewayWithInvalidStripeSetting(mixed $secretKey)
+    {
+        $this->page->_PayPalEnabled = true;
+        $this->page->_PayPalClientId = 'clientid';
+        $this->page->_PayPalSecret = 'secret';
+        $this->page->_PayPalEnvironment = 'sandbox';
+        $this->page->_StripeEnabled = true;
+        $this->page->_StripePublishableKey = 'publishable';
+        $this->page->_StripeSecretKey = $secretKey;
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertNull($this->paymentRepository->_LastPayPal);
+        $this->assertNull($this->paymentRepository->_LastStripe);
+        $this->assertTrue($this->page->_PaymentGatewaysRejected, 'the client must not report success');
+    }
+
+    public function testGatewaySettingLengthDoesNotDependOnTheInternalEncoding()
+    {
+        // Counted as UTF-16, 1002 ASCII bytes are 501 characters, which
+        // would pass a limit of 1000.
+        $tooLong = str_repeat('a', 1002);
+        $this->page->_PayPalEnabled = true;
+        $this->page->_PayPalClientId = 'clientid';
+        $this->page->_PayPalSecret = $tooLong;
+        $this->page->_PayPalEnvironment = 'sandbox';
+        $this->page->_StripeEnabled = false;
+
+        $internalEncoding = mb_internal_encoding();
+        mb_internal_encoding('UTF-16LE');
+        try {
+            $this->presenter->UpdatePaymentGateways();
+        } finally {
+            mb_internal_encoding($internalEncoding);
+        }
+
+        $this->assertNull($this->paymentRepository->_LastPayPal);
+        $this->assertNull($this->paymentRepository->_LastStripe);
+        $this->assertTrue($this->page->_PaymentGatewaysRejected);
+    }
+
+    public function testStoresAGatewaySettingWithThreeByteCharacters()
+    {
+        // U+20AC takes three bytes in UTF-8, which a utf8 column can hold.
+        $secret = "secret\u{20AC}";
+        $this->page->_PayPalEnabled = true;
+        $this->page->_PayPalClientId = 'clientid';
+        $this->page->_PayPalSecret = $secret;
+        $this->page->_PayPalEnvironment = 'sandbox';
+        $this->page->_StripeEnabled = false;
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertSame($secret, $this->paymentRepository->_LastPayPal->Secret());
+        $this->assertFalse($this->page->_PaymentGatewaysRejected);
+    }
+
+    public function testStoresAGatewaySettingOfTheMaximumLength()
+    {
+        $secret = str_repeat('a', 1000);
+        $this->page->_PayPalEnabled = true;
+        $this->page->_PayPalClientId = 'clientid';
+        $this->page->_PayPalSecret = $secret;
+        $this->page->_PayPalEnvironment = 'sandbox';
+        $this->page->_StripeEnabled = false;
+
+        $this->presenter->UpdatePaymentGateways();
+
+        $this->assertSame($secret, $this->paymentRepository->_LastPayPal->Secret());
+        $this->assertFalse($this->page->_PaymentGatewaysRejected);
     }
 
     public function testGetTransactionLog()
@@ -313,6 +471,7 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public $_CreditCost;
     public $_CreditCurrency;
     public $_CreditCostRejected = false;
+    public $_PaymentGatewaysRejected = false;
     public $_PayPalEnabled;
     public $_PayPalClientId;
     public $_PayPalSecret;
@@ -342,6 +501,11 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
     public function BindCreditCostRejected(): void
     {
         $this->_CreditCostRejected = true;
+    }
+
+    public function BindPaymentGatewaysRejected(): void
+    {
+        $this->_PaymentGatewaysRejected = true;
     }
 
     public function GetCreditCost()

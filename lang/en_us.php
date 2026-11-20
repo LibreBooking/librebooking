@@ -654,6 +654,7 @@ class en_us extends Language
         $strings['CreditsUpdated'] = 'Credit cost has been updated';
         $strings['CreditsNotUpdated'] = 'Credit cost was not updated. Check the values and try again.';
         $strings['GatewaysUpdated'] = 'Payment gateways have been updated';
+        $strings['GatewaysNotUpdated'] = 'Payment gateways were not updated. Check the values and try again.';
         $strings['PurchaseSummary'] = 'Purchase Summary';
         $strings['EachCreditCosts'] = 'Each credit costs';
         $strings['Checkout'] = 'Checkout';

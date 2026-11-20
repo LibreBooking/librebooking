@@ -79,7 +79,7 @@ function Payments(opts) {
       function () {
         showMessage('updatedGatewayMessage');
       },
-      function () {}
+      showGatewaysRejected
     );
     ConfigureAsyncForm(
       elements.issueRefundForm,
@@ -122,6 +122,10 @@ function Payments(opts) {
   // The server sends a response body only when it rejected the request.
   var showCreditCostRejected = function () {
     showMessage('creditCostRejectedMessage');
+  };
+
+  var showGatewaysRejected = function () {
+    showMessage('gatewaysRejectedMessage');
   };
 
   var showMessage = function (id) {
