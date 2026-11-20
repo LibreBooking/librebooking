@@ -101,10 +101,10 @@ interface IAnnouncementRepository
 {
     /**
      * Gets all announcements to be displayed for the user
-     * @param int $page
+     * @param int $displayPage
      * @return Announcement[]
      */
-    public function GetFuture($page);
+    public function GetFuture($displayPage);
 
     /**
      * @param null|string $sortField

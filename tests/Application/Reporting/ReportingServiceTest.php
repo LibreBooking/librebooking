@@ -423,11 +423,11 @@ class FakeReportingRepository implements IReportingRepository
     }
 
     /**
-     * @param SavedReport $savedReport
+     * @param SavedReport $report
      */
-    public function SaveCustomReport(SavedReport $savedReport)
+    public function SaveCustomReport(SavedReport $report)
     {
-        $this->_LastSavedReport = $savedReport;
+        $this->_LastSavedReport = $report;
     }
 
     /**

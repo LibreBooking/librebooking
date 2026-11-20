@@ -25,9 +25,9 @@ class FakeResourceAccess extends ResourceRepository
         return $this->_Resources;
     }
 
-    public function LoadByName($name)
+    public function LoadByName($resourceName)
     {
-        return $this->_NamedResources[$name];
+        return $this->_NamedResources[$resourceName];
     }
 
     private function FillRows()
