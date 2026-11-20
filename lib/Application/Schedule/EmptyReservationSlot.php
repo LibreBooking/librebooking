@@ -128,12 +128,12 @@ class EmptyReservationSlot implements IReservationSlot
         );
     }
 
-    public function IsOwnedBy(UserSession $session)
+    public function IsOwnedBy(UserSession $userSession)
     {
         return false;
     }
 
-    public function IsParticipating(UserSession $session)
+    public function IsParticipating(UserSession $userSession)
     {
         return false;
     }

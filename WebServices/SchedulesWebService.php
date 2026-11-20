@@ -152,12 +152,12 @@ class ScheduleWebServicePageBuilder extends SchedulePageBuilder
         // no op
     }
 
-    public function GetScheduleDates(UserSession $user, ISchedule $schedule, ISchedulePage $page)
+    public function GetScheduleDates(UserSession $userSession, ISchedule $schedule, ISchedulePage $page)
     {
         if ($this->startDate != null && $this->endDate != null) {
             return new DateRange($this->startDate, $this->endDate->AddDays(1));
         }
-        return parent::GetScheduleDates($user, $schedule, $page);
+        return parent::GetScheduleDates(userSession: $userSession, schedule: $schedule, page: $page);
     }
 }
 
