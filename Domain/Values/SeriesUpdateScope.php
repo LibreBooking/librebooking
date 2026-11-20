@@ -64,10 +64,10 @@ interface ISeriesUpdateScope
 
     /**
      * @param ExistingReservationSeries $series
-     * @param IRepeatOptions $repeatOptions
+     * @param IRepeatOptions $targetRepeatOptions
      * @return bool
      */
-    public function CanChangeRepeatTo($series, $repeatOptions);
+    public function CanChangeRepeatTo($series, $targetRepeatOptions);
 
     /**
      * @param ExistingReservationSeries $series
