@@ -147,24 +147,24 @@ class FakeReservationRepository implements IReservationRepository
     /**
      * Insert a new reservation
      *
-     * @param ReservationSeries $reservation
+     * @param ReservationSeries $reservationSeries
      * @return void
      */
-    public function Add(ReservationSeries $reservation)
+    public function Add(ReservationSeries $reservationSeries)
     {
         if ($this->_FirstAddedReservation == null) {
-            $this->_FirstAddedReservation = $reservation;
+            $this->_FirstAddedReservation = $reservationSeries;
         }
-        $this->_LastAddedReservation = $reservation;
+        $this->_LastAddedReservation = $reservationSeries;
     }
 
     /**
      * Return an existing reservation series
      *
-     * @param int $reservationInstanceId
+     * @param int $reservationId
      * @return ExistingReservationSeries or null if no reservation found
      */
-    public function LoadById($reservationInstanceId)
+    public function LoadById($reservationId)
     {
         return $this->_Series;
     }
@@ -183,10 +183,10 @@ class FakeReservationRepository implements IReservationRepository
     /**
      * Update an existing reservation
      *
-     * @param ExistingReservationSeries $existingReservationSeries
+     * @param ExistingReservationSeries $reservationSeries
      * @return void
      */
-    public function Update(ExistingReservationSeries $existingReservationSeries)
+    public function Update(ExistingReservationSeries $reservationSeries)
     {
         // TODO: Implement Update() method.
     }
@@ -238,18 +238,18 @@ class FakeReservationRepository implements IReservationRepository
     }
 
     /**
-     * @param ReservationColorRule $colorRule
+     * @param ReservationColorRule $rule
      * @return int
      */
-    public function AddReservationColorRule(ReservationColorRule $colorRule)
+    public function AddReservationColorRule(ReservationColorRule $rule)
     {
         return 1;
     }
 
     /**
-     * @param ReservationColorRule $colorRule
+     * @param ReservationColorRule $rule
      */
-    public function DeleteReservationColorRule(ReservationColorRule $colorRule)
+    public function DeleteReservationColorRule(ReservationColorRule $rule)
     {
         // TODO: Implement DeleteReservationColorRule() method.
     }
