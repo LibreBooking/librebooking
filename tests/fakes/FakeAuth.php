@@ -42,11 +42,11 @@ class FakeAuth implements IAuthentication
         return $this->_ValidateResult;
     }
 
-    public function Login($username, $context)
+    public function Login($username, $loginContext)
     {
         $this->_LoginCalled = true;
         $this->_LastLogin = $username;
-        $this->_LastLoginContext = $context;
+        $this->_LastLoginContext = $loginContext;
         return $this->_Session;
     }
 

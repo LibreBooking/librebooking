@@ -36,7 +36,7 @@ class FakeRegistration implements IRegistration
      */
     public $_AttributeValues = [];
 
-    public function Register($login, $email, $firstName, $lastName, $password, $timezone, $language, $homepageId, $additionalFields = [], $attributes = [], $groups = [], $acceptTerms = false)
+    public function Register($login, $email, $firstName, $lastName, $password, $timezone, $language, $homepageId, $additionalFields = [], $attributeValues = [], $groups = [], $acceptTerms = false)
     {
         $this->_RegisterCalled = true;
         $this->_Login = $login;
@@ -47,7 +47,7 @@ class FakeRegistration implements IRegistration
         $this->_Timezone = $timezone;
         $this->_HomepageId = $homepageId;
         $this->_AdditionalFields = $additionalFields;
-        $this->_AttributeValues = $attributes;
+        $this->_AttributeValues = $attributeValues;
         $this->_Groups = $groups;
         $this->_TermsAccepted = $acceptTerms;
         $this->_Language = $language;

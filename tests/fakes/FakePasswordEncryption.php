@@ -20,10 +20,10 @@ class FakePasswordEncryption extends PasswordEncryption
         return $this->_Encrypted;
     }
 
-    public function EncryptPassword($password)
+    public function EncryptPassword($plainTextPassword)
     {
         $this->_EncryptPasswordCalled = true;
-        $this->_LastPassword = $password;
+        $this->_LastPassword = $plainTextPassword;
 
         return new EncryptedPassword($this->_Encrypted, $this->_Salt);
     }
