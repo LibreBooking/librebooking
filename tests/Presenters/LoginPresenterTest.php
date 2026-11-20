@@ -504,31 +504,31 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_ShowScheduleLink = false;
     public $_Announcements;
 
-    public function SetGoogleUrl($URL)
+    public function SetGoogleUrl($googleUrl)
     {
-        $this->_GoogleUrl = $URL;
+        $this->_GoogleUrl = $googleUrl;
     }
 
-    public function SetMicrosoftUrl($URL)
+    public function SetMicrosoftUrl($microsoftUrl)
     {
-        $this->_MicrosoftUrl = $URL;
+        $this->_MicrosoftUrl = $microsoftUrl;
     }
 
-    public function SetFacebookUrl($URL)
+    public function SetFacebookUrl($facebookUrl)
     {
     }
 
-    public function SetKeycloakUrl($URL)
+    public function SetKeycloakUrl($keycloakUrl)
     {
-        $this->_KeycloakUrl = $URL;
+        $this->_KeycloakUrl = $keycloakUrl;
     }
 
-    public function SetOauth2Url($URL)
+    public function SetOauth2Url($oauth2Url)
     {
-        $this->_Oauth2Url = $URL;
+        $this->_Oauth2Url = $oauth2Url;
     }
 
-    public function SetOauth2Name($Name)
+    public function SetOauth2Name($oauth2Name)
     {
     }
 

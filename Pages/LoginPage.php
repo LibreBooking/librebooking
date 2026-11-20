@@ -25,7 +25,7 @@ interface ILoginPage extends IPage, ILoginBasePage
 
     public function SetShowRegisterLink($value);
 
-    public function SetShowScheduleLink($value);
+    public function SetShowScheduleLink($shouldShow);
 
     /**
      * @return string
@@ -87,28 +87,28 @@ interface ILoginPage extends IPage, ILoginBasePage
     /**
      *
      */
-    public function SetGoogleUrl($URL);
+    public function SetGoogleUrl($googleUrl);
 
     /**
      *
      */
-    public function SetMicrosoftUrl($URL);
+    public function SetMicrosoftUrl($microsoftUrl);
 
     /**
      *
      */
-    public function SetFacebookUrl($URL);
+    public function SetFacebookUrl($facebookUrl);
 
     /**
      *
      */
-    public function SetKeycloakUrl($URL);
+    public function SetKeycloakUrl($keycloakUrl);
 
     /**
      *
      */
-    public function SetOauth2Url($URL);
-    public function SetOauth2Name($Name);
+    public function SetOauth2Url($oauth2Url);
+    public function SetOauth2Name($oauth2Name);
 }
 
 class LoginPage extends Page implements ILoginPage
@@ -323,10 +323,10 @@ class LoginPage extends Page implements ILoginPage
     /**
      * Sends the created facebook url in the presenter to the smarty page
      */
-    public function SetFacebookUrl($FacebookUrl)
+    public function SetFacebookUrl($facebookUrl)
     {
         if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('FacebookUrl', $FacebookUrl);
+            $this->Set('FacebookUrl', $facebookUrl);
         }
     }
 
@@ -343,24 +343,24 @@ class LoginPage extends Page implements ILoginPage
         }
     }
 
-    public function SetKeycloakUrl($KeycloakUrl)
+    public function SetKeycloakUrl($keycloakUrl)
     {
         if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('KeycloakUrl', $KeycloakUrl);
+            $this->Set('KeycloakUrl', $keycloakUrl);
         }
     }
 
-    public function SetOauth2Url($Oauth2Url)
+    public function SetOauth2Url($oauth2Url)
     {
         if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('Oauth2Url', $Oauth2Url);
+            $this->Set('Oauth2Url', $oauth2Url);
         }
     }
 
-    public function SetOauth2Name($Oauth2Name)
+    public function SetOauth2Name($oauth2Name)
     {
         if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('Oauth2Name', $Oauth2Name);
+            $this->Set('Oauth2Name', $oauth2Name);
         }
     }
 }
