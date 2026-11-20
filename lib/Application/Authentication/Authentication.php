@@ -76,9 +76,9 @@ class Authentication implements IAuthentication
         return $this->firstRegistration;
     }
 
-    public function Validate($username, $passwordPlainText)
+    public function Validate($username, $password)
     {
-        if (($this->ShowUsernamePrompt() && empty($username)) || ($this->ShowPasswordPrompt() && empty($passwordPlainText))) {
+        if (($this->ShowUsernamePrompt() && empty($username)) || ($this->ShowPasswordPrompt() && empty($password))) {
             return false;
         }
 
@@ -91,11 +91,15 @@ class Authentication implements IAuthentication
         if ($row = $reader->GetRow()) {
             Log::Debug('User was found: %s', $username);
             $migration = $this->GetMigration();
-            $password = $migration->Create($passwordPlainText, $row[ColumnNames::OLD_PASSWORD], $row[ColumnNames::PASSWORD]);
+            $passwordCheck = $migration->Create(
+                plaintext: $password,
+                oldpassword: $row[ColumnNames::OLD_PASSWORD],
+                newpassword: $row[ColumnNames::PASSWORD]
+            );
             $salt = $row[ColumnNames::SALT];
 
-            if ($password->Validate($salt)) {
-                $password->Migrate($row[ColumnNames::USER_ID]);
+            if ($passwordCheck->Validate(salt: $salt)) {
+                $passwordCheck->Migrate(userid: $row[ColumnNames::USER_ID]);
                 $valid = true;
             }
         }
@@ -132,7 +136,7 @@ class Authentication implements IAuthentication
         return new NullUserSession();
     }
 
-    public function Logout(UserSession $userSession)
+    public function Logout(UserSession $user)
     {
         // hook for implementing Logout logic
     }

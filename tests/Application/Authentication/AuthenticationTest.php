@@ -238,12 +238,12 @@ class FakeMigration extends PasswordMigration
     public $_LastNewPassword;
     public $_LastPlainText;
 
-    public function Create($plaintext, $old, $new)
+    public function Create($plaintext, $oldpassword, $newpassword)
     {
         $this->_CreateCalled = true;
         $this->_LastPlainText = $plaintext;
-        $this->_LastOldPassword = $old;
-        $this->_LastNewPassword = $new;
+        $this->_LastOldPassword = $oldpassword;
+        $this->_LastNewPassword = $newpassword;
 
         return $this->_Password;
     }
