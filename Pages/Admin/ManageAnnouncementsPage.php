@@ -8,17 +8,17 @@ interface IManageAnnouncementsPage extends IActionPage
     public function GetAnnouncementId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetText();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStart();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetEnd();
 
@@ -108,19 +108,19 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         return $this->GetQuerystringInt(key: QueryStringKeys::ANNOUNCEMENT_ID);
     }
 
-    public function GetText()
+    public function GetText(): ?string
     {
-        return $this->GetForm(FormKeys::ANNOUNCEMENT_TEXT);
+        return $this->GetFormString(key: FormKeys::ANNOUNCEMENT_TEXT);
     }
 
-    public function GetStart()
+    public function GetStart(): ?string
     {
-        return $this->GetForm(FormKeys::ANNOUNCEMENT_START);
+        return $this->GetFormString(key: FormKeys::ANNOUNCEMENT_START);
     }
 
-    public function GetEnd()
+    public function GetEnd(): ?string
     {
-        return $this->GetForm(FormKeys::ANNOUNCEMENT_END);
+        return $this->GetFormString(key: FormKeys::ANNOUNCEMENT_END);
     }
 
     public function GetPriority(): ?int

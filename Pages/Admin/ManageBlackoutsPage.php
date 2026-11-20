@@ -326,20 +326,14 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('blackouts', $blackouts);
     }
 
-    /**
-     * @return string
-     */
-    public function GetStartDate()
+    public function GetStartDate(): ?string
     {
-        return $this->server->GetQuerystring(QueryStringKeys::START_DATE);
+        return $this->GetQuerystringString(key: QueryStringKeys::START_DATE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetEndDate()
+    public function GetEndDate(): ?string
     {
-        return $this->server->GetQuerystring(QueryStringKeys::END_DATE);
+        return $this->GetQuerystringString(key: QueryStringKeys::END_DATE);
     }
 
     /**
@@ -425,12 +419,9 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $this->GetQuerystringInt(key: QueryStringKeys::BLACKOUT_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetDeleteScope()
+    public function GetDeleteScope(): ?string
     {
-        return $this->GetForm(FormKeys::SERIES_UPDATE_SCOPE);
+        return $this->GetFormString(key: FormKeys::SERIES_UPDATE_SCOPE);
     }
 
     /**
@@ -452,52 +443,34 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $this->GetFormInt(key: FormKeys::RESOURCE_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBlackoutStartDate()
+    public function GetBlackoutStartDate(): ?string
     {
-        return $this->GetForm(FormKeys::BEGIN_DATE);
+        return $this->GetFormString(key: FormKeys::BEGIN_DATE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBlackoutStartTime()
+    public function GetBlackoutStartTime(): ?string
     {
-        return $this->GetForm(FormKeys::BEGIN_TIME);
+        return $this->GetFormString(key: FormKeys::BEGIN_TIME);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBlackoutEndDate()
+    public function GetBlackoutEndDate(): ?string
     {
-        return $this->GetForm(FormKeys::END_DATE);
+        return $this->GetFormString(key: FormKeys::END_DATE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBlackoutEndTime()
+    public function GetBlackoutEndTime(): ?string
     {
-        return $this->GetForm(FormKeys::END_TIME);
+        return $this->GetFormString(key: FormKeys::END_TIME);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBlackoutTitle()
+    public function GetBlackoutTitle(): ?string
     {
-        return $this->GetForm(FormKeys::SUMMARY);
+        return $this->GetFormString(key: FormKeys::SUMMARY);
     }
 
-    /**
-     * @return string|ReservationConflictResolution
-     */
-    public function GetBlackoutConflictAction()
+    public function GetBlackoutConflictAction(): ?string
     {
-        return $this->GetForm(FormKeys::CONFLICT_ACTION);
+        return $this->GetFormString(key: FormKeys::CONFLICT_ACTION);
     }
 
 
@@ -511,14 +484,14 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         // no-op
     }
 
-    public function GetRepeatType()
+    public function GetRepeatType(): ?string
     {
-        return $this->GetForm(FormKeys::REPEAT_OPTIONS);
+        return $this->GetFormString(key: FormKeys::REPEAT_OPTIONS);
     }
 
-    public function GetRepeatInterval()
+    public function GetRepeatInterval(): ?string
     {
-        return $this->GetForm(FormKeys::REPEAT_EVERY);
+        return $this->GetFormString(key: FormKeys::REPEAT_EVERY);
     }
 
     public function GetRepeatWeekdays()
@@ -563,14 +536,14 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $days;
     }
 
-    public function GetRepeatMonthlyType()
+    public function GetRepeatMonthlyType(): ?string
     {
-        return $this->GetForm(FormKeys::REPEAT_MONTHLY_TYPE);
+        return $this->GetFormString(key: FormKeys::REPEAT_MONTHLY_TYPE);
     }
 
-    public function GetRepeatTerminationDate()
+    public function GetRepeatTerminationDate(): ?string
     {
-        return $this->GetForm(FormKeys::END_REPEAT_DATE);
+        return $this->GetFormString(key: FormKeys::END_REPEAT_DATE);
     }
 
     public function GetRepeatCustomDates()

@@ -137,12 +137,9 @@ class ManageReservationColorsPage extends ActionPage implements IManageReservati
         return AttributeFormParser::GetAttributes($this->GetForm(FormKeys::ATTRIBUTE_PREFIX));
     }
 
-    /**
-     * @return string
-     */
-    public function GetColor()
+    public function GetColor(): ?string
     {
-        return $this->GetForm(FormKeys::RESERVATION_COLOR);
+        return $this->GetFormString(key: FormKeys::RESERVATION_COLOR);
     }
 
     public function GetRuleId(): ?int

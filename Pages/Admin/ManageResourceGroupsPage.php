@@ -99,12 +99,9 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         return $this->GetQuerystringInt(key: QueryStringKeys::GROUP_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetGroupName()
+    public function GetGroupName(): ?string
     {
-        return $this->GetForm(FormKeys::GROUP_NAME);
+        return $this->GetFormString(key: FormKeys::GROUP_NAME);
     }
 
     public function GetParentId(): ?int
@@ -122,12 +119,9 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         return $this->GetQuerystringInt(key: QueryStringKeys::NODE_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetNodeType()
+    public function GetNodeType(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::TYPE);
+        return $this->GetQuerystringString(key: QueryStringKeys::TYPE);
     }
 
     public function GetTargetNodeId(): ?int

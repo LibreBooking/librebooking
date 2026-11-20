@@ -10,7 +10,7 @@ interface IUpdateSchedulePage
     public function GetScheduleId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetScheduleName();
 
@@ -19,12 +19,12 @@ interface IUpdateSchedulePage
     public function GetDaysVisible(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetReservableSlots();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetBlockedSlots();
 
@@ -39,7 +39,7 @@ interface IUpdateSchedulePage
     public function GetDailyBlockedSlots();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLayoutTimezone();
 
@@ -53,7 +53,7 @@ interface IUpdateSchedulePage
     public function GetTargetScheduleId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetValue();
 
@@ -122,12 +122,12 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function GetPeakAllYear();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPeakBeginTime();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPeakEndTime();
 
@@ -157,12 +157,12 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function GetAvailableAllYear();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAvailabilityBegin();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAvailabilityEnd();
 
@@ -175,12 +175,12 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function GetLayoutType(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLayoutStart();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLayoutEnd();
 
@@ -190,27 +190,27 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
     public function BindEvents($events);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetSlotStart();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetSlotEnd();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetCustomLayoutStartRange();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetCustomLayoutEndRange();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetSlotId();
 
@@ -302,9 +302,9 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $id;
     }
 
-    public function GetScheduleName()
+    public function GetScheduleName(): ?string
     {
-        return $this->server->GetForm(FormKeys::SCHEDULE_NAME);
+        return $this->GetFormString(key: FormKeys::SCHEDULE_NAME);
     }
 
     public function GetStartDay(): ?int
@@ -317,14 +317,14 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $this->GetFormInt(key: FormKeys::SCHEDULE_DAYS_VISIBLE);
     }
 
-    public function GetReservableSlots()
+    public function GetReservableSlots(): ?string
     {
-        return $this->server->GetForm(FormKeys::SLOTS_RESERVABLE);
+        return $this->GetFormString(key: FormKeys::SLOTS_RESERVABLE);
     }
 
-    public function GetBlockedSlots()
+    public function GetBlockedSlots(): ?string
     {
-        return $this->server->GetForm(FormKeys::SLOTS_BLOCKED);
+        return $this->GetFormString(key: FormKeys::SLOTS_BLOCKED);
     }
 
     public function GetDailyReservableSlots()
@@ -352,9 +352,9 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return !empty($singleLayout);
     }
 
-    public function GetLayoutTimezone()
+    public function GetLayoutTimezone(): ?string
     {
-        return $this->server->GetForm(FormKeys::TIMEZONE);
+        return $this->GetFormString(key: FormKeys::TIMEZONE);
     }
 
     public function GetSourceScheduleId(): ?int
@@ -420,9 +420,9 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $this->pageablePage->BindPageInfo($pageInfo);
     }
 
-    public function GetValue()
+    public function GetValue(): ?string
     {
-        return $this->GetForm(FormKeys::VALUE);
+        return $this->GetFormString(key: FormKeys::VALUE);
     }
 
     public function GetIntValue(): ?int
@@ -490,14 +490,14 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return !empty($allYear);
     }
 
-    public function GetPeakBeginTime()
+    public function GetPeakBeginTime(): ?string
     {
-        return $this->GetForm(FormKeys::PEAK_BEGIN_TIME);
+        return $this->GetFormString(key: FormKeys::PEAK_BEGIN_TIME);
     }
 
-    public function GetPeakEndTime()
+    public function GetPeakEndTime(): ?string
     {
-        return $this->GetForm(FormKeys::PEAK_END_TIME);
+        return $this->GetFormString(key: FormKeys::PEAK_END_TIME);
     }
 
     public function GetPeakBeginDay(): ?int
@@ -536,14 +536,14 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $this->GetCheckbox(FormKeys::AVAILABLE_ALL_YEAR);
     }
 
-    public function GetAvailabilityBegin()
+    public function GetAvailabilityBegin(): ?string
     {
-        return $this->GetForm(FormKeys::AVAILABLE_BEGIN_DATE);
+        return $this->GetFormString(key: FormKeys::AVAILABLE_BEGIN_DATE);
     }
 
-    public function GetAvailabilityEnd()
+    public function GetAvailabilityEnd(): ?string
     {
-        return $this->GetForm(FormKeys::AVAILABLE_END_DATE);
+        return $this->GetFormString(key: FormKeys::AVAILABLE_END_DATE);
     }
 
     public function DisplayAvailability($schedule, $timezone)
@@ -558,24 +558,24 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $this->GetFormInt(key: FormKeys::LAYOUT_TYPE);
     }
 
-    public function GetLayoutStart()
+    public function GetLayoutStart(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::START_DATE);
+        return $this->GetQuerystringString(key: QueryStringKeys::START_DATE);
     }
 
-    public function GetLayoutEnd()
+    public function GetLayoutEnd(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::END_DATE);
+        return $this->GetQuerystringString(key: QueryStringKeys::END_DATE);
     }
 
-    public function GetSlotStart()
+    public function GetSlotStart(): ?string
     {
-        return $this->GetForm(FormKeys::BEGIN_DATE);
+        return $this->GetFormString(key: FormKeys::BEGIN_DATE);
     }
 
-    public function GetSlotEnd()
+    public function GetSlotEnd(): ?string
     {
-        return $this->GetForm(FormKeys::END_DATE);
+        return $this->GetFormString(key: FormKeys::END_DATE);
     }
 
     public function BindEvents($events)
@@ -583,19 +583,19 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $this->SetJson($events);
     }
 
-    public function GetCustomLayoutStartRange()
+    public function GetCustomLayoutStartRange(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::START);
+        return $this->GetQuerystringString(key: QueryStringKeys::START);
     }
 
-    public function GetCustomLayoutEndRange()
+    public function GetCustomLayoutEndRange(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::END);
+        return $this->GetQuerystringString(key: QueryStringKeys::END);
     }
 
-    public function GetSlotId()
+    public function GetSlotId(): ?string
     {
-        return $this->GetForm(FormKeys::LAYOUT_PERIOD_ID);
+        return $this->GetFormString(key: FormKeys::LAYOUT_PERIOD_ID);
     }
 
     public function GetDefaultStyle(): ?int

@@ -9,16 +9,16 @@ require_once(ROOT_DIR . 'Domain/Values/Currency.php');
 interface IManagePaymentsPage extends IActionPage
 {
     /**
-     * @return string
+     * @return string|null
      */
     public function GetCreditCount();
     /**
-     * @return string
+     * @return string|null
      */
     public function GetCreditCost();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetCreditCurrency();
 
@@ -33,17 +33,17 @@ interface IManagePaymentsPage extends IActionPage
     public function GetPayPalIsEnabled();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPayPalClientId();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPayPalSecret();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPayPalEnvironment();
 
@@ -53,12 +53,12 @@ interface IManagePaymentsPage extends IActionPage
     public function GetStripeIsEnabled();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStripePublishableKey();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStripeSecretKey();
 
@@ -151,19 +151,19 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         $this->Display('Admin/Payments/manage_payments.tpl');
     }
 
-    public function GetCreditCount()
+    public function GetCreditCount(): ?string
     {
-        return $this->GetForm(FormKeys::CREDIT_COUNT);
+        return $this->GetFormString(key: FormKeys::CREDIT_COUNT);
     }
 
-    public function GetCreditCost()
+    public function GetCreditCost(): ?string
     {
-        return $this->GetForm(FormKeys::CREDIT_COST);
+        return $this->GetFormString(key: FormKeys::CREDIT_COST);
     }
 
-    public function GetCreditCurrency()
+    public function GetCreditCurrency(): ?string
     {
-        return $this->GetForm(FormKeys::CREDIT_CURRENCY);
+        return $this->GetFormString(key: FormKeys::CREDIT_CURRENCY);
     }
 
     public function SetCreditCosts($creditCosts)
@@ -176,19 +176,19 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         return $this->GetCheckbox(FormKeys::PAYPAL_ENABLED);
     }
 
-    public function GetPayPalClientId()
+    public function GetPayPalClientId(): ?string
     {
-        return $this->GetForm(FormKeys::PAYPAL_CLIENT_ID);
+        return $this->GetFormString(key: FormKeys::PAYPAL_CLIENT_ID);
     }
 
-    public function GetPayPalSecret()
+    public function GetPayPalSecret(): ?string
     {
-        return $this->GetForm(FormKeys::PAYPAL_SECRET);
+        return $this->GetFormString(key: FormKeys::PAYPAL_SECRET);
     }
 
-    public function GetPayPalEnvironment()
+    public function GetPayPalEnvironment(): ?string
     {
-        return $this->GetForm(FormKeys::PAYPAL_ENVIRONMENT);
+        return $this->GetFormString(key: FormKeys::PAYPAL_ENVIRONMENT);
     }
 
     public function GetStripeIsEnabled()
@@ -196,14 +196,14 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         return $this->GetCheckbox(FormKeys::STRIPE_ENABLED);
     }
 
-    public function GetStripePublishableKey()
+    public function GetStripePublishableKey(): ?string
     {
-        return $this->GetForm(FormKeys::STRIPE_PUBLISHABLE_KEY);
+        return $this->GetFormString(key: FormKeys::STRIPE_PUBLISHABLE_KEY);
     }
 
-    public function GetStripeSecretKey()
+    public function GetStripeSecretKey(): ?string
     {
-        return $this->GetForm(FormKeys::STRIPE_SECRET_KEY);
+        return $this->GetFormString(key: FormKeys::STRIPE_SECRET_KEY);
     }
 
     public function SetPayPalSettings($enabled, $clientId, $secret, $environment)

@@ -6,7 +6,7 @@ require_once(ROOT_DIR . 'Presenters/Admin/ManageEmailTemplatesPresenter.php');
 interface IManageEmailTemplatesPage extends IActionPage
 {
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLanguage();
 
@@ -21,7 +21,7 @@ interface IManageEmailTemplatesPage extends IActionPage
     public function SetSelectedLanguage($languageCode);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetTemplateName();
 
@@ -41,7 +41,7 @@ interface IManageEmailTemplatesPage extends IActionPage
     public function SetSaveResult($saveResult);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetUpdatedTemplateName();
 
@@ -82,9 +82,9 @@ class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplat
         return $this->GetFormString(key: FormKeys::EMAIL_TEMPLATE_LANGUAGE);
     }
 
-    public function GetLanguage()
+    public function GetLanguage(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::LANGUAGE);
+        return $this->GetQuerystringString(key: QueryStringKeys::LANGUAGE);
     }
 
     public function SetSelectedLanguage($languageCode)
@@ -97,14 +97,14 @@ class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplat
         $this->Set('Templates', $templates);
     }
 
-    public function GetTemplateName()
+    public function GetTemplateName(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::EMAIL_TEMPLATE_NAME);
+        return $this->GetQuerystringString(key: QueryStringKeys::EMAIL_TEMPLATE_NAME);
     }
 
-    public function GetUpdatedTemplateName()
+    public function GetUpdatedTemplateName(): ?string
     {
-        return $this->GetForm(FormKeys::EMAIL_TEMPLATE_NAME);
+        return $this->GetFormString(key: FormKeys::EMAIL_TEMPLATE_NAME);
     }
 
     public function BindTemplate($templateContents)

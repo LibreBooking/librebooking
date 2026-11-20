@@ -51,37 +51,37 @@ interface IManageUsersPage extends IPageable, IActionPage
     public function GetUserName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetFirstName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLastName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetTimezone();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPhone();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetPosition();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetOrganization();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLanguage();
 
@@ -108,17 +108,17 @@ interface IManageUsersPage extends IPageable, IActionPage
     public function BindGroups($groups);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetReservationColor();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetValue();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetName();
 
@@ -138,7 +138,7 @@ interface IManageUsersPage extends IPageable, IActionPage
     public function SetImportResult($importResult);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetInvitedEmails();
 
@@ -322,55 +322,49 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         parent::SetJson($objectToSerialize);
     }
 
-    /**
-     * @return string
-     */
-    public function GetEmail()
+    public function GetEmail(): ?string
     {
-        return $this->GetForm(FormKeys::EMAIL);
+        return $this->GetFormString(key: FormKeys::EMAIL);
     }
 
-    /**
-     * @return string
-     */
-    public function GetUserName()
+    public function GetUserName(): ?string
     {
-        return $this->GetForm(FormKeys::USERNAME);
+        return $this->GetFormString(key: FormKeys::USERNAME);
     }
 
-    public function GetFirstName()
+    public function GetFirstName(): ?string
     {
-        return $this->GetForm(FormKeys::FIRST_NAME);
+        return $this->GetFormString(key: FormKeys::FIRST_NAME);
     }
 
-    public function GetLastName()
+    public function GetLastName(): ?string
     {
-        return $this->GetForm(FormKeys::LAST_NAME);
+        return $this->GetFormString(key: FormKeys::LAST_NAME);
     }
 
-    public function GetTimezone()
+    public function GetTimezone(): ?string
     {
-        return $this->GetForm(FormKeys::TIMEZONE);
+        return $this->GetFormString(key: FormKeys::TIMEZONE);
     }
 
-    public function GetPhone()
+    public function GetPhone(): ?string
     {
-        return $this->GetForm(FormKeys::PHONE);
+        return $this->GetFormString(key: FormKeys::PHONE);
     }
 
-    public function GetPosition()
+    public function GetPosition(): ?string
     {
-        return $this->GetForm(FormKeys::POSITION);
+        return $this->GetFormString(key: FormKeys::POSITION);
     }
 
-    public function GetOrganization()
+    public function GetOrganization(): ?string
     {
-        return $this->GetForm(FormKeys::ORGANIZATION);
+        return $this->GetFormString(key: FormKeys::ORGANIZATION);
     }
 
-    public function GetLanguage()
+    public function GetLanguage(): ?string
     {
-        return $this->GetForm(FormKeys::LANGUAGE);
+        return $this->GetFormString(key: FormKeys::LANGUAGE);
     }
 
     public function BindAttributeList($attributeList)
@@ -403,9 +397,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('Groups', $gs);
     }
 
-    public function GetReservationColor()
+    public function GetReservationColor(): ?string
     {
-        return $this->GetForm(FormKeys::RESERVATION_COLOR);
+        return $this->GetFormString(key: FormKeys::RESERVATION_COLOR);
     }
 
     public function GetValue()
@@ -413,9 +407,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         return $this->GetForm(FormKeys::VALUE);
     }
 
-    public function GetName()
+    public function GetName(): ?string
     {
-        return $this->GetForm(FormKeys::NAME);
+        return $this->GetFormString(key: FormKeys::NAME);
     }
 
 
@@ -435,9 +429,9 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->SetJsonResponse($importResult);
     }
 
-    public function GetInvitedEmails()
+    public function GetInvitedEmails(): ?string
     {
-        return $this->GetForm(FormKeys::INVITED_EMAILS);
+        return $this->GetFormString(key: FormKeys::INVITED_EMAILS);
     }
 
     public function ShowExportCsv()
