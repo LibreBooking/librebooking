@@ -76,9 +76,9 @@ class ConfigurePage extends Page implements IConfgurePage
         return is_string($password) ? $password : '';
     }
 
-    public function SetShowPasswordPrompt($showPrompt)
+    public function SetShowPasswordPrompt($showPasswordPrompt)
     {
-        $this->Set('ShowPasswordPrompt', $showPrompt);
+        $this->Set(var: 'ShowPasswordPrompt', value: $showPasswordPrompt);
     }
 
     public function SetShowInvalidPassword($showInvalidPassword)

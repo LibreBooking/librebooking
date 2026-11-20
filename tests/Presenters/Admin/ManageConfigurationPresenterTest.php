@@ -353,10 +353,10 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
     }
 
     /**
-     * @param string $scriptUrl
-     * @param string $suggestedUrl
+     * @param string $currentScriptUrl
+     * @param string $suggestedScriptUrl
      */
-    public function ShowScriptUrlWarning($scriptUrl, $suggestedUrl)
+    public function ShowScriptUrlWarning($currentScriptUrl, $suggestedScriptUrl)
     {
         // TODO: Implement ShowScriptUrlWarning() method.
     }
