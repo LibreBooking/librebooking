@@ -136,9 +136,9 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function BindResources($resources);
 
     /**
-     * @param array $scheduleList array of (id, schedule name)
+     * @param array $schedules array of (id, schedule name)
      */
-    public function BindSchedules($scheduleList);
+    public function BindSchedules($schedules);
 
     /**
      * @param Schedule[] $schedules
@@ -201,9 +201,9 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function FilterButtonPressed();
 
     /**
-     * @param ResourceFilterValues $value
+     * @param ResourceFilterValues $values
      */
-    public function SetFilterValues($value);
+    public function SetFilterValues($values);
 
     /**
      * @return ResourceFilterValues

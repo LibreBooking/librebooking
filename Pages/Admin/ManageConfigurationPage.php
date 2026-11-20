@@ -48,10 +48,10 @@ interface IManageConfigurationPage extends IActionPage
     public function SetSelectedConfigFile($configFileName);
 
     /**
-     * @param string $scriptUrl
-     * @param string $suggestedUrl
+     * @param string $currentScriptUrl
+     * @param string $suggestedScriptUrl
      */
-    public function ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
+    public function ShowScriptUrlWarning($currentScriptUrl, $suggestedScriptUrl);
 
     public function GetHomePageId(): ?int;
 }

@@ -67,9 +67,9 @@ abstract class AdminPage extends SecurePage implements IActionPage
         }
     }
 
-    public function Display($adminTemplateName)
+    public function Display($templateName)
     {
-        parent::Display('Admin/' . $adminTemplateName);
+        parent::Display(templateName: 'Admin/' . $templateName);
     }
 
     public function TakingAction()
