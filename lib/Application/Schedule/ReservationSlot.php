@@ -186,14 +186,14 @@ class ReservationSlot implements IReservationSlot
         return $this->_reservation->ReferenceNumber;
     }
 
-    public function IsOwnedBy(UserSession $user)
+    public function IsOwnedBy(UserSession $userSession)
     {
-        return $this->_reservation->UserId == $user->UserId;
+        return $this->_reservation->UserId == $userSession->UserId;
     }
 
-    public function IsParticipating(UserSession $session)
+    public function IsParticipating(UserSession $userSession)
     {
-        return $this->_reservation->IsUserParticipating($session->UserId) || $this->_reservation->IsUserInvited($session->UserId);
+        return $this->_reservation->IsUserParticipating($userSession->UserId) || $this->_reservation->IsUserInvited($userSession->UserId);
     }
 
     public function __toString()

@@ -72,16 +72,16 @@ interface IReservationSlot
     public function ToTimezone($timezone);
 
     /**
-     * @param UserSession $session
+     * @param UserSession $userSession
      * @return bool
      */
-    public function IsOwnedBy(UserSession $session);
+    public function IsOwnedBy(UserSession $userSession);
 
     /**
-     * @param UserSession $session
+     * @param UserSession $userSession
      * @return bool
      */
-    public function IsParticipating(UserSession $session);
+    public function IsParticipating(UserSession $userSession);
 
     /**
      * @return string

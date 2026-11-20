@@ -128,9 +128,9 @@ class SchedulePageBuilder implements ISchedulePageBuilder
         return $schedule;
     }
 
-    public function GetScheduleDates(UserSession $user, ISchedule $schedule, ISchedulePage $page)
+    public function GetScheduleDates(UserSession $userSession, ISchedule $schedule, ISchedulePage $page)
     {
-        $userTimezone = $user->Timezone;
+        $userTimezone = $userSession->Timezone;
         $providedDate = $page->GetSelectedDate();
         $selectedDates = $page->GetSelectedDates();
         if (!empty($selectedDates)) {

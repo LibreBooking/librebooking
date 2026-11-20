@@ -146,12 +146,12 @@ class BufferSlot implements IReservationSlot
         return $this->_reservation->ReferenceNumber;
     }
 
-    public function IsOwnedBy(UserSession $user)
+    public function IsOwnedBy(UserSession $userSession)
     {
         return false;
     }
 
-    public function IsParticipating(UserSession $session)
+    public function IsParticipating(UserSession $userSession)
     {
         return false;
     }
