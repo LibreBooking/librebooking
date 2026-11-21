@@ -1,0 +1,49 @@
+Reservierungsdetails:
+<br/>
+<br/>
+
+Benutzer: {{ UserName|raw }}
+Beginn: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Ende: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Ressourcen:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Ressource: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Titel: {{ Title|escape_once }}<br/>
+Beschreibung: {{ Description|escape_once|nl2br }}<br/>
+{{ DeleteReason|escape_once|nl2br }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Die folgenden Reservierungen wurden entfernt:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Zubeh&ouml;r:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+<br/>
+<a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a>

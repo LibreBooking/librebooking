@@ -21,7 +21,7 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
     {
         $this->presenter->PageLoad();
 
-        $this->smarty->display('Ajax/resource_popup.tpl');
+        $this->Display('Ajax/resource_popup.tpl');
     }
 
     public function BindResource(BookableResource $resource)

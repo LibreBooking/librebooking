@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>En ny bruger har oprettet sig i {{ AppTitle|raw }} med disse informationer:<br/>
+E-mail: {{ EmailAddress|raw }}<br/>
+Navn: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Organisation: {{ Organization|raw }}<br/>
+Adresse: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    Oprettet af: {{ CreatedBy|raw }}
+{% endif %}

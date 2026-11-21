@@ -1,0 +1,13 @@
+Vaša rezervacija bo kmalu potekla.<br/>
+Podrobnosti rezervacije:
+    <br/>
+    <br/>
+    Začetek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Vir: {{ ResourceName|escape_once }}<br/>
+    Naslov: {{ Title|escape_once }}<br/>
+    Opis: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ogled rezervacije</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Dodaj v Koledar (Outlook)</a> |
+<a href="{{ ScriptUrl|raw }}">Prijava v program LibreBooking</a>

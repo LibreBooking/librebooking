@@ -1,0 +1,60 @@
+รายละอียดการจอง:
+<br/>
+<br/>
+
+เริ่มต้น: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+สิ้นสุด: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    ทรัพยากร:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    ทรัพยากร: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+ชื่อ: {{ Title|escape_once }}<br/>
+รายละเอียด: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    การจองจะเกิดขึ้นในวันที่ดังต่อไปนี้:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    อุปกรร์เสริม:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+   ทรัพยากรอย่างน้อยหนึ่งรายการต้องได้รับอนุมัติก่อนใช้งาน การจองนี้จะอยู่ระหว่างการพิจารณาจนกว่าจะได้รับการอนุมัติ
+{% endif %}
+
+<br/>
+เข้าร่วม? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Yes</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">No</a>
+<br/>
+<br/>
+
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">ดูการจองนี้</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">เพิ่มลงในปฏิทิน</a> |
+<a href="{{ ScriptUrl|raw }}">เข้าสู่ระบบ LibreBooking</a>

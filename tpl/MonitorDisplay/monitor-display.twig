@@ -1,0 +1,87 @@
+{{ include('globalheader.twig', {HideNavBar: true, cssFiles: 'css/schedule.css'}) }}
+
+<div id="page-monitor-display">
+    {% if Enabled is defined and Enabled %}
+        <div id="monitor-display-configuration" class="bg-light border-bottom pb-2 my-2">
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#configuration-options"
+                title="{{ translate('ChangeConfiguration') }}" class="link-primary"><i class="bi bi-gear-fill me-1"></i></a>
+
+            <div class="collapse" id="configuration-options">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="fw-bold" for="schedules">{{ translate('Schedule') }}</label>
+                            <select class="form-select" title="{{ translate('Schedules') }}" id="schedules">
+                                {% for schedule in Schedules %}
+                                    <option value="{{ schedule.GetId() }}" {% if schedule.GetIsDefault() %}selected="selected"
+                                        {% endif %}>{{ schedule.GetName()|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="fw-bold" for="resources">{{ translate('Resource') }}</label>
+                            <select class="form-select" title="{{ translate('Resource') }}" id="resources">
+                                <option selected="selected" value="-1">-- {{ translate('AllResources') }} --</option>
+                                {% for resource in Resources %}
+                                    <option value="{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="fw-bold" for="format">{{ translate('Format') }}</label>
+                            <select class="form-select" title="{{ translate('Format') }}" id="format">
+                                <option selected="selected" value="1">{{ translate('Grid') }}</option>
+                                <option value="2">{{ translate('List') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="fw-bold" for="days">{{ translate('NumberOfDaysVisible') }}</label>
+                            <select class="form-select" title="{{ translate('NumberOfDaysVisible') }}" id="days">
+                                <option selected="selected" value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="monitor-display-schedule" class="mb-4">
+
+        </div>
+    {% else %}
+        <div class="alert alert-danger">To enable the monitor display, set view.schedules to true in your application
+            configuration</div>
+    {% endif %}
+</div>
+
+{{ include('javascript-includes.twig') }}
+{{ jsfile(src: 'ajax-helpers.js') }}
+{{ jsfile(src: 'monitor-display.js') }}
+
+<script type="text/javascript">
+    $(function() {
+        var monitorDisplay = new MonitorDisplay({
+            {# raw: JS string context #}
+            resourcesUrl: '{{ server.SCRIPT_NAME|raw }}?dr=resources&sid=',
+            {# raw: JS string context #}
+            scheduleUrl:  '{{ server.SCRIPT_NAME|raw }}?dr=schedule&sid=[sid]&rid=[rid]&format=[format]&d=[days]'
+        });
+        monitorDisplay.init();
+    });
+</script>
+
+{{ include('globalfooter.twig') }}

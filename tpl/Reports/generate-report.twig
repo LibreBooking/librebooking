@@ -1,0 +1,324 @@
+{{ include('globalheader.twig', {Select2: true, DataTable: true}) }}
+
+<div id="page-generate-report">
+    <div id="customReportInput-container" class="accordion">
+        <form role="form" id="customReportInput">
+            <div class="accordion-item shadow mb-2 panel-default" id="report-filter-panel">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelCustomReport" aria-expanded="true"
+                        aria-controls="panelCustomReport">{{ translate('GenerateReport') }}
+                    </button>
+                </h2>
+                <div id="panelCustomReport" class="accordion-collapse collapse">
+                    <div class="accordion-body no-padding">
+                        <div id="custom-report-input">
+                            <div class="row mb-2 input-set" id="selectDiv">
+                                <div class="col-md-1"><span class="fw-bold">{{ translate('Select') }}</span></div>
+
+                                <div class="col-md-11 btn-group-sm radio d-flex flex-wrap gap-1"
+                                    data-bs-toggle="buttons">
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RESULTS') }}
+                                        value="{{ constant('Report_ResultSelection::FULL_LIST') }}" id="results_list"
+                                        checked="checked" />
+                                    <label for="results_list" class="btn btn-outline-primary"><i
+                                            class="bi bi-list-task me-1"></i>{{ translate('List') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RESULTS') }}
+                                        value="{{ constant('Report_ResultSelection::TIME') }}" id="results_time" />
+                                    <label for="results_time" class="btn btn-outline-primary"><i
+                                            class="bi bi-clock-history me-1"></i>{{ translate('TotalTime') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RESULTS') }}
+                                        value="{{ constant('Report_ResultSelection::COUNT') }}" id="results_count" />
+                                    <label for="results_count" class="btn btn-outline-primary"><i
+                                            class="bi bi-list-columns me-1"></i>{{ translate('Count') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RESULTS') }}
+                                        value="{{ constant('Report_ResultSelection::UTILIZATION') }}" id="results_utilization" />
+                                    <label for="results_utilization" class="btn btn-outline-primary"><i
+                                            class="bi bi-graph-up-arrow me-1"></i>{{ translate('Utilization') }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row input-set select-toggle mb-2" id="listOfDiv">
+                            <div class="col-md-1"><span class="fw-bold">{{ translate('Usage') }}</span></div>
+                            <div class="col-md-11 btn-group-sm radio d-flex flex-wrap gap-1" data-bs-toggle="buttons">
+                                <input type="radio" class="btn-check" {{ formname('REPORT_USAGE') }}
+                                    value="{{ constant('Report_Usage::RESOURCES') }}" id="usage_resources" checked="checked">
+                                <label for="usage_resources" class="btn btn-outline-primary"><i
+                                        class="bi bi-shop-window me-1"></i>{{ translate('Resources') }}</label>
+
+                                <input type="radio" class="btn-check" {{ formname('REPORT_USAGE') }}
+                                    value="{{ constant('Report_Usage::ACCESSORIES') }}" id="usage_accessories">
+                                <label for="usage_accessories" class="btn btn-outline-primary"><i
+                                        class="bi bi-collection me-1"></i>{{ translate('Accessories') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="row input-set select-toggle mb-2" id="aggregateDiv" style="display:none;">
+                            <div class="col-md-1"><span class="fw-bold">{{ translate('AggregateBy') }}</span></div>
+                            <div class="col-md-11 btn-group-sm radio d-flex flex-wrap align-items-start gap-1">
+                                <input type="radio" class="btn-check" {{ formname('REPORT_GROUPBY') }}
+                                    value="{{ constant('Report_GroupBy::NONE') }}" id="groupby_none" checked="checked" />
+                                <label for="groupby_none" class="btn btn-outline-primary"><i
+                                        class="bi bi-slash-circle me-1"></i>{{ translate('None') }}</label>
+
+                                <input type="radio" class="btn-check" {{ formname('REPORT_GROUPBY') }}
+                                    value="{{ constant('Report_GroupBy::RESOURCE') }}" id="groupby_resource"
+                                    class="utilization-eligible" />
+                                <label for="groupby_resource" class="btn btn-outline-primary"><i
+                                        class="bi bi-shop-window me-1"></i> {{ translate('Resource') }}</label>
+
+                                <input type="radio" class="btn-check" {{ formname('REPORT_GROUPBY') }}
+                                    value="{{ constant('Report_GroupBy::SCHEDULE') }}" id="groupby_schedule"
+                                    class="utilization-eligible" />
+                                <label for="groupby_schedule" class="btn btn-outline-primary"><i
+                                        class="bi bi-calendar me-1"></i> {{ translate('Schedule') }}</label>
+
+                                <input type="radio" class="btn-check" {{ formname('REPORT_GROUPBY') }}
+                                    value="{{ constant('Report_GroupBy::USER') }}" id="groupby_user" />
+                                <label for="groupby_user" class="btn btn-outline-primary"><i
+                                        class="bi bi-person-fill me-1"></i>{{ translate('User') }}</label>
+
+                                <input type="radio" class="btn-check" {{ formname('REPORT_GROUPBY') }}
+                                    value="{{ constant('Report_GroupBy::GROUP') }}" id="groupby_group" />
+                                <label for="groupby_group" class="btn btn-outline-primary"><i
+                                        class="bi bi-people-fill me-1"></i>{{ translate('Group') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2 input-set form-group-sm" id="rangeDiv">
+                            <div class="col-md-1"><span class="fw-bold">{{ translate('Range') }}</span></div>
+                            <div class="col-md-11">
+                                <div class="btn-group-sm radio d-flex flex-wrap gap-1" data-bs-toggle="buttons">
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RANGE') }}
+                                        value="{{ constant('Report_Range::CURRENT_MONTH') }}" id="current_month" checked="checked" />
+                                    <label for="current_month" class="btn btn-outline-primary"><i
+                                            class="bi bi-calendar3 me-1"></i>{{ translate('CurrentMonth') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RANGE') }}
+                                        value="{{ constant('Report_Range::CURRENT_WEEK') }}" id="current_week" />
+                                    <label for="current_week" class="btn btn-outline-primary"><i
+                                            class="bi bi-calendar3-week me-1"></i>{{ translate('CurrentWeek') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RANGE') }}
+                                        value="{{ constant('Report_Range::TODAY') }}" id="today" />
+                                    <label for="today" class="btn btn-outline-primary"><i
+                                            class="bi bi-calendar3-event me-1"></i>{{ translate('Today') }}</label>
+
+                                    <input type="radio" class="btn-check" {{ formname('REPORT_RANGE') }}
+                                        value="{{ constant('Report_Range::ALL_TIME') }}" id="range_all" />
+                                    <label for="range_all" class="btn btn-outline-primary"><i
+                                            class="bi bi-calendar3-fill me-1"></i>{{ translate('AllTime') }}</label>
+
+                                    <div class="d-inline-flex align-items-center gap-1 btn-group-sm ">
+                                        <input type="radio" class="btn-check" {{ formname('REPORT_RANGE') }}
+                                            value="{{ constant('Report_Range::DATE_RANGE') }}" id="range_within" />
+                                        <label for="range_within" class="btn btn-outline-primary"><i
+                                                class="bi bi-calendar3-range me-1"></i>{{ translate('Between') }}</label>
+
+                                        <label for="startDate" class="visually-hidden">{{ translate('StartDate') }}</label>
+                                        <input type="text" class="form-control form-control-sm dateinput w-auto"
+                                            id="startDate" {{ formname('REPORT_START') }} />
+                                        <div class="mx-1">-</div>
+                                        <label for="endDate" class="visually-hidden">{{ translate('EndDate') }}</label>
+                                        <input type="text" class="form-control form-control-sm dateinput w-auto"
+                                            id="endDate" {{ formname('REPORT_END') }} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row input-set form-group-sm">
+                            <div class="col-md-1"><span class="fw-bold">{{ translate('FilterBy') }}</span></div>
+                            <div class="col-md-11 d-flex flex-wrap gap-1">
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <label for="resourceId" class="visually-hidden">{{ translate('Resource') }}</label>
+                                    <select class="form-control" {{ formname('RESOURCE_ID', multi: true) }}
+                                        multiple="multiple" id="resourceId">
+                                        {% for resource in Resources %}
+                                            <option value="{{ resource.GetId() }}">{{ resource.GetName()|escape_once }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <label for="resourceTypeId"
+                                        class="visually-hidden">{{ translate('ResourceType') }}</label>
+                                    <select class="form-control" {{ formname('RESOURCE_TYPE_ID', multi: true) }}
+                                        multiple="multiple" id="resourceTypeId">
+                                        {% for resourceType in ResourceTypes %}
+                                            <option value="{{ resourceType.Id() }}">{{ resourceType.Name()|escape_once }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <label for="accessoryId" class="visually-hidden">{{ translate('Accessory') }}</label>
+                                    <select class="form-control" {{ formname('ACCESSORY_ID', multi: true) }}
+                                        multiple="multiple" id="accessoryId">
+                                        {% for accessory in Accessories %}
+                                            <option value="{{ accessory.Id }}">{{ accessory.Name|escape_once }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <label for="scheduleId" class="visually-hidden">{{ translate('Schedule') }}</label>
+                                    <select class="form-control" {{ formname('SCHEDULE_ID', multi: true) }}
+                                        multiple="multiple" id="scheduleId">
+                                        {% for schedule in Schedules %}
+                                            <option value="{{ schedule.GetId() }}">{{ schedule.GetName()|escape_once }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <label for="groupId" class="visually-hidden">{{ translate('Group') }}</label>
+                                    <select class="form-control" {{ formname('GROUP_ID', multi: true) }} multiple="multiple"
+                                        id="groupId">
+                                        {% for group in Groups %}
+                                            <option value="{{ group.Id }}">{{ group.Name|escape_once }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-11 gy-1 offset-md-1  d-flex flex-wrap gap-1">
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <div id="user-filter-div">
+                                        <label class="visually-hidden"
+                                            for="user-filter">{{ translate('AllUsers') }}</label>
+                                        <input id="user-filter" type="search" class="form-control form-control-sm"
+                                            placeholder="{{ translate('AllUsers') }}" />
+                                        <input id="user_id" class="filter-id" type="hidden" {{ formname('USER_ID') }} />
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin no-padding col-12 col-md-3">
+                                    <div id="participant-filter-div">
+                                        <div class="form-group">
+                                            <label class="visually-hidden"
+                                                for="participant-filter">{{ translate('AllParticipants') }}</label>
+                                            <input id="participant-filter" type="search"
+                                                class="form-control form-control-sm"
+                                                placeholder="{{ translate('AllParticipants') }}" />
+                                            <input id="participant_id" class="filter-id" type="hidden"
+                                                {{ formname('PARTICIPANT_ID') }} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-footer border-top mt-3 pt-3 d-flex align-items-center">
+                            <input type="submit" value="{{ translate('GetReport') }}" class="btn btn-primary btn-sm"
+                                id="btnCustomReport" asyncAction="" />
+                            <div class="form-check inline-block ms-2">
+                                <input class="form-check-input" type="checkbox" id="chkIncludeDeleted"
+                                    {{ formname('INCLUDE_DELETED') }} />
+                                <label class="form-check-label"
+                                    for="chkIncludeDeleted">{{ translate('IncludeDeleted') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ csrf_token() }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="saveMessage" class="alert alert-success" style="display:none;">
+    <strong>{{ translate('ReportSaved') }}</strong> <a class="alert-link"
+        href="{{ Path }}reports/{{ constant('Pages::REPORTS_SAVED') }}">{{ translate('MySavedReports') }}</a>
+</div>
+
+<div id="resultsDiv">
+</div>
+
+<div id="indicator" class="d-none card shadow p-2">
+    {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+</div>
+
+{{ include('Reports/chart.twig') }}
+<div class="modal fade" id="saveDialog" tabindex="-1" role="dialog" aria-labelledby="saveDialogLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="saveReportForm" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveDialogLabel">{{ translate('SaveThisReport') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="saveReportName" class="fw-bold">{{ translate('Name') }}</label>
+                        <input type="text" id="saveReportName" {{ formname('REPORT_NAME') }} class="form-control"
+                            placeholder="{{ translate('NoTitleLabel') }}" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary cancel"
+                        data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
+                    <button type="button" id="btnSaveReport" class="btn btn-primary"><span
+                            class="bi bi-check-circle"></span>
+                        {{ translate('SaveThisReport') }}
+                    </button>
+                    {{ indicator() }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{ include('javascript-includes.twig', {Select2: true, DataTable: true}) }}
+{{ jsfile('autocomplete.js') }}
+{{ jsfile('ajax-helpers.js') }}
+{{ jsfile('reports/generate-reports.js') }}
+{{ jsfile('reports/common.js') }}
+{{ jsfile('reports/chart.js') }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var reportOptions = {
+            userAutocompleteUrl: "{{ Path|raw }}ajax/autocomplete.php?type={{ constant('AutoCompleteType::User') }}",
+            groupAutocompleteUrl: "{{ Path|raw }}ajax/autocomplete.php?type={{ constant('AutoCompleteType::Group') }}",
+            customReportUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Generate') }}",
+            printUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::PrintReport') }}&",
+            csvUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Csv') }}&",
+            saveUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Save') }}"
+        };
+
+        var reports = new GenerateReports(reportOptions);
+        reports.init();
+
+        var common = new ReportsCommon({
+            scriptUrl: '{{ ScriptUrl|raw }}',
+            chartOpts: {
+                dateAxisFormat: '{{ DateAxisFormat|raw }}'
+            }
+        });
+        common.init();
+
+        $('#resourceId').select2({
+            placeholder: '{{ translate('AllResources')|raw }}'
+        });
+        $('#resourceTypeId').select2({
+            placeholder: '{{ translate('AllResourceTypes')|raw }}'
+        });
+        $('#accessoryId').select2({
+            placeholder: '{{ translate('AllAccessories')|raw }}'
+        });
+        $('#scheduleId').select2({
+            placeholder: '{{ translate('AllSchedules')|raw }}'
+        });
+        $('#groupId').select2({
+            placeholder: '{{ translate('AllGroups')|raw }}'
+        });
+    });
+
+    //$('#user-filter, #participant-filter').clearable();
+</script>
+
+{{ control('DatePickerSetupControl', {ControlId: 'startDate'}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'endDate'}) }}
+
+</div>
+{{ include('globalfooter.twig') }}

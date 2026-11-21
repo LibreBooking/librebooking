@@ -1,0 +1,115 @@
+<div class="fs-4">{{ Attributes|default([])|length }} {{ translate('Attributes') }}</div>
+{% if Attributes|default([])|length > 0 %}
+    {% set tableId = 'attributeListTable' %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+            <thead>
+                <tr>
+                    <th>{{ translate('DisplayLabel') }}</th>
+                    <th>ID</th>
+                    <th>{{ translate('SortOrder') }}</th>
+                    <th>{{ translate('Type') }}</th>
+                    <th>{{ translate('Required') }}</th>
+                    {% if Category != constant('CustomAttributeCategory::RESERVATION') %}
+                        <th>{{ translate('AppliesTo') }}</th>
+                    {% endif %}
+                    <th>{{ translate('CollectedFor') }}</th>
+                    <th>{{ translate('ValidationExpression') }}</th>
+                    <th>{{ translate('PossibleValues') }}</th>
+                    {% if Category == constant('CustomAttributeCategory::RESERVATION') %}
+                        <th>{{ translate('Private') }}</th>
+                    {% endif %}
+                    <th>{{ translate('AdminOnly') }}</th>
+                    <th class="action">{{ translate('Edit') }}</th>
+                    <th class="action">{{ translate('Delete') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attribute in Attributes %}
+                    <tr attributeId="{{ attribute.Id() }}">
+                        <td>{{ attribute.Label()|escape_once }}</td>
+                        <td data-order="{{ attribute.Id() }}">att{{ attribute.Id() }}</td>
+                        <td>{{ attribute.SortOrder() }}</td>
+                        <td>{{ translate(Types[attribute.Type()]) }}</td>
+                        <td>{% if attribute.Required() %}
+                                {{ translate('Yes') }}
+                            {% else %}
+                                {{ translate('No') }}
+                            {% endif %}</td>
+                        {% if Category != constant('CustomAttributeCategory::RESERVATION') %}
+                            <td>{% if attribute.UniquePerEntity() %}
+                                    {{ attribute.EntityDescriptions()|join(', ')|escape_once }}
+                                {% else %}
+                                    {{ translate('All') }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td>
+                            {% if attribute.HasSecondaryEntities() %}
+                                {{ attribute.SecondaryEntityDescriptions()|join(', ')|escape_once }}
+                            {% else %}
+                                {{ translate('All') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ attribute.Regex()|escape_once }}</td>
+                        <td>{{ attribute.PossibleValues()|escape_once }}</td>
+                        {% if Category == constant('CustomAttributeCategory::RESERVATION') %}
+                            <td>{% if attribute.IsPrivate() %}
+                                    {{ translate('Yes') }}
+                                {% else %}
+                                    {{ translate('No') }}
+                                {% endif %}</td>
+                        {% endif %}
+                        <td>{% if attribute.AdminOnly() %}{{ translate('Yes') }}{% else %}{{ translate('No') }}{% endif %}</td>
+                        <td class="action">
+                            <a href="#" class="update edit link-primary">
+                                <span class="visually-hidden">{{ translate('Edit') }}</span>
+                                <i class="bi bi-pencil-square icon edit"></i>
+                            </a>
+                        </td>
+                        <td class="action">
+                            <a href="#" class="update delete" attributeId="{{ attribute.Id() }}">
+                                <span class="visually-hidden">{{ translate('Remove') }}</span>
+                                <span class="bi bi-trash3-fill text-danger icon remove"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{{ datatable(tableId is defined ? tableId : '') }}
+<script type="text/javascript">
+    var attributeList = new Object();
+
+    {% for attribute in Attributes %}
+        attributeList[{{ attribute.Id() }}] = {
+        id: {{ attribute.Id() }},
+        label: "{{ attribute.Label()|escape_js }}",
+        required: {{ attribute.Required() ? 1 : '' }},
+        regex: "{{ attribute.Regex()|escape_js }}",
+        possibleValues: "{{ attribute.PossibleValues()|escape_js }}",
+        type: "{{ attribute.Type() }}",
+        sortOrder: "{{ attribute.SortOrder() }}",
+        {% if attribute.EntityIds()|length > 0 %}
+            entityIds: ["{{ attribute.EntityIds()|join('","')|raw }}"],{# raw: JS array context, matches Smarty #}
+        {% else %}
+            entityIds: [],
+            {% endif %}
+            entityDescriptions: {{ attribute.EntityDescriptions()|map(d => d|html_entity_decode)|json_encode }},
+            adminOnly: {{ attribute.AdminOnly() }},
+            {% if attribute.HasSecondaryEntities() %}
+                secondaryEntityIds: ["{{ attribute.SecondaryEntityIds()|join('","')|raw }}"],{# raw: JS array context, matches Smarty #}
+                secondaryEntityDescriptions: {{ attribute.SecondaryEntityDescriptions()|map(d => d|html_entity_decode)|json_encode }},
+            {% else %}
+                secondaryEntityIds: [],
+                secondaryEntityDescriptions: [],
+            {% endif %}
+            secondaryCategory: "{{ attribute.SecondaryCategory() }}",
+            isPrivate: "{{ attribute.IsPrivate() ? 1 : '' }}"
+        };
+    {% endfor %}
+
+    $('#attributeList').data('list', attributeList);
+</script>

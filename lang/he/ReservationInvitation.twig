@@ -1,0 +1,46 @@
+    פרטי ההזמנה:
+    <br/>
+    <br/>
+
+    התחלה: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    סיום: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        משאבים:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        משאב: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+    כותר: {{ Title|escape_once }}<br/>
+    תאור: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        ההזמנה מתקיימת בתאריכים הבאים:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>משאבים:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+                אחד או יותר מהמשאבים המבוקשים דורש אישור. ההזמנה במצב המתנה עד שתאושר.
+    {% endif %}
+
+    <br/>
+    משתתף? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">כן</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">לא</a>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">לצפות בהזמנה זו</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">להוסיף ללוח אישי בדואר אלקרוני</a> |
+    <a href="{{ ScriptUrl|raw }}">להתחבר ל-LibreBooking</a>

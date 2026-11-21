@@ -1,0 +1,52 @@
+    Detalji o rezervaciji:
+    <br/>
+    <br/>
+
+    Početak: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Kraj: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+        Tereni:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}<br/>
+        {% endfor %}
+        {% else %}
+        Tereni: {{ ResourceName|escape_once }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Naziv: {{ Title|escape_once }}<br/>
+    Opis: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Rezervacija važi za navedeni datum:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Dodatno:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Jedan ili više terena zahtevaju odobrenje pre upotrebe. Ova rezervacija ce biti zadržana do dozvole.
+    {% endif %}
+
+    <br/>
+    Attending? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Da</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Ne</a>
+    <br/>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Pregled rezervacije</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Dodaj u kalendar</a> |
+    <a href="{{ ScriptUrl|raw }}">Uloguj se</a>

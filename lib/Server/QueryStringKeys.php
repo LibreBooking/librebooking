@@ -76,6 +76,7 @@ class QueryStringKeys
     public const SUBSCRIPTION_DAYS_PAST = 'pastDayCount';
     public const SUBSCRIPTION_DAYS_FUTURE = 'futureDayCount';
     public const EMAIL_TEMPLATE_NAME = 'tn';
+    public const TEMPLATE_ENGINE = 'template_engine';
     public const TRANSACTION_LOG_ID = 'id';
     public const TYPE = 'type';
     public const USER_ID = 'uid';

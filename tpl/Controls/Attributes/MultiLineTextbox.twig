@@ -1,0 +1,24 @@
+<div class="form-group {{ class }}">
+    {% if readonly and tooltip is defined and tooltip %}
+        <span class="customAttribute readonly">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}:</span>
+    {% else %}
+        <label class="customAttribute {% if readonly %}readonly{% elseif searchmode %}search{% else %}standard{% endif %} fw-bold"
+            for="{{ attributeId }}">{{ attribute.Label()|escape_once }}{% if attribute.Required() and not searchmode %}
+                <i class="bi bi-asterisk text-danger align-top text-small"></i>
+            {% endif %}</label>
+    {% endif %}
+    {% if readonly %}
+        <span class="attributeValue {{ class }}">{{ attribute.Value()|escape_once|nl2br }}</span>
+    {% else %}
+        <div class="position-relative">
+            <textarea id="{{ attributeId }}" name="{{ attributeName }}" rows="2"
+                class="customAttribute form-control form-control-sm w-100"
+                {% if attribute.Required() and not searchmode %}required{% endif %}>{{ attribute.Value()|escape_once }}</textarea>
+            {% if searchmode %}
+                <span class="searchclear searchclear-label bi bi-x-circle-fill" ref="{{ attributeId }}"></span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

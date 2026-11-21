@@ -1,0 +1,44 @@
+<div class="minDuration"
+     data-value="{{ resource.GetMinLength() }}"
+     data-days="{{ resource.GetMinLength().Days() }}"
+     data-hours="{{ resource.GetMinLength().Hours() }}"
+     data-minutes="{{ resource.GetMinLength().Minutes() }}">
+    {% if resource.HasMinLength() %}
+        {{ translate('ResourceMinLength', resource.GetMinLength()) }}
+    {% else %}
+        {{ translate('ResourceMinLengthNone') }}
+    {% endif %}
+</div>
+
+<div class="maxDuration"
+     data-value="{{ resource.GetMaxLength() }}"
+     data-days="{{ resource.GetMaxLength().Days() }}"
+     data-hours="{{ resource.GetMaxLength().Hours() }}"
+     data-minutes="{{ resource.GetMaxLength().Minutes() }}">
+    {% if resource.HasMaxLength() %}
+        {{ translate('ResourceMaxLength', resource.GetMaxLength()) }}
+    {% else %}
+        {{ translate('ResourceMaxLengthNone') }}
+    {% endif %}
+</div>
+
+<div class="bufferTime"
+     data-value="{{ resource.GetBufferTime() }}"
+     data-days="{{ resource.GetBufferTime().Days() }}"
+     data-hours="{{ resource.GetBufferTime().Hours() }}"
+     data-minutes="{{ resource.GetBufferTime().Minutes() }}">
+    {% if resource.HasBufferTime() %}
+        {{ translate('ResourceBufferTime', resource.GetBufferTime()) }}
+    {% else %}
+        {{ translate('ResourceBufferTimeNone') }}
+    {% endif %}
+</div>
+
+<div class="allowMultiDay"
+     data-value="{{ resource.GetAllowMultiday() }}">
+    {% if resource.GetAllowMultiday() %}
+        {{ translate('ResourceAllowMultiDay') }}
+    {% else %}
+        {{ translate('ResourceNotAllowMultiDay') }}
+    {% endif %}
+</div>

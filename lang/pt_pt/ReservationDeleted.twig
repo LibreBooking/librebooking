@@ -1,0 +1,57 @@
+<p><strong>Detalhes da reserva:</strong></p>
+
+<p>
+    <strong>Início:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Fim:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Título:</strong> {{ Title|escape_once }}<br/>
+    <strong>Descrição:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+    <br/>
+    {% for attribute in Attributes %}
+    <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+    {% endfor %}
+{% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Recursos ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Recurso:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    <strong>Esta reserva ocorre nas seguintes datas ({{ RepeatRanges|default([])|length }}):</strong>
+    <br/>
+    {% for date in RepeatRanges %}
+        {{ formatdate(date: date.GetBegin()) }}
+        {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<p>
+    {% if CreatedBy %}
+        <strong>Removido por:</strong>
+        {{ CreatedBy|raw }}
+        <br/>
+        <strong>Motivo da exclusão: {{ DeleteReason|escape_once|nl2br }}</strong>
+    {% endif %}
+</p>
+
+<p><strong>Número de referência:</strong> {{ ReferenceNumber|raw }}</p>
+
+<a href="{{ ScriptUrl|raw }}">Entrar em {{ AppTitle|raw }}</a>

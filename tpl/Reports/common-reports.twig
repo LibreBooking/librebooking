@@ -1,0 +1,168 @@
+{{ include('globalheader.twig', {DataTable: true}) }}
+
+<div id="page-common-reports" class="accordion">
+    <div>
+        <div class="accordion-item shadow mb-2" id="saved-reports-panel">
+            <h2 class="accordion-header fw-bold link-primary">
+                <button class="accordion-button link-primary fw-bold" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelCommonReports" aria-expanded="false" aria-controls="panelCommonReports">
+                    {{ translate('CommonReports') }}</button>
+            </h2>
+            <div id="panelCommonReports" class="accordion-collapse collapse">
+                <div class="accordion-body no-padding">
+                    <div id="report-list">
+                        <table class="table table-striped table-hover w-100">
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">{{ translate('ReservedResources') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::RESERVATIONS_TODAY') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('Today') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESERVATIONS_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESERVATIONS_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                                <tr class="alt">
+                                    <td class="fw-bold">{{ translate('ReservedAccessories') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::ACCESSORIES_TODAY') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('Today') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::ACCESSORIES_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::ACCESSORIES_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">{{ translate('ResourceUsageTimeBooked') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_TIME_ALLTIME') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('AllTime') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_TIME_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_TIME_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                                <tr class="alt">
+                                    <td class="fw-bold">{{ translate('ResourceUsageReservationCount') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_COUNT_ALLTIME') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('AllTime') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_COUNT_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::RESOURCE_COUNT_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">{{ translate('Top20UsersTimeBooked') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_TIME_ALLTIME') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('AllTime') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_TIME_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_TIME_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                                <tr class="alt">
+                                    <td class="fw-bold">{{ translate('Top20UsersReservationCount') }}</td>
+                                    <td class="text-end">
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_COUNT_ALLTIME') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3-event"></i>
+                                            {{ translate('AllTime') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_COUNT_THISWEEK') }}"
+                                            class="report report-action runNow link-primary mx-2"><i
+                                                class="bi bi-calendar3-week"></i>
+                                            {{ translate('CurrentWeek') }}</a>
+                                        <a href="#" reportId="{{ constant('CannedReport::USER_COUNT_THISMONTH') }}"
+                                            class="report report-action runNow link-primary"><i
+                                                class="bi bi-calendar3 me-1"></i>
+                                            {{ translate('CurrentMonth') }}</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="resultsDiv">
+</div>
+
+<div id="indicator" class="d-none card shadow p-2">
+    {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+</div>
+
+{{ csrf_token() }}
+
+{{ include('Reports/chart.twig') }}
+
+{{ include('javascript-includes.twig', {DataTable: true}) }}
+{{ jsfile('ajax-helpers.js') }}
+{{ jsfile('reports/canned-reports.js') }}
+{{ jsfile('reports/chart.js') }}
+{{ jsfile('reports/common.js') }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var reportOptions = {
+            generateUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Generate') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            emailUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Email') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            deleteUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Delete') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            printUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::PrintReport') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            csvUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Csv') }}&{{ constant('QueryStringKeys::REPORT_ID') }}="
+        };
+
+        var reports = new CannedReports(reportOptions);
+        reports.init();
+
+        var common = new ReportsCommon({
+            scriptUrl: '{{ ScriptUrl|raw }}',
+            chartOpts: {
+                dateAxisFormat: '{{ DateAxisFormat|raw }}'
+            }
+
+        });
+        common.init();
+    });
+</script>
+
+{{ include('globalfooter.twig') }}

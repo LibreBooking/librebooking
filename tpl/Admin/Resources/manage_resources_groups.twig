@@ -1,0 +1,8 @@
+{% if resource.GetResourceGroupIds()|default([])|length == 0 %}
+    {{ translate('None') }}
+{% endif %}
+{% for resourceGroupId in resource.GetResourceGroupIds()|default([]) %}
+    <span class="resourceGroupId"
+        data-value="{{ resourceGroupId }}">{{ ResourceGroupList[resourceGroupId].name|escape_once }}</span>{% if not loop.last %},
+    {% endif %}
+{% endfor %}

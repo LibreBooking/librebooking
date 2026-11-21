@@ -1,0 +1,93 @@
+Oplysninger om reservation:
+<br/>
+<br/>
+
+Begynder: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Slutter: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Faciliteter:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Facilitet: {{ ResourceName|escape_once }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Overskrift: {{ Title|escape_once }}<br/>
+Beskrivelse: {{ Description|escape_once|nl2br }}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    Reservationen gælder for følgende datoer:
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Participants|default([])|length > 0 %}
+    <br/>
+    Deltagere:
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br/>
+    Inviterede:
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Udstyr:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if RequiresApproval %}
+    <br/>
+    Mindst én af dine reservationer skal godkendes. En reservation er først endelig, når den er godkendt.
+{% endif %}
+
+<br/>
+Kommer du? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Ja</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Nej</a>
+<br/>
+<br/>
+
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Se denne reservation</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Tilføj til kalender</a> |
+<a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Tilføj til Google Kalender</a> |
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

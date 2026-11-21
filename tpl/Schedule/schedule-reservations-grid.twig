@@ -1,0 +1,60 @@
+<!-- schedule-reservations-grid.tpl -->
+{# standard interactive schedule grid.
+   The literal comment above mirrors the Smarty .tpl first line byte-for-byte. #}
+{% import 'Schedule/_slot_macros.twig' as slot %}
+
+{% set TodaysDate = now() %}
+{# Is this a view page and guests are allowed to book #}
+{% set GuestViewBookable = (LoadViewOnly and AllowGuestBooking) %}
+{% for date in BoundDates %}
+    {% set periods = DailyLayout.GetPeriods(date, true) %}
+    {% set slots = DailyLayout.GetPeriods(date, false) %}
+    {% set count = periods|default([])|length %}
+    {% set slotCount = slots|default([])|length %}
+    {% if count != 0 %}{# dont show if there are no slots #}
+        {% set min = slots[0].BeginDate().Timestamp() %}
+        {% set max = slots[slotCount - 1].EndDate().Timestamp() %}
+        <table class="reservations" data-min="{{ min }}" data-max="{{ max }}">
+            <thead>
+                {% if date.DateEquals(TodaysDate) %}
+                <tr class="today">
+                {% else %}
+                <tr>
+                {% endif %}
+                    <td class="resdate">{{ formatdate(date, null, null, 'schedule_daily') }}</td>
+                    {% for period in periods %}
+                        <td class="reslabel text-center" colspan="{{ period.Span() }}">{{ period.Label(date)|escape_once }}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource in Resources %}
+                    {% set resourceId = resource.Id %}
+                    {% set href = CreateReservationPage ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                    <tr class="slots" data-resourceid="{{ resource.GetId() }}">
+                        <td class="resourcename"
+                            {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
+                            {% if (resource.CanBook or GuestViewBookable) and DailyLayout.IsDateReservable(date) %}
+                                <span resourceId="{{ resourceId }}"
+                                    class="d-sm-inline-block d-md-none resourceNameSelector bi bi-info-circle-fill"
+                                    data-show-event="click"
+                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}></span>
+                                <a href="{{ href|raw }}" resourceId="{{ resource.Id }}" class="resourceNameSelector"
+                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                    {% endif %}>{{ resource.Name|escape_once }}</a>
+                            {% else %}
+                                <span resourceId="{{ resource.Id }}" resourceId="{{ resource.Id }}" class="resourceNameSelector"
+                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
+                                    {% endif %}>{{ resource.Name|escape_once }}</span>
+                            {% endif %}
+                        </td>
+                        {% for Slot in slots %}
+                            {% set slotRef = Slot.BeginDate().Format('YmdHis') ~ resourceId %}
+                            {{ slot.dispatch(DisplaySlotFactory.GetFunction(Slot, (resource.CanBook or GuestViewBookable)), Slot, href, slotRef, resourceId) }}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,109 @@
+{% if Deleted %}
+    <p>{{ UserName|raw }} ha eliminado una reserva</p>
+    {% else %}
+    <p>{{ UserName|raw }} te ha añadido a una reserva</p>
+{% endif %}
+
+{% if DeleteReason %}
+    <p><strong>Motivo de Eliminación:</strong>{{ DeleteReason|escape_once|nl2br }}</p>
+{% endif %}
+
+<p><strong>Detalles de la Reserva:</strong></p>
+
+<p>
+    <strong>Inicio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Fin:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+</p>
+
+<p>
+{% if ResourceNames|default([])|length > 1 %}
+    <strong>Recursos ({{ ResourceNames|default([])|length }}):</strong> <br />
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|escape_once }}<br/>
+    {% endfor %}
+{% else %}
+    <strong>Recurso:</strong> {{ ResourceName|escape_once }}<br/>
+{% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+{% if RequiresApproval and not Deleted %}
+    <p>* Uno o más de los recursos reservados requieren aprobación antes de su uso. Esta reserva estará pendiente hasta que sea aprobada. *</p>
+{% endif %}
+
+<p>
+    <strong>Título:</strong> {{ Title|escape_once }}<br/>
+    <strong>Descripción:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    <strong>La reserva ocurre en las siguientes fechas ({{ RepeatRanges|default([])|length }}):</strong>
+    <br/>
+{% endif %}
+
+{% for date in RepeatRanges %}
+    {{ formatdate(date: date.GetBegin()) }}
+    {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+    <br/>
+{% endfor %}
+
+{% if Participants|default([])|length > 0 %}
+    <br />
+    <strong>Participantes ({{ (Participants|default([])|length) + (ParticipatingGuests|default([])|length) }}):</strong>
+    <br />
+    {% for user in Participants %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if ParticipatingGuests|default([])|length > 0 %}
+    {% for email in ParticipatingGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Invitees|default([])|length > 0 %}
+    <br />
+    <strong>Invitados ({{ (Invitees|default([])|length) + (InvitedGuests|default([])|length) }}):</strong>
+    <br />
+    {% for user in Invitees %}
+        {{ user.FullName()|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if InvitedGuests|default([])|length > 0 %}
+    {% for email in InvitedGuests %}
+        {{ email|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br />
+       <strong>Accesorios ({{ Accessories|default([])|length }}):</strong>
+       <br />
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+{% if not Deleted and not Updated %}
+<p>
+    <strong>¿Asistir?</strong> <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Si</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">No</a>
+</p>
+{% endif %}
+
+{% if not Deleted %}
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ver esta reserva</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Agregar a un calendario</a> |
+<a href="{{ GoogleCalendarUrl|raw }}" target="_blank" rel="nofollow">Agregar a Google Calendar</a> |
+{% endif %}
+<a href="{{ ScriptUrl|raw }}">Iniciar sesión en {{ AppTitle|raw }}</a>

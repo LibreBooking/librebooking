@@ -1,0 +1,14 @@
+<div class="availableDates" data-has-availability="{{ schedule.HasAvailability() ? 1 : 0 }}"
+    data-start-date="{{ formatdate(schedule.GetAvailabilityBegin(), timezone, 'Y-m-d') }}"
+    data-end-date="{{ formatdate(schedule.GetAvailabilityEnd(), timezone, 'Y-m-d') }}">
+</div>
+
+{{ translate('Available') }}
+<span class="propertyValue fw-bold">
+    {% if schedule.HasAvailability() %}
+        {{ formatdate(schedule.GetAvailabilityBegin(), timezone, null, 'schedule_daily') }} -
+        {{ formatdate(schedule.GetAvailabilityEnd(), timezone, null, 'schedule_daily') }}
+    {% else %}
+        {{ translate('AvailableAllYear') }}
+    {% endif %}
+</span>

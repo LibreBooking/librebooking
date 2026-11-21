@@ -1,0 +1,174 @@
+<div id="resourceDetailsPopup">
+    <div class="card shadow-sm">
+        {% set headerStyle = '' %}
+        {% if color is not empty %}
+            {% set headerStyle = ' style="background-color:' ~ color ~ ';color:' ~ textColor ~ ';"' %}
+        {% endif %}
+        <div class="resourceNameTitle card-header clearfix" {{ headerStyle|raw }}>
+            <h5 class="float-start">{{ resourceName|escape_once }}</h5>
+            <a href="#" class="btn btn-close d-sm-inline-block d-md-none hideResourceDetailsPopup float-end"
+                aria-label="{{ translate('Close') }}"></a>
+        </div>
+        <div class="card-body row">
+            {% set class = 'col-md-6' %}
+            {% if imageUrl is defined and imageUrl != '' %}
+                {% set class = 'col-md-5' %}
+
+                <div class="resourceImage col-md-2">
+                    <div id="resourceImageCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ resource_image(imageUrl) }}" alt="{{ resourceName|escape_once }}"
+                                    class="rounded d-block w-100" />
+                            </div>
+                            {% for image in images %}
+                                <div class="carousel-item">
+                                    <img src="{{ resource_image(image) }}" alt="{{ resourceName|escape_once }}"
+                                        class="rounded d-block w-100" />
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-indicators">
+                            {% if images|length > 0 %}
+                                {% set slide = 1 %}
+                                <button type="button" data-bs-target="#resourceImageCarousel" data-bs-slide-to="0"
+                                    class="active"></button>
+                                {% for image in images %}
+                                    <button type="button" data-bs-target="#resourceImageCarousel"
+                                        data-bs-slide-to="{{ slide }}"></button>
+                                    {% set slide = slide + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="attributes {{ class }}">
+                <span class="fw-bold">{{ translate('Contact') }}</span>
+                {% if contactInformation != '' %}
+                    {{ contactInformation|escape_once }}
+                {% else %}
+                    {{ translate('NoContactLabel') }}
+                {% endif %}
+                <br />
+                <span class="fw-bold">{{ translate('Location') }}</span>
+                {% if locationInformation != '' %}
+                    {{ locationInformation|escape_once }}
+                {% else %}
+                    {{ translate('NoLocationLabel') }}
+                {% endif %}
+                <br />
+                <span class="fw-bold">{{ translate('ResourceType') }}</span>
+                {% if resourceType != '' %}
+                    {{ resourceType|escape_once }}
+                {% else %}
+                    {{ translate('NoResourceTypeLabel') }}
+                {% endif %}
+                {% if Attributes|default([])|length > 0 %}
+                    {% for attribute in Attributes %}
+                        <div>
+                            {{ control('AttributeControl', {attribute: attribute, readonly: true})|raw }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if ResourceTypeAttributes is defined and ResourceTypeAttributes and ResourceTypeAttributes|default([])|length > 0 %}
+                    {% for attribute in ResourceTypeAttributes %}
+                        <div>
+                            {{ control('AttributeControl', {attribute: attribute, readonly: true})|raw }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="settings {{ class }}">
+                <div>
+                    {% if minimumDuration != '' %}
+                        {{ translate('ResourceMinLength', [minimumDuration]) }}
+                    {% else %}
+                        {{ translate('ResourceMinLengthNone') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if maximumDuration != '' %}
+                        {{ translate('ResourceMaxLength', [maximumDuration]) }}
+                    {% else %}
+                        {{ translate('ResourceMaxLengthNone') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if requiresApproval %}
+                        {{ translate('ResourceRequiresApproval') }}
+                    {% else %}
+                        {{ translate('ResourceRequiresApprovalNone') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if minimumNotice != '' %}
+                        {{ translate('ResourceMinNotice', [minimumNotice]) }}
+                    {% else %}
+                        {{ translate('ResourceMinNoticeNone') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if maximumNotice != '' %}
+                        {{ translate('ResourceMaxNotice', [maximumNotice]) }}
+                    {% else %}
+                        {{ translate('ResourceMaxNoticeNone') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if allowMultiday %}
+                        {{ translate('ResourceAllowMultiDay') }}
+                    {% else %}
+                        {{ translate('ResourceNotAllowMultiDay') }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if maxParticipants != '' %}
+                        {{ translate('ResourceCapacity', [maxParticipants]) }}
+                    {% else %}
+                        {{ translate('ResourceCapacityNone') }}
+                    {% endif %}
+                </div>
+
+                {% if autoReleaseMinutes != '' %}
+                    <div>
+                        {{ translate('AutoReleaseNotification', [autoReleaseMinutes]) }}
+                    </div>
+                {% endif %}
+                {% if isCheckInEnabled %}
+                    <div>
+                        {{ translate('RequiresCheckInNotification') }}
+                    </div>
+                {% endif %}
+
+                {% if creditsEnabled %}
+                    <div>
+                        {{ translate('CreditUsagePerSlot', [offPeakCredits]) }}
+                    </div>
+                    <div>
+                        {{ translate('PeakCreditUsagePerSlot', [peakCredits]) }}
+                    </div>
+                {% endif %}
+            </div>
+            {% set class = 'col-md-10' %}
+            <div class="description {{ class }}">
+                <span class="fw-bold mt-2">{{ translate('Description') }}</span>
+                <div class="descriptionContent px-2">
+                {% if description != '' %}
+                    {{ description|sanitize_rich_text|url2link|nl2br }}
+                {% else %}
+                    {{ translate('NoDescriptionLabel') }}
+                {% endif %}
+                </div>
+                <span class="fw-bold mt-2">{{ translate('Notes') }}</span>
+                <div class="noteContent px-2">
+                {% if notes != '' %}
+                    {{ notes|sanitize_rich_text|url2link|nl2br }}
+                {% else %}
+                    {{ translate('NoNotesLabel') }}
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

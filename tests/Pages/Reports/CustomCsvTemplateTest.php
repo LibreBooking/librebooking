@@ -63,12 +63,12 @@ class CustomCsvTemplateTest extends TestBase
         $report = $this->createStub(IReport::class);
         $report->method('GetData')->willReturn($data);
 
-        $page = new SmartyPage();
+        $page = new TwigRenderer();
         $page->assign('Definition', $definition);
         $page->assign('Report', $report);
         $page->assign('ReportCsvColumnView', new ReportCsvColumnView($selectedColumns));
 
-        return $page->fetch('Reports/custom-csv.tpl');
+        return $page->fetch('Reports/custom-csv.twig');
     }
 
     private function assertEveryRowMatchesHeaderColumnCount(string $csv): void

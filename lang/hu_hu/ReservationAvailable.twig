@@ -1,0 +1,6 @@
+{{ FirstName|raw }},<br/>
+{{ ResourceName|escape_once }} jelenleg elérhető {{ formatdate(date: StartDate, key: 'res_popup') }} és {{ formatdate(date: EndDate, key: 'res_popup') }} között
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Foglalás most</a> |
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

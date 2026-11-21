@@ -1,0 +1,11 @@
+<p>{{ To|raw }},</p>
+
+<p>ผู้ใช้ใหม่ได้ลงทะเบียนด้วยข้อมูลต่อไปนี้:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+ชื่อ: {{ FullName|raw }}<br/>
+โทรศัพท์: {{ Phone|raw }}<br/>
+หน่วยงาน: {{ Organization|raw }}<br/>
+ตำแหน่ง: {{ Position|raw }}</p>
+{% if CreatedBy %}
+    สร้างโดย: {{ CreatedBy|raw }}
+{% endif %}

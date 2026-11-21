@@ -1,0 +1,17 @@
+คุณพลาดการเช็คอิน<br/>
+รายละเอียดการจอง:
+<br/>
+<br/>
+เริ่มต้น: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+สิ้นสุด: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+ทรัพยากร: {{ ResourceName|escape_once }}<br/>
+ชื่อเรื่อง: {{ Title|escape_once }}<br/>
+คำอธิบาย: {{ Description|escape_once|nl2br }}
+     {% if IsAutoRelease %}
+         <br/>
+         หากคุณไม่เช็คอิน การจองนี้จะถูกยกเลิกโดยอัตโนมัติเมื่อ {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}
+     {% endif %}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">ดูการจองนี้</a> |
+<a href="{{ ScriptUrl|raw }}">เข้าสู่ระบบ LibreBooking</a>

@@ -1,0 +1,18 @@
+<p>Nie zameldowano w terminie rezerwacji.</p>
+<p><strong>Szczegóły rezerwacji:</strong></p>
+<p>
+    <strong>Początek:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Koniec:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Zasób:</strong> {{ ResourceName|escape_once }}<br/>
+    <strong>Tytuł:</strong> {{ Title|escape_once }}<br/>
+    <strong>Opis:</strong> {{ Description|escape_once|nl2br }}
+</p>
+
+{% if IsAutoRelease %}
+    <p>Jeśli się nie zameldujesz, rezerwacja zostanie automatycznie anulowana o {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}</p>
+{% endif %}
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Pokaż rezerwację</a> |
+    <a href="{{ ScriptUrl|raw }}">Zaloguj się do {{ AppTitle|raw }}</a>
+</p>

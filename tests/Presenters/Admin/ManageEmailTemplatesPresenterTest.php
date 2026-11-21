@@ -31,7 +31,8 @@ class ManageEmailTemplatesPresenterTest extends TestBase
             '/some/path/help-admin.tpl',
             '/some/path/file1.tpl',
             '/some/path/file2.tpl',
-            '/some/path/file2-custom.tpl'];
+            '/some/path/file2-custom.tpl',
+            '/some/path/file1.twig'];
 
         $this->presenter->PageLoad();
 

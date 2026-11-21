@@ -1,0 +1,37 @@
+    Varauksen tiedot:
+    <br/>
+    <br/>
+
+    Alkaa: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Päättyy: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Resurssi: {{ ResourceName|escape_once }}<br/>
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Otsikko: {{ Title|escape_once }}<br/>
+    Kuvaus: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Varaus toistuu seuraavina päivinä:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Yksi tai useampi varattu resurssi vaatii hyväksynnän ennen käyttöä.  Ole hyvä ja varmista, hyväksytäänkö vai hylätäänkö tämä varauspyyntö.
+    {% endif %}
+
+    <br/>
+    Osallistutko? <a href="{{ ScriptUrl|raw }}/{{ AcceptUrl|raw }}">Kyllä</a> <a href="{{ ScriptUrl|raw }}/{{ DeclineUrl|raw }}">Ei</a>
+    <br/>
+
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Näytä varaus</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Lisää kalenteriisi</a> |
+    <a href="{{ ScriptUrl|raw }}">Kirjaudu sovellukseen LibreBooking</a>

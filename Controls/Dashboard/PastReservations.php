@@ -12,7 +12,7 @@ class PastReservations extends DashboardItem implements IPastReservationsControl
      */
     protected $presenter;
 
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new PastReservationsPresenter($this, new ReservationViewRepository());
@@ -110,7 +110,7 @@ class MissingCheckInOutReservations extends PastReservations implements IRemaini
      */
     protected $presenter;
 
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new MissingCheckInOutReservationsPresenter($this, new ReservationViewRepository());

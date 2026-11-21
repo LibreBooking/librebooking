@@ -1,0 +1,13 @@
+Ismétlődő foglalási sorozata {{ ResourceName|escape_once }} hamarosan befejeződik {{ formatdate(date: StartDate, key: 'reservation_email') }}.<br/>
+Fogalás részletei:
+    <br/>
+    <br/>
+    Kezdés: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Befejezés: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Elem: {{ ResourceName|escape_once }}<br/>
+    Megnevezés: {{ Title|escape_once }}<br/>
+    Leírás: {{ Description|escape_once|nl2br }}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">A foglalás megtekintése</a> |
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

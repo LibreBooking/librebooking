@@ -1,0 +1,57 @@
+<p><strong>Πληροφορίες κράτησης:</strong></p>
+
+<p>
+    <strong>Έναρξη:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Λήξη:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Τίτλος:</strong> {{ Title|escape_once }}<br/>
+    <strong>Περιγραφή:</strong> {{ Description|escape_once|nl2br }}
+    {% if Attributes|default([])|length > 0 %}
+        <br/>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+</p>
+
+<p>
+    {% if ResourceNames|default([])|length > 1 %}
+        <strong>Πόροι ({{ ResourceNames|default([])|length }}):</strong>
+        <br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|escape_once }}
+            <br/>
+        {% endfor %}
+    {% else %}
+        <strong>Πόρος:</strong>
+        {{ ResourceName|escape_once }}
+        <br/>
+    {% endif %}
+</p>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img alt="{{ ResourceName|escape_once }}" src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+{% if RepeatRanges|length > 0 %}
+    <br/>
+    <strong>Η κράτηση συμβαίνει στις ακόλουθες ημερομηνίες ({{ RepeatRanges|default([])|length }}):</strong>
+    <br/>
+    {% for date in RepeatRanges %}
+        {{ formatdate(date: date.GetBegin()) }}
+        {% if not date.IsSameDate() %} - {{ formatdate(date: date.GetEnd()) }}{% endif %}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<p>
+    {% if CreatedBy %}
+        <strong>Διαγράφηκε από:</strong>
+        {{ CreatedBy|raw }}
+        <br/>
+        <strong>Αιτία διαγραφής: {{ DeleteReason|escape_once|nl2br }}</strong>
+    {% endif %}
+</p>
+
+<p><strong>Αριθμός αναφοράς:</strong> {{ ReferenceNumber|raw }}</p>
+
+<a href="{{ ScriptUrl|raw }}">Κάνετε είσοδο στο {{ AppTitle|raw }}</a>

@@ -1,0 +1,16 @@
+Du har ikke tjekket ind på din reservation.<br/>
+    <br/>
+    <br/>
+    Starttidspunkt: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Sluttidspunkt: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Facilitet: {{ ResourceName|escape_once }}<br/>
+  Overskrift: {{ Title|escape_once }}<br/>
+    Beskrivelse: {{ Description|escape_once|nl2br }}
+    {% if IsAutoRelease %}
+        <br/>
+        Hvis du ikke tjekker ind, bliver reservationen automatisk slettet den {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}
+    {% endif %}
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Se denne reservation</a> |
+<a href="{{ ScriptUrl|raw }}">Log på {{ AppTitle|raw }}</a>

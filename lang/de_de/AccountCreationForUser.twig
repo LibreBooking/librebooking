@@ -1,0 +1,15 @@
+<p>Hallo {{ FullName|raw }},</p>
+
+<p>f&uuml;r Sie wurde ein {{ AppTitle|raw }}-Benutzerkonto mit den folgenden Daten erstellt:<br/>
+E-Mail: {{ EmailAddress|raw }}<br/>
+Name: {{ FullName|raw }}<br/>
+Telefon: {{ Phone|raw }}<br/>
+Organisation: {{ Organization|raw }}<br/>
+Position: {{ Position|raw }}<br/>
+Passwort: {{ Password }}</p>
+{% if CreatedBy %}
+    Erstellt von: {{ CreatedBy|raw }}
+{% endif %}
+<br/>
+Bitte melden Sie sich an und &auml;ndern Ihr Passwort.<br/>
+<p><a href="{{ ScriptUrl|raw }}">{{ AppTitle|raw }}-Anmeldung</a></p>

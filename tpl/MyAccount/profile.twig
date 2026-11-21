@@ -1,0 +1,207 @@
+{{ include('globalheader.twig', {Validator: true}) }}
+
+<div class="page-profile">
+
+    <div id="profile-box" class="default-box card shadow col-12 col-sm-8 mx-auto">
+
+        <form method="post" ajaxAction="{{ constant('ProfileActions::Update') }}" id="form-profile" class="was-validated"
+            action="{{ server.SCRIPT_NAME }}" role="form" data-bv-submitbuttons='button[type="submit"]'
+            data-bv-onerror="enableButton" data-bv-onsuccess="enableButton" data-bv-live="enabled">
+
+            <div class="card-body">
+                <h1 class="text-center border-bottom mb-2">{{ translate('EditProfile') }}</h1>
+
+                <div class="d-none alert alert-success" role="alert" id="profileUpdatedMessage">
+                    <i class="bi bi-check-circle-fill text-success"></i> {{ translate('YourProfileWasUpdated') }}
+                </div>
+
+                <div class="validationSummary alert alert-danger d-none" id="validationErrors">
+                    <ul>
+                        {{ async_validator(id: 'fname', key: 'FirstNameRequired') }}
+                        {{ async_validator(id: 'lname', key: 'LastNameRequired') }}
+                        {{ async_validator(id: 'username', key: 'UserNameRequired') }}
+                        {{ async_validator(id: 'emailformat', key: 'ValidEmailRequired') }}
+                        {{ async_validator(id: 'uniqueemail', key: 'UniqueEmailRequired') }}
+                        {{ async_validator(id: 'uniqueusername', key: 'UniqueUsernameRequired') }}
+                        {{ async_validator(id: 'phoneRequired', key: 'PhoneRequired') }}
+                        {{ async_validator(id: 'positionRequired', key: 'PositionRequired') }}
+                        {{ async_validator(id: 'organizationRequired', key: 'OrganizationRequired') }}
+                        {{ async_validator(id: 'additionalattributes', key: '') }}
+                    </ul>
+                </div>
+
+                <div class="row gy-2">
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="username">{{ translate('Username') }}</label>
+                            {% if AllowUsernameChange is defined and AllowUsernameChange %}
+                                {{ textbox(name: 'USERNAME', value: 'Username', required: 'required', attributes: {'data-bv-notempty': 'true', autofocus: 'autofocus', 'data-bv-notempty-message': translate('UserNameRequired')}) }}
+                            {% else %}
+                                <span>{{ Username|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'USERNAME') }} value="{{ Username|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="email">{{ translate('Email') }}</label>
+                            {% if AllowEmailAddressChange is defined and AllowEmailAddressChange %}
+                                {{ textbox(name: 'EMAIL', type: 'email', class: 'input', value: 'Email', required: 'required', attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('ValidEmailRequired'), 'data-bv-emailaddress': 'true', 'data-bv-emailaddress-message': translate('ValidEmailRequired')}) }}
+                            {% else %}
+                                <span>{{ Email|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'EMAIL') }} value="{{ Email|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="fname">{{ translate('FirstName') }}</label>
+                            {% if AllowNameChange is defined and AllowNameChange %}
+                                {{ textbox(name: 'FIRST_NAME', class: 'input', value: 'FirstName', required: 'required', attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('FirstNameRequired')}) }}
+                            {% else %}
+                                <span>{{ FirstName|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'FIRST_NAME') }} value="{{ FirstName|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="lname">{{ translate('LastName') }}</label>
+                            {% if AllowNameChange is defined and AllowNameChange %} {{ Language }}
+                                {{ textbox(name: 'LAST_NAME', class: 'input', value: 'LastName', required: 'required', attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('LastNameRequired')}) }}
+                            {% else %}
+                                <span>{{ LastName|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'LAST_NAME') }} value="{{ LastName|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="homepage">{{ translate('DefaultPage') }}</label>
+                            <select {{ formname(key: 'DEFAULT_HOMEPAGE') }} id="homepage" class="form-select form-select-sm">
+                                {{ html_options(values: HomepageValues, output: HomepageOutput, selected: Homepage) }}
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="timezoneDropDown">{{ translate('Timezone') }}</label>
+                            <select {{ formname(key: 'TIMEZONE') }} class="form-select form-select-sm" id="timezoneDropDown">
+                                {{ html_options(values: TimezoneValues, output: TimezoneOutput, selected: Timezone) }}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="phone">{{ translate('Phone') }}</label>
+                            {% if AllowPhoneChange is defined and AllowPhoneChange %}
+                                <input type="text" id="phone" {{ formname(key: 'PHONE') }} class="form-control form-control-sm"
+                                    size="20" value="{{ Phone|escape_once }}" {% if RequirePhone is defined and RequirePhone %}required="required" data-bv-notempty="true"
+                                    data-bv-notempty-message="{{ translate('PhoneRequired') }}" {% endif %} />
+                            {% else %}
+                                <span>{{ Phone|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'PHONE') }} value="{{ Phone|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="txtOrganization">{{ translate('Organization') }}</label>
+                            {% if AllowOrganizationChange is defined and AllowOrganizationChange %}
+                                <input type="text" id="txtOrganization" {{ formname(key: 'ORGANIZATION') }}
+                                    class="form-control form-control-sm" size="20" value="{{ Organization|escape_once }}"
+                                    {% if RequireOrganization is defined and RequireOrganization %}required="required" data-bv-notempty="true"
+                                    data-bv-notempty-message="{{ translate('OrganizationRequired') }}" {% endif %} />
+                            {% else %}
+                                <span>{{ Organization|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'ORGANIZATION') }} value="{{ Organization|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="reg fw-bold" for="txtPosition">{{ translate('Position') }}</label>
+                            {% if AllowPositionChange is defined and AllowPositionChange %}
+                                <input type="text" id="txtPosition" {{ formname(key: 'POSITION') }}
+                                    class="form-control form-control-sm" size="20" value="{{ Position|escape_once }}"
+                                    {% if RequirePosition is defined and RequirePosition %}required="required" data-bv-notempty="true"
+                                    data-bv-notempty-message="{{ translate('PositionRequired') }}" {% endif %} />
+                            {% else %}
+                                <span>{{ Position|escape_once }}</span>
+                                <input type="hidden" {{ formname(key: 'POSITION') }} value="{{ Position|escape_once }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% for attribute in Attributes %}
+                        <div class="col-12 col-sm-6">
+                            {{ control('AttributeControl', {attribute: attribute}) }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="update btn btn-primary btn-block" name="{{ constant('Actions::SAVE') }}"
+                            id="btnUpdate">
+                            {{ translate('Update') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {{ csrf_token() }}
+        </form>
+    </div>
+    {{ setfocus(key: 'FIRST_NAME') }}
+
+    {{ include('javascript-includes.twig', {Validator: true}) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'profile.js') }}
+
+    <script type="text/javascript">
+        function enableButton() {
+            $('#form-profile').find('button').removeAttr('disabled');
+        }
+
+        $(document).ready(function() {
+            var profilePage = new Profile();
+            profilePage.init();
+
+            var profileForm = $('#form-profile');
+
+            profileForm
+                .on('init.field.bv', function(e, data) {
+                    var $parent = data.element.parents('.form-group');
+                    var $icon = $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field +
+                        '"]');
+                    var validators = data.bv.getOptions(data.field).validators;
+
+                    if (validators.notEmpty) {
+                        $icon.addClass('bi bi-asterisk').show();
+                    }
+                })
+                .off('success.form.bv')
+                .on('success.form.bv', function(e) {
+                    e.preventDefault();
+                });
+
+            profileForm.bootstrapValidator();
+
+            $('#txtOrganization').orgAutoComplete("ajax/autocomplete.php?type={{ constant('AutoCompleteType::Organization') }}");
+        });
+    </script>
+
+    <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
+        data-bs-backdrop="static" aria-hidden="true">
+        {{ include('wait-box.twig', {translateKey: 'Working'}) }}
+    </div>
+
+</div>
+{{ include('globalfooter.twig') }}

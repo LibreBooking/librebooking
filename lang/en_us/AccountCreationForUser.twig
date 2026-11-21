@@ -1,0 +1,14 @@
+<p>{{ FullName|raw }},</p>
+
+<p>An account for {{ AppTitle|raw }} has been created for you with the following details:<br/>
+Email: {{ EmailAddress|raw }}<br/>
+Name: {{ FullName|raw }}<br/>
+Phone: {{ Phone|raw }}<br/>
+Organization: {{ Organization|raw }}<br/>
+Position: {{ Position|raw }}<br/>
+Password: {{ Password }}</p>
+{% if CreatedBy is defined and CreatedBy %}
+    Created by: {{ CreatedBy|raw }}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">Log In to {{ AppTitle|raw }}</a>

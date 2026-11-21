@@ -13,7 +13,7 @@ class UpcomingReservations extends DashboardItem implements IUpcomingReservation
      */
     protected $presenter;
 
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new UpcomingReservationsPresenter($this, new ReservationViewRepository());
@@ -108,7 +108,7 @@ class AllUpcomingReservations extends UpcomingReservations
 
 class GroupUpcomingReservations extends UpcomingReservations
 {
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new GroupUpcomingReservationsPresenter($this, new ReservationViewRepository());
@@ -125,7 +125,7 @@ class GroupUpcomingReservations extends UpcomingReservations
 
 class PendingApprovalReservations extends UpcomingReservations implements IAditionalUpcomingReservationsFieldsControl
 {
-    public function __construct(SmartyPage $smarty)
+    public function __construct(\LibreBooking\Common\Templating\TemplateRenderer|SmartyPage $smarty)
     {
         parent::__construct($smarty);
         $this->presenter = new PendingApprovalReservationsPresenter($this, new ReservationViewRepository());

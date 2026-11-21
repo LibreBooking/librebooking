@@ -1,0 +1,46 @@
+<div class="upcomingReservationsDashboard accordion-item shadow mb-2" id="adminUpcomingReservationsDashboard">
+    <div class="accordion-header dashboardHeader">
+        <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
+            data-bs-target="#adminUpcomingReservationsDashboardContents" aria-expanded="false"
+            aria-controls="adminUpcomingReservationsDashboardContents">
+            {{ translate('AllUpcomingReservations') }}<span class="badge bg-primary ms-1">{{ Total }}</span>
+        </button>
+    </div>
+    <div id="adminUpcomingReservationsDashboardContents" class=" accordion-collapse collapse">
+        <div class="accordion-body">
+            {% if Total > 0 %}
+                <div>
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('Today') }} ({{ (TodaysReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in TodaysReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('Tomorrow') }} ({{ (TomorrowsReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in TomorrowsReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('LaterThisWeek') }} ({{ (ThisWeeksReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in ThisWeeksReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+                    {% endfor %}
+
+                    <div class="timespan bg-warning border-bottom p-1 fw-medium fst-italic">
+                        {{ translate('NextWeek') }} ({{ (NextWeeksReservations ?? [])|length }})
+                    </div>
+                    {% for reservation in NextWeeksReservations %}
+                        {{ include('Dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="noresults text-center fst-italic fs-5">{{ translate('NoUpcomingReservations') }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

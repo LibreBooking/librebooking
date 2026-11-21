@@ -1,0 +1,14 @@
+<p>
+    {{ FirstName|raw }},
+</p>
+
+<p>
+    {{ ResourceName|escape_once }} está atualmente disponível entre
+    {{ formatdate(date: StartDate, key: 'res_popup') }} e
+    {{ formatdate(date: EndDate, key: 'res_popup') }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Reserve agora</a> |
+    <a href="{{ ScriptUrl|raw }}">Acessar {{ AppTitle|raw }}</a>
+</p>

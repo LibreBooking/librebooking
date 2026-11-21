@@ -1,0 +1,13 @@
+Reservasi Anda segera dimulai.<br/>
+Rincian Reservasi:
+    <br/>
+    <br/>
+    Mulai: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Akhir: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Resource: {{ ResourceName|escape_once }}<br/>
+    Judul: {{ Title|escape_once }}<br/>
+    Penjelasan: {{ Description|escape_once|nl2br }}<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Lihat reservasi ini</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Tambah ke kalender</a> |
+<a href="{{ ScriptUrl|raw }}">Masuk LibreBooking</a>

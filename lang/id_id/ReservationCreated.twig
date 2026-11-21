@@ -1,0 +1,70 @@
+    Rincian reservasi:
+    <br/>
+    <br/>
+
+    Mulai: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Akhir: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+
+    {% if Resources|default([])|length > 1 %}
+        <strong>Sumber Daya ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>Sumber Daya:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name|escape_once }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Jadwal:</strong> {{ resource.scheduleName|escape_once }}<br/>{% endif %}
+        <strong>ID Sumber Daya:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Lokasi:</strong> {{ resource.location|escape_once }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Kontak:</strong> {{ resource.contact|escape_once }}<br/>{% endif %}
+        {% if resource.description %}<strong>Deskripsi:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Catatan:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Administrator Sumber Daya:</strong> {{ resource.resourceAdministrator|escape_once }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Detail Sumber Daya:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label|escape_once }}</strong></th>
+                        <td valign="top">{{ row.displayValue|escape_once|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name|escape_once }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+
+    Judul: {{ Title|escape_once }}<br/>
+    Penjelasan: {{ Description|escape_once|nl2br }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Reservasi diulang sampai tanggal:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Aksesori:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|escape_once }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        Satu atau resource lain yang direservasi membutuhkan persetujuan sebelum digunakan. Reservasi ini akan ditunda sampai disetujui.
+    {% endif %}
+
+    <br/>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Lihat reservasi ini</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Tambah ke kalender</a> |
+    <a href="{{ ScriptUrl|raw }}">Masuk LibreBooking</a>
