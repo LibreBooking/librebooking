@@ -6,6 +6,7 @@ require_once(ROOT_DIR . 'lib/Email/EmailService.php');
 require_once(ROOT_DIR . 'tests/fakes/TestReservationEmailMessage.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmail.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmailAdmin.php');
+require_once(ROOT_DIR . 'lib/Email/Messages/ReservationUpdatedEmail.php');
 
 class ReservationEmailMessageTest extends TestBase
 {
@@ -117,6 +118,32 @@ class ReservationEmailMessageTest extends TestBase
         $this->assertTrue(isset($participant->EmailAddress));
         $this->assertSame(5, $participant->CurrentCreditCount());
         $this->assertNull($missing);
+    }
+
+    public function testUpdatedEmailHasTheSubjectForTheOwnerNotTheOneForAdmins()
+    {
+        $owner = new FakeUser(userId: 1, email: 'owner@example.com');
+        $series = $this->Series(instance: new TestReservation());
+
+        $message = new ReservationUpdatedEmail(
+            reservationOwner: $owner,
+            reservationSeries: $series,
+            language: null,
+            attributeRepository: new FakeAttributeRepository(),
+            userRepository: new FakeUserRepository(),
+        );
+
+        $resourceName = $series->Resource()->GetName();
+        $ownerSubject = Resources::GetInstance()->GetString(
+            key: 'ReservationUpdatedSubjectWithResource',
+            args: [$resourceName],
+        );
+        $adminSubject = Resources::GetInstance()->GetString(
+            key: 'ReservationUpdatedAdminSubjectWithResource',
+            args: [$resourceName],
+        );
+        $this->assertSame($ownerSubject, $message->Subject());
+        $this->assertNotSame($adminSubject, $message->Subject());
     }
 
     private function Owner(): FakeUser
