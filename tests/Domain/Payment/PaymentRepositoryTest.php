@@ -32,28 +32,97 @@ class PaymentRepositoryTest extends TestBase
     {
         $this->repository->UpdateCreditCost(new CreditCost(1, 32.99, 'USD'));
 
-        $this->assertEquals(new AddPaymentConfigurationCommand(1, 32.99, 'USD'), $this->db->_LastCommand);
+        // A single statement: deleting the row first would lose the price if the insert failed.
+        $this->assertEquals([new SetPaymentConfigurationCommand(creditCount: 1, creditCost: 32.99, creditCurrency: 'USD')], $this->db->_Commands);
     }
 
     public function testUpdatesPayPal()
     {
-        $gateway = new PayPalGateway(true, 'client', 'secret', 'environment');
+        $gateway = new PayPalGateway(enabled: true, clientId: 'client', secret: 'secret', environment: 'environment');
         $this->repository->UpdatePayPalGateway($gateway);
 
-        $this->assertEquals(new DeletePaymentGatewaySettingsCommand(PaymentGateways::PAYPAL), $this->db->_Commands[0]);
-        $this->assertTrue($this->db->ContainsCommand(new AddPaymentGatewaySettingCommand(PaymentGateways::PAYPAL, PayPalGateway::CLIENT_ID, 'client')));
-        $this->assertTrue($this->db->ContainsCommand(new AddPaymentGatewaySettingCommand(PaymentGateways::PAYPAL, PayPalGateway::SECRET, 'secret')));
-        $this->assertTrue($this->db->ContainsCommand(new AddPaymentGatewaySettingCommand(PaymentGateways::PAYPAL, PayPalGateway::ENVIRONMENT, 'environment')));
+        // The settings are written first, in one statement, and obsolete names
+        // are removed after. Deleting first would lose them if the write failed.
+        $write = new SetPaymentGatewaySettingsCommand(
+            gatewayType: PaymentGateways::PAYPAL,
+            settings: [
+                new PaymentGatewaySetting(name: PayPalGateway::CLIENT_ID, value: 'client'),
+                new PaymentGatewaySetting(name: PayPalGateway::SECRET, value: 'secret'),
+                new PaymentGatewaySetting(name: PayPalGateway::ENVIRONMENT, value: 'environment'),
+            ]
+        );
+        $cleanup = new DeleteObsoletePaymentGatewaySettingsCommand(
+            gatewayType: PaymentGateways::PAYPAL,
+            currentSettingNames: [PayPalGateway::CLIENT_ID, PayPalGateway::SECRET, PayPalGateway::ENVIRONMENT]
+        );
+        $this->assertEquals([$write, $cleanup], $this->db->_Commands);
     }
 
     public function testUpdatesStripe()
     {
-        $gateway = new StripeGateway(true, 'publishable', 'secret');
+        $gateway = new StripeGateway(enabled: true, publishableKey: 'publishable', secretKey: 'secret');
         $this->repository->UpdateStripeGateway($gateway);
 
-        $this->assertEquals(new DeletePaymentGatewaySettingsCommand(PaymentGateways::STRIPE), $this->db->_Commands[0]);
-        $this->assertTrue($this->db->ContainsCommand(new AddPaymentGatewaySettingCommand(PaymentGateways::STRIPE, StripeGateway::PUBLISHABLE_KEY, 'publishable')));
-        $this->assertTrue($this->db->ContainsCommand(new AddPaymentGatewaySettingCommand(PaymentGateways::STRIPE, StripeGateway::SECRET_KEY, 'secret')));
+        $write = new SetPaymentGatewaySettingsCommand(
+            gatewayType: PaymentGateways::STRIPE,
+            settings: [
+                new PaymentGatewaySetting(name: StripeGateway::PUBLISHABLE_KEY, value: 'publishable'),
+                new PaymentGatewaySetting(name: StripeGateway::SECRET_KEY, value: 'secret'),
+            ]
+        );
+        $cleanup = new DeleteObsoletePaymentGatewaySettingsCommand(
+            gatewayType: PaymentGateways::STRIPE,
+            currentSettingNames: [StripeGateway::PUBLISHABLE_KEY, StripeGateway::SECRET_KEY]
+        );
+        $this->assertEquals([$write, $cleanup], $this->db->_Commands);
+    }
+
+    public function testDisablingPayPalDeletesItsSettings()
+    {
+        $gateway = new PayPalGateway(enabled: false, clientId: null, secret: null, environment: null);
+        $this->repository->UpdatePayPalGateway($gateway);
+
+        $this->assertEquals([new DeletePaymentGatewaySettingsCommand(PaymentGateways::PAYPAL)], $this->db->_Commands);
+    }
+
+    public function testDisablingStripeDeletesItsSettings()
+    {
+        $gateway = new StripeGateway(enabled: false, publishableKey: null, secretKey: null);
+        $this->repository->UpdateStripeGateway($gateway);
+
+        $this->assertEquals([new DeletePaymentGatewaySettingsCommand(PaymentGateways::STRIPE)], $this->db->_Commands);
+    }
+
+    public function testGatewaySettingsAreWrittenAsOneRowEach()
+    {
+        $command = new SetPaymentGatewaySettingsCommand(
+            gatewayType: PaymentGateways::STRIPE,
+            settings: [
+                new PaymentGatewaySetting(name: StripeGateway::PUBLISHABLE_KEY, value: 'publishable'),
+                new PaymentGatewaySetting(name: StripeGateway::SECRET_KEY, value: 'secret'),
+            ]
+        );
+
+        $this->assertStringContainsString(
+            'VALUES (@gateway_type, @setting_name0, @setting_value0), (@gateway_type, @setting_name1, @setting_value1)',
+            $command->GetQuery()
+        );
+        $this->assertStringContainsString('ON DUPLICATE KEY UPDATE', $command->GetQuery());
+    }
+
+    public function testGatewaySettingsCommandRejectsNoSettings()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new SetPaymentGatewaySettingsCommand(gatewayType: PaymentGateways::STRIPE, settings: []);
+    }
+
+    public function testObsoleteGatewaySettingsCommandRejectsNoNamesToKeep()
+    {
+        // With no names to keep it would delete every setting of the gateway.
+        $this->expectException(InvalidArgumentException::class);
+
+        new DeleteObsoletePaymentGatewaySettingsCommand(gatewayType: PaymentGateways::STRIPE, currentSettingNames: []);
     }
 
     public function testLoadsPayPal()
