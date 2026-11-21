@@ -17,6 +17,42 @@ class ru_ru extends en_gb
     /**
      * @return array
      */
+    protected function _LoadDates()
+    {
+        $dates = parent::_LoadDates();
+
+        // Russian conventions: day.month.year, 24-hour time.
+        // Month and short weekday names (M, F, D) are not translated by the
+        // formatter, so only numeric dates and the full weekday name (l) are used.
+        $dates['general_date'] = 'd.m.Y';
+        $dates['general_datetime'] = 'd.m.Y H:i:s';
+        $dates['short_datetime'] = 'd.m.y H:i';
+        $dates['schedule_daily'] = 'l, d.m.Y';
+        $dates['reservation_email'] = 'd.m.Y, H:i (e)';
+        $dates['res_popup'] = 'd.m.Y H:i';
+        $dates['res_popup_time'] = 'H:i';
+        $dates['short_reservation_date'] = 'd.m.y H:i';
+        $dates['dashboard'] = 'l, d.m.Y H:i';
+        $dates['period_time'] = 'H:i';
+        $dates['mobile_reservation_date'] = 'd.m H:i';
+        $dates['general_date_js'] = 'dd.mm.yy';
+        $dates['general_time_js'] = 'H:mm';
+        $dates['momentjs_datetime'] = 'DD.MM.YY H:mm';
+        $dates['calendar_time'] = 'H:mm';
+        $dates['calendar_dates'] = 'd.m';
+        $dates['embedded_date'] = 'd.m';
+        $dates['embedded_time'] = 'H:i';
+        $dates['embedded_datetime'] = 'd.m.Y H:i';
+        $dates['report_date'] = '%d.%m';
+
+        $this->Dates = $dates;
+
+        return $this->Dates;
+    }
+
+    /**
+     * @return array
+     */
     protected function _LoadStrings()
     {
         $strings = parent::_LoadStrings();
