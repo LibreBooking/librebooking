@@ -135,8 +135,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => true,
         'label' => 'Use Local Frontend Assets',
-        'description' => 'Use bundled/self-hosted frontend assets (JavaScript libraries, CSS, fonts) instead of CDN-hosted assets',
-        'config_file_comment' => 'Enable use of bundled/self-hosted frontend assets (JavaScript, CSS, fonts)',
+        'description' => 'Use bundled/self-hosted frontend assets (JavaScript libraries and CSS) instead of CDN-hosted assets',
+        'config_file_comment' => 'Enable use of bundled/self-hosted frontend assets (JavaScript and CSS)',
     ];
 
     public const INACTIVITY_TIMEOUT = [

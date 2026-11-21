@@ -62,7 +62,6 @@
 }
 
 body {
-  font-family: 'Hind', 'system-ui', 'sans-serif';
   font-weight: 400;
   font-style: normal;
   font-size: 14px;
@@ -70,6 +69,28 @@ body {
   flex-direction: column;
   background-color: #f6f6f4;
   min-height: 100vh;
+}
+
+body[data-font='montserrat'] {
+  --app-font: 'Montserrat';
+}
+
+body[data-font='nunito'] {
+  --app-font: 'Nunito';
+}
+
+body[data-font='merriweather'] {
+  --app-font: 'Merriweather';
+}
+
+body[data-font='atkinson-hyperlegible'] {
+  --app-font: 'Atkinson Hyperlegible';
+}
+
+body:not([data-font='none']) {
+  font-family: var(--bs-body-font-family);
+  --bs-font-sans-serif: var(--app-font, 'Inter'), system-ui, sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif);
 }
 
 footer {

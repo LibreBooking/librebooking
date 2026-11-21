@@ -77,7 +77,7 @@ return [
         # Options: smarty, twig
         'template.engine' => 'smarty',
 
-        # Enable use of bundled/self-hosted frontend assets (JavaScript, CSS, fonts) (true/false)
+        # Enable use of bundled/self-hosted frontend assets (JavaScript and CSS) (true/false)
         'use.local.js.libs' => true,
 
         # Session inactivity timeout in minutes

@@ -79,12 +79,8 @@
         {/if}
     {/if}
 
-    {if isset($UseLocalJquery) && $UseLocalJquery}
-        {cssfile src="assets/fonts/hind/v18/hind.css"}
-    {else}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;700&display=swap" />
+    {if isset($CssFontStylesheet) && $CssFontStylesheet neq ''}
+        {cssfile src=$CssFontStylesheet}
     {/if}
     {cssfile src="librebooking.css"}
     {if isset($cssFiles) && $cssFiles neq ''}
@@ -113,7 +109,7 @@
     <!-- End CSS -->
 </head>
 
-<body data-bs-theme='{$cssTheme}'>
+<body data-bs-theme='{$cssTheme}' data-font='{$CssFont|escape}'>
 
     <noscript>
         <div class="alert alert-warning text-center m-2" role="alert">
