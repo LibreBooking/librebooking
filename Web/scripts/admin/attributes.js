@@ -20,7 +20,7 @@ function AttributeManagement(opts) {
 
     addDialog: $('#addAttributeDialog'),
     editDialog: $('#editAttributeDialog'),
-    deleteDialog: $('#deleteDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
     deleteAttributeLabel: $('#deleteAttributeLabel'),
 
     addForm: $('#addAttributeForm'),
@@ -91,7 +91,7 @@ function AttributeManagement(opts) {
       elements.appliesTo.text(options.allText);
       elements.secondaryPrompt.text(options.allText);
       elements.appliesToId.val('');
-      elements.addDialog.modal('show');
+      setDialogVisible(elements.addDialog, true);
     });
 
     elements.attributeType.on('change', function () {
@@ -224,18 +224,18 @@ function AttributeManagement(opts) {
 
   var addAttributeHandler = function () {
     elements.addForm.resetForm();
-    elements.addDialog.modal('hide');
+    setDialogVisible(elements.addDialog, false);
     RefreshAttributeList();
   };
 
   var editAttributeHandler = function () {
     elements.form.resetForm();
-    elements.editDialog.modal('hide');
+    setDialogVisible(elements.editDialog, false);
     RefreshAttributeList();
   };
 
   var deleteAttributeHandler = function () {
-    elements.deleteDialog.modal('hide');
+    setDialogVisible(elements.deleteDialog, false);
     RefreshAttributeList();
   };
 
@@ -313,7 +313,7 @@ function AttributeManagement(opts) {
 
     setActiveId(selectedAttribute.id);
 
-    elements.editDialog.modal('show');
+    setDialogVisible(elements.editDialog, true);
   };
 
   var showDeleteDialog = function (selectedAttributeId) {
@@ -323,7 +323,7 @@ function AttributeManagement(opts) {
     elements.deleteAttributeLabel.text(HtmlDecode(selectedAttribute?.label ?? ''));
 
     setActiveId(selectedAttributeId);
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   var defaultSubmitCallback = function (form) {

@@ -13,8 +13,8 @@ function BlackoutManagement(opts) {
     addResourceId: $('#addResourceId'),
     addScheduleId: $('#addScheduleId'),
 
-    deleteDialog: $('#deleteDialog'),
-    deleteRecurringDialog: $('#deleteRecurringDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
+    deleteRecurringDialog: document.getElementById('deleteRecurringDialog'),
 
     deleteForm: $('#deleteForm'),
     deleteRecurringForm: $('#deleteRecurringForm'),
@@ -23,7 +23,7 @@ function BlackoutManagement(opts) {
     referenceNumberList: $(':hidden.reservationId'),
 
     deleteMultiplePrompt: $('#delete-selected'),
-    deleteMultipleDialog: $('#deleteMultipleDialog'),
+    deleteMultipleDialog: document.getElementById('deleteMultipleDialog'),
     deleteMultipleForm: $('#deleteMultipleForm'),
     deleteMultipleSelectAll: $('#delete-all'),
     deleteMultipleCount: $('#deleteMultipleCount'),
@@ -45,7 +45,7 @@ function BlackoutManagement(opts) {
 
     $('#result').on('click', '.unblock', function (e) {
       $('#result').hide();
-      $('#wait-box').modal('hide');
+      setDialogVisible('#wait-box', false);
     });
 
     elements.blackoutTable.on('click', '.edit', function (e) {
@@ -53,7 +53,7 @@ function BlackoutManagement(opts) {
       var tr = $(this).parents('tr');
       var id = tr.attr('data-blackout-id');
 
-      $('#update-box').modal('show');
+      setDialogVisible('#update-box', true);
 
       var updateDiv = $('#update-contents');
 
@@ -121,7 +121,7 @@ function BlackoutManagement(opts) {
       elements.deleteMultipleCount.text(checked.length);
       elements.deleteMultiplePlaceHolder.empty();
       elements.deleteMultiplePlaceHolder.append(checked.clone());
-      elements.deleteMultipleDialog.modal('show');
+      setDialogVisible(elements.deleteMultipleDialog, true);
     });
 
     elements.deleteMultipleSelectAll.click(function (e) {
@@ -156,11 +156,11 @@ function BlackoutManagement(opts) {
   };
 
   function showDeleteBlackout() {
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   }
 
   function showDeleteRecurringBlackout() {
-    elements.deleteRecurringDialog.modal('show');
+    setDialogVisible(elements.deleteRecurringDialog, true);
   }
 
   function setActiveBlackoutId(id) {
@@ -172,8 +172,8 @@ function BlackoutManagement(opts) {
   }
 
   function showWaitBox() {
-    $('#update-box').modal('hide');
-    $('#wait-box').modal('show');
+    setDialogVisible('#update-box', false);
+    setDialogVisible('#wait-box', true);
 
     $('#result').hide();
     $('#creatingNotification').show();
@@ -188,8 +188,9 @@ function BlackoutManagement(opts) {
     return isValid;
   }
 
-  function onBeforeDeleteSubmit() {
-    $('.modal').modal('hide');
+  function onBeforeDeleteSubmit(formData, jqForm) {
+    var modal = jqForm[0].closest('.modal');
+    setDialogVisible(modal, false);
     showWaitBox();
   }
 

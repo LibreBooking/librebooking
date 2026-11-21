@@ -51,13 +51,13 @@ function Configuration() {
 
   function onBeforeAddSubmit(formData, jqForm, opts) {
     $('#updatedMessage').hide();
-    $('#waitModal').modal('show');
+    setDialogVisible('#waitModal', true);
 
     return true;
   }
 
   function hideModal() {
-    $('#waitModal').modal('hide');
+    setDialogVisible('#waitModal', false);
 
     var top = $('#updatedMessage').scrollTop();
     $('html, body').animate({ scrollTop: top }, 'slow');

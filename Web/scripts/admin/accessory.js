@@ -12,8 +12,8 @@ function AccessoryManagement(opts) {
     editUnlimited: $('#chkUnlimitedEdit'),
     editQuantity: $('#editQuantity'),
 
-    editDialog: $('#editDialog'),
-    deleteDialog: $('#deleteDialog'),
+    editDialog: document.getElementById('editDialog'),
+    deleteDialog: document.getElementById('deleteDialog'),
     accessoryResourcesDialog: $('#accessoryResourcesDialog'),
 
     addForm: $('#addForm'),
@@ -90,7 +90,7 @@ function AccessoryManagement(opts) {
     }
 
     elements.editUnlimited.trigger('change');
-    elements.editDialog.modal('show');
+    setDialogVisible(elements.editDialog, true);
   };
 
   function handleAccessoryResourceClick(checkbox) {
@@ -136,12 +136,12 @@ function AccessoryManagement(opts) {
       elements.accessoryResourcesDialog
         .find('.resourcesDialogLabel')
         .val(accessory.name + ' (' + accessory.quantity + ')');
-      elements.accessoryResourcesDialog.modal('show');
+      setDialogVisible(elements.accessoryResourcesDialog, true);
     });
   };
 
   var deleteAccessory = function () {
-    elements.deleteDialog.modal('show');
+    setDialogVisible(elements.deleteDialog, true);
   };
 
   var getActiveAccessory = function () {
