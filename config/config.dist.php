@@ -223,6 +223,9 @@ return [
 
             # Enable SQL logging (true/false)
             'sql' => false,
+
+            # Log failed logins to auth.log in the logging folder for fail2ban (true/false)
+            'auth.failures' => false,
         ],
 
         #########

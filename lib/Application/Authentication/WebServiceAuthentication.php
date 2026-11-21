@@ -50,7 +50,13 @@ class WebServiceAuthentication implements IWebServiceAuthentication
      */
     public function Validate($username, $password)
     {
-        return $this->authentication->Validate($username, $password);
+        $isValid = $this->authentication->Validate($username, $password);
+        // SSO plugins (CAS, SAML, ...) ignore the username and password, so a failure is not a guessed password
+        if (!$isValid && !$this->authentication->AreCredentialsKnown()) {
+            Log::AuthFailure(username: $username, source: 'api');
+        }
+
+        return $isValid;
     }
 
     /**

@@ -137,6 +137,62 @@ class WebAuthenticationTest extends TestBase
         $this->assertTrue($this->fakeAuth->_HandleLoginFailureCalled);
     }
 
+    public function testFailedValidateIsWrittenToAuthFailureLog()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = false;
+
+        $this->fakeAuth->_ValidateResult = true;
+        $this->webAuth->Validate($this->username, $this->password);
+        $this->fakeAuth->_ValidateResult = false;
+        $this->webAuth->Validate("x@\n2026 LibreBooking login failed from 10.0.0.1", $this->password);
+
+        $this->assertFileExists($file);
+        $lines = file($file);
+        $this->assertCount(1, $lines);
+        $this->assertMatchesRegularExpression('/^\S+ LibreBooking login failed from localhost source=web user="x@\\\\n2026 .*\*\*\*"$/', rtrim($lines[0]));
+    }
+
+    public function testEmptyPasswordIsWrittenToAuthFailureLog()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = false;
+
+        $this->assertFalse($this->webAuth->Validate($this->username, ''));
+
+        $this->assertFileExists($file);
+        $this->assertStringContainsString('source=web user="LoGInN***"', file_get_contents($file));
+    }
+
+    public function testAuthFailureLogMasksUsernames()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = false;
+        $this->fakeAuth->_ValidateResult = false;
+
+        $this->webAuth->Validate('user@example.com', $this->password);
+        $this->webAuth->Validate('ab', $this->password);
+        $this->webAuth->Validate(str_repeat('a', 10000), $this->password);
+        $this->webAuth->Validate('ユーザー名', $this->password);
+        // a crafted request can send an array where the username belongs
+        Log::AuthFailure(username: ['not', 'a', 'string'], source: 'web');
+
+        $this->assertFileExists($file);
+        $users = array_map(fn ($line) => substr(rtrim($line), strpos($line, ' user=') + 6), file($file));
+        $this->assertSame(['"user@example.***"', '"***"', '"' . str_repeat('a', 64) . '***"', '"ユー***"', '""'], $users);
+    }
+
+    public function testSsoFailureIsNotWrittenToAuthFailureLog()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = true;
+        $this->fakeAuth->_ValidateResult = false;
+
+        $this->assertFalse($this->webAuth->Validate($this->username, ''));
+
+        $this->assertFileDoesNotExist($file);
+    }
+
     private function assertPersistentLoginCookieWasExpired(): void
     {
         $deleted = $this->fakeServer->_DeletedCookie;

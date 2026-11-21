@@ -21,6 +21,7 @@ class FakeAuth implements IAuthentication
     public $_LoginCalled = false;
     public $_LogoutCalled = false;
     public $_HandleLoginFailureCalled = false;
+    public $_CredentialsKnown = true;
 
     public $_ValidateResult = false;
 
@@ -57,7 +58,7 @@ class FakeAuth implements IAuthentication
 
     public function AreCredentialsKnown()
     {
-        return true;
+        return $this->_CredentialsKnown;
     }
 
     public function HandleLoginFailure(IAuthenticationPage $loginPage)
