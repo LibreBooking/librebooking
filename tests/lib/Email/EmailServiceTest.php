@@ -67,7 +67,7 @@ class EmailServiceTest extends TestBase
         $message->AddStringAttachment(
             contents: 'BEGIN:VCALENDAR...',
             fileName: 'reservation.ics',
-            mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
+            mimeType: 'text/calendar; charset=UTF-8; method=PUBLISH'
         );
 
         $phpMailer->expects($this->once())
@@ -76,7 +76,7 @@ class EmailServiceTest extends TestBase
                 $this->equalTo('BEGIN:VCALENDAR...'),
                 $this->equalTo('reservation.ics'),
                 $this->anything(),
-                $this->equalTo('text/calendar; charset=UTF-8; method=REQUEST')
+                $this->equalTo('text/calendar; charset=UTF-8; method=PUBLISH')
             );
 
         $service = new EmailService($phpMailer);

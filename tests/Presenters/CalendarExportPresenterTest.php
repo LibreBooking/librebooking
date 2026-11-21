@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use LibreBooking\Calendar\IcsMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportPage.php');
 require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
 
@@ -42,6 +45,12 @@ class CalendarExportPresenterTest extends TestBase
         $this->privacyFilter = new FakePrivacyFilter();
 
         $this->presenter = new CalendarExportPresenter($this->page, $this->repo, $this->validator, $this->privacyFilter);
+    }
+
+    private function SetDefaultFrom(string $address, string $name): void
+    {
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS, value: $address);
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_NAME, value: $name);
     }
 
     public function testLoadsReservationByReferenceNumber()
@@ -94,25 +103,11 @@ class CalendarExportPresenterTest extends TestBase
         $this->presenter->PageLoad($this->fakeUser);
     }
 
-    public function testOrganizerIsOwnerIfCurrentUserIsNotOrganizer()
+    public function testOrganizerIsTheReservationOwnerWithSentByAsTheConfiguredDefaultAddress()
     {
-        // this fixes a bug in outlook which prevents you from adding a meeting that you are the organizer of
-        $user = new FakeUserSession();
-        $res = new ReservationItemView();
-        $res->OwnerId = $user->UserId + 1;
-        $res->OwnerFirstName = 'f';
-        $res->OwnerLastName = 'l';
-        $res->OwnerEmailAddress = 'e@m.com';
+        // ORGANIZER is the owner; SENT-BY is the site's default address.
+        $this->SetDefaultFrom(address: 'bookings@example.com', name: 'Example Bookings');
 
-        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
-        $this->assertEquals($res->OwnerEmailAddress, $reservationView->OrganizerEmail);
-        $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
-        $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
-    }
-
-    public function testOrganizerIsDefaultedIfCurrentUserIsOrganizer()
-    {
-        // this fixes a bug in outlook which prevents you from adding a meeting that you are the organizer of
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId;
@@ -121,9 +116,29 @@ class CalendarExportPresenterTest extends TestBase
         $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
-        $this->assertEquals('e-noreply@m.com', $reservationView->OrganizerEmail);
-        $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
-        $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
+        $this->assertEquals('e@m.com', $reservationView->OrganizerEmail);
+        $this->assertEquals('f l', $reservationView->Organizer);
+        $this->assertEquals('bookings@example.com', $reservationView->OrganizerSentBy);
+    }
+
+    public function testOrganizerFallsBackToTheDefaultAddressWithNoSentByWhenPrivacyHidesTheOwner()
+    {
+        $this->SetDefaultFrom(address: 'bookings@example.com', name: 'Example Bookings');
+
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->OwnerId = $user->UserId;
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
+
+        $this->privacyFilter->_CanViewUser = false;
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('bookings@example.com', $reservationView->OrganizerEmail);
+        $this->assertEquals('Private', $reservationView->Organizer);
+        // no real identity, so nothing to send on behalf of
+        $this->assertNull($reservationView->OrganizerSentBy);
     }
 
     public function testOrganizerIsOmittedFromRenderedOutputWhenOwnerHasNoEmailOnFile()
@@ -148,6 +163,39 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertStringNotContainsString('ORGANIZER', $ics);
     }
 
+    public function testOrganizerRendersWithSentByAndNoAttendeeIsAdded()
+    {
+        // the owner is only ever ORGANIZER, never ATTENDEE
+        $this->fakeConfig->SetKey(
+            configDef: ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS,
+            value: 'bookings@example.com',
+        );
+
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->OwnerId = $user->UserId;
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(hours: 1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+        $reservationView = new iCalendarReservationView(
+            res: $res,
+            currentUser: $user,
+            privacyFilter: $this->privacyFilter,
+        );
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render(reservations: [$reservationView]);
+        $unfolded = str_replace(search: "\r\n ", replace: '', subject: $ics);
+
+        $this->assertMatchesRegularExpression('/ORGANIZER;CN=f l;SENT-BY="mailto:bookings@example\.com":mailto:e@m\.com/', $unfolded);
+        $this->assertStringNotContainsString('ATTENDEE', $ics);
+    }
+
     public function testViewHidesDetailsWhenNoAccess()
     {
         $user = new FakeUserSession();
@@ -156,6 +204,7 @@ class CalendarExportPresenterTest extends TestBase
         $this->privacyFilter->_CanViewDetails = false;
         $this->privacyFilter->_CanViewUser = false;
         $this->fakeConfig->SetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS, 'noreply@example.com');
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_NAME, value: 'LB');
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
 
@@ -165,8 +214,10 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals($res, $this->privacyFilter->_LastViewDetailsReservation);
         $this->assertEquals($res, $this->privacyFilter->_LastViewUserReservation);
 
+        // hidden owner: ORGANIZER is the default address, without SENT-BY
         $this->assertEquals('Private', $reservationView->Organizer);
         $this->assertEquals('noreply@example.com', $reservationView->OrganizerEmail);
+        $this->assertNull($reservationView->OrganizerSentBy);
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
     }
@@ -222,6 +273,7 @@ class CalendarExportPresenterTest extends TestBase
         // privacy.view.reservations=false (default) means anonymous users must not see any details
         $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, false);
         $this->fakeConfig->SetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS, 'noreply@example.com');
+        $this->fakeConfig->SetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_NAME, value: 'LB');
         $this->privacyFilter->_CanViewDetails = true;
         $this->privacyFilter->_CanViewUser = true;
 
@@ -229,8 +281,10 @@ class CalendarExportPresenterTest extends TestBase
 
         $this->assertEquals('Private', $reservationView->Summary);
         $this->assertEquals('Private', $reservationView->Description);
+        // anonymous viewers also lose the owner, as in the hidden-owner case
         $this->assertEquals('Private', $reservationView->Organizer);
         $this->assertEquals('noreply@example.com', $reservationView->OrganizerEmail);
+        $this->assertNull($reservationView->OrganizerSentBy);
     }
 
     public function testViewStoresRawTextInSummaryAndDescription()
@@ -349,18 +403,54 @@ class CalendarExportPresenterTest extends TestBase
         $this->privacyFilter->_CanViewDetails = true;
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
-        // ATTENDEE carries parameters; VALARM is a nested component. Both must round-trip
+        // a parameterised property and a nested VALARM must round-trip
         // through Reader::read() rather than becoming malformed flat text.
-        $reservationView->ExtraIcalLines = "ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com\r\n"
+        $reservationView->ExtraIcalLines = "CATEGORIES;LANGUAGE=en:Meeting\r\n"
             . "BEGIN:VALARM\r\nACTION:AUDIO\r\nTRIGGER:-PT15M\r\nEND:VALARM";
 
         $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
         $display = new CalendarExportDisplay();
         $ics = $display->Render([$reservationView]);
 
-        $this->assertStringContainsString('ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com', $ics);
+        $this->assertStringContainsString('CATEGORIES;LANGUAGE=en:Meeting', $ics);
         $this->assertStringContainsString('BEGIN:VALARM', $ics);
         $this->assertStringContainsString('ACTION:AUDIO', $ics);
+    }
+
+    /**
+     * @return array<string, array{IcsMethod, bool}>
+     */
+    public static function pluginAttendeeMethods(): array
+    {
+        return [
+            'feeds keep it' => [IcsMethod::PUBLISH, true],
+            'requests drop it' => [IcsMethod::REQUEST, false],
+            'cancellations drop it' => [IcsMethod::CANCEL, false],
+        ];
+    }
+
+    #[DataProvider('pluginAttendeeMethods')]
+    public function testExtraIcalLinesAttendeeIsOnlyKeptForFeeds(IcsMethod $method, bool $kept)
+    {
+        // an email must not reveal another address than its recipient's
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(hours: 1);
+
+        $reservationView = new iCalendarReservationView(
+            res: $res,
+            currentUser: $user,
+            privacyFilter: $this->privacyFilter,
+        );
+        $reservationView->ExtraIcalLines = "ATTENDEE;CN=Other:mailto:other@example.com\r\nCATEGORIES:Meeting";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render(reservations: [$reservationView], method: $method);
+
+        $this->assertSame($kept, str_contains(haystack: $ics, needle: 'other@example.com'));
+        $this->assertStringContainsString('CATEGORIES:Meeting', $ics);
     }
 
     public function testExtraIcalLinesSupportsRfc5545FoldedContinuationLines()
@@ -422,5 +512,132 @@ class CalendarExportPresenterTest extends TestBase
         // reservation (or the rest of the malformed one's own properties) from rendering.
         $this->assertStringContainsString('good-ref', $ics);
         $this->assertStringContainsString('bad-ref', $ics);
+    }
+
+    public function testDtstampIsTheCreationDateForFeedsAndTheSendTimeForEmails()
+    {
+        // without SEQUENCE, clients order iTip messages for one UID by DTSTAMP
+        $res = new ReservationItemView();
+        $res->DateCreated = Date::Parse(dateString: '2026-01-01 08:00:00', timezone: 'UTC');
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(hours: 1);
+        $view = new iCalendarReservationView(
+            res: $res,
+            currentUser: new FakeUserSession(),
+            privacyFilter: $this->privacyFilter,
+        );
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        // a server outside UTC must still stamp UTC, as the format ends in Z
+        Date::_SetNow(date: Date::Parse(dateString: '2026-03-04 06:06:07', timezone: 'Europe/Berlin'));
+
+        try {
+            $display = new CalendarExportDisplay();
+            $feed = $display->Render(reservations: [$view]);
+            $email = $display->Render(reservations: [$view], method: IcsMethod::CANCEL);
+        } finally {
+            Date::_ResetNow();
+        }
+
+        $this->assertStringContainsString('DTSTAMP:20260101T080000Z', $feed);
+        $this->assertStringContainsString('DTSTAMP:20260304T050607Z', $email);
+        $this->assertStringNotContainsString('SEQUENCE', $email);
+    }
+
+    /**
+     * Both privacy settings through the real PrivacyFilter, for every method.
+     *
+     * @return array<string, array{bool, bool, string, IcsMethod}>
+     */
+    public static function privacyMatrix(): array
+    {
+        $rows = [];
+        foreach (IcsMethod::cases() as $method) {
+            foreach ([[false, false], [true, false], [false, true], [true, true]] as [$hideUser, $hideDetails]) {
+                $rows[sprintf('stranger user=%d details=%d %s', $hideUser, $hideDetails, $method->value)] = [$hideUser, $hideDetails, 'stranger', $method];
+            }
+            foreach (['owner', 'admin'] as $viewer) {
+                $rows[sprintf('%s user=1 details=1 %s', $viewer, $method->value)] = [true, true, $viewer, $method];
+            }
+        }
+
+        return $rows;
+    }
+
+    #[DataProvider('privacyMatrix')]
+    public function testPrivacySettingsApplyToEveryMethod(bool $hideUser, bool $hideDetails, string $viewer, IcsMethod $method)
+    {
+        $this->SetDefaultFrom(address: 'bookings@example.com', name: 'Example Bookings');
+        $this->fakeConfig->SetKey(
+            configDef: ConfigKeys::PRIVACY_HIDE_USER_DETAILS,
+            value: $hideUser ? 'true' : 'false',
+        );
+        $this->fakeConfig->SetKey(
+            configDef: ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
+            value: $hideDetails ? 'true' : 'false',
+        );
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        // only the viewer's resource permission lookup returns a row
+        ServiceLocator::SetDatabase(database: new class () extends FakeDatabase {
+            public function Query(ISqlCommand $command)
+            {
+                parent::Query(command: $command);
+                $isPermissionLookup = $command instanceof GetUserPermissionsCommand;
+
+                return new FakeReader(rows: $isPermissionLookup ? [[ColumnNames::RESOURCE_ID => 1]] : []);
+            }
+        });
+
+        $ownerId = 1;
+        $session = match ($viewer) {
+            'owner' => new FakeUserSession(isAdmin: false, timezone: 'UTC', userId: $ownerId),
+            'admin' => new FakeUserSession(isAdmin: true, timezone: 'UTC', userId: 3),
+            default => new FakeUserSession(isAdmin: false, timezone: 'UTC', userId: 2),
+        };
+
+        $res = new ReservationItemView();
+        $res->ResourceId = 1;
+        $res->UserId = $ownerId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->OwnerId = $ownerId;
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
+        $res->Title = 'Secret Title';
+        $res->Description = 'Secret Description';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(hours: 1);
+
+        $view = new iCalendarReservationView(
+            res: $res,
+            currentUser: $session,
+            privacyFilter: new PrivacyFilter(
+                reservationAuthorization: $this->createMock(IReservationAuthorization::class),
+            ),
+            summaryFormat: '{title}',
+        );
+        $rendered = (new CalendarExportDisplay())->Render(reservations: [$view], method: $method);
+        $ics = str_replace(search: "\r\n ", replace: '', subject: $rendered);
+
+        $seesUser = !$hideUser || $viewer !== 'stranger';
+        $seesDetails = !$hideDetails || $viewer !== 'stranger';
+
+        $this->assertStringContainsString('METHOD:' . $method->value, $ics);
+        $this->assertStringContainsString($method === IcsMethod::CANCEL ? 'STATUS:CANCELLED' : 'STATUS:CONFIRMED', $ics);
+        // the method never changes what the viewer sees; emails set their own organizer and attendee
+        $this->assertStringNotContainsString('ATTENDEE', $ics);
+        if ($seesUser) {
+            $this->assertStringContainsString('ORGANIZER;CN=f l;SENT-BY="mailto:bookings@example.com":mailto:e@m.com', $ics);
+        } else {
+            $this->assertStringContainsString('ORGANIZER;CN=Private:mailto:bookings@example.com', $ics);
+            $this->assertStringNotContainsString('e@m.com', $ics);
+        }
+        if ($seesDetails) {
+            $this->assertStringContainsString('SUMMARY:Secret Title', $ics);
+            $this->assertStringContainsString('DESCRIPTION:Secret Description', $ics);
+        } else {
+            $this->assertStringContainsString('SUMMARY:Private', $ics);
+            $this->assertStringContainsString('DESCRIPTION:Private', $ics);
+            $this->assertStringNotContainsString('Secret', $ics);
+        }
     }
 }

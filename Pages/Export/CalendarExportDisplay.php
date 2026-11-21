@@ -1,5 +1,6 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
 use Sabre\VObject\Component\VAlarm;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
@@ -18,14 +19,15 @@ class CalendarExportDisplay extends Page
     /**
      * @param iCalendarReservationView[] $reservations
      * @param string|null $calendarName Optional display name rendered as X-WR-CALNAME
+     * @param IcsMethod $method PUBLISH for feeds and exports, REQUEST or CANCEL for emails
      */
-    public function Render(array $reservations, ?string $calendarName = null): string
+    public function Render(array $reservations, ?string $calendarName = null, IcsMethod $method = IcsMethod::PUBLISH): string
     {
         // Values passed as constructor children are merged over getDefaults(),
         // replacing the PRODID that VCalendar would otherwise generate.
         $vcal = new VCalendar([
             'PRODID' => '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
-            'METHOD' => 'REQUEST',
+            'METHOD' => $method->value,
         ]);
 
         if ($calendarName !== null && $calendarName !== '') {
@@ -44,7 +46,12 @@ class CalendarExportDisplay extends Page
             // would otherwise auto-generate in getDefaults().
             $event = new VEvent($vcal, 'VEVENT', [
                 'UID' => $res->ReferenceNumber . '&' . $uid,
-                'DTSTAMP' => $res->DateCreated->Format($isoFormat),
+                // SEQUENCE is left out on purpose (RFC 5545 treats a missing one as 0).
+                // Incrementing it across updates would need a revision stored per
+                // reservation, and Outlook, Gmail and Thunderbird all apply updates and
+                // cancellations without it. Instead an iTip message is stamped when it
+                // is sent, so later messages for the same UID win.
+                'DTSTAMP' => ($method === IcsMethod::PUBLISH ? $res->DateCreated : Date::Now()->ToUtc())->Format(format: $isoFormat),
             ]);
             $vcal->add($event);
             $event->add('CLASS', $res->Classification);
@@ -55,11 +62,21 @@ class CalendarExportDisplay extends Page
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
             if (!empty($res->OrganizerEmail)) {
-                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+                $organizerParams = ['CN' => $res->Organizer];
+                if (!empty($res->OrganizerSentBy)) {
+                    // RFC 5545 §3.2.18: the site's address sends on the owner's behalf
+                    $organizerParams['SENT-BY'] = 'mailto:' . $res->OrganizerSentBy;
+                }
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, $organizerParams);
             }
-            $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            if ($method !== IcsMethod::CANCEL) {
+                $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            } elseif (!$res->UninvitesAttendee) {
+                // RFC 5546 §3.2.5: CANCELLED cancels the whole event, so it is left out
+                // when only the attendee is removed
+                $event->add('STATUS', 'CANCELLED');
+            }
             $event->add('SUMMARY', $res->Summary);
-            $event->add('SEQUENCE', 0);
             $event->add('URL', $res->ReservationUrl);
             $event->add('X-MICROSOFT-CDO-BUSYSTATUS', 'BUSY');
 
@@ -80,6 +97,10 @@ class CalendarExportDisplay extends Page
                         . "\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
                     );
                     foreach ($fragment->getComponents()[0]->children() as $child) {
+                        // an email names its recipient as the only attendee
+                        if ($method !== IcsMethod::PUBLISH && $child->name === 'ATTENDEE') {
+                            continue;
+                        }
                         $event->add($child);
                     }
                 } catch (ParseException $e) {
@@ -88,6 +109,14 @@ class CalendarExportDisplay extends Page
                     // skip it for this event and keep going.
                     Log::Error('Failed to parse ExtraIcalLines for reservation %s: %s', $res->ReferenceNumber, $e->getMessage());
                 }
+            }
+
+            if (!empty($res->AttendeeEmail)) {
+                $event->add('ATTENDEE', 'mailto:' . $res->AttendeeEmail, array_filter(array: [
+                    'CN' => $res->AttendeeName,
+                    ...$res->AttendeeParams,
+                    'RSVP' => 'FALSE',
+                ]));
             }
 
             if ($res->StartReminder !== null) {
