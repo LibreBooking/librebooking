@@ -184,6 +184,29 @@ class PageTest extends TestBase
         ];
     }
 
+    #[DataProvider('colorModeProvider')]
+    public function testNormalizeColorMode(mixed $value, string $expected): void
+    {
+        $this->assertSame($expected, Page::normalizeColorMode($value));
+    }
+
+    /**
+     * @return array<string, array{0: mixed, 1: string}>
+     */
+    public static function colorModeProvider(): array
+    {
+        return [
+            'auto' => ['auto', 'auto'],
+            'light' => ['light', 'light'],
+            'dark' => ['dark', 'dark'],
+            'mixed case and whitespace' => [' Dark ', 'dark'],
+            'null falls back to auto' => [null, 'auto'],
+            'empty falls back to auto' => ['', 'auto'],
+            'unknown falls back to auto' => ['sepia', 'auto'],
+            'non-string falls back to auto' => [1, 'auto'],
+        ];
+    }
+
     #[DataProvider('querystringIntProvider')]
     public function testGetQuerystringIntAcceptsOnlyIntegerIds(mixed $value, ?int $expected): void
     {

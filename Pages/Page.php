@@ -96,6 +96,7 @@ abstract class Page implements IPage
         $this->smarty->assign('checkoutAdminOnly', Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_CHECKOUT_ADMIN_ONLY, new BooleanConverter()));
 
         $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
+        $this->smarty->assign('cssColorMode', self::normalizeColorMode(Configuration::Instance()->GetKey(ConfigKeys::CSS_COLOR_MODE)));
 
         $imageUploadDirectory = new ImageUploadDirectory();
         $uploadUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
@@ -158,6 +159,19 @@ abstract class Page implements IPage
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
 
         $this->Set('AutoScrollToday', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_AUTO_SCROLL_TODAY, new BooleanConverter()) ?? true);
+    }
+
+    /**
+     * Normalize the configured color mode to one of the supported values.
+     * Unknown or empty values fall back to 'auto'.
+     */
+    public static function normalizeColorMode(mixed $value): string
+    {
+        $mode = is_string($value) ? strtolower(trim($value)) : '';
+
+        return array_key_exists($mode, ConfigKeys::CSS_COLOR_MODE['choices'])
+            ? $mode
+            : ConfigKeys::CSS_COLOR_MODE['default'];
     }
 
     /**

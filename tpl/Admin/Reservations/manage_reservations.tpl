@@ -530,7 +530,7 @@
 						</div>
 						<div id="tos_upload_div" class="tos-div d-none margin-bottom-15">
 							<label for="tos-upload" class="fw-bold">{translate key=TermsOfService} PDF</label>
-							<div class="dropzone text-center border border-2 rounded-3 bg-light"
+							<div class="dropzone text-center border border-2 rounded-3 bg-body-tertiary"
 								id="termsOfServiceUpload">
 								<div class="">
 									<i class="bi bi-filetype-pdf fs-1"></i><br />

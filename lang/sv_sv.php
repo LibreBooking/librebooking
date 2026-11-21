@@ -485,6 +485,10 @@ class sv_sv extends en_gb
         $strings['ServerSettings'] = 'Serverinställningar';
         $strings['Dashboard'] = 'Anslagstavla';
         $strings['Help'] = 'Hjälp';
+        $strings['ColorMode'] = 'Färgläge';
+        $strings['ColorModeLight'] = 'Ljust';
+        $strings['ColorModeDark'] = 'Mörkt';
+        $strings['ColorModeAuto'] = 'Automatiskt';
         $strings['Bookings'] = 'Bokningar';
         $strings['Schedule'] = 'Kalender';
         $strings['Reservations'] = 'Bokningar';    // ändrat AR

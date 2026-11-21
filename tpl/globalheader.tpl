@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="{$HtmlLang}" dir="{$HtmlTextDirection}">
+<html lang="{$HtmlLang}" dir="{$HtmlTextDirection}" data-bs-theme="{if $cssColorMode eq 'dark'}dark{else}light{/if}"
+    data-lb-color-mode="{$cssColorMode}">
 
 <head>
     <title>{if isset($TitleKey) && $TitleKey neq ''}{translate key=$TitleKey args=$TitleArgs}{else}{$Title}{/if}</title>
     <meta http-equiv="Content-Type" content="text/html; charset={$Charset}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="{if $cssColorMode eq 'auto'}light dark{else}{$cssColorMode}{/if}" />
+    {* Loaded before any CSS so pages don't flash light before switching to dark. *}
+    {jsfile src="color-mode.js"}
     {if isset($ShouldLogout) && $ShouldLogout}
         <meta http-equiv="REFRESH"
             content="{$SessionTimeoutSeconds};URL={$Path}logout.php?{QueryStringKeys::REDIRECT}={$smarty.server.REQUEST_URI|urlencode}" />
@@ -108,7 +112,7 @@
     <!-- End CSS -->
 </head>
 
-<body data-bs-theme='{$cssTheme}'>
+<body data-lb-theme='{$cssTheme}'>
 
     <noscript>
         <div class="alert alert-warning text-center m-2" role="alert">
@@ -139,7 +143,7 @@
                 <h5 class="mb-0"><a class="link-primary" href="{$HomeUrl}">{$AppTitle}</a></h5>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 sticky-top">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm py-2 sticky-top">
             <div class="container-fluid">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                     data-bs-target="#librebooking-navigation" aria-controls="librebooking-navigation" aria-expanded="false"
@@ -414,6 +418,34 @@
                                 </ul>
                             </li>
                         {/if}
+                        <li class="nav-item dropdown" id="navColorModeDropdown">
+                            <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                data-bs-toggle="dropdown" aria-label="{translate key=ColorMode}"
+                                title="{translate key=ColorMode}">
+                                <span class="visually-hidden">{translate key=ColorMode}</span>
+                                <i class="bi bi-circle-half" id="colorModeIcon" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" id="colorModeDropdownMenu">
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="light"
+                                        aria-pressed="false">
+                                        <i class="bi bi-sun-fill me-2" aria-hidden="true"></i>{translate key=ColorModeLight}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="dark"
+                                        aria-pressed="false">
+                                        <i class="bi bi-moon-stars-fill me-2" aria-hidden="true"></i>{translate key=ColorModeDark}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item" data-lb-color-mode-value="auto"
+                                        aria-pressed="false">
+                                        <i class="bi bi-circle-half me-2" aria-hidden="true"></i>{translate key=ColorModeAuto}
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item dropdown" id="navHelpDropdown">
                             <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
                                 data-bs-toggle="dropdown">{translate key="Help"}</a>

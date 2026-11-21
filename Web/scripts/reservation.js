@@ -1416,7 +1416,7 @@ function Reservation(opts) {
 
   function buildAddItem(idAttribute, id, name) {
     return $('<div/>').append(
-      $('<a href="#" class="add link-dark link-underline-opacity-0" title="Add"/>')
+      $('<a href="#" class="add link-body-emphasis link-underline-opacity-0" title="Add"/>')
         .attr(idAttribute, id)
         .append(
           $('<span class="bi bi-plus-square-fill text-success icon"></span>'),

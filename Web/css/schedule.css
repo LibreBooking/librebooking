@@ -480,3 +480,45 @@ img.schedule_icon {
 #reservations {
   position: relative;
 }
+
+/* Dark color mode (see librebooking.css for the shared variables). */
+[data-bs-theme='dark'] table.reservations td.resourcename,
+[data-bs-theme='dark'] table.reservations td.reslabel {
+  background-color: var(--surface-muted);
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme='dark'] table.reservations tr.today td.reslabel {
+  background-color: var(--surface-raised);
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme='dark'] table.reservations td.resourcename a {
+  color: #6cb8e6;
+}
+
+[data-bs-theme='dark'] table.reservations td.resourcename a:hover {
+  color: #9fd2f1;
+}
+
+[data-bs-theme='dark'] table.reservations td.resourcename.hilite {
+  background-color: #4a4630;
+}
+
+[data-bs-theme='dark'] table.reservations.mobile div.reservable,
+[data-bs-theme='dark'] .reservations.condensed div.reservable {
+  border-color: var(--bs-secondary-color);
+  color: var(--bs-secondary-color);
+  background-color: var(--reservable);
+}
+
+[data-bs-theme='dark'] .reservations.condensed div.reservable:hover {
+  background-color: var(--surface-raised);
+}
+
+[data-bs-theme='dark'] .restricted {
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 10px, #555 10px, #555 20px),
+    linear-gradient(to bottom, #3a3a3a, #2a2a2a);
+  color: var(--bs-body-color);
+}

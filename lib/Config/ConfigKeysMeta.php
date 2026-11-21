@@ -176,6 +176,7 @@ class ConfigKeysMeta
             'default.page.size',
             'css.extension.file',
             'css.theme',
+            'css.color.mode',
             'name.format',
         ],
         'Analytics Integration' => [

@@ -496,6 +496,10 @@ class ja_jp extends en_gb
         $strings['MinimumQuantity'] = '最小';
         $strings['MaximumQuantity'] = '最大';
         $strings['ChangeLanguage'] = '言語を変更';
+        $strings['ColorMode'] = 'カラーモード';
+        $strings['ColorModeLight'] = 'ライト';
+        $strings['ColorModeDark'] = 'ダーク';
+        $strings['ColorModeAuto'] = '自動';
         $strings['AddRule'] = '条件を追加';
         $strings['Attribute'] = '属性';
         $strings['RequiredValue'] = '条件値';
