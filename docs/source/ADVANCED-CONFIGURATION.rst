@@ -188,7 +188,8 @@ Frontend Advanced Settings
 
 **use.local.js.libs**
   Prefer bundled or self-hosted frontend assets instead of CDN-hosted ones,
-  including supported fonts and JavaScript libraries.
+  including JavaScript libraries and CSS. The font selected by ``css.font``
+  is always served locally.
 
   .. code-block:: php
 
