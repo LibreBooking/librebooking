@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
@@ -213,15 +215,39 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->Attributes = $ca;
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
+        $rv->RequiresApproval = $this->reservationSeries->RequiresApproval();
 
         $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
 
+        // The site's address organizes, so the organizer stays the same whoever changes the
+        // reservation and is never the recipient, which would turn the REQUEST into the
+        // recipient's own event.
+        $defaultFromAddress = Configuration::Instance()->GetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
+        if (empty($defaultFromAddress)) {
+            Log::Error('%s is not set; reservation email ICS attachments have no ORGANIZER', ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS['key']);
+        }
+        $icsView->OrganizerEmail = $defaultFromAddress;
+        $icsView->Organizer = Configuration::Instance()->GetKey(configDef: ConfigKeys::EMAIL_DEFAULT_FROM_NAME);
+        $icsView->OrganizerSentBy = null;
+
+        // the attendee is whoever the email goes to: the owner, or an invitee, guest or share recipient
+        $recipient = $this->To();
+        $recipient = is_array($recipient) ? $recipient[0] : $recipient;
+        $icsView->AttendeeName = $recipient->Name();
+        $icsView->AttendeeEmail = $recipient->Address();
+        $icsView->AttendeeParams = $this->GetIcsAttendeeParams();
+
+        $method = $this->GetIcsMethod();
+        // removing an invitee, participant or guest also sends a CANCEL, but the reservation goes on
+        $icsView->UninvitesAttendee = $method === IcsMethod::CANCEL
+            && !$this->reservationSeries->IsMarkedForDelete(reservationId: $currentInstance->ReservationId());
+
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
+        $icsContents = $display->Render(reservations: [$icsView], method: $method);
         $this->AddStringAttachment(
             contents: $icsContents,
             fileName: 'reservation.ics',
-            mimeType: 'text/calendar; charset=UTF-8; method=REQUEST'
+            mimeType: "text/calendar; charset=UTF-8; method={$method->value}"
         );
     }
 
@@ -261,5 +287,18 @@ abstract class ReservationEmailMessage extends EmailMessage
                 return is_string($value) ? EmailMessage::EscapeHtml($value) : $value;
             }
         };
+    }
+
+    protected function GetIcsMethod(): IcsMethod
+    {
+        return IcsMethod::REQUEST;
+    }
+
+    /**
+     * @return array<string, string> ROLE and PARTSTAT of the recipient
+     */
+    protected function GetIcsAttendeeParams(): array
+    {
+        return ['ROLE' => 'REQ-PARTICIPANT', 'PARTSTAT' => 'NEEDS-ACTION'];
     }
 }

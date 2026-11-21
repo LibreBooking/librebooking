@@ -7,6 +7,7 @@ require_once ROOT_DIR . '/Domain/namespace.php';
 class TestReservationSeries extends ReservationSeries
 {
     private $_scheduleId;
+    private bool $_markedForDelete = false;
 
     public function __construct()
     {
@@ -96,5 +97,15 @@ class TestReservationSeries extends ReservationSeries
     public function GetCreditsRequired()
     {
         return $this->creditsRequired;
+    }
+
+    public function WithMarkedForDelete()
+    {
+        $this->_markedForDelete = true;
+    }
+
+    public function IsMarkedForDelete($reservationId)
+    {
+        return $this->_markedForDelete;
     }
 }

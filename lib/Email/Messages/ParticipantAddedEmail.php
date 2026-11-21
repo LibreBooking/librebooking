@@ -9,6 +9,12 @@ class ParticipantAddedEmail extends InviteeAddedEmail
     {
         return $this->Translate('ParticipantAddedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
+
+    protected function GetIcsAttendeeParams(): array
+    {
+        // participants are added without having to accept
+        return ['ROLE' => 'REQ-PARTICIPANT', 'PARTSTAT' => 'ACCEPTED'];
+    }
 }
 
 class ParticipantUpdatedEmail extends InviteeUpdatedEmail
@@ -17,6 +23,12 @@ class ParticipantUpdatedEmail extends InviteeUpdatedEmail
     {
         return $this->Translate('ParticipantUpdatedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
+
+    protected function GetIcsAttendeeParams(): array
+    {
+        // participants are added without having to accept
+        return ['ROLE' => 'REQ-PARTICIPANT', 'PARTSTAT' => 'ACCEPTED'];
+    }
 }
 
 class ParticipantDeletedEmail extends InviteeRemovedEmail
@@ -24,5 +36,11 @@ class ParticipantDeletedEmail extends InviteeRemovedEmail
     public function Subject()
     {
         return $this->Translate('ParticipantDeletedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
+    }
+
+    protected function GetIcsAttendeeParams(): array
+    {
+        // participants are added without having to accept
+        return ['ROLE' => 'REQ-PARTICIPANT', 'PARTSTAT' => 'ACCEPTED'];
     }
 }
