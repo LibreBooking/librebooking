@@ -54,7 +54,9 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            if (!empty($res->OrganizerEmail)) {
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            }
             $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
             $event->add('SUMMARY', $res->Summary);
             $event->add('SEQUENCE', 0);

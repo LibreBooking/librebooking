@@ -126,6 +126,28 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
     }
 
+    public function testOrganizerIsOmittedFromRenderedOutputWhenOwnerHasNoEmailOnFile()
+    {
+        // an owner without an email gets no ORGANIZER rather than an empty "mailto:"
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(hours: 1);
+
+        $reservationView = new iCalendarReservationView(
+            res: $res,
+            currentUser: $user,
+            privacyFilter: $this->privacyFilter,
+        );
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render(reservations: [$reservationView]);
+
+        // the event itself must still be rendered
+        $this->assertStringContainsString('BEGIN:VEVENT', $ics);
+        $this->assertStringNotContainsString('ORGANIZER', $ics);
+    }
+
     public function testViewHidesDetailsWhenNoAccess()
     {
         $user = new FakeUserSession();
