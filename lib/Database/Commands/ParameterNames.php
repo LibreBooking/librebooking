@@ -84,6 +84,7 @@ class ParameterNames
 
     public const GATEWAY_TYPE = '@gateway_type';
     public const GATEWAY_SETTING_NAME = '@setting_name';
+    public const GATEWAY_SETTING_NAMES = '@setting_names';
     public const GATEWAY_SETTING_VALUE = '@setting_value';
     public const GROUP_ID = '@groupid';
     public const GROUP_NAME = '@groupname';

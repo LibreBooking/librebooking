@@ -249,28 +249,6 @@ class AddCustomLayoutPeriodCommand extends SqlCommand
     }
 }
 
-class AddPaymentConfigurationCommand extends SqlCommand
-{
-    public function __construct($creditCount, $creditCost, $creditCurrency)
-    {
-        parent::__construct(Queries::ADD_PAYMENT_CONFIGURATION);
-        $this->AddParameter(new Parameter(ParameterNames::CREDIT_COUNT, $creditCount));
-        $this->AddParameter(new Parameter(ParameterNames::CREDIT_COST, $creditCost));
-        $this->AddParameter(new Parameter(ParameterNames::CREDIT_CURRENCY, $creditCurrency));
-    }
-}
-
-class AddPaymentGatewaySettingCommand extends SqlCommand
-{
-    public function __construct($gatewayType, $settingName, $settingValue)
-    {
-        parent::__construct(Queries::ADD_PAYMENT_GATEWAY_SETTING);
-        $this->AddParameter(new Parameter(ParameterNames::GATEWAY_TYPE, $gatewayType));
-        $this->AddParameter(new Parameter(ParameterNames::GATEWAY_SETTING_NAME, $settingName));
-        $this->AddParameter(new Parameter(ParameterNames::GATEWAY_SETTING_VALUE, $settingValue));
-    }
-}
-
 class AddPaymentTransactionLogCommand extends SqlCommand
 {
     /**
@@ -952,6 +930,33 @@ class DeleteGroupRoleCommand extends SqlCommand
         parent::__construct(Queries::DELETE_GROUP_ROLE);
         $this->AddParameter(new Parameter(ParameterNames::GROUP_ID, $groupId));
         $this->AddParameter(new Parameter(ParameterNames::ROLE_ID, $roleId));
+    }
+}
+
+/**
+ * Deletes a gateway's settings whose names are not in the given list. Run it
+ * after SetPaymentGatewaySettingsCommand, so the stored settings are exactly
+ * the ones just written.
+ */
+class DeleteObsoletePaymentGatewaySettingsCommand extends SqlCommand
+{
+    /**
+     * @param string $gatewayType
+     * @param string[] $currentSettingNames names to keep; must not be empty
+     */
+    public function __construct($gatewayType, array $currentSettingNames)
+    {
+        if (empty($currentSettingNames)) {
+            // An empty list would delete every setting of the gateway.
+            throw new InvalidArgumentException(message: 'A payment gateway needs at least one setting name to keep');
+        }
+
+        parent::__construct(query: Queries::DELETE_OBSOLETE_PAYMENT_GATEWAY_SETTINGS);
+        $this->AddParameter(new Parameter(name: ParameterNames::GATEWAY_TYPE, value: $gatewayType));
+        $this->AddParameter(new Parameter(
+            name: ParameterNames::GATEWAY_SETTING_NAMES,
+            value: array_values(array: $currentSettingNames)
+        ));
     }
 }
 
@@ -2570,6 +2575,62 @@ class SetDefaultScheduleCommand extends SqlCommand
     {
         parent::__construct(Queries::SET_DEFAULT_SCHEDULE);
         $this->AddParameter(new Parameter(ParameterNames::SCHEDULE_ID, $scheduleId));
+    }
+}
+
+/**
+ * Adds the price for a credit count, or replaces it when one exists, in a
+ * single statement. If the statement fails, the existing price is kept.
+ */
+class SetPaymentConfigurationCommand extends SqlCommand
+{
+    /**
+     * @param int $creditCount
+     * @param float $creditCost
+     * @param string $creditCurrency
+     */
+    public function __construct($creditCount, $creditCost, $creditCurrency)
+    {
+        parent::__construct(query: Queries::SET_PAYMENT_CONFIGURATION);
+        $this->AddParameter(new Parameter(name: ParameterNames::CREDIT_COUNT, value: $creditCount));
+        $this->AddParameter(new Parameter(name: ParameterNames::CREDIT_COST, value: $creditCost));
+        $this->AddParameter(new Parameter(name: ParameterNames::CREDIT_CURRENCY, value: $creditCurrency));
+    }
+}
+
+/**
+ * Adds or replaces all of a gateway's settings in a single statement. If any
+ * setting cannot be stored, the statement fails as a whole and every existing
+ * setting is kept.
+ */
+class SetPaymentGatewaySettingsCommand extends SqlCommand
+{
+    /**
+     * @param string $gatewayType
+     * @param PaymentGatewaySetting[] $settings must not be empty
+     */
+    public function __construct($gatewayType, array $settings)
+    {
+        if (empty($settings)) {
+            throw new InvalidArgumentException(message: 'A payment gateway needs at least one setting to store');
+        }
+
+        $rows = [];
+        $parameters = [new Parameter(name: ParameterNames::GATEWAY_TYPE, value: $gatewayType)];
+        foreach (array_values(array: $settings) as $index => $setting) {
+            // Each row needs its own parameter names, so number them.
+            $nameParameter = ParameterNames::GATEWAY_SETTING_NAME . $index;
+            $valueParameter = ParameterNames::GATEWAY_SETTING_VALUE . $index;
+
+            $rows[] = sprintf('(%s, %s, %s)', ParameterNames::GATEWAY_TYPE, $nameParameter, $valueParameter);
+            $parameters[] = new Parameter(name: $nameParameter, value: $setting->Name());
+            $parameters[] = new Parameter(name: $valueParameter, value: $setting->Value());
+        }
+
+        parent::__construct(query: sprintf(Queries::SET_PAYMENT_GATEWAY_SETTINGS, implode(separator: ', ', array: $rows)));
+        foreach ($parameters as $parameter) {
+            $this->AddParameter($parameter);
+        }
     }
 }
 

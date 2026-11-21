@@ -79,11 +79,6 @@ class Queries
         'INSERT INTO `quotas` (`quota_limit`, `unit`, `duration`, `resource_id`, `group_id`, `schedule_id`, `enforced_time_start`, `enforced_time_end`, `enforced_days`, `scope`)
 			VALUES (@limit, @unit, @duration, @resourceid, @groupid, @scheduleid, @startTime, @endTime, @enforcedDays, @scope)';
 
-    public const ADD_PAYMENT_CONFIGURATION = 'INSERT INTO `payment_configuration` (`credit_cost`, `credit_currency`, `credit_count`) VALUES (@credit_cost, @credit_currency, @credit_count)';
-
-    public const ADD_PAYMENT_GATEWAY_SETTING = 'INSERT INTO `payment_gateway_settings` (`gateway_type`, `setting_name`, `setting_value`)
-                                      VALUES (@gateway_type, @setting_name, @setting_value)';
-
     public const ADD_PAYMENT_TRANSACTION_LOG =
         'INSERT INTO `payment_transaction_log` (`user_id`, `status`, `invoice_number`, `transaction_id`, `subtotal_amount`, `tax_amount`, `total_amount`, `transaction_fee`, `currency`, `transaction_href`, `refund_href`, `date_created`, `gateway_date_created`, `gateway_name`, `payment_response`)
           VALUES (@userid, @status, @invoice_number, @transaction_id, @total_amount, 0, @total_amount, @transaction_fee, @currency, @transaction_href, @refund_href, @date_created, @gateway_date_created, @gateway_name, @payment_response)';
@@ -243,6 +238,10 @@ class Queries
         'DELETE	FROM `group_resource_permissions` WHERE `group_id` = @groupid AND `resource_id` = @resourceid';
 
     public const DELETE_GROUP_ROLE = 'DELETE FROM `group_roles` WHERE `group_id` = @groupid AND `role_id` = @roleid';
+
+    public const DELETE_OBSOLETE_PAYMENT_GATEWAY_SETTINGS =
+        'DELETE FROM `payment_gateway_settings`
+        WHERE `gateway_type` = @gateway_type AND `setting_name` NOT IN (@setting_names)';
 
     public const DELETE_ORPHAN_LAYOUTS = 'DELETE `l`.* FROM `layouts` `l` LEFT JOIN `schedules` `s` ON `l`.`layout_id` = `s`.`layout_id` WHERE `s`.`layout_id` IS NULL';
 
@@ -1058,6 +1057,20 @@ class Queries
         'UPDATE `schedules`
 		SET `isdefault` = 0
 		WHERE `schedule_id` <> @scheduleid';
+
+    public const SET_PAYMENT_CONFIGURATION =
+        'INSERT INTO `payment_configuration` (`credit_cost`, `credit_currency`, `credit_count`)
+        VALUES (@credit_cost, @credit_currency, @credit_count)
+        ON DUPLICATE KEY UPDATE `credit_cost` = @credit_cost, `credit_currency` = @credit_currency';
+
+    /**
+     * %s is one row per setting; see SetPaymentGatewaySettingsCommand.
+     * VALUES() is used, not a row alias, because MariaDB has no row alias.
+     */
+    public const SET_PAYMENT_GATEWAY_SETTINGS =
+        'INSERT INTO `payment_gateway_settings` (`gateway_type`, `setting_name`, `setting_value`)
+        VALUES %s
+        ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)';
 
     public const UPDATE_ACCESSORY =
         'UPDATE `accessories`

@@ -66,8 +66,13 @@ class PaymentRepository implements IPaymentRepository
 {
     public function UpdateCreditCost($credit)
     {
-        $this->DeleteCreditCost($credit->Count()); // In case it already exists: overwrite
-        ServiceLocator::GetDatabase()->Execute(new AddPaymentConfigurationCommand($credit->Count(), $credit->Cost(), $credit->Currency()));
+        // One statement that adds or overwrites, so a price the database
+        // rejects leaves the existing price in place.
+        ServiceLocator::GetDatabase()->Execute(new SetPaymentConfigurationCommand(
+            creditCount: $credit->Count(),
+            creditCost: $credit->Cost(),
+            creditCurrency: $credit->Currency()
+        ));
     }
 
     public function DeleteCreditCost($creditCount)
@@ -103,12 +108,31 @@ class PaymentRepository implements IPaymentRepository
 
     private function UpdateGateway(IPaymentGateway $gateway)
     {
-        ServiceLocator::GetDatabase()->Execute(new DeletePaymentGatewaySettingsCommand($gateway->GetGatewayType()));
-        if ($gateway->IsEnabled()) {
-            foreach ($gateway->Settings() as $gatewaySetting) {
-                ServiceLocator::GetDatabase()->Execute(new AddPaymentGatewaySettingCommand($gateway->GetGatewayType(), $gatewaySetting->Name(), $gatewaySetting->Value()));
-            }
+        if (!$gateway->IsEnabled()) {
+            ServiceLocator::GetDatabase()->Execute(new DeletePaymentGatewaySettingsCommand($gateway->GetGatewayType()));
+            return;
         }
+
+        // One statement for all the settings, so a setting the database
+        // rejects leaves every existing setting in place. Deleting first and
+        // then inserting would lose the stored settings when an insert fails.
+        $settings = $gateway->Settings();
+        ServiceLocator::GetDatabase()->Execute(new SetPaymentGatewaySettingsCommand(
+            gatewayType: $gateway->GetGatewayType(),
+            settings: $settings
+        ));
+
+        // Then remove any setting stored under a name the gateway no longer
+        // uses, so the stored settings are exactly the ones just written.
+        // This runs second on purpose: if it fails, the only result is a
+        // leftover row that nothing reads.
+        ServiceLocator::GetDatabase()->Execute(new DeleteObsoletePaymentGatewaySettingsCommand(
+            gatewayType: $gateway->GetGatewayType(),
+            currentSettingNames: array_map(
+                callback: static fn (PaymentGatewaySetting $setting): string => $setting->Name(),
+                array: $settings
+            )
+        ));
     }
 
     public function GetPayPalGateway()
