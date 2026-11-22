@@ -320,6 +320,7 @@ class it_it extends en_gb
         $strings['TurnOnSubscription'] = 'Abilita la sottoscrizione';
         $strings['SubscribeToCalendar'] = 'Apri una sottoscrizione';
         $strings['UrlCopiedToClipboard'] = 'URL copiata negli appunti';
+        $strings['CopyUrlToClipboard'] = 'Copia URL negli appunti';
         $strings['SubscriptionsAreDisabled'] = 'L\'amministratore ha disabilitato le sottoscrizioni';
         $strings['NoResourceAdministratorLabel'] = '(Nessun amministratore della risorsa)';
         $strings['WhoCanManageThisResource'] = 'Chi può gestire questa risorsa?';

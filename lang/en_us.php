@@ -359,6 +359,7 @@ class en_us extends Language
         $strings['TurnOnSubscription'] = 'Show to public (RSS, iCalendar, Tablet, Monitor)';
         $strings['SubscribeToCalendar'] = 'Subscribe to this Calendar';
         $strings['UrlCopiedToClipboard'] = 'URL copied to clipboard';
+        $strings['CopyUrlToClipboard'] = 'Copy URL to clipboard';
         $strings['SubscriptionsAreDisabled'] = 'The administrator has disabled calendar subscriptions';
         $strings['NoResourceAdministratorLabel'] = '(No Resource Administrator)';
         $strings['WhoCanManageThisResource'] = 'Who Can Manage This Resource?';
