@@ -30,7 +30,8 @@ interface IManageAccessoriesPage extends IActionPage
     public function SetAccessoryResources($resources);
 
     /**
-     * @return string[]
+     * @return array<array-key, mixed> the selected resource IDs as submitted;
+     *                                 the caller must check each entry
      */
     public function GetAccessoryResources();
 
@@ -112,11 +113,23 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
     }
 
     /**
-     * @return string[]
+     * Returns the selected resource IDs as submitted, without dropping
+     * entries that are not strings. The presenter rejects the whole request
+     * when an entry is malformed; dropping it here would turn a selection
+     * holding only malformed entries into "no resources selected".
+     *
+     * @return array<array-key, mixed> a single value becomes a one-item
+     *                                 list; empty when the field is missing
+     *                                 or blank
      */
     public function GetAccessoryResources(): array
     {
-        return $this->GetFormStringList(key: FormKeys::ACCESSORY_RESOURCE);
+        $resources = $this->GetForm(var: FormKeys::ACCESSORY_RESOURCE);
+        if (is_array($resources)) {
+            return $resources;
+        }
+
+        return $resources === null || $resources === '' ? [] : [$resources];
     }
 
     /**
