@@ -259,6 +259,15 @@ class ManageScheduleService
      * @param int $scheduleId
      * @return Schedule
      */
+    public function GetSchedule($scheduleId)
+    {
+        return $this->scheduleRepository->LoadById($scheduleId);
+    }
+
+    /**
+     * @param int $scheduleId
+     * @return Schedule
+     */
     public function DeleteAvailability($scheduleId)
     {
         $schedule = $this->scheduleRepository->LoadById($scheduleId);
@@ -625,10 +634,28 @@ class ManageSchedulesPresenter extends ActionPresenter
         $scheduleId = $this->page->GetScheduleId();
         $timezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
 
-        if ($availableAllYear || empty($start) || empty($end)) {
+        // A blank date clears the availability, as the "all year" checkbox does.
+        $clearAvailability = $availableAllYear || $start === '' || $end === '';
+
+        if ($clearAvailability) {
             $schedule = $this->manageSchedulesService->DeleteAvailability($scheduleId);
         } else {
-            $schedule = $this->manageSchedulesService->UpdateAvailability($scheduleId, Date::Parse($start, $timezone), Date::Parse($end, $timezone));
+            $startDate = self::ParseSubmittedDate(value: $start, timezone: $timezone);
+            $endDate = self::ParseSubmittedDate(value: $end, timezone: $timezone);
+
+            if ($startDate === null || $endDate === null) {
+                // A date that is missing or was sent as a list must not clear
+                // the availability. The form replaces the displayed
+                // availability with the response, so show what is stored.
+                Log::Debug('Not changing schedule availability, a date is missing or malformed. Schedule %s', $scheduleId);
+                $schedule = $this->manageSchedulesService->GetSchedule(scheduleId: $scheduleId);
+            } else {
+                $schedule = $this->manageSchedulesService->UpdateAvailability(
+                    scheduleId: $scheduleId,
+                    start: $startDate,
+                    end: $endDate,
+                );
+            }
         }
 
         $this->page->DisplayAvailability($schedule, $timezone);
@@ -681,13 +708,40 @@ class ManageSchedulesPresenter extends ActionPresenter
     public function UpdateLayoutSlot()
     {
         $timezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
-        $start = Date::Parse($this->page->GetSlotStart(), $timezone);
-        $end = Date::Parse($this->page->GetSlotEnd(), $timezone);
-        $originalStart = Date::Parse($this->page->GetSlotId(), $timezone);
+        $start = self::ParseSubmittedDate(value: $this->page->GetSlotStart(), timezone: $timezone);
+        $end = self::ParseSubmittedDate(value: $this->page->GetSlotEnd(), timezone: $timezone);
+        $originalStart = self::ParseSubmittedDate(value: $this->page->GetSlotId(), timezone: $timezone);
         $scheduleId = $this->page->GetScheduleId();
+
+        if ($start === null || $end === null || $originalStart === null) {
+            // The update deletes the original slot before adding its
+            // replacement, so it must not start without all three dates.
+            Log::Debug('Not updating custom layout slot, a date is missing or malformed. Schedule %s', $scheduleId);
+
+            return;
+        }
 
         Log::Debug('Updating custom layout slot. Start %s, End %s, Schedule %s', $start, $end, $scheduleId);
         $this->manageSchedulesService->UpdateCustomLayoutPeriod($scheduleId, $start, $end, $originalStart);
+    }
+
+    /**
+     * Parses a submitted date field.
+     *
+     * @param mixed $value the submitted field
+     * @return Date|null null when the field holds no date: it is missing,
+     *                   sent as a list (name[]=x), or a value Date::Parse()
+     *                   reads as no date, such as a blank string or '0'
+     */
+    private static function ParseSubmittedDate(mixed $value, ?string $timezone): ?Date
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+
+        $date = Date::Parse(dateString: $value, timezone: $timezone);
+
+        return $date instanceof NullDate ? null : $date;
     }
 
     public function DeleteLayoutSlot()

@@ -212,4 +212,158 @@ class ManageSchedulesPresenterTest extends TestBase
 
         $presenter->Delete();
     }
+
+    public function testChangeAvailabilitySetsAvailabilityWindow(): void
+    {
+        $schedule = new FakeSchedule();
+        $schedule->SetAvailableAllYear();
+
+        $this->page->method('GetScheduleId')->willReturn(1);
+        $this->page->method('GetAvailableAllYear')->willReturn(false);
+        $this->page->method('GetAvailabilityBegin')->willReturn('2026-03-01');
+        $this->page->method('GetAvailabilityEnd')->willReturn('2026-04-01');
+
+        $this->scheduleRepo->method('LoadById')->willReturn($schedule);
+        $this->scheduleRepo->expects($this->once())
+            ->method('Update')
+            ->with($this->identicalTo($schedule));
+
+        $presenter = new ManageSchedulesPresenter($this->page, $this->service, $this->groupRepo);
+        $presenter->ChangeAvailability();
+
+        $this->assertTrue($schedule->HasAvailability());
+    }
+
+    /**
+     * @return array<string, array{bool, mixed, mixed}>
+     */
+    public static function clearedAvailabilityProvider(): array
+    {
+        return [
+            'all year checked' => [true, '2026-03-01', '2026-04-01'],
+            'all year checked without dates' => [true, null, null],
+            'blank start' => [false, '', '2026-04-01'],
+            'blank end' => [false, '2026-03-01', ''],
+            'blank start with malformed end' => [false, '', ['2026-04-01']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('clearedAvailabilityProvider')]
+    public function testChangeAvailabilityClearsAvailabilityWindow(bool $allYear, mixed $start, mixed $end): void
+    {
+        $schedule = new FakeSchedule();
+
+        $this->page->method('GetScheduleId')->willReturn(1);
+        $this->page->method('GetAvailableAllYear')->willReturn($allYear);
+        $this->page->method('GetAvailabilityBegin')->willReturn($start);
+        $this->page->method('GetAvailabilityEnd')->willReturn($end);
+
+        $this->scheduleRepo->method('LoadById')->willReturn($schedule);
+        $this->scheduleRepo->expects($this->once())
+            ->method('Update')
+            ->with($this->identicalTo($schedule));
+
+        $presenter = new ManageSchedulesPresenter($this->page, $this->service, $this->groupRepo);
+        $presenter->ChangeAvailability();
+
+        $this->assertFalse($schedule->HasAvailability());
+    }
+
+    /**
+     * @return array<string, array{mixed, mixed}>
+     */
+    public static function malformedAvailabilityProvider(): array
+    {
+        return [
+            // Sent as name[]=x.
+            'start as a list' => [['2026-03-01'], '2026-04-01'],
+            'end as a list' => ['2026-03-01', ['2026-04-01']],
+            'missing start' => [null, '2026-04-01'],
+            'missing end' => ['2026-03-01', null],
+            // Date::Parse() reads '0' as no date.
+            'zero start' => ['0', '2026-04-01'],
+            'zero end' => ['2026-03-01', '0'],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('malformedAvailabilityProvider')]
+    public function testChangeAvailabilityKeepsAvailabilityWindowWhenDateIsMalformed(mixed $start, mixed $end): void
+    {
+        $schedule = new FakeSchedule();
+
+        $this->page->method('GetScheduleId')->willReturn(1);
+        $this->page->method('GetAvailableAllYear')->willReturn(false);
+        $this->page->method('GetAvailabilityBegin')->willReturn($start);
+        $this->page->method('GetAvailabilityEnd')->willReturn($end);
+
+        $this->scheduleRepo->method('LoadById')->willReturn($schedule);
+        $this->scheduleRepo->expects($this->never())->method('Update');
+
+        // The form replaces the displayed availability with the response, so
+        // the stored availability must still be shown.
+        $this->page->expects($this->once())
+            ->method('DisplayAvailability')
+            ->with($this->identicalTo($schedule));
+
+        $presenter = new ManageSchedulesPresenter($this->page, $this->service, $this->groupRepo);
+        $presenter->ChangeAvailability();
+
+        $this->assertTrue($schedule->HasAvailability());
+    }
+
+    public function testUpdateLayoutSlotReplacesSlot(): void
+    {
+        $this->page->method('GetScheduleId')->willReturn(1);
+        $this->page->method('GetSlotStart')->willReturn('2026-03-01 09:00');
+        $this->page->method('GetSlotEnd')->willReturn('2026-03-01 10:00');
+        $this->page->method('GetSlotId')->willReturn('2026-03-01 08:00');
+
+        $this->scheduleRepo->expects($this->once())->method('DeleteCustomLayoutPeriod');
+        $this->scheduleRepo->expects($this->once())->method('AddCustomLayoutPeriod');
+
+        $presenter = new ManageSchedulesPresenter($this->page, $this->service, $this->groupRepo);
+        $presenter->UpdateLayoutSlot();
+    }
+
+    /**
+     * @return array<string, array{mixed, mixed, mixed}>
+     */
+    public static function malformedLayoutSlotProvider(): array
+    {
+        $start = '2026-03-01 09:00';
+        $end = '2026-03-01 10:00';
+        $slotId = '2026-03-01 08:00';
+
+        return [
+            // Sent as name[]=x.
+            'start as a list' => [[$start], $end, $slotId],
+            'end as a list' => [$start, [$end], $slotId],
+            'slot id as a list' => [$start, $end, [$slotId]],
+            'missing start' => [null, $end, $slotId],
+            'missing end' => [$start, null, $slotId],
+            'missing slot id' => [$start, $end, null],
+            'blank start' => ['', $end, $slotId],
+            'blank end' => [$start, '', $slotId],
+            'blank slot id' => [$start, $end, ''],
+            // Date::Parse() reads '0' as no date.
+            'zero start' => ['0', $end, $slotId],
+            'zero end' => [$start, '0', $slotId],
+            'zero slot id' => [$start, $end, '0'],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('malformedLayoutSlotProvider')]
+    public function testUpdateLayoutSlotKeepsSlotWhenDateIsMalformed(mixed $start, mixed $end, mixed $slotId): void
+    {
+        $this->page->method('GetScheduleId')->willReturn(1);
+        $this->page->method('GetSlotStart')->willReturn($start);
+        $this->page->method('GetSlotEnd')->willReturn($end);
+        $this->page->method('GetSlotId')->willReturn($slotId);
+
+        $this->scheduleRepo->expects($this->never())->method('DeleteCustomLayoutPeriod');
+        $this->scheduleRepo->expects($this->never())->method('AddCustomLayoutPeriod');
+
+        $presenter = new ManageSchedulesPresenter($this->page, $this->service, $this->groupRepo);
+        $presenter->UpdateLayoutSlot();
+    }
 }
