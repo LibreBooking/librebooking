@@ -128,11 +128,11 @@
                                 {assign var="icalUrl" value=$SubscriptionUrl->GetWebcalUrl()}
                                 <div class="d-flex align-items-center"><i class="bi bi-rss-fill link-primary me-1"></i>
                                     <a class="link-primary me-1" target="_blank" href="{$atomUrl|escape:'html'}"
-                                        title="{translate key=UrlCopiedToClipboard}"
+                                        title="{translate key=CopyUrlToClipboard}"
                                         onclick="copyUrlToClipboard('{$atomUrl|escape:'javascript'|escape:'html'}'); return false;">Atom</a>
                                     <div class="vr me-1"></div>
                                     <a class="link-primary" target="_blank" href="{$icalUrl|escape:'html'}"
-                                        title="{translate key=UrlCopiedToClipboard}"
+                                        title="{translate key=CopyUrlToClipboard}"
                                         onclick="copyUrlToClipboard('{$icalUrl|escape:'javascript'|escape:'html'}'); return false;">iCalendar</a>
                                 </div>
                             {/if}

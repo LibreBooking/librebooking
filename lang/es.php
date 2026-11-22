@@ -322,6 +322,7 @@ class es extends en_gb
         $strings['TurnOnSubscription'] = 'Activar suscripciones en calendario';
         $strings['SubscribeToCalendar'] = 'Subscribirse a este calendario';
         $strings['UrlCopiedToClipboard'] = 'URL copiada al portapapeles';
+        $strings['CopyUrlToClipboard'] = 'Copiar URL al portapapeles';
         $strings['SubscriptionsAreDisabled'] = 'El administrador ha deshabilitado las suscripciones a este calendario';
         $strings['NoResourceAdministratorLabel'] = '(No hay administrador de recurso)';
         $strings['WhoCanManageThisResource'] = '¿Quién puede administrar este recurso?';

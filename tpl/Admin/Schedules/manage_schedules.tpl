@@ -276,13 +276,13 @@
 																	{assign var="atomUrl" value=$schedule->GetSubscriptionUrl()->GetAtomUrl()}
 																	{assign var="icalUrl" value=$schedule->GetSubscriptionUrl()->GetWebcalUrl()}
 																	<a target="_blank" class="link-primary"
-																		title="{translate key=UrlCopiedToClipboard}"
+																		title="{translate key=CopyUrlToClipboard}"
 																		onclick="copyUrlToClipboard('{$atomUrl|escape:'javascript'|escape:'html'}'); return false;"
 																		href="{$atomUrl|escape:'html'}"> <i
 																			class="bi bi-rss-fill link-primary me-1"></i>Atom</a>
 																	<div class="vr"></div>
 																	<a target="_blank" class="link-primary"
-																		title="{translate key=UrlCopiedToClipboard}"
+																		title="{translate key=CopyUrlToClipboard}"
 																		onclick="copyUrlToClipboard('{$icalUrl|escape:'javascript'|escape:'html'}'); return false;"
 																		href="{$icalUrl|escape:'html'}">iCalendar</a>
 																{/if}
