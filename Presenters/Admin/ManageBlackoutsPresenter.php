@@ -155,6 +155,13 @@ class ManageBlackoutsPresenter extends ActionPresenter
         $id = $this->page->GetBlackoutId();
         $scope = $this->page->GetSeriesUpdateScope();
 
+        if ($scope === null) {
+            Log::Error('Rejected blackout delete with unsupported scope. BlackoutId=%s', $id);
+            $this->page->ShowDeleteRejected();
+
+            return;
+        }
+
         Log::Debug('Deleting blackout. BlackoutId=%s, DeleteScope=%s', $id, $scope);
 
         $this->manageBlackoutsService->Delete($id, $scope);
@@ -199,6 +206,19 @@ class ManageBlackoutsPresenter extends ActionPresenter
 
         $id = $this->page->GetUpdateBlackoutId();
         $scope = $this->page->GetSeriesUpdateScope();
+
+        if ($scope === null) {
+            Log::Error('Rejected blackout update with unsupported scope. BlackoutId=%s', $id);
+            $this->page->ShowUpdateResult(
+                wasAddedSuccessfully: false,
+                displayMessage: '',
+                conflictingReservations: [],
+                conflictingBlackouts: [],
+                timezone: $session->Timezone,
+            );
+
+            return;
+        }
 
         Log::Debug('Updating blackout. BlackoutId=%s, UpdateScope=%s', $id, $scope);
 

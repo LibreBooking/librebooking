@@ -124,7 +124,9 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
     public function GetBlackoutId(): ?int;
 
     /**
-     * @return string
+     * @return string|null SeriesUpdateScope::ThisInstance or
+     *     SeriesUpdateScope::FullSeries; the full series when the field is
+     *     omitted or blank; null for anything else
      */
     public function GetSeriesUpdateScope();
 
@@ -161,6 +163,12 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
         $conflictingBlackouts,
         $timezone
     );
+
+    /**
+     * Reports that a delete was rejected. A successful delete has an empty
+     * response, so without this the caller could not tell the two apart.
+     */
+    public function ShowDeleteRejected(): void;
 
     /**
      * @param int[] $blackoutResourceIds
@@ -229,6 +237,8 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
 
 class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 {
+    private const HTTP_BAD_REQUEST = 400;
+
     /**
      * @var ManageBlackoutsPresenter
      */
@@ -319,6 +329,11 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('Blackouts', $conflictingBlackouts);
         $this->Set('Timezone', $timezone);
         $this->Display('Admin/Blackouts/manage_blackouts_response.tpl');
+    }
+
+    public function ShowDeleteRejected(): void
+    {
+        http_response_code(self::HTTP_BAD_REQUEST);
     }
 
     public function BindBlackouts($blackouts)
@@ -556,15 +571,20 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $dates;
     }
 
-    public function GetSeriesUpdateScope()
+    public function GetSeriesUpdateScope(): ?string
     {
-        $scope = $this->GetForm(FormKeys::SERIES_UPDATE_SCOPE);
+        $scope = $this->GetForm(var: FormKeys::SERIES_UPDATE_SCOPE);
 
-        if (empty($scope)) {
-            $scope = SeriesUpdateScope::FullSeries;
+        if ($scope === null || $scope === '') {
+            return SeriesUpdateScope::FullSeries;
         }
 
-        return $scope;
+        // Blackouts are changed one instance at a time or as a whole series.
+        // Any other value, such as a list or the future-instances scope, must
+        // not fall through to either of those.
+        $supportedScopes = [SeriesUpdateScope::ThisInstance, SeriesUpdateScope::FullSeries];
+
+        return in_array(needle: $scope, haystack: $supportedScopes, strict: true) ? $scope : null;
     }
 
     public function SetBlackoutResources($blackoutResourceIds)

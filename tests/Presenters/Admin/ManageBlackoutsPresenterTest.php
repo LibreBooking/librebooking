@@ -221,6 +221,52 @@ class ManageBlackoutsPresenterTest extends TestBase
         $this->presenter->DeleteBlackout();
     }
 
+    public function testDoesNotDeleteBlackoutWithMalformedScope()
+    {
+        $this->page->expects($this->once())
+            ->method('GetBlackoutId')
+            ->willReturn(123);
+
+        // The page returns null when the scope is not one blackouts support.
+        $this->page->expects($this->once())
+            ->method('GetSeriesUpdateScope')
+            ->willReturn(null);
+
+        $this->blackoutsService->expects($this->never())
+            ->method('Delete');
+
+        $this->page->expects($this->once())
+            ->method('ShowDeleteRejected');
+
+        $this->presenter->DeleteBlackout();
+    }
+
+    public function testDoesNotUpdateBlackoutWithMalformedScope()
+    {
+        $this->page->expects($this->once())
+            ->method('GetUpdateBlackoutId')
+            ->willReturn(1111);
+
+        $this->page->expects($this->once())
+            ->method('GetSeriesUpdateScope')
+            ->willReturn(null);
+
+        $this->blackoutsService->expects($this->never())
+            ->method('Update');
+
+        $this->page->expects($this->once())
+            ->method('ShowUpdateResult')
+            ->with(
+                $this->isFalse(),
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $this->anything()
+            );
+
+        $this->presenter->UpdateBlackout();
+    }
+
     public function testLoadsBlackoutSeriesByBlackoutId()
     {
         $series = BlackoutSeries::Create(1, 'title', new TestDateRange());
