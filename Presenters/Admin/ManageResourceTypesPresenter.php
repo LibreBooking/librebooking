@@ -89,23 +89,29 @@ class ManageResourceTypesPresenter extends ActionPresenter
         $this->resourceRepository->UpdateResourceType($type);
     }
 
-    private function GetInlineAttributeValue()
+    /**
+     * @return AttributeValue|null null when the submitted attribute name or value is not usable
+     */
+    private function GetInlineAttributeValue(): ?AttributeValue
     {
-        $value = $this->page->GetValue();
-        if (is_array($value)) {
-            $value = $value[0];
-        }
-        $id = str_replace(FormKeys::ATTRIBUTE_PREFIX, '', $this->page->GetName());
-
-        return new AttributeValue($id, $value);
+        return AttributeFormParser::GetInlineAttributeValue(
+            name: $this->page->GetName(),
+            value: $this->page->GetValue(),
+        );
     }
 
     public function ChangeAttribute()
     {
         $id = $this->page->GetId();
-        $type = $this->resourceRepository->LoadResourceType($id);
 
         $attributeValue = $this->GetInlineAttributeValue();
+        if ($attributeValue === null) {
+            Log::Debug('Not changing attributes, the submitted attribute name or value is not usable. ResourceTypeId=%s', $id);
+
+            return;
+        }
+
+        $type = $this->resourceRepository->LoadResourceType($id);
 
         Log::Debug('Changing attributes. ResourceTypeId=%s, AttributeId=%s, Value=%s', $id, $attributeValue->AttributeId, $attributeValue->Value);
 

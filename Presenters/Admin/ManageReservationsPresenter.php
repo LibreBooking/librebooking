@@ -379,6 +379,20 @@ class ManageReservationsPresenter extends ActionPresenter
         $referenceNumber = $this->page->GetReferenceNumber();
         $inlineAttribute = $this->GetInlineAttributeValue();
 
+        if ($inlineAttribute === null) {
+            Log::Debug(
+                'Not updating reservation attribute, the submitted attribute name or value is not usable. UserId=%s, ReferenceNumber=%s',
+                $userSession->UserId,
+                $referenceNumber
+            );
+
+            $this->page->BindAttributeUpdateErrors(
+                errors: [AttributeValidatorInline::MissingAttributeMessage()],
+            );
+
+            return;
+        }
+
         $attributeId = $inlineAttribute->AttributeId;
         $attributeValue = $inlineAttribute->Value;
         Log::Debug(
@@ -400,15 +414,15 @@ class ManageReservationsPresenter extends ActionPresenter
         }
     }
 
-    private function GetInlineAttributeValue()
+    /**
+     * @return AttributeValue|null null when the submitted attribute name or value is not usable
+     */
+    private function GetInlineAttributeValue(): ?AttributeValue
     {
-        $value = $this->page->GetValue();
-        if (is_array($value)) {
-            $value = $value[0];
-        }
-        $id = str_replace(FormKeys::ATTRIBUTE_PREFIX, '', $this->page->GetName());
-
-        return new AttributeValue($id, $value);
+        return AttributeFormParser::GetInlineAttributeValue(
+            name: $this->page->GetName(),
+            value: $this->page->GetValue(),
+        );
     }
 
     public function ImportReservations()

@@ -411,6 +411,102 @@ class ManageUsersPresenterTest extends TestBase
         $this->assertEquals(0, count($this->fakeEmailService->_Messages));
     }
 
+    public function testInvitesEachSubmittedEmail(): void
+    {
+        $this->fakeUser->IsAdmin = true;
+        // The trailing separators must not produce an invitation with no recipient.
+        $this->page->_InvitedEmails = "one@email.com, two@email.com;\n";
+
+        $this->presenter->InviteUsers();
+
+        $this->assertCount(2, $this->fakeEmailService->_Messages);
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function unusableInvitedEmailsProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'separators only' => [', ;'],
+            'submitted as name[]' => [['invitee@email.com']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('unusableInvitedEmailsProvider')]
+    public function testInvitesNobodyWithoutEmails(mixed $invitedEmails): void
+    {
+        $this->fakeUser->IsAdmin = true;
+        $this->page->_InvitedEmails = $invitedEmails;
+
+        $this->presenter->InviteUsers();
+
+        $this->assertCount(0, $this->fakeEmailService->_Messages);
+    }
+
+    public function testChangesAttribute(): void
+    {
+        $this->page->_UserId = 9;
+        $this->page->_Name = FormKeys::ATTRIBUTE_PREFIX . '5';
+        $this->page->_Value = 'value';
+
+        $this->manageUsersService->expects($this->once())
+            ->method('ChangeAttribute')
+            ->with($this->equalTo(9), $this->equalTo(new AttributeValue(attributeId: '5', value: 'value')));
+
+        $this->presenter->ChangeAttribute();
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function missingAttributeNameProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'prefix only' => [FormKeys::ATTRIBUTE_PREFIX],
+            'no prefix' => ['foo'],
+            'submitted as name[]' => [[FormKeys::ATTRIBUTE_PREFIX . '5']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testDoesNotChangeAttributeWithoutAttributeName(mixed $attributeName): void
+    {
+        $this->page->_UserId = 9;
+        $this->page->_Name = $attributeName;
+        $this->page->_Value = 'value';
+
+        $this->manageUsersService->expects($this->never())
+            ->method('ChangeAttribute');
+
+        $this->presenter->ChangeAttribute();
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testAttributeChangeWithoutAttributeNameFailsValidation(mixed $attributeName): void
+    {
+        $this->page->_Action = ManageUsersActions::ChangeAttribute;
+        $this->page->_UserId = 9;
+        $this->page->_Name = $attributeName;
+        $this->page->_Value = 'value';
+        $this->page->_IsValid = false;
+
+        $this->manageUsersService->expects($this->never())
+            ->method('ChangeAttribute');
+
+        $this->presenter->ProcessAction();
+
+        $validator = $this->page->_Validators['attributeValidator'];
+        $this->assertInstanceOf(AttributeValidatorInline::class, $validator);
+        $validator->Validate();
+        $this->assertFalse($validator->IsValid());
+        $this->assertSame(['CustomAttributeInvalidAttribute'], $validator->Messages());
+    }
+
     public function testResetPasswordDelegatesToService()
     {
         $password = 'password';
@@ -695,7 +791,7 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
      */
     public $_ShowedExportCsv = false;
     /**
-     * @var string
+     * @var mixed
      */
     public $_InvitedEmails = '';
     /**
@@ -790,6 +886,14 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
     public $_JsonResponse;
     public $_ReservationColor = '';
     public $_Value = '';
+    /**
+     * @var mixed
+     */
+    public $_Name = '';
+    /**
+     * @var string|null
+     */
+    public $_Action;
     /**
      * @var User
      */
@@ -929,7 +1033,12 @@ class FakeManageUsersPage extends FakeActionPageBase implements IManageUsersPage
 
     public function GetName()
     {
-        return '';
+        return $this->_Name;
+    }
+
+    public function GetAction()
+    {
+        return $this->_Action;
     }
 
     public function ShowTemplateCSV($attributes)

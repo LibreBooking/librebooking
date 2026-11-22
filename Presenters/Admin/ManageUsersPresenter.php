@@ -368,7 +368,16 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ChangeAttribute()
     {
-        $this->manageUsersService->ChangeAttribute($this->page->GetUserId(), $this->GetInlineAttributeValue());
+        $userId = $this->page->GetUserId();
+
+        $attributeValue = $this->GetInlineAttributeValue();
+        if ($attributeValue === null) {
+            Log::Debug('Not changing attributes, the submitted attribute name or value is not usable. UserId=%s', $userId);
+
+            return;
+        }
+
+        $this->manageUsersService->ChangeAttribute($userId, $attributeValue);
     }
 
     public function ExportUsers()
@@ -423,15 +432,15 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         return $attributes;
     }
 
-    private function GetInlineAttributeValue()
+    /**
+     * @return AttributeValue|null null when the submitted attribute name or value is not usable
+     */
+    private function GetInlineAttributeValue(): ?AttributeValue
     {
-        $value = $this->page->GetValue();
-        if (is_array($value)) {
-            $value = $value[0];
-        }
-        $id = str_replace(FormKeys::ATTRIBUTE_PREFIX, '', $this->page->GetName());
-
-        return new AttributeValue($id, $value);
+        return AttributeFormParser::GetInlineAttributeValue(
+            name: $this->page->GetName(),
+            value: $this->page->GetValue(),
+        );
     }
 
     protected function LoadValidators($action)
@@ -754,7 +763,17 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         }
 
         $emailList = $this->page->GetInvitedEmails();
-        $emails = preg_split('/[,;\s\n]+/', $emailList);
+        if (!is_string($emailList)) {
+            Log::Debug('Not inviting users, no email list was submitted');
+
+            return;
+        }
+
+        $emails = preg_split(
+            pattern: '/[,;\s\n]+/',
+            subject: $emailList,
+            flags: PREG_SPLIT_NO_EMPTY,
+        );
         foreach ($emails as $email) {
             ServiceLocator::GetEmailService()->Send(new InviteUserEmail(trim($email), ServiceLocator::GetServer()->GetUserSession()));
         }

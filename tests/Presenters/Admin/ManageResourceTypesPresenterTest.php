@@ -142,4 +142,81 @@ class ManageResourceTypesPresenterTest extends TestBase
 
         $this->presenter->Delete();
     }
+
+    public function testChangesAttribute(): void
+    {
+        $id = 9919;
+        $type = new ResourceType($id, 'name', 'description');
+
+        $this->page->method('GetId')->willReturn($id);
+        $this->page->method('GetName')->willReturn(FormKeys::ATTRIBUTE_PREFIX . '5');
+        $this->page->method('GetValue')->willReturn('value');
+
+        $this->resourceRepository->expects($this->once())
+            ->method('LoadResourceType')
+            ->with($this->equalTo($id))
+            ->willReturn($type);
+
+        $this->resourceRepository->expects($this->once())
+            ->method('UpdateResourceType')
+            ->with($this->identicalTo($type));
+
+        $this->presenter->ChangeAttribute();
+
+        $this->assertSame('value', $type->GetAttributeValue('5'));
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function missingAttributeNameProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'prefix only' => [FormKeys::ATTRIBUTE_PREFIX],
+            'no prefix' => ['foo'],
+            'submitted as name[]' => [[FormKeys::ATTRIBUTE_PREFIX . '5']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testDoesNotChangeAttributeWithoutAttributeName(mixed $attributeName): void
+    {
+        $this->page->method('GetId')->willReturn(9919);
+        $this->page->method('GetName')->willReturn($attributeName);
+        $this->page->method('GetValue')->willReturn('value');
+
+        $this->resourceRepository->expects($this->never())
+            ->method('UpdateResourceType');
+
+        $this->presenter->ChangeAttribute();
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testAttributeChangeWithoutAttributeNameFailsValidation(mixed $attributeName): void
+    {
+        $this->page->method('GetAction')->willReturn(ManageResourceTypesActions::ChangeAttribute);
+        $this->page->method('GetId')->willReturn(9919);
+        $this->page->method('GetName')->willReturn($attributeName);
+        $this->page->method('GetValue')->willReturn('value');
+
+        $validator = null;
+        $this->page->expects($this->once())
+            ->method('RegisterValidator')
+            ->willReturnCallback(function ($validatorId, $registered) use (&$validator) {
+                $validator = $registered;
+            });
+        $this->page->method('IsValid')->willReturn(false);
+
+        $this->resourceRepository->expects($this->never())
+            ->method('UpdateResourceType');
+
+        $this->presenter->ProcessAction();
+
+        $this->assertInstanceOf(AttributeValidatorInline::class, $validator);
+        $validator->Validate();
+        $this->assertFalse($validator->IsValid());
+        $this->assertSame(['CustomAttributeInvalidAttribute'], $validator->Messages());
+    }
 }

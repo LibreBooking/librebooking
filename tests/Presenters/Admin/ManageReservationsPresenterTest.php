@@ -423,7 +423,7 @@ class ManageReservationsPresenterTest extends TestBase
     public function testUpdatesReservationAttribute()
     {
         $referenceNumber = 'rn';
-        $attrId = 'attid';
+        $attrId = '15';
         $attrValue = 'val';
 
         $this->page->expects($this->once())
@@ -432,7 +432,7 @@ class ManageReservationsPresenterTest extends TestBase
 
         $this->page->expects($this->once())
             ->method('GetName')
-            ->willReturn($attrId);
+            ->willReturn(FormKeys::ATTRIBUTE_PREFIX . $attrId);
 
         $this->page->expects($this->once())
             ->method('GetValue')
@@ -442,6 +442,58 @@ class ManageReservationsPresenterTest extends TestBase
             ->method('UpdateAttribute')
             ->with($this->equalTo($referenceNumber), $this->equalTo($attrId), $this->equalTo($attrValue), $this->equalTo($this->fakeUser))
             ->willReturn([]);
+
+        $this->presenter->UpdateAttribute();
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function missingAttributeNameProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'prefix only' => [FormKeys::ATTRIBUTE_PREFIX],
+            'no prefix' => ['foo'],
+            'submitted as name[]' => [[FormKeys::ATTRIBUTE_PREFIX . '1']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testDoesNotUpdateReservationAttributeWithoutAttributeName(mixed $attributeName)
+    {
+        $this->page->expects($this->once())
+            ->method('GetReferenceNumber')
+            ->willReturn('rn');
+
+        $this->page->expects($this->once())
+            ->method('GetName')
+            ->willReturn($attributeName);
+
+        $this->reservationsService->expects($this->never())
+            ->method('UpdateAttribute');
+
+        $this->page->expects($this->once())
+            ->method('BindAttributeUpdateErrors')
+            ->with($this->equalTo(['CustomAttributeInvalidAttribute']));
+
+        $this->presenter->UpdateAttribute();
+    }
+
+    public function testDoesNotUpdateReservationAttributeWithNestedValue()
+    {
+        $this->page->method('GetReferenceNumber')->willReturn('rn');
+        $this->page->method('GetName')->willReturn(FormKeys::ATTRIBUTE_PREFIX . '1');
+        // Sent as value[][]=x.
+        $this->page->method('GetValue')->willReturn([['nested']]);
+
+        $this->reservationsService->expects($this->never())
+            ->method('UpdateAttribute');
+
+        $this->page->expects($this->once())
+            ->method('BindAttributeUpdateErrors')
+            ->with($this->equalTo(['CustomAttributeInvalidAttribute']));
 
         $this->presenter->UpdateAttribute();
     }
