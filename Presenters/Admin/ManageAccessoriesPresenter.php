@@ -103,16 +103,14 @@ class ManageAccessoriesPresenter extends ActionPresenter
 
     public function ChangeAccessoryResources()
     {
-        $accessoryResources = [];
-        $resources = $this->page->GetAccessoryResources();
-        $min = $this->page->GetAccessoryResourcesMinimums();
-        $max = $this->page->GetAccessoryResourcesMaximums();
+        $accessoryId = $this->page->GetAccessoryId();
 
-        foreach ($resources as $resourceId) {
-            $accessoryResources[] = new ResourceAccessory($resourceId, $min[$resourceId], $max[$resourceId]);
+        $accessoryResources = $this->GetSubmittedAccessoryResources();
+        if ($accessoryResources === null) {
+            Log::Error('Not changing accessory resources, the submitted resources or quantities are malformed. AccessoryId=%s', $accessoryId);
+            return;
         }
 
-        $accessoryId = $this->page->GetAccessoryId();
         $accessory = $this->accessoryRepository->LoadById($accessoryId);
         if ($accessory === null) {
             Log::Error('Cannot change accessory resources, accessory %s not found', $accessoryId);
@@ -121,5 +119,44 @@ class ManageAccessoriesPresenter extends ActionPresenter
 
         $accessory->ChangeResources($accessoryResources);
         $this->accessoryRepository->Update($accessory);
+    }
+
+    /**
+     * Builds the accessory's resources from the submitted resource IDs and
+     * their minimum and maximum quantities. The form submits each quantity
+     * keyed by resource ID; a blank quantity means no limit.
+     *
+     * @return ResourceAccessory[]|null null when a field is not a list, or a
+     *                                  selected resource has no minimum or
+     *                                  maximum quantity entry
+     */
+    private function GetSubmittedAccessoryResources(): ?array
+    {
+        $resources = $this->page->GetAccessoryResources();
+        $min = $this->page->GetAccessoryResourcesMinimums();
+        $max = $this->page->GetAccessoryResourcesMaximums();
+
+        if (!is_array($resources) || !is_array($min) || !is_array($max)) {
+            return null;
+        }
+
+        $accessoryResources = [];
+        foreach ($resources as $resourceId) {
+            if (
+                !is_string($resourceId)
+                || !is_string($min[$resourceId] ?? null)
+                || !is_string($max[$resourceId] ?? null)
+            ) {
+                return null;
+            }
+
+            $accessoryResources[] = new ResourceAccessory(
+                resourceId: $resourceId,
+                minQuantity: $min[$resourceId],
+                maxQuantity: $max[$resourceId],
+            );
+        }
+
+        return $accessoryResources;
     }
 }
