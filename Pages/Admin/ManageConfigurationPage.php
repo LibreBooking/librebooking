@@ -38,7 +38,7 @@ interface IManageConfigurationPage extends IActionPage
     public function SetConfigFileOptions($configFiles);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetConfigFileToEdit();
 
@@ -169,9 +169,9 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
         $this->Set('ConfigFiles', $configFiles);
     }
 
-    public function GetConfigFileToEdit()
+    public function GetConfigFileToEdit(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::CONFIG_FILE);
+        return $this->GetQuerystringString(key: QueryStringKeys::CONFIG_FILE);
     }
 
     public function SetSelectedConfigFile($configFileName)

@@ -8,7 +8,7 @@ interface IManageAccessoriesPage extends IActionPage
     public function GetAccessoryId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAccessoryName();
 
@@ -80,12 +80,9 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
         return $this->GetQuerystringInt(key: QueryStringKeys::ACCESSORY_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetAccessoryName()
+    public function GetAccessoryName(): ?string
     {
-        return $this->GetForm(FormKeys::ACCESSORY_NAME);
+        return $this->GetFormString(key: FormKeys::ACCESSORY_NAME);
     }
 
     public function GetQuantityAvailable(): ?int
