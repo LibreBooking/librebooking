@@ -13,17 +13,17 @@ interface IManageResourceTypesPage extends IActionPage
     public function GetId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetResourceTypeName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetDescription();
 
@@ -43,7 +43,7 @@ interface IManageResourceTypesPage extends IActionPage
     public function SetResourceTypesJson($resourceTypes);
 
     /**
-     * @return string
+     * @return string|array|null
      */
     public function GetValue();
 }
@@ -97,25 +97,19 @@ class ManageResourceTypesPage extends ActionPage implements IManageResourceTypes
         $this->Set('ResourceTypes', $types);
     }
 
-    /**
-     * @return string
-     */
-    public function GetResourceTypeName()
+    public function GetResourceTypeName(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_TYPE_NAME);
+        return $this->GetFormString(key: FormKeys::RESOURCE_TYPE_NAME);
     }
 
-    public function GetName()
+    public function GetName(): ?string
     {
-        return $this->GetForm(FormKeys::NAME);
+        return $this->GetFormString(key: FormKeys::NAME);
     }
 
-    /**
-     * @return string
-     */
-    public function GetDescription()
+    public function GetDescription(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_TYPE_DESCRIPTION);
+        return $this->GetFormString(key: FormKeys::RESOURCE_TYPE_DESCRIPTION);
     }
 
     /**

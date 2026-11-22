@@ -61,12 +61,15 @@ class ManagePaymentsPresenterTest extends TestBase
 
     public function testSettingCreditCost()
     {
-        $this->page->_CreditCost = 30.5;
+        $this->page->_CreditCost = '30.5';
         $this->page->_CreditCurrency = 'USD';
 
         $this->presenter->UpdateCreditCost();
 
-        $this->assertEquals(new CreditCost(1, $this->page->_CreditCost, $this->page->_CreditCurrency), $this->paymentRepository->_LastCost);
+        $this->assertEquals(
+            new CreditCost(count: 1, cost: 30.5, currency: 'USD'),
+            $this->paymentRepository->_LastCost,
+        );
     }
 
     public function testSettingCreditCostToZero()
@@ -508,14 +511,23 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         $this->_PaymentGatewaysRejected = true;
     }
 
-    public function GetCreditCost()
+    /**
+     * Mirrors GetFormString(): a value that is not a string, such as a
+     * field submitted as name[], reads as null.
+     */
+    private function AsFormString(mixed $value): ?string
     {
-        return $this->_CreditCost;
+        return is_string($value) ? $value : null;
     }
 
-    public function GetCreditCurrency()
+    public function GetCreditCost(): ?string
     {
-        return $this->_CreditCurrency;
+        return $this->AsFormString(value: $this->_CreditCost);
+    }
+
+    public function GetCreditCurrency(): ?string
+    {
+        return $this->AsFormString(value: $this->_CreditCurrency);
     }
 
     public function SetCreditCosts($creditCosts)
@@ -528,19 +540,19 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         return $this->_PayPalEnabled;
     }
 
-    public function GetPayPalClientId()
+    public function GetPayPalClientId(): ?string
     {
-        return $this->_PayPalClientId;
+        return $this->AsFormString(value: $this->_PayPalClientId);
     }
 
-    public function GetPayPalSecret()
+    public function GetPayPalSecret(): ?string
     {
-        return $this->_PayPalSecret;
+        return $this->AsFormString(value: $this->_PayPalSecret);
     }
 
-    public function GetPayPalEnvironment()
+    public function GetPayPalEnvironment(): ?string
     {
-        return $this->_PayPalEnvironment;
+        return $this->AsFormString(value: $this->_PayPalEnvironment);
     }
 
     public function GetStripeIsEnabled()
@@ -548,14 +560,14 @@ class FakeManagePaymentsPage extends ManagePaymentsPage
         return $this->_StripeEnabled;
     }
 
-    public function GetStripePublishableKey()
+    public function GetStripePublishableKey(): ?string
     {
-        return $this->_StripePublishableKey;
+        return $this->AsFormString(value: $this->_StripePublishableKey);
     }
 
-    public function GetStripeSecretKey()
+    public function GetStripeSecretKey(): ?string
     {
-        return $this->_StripeSecretKey;
+        return $this->AsFormString(value: $this->_StripeSecretKey);
     }
 
     public function SetPayPalSettings($enabled, $clientId, $secret, $environment)

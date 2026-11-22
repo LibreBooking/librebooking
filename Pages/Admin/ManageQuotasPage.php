@@ -31,7 +31,7 @@ interface IManageQuotasPage extends IActionPage
     public function BindQuotas($quotas);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetDuration();
 
@@ -42,7 +42,7 @@ interface IManageQuotasPage extends IActionPage
     public function GetGroupId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetUnit();
 
@@ -56,12 +56,12 @@ interface IManageQuotasPage extends IActionPage
     public function GetEnforcedAllDay();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetEnforcedStartTime();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetEnforcedEndTime();
 
@@ -76,7 +76,7 @@ interface IManageQuotasPage extends IActionPage
     public function GetEnforcedDays();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetScope();
 }
@@ -165,12 +165,9 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         $this->Set('Quotas', $quotas);
     }
 
-    /**
-     * @return string
-     */
-    public function GetDuration()
+    public function GetDuration(): ?string
     {
-        return $this->GetForm(FormKeys::DURATION);
+        return $this->GetFormString(key: FormKeys::DURATION);
     }
 
     public function GetLimit(): ?float
@@ -188,12 +185,9 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         return $this->GetFormInt(key: FormKeys::GROUP);
     }
 
-    /**
-     * @return string
-     */
-    public function GetUnit()
+    public function GetUnit(): ?string
     {
-        return $this->GetForm(FormKeys::UNIT);
+        return $this->GetFormString(key: FormKeys::UNIT);
     }
 
     public function GetQuotaId(): ?int
@@ -221,20 +215,14 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         return !empty($allDay);
     }
 
-    /**
-     * @return string
-     */
-    public function GetEnforcedStartTime()
+    public function GetEnforcedStartTime(): ?string
     {
-        return $this->GetForm(FormKeys::BEGIN_TIME);
+        return $this->GetFormString(key: FormKeys::BEGIN_TIME);
     }
 
-    /**
-     * @return string
-     */
-    public function GetEnforcedEndTime()
+    public function GetEnforcedEndTime(): ?string
     {
-        return $this->GetForm(FormKeys::END_TIME);
+        return $this->GetFormString(key: FormKeys::END_TIME);
     }
 
     /**
@@ -261,11 +249,8 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         return $days;
     }
 
-    /**
-     * @return string
-     */
-    public function GetScope()
+    public function GetScope(): ?string
     {
-        return $this->GetForm(FormKeys::QUOTA_SCOPE);
+        return $this->GetFormString(key: FormKeys::QUOTA_SCOPE);
     }
 }

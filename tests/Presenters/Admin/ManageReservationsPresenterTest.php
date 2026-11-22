@@ -365,8 +365,9 @@ class ManageReservationsPresenterTest extends TestBase
             'empty' => [''],
             // ReservationFilter treats '0' as empty and drops the condition.
             'zero' => ['0'],
-            // The page getter is untyped, so reference_number[]=x arrives
-            // as an array.
+            // The page reads reference_number[]=x as null, but the interface
+            // getter is untyped, so another implementation can return an
+            // array.
             'array' => [['abc123']],
         ];
     }

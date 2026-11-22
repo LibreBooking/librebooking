@@ -14,7 +14,7 @@ interface IUpdateResourcePage
     public function GetScheduleId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetResourceName();
 
@@ -24,37 +24,37 @@ interface IUpdateResourcePage
     public function GetUploadedImage();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetLocation();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetContact();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetDescription();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetNotes();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetMinimumDuration();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetMaximumDuration();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetBufferTime();
 
@@ -80,32 +80,32 @@ interface IUpdateResourcePage
     public function GetBulkAutoAssign(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAutoAssignClear();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAllowSubscriptions();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStartNoticeMinutesAdd();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStartNoticeMinutesUpdate();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStartNoticeMinutesDelete();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetEndNoticeMinutes();
 
@@ -186,7 +186,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetStatusReasonId(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetNewStatusReason();
 
@@ -257,7 +257,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetPermissionType(): ?int;
 
     /**
-     * @return string
+     * @return string|array|null
      */
     public function GetValue();
 
@@ -267,12 +267,12 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetIntValue(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetName();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetAttributeId();
 
@@ -310,7 +310,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function GetResourceGroupIds();
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetColor();
 
@@ -364,7 +364,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function BindResourceImages(BookableResource $resource);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetImageName();
 
@@ -403,7 +403,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
     public function StatusChangeDays(): ?int;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function GetStatusChangeMessage();
 }
@@ -542,14 +542,14 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetFormInt(key: FormKeys::VALUE);
     }
 
-    public function GetName()
+    public function GetName(): ?string
     {
-        return $this->GetForm(FormKeys::NAME);
+        return $this->GetFormString(key: FormKeys::NAME);
     }
 
-    public function GetResourceName()
+    public function GetResourceName(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_NAME);
+        return $this->GetFormString(key: FormKeys::RESOURCE_NAME);
     }
 
     public function GetUploadedImage()
@@ -557,48 +557,39 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->server->GetFile(FormKeys::RESOURCE_IMAGE);
     }
 
-    public function GetLocation()
+    public function GetLocation(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_LOCATION);
+        return $this->GetFormString(key: FormKeys::RESOURCE_LOCATION);
     }
 
-    public function GetContact()
+    public function GetContact(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_CONTACT);
+        return $this->GetFormString(key: FormKeys::RESOURCE_CONTACT);
     }
 
-    public function GetDescription()
+    public function GetDescription(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_DESCRIPTION);
+        return $this->GetFormString(key: FormKeys::RESOURCE_DESCRIPTION);
     }
 
-    public function GetNotes()
+    public function GetNotes(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_NOTES);
+        return $this->GetFormString(key: FormKeys::RESOURCE_NOTES);
     }
 
-    /**
-     * @return string
-     */
-    public function GetMinimumDuration()
+    public function GetMinimumDuration(): ?string
     {
-        return $this->GetForm(FormKeys::MIN_DURATION);
+        return $this->GetFormString(key: FormKeys::MIN_DURATION);
     }
 
-    /**
-     * @return string
-     */
-    public function GetMaximumDuration()
+    public function GetMaximumDuration(): ?string
     {
-        return $this->GetForm(FormKeys::MAX_DURATION);
+        return $this->GetFormString(key: FormKeys::MAX_DURATION);
     }
 
-    /**
-     * @return string
-     */
-    public function GetBufferTime()
+    public function GetBufferTime(): ?string
     {
-        return $this->GetForm(FormKeys::BUFFER_TIME);
+        return $this->GetFormString(key: FormKeys::BUFFER_TIME);
     }
 
     public function GetAllowMultiday(): bool
@@ -616,44 +607,29 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetCheckbox(FormKeys::AUTO_ASSIGN);
     }
 
-    /**
-     * @return string
-     */
-    public function GetAutoAssignClear()
+    public function GetAutoAssignClear(): ?string
     {
-        return $this->GetForm(FormKeys::AUTO_ASSIGN_CLEAR);
+        return $this->GetFormString(key: FormKeys::AUTO_ASSIGN_CLEAR);
     }
 
-    /**
-     * @return string
-     */
-    public function GetStartNoticeMinutesAdd()
+    public function GetStartNoticeMinutesAdd(): ?string
     {
-        return $this->GetForm(FormKeys::MIN_NOTICE_ADD);
+        return $this->GetFormString(key: FormKeys::MIN_NOTICE_ADD);
     }
 
-    /**
-     * @return string
-     */
-    public function GetStartNoticeMinutesUpdate()
+    public function GetStartNoticeMinutesUpdate(): ?string
     {
-        return $this->GetForm(FormKeys::MIN_NOTICE_UPDATE);
+        return $this->GetFormString(key: FormKeys::MIN_NOTICE_UPDATE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetStartNoticeMinutesDelete()
+    public function GetStartNoticeMinutesDelete(): ?string
     {
-        return $this->GetForm(FormKeys::MIN_NOTICE_DELETE);
+        return $this->GetFormString(key: FormKeys::MIN_NOTICE_DELETE);
     }
 
-    /**
-     * @return string
-     */
-    public function GetEndNoticeMinutes()
+    public function GetEndNoticeMinutes(): ?string
     {
-        return $this->GetForm(FormKeys::MAX_NOTICE);
+        return $this->GetFormString(key: FormKeys::MAX_NOTICE);
     }
 
     public function GetMaxParticipants(): ?int
@@ -750,12 +726,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetFormInt(key: FormKeys::RESOURCE_STATUS_REASON_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function GetNewStatusReason()
+    public function GetNewStatusReason(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_STATUS_REASON);
+        return $this->GetFormString(key: FormKeys::RESOURCE_STATUS_REASON);
     }
 
     public function FilterButtonPressed()
@@ -809,9 +782,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $resourceIds;
     }
 
-    public function GetAllowSubscriptions()
+    public function GetAllowSubscriptions(): ?string
     {
-        return $this->GetForm(FormKeys::ALLOW_CALENDAR_SUBSCRIPTIONS);
+        return $this->GetFormString(key: FormKeys::ALLOW_CALENDAR_SUBSCRIPTIONS);
     }
 
     public function GetMinimumDurationNone()
@@ -887,12 +860,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Display('Admin/Resources/manage_resources_groups.tpl');
     }
 
-    /**
-     * @return string
-     */
-    public function GetAttributeId()
+    public function GetAttributeId(): ?string
     {
-        return $this->GetQuerystring(QueryStringKeys::ATTRIBUTE_ID);
+        return $this->GetQuerystringString(key: QueryStringKeys::ATTRIBUTE_ID);
     }
 
     public function SetAttributeValueAsJson($attributeValue)
@@ -935,9 +905,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $groupIds;
     }
 
-    public function GetColor()
+    public function GetColor(): ?string
     {
-        return $this->GetForm(FormKeys::RESERVATION_COLOR);
+        return $this->GetFormString(key: FormKeys::RESERVATION_COLOR);
     }
 
     public function GetEnableCheckin()
@@ -1039,9 +1009,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->SetJsonResponse($response);
     }
 
-    public function GetImageName()
+    public function GetImageName(): ?string
     {
-        return $this->GetForm(FormKeys::RESOURCE_IMAGE);
+        return $this->GetFormString(key: FormKeys::RESOURCE_IMAGE);
     }
 
     public function BindGroupPermissions($groups)
@@ -1088,9 +1058,9 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetFormInt(key: FormKeys::DAY);
     }
 
-    public function GetStatusChangeMessage()
+    public function GetStatusChangeMessage(): ?string
     {
-        return $this->GetForm(FormKeys::EMAIL_CONTENTS);
+        return $this->GetFormString(key: FormKeys::EMAIL_CONTENTS);
     }
 }
 
