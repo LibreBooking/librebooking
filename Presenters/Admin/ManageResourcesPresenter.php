@@ -550,24 +550,30 @@ class ManageResourcesPresenter extends ActionPresenter
     {
         $resourceId = $this->page->GetResourceId();
 
+        $attributeValue = $this->GetInlineAttributeValue();
+        if ($attributeValue === null) {
+            Log::Debug('Not changing attributes, the submitted attribute name or value is not usable. ResourceId=%s', $resourceId);
+
+            return;
+        }
+
         $resource = $this->resourceRepository->LoadById($resourceId);
 
-        $attributeValue = $this->GetInlineAttributeValue();
         Log::Debug('Changing attributes. ResourceId=%s, AttributeId=%s, Value=%s', $resourceId, $attributeValue->AttributeId, $attributeValue->Value);
 
         $resource->ChangeAttribute($attributeValue);
         $this->resourceRepository->Update($resource);
     }
 
-    private function GetInlineAttributeValue()
+    /**
+     * @return AttributeValue|null null when the submitted attribute name or value is not usable
+     */
+    private function GetInlineAttributeValue(): ?AttributeValue
     {
-        $value = $this->page->GetValue();
-        if (is_array($value)) {
-            $value = $value[0];
-        }
-        $id = str_replace(FormKeys::ATTRIBUTE_PREFIX, '', $this->page->GetName());
-
-        return new AttributeValue($id, $value);
+        return AttributeFormParser::GetInlineAttributeValue(
+            name: $this->page->GetName(),
+            value: $this->page->GetValue(),
+        );
     }
 
     public function ChangeSortOrder()

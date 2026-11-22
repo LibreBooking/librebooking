@@ -28,4 +28,45 @@ class AttributeValidatorTest extends TestBase
         $this->assertFalse($validator->IsValid());
         $this->assertEquals($errors, $validator->Messages());
     }
+
+    public function testInlineValidatorChecksAttributeAgainstService(): void
+    {
+        $service = $this->createMock(IAttributeService::class);
+        $category = CustomAttributeCategory::RESOURCE;
+        $attribute = new AttributeValue(attributeId: '1', value: 'value');
+        $entityId = 123;
+
+        $service->expects($this->once())
+                ->method('Validate')
+                ->with($this->equalTo($category), $this->equalTo([$attribute]), $this->equalTo($entityId))
+                ->willReturn(new AttributeServiceValidationResult(true, []));
+
+        $validator = new AttributeValidatorInline(
+            service: $service,
+            category: $category,
+            attribute: $attribute,
+            entityId: $entityId,
+        );
+        $validator->Validate();
+
+        $this->assertTrue($validator->IsValid());
+    }
+
+    public function testInlineValidatorFailsWithoutAttribute(): void
+    {
+        $service = $this->createMock(IAttributeService::class);
+        $service->expects($this->never())
+                ->method('Validate');
+
+        $validator = new AttributeValidatorInline(
+            service: $service,
+            category: CustomAttributeCategory::RESOURCE,
+            attribute: null,
+            entityId: 123,
+        );
+        $validator->Validate();
+
+        $this->assertFalse($validator->IsValid());
+        $this->assertSame(['CustomAttributeInvalidAttribute'], $validator->Messages());
+    }
 }

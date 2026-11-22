@@ -164,6 +164,80 @@ class ManageResourcesPresenterTest extends TestBase
         $this->assertFalse($resource->IsCheckInEnabled());
     }
 
+    public function testChangesAttribute(): void
+    {
+        $resourceId = 7;
+        $resource = new FakeBookableResource($resourceId);
+
+        $this->page->method('GetResourceId')->willReturn($resourceId);
+        $this->page->method('GetName')->willReturn(FormKeys::ATTRIBUTE_PREFIX . '5');
+        $this->page->method('GetValue')->willReturn('value');
+
+        $this->resourceRepository->expects($this->once())
+            ->method('LoadById')
+            ->with($this->equalTo($resourceId))
+            ->willReturn($resource);
+        $this->resourceRepository->expects($this->once())
+            ->method('Update')
+            ->with($this->identicalTo($resource));
+
+        $this->presenter->ChangeAttribute();
+
+        $this->assertSame('value', $resource->GetAttributeValue('5'));
+    }
+
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function missingAttributeNameProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'prefix only' => [FormKeys::ATTRIBUTE_PREFIX],
+            'no prefix' => ['foo'],
+            'submitted as name[]' => [[FormKeys::ATTRIBUTE_PREFIX . '5']],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testDoesNotChangeAttributeWithoutAttributeName(mixed $attributeName): void
+    {
+        $this->page->method('GetResourceId')->willReturn(7);
+        $this->page->method('GetName')->willReturn($attributeName);
+        $this->page->method('GetValue')->willReturn('value');
+
+        $this->resourceRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ChangeAttribute();
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('missingAttributeNameProvider')]
+    public function testAttributeChangeWithoutAttributeNameFailsValidation(mixed $attributeName): void
+    {
+        $this->page->method('GetAction')->willReturn(ManageResourcesActions::ActionChangeAttribute);
+        $this->page->method('GetResourceId')->willReturn(7);
+        $this->page->method('GetName')->willReturn($attributeName);
+        $this->page->method('GetValue')->willReturn('value');
+
+        $validator = null;
+        $this->page->expects($this->once())
+            ->method('RegisterValidator')
+            ->willReturnCallback(function ($validatorId, $registered) use (&$validator) {
+                $validator = $registered;
+            });
+        $this->page->method('IsValid')->willReturn(false);
+
+        $this->resourceRepository->expects($this->never())->method('Update');
+
+        $this->presenter->ProcessAction();
+
+        $this->assertInstanceOf(AttributeValidatorInline::class, $validator);
+        $validator->Validate();
+        $this->assertFalse($validator->IsValid());
+        $this->assertSame(['CustomAttributeInvalidAttribute'], $validator->Messages());
+    }
+
     /**
      * @param int $dropdownValue value for the schedule, resource type, admin group and status dropdowns
      * @param int $yesNoValue value for the multi-day, approval, auto-assign and check-in dropdowns

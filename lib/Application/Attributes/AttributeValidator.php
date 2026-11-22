@@ -22,7 +22,7 @@ class AttributeValidator extends ValidatorBase
     /**
      * @var array|string[]
      */
-    private $messages;
+    protected $messages;
 
     /**
      * @var int|null
@@ -80,6 +80,66 @@ class AttributeValidator extends ValidatorBase
 
 class AttributeValidatorInline extends AttributeValidator
 {
+    private bool $attributeMissing;
+
+    /**
+     * @param IAttributeService $service
+     * @param int|CustomAttributeCategory $category
+     * @param AttributeValue|null $attribute null when the submitted attribute
+     *                                       name or value is not usable,
+     *                                       which fails validation
+     * @param int|null $entityId
+     * @param bool $ignoreEmpty
+     * @param bool $isAdmin
+     */
+    public function __construct(
+        IAttributeService $service,
+        $category,
+        ?AttributeValue $attribute,
+        $entityId = null,
+        $ignoreEmpty = false,
+        $isAdmin = false
+    ) {
+        parent::__construct(
+            service: $service,
+            category: $category,
+            attributes: $attribute === null ? [] : [$attribute],
+            entityId: $entityId,
+            ignoreEmpty: $ignoreEmpty,
+            isAdmin: $isAdmin,
+        );
+        $this->attributeMissing = $attribute === null;
+    }
+
+    /**
+     * @return void
+     */
+    public function Validate()
+    {
+        if ($this->attributeMissing) {
+            $this->isValid = false;
+            $this->messages = [self::MissingAttributeMessage()];
+
+            return;
+        }
+
+        parent::Validate();
+    }
+
+    /**
+     * The error shown when the attribute name or value of an inline
+     * attribute update is not usable.
+     */
+    public static function MissingAttributeMessage(): string
+    {
+        $resources = Resources::GetInstance();
+
+        return $resources->GetString(
+            key: 'CustomAttributeInvalid',
+            args: [$resources->GetString(key: 'Attribute')],
+        );
+    }
+
     public function ReturnsErrorResponse()
     {
         return true;
