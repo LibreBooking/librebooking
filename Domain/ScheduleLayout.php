@@ -769,8 +769,8 @@ class PeakTimes
         $this->beginTime = new NullTime();
         $this->endTime = new NullTime();
         if (!$this->allDay) {
-            $this->beginTime = is_a($beginTime, 'Time') ? $beginTime : (!empty($beginTime) ? Time::Parse($beginTime) : new NullTime());
-            $this->endTime = is_a($endTime, 'Time') ? $endTime : (!empty($endTime) ? Time::Parse($endTime) : new NullTime());
+            $this->beginTime = $beginTime instanceof Time ? $beginTime : (!empty($beginTime) ? Time::Parse($beginTime) : new NullTime());
+            $this->endTime = $endTime instanceof Time ? $endTime : (!empty($endTime) ? Time::Parse($endTime) : new NullTime());
         }
 
         $this->everyDay = $everyDay;
