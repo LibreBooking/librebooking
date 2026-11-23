@@ -463,12 +463,12 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param TimeInterval|string|int $value
+     * @param TimeInterval|string|int|null $value
      * @return int
      */
     private function GetIntervalValue($value)
     {
-        if (is_a($value, 'TimeInterval')) {
+        if ($value instanceof TimeInterval) {
             return $value->TotalSeconds();
         } else {
             return TimeInterval::Parse($value)->TotalSeconds();

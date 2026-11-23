@@ -212,7 +212,7 @@ class ReportDateColumn extends ReportColumn
 
     public function GetData($data)
     {
-        if (is_a($data, 'Date')) {
+        if ($data instanceof Date) {
             $date = $data;
         } else {
             $date = Date::FromDatabase($data);
@@ -222,7 +222,7 @@ class ReportDateColumn extends ReportColumn
 
     public function GetChartData($row, $columnKey)
     {
-        if (is_a(object_or_class: $row[$columnKey], class: 'Date')) {
+        if ($row[$columnKey] instanceof Date) {
             $date = $row[$columnKey];
         } else {
             $date = Date::FromDatabase(databaseValue: $row[$columnKey]);
