@@ -80,6 +80,12 @@ img.logo {
   max-height: 50px;
 }
 
+/* Cap the login logo instead of stretching it, so square logos stay small */
+.login-icon img {
+  max-width: 50%;
+  max-height: 75px;
+}
+
 .dropdown-item:hover,
 .dropdown-item:focus,
 .dropdown-item:focus-visible {
