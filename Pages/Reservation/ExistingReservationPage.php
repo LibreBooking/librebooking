@@ -340,7 +340,7 @@ class DuplicateReservationPage extends ExistingReservationPage
     {
         parent::PageLoad();
 
-        $this->Set('ReturnUrl', urldecode($this->GetQuerystring('return')));
+        $this->Set('ReturnUrl', urldecode($this->GetQuerystring('return') ?? ''));
     }
 
     protected function GetReservationAction()
@@ -355,7 +355,7 @@ class DuplicateReservationPage extends ExistingReservationPage
 
     protected function GetReturnUrl()
     {
-        return urldecode($this->GetQuerystring(QueryStringKeys::REDIRECT));
+        return urldecode($this->GetQuerystring(QueryStringKeys::REDIRECT) ?? '');
     }
 
     public function SetTermsAccepted($accepted)

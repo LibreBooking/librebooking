@@ -48,7 +48,9 @@ class ReportingRepository implements IReportingRepository
         $reader = ServiceLocator::GetDatabase()->Query($query);
         $rows = [];
         while ($row = $reader->GetRow()) {
-            $row[ColumnNames::DURATION_HOURS] = round($row[ColumnNames::DURATION_ALIAS] / 3600, 2);
+            if (array_key_exists(ColumnNames::DURATION_ALIAS, $row)) {
+                $row[ColumnNames::DURATION_HOURS] = round($row[ColumnNames::DURATION_ALIAS] / 3600, 2);
+            }
             $rows[] = $row;
         }
         $reader->Free();
