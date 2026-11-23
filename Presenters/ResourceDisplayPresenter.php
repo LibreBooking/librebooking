@@ -261,7 +261,13 @@ class ResourceDisplayPresenter extends ActionPresenter
         $email = $this->page->GetEmail();
 
         $reservationDate = Date::Parse($this->page->GetBeginDate(), $timezone)->Format('Y-m-d ');
-        $date = DateRange::Create($reservationDate . $this->page->GetBeginTime(), $reservationDate . $this->page->GetEndTime(), $timezone);
+        $begin = Date::Parse($reservationDate . $this->page->GetBeginTime(), $timezone);
+        $end = Date::Parse($reservationDate . $this->page->GetEndTime(), $timezone);
+        if ($end->LessThan($begin)) {
+            // the slot runs past midnight and ends on the following day
+            $end = $end->AddDays(1);
+        }
+        $date = new DateRange($begin, $end);
 
         $maxFutureDays = Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
         if ($maxFutureDays == 0) {

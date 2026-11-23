@@ -108,6 +108,100 @@ class LayoutValidatorTest extends TestBase
         $this->assertTrue($v4->IsValid());
     }
 
+    public function testSingleLayoutMayHaveASlotThatRunsPastMidnight(): void
+    {
+        $reservableOvernight = new LayoutValidator(reservableSlots: '22:00-06:00', blockedSlots: '06:00-22:00');
+        $blockedOvernight = new LayoutValidator(reservableSlots: "06:00-14:00\n14:00-22:00", blockedSlots: '22:00-06:00');
+        $splitNight = new LayoutValidator(reservableSlots: "20:00-23:00\n23:00-02:00\n02:00-05:00", blockedSlots: '05:00-20:00');
+
+        $reservableOvernight->Validate();
+        $blockedOvernight->Validate();
+        $splitNight->Validate();
+
+        $this->assertTrue($reservableOvernight->IsValid());
+        $this->assertTrue($blockedOvernight->IsValid());
+        $this->assertTrue($splitNight->IsValid());
+    }
+
+    public function testSingleLayoutWithOvernightSlotStillHasToCoverTheWholeDay(): void
+    {
+        $gapAfterOvernight = new LayoutValidator(reservableSlots: '22:00-06:00', blockedSlots: '07:00-22:00');
+        $overlapsOvernight = new LayoutValidator(reservableSlots: '22:00-06:00', blockedSlots: '00:00-22:00');
+        $twoOvernight = new LayoutValidator(reservableSlots: '22:00-06:00', blockedSlots: '06:00-22:00' . "\n" . '23:00-05:00');
+        $sameStartAndEnd = new LayoutValidator(reservableSlots: '22:00-22:00', blockedSlots: '');
+
+        $gapAfterOvernight->Validate();
+        $overlapsOvernight->Validate();
+        $twoOvernight->Validate();
+        $sameStartAndEnd->Validate();
+
+        $this->assertFalse($gapAfterOvernight->IsValid());
+        $this->assertFalse($overlapsOvernight->IsValid());
+        $this->assertFalse($twoOvernight->IsValid());
+        $this->assertFalse($sameStartAndEnd->IsValid());
+    }
+
+    public function testDailyLayoutMayHaveASlotThatRunsIntoTheNextDay(): void
+    {
+        // every night 22:00 - 06:00, so every day starts at 06:00
+        $everyNight = new LayoutValidator(
+            reservableSlots: $this->toWeek('22:00-06:00'),
+            blockedSlots: $this->toWeek('06:00-22:00'),
+            validateSingle: false
+        );
+
+        // only Monday night, so only Tuesday starts at 06:00
+        $reservable = $this->toWeek('08:00-22:00');
+        $blocked = $this->toWeek("00:00-08:00\n22:00-00:00");
+        $reservable[DayOfWeek::MONDAY] = "08:00-22:00\n22:00-06:00";
+        $blocked[DayOfWeek::MONDAY] = '00:00-08:00';
+        $blocked[DayOfWeek::TUESDAY] = "06:00-08:00\n22:00-00:00";
+        $mondayNight = new LayoutValidator(reservableSlots: $reservable, blockedSlots: $blocked, validateSingle: false);
+
+        // Saturday night runs into Sunday
+        $reservable = $this->toWeek('00:00-00:00');
+        $blocked = $this->toWeek('');
+        $reservable[DayOfWeek::SATURDAY] = "00:00-20:00\n20:00-04:00";
+        $reservable[DayOfWeek::SUNDAY] = '04:00-00:00';
+        $saturdayNight = new LayoutValidator(reservableSlots: $reservable, blockedSlots: $blocked, validateSingle: false);
+
+        $everyNight->Validate();
+        $mondayNight->Validate();
+        $saturdayNight->Validate();
+
+        $this->assertTrue($everyNight->IsValid());
+        $this->assertTrue($mondayNight->IsValid());
+        $this->assertTrue($saturdayNight->IsValid());
+    }
+
+    public function testDailyLayoutNextDayHasToStartWhereTheOvernightSlotEnds(): void
+    {
+        $reservable = $this->toWeek('08:00-22:00');
+        $blocked = $this->toWeek("00:00-08:00\n22:00-00:00");
+        $reservable[DayOfWeek::MONDAY] = "08:00-22:00\n22:00-06:00";
+        $blocked[DayOfWeek::MONDAY] = '00:00-08:00';
+
+        // Tuesday still starts at midnight, overlapping Monday's overnight slot
+        $overlap = new LayoutValidator(reservableSlots: $reservable, blockedSlots: $blocked, validateSingle: false);
+
+        // Tuesday starts at 08:00, leaving 06:00 - 08:00 uncovered
+        $blocked[DayOfWeek::TUESDAY] = '22:00-00:00';
+        $gap = new LayoutValidator(reservableSlots: $reservable, blockedSlots: $blocked, validateSingle: false);
+
+        // a slot that runs past midnight has to be the last slot of its day
+        $reservable = $this->toWeek('00:00-00:00');
+        $reservable[DayOfWeek::MONDAY] = "00:00-10:00\n10:00-02:00\n12:00-00:00";
+        $notLast = new LayoutValidator(reservableSlots: $reservable, blockedSlots: $this->toWeek(''), validateSingle: false);
+
+        $overlap->Validate();
+        $gap->Validate();
+        $notLast->Validate();
+
+        $this->assertFalse($overlap->IsValid());
+        $this->assertFalse($gap->IsValid());
+        $this->assertFalse($notLast->IsValid());
+    }
+
     private function toWeek($slots)
     {
         $s = [];

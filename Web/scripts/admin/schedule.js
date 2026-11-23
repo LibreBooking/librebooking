@@ -305,101 +305,108 @@ function ScheduleManagement(opts) {
     };
   };
 
-  var createQuickLayout = function () {
-    var intervalMinutes = elements.quickLayoutConfig.val();
-    var startTime = elements.quickLayoutStart.val();
-    var endTime = elements.quickLayoutEnd.val();
+  var minutesPerHour = 60;
+  var minutesPerDay = 24 * minutesPerHour;
 
-    if (intervalMinutes != '' && startTime != '' && endTime != '') {
-      var layout = '';
-      var blocked = '';
-
-      if (startTime != '00:00') {
-        blocked += '00:00 - ' + startTime + '\n';
-      }
-
-      if (endTime != '00:00') {
-        blocked += endTime + ' - 00:00';
-      }
-
-      var startTimes = startTime.split(':');
-      var endTimes = endTime.split(':');
-
-      var currentTime = new Date();
-      currentTime.setHours(startTimes[0]);
-      currentTime.setMinutes(startTimes[1]);
-
-      var endDateTime = new Date();
-      endDateTime.setHours(endTimes[0]);
-      endDateTime.setMinutes(endTimes[1]);
-
-      var nextTime = new Date(currentTime);
-
-      var intervalMilliseconds = 60 * 1000 * intervalMinutes;
-      while (currentTime.getTime() < endDateTime.getTime()) {
-        nextTime.setTime(nextTime.getTime() + intervalMilliseconds);
-
-        layout += getFormattedTime(currentTime) + ' - ';
-        layout += getFormattedTime(nextTime) + '\n';
-
-        currentTime.setTime(currentTime.getTime() + intervalMilliseconds);
-      }
-
-      $('.reservableEdit:visible', elements.layoutDialog).val(layout);
-      $('.blockedEdit:visible', elements.layoutDialog).val(blocked);
+  // Minutes since midnight for a HH:MM time, or NaN when it is not a time.
+  var toMinutes = function (time) {
+    var match = /^(\d?\d):(\d\d)$/.exec(_.trim(time));
+    if (!match) {
+      return NaN;
     }
+    return Number(match[1]) * minutesPerHour + Number(match[2]);
   };
 
-  var getFormattedTime = function (date) {
-    var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-    var minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-    return hour + ':' + minute;
+  var toTime = function (minutes) {
+    var minuteOfDay = minutes % minutesPerDay;
+    var hour = Math.floor(minuteOfDay / minutesPerHour);
+    var minute = minuteOfDay % minutesPerHour;
+    return String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
   };
 
-  var autoFillBlocked = function () {
-    function splitAndTrim(line) {
-      return _.map(_.split(line, '-'), _.trim);
+  // A slot which ends at or before the time it starts ends on the following
+  // day, so 22:00 - 06:00 runs past midnight and 08:00 - 00:00 ends at midnight.
+  var runsPastMidnight = function (startMinutes, endMinutes) {
+    return endMinutes !== 0 && endMinutes < startMinutes;
+  };
+
+  var createQuickLayout = function () {
+    var intervalMinutes = Number(elements.quickLayoutConfig.val());
+    var startMinutes = toMinutes(elements.quickLayoutStart.val());
+    var endMinutes = toMinutes(elements.quickLayoutEnd.val());
+
+    if (!(intervalMinutes > 0) || isNaN(startMinutes) || isNaN(endMinutes)) {
+      return;
+    }
+
+    var lastMinute = endMinutes > startMinutes ? endMinutes : endMinutes + minutesPerDay;
+
+    var layout = '';
+    for (var current = startMinutes; current < lastMinute; current += intervalMinutes) {
+      var next = Math.min(current + intervalMinutes, lastMinute);
+      layout += toTime(current) + ' - ' + toTime(next) + '\n';
     }
 
     var blocked = '';
+    if (runsPastMidnight(startMinutes, endMinutes)) {
+      blocked = toTime(endMinutes) + ' - ' + toTime(startMinutes);
+    } else {
+      if (startMinutes !== 0) {
+        blocked += '00:00 - ' + toTime(startMinutes) + '\n';
+      }
+      if (endMinutes !== 0) {
+        blocked += toTime(endMinutes) + ' - 00:00';
+      }
+    }
 
+    $('.reservableEdit:visible', elements.layoutDialog).val(layout);
+    $('.blockedEdit:visible', elements.layoutDialog).val(blocked);
+  };
+
+  var autoFillBlocked = function () {
     var reservableText = _.trim($('.reservableEdit:visible', elements.layoutDialog).val());
-    var reservable = _.split(reservableText, '\n');
-    if (reservable.length === 0) {
+
+    var slots = [];
+    _.each(_.split(reservableText, '\n'), function (line) {
+      var match = /(\d?\d:\d\d)\s*-\s*(\d?\d:\d\d)/.exec(line);
+      if (match) {
+        slots.push({ start: toMinutes(match[1]), end: toMinutes(match[2]) });
+      }
+    });
+
+    if (slots.length === 0) {
       $('.blockedEdit:visible', elements.layoutDialog).val('00:00 - 00:00');
       return;
     }
 
-    var startIndex = 0;
-    if (!_.startsWith(reservable[0], '00:00') && !_.startsWith(reservable[0], '0:00')) {
-      blocked += '00:00 - ' + splitAndTrim(reservable)[0] + '\n';
-      startIndex = 1;
+    slots = _.sortBy(slots, 'start');
+    var first = slots[0];
+    var last = slots[slots.length - 1];
+    var lastRunsPastMidnight = runsPastMidnight(last.start, last.end);
+
+    var blocked = [];
+    var addBlocked = function (startMinutes, endMinutes) {
+      if (startMinutes !== endMinutes) {
+        blocked.push(toTime(startMinutes) + ' - ' + toTime(endMinutes));
+      }
+    };
+
+    if (lastRunsPastMidnight) {
+      // the day starts where the slot which runs past midnight ends
+      addBlocked(last.end, first.start);
+    } else if (first.start !== 0) {
+      addBlocked(0, first.start);
     }
 
-    for (var i = startIndex; i < reservable.length; i++) {
-      var firstIteration = i === 0;
-      var lastIteration = i + 1 === reservable.length;
-
-      if (_.isEmpty(_.trim(reservable[i]))) {
-        continue;
-      }
-
-      var current = splitAndTrim(reservable[i]);
-      var previous = null;
-      if (!firstIteration) {
-        previous = splitAndTrim(reservable[i - 1]);
-      }
-
-      if (!firstIteration && !lastIteration && current[0] != previous[1]) {
-        blocked += previous[1] + ' - ' + current[0] + '\n';
-      }
-
-      if (lastIteration && current[1] != '00:00') {
-        blocked += current[1] + ' - 00:00' + '\n';
-      }
+    for (var i = 1; i < slots.length; i++) {
+      addBlocked(slots[i - 1].end, slots[i].start);
     }
 
-    $('.blockedEdit:visible', elements.layoutDialog).val(blocked);
+    if (!lastRunsPastMidnight && last.end !== 0) {
+      blocked.push(toTime(last.end) + ' - 00:00');
+    }
+
+    $('.blockedEdit:visible', elements.layoutDialog).val(blocked.join('\n'));
   };
 
   var handleAddError = function (responseText) {
@@ -416,7 +423,7 @@ function ScheduleManagement(opts) {
   };
 
   var showChangeLayout = function (e, reservableDiv, blockedDiv, timezone, usesSingleLayout) {
-    elements.changeLayoutForm.find('.validationSummary ').addClass('no-show');
+    elements.changeLayoutForm.find('.validationSummary').addClass('d-none');
     $.each(reservableDiv, function (index, val) {
       var slots = reformatTimeSlots($(val));
       $('#' + $(val).attr('ref')).val(slots);

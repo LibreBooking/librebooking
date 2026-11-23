@@ -340,6 +340,15 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
 
         $list = new PeriodList();
         $this->AddDailyPeriods($requestedDate->Weekday(), $baseDateInLayoutTz, $requestedDate, $list, $hideBlockedPeriods);
+        // a period which runs past midnight belongs to the day it starts on, so the previous day's may end today
+        $this->AddDailyPeriods(
+            day: $requestedDate->AddDays(-1)->Weekday(),
+            baseDateInLayoutTz: $baseDateInLayoutTz->AddDays(-1),
+            requestedDate: $requestedDate,
+            list: $list,
+            hideBlockedPeriods: $hideBlockedPeriods,
+            onlyEndingNextDay: true
+        );
 
         if ($this->layoutTimezone != $this->targetTimezone) {
             $requestedDateInTargetTz = $requestedDate->ToTimezone($this->layoutTimezone);
@@ -357,6 +366,14 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
                 $adjustedDate = $requestedDate->AddDays($adjustment);
                 $baseDateInLayoutTz = $baseDateInLayoutTz->AddDays($adjustment);
                 $this->AddDailyPeriods($adjustedDate->Weekday(), $baseDateInLayoutTz, $requestedDate, $list);
+                $this->AddDailyPeriods(
+                    day: $adjustedDate->AddDays(-1)->Weekday(),
+                    baseDateInLayoutTz: $baseDateInLayoutTz->AddDays(-1),
+                    requestedDate: $requestedDate,
+                    list: $list,
+                    hideBlockedPeriods: $hideBlockedPeriods,
+                    onlyEndingNextDay: true
+                );
             }
         }
         $layout = $list->GetItems();
@@ -371,17 +388,28 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
      * @param Date $requestedDate
      * @param PeriodList $list
      * @param bool $hideBlockedPeriods
+     * @param bool $onlyEndingNextDay only add the periods which run past midnight into the following day
      */
-    private function AddDailyPeriods($day, $baseDateInLayoutTz, $requestedDate, $list, $hideBlockedPeriods = false)
-    {
-        $periods = $this->_periods[$day];
+    private function AddDailyPeriods(
+        $day,
+        $baseDateInLayoutTz,
+        $requestedDate,
+        $list,
+        $hideBlockedPeriods = false,
+        $onlyEndingNextDay = false
+    ) {
+        $periods = $this->_periods[$day] ?? [];
         /** @var LayoutPeriod $period */
         foreach ($periods as $period) {
             if ($hideBlockedPeriods && !$period->IsReservable()) {
                 continue;
             }
-            $begin = $baseDateInLayoutTz->SetTime($period->Start)->ToTimezone($this->targetTimezone);
-            $end = $baseDateInLayoutTz->SetTime($period->End, true)->ToTimezone($this->targetTimezone);
+            if ($onlyEndingNextDay && !$period->EndsNextDay()) {
+                continue;
+            }
+            [$periodStart, $periodEnd] = $this->GetPeriodDates($period, $baseDateInLayoutTz);
+            $begin = $periodStart->ToTimezone($this->targetTimezone);
+            $end = $periodEnd->ToTimezone($this->targetTimezone);
             // only add this period if it occurs on the requested date
             if ($begin->DateEquals($requestedDate) || ($end->DateEquals($requestedDate) && !$end->IsMidnight())) {
                 $built = $this->BuildPeriod($period->PeriodTypeClass(), $begin, $end, $period->Label);
@@ -420,6 +448,49 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     private function BuildPeriod($periodType, Date $start, Date $end, $label, $labelEnd = null)
     {
         return new $periodType($start, $end, $label, $labelEnd);
+    }
+
+    /**
+     * Returns when the period starts and ends for the given day. A period
+     * whose end time is before its start time ends on the following day.
+     *
+     * @param LayoutPeriod $period
+     * @param Date $day midnight of the day the period starts on, in the layout timezone
+     * @return Date[] start and end, in that order
+     */
+    private function GetPeriodDates(LayoutPeriod $period, Date $day): array
+    {
+        $start = $day->SetTime($period->Start);
+        // decided by the times of day rather than the resulting dates, which a daylight saving change can reorder
+        $end = $period->EndsNextDay() ? $day->AddDays(1)->SetTime($period->End) : $day->SetTime($period->End, true);
+
+        return [$start, $end];
+    }
+
+    /**
+     * Finds the period of the given day which contains this datetime
+     * (includes start time, excludes end time).
+     *
+     * @param Date $date
+     * @param Date $day midnight of the day to search, in the layout timezone
+     * @param bool $onlyEndingNextDay only consider the periods which run past midnight into the following day
+     */
+    private function FindPeriodOnDay(Date $date, Date $day, bool $onlyEndingNextDay): ?SchedulePeriod
+    {
+        /** @var LayoutPeriod $period */
+        foreach ($this->getPeriods($day) as $period) {
+            if ($onlyEndingNextDay && !$period->EndsNextDay()) {
+                continue;
+            }
+
+            [$start, $end] = $this->GetPeriodDates($period, $day);
+
+            if ($start->Compare($date) <= 0 && $end->Compare($date) > 0) {
+                return $this->BuildPeriod($period->PeriodTypeClass(), $start, $end, $period->Label);
+            }
+        }
+
+        return null;
     }
 
     protected function SortItems(&$items)
@@ -508,41 +579,11 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
      */
     public function GetPeriod(Date $date): ?SchedulePeriod
     {
-        $timezone = $this->layoutTimezone;
-        $tempDate = $date->ToTimezone($timezone);
-        $periods = $this->getPeriods($tempDate);
+        $day = $date->ToTimezone($this->layoutTimezone)->GetDate();
 
-        /** @var LayoutPeriod $period */
-        foreach ($periods as $period) {
-            $start = Date::Create(
-                $tempDate->Year(),
-                $tempDate->Month(),
-                $tempDate->Day(),
-                $period->Start->Hour(),
-                $period->Start->Minute(),
-                0,
-                $timezone
-            );
-            $end = Date::Create(
-                $tempDate->Year(),
-                $tempDate->Month(),
-                $tempDate->Day(),
-                $period->End->Hour(),
-                $period->End->Minute(),
-                0,
-                $timezone
-            );
-
-            if ($end->IsMidnight()) {
-                $end = $end->AddDays(1);
-            }
-
-            if ($start->Compare($date) <= 0 && $end->Compare($date) > 0) {
-                return $this->BuildPeriod($period->PeriodTypeClass(), $start, $end, $period->Label);
-            }
-        }
-
-        return null;
+        // a period which runs past midnight belongs to the day it starts on
+        return $this->FindPeriodOnDay($date, $day, onlyEndingNextDay: false)
+            ?? $this->FindPeriodOnDay($date, $day->AddDays(-1), onlyEndingNextDay: true);
     }
 
     public function UsesDailyLayouts()
@@ -554,7 +595,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
     {
         if ($this->usingDailyLayouts) {
             $dayOfWeek = $layoutDate->Weekday();
-            return $this->_periods[$dayOfWeek];
+            return $this->_periods[$dayOfWeek] ?? [];
         } else {
             return $this->_periods;
         }
@@ -585,11 +626,11 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
         $peakSlots = 0;
         $start = $startDate->ToTimezone($this->layoutTimezone);
         $end = $endDate->ToTimezone($this->layoutTimezone);
-        $testDate = $start;
+        $testDate = $start->GetDate();
 
         Log::Debug('s %s e %s t %s', $start, $end, $testDate);
 
-        $periods = $this->getPeriods($startDate);
+        $periods = $this->getPeriods($start);
 
         /** var LayoutPeriod $period */
         foreach ($periods as $period) {
@@ -597,11 +638,14 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
                 continue;
             }
 
-            if ($start->Compare($testDate->SetTime($period->Start)) <= 0 && $end->Compare($testDate->SetTime($period->End, true)) >= 0) {
+            // a period which runs past midnight is counted once, on the day it starts
+            [$periodStart, $periodEnd] = $this->GetPeriodDates($period, $testDate);
+
+            if ($start->Compare($periodStart) <= 0 && $end->Compare($periodEnd) >= 0) {
                 Log::Debug($period->Start);
                 Log::Debug($period->End);
 
-                $isPeak = $this->HasPeakTimesDefined() && $this->peakTimes->IsWithinPeak($testDate->SetTime($period->Start));
+                $isPeak = $this->HasPeakTimesDefined() && $this->peakTimes->IsWithinPeak($periodStart);
                 if ($isPeak) {
                     $peakSlots++;
                 } else {
@@ -860,7 +904,12 @@ class PeakTimes
         $peakEnd = Date::Create($endYear, $endMonth, $endDay, $endTime->Hour(), $endTime->Minute(), 0, $date->Timezone())->AddDays($endDayAddition);
 
         if ($date->Compare($peakStart) >= 0 && $date->Compare($peakEnd) <= 0) {
-            $isPeakHour = $this->IsAllDay() || ($date->CompareTimes($startTime) >= 0 && $date->CompareTimes($endTime) < 0);
+            $isAfterStart = $date->CompareTimes($startTime) >= 0;
+            $isBeforeEnd = $date->CompareTimes($endTime) < 0;
+            // peak hours which end before they start run past midnight
+            $runsPastMidnight = $endTime->Compare($startTime) < 0;
+            $isPeakHour = $this->IsAllDay()
+                || ($runsPastMidnight ? ($isAfterStart || $isBeforeEnd) : ($isAfterStart && $isBeforeEnd));
             $isPeakWeekday = true;
 
             if ($weekdays != null) {
@@ -1029,6 +1078,17 @@ class LayoutPeriod
         $this->End = $end;
         $this->PeriodType = $periodType;
         $this->Label = $label;
+    }
+
+    /**
+     * Whether this period runs past midnight and ends on the day after it
+     * starts (for example 22:00 - 06:00). Ending exactly at midnight does not count.
+     */
+    public function EndsNextDay(): bool
+    {
+        $endsAtMidnight = $this->End->Hour() == 0 && $this->End->Minute() == 0 && $this->End->Second() == 0;
+
+        return !$endsAtMidnight && $this->End->Compare($this->Start) < 0;
     }
 
     /**

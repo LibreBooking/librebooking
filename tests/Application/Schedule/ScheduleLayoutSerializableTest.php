@@ -51,4 +51,27 @@ class ScheduleLayoutSerializableTest extends TestBase
         $this->assertEquals($p2->LabelEnd(), $actualPeriods[1]->labelEnd);
         $this->assertEquals($p2->IsReservable(), $actualPeriods[1]->isReservable);
     }
+
+    public function testMarksPeriodsThatRunPastMidnightForTheRequestedDate(): void
+    {
+        $date = Date::Parse('2026-11-17', 'UTC');
+        $beganPreviousDay = new SchedulePeriod($date->AddDays(-1)->SetTimeString('22:00'), $date->SetTimeString('06:00'));
+        $withinDay = new SchedulePeriod($date->SetTimeString('06:00'), $date->SetTimeString('22:00'));
+        $endsNextDay = new SchedulePeriod($date->SetTimeString('22:00'), $date->AddDays(1)->SetTimeString('06:00'));
+        $endsAtMidnight = new SchedulePeriod($date->SetTimeString('22:00'), $date->AddDays(1));
+
+        $actual = new ScheduleLayoutSerializable(
+            periods: [$beganPreviousDay, $withinDay, $endsNextDay, $endsAtMidnight],
+            layoutDate: $date->SetTimeString('13:00')
+        );
+
+        $this->assertFalse($actual->periods[0]->beginsOnDate);
+        $this->assertTrue($actual->periods[0]->endsOnDate);
+        $this->assertTrue($actual->periods[1]->beginsOnDate);
+        $this->assertTrue($actual->periods[1]->endsOnDate);
+        $this->assertTrue($actual->periods[2]->beginsOnDate);
+        $this->assertFalse($actual->periods[2]->endsOnDate);
+        $this->assertTrue($actual->periods[3]->beginsOnDate);
+        $this->assertTrue($actual->periods[3]->endsOnDate);
+    }
 }

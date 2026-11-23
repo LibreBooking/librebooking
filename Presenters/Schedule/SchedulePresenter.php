@@ -127,7 +127,7 @@ class SchedulePresenter extends ActionPresenter implements ISchedulePresenter
         $layout = $this->_scheduleService->GetLayout($scheduleId, new ScheduleLayoutFactory($user->Timezone));
         $periods = $layout->GetLayout($requestedDate);
 
-        $this->_page->SetLayoutResponse(new ScheduleLayoutSerializable($periods));
+        $this->_page->SetLayoutResponse(new ScheduleLayoutSerializable(periods: $periods, layoutDate: $requestedDate));
     }
 
     public function LoadReservations()

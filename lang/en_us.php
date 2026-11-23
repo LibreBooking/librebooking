@@ -339,7 +339,7 @@ class en_us extends Language
         $strings['UseSameLayoutAs'] = 'Use Same Layout As';
         $strings['Format'] = 'Format';
         $strings['OptionalLabel'] = 'Optional Label';
-        $strings['LayoutInstructions'] = 'Enter one slot per line.  Slots must be provided for all 24 hours of the day beginning and ending at 12:00 AM.';
+        $strings['LayoutInstructions'] = 'Enter one slot per line.  Slots must be provided for all 24 hours of the day.  A slot may run past midnight (for example 22:00 - 06:00), in which case the next day starts when that slot ends.';
         $strings['AddUser'] = 'Add User';
         $strings['UserPermissionInfo'] = 'Actual access to resource may be different depending on user role, group permissions, or external permission settings';
         $strings['DeleteUserWarning'] = 'Deleting this user will remove all of their current, future, and historical reservations.';
@@ -871,7 +871,7 @@ class en_us extends Language
         $strings['RecurringWithoutTerminationRule'] = 'A termination date is required for recurring blackouts.';
         $strings['StartIsInPast'] = 'The start date and time cannot be in the past.';
         $strings['EmailDisabled'] = 'The administrator has disabled email notifications.';
-        $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day beginning and ending at 00:00.';
+        $strings['ValidLayoutRequired'] = 'Slots must be provided for all 24 hours of the day without gaps or overlaps. If a slot runs past midnight, the next day must start when that slot ends.';
         $strings['CustomAttributeErrors'] = 'There are problems with the additional attributes you provided:';
         $strings['CustomAttributeRequired'] = '%s is a required field.';
         $strings['CustomAttributeInvalid'] = 'The value provided for %s is invalid.';

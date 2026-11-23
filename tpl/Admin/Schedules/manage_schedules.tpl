@@ -397,7 +397,7 @@
 					</div>
 					<div class="modal-body row gy-2">
 						<div class="col-12">
-							<div class="validationSummary alert alert-danger no-show">
+							<div class="validationSummary alert alert-danger d-none">
 								<ul>{async_validator id="layoutValidator" key="ValidLayoutRequired"}</ul>
 							</div>
 						</div>
