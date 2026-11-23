@@ -34,6 +34,17 @@ class ReportingRepositoryTest extends TestBase
         $this->assertEquals($expectedRows, $rows);
     }
 
+    public function testDoesNotCalculateDurationHoursWhenDurationIsNotSelected()
+    {
+        $builder = new ReportCommandBuilder();
+        $expectedRows = [['resource_id' => 1]];
+        $this->db->SetRows(rows: $expectedRows);
+
+        $rows = $this->repository->GetCustomReport(commandBuilder: $builder);
+
+        $this->assertSame($expectedRows, $rows);
+    }
+
     public function testSavesCustomReport()
     {
         $reportName = 'reportName';
