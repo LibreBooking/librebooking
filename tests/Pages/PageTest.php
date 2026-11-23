@@ -46,6 +46,25 @@ class PageTest extends TestBase
         rmdir($dir);
     }
 
+    public function testEachThemeResolvesToItsBundledLogo(): void
+    {
+        foreach (array_keys(array: ConfigKeys::CSS_THEME['choices']) as $theme) {
+            $expected = $theme === 'default' ? 'img/librebooking.png' : "img/librebooking-{$theme}.png";
+            $this->assertSame($expected, Page::resolveLogoUrl(theme: $theme, locations: []));
+            $this->assertFileExists(ROOT_DIR . 'Web/' . $expected);
+        }
+
+        $this->assertSame('img/librebooking.png', Page::resolveLogoUrl(theme: 'unknown', locations: []));
+    }
+
+    public function testCustomLogoOverridesTheThemeLogo(): void
+    {
+        touch(filename: $this->tempDir . '/new_upload/custom-logo.png');
+        $locations = [['dir' => $this->tempDir . '/new_upload', 'url' => 'uploads/images']];
+
+        $this->assertSame('uploads/images/custom-logo.png', Page::resolveLogoUrl(theme: 'orange', locations: $locations));
+    }
+
     public function testFindCustomFileReturnsNullWhenNoFilesExist(): void
     {
         $locations = [

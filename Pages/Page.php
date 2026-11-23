@@ -95,7 +95,8 @@ abstract class Page implements IPage
         $this->smarty->assign('checkinAdminOnly', Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_CHECKIN_ADMIN_ONLY, new BooleanConverter()));
         $this->smarty->assign('checkoutAdminOnly', Configuration::Instance()->GetKey(ConfigKeys::RESERVATION_CHECKOUT_ADMIN_ONLY, new BooleanConverter()));
 
-        $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
+        $cssTheme = Configuration::Instance()->GetKey(configDef: ConfigKeys::CSS_THEME) ?? 'default';
+        $this->smarty->assign(tpl_var: 'cssTheme', value: $cssTheme);
 
         $imageUploadDirectory = new ImageUploadDirectory();
         $uploadUrl = Configuration::Instance()->GetKey(ConfigKeys::UPLOAD_IMAGE_URL);
@@ -105,12 +106,8 @@ abstract class Page implements IPage
         ];
 
         $this->smarty->assign(
-            'LogoUrl',
-            self::findCustomFile(
-                baseName: 'custom-logo',
-                extensions: ['png', 'gif', 'jpg'],
-                locations: $customFileLocations,
-            ) ?? 'img/librebooking.png'
+            tpl_var: 'LogoUrl',
+            value: self::resolveLogoUrl(theme: $cssTheme, locations: $customFileLocations),
         );
 
         $this->smarty->assign('CssUrl', 'null-style.css');
@@ -158,6 +155,23 @@ abstract class Page implements IPage
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
 
         $this->Set('AutoScrollToday', Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_AUTO_SCROLL_TODAY, new BooleanConverter()) ?? true);
+    }
+
+    /**
+     * @param array<array{dir: string, url: string}> $locations
+     */
+    public static function resolveLogoUrl(mixed $theme, array $locations): string
+    {
+        $customLogo = self::findCustomFile(baseName: 'custom-logo', extensions: ['png', 'gif', 'jpg'], locations: $locations);
+        if ($customLogo !== null) {
+            return $customLogo;
+        }
+
+        if (is_string(value: $theme) && $theme !== 'default' && isset(ConfigKeys::CSS_THEME['choices'][$theme])) {
+            return "img/librebooking-{$theme}.png";
+        }
+
+        return 'img/librebooking.png';
     }
 
     /**

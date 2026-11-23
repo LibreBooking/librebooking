@@ -316,7 +316,8 @@ Frontend Settings
 
 **css.theme**
   Theme to use for the application. Options: default, dimgray, dark_red,
-  dark_green, french_blue, cake_blue, orange.
+  dark_green, french_blue, cake_blue, orange. The built-in logo follows the
+  selected theme. A custom logo takes precedence for every theme.
 
 **cache.templates**
   Enable or disable template caching.

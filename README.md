@@ -188,10 +188,12 @@ Recent configuration highlights:
 - Change theme via `config.php`:
 
   ```php
-  'css.theme' = 'default';
+  'css.theme' => 'default',
   ```
 
-- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
+- Available themes are `default`, `dimgray`, `dark_red`, `dark_green`,
+  `french_blue`, `cake_blue`, and `orange`. The built-in logo follows the
+  selected theme. An uploaded custom logo takes precedence.
 - Customize `Web/css/librebooking.css`
 
 ## 🔒 ReCaptcha
