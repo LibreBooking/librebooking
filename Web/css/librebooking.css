@@ -506,6 +506,7 @@ ul.jqtree-tree .group-resource .jqtree-title {
 
 .opening {
   cursor: pointer;
+  min-width: 170px;
 }
 
 #userDetailsDiv,
