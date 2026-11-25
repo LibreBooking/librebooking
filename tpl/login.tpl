@@ -9,7 +9,7 @@
     {/if}
 
     {if $Announcements|default:array()|count > 0}
-        <div id="announcements" class="col-sm-8 col-12 card mx-auto shadow mt-5">
+        <div id="announcements" class="col-sm-8 col-12 card mx-auto shadow mb-4 mt-1">
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     {foreach from=$Announcements item=each}
@@ -26,8 +26,13 @@
             <div class="card shadow mb-2">
                 <div class="card-body mx-3">
                     <div id="login-box" class="default-box">
-                        <div class="login-icon my-2">
-                            <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="mx-auto d-block">
+                        <div class="login-icon mb-3 py-2">
+                            {if !empty($LogoSvg)}
+                                {* The navbar already inlines this logo, so this copy needs its own gradient id *}
+                                <span class="logo-svg mx-auto d-block" role="img" aria-label="{$Title}">{$LogoSvg|replace:'lb-logo-gradient':'lb-logo-gradient-box' nofilter}</span>
+                            {else}
+                                <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="mx-auto d-block">
+                            {/if}
                         </div>
 
                         {if $ShowLoginError}

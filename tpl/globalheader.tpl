@@ -10,8 +10,13 @@
         <meta http-equiv="REFRESH"
             content="{$SessionTimeoutSeconds};URL={$Path}logout.php?{QueryStringKeys::REDIRECT}={$smarty.server.REQUEST_URI|urlencode}" />
     {/if}
-    <link rel="shortcut icon" href="{$Path}{$FaviconUrl}" />
-    <link rel="icon" href="{$Path}{$FaviconUrl}" />
+    {if $FaviconUrl == 'favicon.svg'}
+        {* PNG for browsers without SVG favicons; its `sizes` attribute keeps Chrome on the SVG *}
+        <link rel="icon" href="{$Path}favicon.png" sizes="62x75" type="image/png" />
+        <link rel="icon" href="{$Path}{$FaviconUrl}" type="image/svg+xml" />
+    {else}
+        <link rel="icon" href="{$Path}{$FaviconUrl}" />
+    {/if}
     <!-- JavaScript -->
     {if isset($UseLocalJquery) && $UseLocalJquery}
         {vendor_js src="jquery/3.3.1/jquery-3.3.1.min.js"}
@@ -130,7 +135,11 @@
     {if !isset($HideNavBar) || $HideNavBar == false}
         <div class="d-flex align-items-center gap-2 m-2">
             <a class="navbar-brand" href="{$HomeUrl}">
-                <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="logo">
+                {if !empty($LogoSvg)}
+                    <span class="logo logo-svg" role="img" aria-label="{$Title}">{$LogoSvg nofilter}</span>
+                {else}
+                    <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="logo">
+                {/if}
             </a>
             <div class="border-start ps-2 d-flex flex-column">
                 {if $CompanyName neq ''}

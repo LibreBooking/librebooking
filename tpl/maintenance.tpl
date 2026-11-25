@@ -6,7 +6,12 @@
             <div class="card-body mx-3">
                 <div id="maintenance-box" class="default-box">
                     <div class="maintenance-icon my-2">
-                        <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="mx-auto d-block w-50">
+                        {if !empty($LogoSvg)}
+                            {* The navbar already inlines this logo, so this copy needs its own gradient id *}
+                            <span class="logo-svg mx-auto d-block w-50" role="img" aria-label="{$Title}">{$LogoSvg|replace:'lb-logo-gradient':'lb-logo-gradient-box' nofilter}</span>
+                        {else}
+                            <img src="{$Path}{$LogoUrl}?{$Version}" alt="{$Title}" class="mx-auto d-block w-50">
+                        {/if}
                     </div>
                     <div class="text-center mb-2">
                         <i class="bi bi-tools fs-1"></i>
