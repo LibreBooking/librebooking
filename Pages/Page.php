@@ -16,6 +16,8 @@ abstract class Page implements IPage
 {
     private static ?string $displayVersion = null;
 
+    private const DEFAULT_LOGO = 'img/librebooking.svg';
+
     /**
      * @var SmartyPage
      */
@@ -104,14 +106,19 @@ abstract class Page implements IPage
             ['dir' => ROOT_DIR . 'Web/img', 'url' => 'img'],
         ];
 
-        $this->smarty->assign(
-            'LogoUrl',
-            self::findCustomFile(
-                baseName: 'custom-logo',
-                extensions: ['png', 'gif', 'jpg'],
-                locations: $customFileLocations,
-            ) ?? 'img/librebooking.png'
-        );
+        $logoUrl = self::findCustomFile(
+            baseName: 'custom-logo',
+            extensions: ['png', 'gif', 'jpg'],
+            locations: $customFileLocations,
+        ) ?? self::DEFAULT_LOGO;
+        $this->smarty->assign(tpl_var: 'LogoUrl', value: $logoUrl);
+        // Only the shipped logo is inlined, so CSS can recolour it from the theme. Custom
+        // logos stay in <img>.
+        $logoSvg = false;
+        if ($logoUrl === self::DEFAULT_LOGO) {
+            $logoSvg = file_get_contents(filename: ROOT_DIR . 'Web/' . self::DEFAULT_LOGO);
+        }
+        $this->smarty->assign(tpl_var: 'LogoSvg', value: $logoSvg === false ? null : $logoSvg);
 
         $this->smarty->assign('CssUrl', 'null-style.css');
         if (file_exists($this->path . 'css/custom-style.css')) {
@@ -133,14 +140,14 @@ abstract class Page implements IPage
                 baseName: 'custom-favicon',
                 extensions: ['png', 'gif', 'jpg', 'ico'],
                 locations: $faviconLocations,
-            ) ?? 'favicon.png'
+            ) ?? 'favicon.svg'
         );
 
-        $logoUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);
-        if (empty($logoUrl)) {
-            $logoUrl = $this->path . Pages::UrlFromId($userSession->HomepageId);
+        $homeUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);
+        if (empty($homeUrl)) {
+            $homeUrl = $this->path . Pages::UrlFromId($userSession->HomepageId);
         }
-        $this->smarty->assign('HomeUrl', $logoUrl);
+        $this->smarty->assign('HomeUrl', $homeUrl);
 
         $loadMobileViews = Configuration::Instance()->GetKey(ConfigKeys::SCHEDULE_LOAD_MOBILE_VIEWS, new BooleanConverter()) ?? true;
 

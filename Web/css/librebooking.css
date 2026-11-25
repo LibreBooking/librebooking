@@ -86,6 +86,53 @@ img.logo {
   max-height: 75px;
 }
 
+/* Inlined default logo: falls back to the brand color when the theme sets no --primary */
+.logo-svg {
+  --logo-base: var(--primary, #2b6b6b);
+}
+
+.logo-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.logo.logo-svg svg {
+  width: auto;
+  height: 50px;
+}
+
+/* Same cap as .login-icon img: half the card, up to the logo's own 253px width */
+.login-icon .logo-svg {
+  width: 50%;
+  max-width: 253px;
+}
+
+/* Default logo: dark parts in the theme color, light parts and the swoosh in
+   lighter shades of it. Without relative color support the brand colors in
+   the SVG are kept. */
+@supports (color: oklch(from red l c h)) {
+  .logo-svg .lb-dark {
+    fill: var(--logo-base);
+  }
+
+  .logo-svg .lb-stop-0 {
+    stop-color: var(--logo-base);
+  }
+
+  .logo-svg .lb-light {
+    fill: oklch(from var(--logo-base) calc(l + 0.22) calc(c * 1.2) h);
+  }
+
+  .logo-svg .lb-stop-1 {
+    stop-color: oklch(from var(--logo-base) calc(l + 0.14) calc(c * 1.2) h);
+  }
+
+  .logo-svg .lb-stop-2 {
+    stop-color: oklch(from var(--logo-base) calc(l + 0.29) calc(c * 1.2) h);
+  }
+}
+
 .dropdown-item:hover,
 .dropdown-item:focus,
 .dropdown-item:focus-visible {
