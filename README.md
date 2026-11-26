@@ -1,4 +1,3 @@
-
 # Librebooking
 
 > [!WARNING]
@@ -105,7 +104,8 @@ significantly and diverged from the original project.
 - [x] Quotas and credits for reservations
 - [x] Granular usage reporting
 - [x] Responsive Bootstrap 5 interface
-- [x] Custom themes and color schemes
+- [x] Multilingual interface (35+ languages)
+- [x] Custom themes, color schemes and fonts
 - [x] Plugin-ready architecture
 - [x] Outlook/Thunderbird integration through ics
 
@@ -185,14 +185,21 @@ For configuration options, see the
 
 Recent configuration highlights:
 
-- Change theme via `config.php`:
+- Change the color theme and interface font in `config.php`:
 
   ```php
-  'css.theme' = 'default';
+  'css.theme' => 'default',
+  'css.font' => 'inter',
   ```
 
-- Theme options: 'default', 'dimgray', 'dark_red', 'dark_green', 'french_blue', 'orange'
-- Customize `Web/css/librebooking.css`
+- Theme options: `default`, `dimgray`, `dark_red`, `dark_green`,
+  `french_blue`, `cake_blue`, `orange`. The default logo follows the
+  selected theme color.
+- Font options: `inter` (default), `montserrat`, `nunito`,
+  `merriweather`, `atkinson-hyperlegible`, or `none` for the Bootstrap
+  default. Fonts are bundled and served locally.
+- Add your own styles with `css.extension.file` instead of editing
+  `Web/css/librebooking.css`.
 
 ## 🔒 ReCaptcha
 
