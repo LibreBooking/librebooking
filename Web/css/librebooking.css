@@ -86,6 +86,11 @@ img.logo {
   max-height: 75px;
 }
 
+/* An SVG with only a viewBox has no intrinsic size and would collapse */
+img.logo[src*='.svg'] {
+  height: 50px;
+}
+
 /* Inlined default logo: falls back to the brand color when the theme sets no --primary */
 .logo-svg {
   --logo-base: var(--primary, #2b6b6b);

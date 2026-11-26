@@ -108,7 +108,7 @@ abstract class Page implements IPage
 
         $logoUrl = self::findCustomFile(
             baseName: 'custom-logo',
-            extensions: ['png', 'gif', 'jpg'],
+            extensions: ['png', 'gif', 'jpg', 'svg'],
             locations: $customFileLocations,
         ) ?? self::DEFAULT_LOGO;
         $this->smarty->assign(tpl_var: 'LogoUrl', value: $logoUrl);
@@ -138,7 +138,7 @@ abstract class Page implements IPage
             'FaviconUrl',
             self::findCustomFile(
                 baseName: 'custom-favicon',
-                extensions: ['png', 'gif', 'jpg', 'ico'],
+                extensions: ['png', 'gif', 'jpg', 'ico', 'svg'],
                 locations: $faviconLocations,
             ) ?? 'favicon.svg'
         );

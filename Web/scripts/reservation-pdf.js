@@ -60,9 +60,10 @@
       image.onload = function () {
         try {
           const canvas = document.createElement('canvas');
-          canvas.width = image.naturalWidth || image.width;
-          canvas.height = image.naturalHeight || image.height;
-          canvas.getContext('2d').drawImage(image, 0, 0);
+          // An SVG with only a viewBox has no intrinsic size; use the browser default
+          canvas.width = image.naturalWidth || image.width || 300;
+          canvas.height = image.naturalHeight || image.height || 150;
+          canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
           resolve(canvas.toDataURL('image/png'));
         } catch {
           resolve(null);

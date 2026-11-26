@@ -3,6 +3,8 @@
 require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/ImageUploadDirectory.php');
 
+use LibreBooking\Common\Security\SvgSanitizer;
+
 class ManageThemePresenter extends ActionPresenter
 {
     /**
@@ -25,23 +27,19 @@ class ManageThemePresenter extends ActionPresenter
         $logoFile = $this->page->GetLogoFile();
         $cssFile = $this->page->GetCssFile();
         $favicon = $this->page->GetFaviconFile();
+        // Read before removing anything, so a rejected upload keeps the current image
+        $logoImage = $logoFile == null ? null : $this->ReadImage(file: $logoFile);
+        $faviconImage = $favicon == null ? null : $this->ReadImage(file: $favicon);
 
-        if ($logoFile != null) {
+        if ($logoImage !== null) {
             Log::Debug('Replacing logo with ' . $logoFile->OriginalName());
 
-            $this->RemoveLogo();
-
-            $imageUploadDirectory = new ImageUploadDirectory();
-            $uploadDir = $imageUploadDirectory->GetDirectory();
-            $target = $uploadDir . '/custom-logo.' . $logoFile->Extension();
-            $copied = copy($logoFile->TemporaryName(), $target);
-            if (!$copied) {
-                Log::Error(
-                    'Could not replace logo with %s. Ensure %s is writable.',
-                    $logoFile->OriginalName(),
-                    $target
-                );
-            }
+            $this->StoreImage(
+                baseName: 'custom-logo',
+                extension: $logoFile->Extension(),
+                contents: $logoImage,
+                removeOld: fn () => $this->RemoveLogo()
+            );
         }
         if ($cssFile != null) {
             Log::Debug('Replacing css file with ' . $cssFile->OriginalName());
@@ -55,22 +53,15 @@ class ManageThemePresenter extends ActionPresenter
                 );
             }
         }
-        if ($favicon != null) {
+        if ($faviconImage !== null) {
             Log::Debug('Replacing favicon with ' . $favicon->OriginalName());
 
-            $this->RemoveFavicon();
-
-            $imageUploadDirectory = new ImageUploadDirectory();
-            $uploadDir = $imageUploadDirectory->GetDirectory();
-            $target = $uploadDir . '/custom-favicon.' . $favicon->Extension();
-            $copied = copy($favicon->TemporaryName(), $target);
-            if (!$copied) {
-                Log::Error(
-                    'Could not replace favicon with %s. Ensure %s is writable.',
-                    $favicon->OriginalName(),
-                    $target
-                );
-            }
+            $this->StoreImage(
+                baseName: 'custom-favicon',
+                extension: $favicon->Extension(),
+                contents: $faviconImage,
+                removeOld: fn () => $this->RemoveFavicon()
+            );
         }
     }
 
@@ -135,10 +126,55 @@ class ManageThemePresenter extends ActionPresenter
     protected function LoadValidators($action)
     {
         $this->page->RegisterValidator('logoFile', new FileUploadValidator($this->page->GetLogoFile()));
-        $this->page->RegisterValidator('logoFileExt', new FileTypeValidator($this->page->GetLogoFile(), ['jpg', 'png', 'gif']));
+        $this->page->RegisterValidator('logoFileExt', new FileTypeValidator(file: $this->page->GetLogoFile(), allowedTypes: ['jpg', 'png', 'gif', 'svg']));
         $this->page->RegisterValidator('cssFile', new FileUploadValidator($this->page->GetCssFile()));
         $this->page->RegisterValidator('cssFileExt', new FileTypeValidator($this->page->GetCssFile(), 'css'));
         $this->page->RegisterValidator('faviconFile', new FileUploadValidator($this->page->GetFaviconFile()));
-        $this->page->RegisterValidator('faviconFileExt', new FileTypeValidator($this->page->GetFaviconFile(), ['ico', 'jpg', 'png', 'gif']));
+        $this->page->RegisterValidator('faviconFileExt', new FileTypeValidator(file: $this->page->GetFaviconFile(), allowedTypes: ['ico', 'jpg', 'png', 'gif', 'svg']));
+    }
+
+    /**
+     * Returns the uploaded image's contents, or null if it is rejected. SVGs are
+     * sanitized, because an SVG opened directly runs its scripts on our origin.
+     */
+    private function ReadImage(UploadedFile $file): ?string
+    {
+        $contents = file_get_contents(filename: $file->TemporaryName());
+        if ($contents === false) {
+            Log::Error('Could not read uploaded image %s.', $file->OriginalName());
+            return null;
+        }
+        if ($file->Extension() !== 'svg') {
+            return $contents;
+        }
+
+        $clean = SvgSanitizer::sanitize(svg: $contents);
+        if ($clean === null) {
+            Log::Error('Rejected SVG upload %s, it is not a valid SVG image.', $file->OriginalName());
+        }
+
+        return $clean;
+    }
+
+    /**
+     * Writes the new image under a temporary name first and only then removes the old
+     * ones, so a failed write keeps the current image.
+     */
+    private function StoreImage(string $baseName, string $extension, string $contents, callable $removeOld): void
+    {
+        $uploadDir = (new ImageUploadDirectory())->GetDirectory();
+        // Not matched by the "custom-logo.*" / "custom-favicon.*" globs of $removeOld
+        $temporary = $uploadDir . '/.upload-' . $baseName;
+        $target = $uploadDir . '/' . $baseName . '.' . $extension;
+
+        if (file_put_contents(filename: $temporary, data: $contents) === false) {
+            Log::Error('Could not store %s. Ensure %s is writable.', $target, $uploadDir);
+            return;
+        }
+
+        $removeOld();
+        if (!rename(from: $temporary, to: $target)) {
+            Log::Error('Could not move %s to %s.', $temporary, $target);
+        }
     }
 }
