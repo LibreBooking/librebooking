@@ -129,7 +129,7 @@ Note: This instance is public and **resets every 20 minutes** to ensure a clean 
 ![Dashboard](./Web/img/readme/03.png)
 ![User profile](./Web/img/readme/04.png)
 ![Search](./Web/img/readme/07.png)
-![DataTables example](./Web/img/readme/15.png)
+![Report example](./Web/img/readme/15.png)
 
 ## 🔧 Installation & Deployment
 
