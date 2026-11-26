@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div id="resourceGroupsContainer" class="bg-white border rounded pt-2">
+    <div id="resourceGroupsContainer" class="bg-body border rounded pt-2">
         <div id="resourceGroups"></div>
     </div>
 

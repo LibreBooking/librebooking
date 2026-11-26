@@ -460,6 +460,10 @@ class it_it extends en_gb
         $strings['MinimumQuantity'] = 'Minima quantità';
         $strings['MaximumQuantity'] = 'Massima quantità';
         $strings['ChangeLanguage'] = 'Cambia lingua';
+        $strings['ColorMode'] = 'Modalità colore';
+        $strings['ColorModeLight'] = 'Chiaro';
+        $strings['ColorModeDark'] = 'Scuro';
+        $strings['ColorModeAuto'] = 'Automatico';
         $strings['AddRule'] = 'Aggiungi ruolo';
         $strings['Attribute'] = 'Attributi';
         $strings['RequiredValue'] = 'Obbligatori';

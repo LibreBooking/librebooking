@@ -104,6 +104,10 @@ return [
         # Options: default, dimgray, dark_red, dark_green, french_blue, cake_blue, orange
         'css.theme' => 'default',
 
+        # Default light or dark color mode. Users can override it per browser
+        # Options: auto (follow browser/OS setting), light, dark
+        'css.color.mode' => 'auto',
+
         # Display format when showing user names
         'name.format' => '{first} {last}',
 

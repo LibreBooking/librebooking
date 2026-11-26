@@ -23,7 +23,7 @@
 		</div>
 	</div>
 
-	<div id="participantList" class="rounded border bg-white my-2 p-2">
+	<div id="participantList" class="rounded border bg-body my-2 p-2">
 	</div>
 
 

@@ -248,7 +248,7 @@
 														{else}
 															<div class="noImageContainer text-center">
 																<div
-																	class="noImage d-flex align-items-center justify-content-center w-100 bg-light border rounded-3 mx-auto">
+																	class="noImage d-flex align-items-center justify-content-center w-100 bg-body-tertiary border rounded-3 mx-auto">
 																	<span class="bi bi-image fs-1"></span>
 																</div>
 															</div>
@@ -679,7 +679,7 @@
 							</select>
 						</div>
 						<label class="fw-bold mb-2" for="resourceImageAdd">{translate key=Image}</label>
-						<div class="dropzone text-center border border-2 rounded-3 bg-light" id="addResourceImage">
+						<div class="dropzone text-center border border-2 rounded-3 bg-body-tertiary" id="addResourceImage">
 							<div>
 								<i class="bi bi-image fs-1"></i><br />
 								{translate key=ChooseOrDropFile}
@@ -719,7 +719,7 @@
 						</div>
 
 						<label for="resourceImage" class="visually-hidden">{translate key=Image}</label>
-						<div class="dropzone text-center border border-2 rounded-3 bg-light" id="changeResourceImage">
+						<div class="dropzone text-center border border-2 rounded-3 bg-body-tertiary" id="changeResourceImage">
 							<div class="dropzone-empty">
 								<i class="bi bi-image fs-1"></i><br />
 								{translate key=ChooseOrDropFile}
@@ -1191,7 +1191,7 @@
 								</div>
 							</div>
 
-							<div id="sendStatusChangeMessageContent" class="d-none border rounded bg-light p-3">
+							<div id="sendStatusChangeMessageContent" class="d-none border rounded bg-body-tertiary p-3">
 								<div class="form-group mb-2">
 									<label class="fw-bold"
 										for="statusMessageSendDays">{translate key=AllUsersWhoHaveAReservationInTheNext}</label>
@@ -1272,7 +1272,7 @@
 							<div class="vr"></div>
 							<a href="#" id="checkNoResources" class="link-primary">{translate key=None}</a>
 						</div>
-						<div id="bulkUpdateList" class="bg-light border rounded p-2 mb-2"></div>
+						<div id="bulkUpdateList" class="bg-body-tertiary border rounded p-2 mb-2"></div>
 						<div class="accordion" id="accordionbulkUpdate">
 							<div class="accordion-item">
 								<h2 class="accordion-header">
@@ -1858,7 +1858,7 @@
 							<div class="vr"></div>
 							<a href="#" id="checkNoDeleteResources" class="link-primary">{translate key=None}</a>
 						</div>
-						<div id="bulkDeleteList" class="bg-light border rounded p-2"></div>
+						<div id="bulkDeleteList" class="bg-body-tertiary border rounded p-2"></div>
 					</div>
 					<div class="modal-footer">
 						{cancel_button}

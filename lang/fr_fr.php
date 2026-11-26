@@ -465,6 +465,10 @@ class fr_fr extends en_gb
         $strings['MinimumQuantity'] = 'Quantité minimum';
         $strings['MaximumQuantity'] = 'Quantité maximum';
         $strings['ChangeLanguage'] = 'Changer la langue';
+        $strings['ColorMode'] = 'Mode de couleur';
+        $strings['ColorModeLight'] = 'Clair';
+        $strings['ColorModeDark'] = 'Sombre';
+        $strings['ColorModeAuto'] = 'Automatique';
         $strings['AddRule'] = 'Ajouter la règle';
         $strings['Attribute'] = 'Attribut';
         $strings['RequiredValue'] = 'Valeur requise';

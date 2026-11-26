@@ -500,6 +500,10 @@ class en_us extends Language
         $strings['MinimumQuantity'] = 'Minimum Quantity';
         $strings['MaximumQuantity'] = 'Maximum Quantity';
         $strings['ChangeLanguage'] = 'Change Language';
+        $strings['ColorMode'] = 'Color Mode';
+        $strings['ColorModeLight'] = 'Light';
+        $strings['ColorModeDark'] = 'Dark';
+        $strings['ColorModeAuto'] = 'Auto';
         $strings['AddRule'] = 'Add Rule';
         $strings['Attribute'] = 'Attribute';
         $strings['RequiredValue'] = 'Required Value';

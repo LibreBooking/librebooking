@@ -2,7 +2,7 @@
 
 <div id="page-monitor-display">
     {if $Enabled}
-        <div id="monitor-display-configuration" class="bg-light border-bottom pb-2 my-2">
+        <div id="monitor-display-configuration" class="bg-body-tertiary border-bottom pb-2 my-2">
             <a href="#" data-bs-toggle="collapse" data-bs-target="#configuration-options"
                 title="{translate key=ChangeConfiguration}" class="link-primary"><i class="bi bi-gear-fill me-1"></i></a>
 

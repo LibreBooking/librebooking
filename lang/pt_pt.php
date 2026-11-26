@@ -182,6 +182,10 @@ class pt_pt extends en_gb
         $strings['ChangeCalendar'] = 'Alterar calendário';
         $strings['ChangeConfiguration'] = 'Alterar configuração';
         $strings['ChangeLanguage'] = 'Alterar idioma';
+        $strings['ColorMode'] = 'Modo de cor';
+        $strings['ColorModeLight'] = 'Claro';
+        $strings['ColorModeDark'] = 'Escuro';
+        $strings['ColorModeAuto'] = 'Automático';
         $strings['ChangeLayout'] = 'Mudar disposição';
         $strings['ChangePassword'] = 'Alterar Senha';
         $strings['ChangeUser'] = 'Alterar utilizador';
