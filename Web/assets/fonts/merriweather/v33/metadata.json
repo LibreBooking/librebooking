@@ -1,0 +1,12 @@
+{
+  "name": "merriweather",
+  "version": "v33",
+  "description": "Merriweather is an open source typeface.",
+  "homepage": "https://fonts.google.com/specimen/Merriweather",
+  "source": "https://github.com/google/fonts/tree/main/ofl/merriweather",
+  "download": "https://fonts.googleapis.com/css2?family=Merriweather:wght@300..900&display=swap",
+  "subsets": ["cyrillic", "cyrillic-ext", "latin", "latin-ext", "vietnamese"],
+  "weights": "300-900 (variable)",
+  "notes": "The .woff2 files are unmodified copies of the files the download URL serves to a current browser.",
+  "license": "OFL-1.1"
+}

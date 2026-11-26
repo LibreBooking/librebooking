@@ -1,0 +1,12 @@
+{
+  "name": "inter",
+  "version": "v20",
+  "description": "Inter is an open source sans-serif typeface.",
+  "homepage": "https://fonts.google.com/specimen/Inter",
+  "source": "https://github.com/google/fonts/tree/main/ofl/inter",
+  "download": "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
+  "subsets": ["cyrillic", "cyrillic-ext", "greek", "greek-ext", "latin", "latin-ext", "vietnamese"],
+  "weights": "100-900 (variable)",
+  "notes": "The .woff2 files are unmodified copies of the files the download URL serves to a current browser.",
+  "license": "OFL-1.1"
+}
