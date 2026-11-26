@@ -25,7 +25,7 @@
                 <ul class="list-group mb-2">
 
                     <li class="list-group-item">
-                        <div class="fs-4">{translate key="Logo"} (*.png, *.gif, *.jpg - Recommended height 75px)</div>
+                        <div class="fs-4">{translate key="Logo"} (*.png, *.gif, *.jpg, *.svg - Recommended height 75px)</div>
                         <img src="{$ScriptUrl}/{$LogoUrl}" class="d-block mx-auto mw-100"
                             alt="{translate key="Logo"}" />
                         <div class="d-flex align-items-center justify-content-center my-2">
@@ -37,7 +37,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=LOGO_FILE} class="form-control" id="logoFile"
-                                accept=".png, .gif, .jpg, .jpeg" aria-label="{translate key="Logo"}" />
+                                accept=".png, .gif, .jpg, .jpeg, .svg" aria-label="{translate key="Logo"}" />
                             <a href="#" class="clearInput inline input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>
@@ -45,7 +45,7 @@
                     </li>
 
                     <li class="list-group-item">
-                        <div class="fs-4">Favicon (*.ico, *.png, *.gif, *.jpg - Recommended size 48px x 48px)</div>
+                        <div class="fs-4">Favicon (*.ico, *.png, *.gif, *.jpg, *.svg - Recommended size 48px x 48px)</div>
                         <img src="{$ScriptUrl}/{$FaviconUrl}" class="d-block mx-auto" alt="Favicon" />
                         <div class="d-flex align-items-center justify-content-center my-2">
                             <a href="{$ScriptUrl}/{$FaviconUrl}" download="{$FaviconUrl}"
@@ -56,7 +56,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <input type="file" {formname key=FAVICON_FILE} class="form-control" id="faviconFile"
-                                accept=".png, .gif, .jpg, .jpeg, .ico" aria-label="Favicon" />
+                                accept=".png, .gif, .jpg, .jpeg, .ico, .svg" aria-label="Favicon" />
                             <a href="#" class="clearInput inline input-group-text"><span
                                     class="visually-hidden">{translate key=Delete}</span><i
                                     class="bi bi-x-square-fill text-danger"></i></a>
