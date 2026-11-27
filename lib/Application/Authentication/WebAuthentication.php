@@ -97,6 +97,8 @@ class WebAuthentication implements IWebAuthentication
     public function Login($username, $loginContext)
     {
         $userSession = $this->authentication->Login($username, $loginContext);
+        // A fresh login must not inherit a stashed admin session from an earlier impersonation.
+        $this->server->SetSession(name: SessionKeys::IMPERSONATOR_SESSION, value: null);
         $this->server->SetUserSession($userSession);
     }
 

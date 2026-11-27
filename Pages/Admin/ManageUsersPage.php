@@ -211,9 +211,14 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('Languages', $GLOBALS['APP_TIMEZONES']);
         $this->Set('ManageGroupsUrl', Pages::MANAGE_GROUPS);
         $this->Set('ManageReservationsUrl', Pages::MANAGE_RESERVATIONS);
+        $this->Set(var: 'DashboardUrl', value: $this->path . Pages::DEFAULT_LOGIN);
         $this->Set('FilterStatusId', $this->GetFilterStatusId());
         $this->Set('PerUserColors', $config->GetKey(ConfigKeys::SCHEDULE_USE_PER_USER_COLORS, new BooleanConverter()));
         $this->Set('CreditsEnabled', $config->GetKey(ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
+        $this->Set(
+            var: 'ImpersonateEnabled',
+            value: $config->GetKey(configDef: ConfigKeys::ADMIN_IMPERSONATION_ENABLED, converter: new BooleanConverter())
+        );
         $isApplicationAdmin = $this->server->GetUserSession()->IsAdmin;
         $this->Set('CanDeleteUsers', $isApplicationAdmin);
         $this->Set('CanChangePasswords', $isApplicationAdmin);
@@ -225,6 +230,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('CanChangeColors', $isApplicationAdmin);
         $this->Set('CanChangePermissions', $isApplicationAdmin);
         $this->Set('CanChangeAttributes', $isApplicationAdmin);
+        $this->Set(var: 'CanImpersonateUsers', value: $isApplicationAdmin);
         $url = $this->server->GetUrl();
         $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
         $this->Set('ExportUrl', $exportUrl);

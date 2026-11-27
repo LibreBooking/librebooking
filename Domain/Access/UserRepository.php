@@ -954,6 +954,8 @@ class UserItemView
     public $First;
     public $Last;
     public $Email;
+
+    public bool $IsApplicationAdmin = false;
     public $Phone;
     /**
      * @var Date
