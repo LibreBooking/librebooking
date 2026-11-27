@@ -97,7 +97,7 @@ class AvailableAccessoriesPresenterTest extends TestBase
 
         $bound = $this->page->_BoundAvailability;
 
-        $this->assertEquals([new AccessoryAvailability(1, 0)], $bound);
+        $this->assertEquals([new AccessoryAvailability(1, 5)], $bound);
     }
 
     public function testWhenAccessoryReservationSpansMultipleDays()
@@ -137,7 +137,74 @@ class AvailableAccessoriesPresenterTest extends TestBase
 
         $bound = $this->page->_BoundAvailability;
 
-        $this->assertEquals([new AccessoryAvailability(1, 0)], $bound);
+        $this->assertEquals([new AccessoryAvailability(1, 1)], $bound);
+    }
+
+    public function testWhenNewReservationOverlapsOverlappingReservations(): void
+    {
+        $this->page->_StartDate = '2018-10-16';
+        $this->page->_StartTime = '09:30';
+        $this->page->_EndDate = '2018-10-16';
+        $this->page->_EndTime = '11:00';
+        $this->accessoryRepo->_AllAccessories = [new Accessory(id: 1, name: '', quantityAvailable: 2)];
+
+        $this->reservationRepo->_AccessoryReservations = [
+            new AccessoryReservation(
+                referenceNumber: 'r1',
+                startDate: Date::Parse('2018-10-16 10:00', 'UTC'),
+                endDate: Date::Parse('2018-10-16 10:45', 'UTC'),
+                accessoryId: 1,
+                quantityReserved: 1
+            ),
+            new AccessoryReservation(
+                referenceNumber: 'r2',
+                startDate: Date::Parse('2018-10-16 10:30', 'UTC'),
+                endDate: Date::Parse('2018-10-16 11:00', 'UTC'),
+                accessoryId: 1,
+                quantityReserved: 1
+            ),
+        ];
+
+        $this->presenter->PageLoad();
+
+        $bound = $this->page->_BoundAvailability;
+
+        $this->assertEquals([new AccessoryAvailability(id: 1, quantity: 0)], $bound);
+    }
+
+    /**
+     * @see https://github.com/LibreBooking/librebooking/issues/2058
+     */
+    public function testAvailabilityUsesPeakConcurrentUsage(): void
+    {
+        $this->page->_StartDate = '2026-11-25';
+        $this->page->_StartTime = '09:00';
+        $this->page->_EndDate = '2026-11-25';
+        $this->page->_EndTime = '10:00';
+        $this->accessoryRepo->_AllAccessories = [new Accessory(id: 1, name: '', quantityAvailable: 5)];
+
+        $this->reservationRepo->_AccessoryReservations = [
+            new AccessoryReservation(
+                referenceNumber: 'A',
+                startDate: Date::Parse('2026-11-25 08:30', 'UTC'),
+                endDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+                accessoryId: 1,
+                quantityReserved: 2
+            ),
+            new AccessoryReservation(
+                referenceNumber: 'B',
+                startDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+                endDate: Date::Parse('2026-11-25 10:30', 'UTC'),
+                accessoryId: 1,
+                quantityReserved: 3
+            ),
+        ];
+
+        $this->presenter->PageLoad();
+
+        $bound = $this->page->_BoundAvailability;
+
+        $this->assertEquals([new AccessoryAvailability(id: 1, quantity: 2)], $bound);
     }
 }
 

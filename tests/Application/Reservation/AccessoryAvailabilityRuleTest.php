@@ -241,7 +241,7 @@ class AccessoryAvailabilityRuleTest extends TestBase
         );
         $a2 = new AccessoryReservation(
             referenceNumber: '3',
-            startDate: Date::Parse('2010-04-04 13:00', 'UTC'),
+            startDate: Date::Parse('2010-04-04 11:00', 'UTC'),
             endDate: Date::Parse('2010-04-04 15:00', 'UTC'),
             accessoryId: $accessory1->AccessoryId,
             quantityReserved: 1
@@ -315,5 +315,135 @@ class AccessoryAvailabilityRuleTest extends TestBase
         $result = $this->rule->Validate($reservation, null);
 
         $this->assertTrue($result->IsValid());
+    }
+
+    public function testExistingLongRunningReservationWithNonOverlappingReservations(): void
+    {
+        $accessory1 = new ReservationAccessory(accessoryId: 1, quantityReserved: 5);
+        $currentReferenceNumber = '1';
+
+        $quantityAvailable = 6;
+        $startDate = Date::Parse('2010-04-04 00:00', 'UTC');
+        $endDate = Date::Parse('2010-04-06 00:00', 'UTC');
+
+        $reservation = new TestReservationSeries();
+        $reservation->WithAccessory($accessory1);
+
+        $dr1 = new DateRange(begin: $startDate, end: $endDate);
+        $reservation->WithCurrentInstance(new TestReservation(referenceNumber: $currentReferenceNumber, reservationDate: $dr1));
+
+        $accessoryReservation = new AccessoryReservation(
+            referenceNumber: $currentReferenceNumber,
+            startDate: $startDate,
+            endDate: $endDate,
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 5
+        );
+        $a1 = new AccessoryReservation(
+            referenceNumber: '2',
+            startDate: Date::Parse('2010-04-04 10:00', 'UTC'),
+            endDate: Date::Parse('2010-04-04 12:00', 'UTC'),
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 1
+        );
+        $a2 = new AccessoryReservation(
+            referenceNumber: '3',
+            startDate: Date::Parse('2010-04-04 13:00', 'UTC'),
+            endDate: Date::Parse('2010-04-04 15:00', 'UTC'),
+            accessoryId: $accessory1->AccessoryId,
+            quantityReserved: 1
+        );
+
+        $this->accessoryRepository->expects($this->once())
+            ->method('LoadById')
+            ->with($accessory1->AccessoryId)
+            ->willReturn(new Accessory(id: $accessory1->AccessoryId, name: 'name1', quantityAvailable: $quantityAvailable));
+
+        $this->reservationRepository->expects($this->atLeast(1))
+            ->method('GetAccessoriesWithin')
+            ->willReturn([$accessoryReservation, $a1, $a2]);
+
+        $result = $this->rule->Validate($reservation, null);
+
+        $this->assertTrue($result->IsValid());
+    }
+
+    /**
+     * @see https://github.com/LibreBooking/librebooking/issues/2058
+     */
+    public function testReservationSpanningTwoNonOverlappingReservationsChecksPeakUsage(): void
+    {
+        $accessory = new ReservationAccessory(accessoryId: 1, quantityReserved: 2);
+        $quantityAvailable = 5;
+
+        $reservation = new TestReservationSeries();
+        $reservation->WithAccessory($accessory);
+        $reservation->WithDuration(new DateRange(
+            begin: Date::Parse('2026-11-25 09:00', 'UTC'),
+            end: Date::Parse('2026-11-25 10:00', 'UTC')
+        ));
+
+        $before = new AccessoryReservation(
+            referenceNumber: 'A',
+            startDate: Date::Parse('2026-11-25 08:30', 'UTC'),
+            endDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 2
+        );
+        $after = new AccessoryReservation(
+            referenceNumber: 'B',
+            startDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+            endDate: Date::Parse('2026-11-25 10:30', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 3
+        );
+
+        $this->accessoryRepository->method('LoadById')
+            ->willReturn(new Accessory(id: $accessory->AccessoryId, name: 'name1', quantityAvailable: $quantityAvailable));
+
+        $this->reservationRepository->method('GetAccessoriesWithin')
+            ->willReturn([$before, $after]);
+
+        $result = $this->rule->Validate($reservation, null);
+
+        $this->assertTrue($result->IsValid());
+    }
+
+    public function testReservationSpanningTwoNonOverlappingReservationsFailsWhenPeakExceedsQuantity(): void
+    {
+        $accessory = new ReservationAccessory(accessoryId: 1, quantityReserved: 3);
+        $quantityAvailable = 5;
+
+        $reservation = new TestReservationSeries();
+        $reservation->WithAccessory($accessory);
+        $reservation->WithDuration(new DateRange(
+            begin: Date::Parse('2026-11-25 09:00', 'UTC'),
+            end: Date::Parse('2026-11-25 10:00', 'UTC')
+        ));
+
+        $before = new AccessoryReservation(
+            referenceNumber: 'A',
+            startDate: Date::Parse('2026-11-25 08:30', 'UTC'),
+            endDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 2
+        );
+        $after = new AccessoryReservation(
+            referenceNumber: 'B',
+            startDate: Date::Parse('2026-11-25 09:30', 'UTC'),
+            endDate: Date::Parse('2026-11-25 10:30', 'UTC'),
+            accessoryId: $accessory->AccessoryId,
+            quantityReserved: 3
+        );
+
+        $this->accessoryRepository->method('LoadById')
+            ->willReturn(new Accessory(id: $accessory->AccessoryId, name: 'name1', quantityAvailable: $quantityAvailable));
+
+        $this->reservationRepository->method('GetAccessoriesWithin')
+            ->willReturn([$before, $after]);
+
+        $result = $this->rule->Validate($reservation, null);
+
+        $this->assertFalse($result->IsValid());
     }
 }
