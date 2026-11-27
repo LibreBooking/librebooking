@@ -469,13 +469,13 @@ The repository uses several CI workflows:
    - Config checks
    - doc8 (RST documentation)
    - Markdown linting
-   - PHP lint (syntax check) on PHP 8.4, 8.5
+   - PHP lint (syntax check) on PHP 8.4, 8.5, 8.6
    - php-cs-fixer (code style) on PHP 8.4
    - PHPStan analysis on PHP 8.5 (both base and next configs)
    - Validates no merge commits in PR
 
 2. **PHPUnit** (`phpunit.yml`) - Runs on PRs to `main`:
-   - Unit tests on PHP 8.4, 8.5
+   - Unit tests on PHP 8.4, 8.5, 8.6
    - Creates config.php from config.dist.php
    - Validates test summary output
 
