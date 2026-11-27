@@ -30,17 +30,13 @@ class ConfigKeyDefinitionsTest extends TestBase
         $files = glob(ROOT_DIR . 'plugins/*/*/*ConfigKeys.php');
         $this->assertNotEmpty($files, 'Expected to discover plugin *ConfigKeys.php files');
 
-        $classesChecked = 0;
         foreach ($files as $file) {
             require_once($file);
             $class = basename($file, '.php');
             $this->assertTrue(class_exists($class), "Plugin ConfigKeys class {$class} not found after loading {$file}");
 
             $this->assertAllConstantsConvert($class);
-            $classesChecked++;
         }
-
-        $this->assertGreaterThan(0, $classesChecked, 'Expected to check at least one plugin ConfigKeys class');
     }
 
     /**
