@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f38bf4a263bb95b91eaaf4cba4285899",
+    "content-hash": "11308ce5b3d1d41f4bc602caa7fb6205",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -447,16 +447,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v7.2.1",
+            "version": "v7.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-jwt.git",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e"
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/0501f5729b9e2448516674aff07c7d1727869b8e",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e",
+                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
                 "shasum": ""
             },
             "require": {
@@ -515,9 +515,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/php-jwt/issues",
-                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.1"
+                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.2"
             },
-            "time": "2026-09-28T17:51:46+00:00"
+            "time": "2026-11-17T00:25:19+00:00"
         },
         {
             "name": "google/apiclient",
@@ -889,22 +889,22 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.16.1",
+            "version": "7.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "81755d989b3007ca7f88a069857553cd08e7dc2e"
+                "reference": "f61ba5ea0a55032a55ddbb72cab7d307c1043654"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/81755d989b3007ca7f88a069857553cd08e7dc2e",
-                "reference": "81755d989b3007ca7f88a069857553cd08e7dc2e",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f61ba5ea0a55032a55ddbb72cab7d307c1043654",
+                "reference": "f61ba5ea0a55032a55ddbb72cab7d307c1043654",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^2.6",
-                "guzzlehttp/psr7": "^2.13.2",
+                "guzzlehttp/promises": "^2.6.2",
+                "guzzlehttp/psr7": "^2.13.6",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
                 "symfony/deprecation-contracts": "^2.5 || ^3.0",
@@ -997,7 +997,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.16.1"
+                "source": "https://github.com/guzzle/guzzle/tree/7.17.0"
             },
             "funding": [
                 {
@@ -1013,20 +1013,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-25T21:35:21+00:00"
+            "time": "2026-11-22T16:49:11+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.6.0",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "3d88c829bd5f13d13847b39067dbf09a60af2154"
+                "reference": "72e93ed2b1f3d8c09d1460c950bd5726face7ccd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/3d88c829bd5f13d13847b39067dbf09a60af2154",
-                "reference": "3d88c829bd5f13d13847b39067dbf09a60af2154",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/72e93ed2b1f3d8c09d1460c950bd5726face7ccd",
+                "reference": "72e93ed2b1f3d8c09d1460c950bd5726face7ccd",
                 "shasum": ""
             },
             "require": {
@@ -1081,7 +1081,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.6.0"
+                "source": "https://github.com/guzzle/promises/tree/2.6.2"
             },
             "funding": [
                 {
@@ -1097,20 +1097,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-18T12:46:59+00:00"
+            "time": "2026-11-21T03:45:23+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.13.3",
+            "version": "2.13.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e"
+                "reference": "2bd3dccf56e99cdacf74b1ad5e06a08a5a7739f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
-                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/2bd3dccf56e99cdacf74b1ad5e06a08a5a7739f2",
+                "reference": "2bd3dccf56e99cdacf74b1ad5e06a08a5a7739f2",
                 "shasum": ""
             },
             "require": {
@@ -1200,7 +1200,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.13.3"
+                "source": "https://github.com/guzzle/psr7/tree/2.13.6"
             },
             "funding": [
                 {
@@ -1216,7 +1216,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-12T15:57:42+00:00"
+            "time": "2026-11-21T23:48:40+00:00"
         },
         {
             "name": "joelbutcher/facebook-graph-sdk",
@@ -1820,16 +1820,16 @@
         },
         {
             "name": "microsoft/kiota-abstractions",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-abstractions-php.git",
-                "reference": "42f04acb6fb51863fd24d4304803ea5cb7a44f1f"
+                "reference": "c43408f4fde482b149d40bd759793fbf712b6f05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-abstractions-php/zipball/42f04acb6fb51863fd24d4304803ea5cb7a44f1f",
-                "reference": "42f04acb6fb51863fd24d4304803ea5cb7a44f1f",
+                "url": "https://api.github.com/repos/microsoft/kiota-abstractions-php/zipball/c43408f4fde482b149d40bd759793fbf712b6f05",
+                "reference": "c43408f4fde482b149d40bd759793fbf712b6f05",
                 "shasum": ""
             },
             "require": {
@@ -1863,22 +1863,22 @@
             ],
             "description": "Abstractions for Kiota",
             "support": {
-                "source": "https://github.com/microsoft/kiota-abstractions-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-abstractions-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:06:26+00:00"
+            "time": "2026-11-26T16:53:45+00:00"
         },
         {
             "name": "microsoft/kiota-authentication-phpleague",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-authentication-phpleague-php.git",
-                "reference": "1fad67e423c0cbf07317c3b445f22e462af1d3f7"
+                "reference": "0d568dbe7716557c49476813164b83387142e0bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-authentication-phpleague-php/zipball/1fad67e423c0cbf07317c3b445f22e462af1d3f7",
-                "reference": "1fad67e423c0cbf07317c3b445f22e462af1d3f7",
+                "url": "https://api.github.com/repos/microsoft/kiota-authentication-phpleague-php/zipball/0d568dbe7716557c49476813164b83387142e0bb",
+                "reference": "0d568dbe7716557c49476813164b83387142e0bb",
                 "shasum": ""
             },
             "require": {
@@ -1886,7 +1886,7 @@
                 "ext-openssl": "*",
                 "firebase/php-jwt": "^6 || ^7",
                 "league/oauth2-client": "^2.6.1",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2",
                 "ramsey/uuid": "^4.2.3"
             },
@@ -1912,29 +1912,29 @@
             ],
             "description": "Authentication provider for Kiota using the PHP League OAuth 2.0 client to authenticate against the Microsoft Identity platform",
             "support": {
-                "source": "https://github.com/microsoft/kiota-authentication-phpleague-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-authentication-phpleague-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:17:08+00:00"
+            "time": "2026-11-26T17:02:35+00:00"
         },
         {
             "name": "microsoft/kiota-http-guzzle",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-http-guzzle-php.git",
-                "reference": "71452a61d27cff9e26fc16228f9ce7a58f7bb00a"
+                "reference": "f13b031cc296c1bb1c9d0d5602fea2ba6c4d6cdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-http-guzzle-php/zipball/71452a61d27cff9e26fc16228f9ce7a58f7bb00a",
-                "reference": "71452a61d27cff9e26fc16228f9ce7a58f7bb00a",
+                "url": "https://api.github.com/repos/microsoft/kiota-http-guzzle-php/zipball/f13b031cc296c1bb1c9d0d5602fea2ba6c4d6cdc",
+                "reference": "f13b031cc296c1bb1c9d0d5602fea2ba6c4d6cdc",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-zlib": "*",
                 "guzzlehttp/guzzle": "^7.4.5 || ^8.0",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -1959,28 +1959,28 @@
             ],
             "description": "Kiota HTTP Request Adapter implementation",
             "support": {
-                "source": "https://github.com/microsoft/kiota-http-guzzle-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-http-guzzle-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:18:53+00:00"
+            "time": "2026-11-26T17:02:30+00:00"
         },
         {
             "name": "microsoft/kiota-serialization-form",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-serialization-form-php.git",
-                "reference": "6ff08880571366008469003b983291e89fd8bece"
+                "reference": "cbdb74688b210478a0b2501c2fab4c2601fd1bfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-serialization-form-php/zipball/6ff08880571366008469003b983291e89fd8bece",
-                "reference": "6ff08880571366008469003b983291e89fd8bece",
+                "url": "https://api.github.com/repos/microsoft/kiota-serialization-form-php/zipball/cbdb74688b210478a0b2501c2fab4c2601fd1bfb",
+                "reference": "cbdb74688b210478a0b2501c2fab4c2601fd1bfb",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/psr7": "^1.6 || ^2 || ^3",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -2007,28 +2007,28 @@
             ],
             "description": "Form implementation of Kiota abstractions serialization.",
             "support": {
-                "source": "https://github.com/microsoft/kiota-serialization-form-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-serialization-form-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:17:17+00:00"
+            "time": "2026-11-26T17:02:05+00:00"
         },
         {
             "name": "microsoft/kiota-serialization-json",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-serialization-json-php.git",
-                "reference": "91c837a4fb55a12864f0ef2744d938793720e869"
+                "reference": "610110c3eac12ced58900ab9a1793f75841f35a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-serialization-json-php/zipball/91c837a4fb55a12864f0ef2744d938793720e869",
-                "reference": "91c837a4fb55a12864f0ef2744d938793720e869",
+                "url": "https://api.github.com/repos/microsoft/kiota-serialization-json-php/zipball/610110c3eac12ced58900ab9a1793f75841f35a1",
+                "reference": "610110c3eac12ced58900ab9a1793f75841f35a1",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/psr7": "^1.6 || ^2 || ^3",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -2055,28 +2055,28 @@
             ],
             "description": "Implementation of Kiota serialization abstractions using Json.",
             "support": {
-                "source": "https://github.com/microsoft/kiota-serialization-json-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-serialization-json-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:16:39+00:00"
+            "time": "2026-11-26T17:02:14+00:00"
         },
         {
             "name": "microsoft/kiota-serialization-multipart",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-serialization-multipart-php.git",
-                "reference": "c6a3908e1dc44fe35f82a226e575dd997771a2a7"
+                "reference": "a62360236ef6b2fa7d310359deb647e2b47bd244"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-serialization-multipart-php/zipball/c6a3908e1dc44fe35f82a226e575dd997771a2a7",
-                "reference": "c6a3908e1dc44fe35f82a226e575dd997771a2a7",
+                "url": "https://api.github.com/repos/microsoft/kiota-serialization-multipart-php/zipball/a62360236ef6b2fa7d310359deb647e2b47bd244",
+                "reference": "a62360236ef6b2fa7d310359deb647e2b47bd244",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/psr7": "^1.6 || ^2 || ^3",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -2103,27 +2103,27 @@
             ],
             "description": "Multipart implementation of Kiota abstractions serialization.",
             "support": {
-                "source": "https://github.com/microsoft/kiota-serialization-multipart-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-serialization-multipart-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:17:57+00:00"
+            "time": "2026-11-26T17:02:16+00:00"
         },
         {
             "name": "microsoft/kiota-serialization-text",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoft/kiota-serialization-text-php.git",
-                "reference": "f810c03adb31e42ff5f0b5e6364a24387f7732bf"
+                "reference": "3d9cd571346562fd42e612305f465ee220312fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoft/kiota-serialization-text-php/zipball/f810c03adb31e42ff5f0b5e6364a24387f7732bf",
-                "reference": "f810c03adb31e42ff5f0b5e6364a24387f7732bf",
+                "url": "https://api.github.com/repos/microsoft/kiota-serialization-text-php/zipball/3d9cd571346562fd42e612305f465ee220312fdb",
+                "reference": "3d9cd571346562fd42e612305f465ee220312fdb",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.6 || ^2 || ^3",
-                "microsoft/kiota-abstractions": "^2.2.3",
+                "microsoft/kiota-abstractions": "^2.3.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -2148,22 +2148,22 @@
             ],
             "description": "Implementation of Serialization Abstractions for text/plain content",
             "support": {
-                "source": "https://github.com/microsoft/kiota-serialization-text-php/tree/2.2.3"
+                "source": "https://github.com/microsoft/kiota-serialization-text-php/tree/2.3.1"
             },
-            "time": "2026-11-03T14:16:52+00:00"
+            "time": "2026-11-26T17:02:25+00:00"
         },
         {
             "name": "microsoft/microsoft-graph",
-            "version": "v3.10.0",
+            "version": "v3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microsoftgraph/msgraph-sdk-php.git",
-                "reference": "a1758695627b2e309fa9688e95424c02e6710e9f"
+                "reference": "7e05181b10ad403c1c028cf276d829c024ef49a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microsoftgraph/msgraph-sdk-php/zipball/a1758695627b2e309fa9688e95424c02e6710e9f",
-                "reference": "a1758695627b2e309fa9688e95424c02e6710e9f",
+                "url": "https://api.github.com/repos/microsoftgraph/msgraph-sdk-php/zipball/7e05181b10ad403c1c028cf276d829c024ef49a9",
+                "reference": "7e05181b10ad403c1c028cf276d829c024ef49a9",
                 "shasum": ""
             },
             "require": {
@@ -2195,9 +2195,9 @@
             "homepage": "https://developer.microsoft.com/en-us/graph",
             "support": {
                 "issues": "https://github.com/microsoftgraph/msgraph-sdk-php/issues",
-                "source": "https://github.com/microsoftgraph/msgraph-sdk-php/tree/v3.10.0"
+                "source": "https://github.com/microsoftgraph/msgraph-sdk-php/tree/v3.11.0"
             },
-            "time": "2026-11-09T15:47:38+00:00"
+            "time": "2026-11-20T16:56:25+00:00"
         },
         {
             "name": "microsoft/microsoft-graph-core",
@@ -2490,16 +2490,16 @@
         },
         {
             "name": "open-telemetry/api",
-            "version": "1.11.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/api.git",
-                "reference": "bc169d9ecd11858e941657770dc708c6a15fc5f4"
+                "reference": "2dace793114f43ce879c15cbbd34411add11272d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/api/zipball/bc169d9ecd11858e941657770dc708c6a15fc5f4",
-                "reference": "bc169d9ecd11858e941657770dc708c6a15fc5f4",
+                "url": "https://api.github.com/repos/opentelemetry-php/api/zipball/2dace793114f43ce879c15cbbd34411add11272d",
+                "reference": "2dace793114f43ce879c15cbbd34411add11272d",
                 "shasum": ""
             },
             "require": {
@@ -2526,7 +2526,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.11.x-dev"
+                    "dev-main": "1.13.x-dev"
                 }
             },
             "autoload": {
@@ -2563,7 +2563,7 @@
                 "issues": "https://github.com/open-telemetry/opentelemetry-php/issues",
                 "source": "https://github.com/open-telemetry/opentelemetry-php"
             },
-            "time": "2026-11-05T11:54:49+00:00"
+            "time": "2026-11-26T01:07:02+00:00"
         },
         {
             "name": "open-telemetry/context",
@@ -2625,16 +2625,16 @@
         },
         {
             "name": "open-telemetry/sdk",
-            "version": "1.16.1",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/sdk.git",
-                "reference": "51ebca2563dd580d682d4f32b1611c1779424dac"
+                "reference": "d6a4c614f217f8492ab2e15f6ec00021c9b026ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/sdk/zipball/51ebca2563dd580d682d4f32b1611c1779424dac",
-                "reference": "51ebca2563dd580d682d4f32b1611c1779424dac",
+                "url": "https://api.github.com/repos/opentelemetry-php/sdk/zipball/d6a4c614f217f8492ab2e15f6ec00021c9b026ea",
+                "reference": "d6a4c614f217f8492ab2e15f6ec00021c9b026ea",
                 "shasum": ""
             },
             "require": {
@@ -2676,17 +2676,19 @@
                         "OpenTelemetry\\API\\Instrumentation\\AutoInstrumentation\\ExtensionHookManager"
                     ]
                 },
+                "spi-config": {
+                    "autoload-files": [
+                        "_register.php"
+                    ]
+                },
                 "branch-alias": {
-                    "dev-main": "1.16.x-dev"
+                    "dev-main": "1.18.x-dev"
                 }
             },
             "autoload": {
                 "files": [
                     "Common/Util/functions.php",
-                    "Logs/Exporter/_register.php",
-                    "Metrics/MetricExporter/_register.php",
-                    "Propagation/_register.php",
-                    "Trace/SpanExporter/_register.php",
+                    "_register.php",
                     "Common/Dev/Compatibility/_load.php",
                     "_autoload.php"
                 ],
@@ -2720,20 +2722,20 @@
                 "issues": "https://github.com/open-telemetry/opentelemetry-php/issues",
                 "source": "https://github.com/open-telemetry/opentelemetry-php"
             },
-            "time": "2026-11-06T02:25:35+00:00"
+            "time": "2026-11-26T01:07:02+00:00"
         },
         {
             "name": "open-telemetry/sem-conv",
-            "version": "1.45.0",
+            "version": "1.45.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/sem-conv.git",
-                "reference": "7a42562cf5891f56f6f8ea2ecc945f31108c8806"
+                "reference": "3d11ab7259c04b3622be7b3d17b15f6ce8f8956d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/sem-conv/zipball/7a42562cf5891f56f6f8ea2ecc945f31108c8806",
-                "reference": "7a42562cf5891f56f6f8ea2ecc945f31108c8806",
+                "url": "https://api.github.com/repos/opentelemetry-php/sem-conv/zipball/3d11ab7259c04b3622be7b3d17b15f6ce8f8956d",
+                "reference": "3d11ab7259c04b3622be7b3d17b15f6ce8f8956d",
                 "shasum": ""
             },
             "require": {
@@ -2777,7 +2779,7 @@
                 "issues": "https://github.com/open-telemetry/opentelemetry-php/issues",
                 "source": "https://github.com/open-telemetry/opentelemetry-php"
             },
-            "time": "2026-11-03T22:37:22+00:00"
+            "time": "2026-11-26T01:07:02+00:00"
         },
         {
             "name": "pear/console_getopt",
