@@ -449,7 +449,6 @@ opacity-75">
 {jsfile src="schedule.js"}
 {jsfile src="resourcePopup.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
-{vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
 {jsfile src="autocomplete.js"}
 {jsfile src="ajax-helpers.js"}
 <script type="text/javascript">

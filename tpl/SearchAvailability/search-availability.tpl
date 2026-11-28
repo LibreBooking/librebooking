@@ -156,7 +156,6 @@
 
     {include file="javascript-includes.tpl" Select2=true}
     {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
-    {vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
     {jsfile src="ajax-helpers.js"}
     {jsfile src="availability-search.js"}
     {jsfile src="resourcePopup.js"}

@@ -140,7 +140,6 @@
 {jsfile src="ajax-helpers.js"}
 {jsfile src="admin/resource-groups.js"}
 {vendor_js src="jqtree/1.8.11/js/tree.jquery.js"}
-{vendor_js src="jquery-cookie/1.3.1/js/jquery.cookie.js"}
 {vendor_js src="jquery-contextmenu/2.9.2/js/jquery.contextMenu.js"}
 
 <script type="text/javascript">
