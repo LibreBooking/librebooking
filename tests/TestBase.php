@@ -46,6 +46,8 @@ class TestBase extends TestCase
      */
     public $fileSystem;
 
+    private ?string $authLogFolder = null;
+
     public function setUp(): void
     {
         Date::_SetNow(Date::Now());
@@ -70,6 +72,20 @@ class TestBase extends TestCase
         Configuration::SetInstance($this->fakeConfig);
         Resources::SetInstance($this->fakeResources);
         PluginManager::SetInstance($this->fakePluginManager);
+    }
+
+    /**
+     * Turns on the failed-login log in a fresh temp folder, removed in teardown
+     * @return string path of the auth.log file
+     */
+    protected function enableAuthFailureLog(): string
+    {
+        $this->authLogFolder = sys_get_temp_dir() . '/lbauth' . uniqid();
+        mkdir($this->authLogFolder);
+        $this->fakeConfig->SetKey(ConfigKeys::LOGGING_FOLDER, $this->authLogFolder);
+        $this->fakeConfig->SetKey(ConfigKeys::LOGGING_AUTH_FAILURES, true);
+
+        return $this->authLogFolder . '/auth.log';
     }
 
     /**
@@ -146,6 +162,11 @@ class TestBase extends TestCase
 
     public function teardown(): void
     {
+        if ($this->authLogFolder !== null) {
+            @unlink($this->authLogFolder . '/auth.log');
+            @rmdir($this->authLogFolder);
+            $this->authLogFolder = null;
+        }
         Configuration::SetInstance(null);
         PluginManager::SetInstance(null);
         Date::_ResetNow();

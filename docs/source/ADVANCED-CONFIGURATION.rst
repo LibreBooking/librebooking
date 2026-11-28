@@ -332,6 +332,42 @@ Logging Configuration
 **logging.sql**
   Enable or disable logging of SQL queries.
 
+**logging.auth.failures**
+  Write one line per failed login (web, kiosk and API) to ``auth.log`` in
+  ``logging.folder``, for use with fail2ban. Written regardless of
+  ``logging.level``. Kiosk (resource display) logins are logged as
+  ``source=web``. The last 3 characters of the username are replaced
+  with ``***`` and the rest is cut to 64 characters. Failures reported by
+  single sign-on plugins (CAS, SAML, Shibboleth, ...) are not logged.
+
+  .. code-block:: text
+
+     2026-11-21T10:00:00+00:00 LibreBooking login failed from 203.0.113.7 source=web user="user@example.***"
+
+  Example fail2ban filter ``/etc/fail2ban/filter.d/librebooking.conf``:
+
+  .. code-block:: ini
+
+     [Definition]
+     failregex = ^\s*LibreBooking login failed from <HOST> source=
+
+  Example jail in ``/etc/fail2ban/jail.d/librebooking.local``:
+
+  .. code-block:: ini
+
+     [librebooking]
+     enabled  = true
+     port     = http,https
+     filter   = librebooking
+     logpath  = /var/log/librebooking/log/auth.log
+     maxretry = 5
+     findtime = 10m
+     bantime  = 1h
+
+  Behind a reverse proxy, the logged address is the proxy's unless the web
+  server restores the client address (for example Apache ``mod_remoteip`` or
+  nginx ``real_ip``).
+
 File Upload Settings
 --------------------
 

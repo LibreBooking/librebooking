@@ -26,6 +26,12 @@ class Log
      */
     private $sqlLogger;
 
+    private static bool $authLogErrorReported = false;
+
+    private const AUTH_LOG_MAX_USERNAME_LENGTH = 64;
+
+    private const AUTH_LOG_MASKED_CHARS = 3;
+
     private function __construct()
     {
         $this->logger = new Logger('app');
@@ -143,6 +149,67 @@ class Log
         } catch (Exception $ex) {
         }
     }
+
+    /**
+     * Appends one line per failed login to auth.log in the logging folder, independent of
+     * the log level, so fail2ban can match on it. The IP comes before the user-supplied
+     * username, so a crafted username cannot change which address gets banned.
+     *
+     * @param mixed $username raw request value, which may not be a string
+     */
+    public static function AuthFailure(mixed $username, string $source): void
+    {
+        if (!Configuration::Instance()->GetKey(ConfigKeys::LOGGING_AUTH_FAILURES, new BooleanConverter())) {
+            return;
+        }
+
+        $file = rtrim(Configuration::Instance()->GetKey(ConfigKeys::LOGGING_FOLDER), '/') . '/auth.log';
+
+        $line = self::FormatAuthFailure(
+            username: $username,
+            ip: ServiceLocator::GetServer()->GetRemoteAddress(),
+            source: $source,
+            time: new DateTimeImmutable()
+        );
+        // Report an unwritable file once per request, so failed logins cannot flood app.log
+        $written = @file_put_contents(filename: $file, data: $line, flags: FILE_APPEND | LOCK_EX);
+        if ($written === false && !self::$authLogErrorReported) {
+            self::$authLogErrorReported = true;
+            // error_log, not self::Error, so this is reported even when logging.level is none
+            error_log(sprintf('LibreBooking: could not write failed login to %s', $file));
+        }
+    }
+
+    private static function FormatAuthFailure(mixed $username, string $ip, string $source, DateTimeInterface $time): string
+    {
+        // json_encode escapes quotes and newlines (and replaces invalid UTF-8), so no extra
+        // lines can be forged.
+        $user = json_encode(
+            value: self::MaskUsername(username: $username),
+            flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+        );
+
+        return sprintf("%s LibreBooking login failed from %s source=%s user=%s\n", $time->format(DATE_ATOM), $ip, $source, $user);
+    }
+
+    /**
+     * Replaces the last characters with '***' and caps the length:
+     * user@example.com becomes user@example.***
+     */
+    private static function MaskUsername(mixed $username): string
+    {
+        if (!is_string($username)) {
+            return '';
+        }
+
+        $visible = min(
+            max(mb_strlen(string: $username, encoding: 'UTF-8') - self::AUTH_LOG_MASKED_CHARS, 0),
+            self::AUTH_LOG_MAX_USERNAME_LENGTH
+        );
+
+        return mb_substr(string: $username, start: 0, length: $visible, encoding: 'UTF-8') . '***';
+    }
+
     public static function DebugEnabled()
     {
         return self::getLogLevel() != 'none';

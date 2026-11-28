@@ -83,10 +83,18 @@ class WebAuthentication implements IWebAuthentication
     public function Validate($username, $password)
     {
         if (empty($password) && !$this->authentication->AreCredentialsKnown()) {
-            return false;
+            $isValid = false;
+        } else {
+            $isValid = $this->authentication->Validate($username, $password);
         }
 
-        return $this->authentication->Validate($username, $password);
+        // SSO plugins (CAS, SAML, ...) supply the credentials and re-validate on every
+        // login page load, so a failure there is not a guessed password
+        if (!$isValid && !$this->authentication->AreCredentialsKnown()) {
+            Log::AuthFailure(username: $username, source: 'web');
+        }
+
+        return $isValid;
     }
 
     /**

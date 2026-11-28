@@ -499,6 +499,16 @@ class ConfigKeys extends AbstractConfigKeys
         'section' => 'logging'
     ];
 
+    public const LOGGING_AUTH_FAILURES = [
+        'key' => 'logging.auth.failures',
+        'type' => 'boolean',
+        'default' => false,
+        'label' => 'Log Failed Logins',
+        'description' => 'Write one line per failed login to auth.log in the logging folder, for use with fail2ban',
+        'config_file_comment' => 'Log failed logins to auth.log in the logging folder for fail2ban (true/false)',
+        'section' => 'logging'
+    ];
+
     // Uploads
     # previously IMAGE_UPLOAD_DIRECTORY
     public const UPLOAD_IMAGE_DIRECTORY = [

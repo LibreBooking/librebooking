@@ -33,6 +33,29 @@ class WebServiceAuthenticationTest extends TestBase
         $this->webAuth = new WebServiceAuthentication($this->fakeAuth, $this->userSessionRepository);
     }
 
+    public function testFailedValidateIsWrittenToAuthFailureLog()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = false;
+        $this->fakeAuth->_ValidateResult = false;
+
+        $this->assertFalse($this->webAuth->Validate($this->username, $this->password));
+
+        $this->assertFileExists($file);
+        $this->assertStringContainsString('LibreBooking login failed from localhost source=api user="LoGInN***"', file_get_contents($file));
+    }
+
+    public function testSsoFailureIsNotWrittenToAuthFailureLog()
+    {
+        $file = $this->enableAuthFailureLog();
+        $this->fakeAuth->_CredentialsKnown = true;
+        $this->fakeAuth->_ValidateResult = false;
+
+        $this->assertFalse($this->webAuth->Validate($this->username, $this->password));
+
+        $this->assertFileDoesNotExist($file);
+    }
+
     public function testValidatePassesThrough()
     {
         $this->fakeAuth->_ValidateResult = true;
