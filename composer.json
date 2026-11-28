@@ -19,7 +19,7 @@
         "phpstan/phpstan-phpunit": "^2.1",
         "guzzlehttp/guzzle": "^7.0",
         "vincentlanglet/twig-cs-fixer": "^4.1",
-        "psalm/phar": "^7.11"
+        "psalm/phar": "^7.13"
     },
     "require": {
         "php": ">=8.4",
