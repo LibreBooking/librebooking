@@ -25,7 +25,7 @@
         "php": ">=8.4",
         "smarty/smarty": "^5.9",
         "stripe/stripe-php": "^23.1",
-        "monolog/monolog": "^3.12",
+        "monolog/monolog": "^3.13",
         "google/recaptcha": "2.2.*",
         "gregwar/captcha": "^2.1",
         "google/apiclient": "^2.20",
